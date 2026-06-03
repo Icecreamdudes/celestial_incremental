@@ -83,6 +83,19 @@
         milestone207Effect: new Decimal(1),
         milestone210Effect: new Decimal(1),
         milestone304Effect: new Decimal(1),
+
+        pylonEnergyMax: new Decimal(1e6),
+        pylonEnergy: new Decimal(0),
+        pylonEnergyEffect: new Decimal(1),
+        pylonEnergyEffect2: new Decimal(1),
+        pylonEnergyEffect3: new Decimal(1),
+        pylonEnergyEffect4: new Decimal(1),
+        pylonEnergyPerSecond: new Decimal(0),
+        
+        pylonPassiveEffect: new Decimal(1),
+
+        pylonTier: new Decimal(1),
+        pylonTierEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -154,6 +167,41 @@
         // MISC
 
         if (player.prj.projectSpeed.gte(player.prj.bestProjectSpeed)) player.prj.bestProjectSpeed = player.prj.projectSpeed;
+
+        // COSMIC PYLON
+
+        if (player.prj.pylonBuilt)
+        {
+            player.prj.pylonEnergyPerSecond = new Decimal(1)
+            player.prj.pylonEnergyPerSecond = player.prj.pylonEnergyPerSecond.mul(buyableEffect("prj", 11))
+            player.prj.pylonEnergyPerSecond = player.prj.pylonEnergyPerSecond.mul(buyableEffect("prj", 12))
+            player.prj.pylonEnergyPerSecond = player.prj.pylonEnergyPerSecond.mul(buyableEffect("prj", 13))
+
+            player.prj.pylonPassiveEffect = player.ta.highestRocketFuel.add(1).log(10).div(1000).add(1).pow(0.5).div(100).mul(player.prj.pylonTierEffect).add(1)
+        } else
+        {
+            player.prj.pylonEnergyPerSecond = new Decimal(0)
+
+            player.prj.pylonPassiveEffect = new Decimal(1)
+        }
+
+        if (player.prj.pylonEnergy.gte(player.prj.pylonEnergyMax))
+        {
+            player.prj.pylonEnergy = player.prj.pylonEnergyMax
+            player.prj.pylonEnergyPerSecond = new Decimal(0)
+        }
+        player.prj.pylonEnergy = player.prj.pylonEnergy.add(player.prj.pylonEnergyPerSecond.mul(delta))
+
+        player.prj.pylonEnergyEffect = player.prj.pylonEnergy.add(1).log(10).add(1).pow(3).pow(player.prj.pylonTierEffect).div(100).add(1)
+        player.prj.pylonEnergyEffect2 = player.prj.pylonEnergy.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).pow(player.prj.pylonTierEffect).pow(3).div(100).add(1)
+        player.prj.pylonEnergyEffect3 = player.prj.pylonEnergy.add(1).log(10).add(1).pow(0.875).sub(1).pow_base(10).pow(player.prj.pylonTierEffect).pow(0.25).sub(1).div(10).add(1)
+        player.prj.pylonEnergyEffect4 = player.prj.pylonEnergy.add(1).log(10).add(1).pow(3).pow(player.prj.pylonTierEffect).div(100).add(1)
+
+        player.prj.pylonTierEffect = player.prj.pylonTier.sub(1).pow(0.3).div(10).add(1)
+
+        //tickspeed
+        player.uni["A2"].tickspeed = new Decimal(1)
+        player.uni["A2"].tickspeed = player.uni["A2"].tickspeed.mul(player.prj.pylonEnergyEffect)
     },
     branches: ["wel"],
     clickables: {
@@ -311,10 +359,127 @@
                 return look
             },
         },
+        201: {
+            title() { return "<h2>Build the Cosmic Shard Pylon</h2><br><h3 style='color:#a522e6'>Cost: 1,000,000 Cosmic Core Fragments</h3>" },
+            canClick() { return player.cof.coreFragments[5].gte(1e6) },
+            unlocked() { return !player.prj.pylonBuilt},
+            onClick() {
+                player.cof.coreFragments[5] = player.cof.coreFragments[5].sub(1e6)
+
+                player.prj.pylonBuilt = true
+            },
+            style: {width: "600px", minHeight: "100px", maxHeight: "100px", color: "white", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)", border: "2px solid #a522e6", borderRadius: "15px"},
+        },
     },
     bars: {},
     upgrades: {},
-    buyables: {},
+    buyables: {
+        11: {
+            costBase() { return new Decimal(1e5) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[5] },
+            pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).add(1)},
+            unlocked() { return player.prj.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Cosmic Pylon Factor I"
+            },
+            display() {
+                return 'which are boosting cosmic pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" },
+            progressColor: "#891dbf",
+        },
+        12: {
+            costBase() { return new Decimal(3e5) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[5] },
+            pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).add(1)},
+            unlocked() { return player.prj.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Cosmic Pylon Factor II"
+            },
+            display() {
+                return 'which are boosting cosmic pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" },
+            progressColor: "#891dbf",
+        },
+        13: {
+            costBase() { return new Decimal(9e5) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[5] },
+            pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).add(1)},
+            unlocked() { return player.prj.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Cosmic Pylon Factor III"
+            },
+            display() {
+                return 'which are boosting cosmic pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" },
+            progressColor: "#891dbf",
+        },
+    },
     milestones: {
         // TIME CAPSULES
         101: {
@@ -975,7 +1140,7 @@
             onComplete() {
                 doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock starshine and the study hall.</small>" },
+            effectDescription() { return "<small>Unlock starshine and Bumpy's journal.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 4 },
             unlocked() { return true },
@@ -1421,6 +1586,34 @@
                     ]
                     return look
                 },
+            },
+            "Pylon": {
+                buttonStyle() { return { color: "white", borderRadius: "8px" } },
+                unlocked() { return false},
+                content: [
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/cosmicFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[5])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Cosmic Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #a522e6", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["clickable", 201],
+                    ["raw-html", () => { return player.prj.pylonBuilt ? "You have <h3>" + format(player.prj.pylonEnergy) + "/" + format(player.prj.pylonEnergyMax) +  "</h3> cosmic pylon energy (+" + format(player.prj.pylonEnergyPerSecond) + "/s)." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts A2 tickspeed by x" + format(player.prj.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts star gain by x" + format(player.prj.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts stored space energy and time capsules by x" + format(player.prj.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts natural pylon energy gain by x" + format(player.prj.pylonEnergyEffect4) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Passive effect: Boosts dark celestial point gain by ^" + format(player.prj.pylonPassiveEffect, 4) + " (Based on rocket fuel)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Your cosmic pylon is tier " + formatWhole(player.prj.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.prj.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 11], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 12], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 13],]], 
+                    ["blank", "10px"],
+                    ["clickable", 202],
+                ],
             },
         },
     },

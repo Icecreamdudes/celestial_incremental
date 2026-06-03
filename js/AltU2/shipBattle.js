@@ -4738,7 +4738,7 @@ class SpaceArena {
                 ) {
                     let upg = this.upgradeChoices[this.selectedUpgradeIndex];
                     upg.effect(this);
-                    player.ir.upgrades.push(upg.name);
+                    //player.ir.upgrades.push(upg.name);
                     this.upgradeChoiceActive = false;
                     this.upgradeChoices = [];
                     this.selectedUpgradeIndex = null;

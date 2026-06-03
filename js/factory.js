@@ -883,7 +883,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '200px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" }
         },
         307: {
             costBase() { return new Decimal(100000) },

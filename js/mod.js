@@ -287,7 +287,11 @@ function updateStyles() {
 			layerBG = "linear-gradient(0deg, #1f4040 0%, #0f1f1f 100%)"
 			break;
 		case "prj":
-			layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
+			if (player.subtabs["prj"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)"
+			} else {
+				layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
+			}
 			break;
 		case "pri":
 			layerBG = "linear-gradient(0deg, #203040 0%, #0f171f 100%)"

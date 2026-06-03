@@ -1145,7 +1145,7 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.ir.spaceGem.pow(0.25).mul(0.3).add(1)
+                return player.ir.spaceGem.pow(0.25).mul(2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -1167,7 +1167,7 @@ addLayer("ir", {
             title: "Healing",
             unlocked() { return true },
             description() { return "All ships start off with 0.5 hp/sec of health regeneration."},
-            cost: new Decimal(1200),
+            cost: new Decimal(650),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1189,13 +1189,13 @@ addLayer("ir", {
             },
             title: "Civilization",
             unlocked() { return true },
-            description() { return "Unlock Space Buildings."},
+            description() { return "Unlocks a normality upgrade in the dark universe."},
             cost: new Decimal(2000),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1207,18 +1207,18 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
                 this.description() + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + "Level 1-20 Cleared" + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Miniboss",
+            title: "Expansion",
             unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description() { return "You are able to fight the UFO miniboss at level 8, and unlock a new legendary pet."},
+            description() { return "Unlocks Space Zone II and a legendary pet."},
             cost: new Decimal(3000),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1241,7 +1241,7 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1258,7 +1258,7 @@ addLayer("ir", {
             },
             title: "Timekeeper",
             unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description() { return "Cut ship cooldown times based on space gems."},
+            description() { return "Cut ship cooldown times based on space gems. (/" + format(this.effect()) + ")"},
             effect() {
                 return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
             },
@@ -1268,7 +1268,7 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1280,18 +1280,361 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
                 this.description() + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + "Level 2-20 Cleared" + "</span>" // BOTTOM
                 "</div></div>"
             },
             title: "Iridite",
             unlocked() { return player.ir.ufoDefeated },
-            description() { return "..."},
+            description() { return "Unlocks Iridite Zone and Geroa's fighting upgrades."},
             cost: new Decimal(10000),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "white", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : true ? look.backgroundColor = "#361e1e" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        20: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Repair",
+            unlocked() { return true },
+            description() { return "Boosts steel gain based on space rocks. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(400),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.ir.spaceRock.add(1).log10().add(1).pow(0.75).sub(1).pow_base("1e100")
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
                 let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        21: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Growth",
+            unlocked() { return true },
+            description() { return "Boosts space rock gain based on total Iridite upgrades purchased. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return new Decimal(player.ir.upgrades.length).div(10).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        22: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        23: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Momentum",
+            unlocked() { return true },
+            description() { return "Space battle celestialite stats scale 1% slower."},
+            cost: new Decimal(6666),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return new Decimal(player.ir.upgrades.length).div(10).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        24: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Full Speed",
+            unlocked() { return true },
+            description() { return "Increase max ship velocity by +1 and cut star dimension cooldown by /2."},
+            cost: new Decimal(1e4),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return new Decimal(2)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        25: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Boundless",
+            unlocked() { return true },
+            description() { return "Unlocks Space Zone III."},
+            cost: new Decimal(1e5),
+            currencyLocation() { return player.sb },
+            currencyDisplayName: "Stored Space Energy",
+            currencyInternalName: "storedSpaceEnergy",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        26: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        27: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        28: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        29: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        30: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        31: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Solar Power",
+            unlocked() { return true },
+            description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
+            cost: new Decimal(3.5e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            effect() {
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        32: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Warped",
+            unlocked() { return true },
+            description() { return "Unlocks Space Zone IV."},
+            cost: new Decimal(1e5),
+            currencyLocation() { return player.prj },
+            currencyDisplayName: "Project Speed",
+            currencyInternalName: "projectSpeed",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#bf41bf", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1299,6 +1642,15 @@ addLayer("ir", {
 
         //gems
         101: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Impact",
             unlocked() { return true },
             description() { return "Unlocks the second ship: Impact."},
@@ -1307,12 +1659,21 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
         102: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Reinforcement",
             unlocked() { return true },
             description() { return "All ships have 25% increased max hp."},
@@ -1321,12 +1682,21 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
         103: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Alleviator",
             unlocked() { return true },
             description() { return "Battle XP requirements are cut by /1.25."},
@@ -1335,12 +1705,21 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
         104: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Treasure",
             unlocked() { return true },
             description() { return "Double the probability of getting space gems from asteroids."},
@@ -1349,12 +1728,21 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
         105: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Exploration",
             unlocked() { return buyableEffect("sb", 12).gte(3) },
             description() { return "Unlock more star exploration nodes."},
@@ -1363,12 +1751,21 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
         106: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Alleviator II",
             unlocked() { return buyableEffect("sb", 12).gte(3) },
             description() { return "Battle XP requirements are cut by /1.4"},
@@ -1377,7 +1774,76 @@ addLayer("ir", {
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
             style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", outline: "3px solid #ffe066", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#904ee6", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        107: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Head Start",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description() { return "Enable starting space battles at your best level milestone."},
+            cost: new Decimal(10),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        108: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Destruction",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description() { return "All ships deal 15% more damage."},
+            cost: new Decimal(50),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        109: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Bloodshed",
+            unlocked() { return buyableEffect("sb", 12).gte(3) },
+            description() { return "Boosts blood gain by x1.25."},
+            cost: new Decimal(150),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Gems",
+            currencyInternalName: "spaceGem",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #66e8ff", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
@@ -1702,49 +2168,137 @@ addLayer("ir", {
                                 ["style-row", [
 
                                     // Zone I Upgrades
-                                    ["style-row", [
+                                    ["style-column", [
                                         ["style-row", [
-                                            ["upgrade", 11],
-                                            ["upgrade", 12],
-                                            ["upgrade", 13],
+                                            ["style-row", [
+                                                ["upgrade", 11],
+                                                ["upgrade", 12],
+                                                ["upgrade", 13],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 20],
+                                                ["upgrade", 14],
+                                                ["upgrade", 21],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 101],
+                                                ["upgrade", 102],
+                                                ["upgrade", 103],
+                                            ]],
                                         ], {width: "636px", background: "#5e4ee63f", border: "3px solid #5e4ee6", borderRadius: "19px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "-318px", top: "0"}],
+                                    
+                                    // Zone I -> Zone II Connection
+
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 16],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #5e4ee63f, #904ee63f)", borderRadius: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "327px", top: "0"}],
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #5e4ee6, #904ee6) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "327px", top: "0"}],
 
                                     // Zone II Upgrades
 
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 15],
+                                                ["upgrade", 17],
+                                                ["upgrade", 18],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 22],
+                                                ["upgrade", 23],
+                                                ["upgrade", 24],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 104],
+                                                ["upgrade", 105],
+                                                ["upgrade", 106],
+                                            ]],
+                                        ], {width: "636px", background: "#904ee63f", border: "3px solid #904ee6", borderRadius: "19px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "548px", top: "0"}],
+
+                                    // Zone II -> Iridite Zone Connection
+
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 19],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #ffffff3f)", borderRadius: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "1193px", top: "0"}],
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #904ee6, white) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "1193px", top: "0"}],
+
                                     // Geroa Upgrades
+
+                                    // Zone II -> Zone III Connection
+
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 25],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #e64ebd3f)", borderRadius: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}],
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(0deg, #904ee6, #e64ebd) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}],
 
                                     // Zone III Upgrades
 
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 26],
+                                                ["upgrade", 27],
+                                                ["upgrade", 28],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 29],
+                                                ["upgrade", 30],
+                                                ["upgrade", 31],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 107],
+                                                ["upgrade", 108],
+                                                ["upgrade", 109],
+                                            ]],
+                                        ], {width: "636px", background: "#e64ebd3f", border: "3px solid #e64ebd", borderRadius: "19px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "548px", top: "-666px"}],
+
                                     // Shard Mining Upgrades
+
+                                    // Zone II -> Zone IV Connection
+
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 32],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #bf41bf3f)", borderRadius: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}],
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(180deg, #904ee6, #bf41bf) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}],
 
                                     // Zone IV Upgrades
 
                                 ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/zone1.png)"}],
                             ], {width: "800px", height: "677px", flexFlow: "column"}]
-                        ]]
+                        ]],
+                        /*["style-row", [
+                            ["raw-html", function () { return "You have <span style='color:#bfbfbf;text-shadow:0 0 8px #bfbfbf'>" + formatWhole(player.cb.evolutionShards) + " ES</span> and <span style='color:#796d85;text-shadow:0 0 8px #796d85'>" + formatWhole(player.cb.paragonShards) + " PS</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            
+                        ], {background: "#37078f", borderTop: "3px solid #5e4ee6", width: "800px", height: "40px"}],*/
                     ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
                 ],
-            },
-            "Upgrades": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gem." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", "Space Rocks", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                    ["row", [["upgrade", 17],["upgrade", 18],["upgrade", 19],]],
-                    ["blank", "25px"],
-                    ["raw-html", "Space Gems", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
-                    ["blank", "25px"],
-                    ["raw-html", () => {return getLevelableAmount("pet", 502).gt(0) ? "Geroa Skills" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205], ["upgrade", 206],
-                        ["upgrade", 207]]],
-                ]
             },
             "Battle": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},

@@ -704,13 +704,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the Arrow effect.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1e5),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -740,13 +740,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the Spiral effect.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1e6),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -812,13 +812,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Remove the light well ↻ effect softcap. Starshines no longer reset project content.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1e7),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -848,13 +848,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double prism well speed and ↻ gain.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1e10),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -884,13 +884,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock focus studies in blueshift layer.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1e12),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -920,13 +920,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[PLACEHOLDER]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock the cosmic pylon.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(9.99e99),
+            cost: new Decimal(1.4e14),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",
@@ -956,13 +956,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock The Cycle.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock Cere, the Celestial of Cycles.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e12),
+            cost: new Decimal(1e16),
             currencyLocation() { return player.bum },
             currencyDisplayName: "Starlight",
             currencyInternalName: "starlight",

@@ -23,13 +23,14 @@ addLayer("ev15", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
-        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e10).pow(0.625).mul(2)
+        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e10).pow(0.5)
         player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(buyableEffect("ev15", 11))
 
         if (player.ev15.diamondDust.lte(1e6)) { 
             player.ev15.diamondDustEffect = player.ev15.diamondDust.pow(0.625).add(1)
         } else if (player.ev15.diamondDust.gte(1e6)) {
-            player.ev15.diamondDustEffect = new Decimal(1e6).pow(0.625).add(1)
+            let mult = player.ev15.diamondDust.div(1e6);
+            player.ev15.diamondDustEffect = new Decimal(1e6).times(Decimal.pow(mult, 0.25)).pow(0.625).add(1)
         }
     },
     diamondDustReset() {
@@ -311,7 +312,7 @@ addLayer("ev15", {
                  ["raw-html", () => {
                      return formatShort(player.ev15.diamondDust) + "<br>(+" + formatShort(player.ev15.diamondDustToGet) + ")"
                  }, {width: "93px", height: "50px", color: "#00ffff", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
-                 ["raw-html", () => { return "<div class='bottomTooltip'>Diamond Dust<hr><small>x" + (hasUpgrade("ev15", 12) ? formatShort(player.ev15.diamondDustEffect.pow(2)) : formatShort(player.ev15.diamondDustEffect)) + " Coin Dust<br>x" + formatShort(player.ev15.diamondDustEffect) + " Coin Shards" + (player.ev15.diamondDust.gte(1e6) ? "<br>[HARDCAPPED]" : "") + "</small></div>"}],
+                 ["raw-html", () => { return "<div class='bottomTooltip'>Diamond Dust<hr><small>x" + (hasUpgrade("ev15", 12) ? formatShort(player.ev15.diamondDustEffect.pow(2)) : formatShort(player.ev15.diamondDustEffect)) + " Coin Dust<br>x" + formatShort(player.ev15.diamondDustEffect) + " Coin Shards" + (player.ev15.diamondDust.gte(1e6) ? "<br>[SOFTCAPPED]" : "") + "</small></div>"}],
              ], () => {return player.cb.highestLevel.gte(250) ? {width: "150px", height: "50px"} : {display: "none !important"}}],
         ], () => { return player.cb.highestLevel.gte(250) ? {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }
         ],

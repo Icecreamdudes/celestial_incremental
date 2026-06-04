@@ -188,7 +188,7 @@
 
         let prismGainGrowth = new Decimal(0.5)
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth.add(1))
-        if (!hasMilestone("prj", 202)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
+        if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
@@ -568,7 +568,7 @@
             },
         },
         101: {
-            title() { return "<h2>" + (hasMilestone("prj", 202) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
+            title() { return "<h2>" + (hasMilestone("prj", 201) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
@@ -1418,17 +1418,7 @@
                 unlocked() { return true },
                 content() {
                     let look = [
-                        ["style-column", [
-                            ["blank", "15px"],
-                            ["raw-html", "You are gaining <h3>" + format(player.pri.fountainSpeed, 1) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.totalPrisms.div(10), 1) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["blank", "25px"],
-                            ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ["style-column", [
-                                ["raw-html", "<small>Automated fountains gain x" + formatShort(new Decimal(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {display: layers.pri.fountains[1].canAuto() ? "" : "none !important"}],
-                            ["blank", "25px"],
-                        ]],
+                        ["blank", "25px"],
                         ["style-row", [
                             ["style-column", [
                                 ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
@@ -1626,15 +1616,15 @@
     },
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-        ["style-row", [
-            ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
+        ["style-column", [
             ["style-row", [
+                ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + formatWhole(player.pri.prismsToGet) + ")"}, () => {
                     let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                     if (player.pri.prismsToGet.gte(1)) {look.color = "#d6ebff"} else {look.color = "gray"}
                     return look
                 }],
-            ], () => {return {display: hasMilestone("prj", 202) ? "" : "none !important"}}],
+            ], {display: () => {return hasMilestone("prj", 201) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["style-row", [

@@ -1751,20 +1751,14 @@
                 unlocked() { return hasUpgrade("wel", 11) },
                 content() {
                     let look = [
-                        ["blank", "0"],
+                        ["blank", "25px"],
                         ["style-column", [
-                            ["style-column", [
-                                ["blank", "25px"],
-                            ], {display: player.wel.lightWellCycleYield.gt(1) || player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                             ["style-column", [
                                 ["raw-html", "Light wells yield a base of <h3>" + formatSimple(player.wel.lightWellCycleYield) + "</h3> ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                             ], {display: player.wel.lightWellCycleYield.gt(1) ? "" : "none !important"}],
                             ["style-column", [
                                 ["raw-html", "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                             ], {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
-                            ["style-column", [
-                                ["raw-html", "<small>Next blueshift at <h3>x" + formatWhole(new Decimal(100)) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
-                            ], {display: hasMilestone("prj", 301) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],
                         ["style-column", [
@@ -1810,7 +1804,7 @@
                         ]],
                         
                         ["blank", "12px"],
-                        ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectSoftcap, 2) + " after 1,000 ↻!", {color: "yellow", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                        ["raw-html", "All light well cycle effect scaling is ^" + format(player.wel.lightWellCycleEffectSoftcap, 2) + " after 1,000!", {color: "yellow", fontSize: "16px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                         ["blank", "25px"]
                         ["row", []],
                         ["blank", "25px"]
@@ -2177,7 +2171,7 @@
                             ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ["style-column", [
                                 ["raw-html", hasUpgrade("wel", 33) ? "<small>Fountain requirements are reduced by /" + formatShort(player.pri.fountains[3].completionEffect, 1) + ".</small>" : "<small>Automated fountains gain x" + formatShort(player.pri.fountains[3].completionEffect.mul(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {display: layers.wel.fountains[1].canAuto() ? "" : "none !important"}],
+                            ], {display: layers.wel.fountains[1].canAuto ? "" : "none !important"}],
                             ["blank", "10px"],
                         ]],
                         ["style-row", [

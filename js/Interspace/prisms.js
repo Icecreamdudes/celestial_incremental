@@ -188,7 +188,7 @@
 
         let prismGainGrowth = new Decimal(0.5)
         player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth.add(1))
-        if (!hasMilestone("prj", 201)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
+        if (!hasMilestone("prj", 202)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
@@ -568,7 +568,7 @@
             },
         },
         101: {
-            title() { return "<h2>" + (hasMilestone("prj", 201) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
+            title() { return "<h2>" + (hasMilestone("prj", 202) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
             onClick() {
@@ -1139,7 +1139,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light Well Speed",
             condition() {
-                return player.pri.bestPrismsInOneReset.gte(100)
+                return player.pri.bestPrismsInOneReset.gte(400)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -1160,13 +1160,13 @@
 
                 s = s.mul(completions.pow_base(1.5))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.25))
-                s = s.pow(1.0625).mul(1.2e3)
+                s = s.pow(1.0625).mul(4e3)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
-                let s = completions.pow_base(1.5).mul(100)
+                let s = completions.pow_base(1.5).mul(400)
                 s = s.mul(completions.sub(20).max(0).pow_base(1.25))
 
                 return s.floor()
@@ -1418,7 +1418,17 @@
                 unlocked() { return true },
                 content() {
                     let look = [
-                        ["blank", "25px"],
+                        ["style-column", [
+                            ["blank", "15px"],
+                            ["raw-html", "You are gaining <h3>" + format(player.pri.fountainSpeed, 1) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["raw-html", "<small>Total prisms give a base progress rate of " + format(player.pri.totalPrisms.div(10), 1) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["blank", "25px"],
+                            ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["style-column", [
+                                ["raw-html", "<small>Automated fountains gain x" + formatShort(new Decimal(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {display: layers.pri.fountains[1].canAuto() ? "" : "none !important"}],
+                            ["blank", "25px"],
+                        ]],
                         ["style-row", [
                             ["style-column", [
                                 ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
@@ -1509,7 +1519,7 @@
                         } else {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["raw-html", "Cone<br><small>Req: +100 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Cone<br><small>Req: +400 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
@@ -1616,15 +1626,15 @@
     },
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-        ["style-column", [
+        ["style-row", [
+            ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
             ["style-row", [
-                ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + formatWhole(player.pri.prismsToGet) + ")"}, () => {
                     let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                     if (player.pri.prismsToGet.gte(1)) {look.color = "#d6ebff"} else {look.color = "gray"}
                     return look
                 }],
-            ], {display: () => {return hasMilestone("prj", 201) ? "" : "none !important"}}],
+            ], () => {return {display: hasMilestone("prj", 202) ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["style-row", [
@@ -1700,7 +1710,7 @@ const makePrismFountain = function (id, effectIsWhole) {
                 ], {background: "#335966", border: "3px solid #335966", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [
                     ["style-column", [
-                        ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(" + layers.pri.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.pri.fountains[id].getCompletionEffect()) : formatShort(layers.pri.fountains[id].getCompletionEffect())) + layers.pri.fountains[id].completionEffectSuffix + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                        ["raw-html", formatWhole(player.pri.fountains[id].completions) + " ↻<br><small>(" + layers.pri.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.pri.fountains[id].getCompletionEffect()) : formatShort(layers.pri.fountains[id].getCompletionEffect())) + layers.pri.fountains[id].completionEffectSuffix + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px"}],
                     ], {background: "#335966", border: "3px solid #4d9999", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
             ], {width: "206px"}]

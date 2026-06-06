@@ -147,7 +147,7 @@ function updateStyles() {
 			} else {
 				layerBG = "#001f18"
 			}
-			break;
+			break; 
 	    case "za": case "cf": case "wof": case "sm": case "car": case "zd":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
@@ -214,7 +214,15 @@ function updateStyles() {
 		case "en":
 			layerBG = "#400c42"
 			break;
-		case "s": case "co": case "ra": case "sd": case "cs":
+		case "s":
+			if (player.s.pylonBuilt && player.subtabs["s"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(120deg, #801757 0%, #D3173A 100%)"
+			} else {
+				if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+				if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+			}
+			break;
+		case "co": case "ra": case "sd": case "cs":
 		case "cof":
 			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
@@ -759,6 +767,10 @@ function updateStyles() {
 								playAndLoopAudio("music/zar.mp3", options.musicVolume/10)
 								break;
 							}
+							if (player.bh.currentStage == "depth1" && player.bh.combo.lt(0)) {
+								playAndLoopAudio("music/depth1Encore.mp3", options.musicVolume/10)
+								break;
+							}
 							// Default Behavior
 							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
 								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);
@@ -833,6 +845,32 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.13 - The Novasent Update Part III: Luckless Labor</h3><br><br>
+		Content:<br>
+			- Added Enhance Points<br>
+			- Added Cards<br>
+			- Added Zar's Dungeon<br>
+			- Added Blackjack minigame in Zar's Dungeon<br>
+			- Added Zar Bossfight<br>
+			- Added blue soul gamemode for bullet hell fights<br>
+			- Added a LOT of lore, probably the most emotional lore yet (Hopefully)<br>
+			- Added 2 new fighting characters<br>
+			- Added ultimate skills for Nav and Dice Five<br>
+			- Added 1 new punchcard<br> bv    
+			- Added rare space pets<br>
+			- Other stuff I may have forgot<br><br>
+		Balancing:<br>
+			- Removed UFO printing exploit.<br>
+			- Changed a couple few space pet formulas<br>
+			- Rebalanced a couple of Dice Space things<br>
+			- Rebalanced a couple of Alt-Universe 1 things<br>
+			- A bunch of other things I forgot<br><br>
+		Bux Fixes:<br>
+			- Fixed a bunch of typos<br>
+			- Fixed bug where buying max chip researches crashes the game<br>
+			- Fixed bug where cutscenes don't pause battles<br>
+			- Fixed several rounding and floating-point errors<br>
+			- A bunch of other things I forgot.<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

@@ -270,7 +270,14 @@ addLayer("jukebox", {
             file: "music/ascensionSpirit.mp3",
             unlocked() {return player.cbs.shrineReactivated},
         },
-
+        "zar": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Zar",
+            img: "resources/music/template.png",
+            file: "music/zar.mp3",
+            unlocked() {return player.zarDungeon.zarDefeated},
+        },
         // BLACK HEART SONGS
         "black-heart": {
             artist: "Citrine/Niko/Flushmak",
@@ -490,6 +497,14 @@ addLayer("jukebox", {
             file: "music/mysteryCutscene.mp3",
             unlocked() {return hasUpgrade("za", 19)},
         },
+        "nav": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Nav",
+            img: "resources/music/template.png",
+            file: "music/navTheme.mp3",
+            unlocked() {return player.zarDungeon.zarDefeated},
+        },
     },
     microtabs: {
         stuff: {
@@ -504,7 +519,7 @@ addLayer("jukebox", {
                         ["jukebox", "alt-1"], ["jukebox", "universe-3"], ["jukebox", "dark-universe-1"], ["jukebox", "universe-3-B"],
                         ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"], ["jukebox", "space-battle"],
                         ["jukebox", "iridite-fight"], ["jukebox", "hive"], ["jukebox", "dice-space"], ["jukebox", "casino"], ["jukebox", "blood-battle"],
-                        ["jukebox", "nox"], ["jukebox", "ascension-spirit"],
+                        ["jukebox", "nox"], ["jukebox", "ascension-spirit"], ["jukebox", "zar"],
                     ]],
                     ["blank", "2px"],
                 ],
@@ -519,7 +534,7 @@ addLayer("jukebox", {
                         ["jukebox", "tav"], ["jukebox", "tav-box"], ["jukebox", "tav-rip"], ["jukebox", "cante"],
                         ["jukebox", "singularity-waltz"], ["jukebox", "jocus"], ["jukebox", "matos-box"], ["jukebox", "matos"],
                         ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], ["jukebox", "zar"], 
-                        ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], 
+                        ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], ["jukebox", "nav"], 
                     ]],
                     ["blank", "2px"],
                 ],

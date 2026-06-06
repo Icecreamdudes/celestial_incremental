@@ -50,6 +50,7 @@
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
 
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 

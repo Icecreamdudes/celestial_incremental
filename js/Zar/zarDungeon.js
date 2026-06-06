@@ -643,7 +643,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>ZC-7</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                return "<h3>ZC-8</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
                     Divides Evo Shard requirement\n\
                     Currently: /" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Zar Chips"
@@ -999,6 +999,7 @@ addLayer("zarDungeon", {
                     ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", "+1 OTF Slot", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", "Zar Punchcard", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "Rare Space Pets", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", "Auto Card-Draw", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],

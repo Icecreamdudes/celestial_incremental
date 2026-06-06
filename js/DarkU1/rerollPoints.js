@@ -18,13 +18,13 @@
             color: "#000000",
         };
     },
-    tooltip: "Light Extractor",
+    tooltip: "Reroll Points",
     branches: [["dp", "#309"], ["dgj", "#309"], ],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.rp.rerollPointsToGet = player.du.points.plus(1).log10().pow(1.25).div(50).add(1).div(player.rp.rerollPoints.pow(0.75))
+        player.rp.rerollPointsToGet = player.du.points.plus(1).log10().pow(1.25).div(50).add(1).div(player.rp.rerollPoints.pow(0.75).add(1))
         player.rp.rerollPointsToGet = player.rp.rerollPointsToGet.mul(levelableEffect("pu", 402)[0])
 
         if (player.rp.rerollPoints.lt(0)) {

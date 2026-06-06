@@ -45,6 +45,7 @@
         player.dv.cloudsPerSecond = player.dv.cloudsPerSecond.mul(buyableEffect("dgj", 15))
         if (getLevelableTier("pu", 307, true)) player.dv.cloudsPerSecond = player.dv.cloudsPerSecond.mul(levelableEffect("pu", 307)[0])
         player.dv.cloudsPerSecond = player.dv.cloudsPerSecond.mul(levelableEffect("car", 409)[0])
+        player.dv.cloudsPerSecond = player.dv.cloudsPerSecond.mul(levelableEffect("st", 304)[0])
 
         player.dv.clouds = player.dv.clouds.add(player.dv.cloudsPerSecond.mul(delta))
 

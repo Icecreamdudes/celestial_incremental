@@ -3,7 +3,7 @@ const bbMilestone = [
     [new Decimal(1), new Decimal(25), new Decimal(1000), new Decimal(250000), new Decimal(1e7), new Decimal(5e9), new Decimal(1e12), new Decimal(1e15), new Decimal(1e40), new Decimal(1e90)],
     [new Decimal(1), new Decimal(15625), new Decimal(1e9), new Decimal(1.5e16), new Decimal(1e21), new Decimal(1e29), new Decimal(1e36), new Decimal(1e45), new Decimal(1e120), new Decimal(1e270)],
 ]
-
+// Add bee bread milestone glistening, which resets previous bee bread progress, but notably boosts one of your milestones (from top to bottom)
 addLayer("bb", {
     name: "Bee Bread", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BB", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -68,6 +68,10 @@ addLayer("bb", {
         if (hasUpgrade("al", 102)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(2)
         if (hasUpgrade("al", 119)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(upgradeEffect("al", 119))
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.bee.preAlephMult)
+        player.bb.beeBreadGain = player.bb.beeBreadGain.mul(buyableEffect("tw", 43))
+
+        // Per Second Gain
+        if (hasUpgrade("al", 130)) player.bb.beeBreadPerSecond = player.bb.beeBreadPerSecond.add(player.bb.beeBreadGain.div(100).mul(delta))
 
         // Per Second
         player.bb.beeBread = player.bb.beeBread.add(player.bb.beeBreadPerSecond.mul(delta))
@@ -123,6 +127,7 @@ addLayer("bb", {
     },
     prestigeReset() {
         player.bee.bees = new Decimal(1)
+        player.bee.bps = new Decimal(0)
 
         player.bpl.pollen = new Decimal(0)
         player.bpl.pollenGain = new Decimal(0)
@@ -139,7 +144,10 @@ addLayer("bb", {
     },
     clickables: {
         11: {
-            title() { return "Increase Bee Bread/s<br>but reset previous content.<br>Gain: " + format(player.bb.beeBreadGain) + " BB/s"},
+            title() {
+                if (player.bee.path != 1) return "Increase Bee Bread/s<br>but reset bees and pollen content.<br>Req: 1e40 Pollen"
+                return "Increase Bee Bread/s<br>but reset bees and pollen content.<br>Req: 1e10 Pollen"
+            },
             canClick() { return (player.bee.path == 1 && player.bpl.pollen.gte(1e10)) || player.bpl.pollen.gte(1e40)},
             unlocked() { return true},
             onClick() {
@@ -156,7 +164,7 @@ addLayer("bb", {
         12: {
             title() {
                 if (hasUpgrade("al", 118)) return "Increase your Bee Bread tier.<br>Req: " + format(player.bb.breadTierReq) + " BB"
-                return "Increase your Bee Bread tier<br>but reset previous content.<br>Req: " + format(player.bb.breadTierReq) + " BB"
+                return "Increase your Bee Bread tier<br>but reset bees and pollen content.<br>Req: " + format(player.bb.breadTierReq) + " BB"
             },
             canClick() { return player.bb.beeBread.gte(player.bb.breadTierReq)},
             unlocked() { return true },
@@ -180,10 +188,10 @@ addLayer("bb", {
         bbBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width: 450,
+            width: 250,
             height: 35,
             progress() {
-                if ((hasUpgrade("al", 114) && player.bb.breadMilestone >= 9) || (!hasUpgrade("al", 114) && player.bb.breadMilestone >= 8)) return new Decimal(0)
+                if ((hasUpgrade("al", 114) && player.bb.breadMilestone >= 9) || (!hasUpgrade("al", 114) && player.bb.breadMilestone >= 8)) return new Decimal(1)
                 return player.bb.beeBread.div(bbMilestone[player.bee.path][player.bb.breadMilestone])
             },
             borderStyle: {
@@ -198,13 +206,13 @@ addLayer("bb", {
             },
             textStyle: {
                 color: "white",
-                fontSize: "18px",
+                fontSize: "14px",
             },
             display() {
                 if ((player.bb.breadMilestone < 8) || (hasUpgrade("al", 114) && player.bb.breadMilestone < 9) || (hasUpgrade("al", 122) && player.bb.breadMilestone < 10)) {
-                    return format(player.bb.beeBread) + "/" + format(bbMilestone[player.bee.path][player.bb.breadMilestone]) + " Bee Bread (" + format(player.bb.beeBreadPerSecond) + "/s)"
+                    return "Next Milestone at:<br>" + format(player.bb.beeBread) + "/" + format(bbMilestone[player.bee.path][player.bb.breadMilestone]) + " Bee Bread"
                 } else {
-                    return format(player.bb.beeBread) + " Bee Bread (" + format(player.bb.beeBreadPerSecond) + "/s)"
+                    return "Next Milestone at:<br><small>[MAXED]</small>"
                 }
             },
         },
@@ -219,13 +227,21 @@ addLayer("bb", {
             ["raw-html", () => {return hasUpgrade("al", 112) ? "(+" + format(player.bpl.pollenGain) + "/s)" : "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
+        ["style-column", [
+            ["raw-html", () => {return "You have <h3>" + format(player.bb.beeBread) + " Bee Bread (" + format(player.bb.beeBreadPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "You will gain <h3>+" + format(player.bb.beeBreadGain) + "</h3> BB/s on reset"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ], {height: "60px", background: "#2f2218", borderTop: "3px solid #1e160f", borderLeft: "3px solid #1e160f", borderRight: "3px solid #1e160f"}],
         ["style-row", [["clickable", 11], ["style-row", [], {width: "3px", height: "100px", background: "#1e160f"}], ["clickable", 12]], {border: "3px solid #1e160f", backgroundColor: "#986F4C"}],
         ["style-row", [
-            ["tooltip-row", [
-                ["raw-html", () => {return "T" + formatWhole(player.bb.breadTier)}, {color: "#1e160f", fontSize: "20px", fontFamily: "monospace"}],
-                ["raw-html", () => {return "<div class='bottomTooltip'>Tier " + formatWhole(player.bb.breadTier) + "<hr><small>x" + formatWhole(player.bb.breadTierMult) + " BB effectiveness</small></div>"}],
-            ], { width: "50px", height: "35px", backgroundColor: "#ac8b6f", borderRight: "3px solid #1e160f", borderRadius: "0px" }],
             ["bar", "bbBar"],
+            ["style-row", [
+                ["style-row", [
+                    ["raw-html", () => {return "T" + formatWhole(player.bb.breadTier)}, {color: "#1e160f", fontSize: "20px", fontFamily: "monospace"}],
+                ], {width: "48px", height: "35px", borderRight: "2px solid #1e160f"}],
+                ["style-row", [
+                    ["raw-html", () => {return "x" + formatWhole(player.bb.breadTierMult) + " BB effectiveness"}, {color: "#1e160f", fontSize: "14px", fontFamily: "monospace"}],
+                ], {width: "200px"}],
+            ], { width: "250px", height: "35px", backgroundColor: "#ac8b6f", borderLeft: "3px solid #1e160f", borderRadius: "0px" }],
         ], {borderLeft: "3px solid #1e160f",borderRight: "3px solid #1e160f"}],
         ["top-column", [
             ["blank", "10px"],
@@ -244,5 +260,5 @@ addLayer("bb", {
             ["color-text", [() => {return "Cell Effect Bases: x" + formatSimple(player.bb.breadEffects[9], 2) + " <small>[Cap x1.25]</small>"}, () => {return player.bb.breadMilestoneHighest >= 9 && hasUpgrade("al", 122)}, "white", () => {return player.bb.breadMilestone >= 10}, "gray"]],
         ], {height: "210px", border: "3px solid #1e160f", backgroundColor: "#3c2c1e"}],
     ],
-    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 1) || (player.bee.totalResearch.gte(170) && player.bee.path == 2))}
+    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 1) || (hasChallenge("fu", 12) && player.bee.totalResearch.gte(170) && player.bee.path == 2))}
 })

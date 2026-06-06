@@ -310,6 +310,7 @@ addLayer("fl", {
         if (hasAchievement("achievements", 912)) allCooldownDiv = allCooldownDiv.mul(1.1)
         if (player.al.cocoonLevel >= 8) allCooldownDiv = allCooldownDiv.mul(2)
         if (hasUpgrade("al", 503)) allCooldownDiv = allCooldownDiv.mul(upgradeEffect("ne", 503))
+        allCooldownDiv = allCooldownDiv.mul(buyableEffect("tw", 24))
 
         player.fl.timers.red.max = new Decimal(15)
         player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
@@ -356,6 +357,7 @@ addLayer("fl", {
         if (hasUpgrade("ho", 3)) player.fl.pickingPower = player.fl.pickingPower.mul(upgradeEffect("ho", 3))
         if (hasUpgrade("al", 102)) player.fl.pickingPower = player.fl.pickingPower.mul(2)
         if (hasUpgrade("al", 202)) player.fl.pickingPower = player.fl.pickingPower.mul(2)
+        player.fl.pickingPower = player.fl.pickingPower.mul(buyableEffect("tw", 12))
 
         player.fl.flowerGain = new Decimal(1)
         if (hasAchievement("achievements", 904)) player.fl.flowerGain = player.fl.flowerGain.mul(1.25)
@@ -367,15 +369,16 @@ addLayer("fl", {
         if (hasUpgrade("al", 213)) player.fl.flowerGain = player.fl.flowerGain.mul(player.ho.effects.flower.effect2)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bpl.roles.empress.effect)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bee.preAlephMult)
+        player.fl.flowerGain = player.fl.flowerGain.mul(buyableEffect("tw", 22))
 
         // FLOWER AUTOMATION
         let max = 26
         if (hasMilestone("n", 13)) max += 100
         if (hasMilestone("n", 15)) max += 100
         if (hasMilestone("n", 17)) max += 100
-        if (hasMilestone("n", 21)) max += 100
+        if (hasMilestone("n", 20)) max += 100
         if (hasMilestone("n", 23)) max += 100
-        if (hasMilestone("n", 25)) max += 100
+        if (hasMilestone("n", 29)) max += 100
         for (let i = 101; i < max; ) {
             if (layers.fl.glossary[i].display()) player.fl.glossary[i] = player.fl.glossary[i].add(player.fl.flowerGain.mul(player.n.flowerPercentage).mul(delta))
             if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
@@ -395,6 +398,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 210)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.1)
         player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("bee", 14))
         player.fl.glossaryBase = player.fl.glossaryBase.mul(player.n.pylonEnergyEffect2)
+        player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("tw", 32))
 
         player.fl.glossaryEffects.bee = new Decimal(1)
         for (let i = 101; i < 126; ) {
@@ -448,11 +452,13 @@ addLayer("fl", {
         player.fl.gatherer[1].max = new Decimal(5).div(buyableEffect("fl", 1))
         player.fl.gatherer[1].power = buyableEffect("fl", 2)
         player.fl.gatherer[1].mult = buyableEffect("fl", 3).add(1)
+        if (hasMilestone("n", 18)) player.fl.gatherer[1].mult = player.fl.gatherer[1].mult.mul(10)
         player.fl.gatherer[1].current = player.fl.gatherer[1].current.add(delta)
 
         player.fl.gatherer[2].max = new Decimal(5).div(buyableEffect("fl", 4))
         player.fl.gatherer[2].power = buyableEffect("fl", 5)
         player.fl.gatherer[2].mult = buyableEffect("fl", 6).add(1)
+        if (hasMilestone("n", 18)) player.fl.gatherer[2].mult = player.fl.gatherer[2].mult.mul(10)
         player.fl.gatherer[2].current = player.fl.gatherer[2].current.add(delta)
 
         if (player.fl.gatherer[1].current.gte(player.fl.gatherer[1].max) && player.fl.gatherer[1].power.gt(0)) {
@@ -499,6 +505,7 @@ addLayer("fl", {
         player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestHoneycomb.add(1).log(3).floor())
         player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(player.al.highestRoyalJelly.add(1).log(3).floor())
         if (player.al.cocoonLevel >= 7) player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(5)
+        player.fl.goldenSeedsTotal = player.fl.goldenSeedsTotal.add(buyableEffect("tw", 13).sub(1))
 
         player.fl.goldenSeeds = player.fl.goldenSeedsTotal
         for (let i = 101; i < 626; ) {
@@ -880,11 +887,13 @@ addLayer("fl", {
         return str
     },
     flowerClick(id, power) {
+        let gain = player.fl.flowerGain
+        if (hasMilestone("n", 18)) gain = gain.mul(10)
         if (getGridData("fl", id)[0] != 0) {
             if (getGridData("fl", id)[1].gt(0)) {
                 setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(power)])
                 if (getGridData("fl", id)[1].lte(0)) {
-                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(gain)
                     setGridData("fl", id, [0, new Decimal(1)])
                 }
             }

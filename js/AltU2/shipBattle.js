@@ -156,12 +156,27 @@ const UPGRADE_RARITY_WEIGHTS = {
     epic: 10
 };
 
-function pickUpgrades() {
+const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
+    common: 30,
+    uncommon: 25,
+    rare: 25,
+    epic: 20,
+};
+
+function pickUpgrades(enhanced = false) {
     // Weighted random selection
     let pool = [];
-    for (let upg of UPGRADE_POOL) {
-        for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
-            pool.push(upg);
+    if (!enhanced) {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
+                pool.push(upg);
+            }
+        }
+    } else {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[upg.rarity]; i++) {
+                pool.push(upg);
+            }
         }
     }
     let chosen = [];
@@ -344,7 +359,7 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastBounceClick = 0;
+            this.lastBounceClick = Date.now() - 1500;
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
@@ -430,8 +445,8 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastDashClick = 0;
-            this.dashCooldown = 1000; // 1 seconds in ms
+            this.lastDashClick = Date.now() - 500;
+            this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
                 this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
@@ -781,7 +796,6 @@ class SpaceArena {
                 bulletSpeed: 8,
                 bulletCooldown: 60,
                 rockDrop: [50, 80],
-                xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
@@ -822,7 +836,6 @@ class SpaceArena {
                 bulletSpeed: 10,
                 bulletCooldown: 40,
                 rockDrop: [250, 450],
-                xpDrop: [2000, 3000],
                 draw: (ctx, enemy) => {
                     ctx.save();
                     ctx.translate(enemy.x, enemy.y);
@@ -1563,8 +1576,12 @@ class SpaceArena {
             if (enemy.type === "ufoBoss") {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
-                player.ir.spaceGem = player.ir.spaceGem.add(2);
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
+                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // Mark Iridite defeat when boss dies
@@ -1574,6 +1591,12 @@ class SpaceArena {
                 if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
+                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                player.ir.spaceGem = player.ir.spaceGem.add(gain);
+                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
@@ -1615,6 +1638,20 @@ class SpaceArena {
         if (player.ir.shipType == 3) {
             // Gravity
             this.ship.vy += this.ship.gravity;
+
+            // Auto Bounce
+            if (player.ir.autoShoot) {
+                let now = Date.now();
+                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
+                if (now - this.lastBounceClick >= this.bounceCooldown) {
+                    this.lastBounceClick = now;
+                    let rect = this.canvas.getBoundingClientRect();
+                    this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.bounceTarget.x == undefined) {
+                        this.ship.bounceTarget = {x: this.width / 2, y: this.height / 2}
+                    }
+                }
+            }
 
             // Bounce click logic
             if (this.ship.bounceTarget) {
@@ -1664,6 +1701,20 @@ class SpaceArena {
                 this.ship.vx = -this.ship.vx * this.ship.bounce;
             }
         } else if (player.ir.shipType == 7) {
+            // Auto Dash
+            if (player.ir.autoShoot) {
+                let now = Date.now();
+                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
+                if (now - this.lastDashClick >= this.dashCooldown) {
+                    this.lastDashClick = now;
+                    let rect = this.canvas.getBoundingClientRect();
+                    this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.dashTarget.x == undefined) {
+                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
+                    }
+                }
+            }
+
             if (this.ship.dashTarget) {
                 let dx = this.ship.dashTarget.x - this.ship.x;
                 let dy = this.ship.dashTarget.y - this.ship.y;
@@ -3521,7 +3572,9 @@ class SpaceArena {
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = Math.floor((asteroid.big ? 10 : 3) * this.upgradeEffects.xpGain);
+                let xp = Math.pow(3, asteroid.unit);
+                if (asteroid.type == "metal") xp = Math.pow(xp, 1.3)
+                xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
                 let random = Math.random();
@@ -4694,9 +4747,9 @@ class SpaceArena {
         }
     }
 
-    showUpgradeChoice() {
+    showUpgradeChoice(enhanced = false) {
         this.upgradeChoiceActive = true;
-        this.upgradeChoices = pickUpgrades();
+        this.upgradeChoices = pickUpgrades(enhanced);
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
 

@@ -356,6 +356,7 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(player.cbs.pylonEnergyEffect3)
             if (hasUpgrade("gwaTemple", 10)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
+            if (hasChallenge("fu", 11)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))
@@ -491,7 +492,7 @@ addLayer("cb", {
     levelup() {
         let leftover = new Decimal(0)
         player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
-        leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
+        leftover = player.cb.totalxp.sub(layers.cb.levelToXP(player.cb.level))
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
@@ -1014,7 +1015,10 @@ addLayer("cb", {
             title() { return player.cb.crateTimers[6].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.crateTimers[6].current) + "." : "<h3>Collect a random singularity pet."},
             canClick() { return player.cb.crateTimers[6].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            tooltip() { return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"},
+            tooltip() {
+                if (player.cb.highestLevel.lt(100000)) return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>30% - Singularity Fragment"
+                return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"
+            },
             onClick() {
                 player.cb.crateTimers[6].current = player.cb.crateTimers[6].max
                 layers.cb.petButton7(player.cb.crateTimers[6].base);
@@ -1893,15 +1897,23 @@ addLayer("cb", {
             addLevelableXP("pet", 308, guarantee.mul(18))
             addLevelableXP("pet", 309, guarantee.mul(18))
             player.cb.paragonShards = player.cb.paragonShards.add(guarantee.mul(3))
-            player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(25))
-            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(8));
-            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(8));
-            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(8));
+            if (player.cb.highestLevel.gte(100000)) {
+                player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(25))
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(8));
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(8));
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(8));
+            } else {
+                player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(30))
+            }
             reward[0] = reward[0].add(guarantee.mul(18))
             reward[1] = reward[1].add(guarantee.mul(18))
             reward[2] = reward[2].add(guarantee.mul(3))
-            reward[3] = reward[3].add(guarantee.mul(25))
-            reward[4] = reward[4].add(guarantee.mul(8))
+            if (player.cb.highestLevel.gte(100000)) {
+                reward[3] = reward[3].add(guarantee.mul(25))
+                reward[4] = reward[4].add(guarantee.mul(8))
+            } else {
+                reward[3] = reward[3].add(guarantee.mul(30))
+            }
             amt = amt.sub(guarantee.mul(20))
         }
         if (amt.lt(20)) {
@@ -1923,7 +1935,7 @@ addLayer("cb", {
                     let gainedShards = getRandomInt(1) + 1
                     player.cb.paragonShards = player.cb.paragonShards.add(gainedShards);
                     reward[2] = reward[2].add(gainedShards)
-                } else if (rng < 0.3 && rng > 0.05) {
+                } else if (rng < 0.3 && (rng > 0.05 || player.cb.highestLevel.lt(100000))) {
                     let gainedFragments = getRandomInt(2) + 4
                     player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
                     reward[3] = reward[3].add(gainedFragments)
@@ -2511,28 +2523,28 @@ addLayer("cb", {
             ]],
         ]],
         ["blank", "10px"],
-        ["raw-html", () => { return player.cb.highestLevel.lt(3) ?  "You will unlock something at level 3! <small>[XP TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(6) && player.cb.highestLevel.gte(3) ?  "You will unlock something at level 6! <small>[XP TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(10) && player.cb.highestLevel.gte(6) ?  "You will unlock something at level 10! <small>[??? TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15! <small>[XP TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25! <small>[CRATE TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35! <small>[??? TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50! <small>[XP TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! <small>[XP TAB] [PET SHOP]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75! <small>[CRATE TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && (hasChallenge("ip", 12) || hasMilestone("s", 14)) ?  "You will unlock something at level 125! <small>[CRATE TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666! <small>[XPBOOST TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[CRATE TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(7500) && player.cb.highestLevel.gte(3000) ?  "You will unlock something at level 7,500! <small>[FRAGMENTATION]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.ma.matosUnlock ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "#cceaf9", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(3) ?  "You will unlock something at level 3! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(6) && player.cb.highestLevel.gte(3) ?  "You will unlock something at level 6! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(10) && player.cb.highestLevel.gte(6) ?  "You will unlock something at level 10! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! <small>[XP TAB] [PET SHOP]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && (hasChallenge("ip", 12) || hasMilestone("s", 14)) ?  "You will unlock something at level 125! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666! <small>[XPBOOST TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(7500) && player.cb.highestLevel.gte(3000) ?  "You will unlock something at level 7,500! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[PET TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.bh.unlockConditions.done ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

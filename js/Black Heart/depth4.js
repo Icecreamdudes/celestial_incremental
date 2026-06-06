@@ -80,7 +80,7 @@ addLayer("depth4", {
         player.depth4.negComboEffect = Decimal.div(player.depth4.lowestCombo, -100).add(1)
 
         player.depth4.milestoneEffect = new Decimal(0)
-        for (let i = 25; i < 251; i = i+25) {
+        for (let i in player.depth4.milestone) {
             player.depth4.milestoneEffect = player.depth4.milestoneEffect.add(player.depth4.milestone[i])
         }
         player.depth4.milestoneEffect = player.depth4.milestoneEffect.pow(1.3).floor()

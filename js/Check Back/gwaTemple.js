@@ -994,7 +994,7 @@ addLayer("gwaTemple", {
         },
         15: {
             requirementDescription: "6 Gwarks",
-            effectDescription() { return "Increase space pet xp based on gwarks<br>Currently: x" + formatSimple(player.gwaTemple.gwark.div(10).add(1).pow(0.5), 2) },
+            effectDescription() { return "Increase space pet xp based on gwarks<br>Currently: x" + formatSimple(player.gwaTemple.gwark.pow(0.5).div(100).add(1), 2) },
             done() { return player.gwaTemple.gwark.gte(6) },
             style() {
                 let look = {width: "291px", minHeight: "75px", fontSize: "12px", color: "black", border: "3px solid #29291a", borderTop: "0", borderRight: "0", borderRadius: "0px"}

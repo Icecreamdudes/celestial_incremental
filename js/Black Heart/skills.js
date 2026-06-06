@@ -16,7 +16,12 @@ BHA.none = {
 // General Skills
 BHA.general_slap = {
     name: "Slap",
-    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."},
+    description(char) {
+        if (hasUpgrade("depth1", 106)) {
+            return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage, with a " + formatSimple(Decimal.mul(10, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to hit twice, and soft-stuns the celestialite for a second."
+        }
+        return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."
+    },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
     char: "general",
     spCost: new Decimal(6),
@@ -31,6 +36,14 @@ BHA.general_slap = {
     method: "physical",
     properties: {
         "stun": [new Decimal(1), "soft", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+        "multi-hit"(char) {
+            let luckMult = Decimal.div(Decimal.add(100, char.luck), 100)
+            if (hasUpgrade("depth1", 106) && Decimal.lt(Math.random(), luckMult.div(10))) {
+                return [2, 200]
+            } else {
+                return [1, 200]
+            }
+        },
     },
     value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))},
     cooldown: new Decimal(10),
@@ -40,7 +53,12 @@ BHA.general_bandage = {
     name: "Bandage",
     description(char) {
         let heal = new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))
-        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        let heal2 = new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))
+        if (player.matosLair.milestone[25] >= 2) {
+            heal = heal.mul(char.mending.div(10).add(1))
+            heal2 = heal2.mul(char.mending.div(10).add(1))
+        }
+        if (hasUpgrade("depth2", 106)) return "Heal yourself by " + formatWhole(heal) + " health, and passively increase your regen by " + formatSimple(heal2) + "%"
         return "Heal yourself by " + formatWhole(heal) + " health"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_bandage"].maxLevel) + " HP"},
@@ -57,6 +75,16 @@ BHA.general_bandage = {
     value() {return new Decimal(10).add(player.bh.skillData["general_bandage"].level.mul(2))},
     cooldown: new Decimal(15),
     cooldownCap: new Decimal(5),
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "regenMult"() {
+            if (hasUpgrade("depth2", 106)) return new Decimal(1.1).add(player.bh.skillData["general_bandage"].level.mul(0.02))
+            return new Decimal(1)
+        }
+    },
 }
 BHA.general_scream = {
     name: "Scream",
@@ -87,9 +115,12 @@ BHA.general_scream = {
 BHA.general_recklessAbandon = {
     name: "Reckless Abandon",
     description(char) {
-        let effect = new Decimal(20).add(player.bh.skillData["general_recklessAbandon"].level.mul(2))
+        let effect = new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))) + "% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+        if (player.bh.currentStage != "none") return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+        return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency<br>Currently:<br>" +
+        formatSimple(player.bh.characterData[char.id].health) + " HP ⇒ " + formatSimple(player.bh.characterData[char.id].health.mul(0.75)) + " HP<br>" +
+        formatSimple(char.damage) + " DMG ⇒ " + formatSimple(char.damage.add(player.bh.characterData[char.id].health.mul(0.75).div(4).mul(effect.div(100)))) + " DMG"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_recklessAbandon"].maxLevel) + " HP"},
     char: "general",
@@ -103,8 +134,8 @@ BHA.general_recklessAbandon = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
-        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)).mul(Decimal.add(0.2, player.bh.skillData["general_recklessAbandon"].level.mul(0.02))))}, // Additive Effect
-        "healthMult"(char) {return Decimal.sub(1, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)))}, // Multiplicative Effect
+        "damageAdd"(char) {return char.health.mul(Decimal.mul(0.25, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05))))}, // Additive Effect
+        "healthMult"(char) {return new Decimal(0.75)}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
@@ -668,7 +699,7 @@ BHA.eclipse_solarRetinopathy = {
     instant: true,
     type: "damage",
     target: "celestialite",
-    method: "true",
+    method: "spirit",
     value() {return new Decimal(0.75).add(player.bh.skillData["eclipse_solarRetinopathy"].level.mul(0.15))},
     active: true,
     constantType: "effect",
@@ -760,8 +791,8 @@ BHA.geroa_selfRepair = {
         if (hasUpgrade("ir", 207)) return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(2))
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
-    cooldown: new Decimal(30),
-    cooldownCap: new Decimal(10),
+    cooldown: new Decimal(24),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",

@@ -52,7 +52,7 @@ addLayer("stagnantSynestia", {
         player.stagnantSynestia.negComboEffect = player.stagnantSynestia.lowestCombo.div(-100).add(1)
 
         player.stagnantSynestia.milestoneEffect = new Decimal(1)
-        for (let i = 25; i < 101; i = i+25) {
+        for (let i in player.stagnantSynestia.milestone) {
             player.stagnantSynestia.milestoneEffect = player.stagnantSynestia.milestoneEffect.add(player.stagnantSynestia.milestone[i]/20)
         }
 

@@ -174,7 +174,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("al", 104))
-            if (hasMilestone("n", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
+            if (player.n.highestNest.gt(0)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)

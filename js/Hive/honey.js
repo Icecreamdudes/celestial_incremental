@@ -7,6 +7,7 @@ const CELL_MILESTONES = [
 // HONEYDEW (SECRETION) IS NOTABLE
 // POLLEN CAKES IS NOTABLE
 // ADD STAMEN LAYER WHICH IS A FLOWER RESET LAYER
+// RESET LAYER AFTER NESTS IS A META LAYER THAT SWITCHES THE MAIN RESOURCE FROM BEES TO OTHER STUFF
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "HO", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -88,9 +89,12 @@ addLayer("ho", {
         if (hasUpgrade("ho", 4)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("ho", 4))
         if (hasUpgrade("al", 202)) player.ho.cellGain = player.ho.cellGain.mul(2)
         player.ho.cellGain = player.ho.cellGain.mul(player.bee.preAlephMult)
+        player.ho.cellGain = player.ho.cellGain.mul(buyableEffect("tw", 44))
 
         //FLOOR VALUE
         player.ho.cellGain = player.ho.cellGain.floor()
+
+        if (hasUpgrade("al", 230)) player.ho.cell = player.ho.cell.add(player.ho.cellGain.div(100).mul(delta))
 
         player.ho.honeyPerSecond = player.ho.cell.div(10)
         player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(buyableEffect("bee", 62))
@@ -152,8 +156,8 @@ addLayer("ho", {
     clickables: {
         1: {
             title() {
-                if (player.bee.path != 2) return "Gain honey-cells, but reset previous content<br><small>Req: 1e16 Nectar δ</small>"
-                return "Gain honey-cells, but reset previous content<br><small>Req: 100 Nectar δ</small>"
+                if (player.bee.path != 2) return "Gain honey-cells, but reset bees and nectar content<br><small>Req: 1e16 Nectar δ</small>"
+                return "Gain honey-cells, but reset bees and nectar content<br><small>Req: 100 Nectar δ</small>"
             },
             canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(100)) || (player.bee.path != 2 && player.ne.delta.amount.gte(1e16))},
             unlocked: true,
@@ -162,6 +166,7 @@ addLayer("ho", {
                 player.ho.cell = player.ho.cell.add(player.ho.cellGain)
 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
                 player.ne.alpha.amount = new Decimal(0)
                 player.ne.alpha.gain = new Decimal(0)
                 player.ne.alpha.effect = new Decimal(1)
@@ -179,7 +184,7 @@ addLayer("ho", {
                 player.ne.epsilon.effect = new Decimal(1)
                 player.ne.upgrades.splice(0, player.ne.upgrades.length)
             },
-            style: {width: "250px", minHeight: "97px", fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px 0px 17px 0px"},
+            style: {width: "250px", minHeight: "97px", fontSize: "12px", lineHeight: "1.1", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "0px 0px 17px 0px"},
         },
     },
     bars: {
@@ -490,5 +495,5 @@ addLayer("ho", {
             ], {width: "250px", height: "625px", borderRight: "3px solid white", borderTop: "3px solid white", borderBottom: "3px solid white", borderRadius: "0px 20px 20px 0px"}],
         ]],
     ],
-    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 2) || (player.bee.totalResearch.gte(165) && player.bee.path == 1)) }
+    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 2) || (hasChallenge("fu", 12) && player.bee.totalResearch.gte(165) && player.bee.path == 1)) }
 })

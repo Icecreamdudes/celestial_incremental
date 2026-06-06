@@ -81,10 +81,10 @@ addLayer("depth2", {
         player.depth2.negComboEffect = Decimal.pow(1.25, player.depth2.lowestCombo.div(-1))
 
         player.depth2.milestoneEffect = new Decimal(0)
-        for (let i = 25; i < 251; i = i+25) {
+        for (let i in player.depth2.milestone) {
             player.depth2.milestoneEffect = player.depth2.milestoneEffect.add(player.depth2.milestone[i])
         }
-        player.depth2.milestoneEffect = player.depth2.milestoneEffect.pow(1.1).floor()
+        player.depth2.milestoneEffect = player.depth2.milestoneEffect.pow(Decimal.add(1.1, buyableEffect("depth2", 103).sub(1))).floor()
 
         player.depth2.depth2Mult = new Decimal(1)
         player.depth2.depth2Mult = player.depth2.depth2Mult.mul(player.darkTemple.depth2CurMult)
@@ -279,6 +279,34 @@ addLayer("depth2", {
                 return look
             },
         },
+        105: {
+            title: "Steady Negativity",
+            unlocked() {return hasUpgrade("darkTemple", 10)},
+            description: "Reduce negative scaling by 1%.",
+            cost: new Decimal(300),
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Hazy Umbrite",
+            currencyInternalName: "hazyUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
+        106: {
+            title: "Bound Bandage",
+            unlocked() {return hasUpgrade("darkTemple", 10)},
+            description: "Bandage now passively increases your regen by 10%.",
+            cost: new Decimal(1200),
+            currencyLocation() { return player.depth2 },
+            currencyDisplayName: "Hazy Umbrite",
+            currencyInternalName: "hazyUmbrite",
+            style() {
+                let look = {minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid rgba(0,0,0,0.5)", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#250121"
+                return look
+            },
+        },
     },
     buyables: {
         1: {
@@ -437,6 +465,64 @@ addLayer("depth2", {
                 return look
             },
         },
+        103: {
+            costBase() { return new Decimal(30) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.depth2.hazyUmbrite},
+            pay(amt) { player.depth2.hazyUmbrite = this.currency().sub(amt) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Clearer Bonuses</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Increase Depth 2 milestone effect exponent\n\
+                    Currently: +" + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1), 2) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Hazy Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", lineHeight: "1", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
+        104: {
+            costBase() { return new Decimal(120) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.depth2.hazyUmbrite},
+            pay(amt) { player.depth2.hazyUmbrite = this.currency().sub(amt) },
+            effect(x) {
+                let amt = new Decimal(player.darkTemple.upgrades.length)
+                for (let i = 1001; i < 1016; i = i+2) {
+                    amt = amt.add(getBuyableAmount("darkTemple", i))
+                }
+                return amt.div(1000).mul(getBuyableAmount(this.layer, this.id)).add(1)
+            },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() {return this.currency().gte(this.cost())},
+            display() {
+                return "<h3>Bestowal Brood</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Bestowals reduce bestowal buyable cost\n\
+                    Currently: /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 3) + "\n\ \n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Hazy Umbrite"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "120px", height: "100px", lineHeight: "1", color: "white", border: "2px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#1a3b0f" : !this.canAfford() ? look.background =  "#361e1e" : look.background = "#250121"
+                return look
+            },
+        },
     },
     microtabs: {
         stuff: {
@@ -533,8 +619,10 @@ addLayer("depth2", {
                             ["theme-scroll-column", [
                                 ["blank", "2px"],
                                 ["row", [["upgrade", 101], ["upgrade", 102]]],
+                                ["row", [["upgrade", 105], ["upgrade", 106]]],
                                 ["row", [["upgrade", 103], ["upgrade", 104]]],
                                 ["row", [["buyable", 101], ["buyable", 102]]],
+                                ["row", [["buyable", 103], ["buyable", 104]]],
                                 ["blank", "2px"],
                             ], {width: "272px", height: "345px", background: "var(--miscButtonDisable)", borderRadius: "0 0 0 27px"}],
                         ], {width: "272px", height: "420px", borderRight: "3px solid var(--regBorder)"}],

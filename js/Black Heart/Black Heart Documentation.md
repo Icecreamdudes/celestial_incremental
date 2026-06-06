@@ -366,6 +366,10 @@ Attributes are used to give a character/celestialite a non-action specific effec
 
 - Daze ꩜ - All actions have a chance to miss, decided by the attribute value and the character/celestialites luck.
 
+- Anima ⚜︎ - Multiplies incoming spirit damage by the attribute value.
+
+- Negative — - When attacked, the attack has a chance to turn into a heal, which is effected by the character/celestialites luck.
+
 Below is an example of an object that gives attributes:
 
 ```js

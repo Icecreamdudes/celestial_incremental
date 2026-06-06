@@ -735,11 +735,11 @@
                 return "2 Refinements"
             },
             goal() {
-                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e2000")
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e2400")
                 return new Decimal("2")
             },
             canComplete() {
-                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e2000")
+                if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return player.points.gte("1e2400")
                 return player.hre.refinement.gte(2)
             },
             rewardDescription: "Permanently unlock hex as an otherworldly feature, and change base hex point formula to:<br><small>(log<sub>60</sub>(Celestial Points+1))<sup>0.6</sup></small>",

@@ -35,6 +35,7 @@ addLayer("tw", {
         player.tw.twigsGain = player.tw.twigsGain.mul(buyableEffect("tw", 31))
         player.tw.twigsGain = player.tw.twigsGain.mul(buyableEffect("tw", 42))
         player.tw.twigsGain = player.tw.twigsGain.mul(buyableEffect("tw", 71))
+        if (hasMilestone("n", 24)) player.tw.twigsGain = player.tw.twigsGain.mul(player.n.milestone24Effect)
 
         if (getBuyableAmount("tw", 51).gt(0)) player.tw.twigs = player.tw.twigs.add(player.tw.twigsGain.mul(buyableEffect("tw", 51).sub(1)).mul(delta))
 
@@ -61,6 +62,7 @@ addLayer("tw", {
 
         player.tw.twigsReq = new Decimal(10)
         player.tw.twigsReq = player.tw.twigsReq.div(buyableEffect("tw", 52))
+        if (hasMilestone("n", 21)) player.tw.twigsReq = player.tw.twigsReq.div(player.n.milestone21Effect)
 
         player.tw.twigsMin = new Decimal(1)
         player.tw.twigsMin = player.tw.twigsMin.add(buyableEffect("tw", 61).sub(1))

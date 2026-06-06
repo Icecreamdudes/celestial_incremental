@@ -960,7 +960,7 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.13 - The Interspace Update Part I: Wells of Light</h3><br>
+	<h3>v1.14 - The Interspace Update Part I: Wells of Light</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
 			- Remade the dragon pet.<br>

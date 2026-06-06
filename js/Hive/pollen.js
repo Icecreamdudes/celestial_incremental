@@ -82,6 +82,7 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ne.epsilon.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ho.effects.pollen.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bee.preAlephMult)
+        player.bpl.pollenGain = player.bpl.pollenGain.mul(buyableEffect("tw", 33))
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 126)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.01)

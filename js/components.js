@@ -1308,8 +1308,9 @@ function loadVue() {
 			start() {
 				if (!this.interval && layers[this.layer].grid.onHold) {
 					this.interval = setInterval((function() {
-						if(this.time >= 5 && gridRun(this.layer, 'getCanClick', player[this.layer].grid[this.data], this.data)) {
-							gridRun(this.layer, 'onHold', player[this.layer].grid[this.data], this.data)						}
+						if(this.time >= 5) {
+							gridRun(this.layer, 'onHold', player[this.layer].grid[this.data], this.data)
+						}
 						this.time = this.time+1
 					}).bind(this), 50)}
 				this.hover()
@@ -1749,7 +1750,7 @@ function loadVue() {
 		template: `
 		<div class="upgRow">
 			<div style="margin:0" v-for="(value, name, index) in BHA"  v-if="run(value.unlocked, value)">
-				<button v-bind:class="{can: true, bhSkill: true, selected: player.bh.skillData[name].selected[0] != 'none', outline: player.bh.skillSelection == name}" v-bind:style="{background: BHP[value.char].color, filter: (value.char == 'general' || value.char == player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id) ? '' : 'brightness(25%)'}" v-on:click="player.bh.skillSelection = name"
+				<button v-bind:class="{can: true, bhSkill: true, selected: player.bh.skillData[name].selected[0] != 'none', outline: player.bh.skillSelection == name}" v-bind:style="[{background: BHP[value.char].color, filter: (value.char == 'general' || value.char == player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id) ? '' : 'brightness(25%)'}, BHA[name].style ? run(BHA[name].style, BHA[name]) : {}]" v-on:click="player.bh.skillSelection = name"
 				v-html="value.name + '<br><small>[Lv ' + formatWhole(player.bh.skillData[name].level.add(1)) + '/' + formatWhole(player.bh.skillData[name].maxLevel.add(1)) + ']'"></button>
 			</div>
 		</div>

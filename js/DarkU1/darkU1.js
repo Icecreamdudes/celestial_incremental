@@ -54,6 +54,7 @@
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
+        if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
 
@@ -85,6 +86,9 @@
 
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
+            
+        // POST SOFTCAP MULTIPLIERS
+        if (getLevelableTier("pu", 100, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 100)[1])
 
         //tickspeed
         player.uni["D1"].tickspeed = new Decimal(1)

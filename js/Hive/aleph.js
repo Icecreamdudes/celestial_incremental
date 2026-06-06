@@ -23,7 +23,7 @@ addLayer("al", {
         show: false,
     }},
     automate() {
-        if (hasMilestone("n", 22)) {
+        if (hasMilestone("n", 27)) {
             for (let i in layers.al.upgrades) {
                 buyUpgrade("al", i, false)
             }
@@ -127,7 +127,7 @@ addLayer("al", {
 
         player.fl.gatherer[1].id = 101
         player.fl.gatherer[1].current = new Decimal(0)
-        if (!hasMilestone("n", 20)) {
+        if (!hasMilestone("n", 12)) {
             player.fl.gatherer[1].max = new Decimal(5)
             player.fl.gatherer[1].power = new Decimal(0)
             player.fl.gatherer[1].mult = new Decimal(1)
@@ -135,13 +135,13 @@ addLayer("al", {
         
         player.fl.gatherer[2].id = 505
         player.fl.gatherer[2].current = new Decimal(0)
-        if (all && !hasMilestone("n", 20)) {
+        if (all && !hasMilestone("n", 12)) {
             player.fl.gatherer[2].max = new Decimal(5)
             player.fl.gatherer[2].power = new Decimal(0)
             player.fl.gatherer[2].mult = new Decimal(1)
         }
 
-        if (!hasMilestone("n", 20)) {
+        if (!hasMilestone("n", 12)) {
             player.fl.buyables[1] = new Decimal(0)
             player.fl.buyables[2] = new Decimal(0)
             player.fl.buyables[3] = new Decimal(0)
@@ -152,7 +152,7 @@ addLayer("al", {
             }
         }
 
-        if (all) {
+        if (all && !hasMilestone("n", 25)) {
             player.fl.gildingIndex = 101
             for (let i in player.fl.gilding) {
                 player.fl.gilding[i] = false
@@ -217,10 +217,10 @@ addLayer("al", {
         if (all) {
             player.al.honeycomb = new Decimal(0)
             player.al.honeycombGain = new Decimal(0)
-            player.al.highestHoneycomb = new Decimal(0)
+            if (!hasMilestone("n", 25)) player.al.highestHoneycomb = new Decimal(0)
             player.al.royalJelly = new Decimal(0)
             player.al.royalJellyGain = new Decimal(0)
-            player.al.highestRoyalJelly = new Decimal(0)
+            if (!hasMilestone("n", 25)) player.al.highestRoyalJelly = new Decimal(0)
             for (let i = 0; i < player.al.upgrades.length; i++) {
                 let upg = +player.al.upgrades[i]
                 if (upg > 100 && upg < 200 && (upg-100)%3 == 0 && Decimal.lte((upg-100)/3, getBuyableAmount("tw", 53))) continue
@@ -229,7 +229,7 @@ addLayer("al", {
                 i--;
             }
             for (let i in player.al.buyables) {
-                if (!hasMilestone("n", 12)) {
+                if (!hasMilestone("n", 14)) {
                     player.al.buyables[i] = new Decimal(0)
                 } else {
                     player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
@@ -713,6 +713,7 @@ addLayer("al", {
             },
         },
         // Improve honeycomb 7:1
+        // Automate honey upgrades on pollen path
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -1143,6 +1144,7 @@ addLayer("al", {
             },
         },
         // Improve royal jelly 7:1
+        // Cells level instantly
     },
     buyables: {
         101: {

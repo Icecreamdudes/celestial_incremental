@@ -376,9 +376,9 @@ addLayer("fl", {
         if (hasMilestone("n", 13)) max += 100
         if (hasMilestone("n", 15)) max += 100
         if (hasMilestone("n", 17)) max += 100
-        if (hasMilestone("n", 21)) max += 100
+        if (hasMilestone("n", 20)) max += 100
         if (hasMilestone("n", 23)) max += 100
-        if (hasMilestone("n", 25)) max += 100
+        if (hasMilestone("n", 29)) max += 100
         for (let i = 101; i < max; ) {
             if (layers.fl.glossary[i].display()) player.fl.glossary[i] = player.fl.glossary[i].add(player.fl.flowerGain.mul(player.n.flowerPercentage).mul(delta))
             if (i % 100 == 25) {i = i+76} else if (i % 10 == 5) {i = i+6} else {i++}
@@ -452,11 +452,13 @@ addLayer("fl", {
         player.fl.gatherer[1].max = new Decimal(5).div(buyableEffect("fl", 1))
         player.fl.gatherer[1].power = buyableEffect("fl", 2)
         player.fl.gatherer[1].mult = buyableEffect("fl", 3).add(1)
+        if (hasMilestone("n", 18)) player.fl.gatherer[1].mult = player.fl.gatherer[1].mult.mul(10)
         player.fl.gatherer[1].current = player.fl.gatherer[1].current.add(delta)
 
         player.fl.gatherer[2].max = new Decimal(5).div(buyableEffect("fl", 4))
         player.fl.gatherer[2].power = buyableEffect("fl", 5)
         player.fl.gatherer[2].mult = buyableEffect("fl", 6).add(1)
+        if (hasMilestone("n", 18)) player.fl.gatherer[2].mult = player.fl.gatherer[2].mult.mul(10)
         player.fl.gatherer[2].current = player.fl.gatherer[2].current.add(delta)
 
         if (player.fl.gatherer[1].current.gte(player.fl.gatherer[1].max) && player.fl.gatherer[1].power.gt(0)) {
@@ -885,11 +887,13 @@ addLayer("fl", {
         return str
     },
     flowerClick(id, power) {
+        let gain = player.fl.flowerGain
+        if (hasMilestone("n", 18)) gain = gain.mul(10)
         if (getGridData("fl", id)[0] != 0) {
             if (getGridData("fl", id)[1].gt(0)) {
                 setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(power)])
                 if (getGridData("fl", id)[1].lte(0)) {
-                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(gain)
                     setGridData("fl", id, [0, new Decimal(1)])
                 }
             }

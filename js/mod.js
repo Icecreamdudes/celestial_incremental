@@ -842,6 +842,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fun layers "Mood Triangle" tab now updates based on the shape<br>
 			- Increased SME generator buyable heights to accomodate different browsers<br>
 			- BH skill reckless abandon now tells you how it changes the stats<br>
+			- Clarified that -D1's "Vast Darkness" upgrade unlocks the buyable in DU1<br>
 			- Added text to tell you how much your aleph resources effect nest gain<br><br>
 		Balancing:<br>
 			- Buffed skill points from later runes<br>

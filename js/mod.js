@@ -831,6 +831,23 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.12.6 - Bits and Bobs</h3><br>
+		Content:<br>
+			- Added twigs layer<br>
+			- Added 3 new punchcards<br>
+			- Added Jocus perks<br>
+			- Redid nest milestones<br>
+			- Added 2 more aleph upgrades<br><br>
+		Minor Changes:<br>
+			- Added text to tell you how much your aleph resources effect nest gain<br><br>
+		Balancing:<br>
+			- Buffed skill points from later runes<br>
+			- Changed reckless abandon to not scale health converted<br>
+			- Nerfed nest effect<br>
+			- Slightly nerfed nest upgrade 5:2 (previously 4:2)<br><br>
+		Bugfixes:<br>
+			- Fixed the 7th DU1 space buyable not resetting on DU1 leave<br>
+			- Fixed some punchcards not having borders<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

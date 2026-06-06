@@ -229,10 +229,12 @@ addLayer("al", {
                 i--;
             }
             for (let i in player.al.buyables) {
-                if (!hasMilestone("n", 14)) {
-                    player.al.buyables[i] = new Decimal(0)
-                } else {
-                    player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
+                if ((i >= 101 && i <= 103) || (i >= 201 && i <= 203)) {
+                    if (!hasMilestone("n", 14)) {
+                        player.al.buyables[i] = new Decimal(0)
+                    } else {
+                        player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
+                    }
                 }
             }
         }

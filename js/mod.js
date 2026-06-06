@@ -848,6 +848,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Buffed skill points from later runes<br>
 			- Changed reckless abandon to not scale health converted<br>
 			- Reduced the cost for Geroa's "Version 2.0" upgrade<br>
+			- External hive buffing aleph buyables are no longer reset on nest resets<br>
 			- Nerfed nest effect<br>
 			- Slightly nerfed nest upgrade 5:2 (previously 4:2)<br><br>
 		Bugfixes:<br>

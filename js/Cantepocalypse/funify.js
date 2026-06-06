@@ -148,6 +148,7 @@
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
         player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 1205)[1])
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("st", 109))
+        if (hasChallenge("fu", 11)) player.fu.funToGet = player.fu.funToGet.mul(10)
 
         // POWER MODIFIERS
         player.fu.funToGet = player.fu.funToGet.pow(levelableEffect("pet", 405)[2])
@@ -178,6 +179,7 @@
         if (hasUpgrade("fu", 115)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(10)
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(player.en.enhancersEffect[2])
+        if (hasChallenge("fu", 11)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(2)
         
         player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.happinessEffect2 = player.fu.happiness.pow(2.2).add(1).pow(buyableEffect("fu", 92))
@@ -193,6 +195,7 @@
         if (hasUpgrade("fu", 115)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(10)
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(player.en.enhancersEffect[2])
+        if (hasChallenge("fu", 11)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(2)
 
         player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.sadnessEffect2 = player.fu.sadness.pow(1.2).add(1).pow(buyableEffect("fu", 92))
@@ -209,6 +212,7 @@
         if (hasUpgrade("fu", 115)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(10)
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(player.en.enhancersEffect[2])
+        if (hasChallenge("fu", 11)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(2)
 
         player.fu.angerEffect = player.fu.anger.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.angerEffect2 = player.fu.anger.pow(0.25).div(15).add(1).pow(buyableEffect("fu", 92))
@@ -222,6 +226,7 @@
         if (hasUpgrade("fu", 115)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(10)
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(player.en.enhancersEffect[2])
+        if (hasChallenge("fu", 11)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(2)
         
         player.fu.fearEffect = player.fu.fear.pow(0.35).add(1).div(player.fu.numbEffect)
         player.fu.fearEffect2 = player.fu.fear.pow(0.5).add(1)
@@ -3115,7 +3120,7 @@
             goal() { return new Decimal("10") },
             canComplete: function () { return player.gs.grassSkip.gte(10) },
             goalDescription() { return "10 Grass-Skip" },
-            rewardDescription: "Kill Jocus, and gain x10 Singularity Points.",
+            rewardDescription: "Kill Jocus.",
             onEnter() {
                 if (!player.fu.enterFear) player.fu.enterFear = true
                 player.fu.funifyPause = new Decimal(12)
@@ -3302,6 +3307,25 @@
                         ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116],
                     ], {maxWidth: "750px"}],
                 ]
+            },
+            "Perks": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return hasChallenge("fu", 11) },
+                content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", "Perks for killing Jocus", {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #5e8503", backgroundImage: "linear-gradient(120deg, #fcff04 0%, #befa32 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-column", [
+                        ["raw-html", "<u>Effects</u>", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Gain 100% of time cubes per second.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x10 singularity points.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x10 fun.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x3 core scraps.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "x2 emotion gain.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "+10% crate roll chance.", {color: "rgba(0,0,0,0.6)", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #5e8503", backgroundImage: "linear-gradient(120deg, #fcff04 0%, #befa32 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                ],
             },
         },
         mood: {

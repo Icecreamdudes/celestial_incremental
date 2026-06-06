@@ -53,6 +53,7 @@
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
+        if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
@@ -74,6 +75,9 @@
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
         
+        // POST SOFTCAP MULTIPLIERS
+        if (getLevelableTier("pu", 100, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 100)[1])
+
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }

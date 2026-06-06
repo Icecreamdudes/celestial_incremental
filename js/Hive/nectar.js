@@ -77,6 +77,7 @@ addLayer("ne", {
         if (hasAchievement("achievements", 914)) allGain = allGain.mul(1.2)
         if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
         allGain = allGain.mul(player.bee.preAlephMult.pow(0.5))
+        allGain = allGain.mul(buyableEffect("tw", 34))
 
         let allRaise = new Decimal(0)
         if (buyableEffect("bee", 43).lt(1)) allRaise = allRaise.add(buyableEffect("bee", 43))

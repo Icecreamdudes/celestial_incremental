@@ -1751,19 +1751,19 @@
                 unlocked() { return hasUpgrade("wel", 11) },
                 content() {
                     let look = [
-                        ["blank", "0"],
+                        ["blank", "0px"],
                         ["style-column", [
                             ["style-column", [
                                 ["blank", "25px"],
                             ], {display: player.wel.lightWellCycleYield.gt(1) || player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                             ["style-column", [
-                                ["raw-html", "Light wells yield a base of <h3>" + formatSimple(player.wel.lightWellCycleYield) + "</h3> ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                                ["raw-html", "Light wells yield a base of <h3>" + formatSimple(player.wel.lightWellCycleYield) + "</h3> ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: player.wel.lightWellCycleYield.gt(1) ? "" : "none !important"}],
                             ["style-column", [
-                                ["raw-html", "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                                ["raw-html", "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                             ["style-column", [
-                                ["raw-html", "<small>Next blueshift at <h3>x" + formatWhole(new Decimal(100)) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
+                                ["raw-html", "<small>Next blueshift at <h3>x" + formatWhole(new Decimal(100)) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: hasMilestone("prj", 301) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],

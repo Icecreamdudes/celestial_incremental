@@ -839,6 +839,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redid nest milestones<br>
 			- Added 2 more aleph upgrades<br><br>
 		Minor Changes:<br>
+			- Fun layers "Mood Triangle" tab now updates based on the shape<br>
+			- BH skill reckless abandon now tells you how it changes the stats<br>
 			- Added text to tell you how much your aleph resources effect nest gain<br><br>
 		Balancing:<br>
 			- Buffed skill points from later runes<br>

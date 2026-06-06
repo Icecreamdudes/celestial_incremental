@@ -3220,7 +3220,12 @@
                         ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
-            "Mood Triangle" : {
+            "Mood Triangle": {
+                title() {
+                    if (player.al.cocoonLevel >= 10) return "Mood Pentagon"
+                    if (hasUpgrade("fu", 17)) return "Mood Square"
+                    return "Mood Triangle"
+                },
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("fu", 15) },
                 content: [

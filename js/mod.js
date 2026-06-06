@@ -16,12 +16,12 @@
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
-		"Singularity/core.js", "Singularity/coreFragments.js", 
+		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
-		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
+		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js", "Hive/twig.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
@@ -286,6 +286,9 @@ function updateStyles() {
 			} else {
 				layerBG = "linear-gradient(to right, #443812, #432236)"
 			}
+			break;
+		case "tw":
+			layerBG = "#021507"
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -661,6 +664,7 @@ function updateStyles() {
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
 		case "hpu": case "hpw": case "hrm": case "hve": case "hsa":
+		case "tera":
 			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":
@@ -695,7 +699,7 @@ function updateStyles() {
 			player.musuniverse = "MI"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
-		case "ho": case "wa": case "al": case "n":
+		case "ho": case "wa": case "al": case "n": case "tw":
 			player.musuniverse = "UB"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
@@ -827,6 +831,29 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.12.6 - Bits and Bobs</h3><br>
+		Content:<br>
+			- Added twigs layer<br>
+			- Added 3 new punchcards<br>
+			- Added Jocus perks<br>
+			- Redid nest milestones<br>
+			- Added 2 more aleph upgrades<br><br>
+		Minor Changes:<br>
+			- Fun layers "Mood Triangle" tab now updates based on the shape<br>
+			- Increased SME generator buyable heights to accommodate different browsers<br>
+			- BH skill reckless abandon now tells you how it changes the stats<br>
+			- Clarified that -D1's "Vast Darkness" upgrade unlocks the buyable in DU1<br>
+			- Added text to tell you how much your aleph resources effect nest gain<br><br>
+		Balancing:<br>
+			- Buffed skill points from later runes<br>
+			- Changed reckless abandon to not scale health converted<br>
+			- Reduced the cost for Geroa's "Version 2.0" upgrade<br>
+			- External hive buffing aleph buyables are no longer reset on nest resets<br>
+			- Nerfed nest effect<br>
+			- Slightly nerfed nest upgrade 5:2 (previously 4:2)<br><br>
+		Bugfixes:<br>
+			- Fixed the 7th DU1 space buyable not resetting on DU1 leave<br>
+			- Fixed some punchcards not having borders<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>

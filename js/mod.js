@@ -840,7 +840,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added 2 more aleph upgrades<br><br>
 		Minor Changes:<br>
 			- Fun layers "Mood Triangle" tab now updates based on the shape<br>
-			- Increased SME generator buyable heights to accomodate different browsers<br>
+			- Increased SME generator buyable heights to accommodate different browsers<br>
 			- BH skill reckless abandon now tells you how it changes the stats<br>
 			- Clarified that -D1's "Vast Darkness" upgrade unlocks the buyable in DU1<br>
 			- Added text to tell you how much your aleph resources effect nest gain<br><br>

@@ -1139,7 +1139,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light Well Speed",
             condition() {
-                return player.pri.bestPrismsInOneReset.gte(400)
+                return player.pri.bestPrismsInOneReset.gte(100)
             },
             unlocked() {
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
@@ -1160,13 +1160,13 @@
 
                 s = s.mul(completions.pow_base(1.5))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.25))
-                s = s.pow(1.0625).mul(4e3)
+                s = s.pow(1.0625).mul(1e3)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
-                let s = completions.pow_base(1.5).mul(400)
+                let s = completions.pow_base(1.5).mul(50)
                 s = s.mul(completions.sub(20).max(0).pow_base(1.25))
 
                 return s.floor()
@@ -1519,7 +1519,7 @@
                         } else {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["raw-html", "Cone<br><small>Req: +400 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Cone<br><small>Req: +100 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

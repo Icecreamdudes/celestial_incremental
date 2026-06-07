@@ -321,13 +321,13 @@ function updateStyles() {
 			}
 			break;
 		case "tw":
-			layerBG = "#021507"
+			layerBG = "linear-gradient(0deg, #021507)"
 			break;
 		case "cb":
 			layerBG = "linear-gradient(0deg, #021924)"
 			break;
 	    case "bl":
-			layerBG = "#130000ff"
+			layerBG = "linear-gradient(0deg, #130000ff)"
 			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
@@ -1007,6 +1007,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Heavily weakened the negative effect of clouds.<br>
 			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
 		<br>Bugfixes:<br>
+			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
 			- Cutscene "DS-Zar-Slot-Spin" now correctly triggers after spinning the slots.<br>
 		<br>
 

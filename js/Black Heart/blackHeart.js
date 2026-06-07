@@ -819,7 +819,7 @@ addLayer("bh", {
         if (player.bh.currentStage == "none" && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
             if (player.bh.currentStage == "zarDungeon")
             {
-                player.tab = "zard"
+                if (player.zd.buyables[14].gte(1)) player.tab = "zard"
                 options.fullscreen = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
@@ -868,7 +868,7 @@ addLayer("bh", {
 
                 if (player.bh.currentStage == "zarDungeon")
                 {
-                    player.tab = "zard"
+                    if (player.zd.buyables[14].gte(1)) player.tab = "zard"
                     options.fullscreen = false
 
                     player.subtabs["bh"]["stuff"] = "stages"
@@ -1716,7 +1716,7 @@ addLayer("bh", {
 
                 player.subtabs["bh"]["stuff"] = "stages"
                 if (player.universe == "DS") {
-                    player.tab = "zd"
+                    if (player.zd.buyables[14].gte(1)) player.tab = "zd"
                 }
             },
             style() {

@@ -537,9 +537,9 @@ addLayer("settings", {
         },
         110: {
             title() {return true ? "Teal Theme" : "[LOCKED]"},
-            canClick() {return options.theme != "teal" && true},
+            canClick() {return options.theme != "teal" && player.bi.interspaceUnlocked},
             unlocked: "true",
-            tooltip() {return !true ? "Obtained from an array of teal." : ""},
+            tooltip() {return !player.bi.interspaceUnlocked ? "Obtained from a broken developer." : ""},
             onClick() {
                 options.theme = "teal"
 	            changeTheme();
@@ -565,9 +565,9 @@ addLayer("settings", {
         },
         111: {
             title: "Blossom Theme",
-            canClick() {return options.theme != "blossom" && true},
+            canClick() {return options.theme != "blossom" && false},
             unlocked: "true",
-            tooltip() {return !true ? "Obtained from a narrow escape." : ""},
+            tooltip() {return !false ? "Obtained from a broken celestial." : ""},
             onClick() {
                 options.theme = "blossom"
 	            changeTheme();

@@ -4571,7 +4571,7 @@ addLayer("pet", {
                 player.tab = "en"
             },
             // CLICK CODE
-            unlocked() { return player.ev.evolutionsUnlocked[13] },
+            unlocked() { return player.d.diceSpaceUnlocked },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE

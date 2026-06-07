@@ -52,6 +52,7 @@
         if (getLevelableTier("pu", 307, true)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(levelableEffect("pu", 307)[0])
         player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(buyableEffect("dgj", 13))
         if (hasUpgrade("sma", 207)) player.db.boosterReqDivisor = player.db.boosterReqDivisor.mul(upgradeEffect("sma", 207))
+        player.db.boosterReqDivisor = player.db.boosterReqDivisor.div(levelableEffect("car", 405)[0])
     
         player.db.boosterReqRoot = player.db.boosterReqRoot.div(buyableEffect("dv", 13))
     

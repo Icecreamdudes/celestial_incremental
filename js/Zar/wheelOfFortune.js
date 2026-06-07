@@ -29,8 +29,18 @@
         wheelPointsMult: new Decimal(1),
 
         autoSpin: false,
+        generateSpin: true,
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("car", 17))
+        {
+            buyBuyable("wof", 11)
+            buyBuyable("wof", 12)
+            buyBuyable("wof", 13)
+            buyBuyable("wof", 14)
+            buyBuyable("wof", 15)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(105deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)",
@@ -99,12 +109,17 @@
         player.wof.wheelPointsEffect3 = player.wof.wheelPoints.pow(0.3).div(2).add(1)
 
         player.wof.wheelPointsMult = new Decimal(1)
-        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104)).pow(0.65).add(1))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.wof.wheelsSpinned.pow(buyableEffect("sm", 104).pow(levelableEffect("car", 209)[0])).pow(0.65).add(1))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("wof", 13))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("cf", 24))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(player.sm.chipsEffect[2])
         if (hasUpgrade("cbs", 12)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(upgradeEffect("cbs", 12))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(levelableEffect("car", 208)[0])
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
+        player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("car", 32))
+        if (player.zarDungeon.zarDefeated) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(100)
+
+        if (hasUpgrade("car", 12)) player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.wheelPointsMult.mul(Decimal.mul(delta, 0.25)))
 
         if (player.wof.autoSpin) {
             if (player.za.chancePoints.gte(player.wof.spinCost) && !player.wof.spinActive)
@@ -115,6 +130,8 @@
                 player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(1)
             }
         }
+        
+        if (player.wof.generateSpin) player.wof.wheelsSpinned = player.wof.wheelsSpinned.add(buyableEffect("sm", 112).mul(delta))
 
         player.wof.reductionCooldown = player.wof.reductionCooldown.sub(delta)
     },
@@ -352,6 +369,18 @@
                 return look
             }
         },
+        24: {
+            title() { return player.wof.generateSpin ? "Passive Spin Gain: ON" : "Passive Spin Gain: OFF" },
+            canClick() { return true },
+            unlocked() { return player.sm.buyables[112].gte(1) },
+            onClick() {
+                if (!player.wof.generateSpin) player.wof.generateSpin = true
+                else player.wof.generateSpin = false
+            },
+            style() { 
+                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
+            },
+        },
     },
     bars: {
         wheel: {
@@ -391,7 +420,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -400,7 +429,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -425,7 +454,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -434,7 +463,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -459,7 +488,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -468,7 +497,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -493,7 +522,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -502,7 +531,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -527,7 +556,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Wheel Points'
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -536,7 +565,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

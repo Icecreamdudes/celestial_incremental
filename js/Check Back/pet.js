@@ -751,6 +751,7 @@ addLayer("pet", {
         if (hasMilestone("db", 106)) abilityTimeDecrease = abilityTimeDecrease.div(2)
         if (hasMilestone("prj", 109)) abilityTimeDecrease = abilityTimeDecrease.div(1.5)
         player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
+        abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("st", 309)[0])
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
 

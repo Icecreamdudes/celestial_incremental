@@ -49,6 +49,8 @@
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
 
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 
@@ -800,7 +802,7 @@
                         ["blank", "10px"],
                         ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "\"Humanities\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },

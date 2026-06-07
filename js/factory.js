@@ -31,7 +31,7 @@
             borderColor: "white",
         }
     },
-    branches: ["oi"],
+    branches() { return !player.zarDungeon.zarDefeated ? "cb" : ["cb", "d", "rf"] },
     tooltip: "Factory",
     color: "gray",
     update(delta) {

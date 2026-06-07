@@ -179,6 +179,7 @@
         if (hasUpgrade("fu", 115)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(10)
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(player.en.enhancersEffect[2])
+        player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(levelableEffect("car", 310)[0])
         if (hasChallenge("fu", 11)) player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(2)
         
         player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -195,6 +196,7 @@
         if (hasUpgrade("fu", 115)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(10)
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(player.en.enhancersEffect[2])
+        player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(levelableEffect("car", 310)[0])
         if (hasChallenge("fu", 11)) player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(2)
 
         player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1).div(player.fu.numbEffect)
@@ -212,6 +214,7 @@
         if (hasUpgrade("fu", 115)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(upgradeEffect("fu", 115))
         if (player.alephsChamber.milestone[25] > 0) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(10)
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(player.en.enhancersEffect[2])
+        player.fu.angerPerSecond = player.fu.angerPerSecond.mul(levelableEffect("car", 310)[0])
         if (hasChallenge("fu", 11)) player.fu.angerPerSecond = player.fu.angerPerSecond.mul(2)
 
         player.fu.angerEffect = player.fu.anger.pow(0.35).add(1).div(player.fu.numbEffect)

@@ -179,6 +179,7 @@
         player.cp.replicantiPointCap = new Decimal(1.79e308)
         if (!inChallenge("fu", 12)) player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
         player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(player.en.enhancersEffect[1])
+        player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(levelableEffect("car", 308)[0])
     },
     replicantiPointMultiply() {
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {

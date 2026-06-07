@@ -45,6 +45,8 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(player.sm.chipsEffect[0])
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(buyableEffect("sme", 181))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
+        player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 116))
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
@@ -52,6 +54,7 @@
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("wof", 15))
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("sm", 102))
             if (hasUpgrade("cbs", 14)) player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(upgradeEffect("cbs", 14))
+            player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(levelableEffect("car", 203)[0])
         } else
         {
             player.za.chancePointsSoftcapEffect = new Decimal(1)
@@ -63,7 +66,15 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.wof.wheelPointsEffect)
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(player.sm.chipsEffect[0])
         if (hasUpgrade("cbs", 11)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("cbs", 11))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(levelableEffect("car", 201)[0])
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("sme", 181))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("car", 12))
+        if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("zd", 11))
+        if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
+        if (player.zarDungeon.zarDefeated) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1000)
+
+        player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         
         if (player.za.chancePoints.gte(player.za.chancePointsSoftcapStart)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.div(player.za.chancePointsSoftcapEffect)
 
@@ -263,6 +274,20 @@
             currencyInternalName: "chancePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
         },
+        22: {
+            title: "I don't like bees but I do like honey.",
+            unlocked() { return hasUpgrade("za", 21) && player.al.show },
+            description: "Boosts honey-cells based on chance points.",
+            cost: new Decimal(1e40),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px", width: '150px',},
+            effect() {
+                return player.za.chancePoints.pow(0.06).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        },
     },
     buyables: {},
     milestones: {},
@@ -296,7 +321,7 @@
                         ["raw-html", function () { return "My amazing upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "5px"],
                         ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19],["upgrade", 21],]],
+                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19],["upgrade", 21],["upgrade", 22],]],
                         ["blank", "5px"],
                     ], {width: "800px", background: "#313131ff", border: "3px solid #ccc", borderRadius: "15px"}],
                 ]

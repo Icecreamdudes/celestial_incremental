@@ -69,7 +69,7 @@ const RUNE_EFFECTS = {
             rgn: 0.1,
         },
         5: {
-            sp: 1,
+            sp: 2,
             scd: 0.5,
             hpMult: 0.2,
             dmgMult: 0.2,
@@ -113,7 +113,7 @@ const RUNE_EFFECTS = {
             rgn: 0.15,
         },
         5: {
-            sp: 1,
+            sp: 3,
             scd: 0.5,
             hpMult: 0.3,
             dmgMult: 0.3,
@@ -157,7 +157,7 @@ const RUNE_EFFECTS = {
             rgn: 0.2,
         },
         5: {
-            sp: 1,
+            sp: 4,
             scd: 0.5,
             hpMult: 0.4,
             dmgMult: 0.4,
@@ -201,7 +201,7 @@ const RUNE_EFFECTS = {
             rgn: 0.25,
         },
         5: {
-            sp: 1,
+            sp: 5,
             scd: 0.5,
             hpMult: 0.5,
             dmgMult: 0.5,

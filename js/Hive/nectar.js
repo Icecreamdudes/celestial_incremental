@@ -77,6 +77,7 @@ addLayer("ne", {
         if (hasAchievement("achievements", 914)) allGain = allGain.mul(1.2)
         if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
         allGain = allGain.mul(player.bee.preAlephMult.pow(0.5))
+        allGain = allGain.mul(buyableEffect("tw", 34))
 
         let allRaise = new Decimal(0)
         if (buyableEffect("bee", 43).lt(1)) allRaise = allRaise.add(buyableEffect("bee", 43))
@@ -172,8 +173,8 @@ addLayer("ne", {
     clickables: {
         1: {
             title() {
-                if (player.bee.path != 2) return "Gain Nectar α, but reset previous content.<br><small>Req: 1e60 Bees</small>"
-                return "Gain Nectar α, but reset previous content.<br><small>Req: 100,000 Bees</small>"
+                if (player.bee.path != 2) return "Gain Nectar α, but reset bees and previous nectar content.<br><small>Req: 1e60 Bees</small>"
+                return "Gain Nectar α, but reset bees and previous nectar content.<br><small>Req: 100,000 Bees</small>"
             },
             canClick() { return (player.bee.path == 2 && player.bee.bees.gte(1e5)) || (player.bee.path != 2 && player.bee.bees.gte(1e60)) },
             unlocked: true,
@@ -181,13 +182,14 @@ addLayer("ne", {
                 player.ne.alpha.amount = player.ne.alpha.amount.add(player.ne.alpha.gain)
                 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
             },
-            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+            style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         2: {
             title() {
-                if (player.bee.path != 2) return "Gain Nectar β, but reset previous content.<br><small>Req: 1e6 Nectar α</small>"
-                return "Gain Nectar β, but reset previous content.<br><small>Req: 100 Nectar α</small>"
+                if (player.bee.path != 2) return "Gain Nectar β, but reset bees and previous nectar content.<br><small>Req: 1e6 Nectar α</small>"
+                return "Gain Nectar β, but reset bees and previous nectar content.<br><small>Req: 100 Nectar α</small>"
             },
             canClick() { return (player.bee.path == 2 && player.ne.alpha.amount.gte(100)) || (player.bee.path != 2 && player.ne.alpha.amount.gte(1e6)) },
             unlocked: true,
@@ -195,14 +197,15 @@ addLayer("ne", {
                 player.ne.beta.amount = player.ne.beta.amount.add(player.ne.beta.gain)
                 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
                 player.ne.alpha.amount = new Decimal(0)
             },
-            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+            style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         3: {
             title() {
-                if (player.bee.path != 2) return "Gain Nectar γ, but reset previous content.<br><small>Req: 1e6 Nectar β</small>"
-                return "Gain Nectar γ, but reset previous content.<br><small>Req: 100 Nectar β</small>"
+                if (player.bee.path != 2) return "Gain Nectar γ, but reset bees and previous nectar content.<br><small>Req: 1e6 Nectar β</small>"
+                return "Gain Nectar γ, but reset bees and previous nectar content.<br><small>Req: 100 Nectar β</small>"
             },
             canClick() { return (player.bee.path == 2 && player.ne.beta.amount.gte(100)) || (player.bee.path != 2 && player.ne.beta.amount.gte(1e6)) },
             unlocked: true,
@@ -210,15 +213,16 @@ addLayer("ne", {
                 player.ne.gamma.amount = player.ne.gamma.amount.add(player.ne.gamma.gain)
                 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
                 player.ne.alpha.amount = new Decimal(0)
                 player.ne.beta.amount = new Decimal(0)
             },
-            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+            style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         4: {
             title() {
-                if (player.bee.path != 2) return "Gain Nectar δ, but reset previous content.<br><small>Req: 1e6 Nectar γ</small>"
-                return "Gain Nectar δ, but reset previous content.<br><small>Req: 100 Nectar γ</small>"
+                if (player.bee.path != 2) return "Gain Nectar δ, but reset bees and nectar content.<br><small>Req: 1e6 Nectar γ</small>"
+                return "Gain Nectar δ, but reset bees and previous nectar content.<br><small>Req: 100 Nectar γ</small>"
             },
             canClick() { return (player.bee.path == 2 && player.ne.gamma.amount.gte(100)) || (player.bee.path != 2 && player.ne.gamma.amount.gte(1e6)) },
             unlocked: true,
@@ -226,16 +230,17 @@ addLayer("ne", {
                 player.ne.delta.amount = player.ne.delta.amount.add(player.ne.delta.gain)
                 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
                 player.ne.alpha.amount = new Decimal(0)
                 player.ne.beta.amount = new Decimal(0)
                 player.ne.gamma.amount = new Decimal(0)
             },
-            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+            style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
         5: {
             title() {
-                if (player.bee.path != 2) return "Gain Nectar ε, but reset previous content.<br><small>Req: 1e120 Nectar δ</small>"
-                return "Gain Nectar ε, but reset previous content.<br><small>Req: 1e40 Nectar δ</small>"
+                if (player.bee.path != 2) return "Gain Nectar ε, but reset bees and previous nectar content.<br><small>Req: 1e120 Nectar δ</small>"
+                return "Gain Nectar ε, but reset bees and previous nectar content.<br><small>Req: 1e40 Nectar δ</small>"
             },
             canClick() { return (player.bee.path == 2 && player.ne.delta.amount.gte(1e40)) || (player.bee.path != 2 && player.ne.delta.amount.gte(1e120)) },
             unlocked() {return hasUpgrade("al", 211)},
@@ -244,12 +249,13 @@ addLayer("ne", {
                 player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain)
                 
                 player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
                 player.ne.alpha.amount = new Decimal(0)
                 player.ne.beta.amount = new Decimal(0)
                 player.ne.gamma.amount = new Decimal(0)
                 player.ne.delta.amount = new Decimal(0)
             },
-            style: {width: '300px', minHeight: '80px', fontSize: "12px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+            style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
     },
     upgrades: {

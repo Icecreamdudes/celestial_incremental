@@ -23,7 +23,7 @@ addLayer("al", {
         show: false,
     }},
     automate() {
-        if (hasMilestone("n", 22)) {
+        if (hasMilestone("n", 27)) {
             for (let i in layers.al.upgrades) {
                 buyUpgrade("al", i, false)
             }
@@ -52,6 +52,7 @@ addLayer("al", {
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pet", 503)[1])
         player.al.honeycombGain = player.al.honeycombGain.mul(levelableEffect("pu", 308)[1])
         if (hasUpgrade("n", 62)) player.al.honeycombGain = player.al.honeycombGain.mul(player.n.nestReset.add(1).pow(0.5))
+        player.al.honeycombGain = player.al.honeycombGain.mul(buyableEffect("tw", 64))
 
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
@@ -67,6 +68,7 @@ addLayer("al", {
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pet", 503)[1])
         player.al.royalJellyGain = player.al.royalJellyGain.mul(levelableEffect("pu", 308)[1])
         if (hasUpgrade("n", 62)) player.al.royalJellyGain = player.al.royalJellyGain.mul(player.n.nestReset.add(1).pow(0.5))
+        player.al.royalJellyGain = player.al.royalJellyGain.mul(buyableEffect("tw", 64))
 
         // FLOOR ROYAL JELLY
         player.al.royalJellyGain = player.al.royalJellyGain.floor()
@@ -125,7 +127,7 @@ addLayer("al", {
 
         player.fl.gatherer[1].id = 101
         player.fl.gatherer[1].current = new Decimal(0)
-        if (!hasMilestone("n", 20)) {
+        if (!hasMilestone("n", 12)) {
             player.fl.gatherer[1].max = new Decimal(5)
             player.fl.gatherer[1].power = new Decimal(0)
             player.fl.gatherer[1].mult = new Decimal(1)
@@ -133,13 +135,13 @@ addLayer("al", {
         
         player.fl.gatherer[2].id = 505
         player.fl.gatherer[2].current = new Decimal(0)
-        if (all && !hasMilestone("n", 20)) {
+        if (all && !hasMilestone("n", 12)) {
             player.fl.gatherer[2].max = new Decimal(5)
             player.fl.gatherer[2].power = new Decimal(0)
             player.fl.gatherer[2].mult = new Decimal(1)
         }
 
-        if (!hasMilestone("n", 20)) {
+        if (!hasMilestone("n", 12)) {
             player.fl.buyables[1] = new Decimal(0)
             player.fl.buyables[2] = new Decimal(0)
             player.fl.buyables[3] = new Decimal(0)
@@ -150,7 +152,7 @@ addLayer("al", {
             }
         }
 
-        if (all) {
+        if (all && !hasMilestone("n", 25)) {
             player.fl.gildingIndex = 101
             for (let i in player.fl.gilding) {
                 player.fl.gilding[i] = false
@@ -215,16 +217,24 @@ addLayer("al", {
         if (all) {
             player.al.honeycomb = new Decimal(0)
             player.al.honeycombGain = new Decimal(0)
-            player.al.highestHoneycomb = new Decimal(0)
+            if (!hasMilestone("n", 25)) player.al.highestHoneycomb = new Decimal(0)
             player.al.royalJelly = new Decimal(0)
             player.al.royalJellyGain = new Decimal(0)
-            player.al.highestRoyalJelly = new Decimal(0)
-            player.al.upgrades.splice(0, player.al.upgrades.length)
+            if (!hasMilestone("n", 25)) player.al.highestRoyalJelly = new Decimal(0)
+            for (let i = 0; i < player.al.upgrades.length; i++) {
+                let upg = +player.al.upgrades[i]
+                if (upg > 100 && upg < 200 && (upg-100)%3 == 0 && Decimal.lte((upg-100)/3, getBuyableAmount("tw", 53))) continue
+                if (upg > 200 && upg < 300 && (upg-200)%3 == 0 && Decimal.lte((upg-200)/3, getBuyableAmount("tw", 54))) continue
+                player.al.upgrades.splice(i, 1);
+                i--;
+            }
             for (let i in player.al.buyables) {
-                if (!hasMilestone("n", 12)) {
-                    player.al.buyables[i] = new Decimal(0)
-                } else {
-                    player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
+                if ((i >= 101 && i <= 103) || (i >= 201 && i <= 203)) {
+                    if (!hasMilestone("n", 14)) {
+                        player.al.buyables[i] = new Decimal(0)
+                    } else {
+                        player.al.buyables[i] = layers.al.buyables[i].purchaseLimit().mul(player.n.nestReset.div(50).min(1)).floor()
+                    }
                 }
             }
         }
@@ -680,7 +690,21 @@ addLayer("al", {
             title: "Honeycomb <small>(10, 2)</small>",
             unlocked() {return getBuyableAmount("n", 51).gte(2)},
             description: "Increase pollens gain softcap exponent by +0.1.",
-            cost: new Decimal(1e34),
+            cost: new Decimal(1e35),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        130: {
+            title: "Honeycomb <small>(10, 3)</small>",
+            unlocked() {return getBuyableAmount("n", 51).gte(3)},
+            description: "Produce 1% of bee bread production gain per second.",
+            cost: new Decimal(1e40),
             currencyLocation() { return player.al },
             currencyDisplayName: "Honeycombs",
             currencyInternalName: "honeycomb",
@@ -691,6 +715,7 @@ addLayer("al", {
             },
         },
         // Improve honeycomb 7:1
+        // Automate honey upgrades on pollen path
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -1096,7 +1121,21 @@ addLayer("al", {
             title: "Royal J. <small>(10, 2)</small>",
             unlocked() {return getBuyableAmount("n", 51).gte(2)},
             description: "Increase nectar α gain softcap's exponent by +0.1.",
-            cost: new Decimal(1e34),
+            cost: new Decimal(1e35),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        230: {
+            title: "Royal J. <small>(10, 3)</small>",
+            unlocked() {return getBuyableAmount("n", 51).gte(3)},
+            description: "Produce 1% of honey-cells per second.",
+            cost: new Decimal(1e40),
             currencyLocation() { return player.al },
             currencyDisplayName: "Royal Jelly",
             currencyInternalName: "royalJelly",
@@ -1107,6 +1146,7 @@ addLayer("al", {
             },
         },
         // Improve royal jelly 7:1
+        // Cells level instantly
     },
     buyables: {
         101: {
@@ -1527,7 +1567,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 119], ["upgrade", 120], ["upgrade", 121]]],
                                 ["row", [["upgrade", 122], ["upgrade", 123], ["upgrade", 124]]],
                                 ["row", [["upgrade", 125], ["upgrade", 126], ["upgrade", 127]]],
-                                ["row", [["upgrade", 128], ["upgrade", 129]]],
+                                ["row", [["upgrade", 128], ["upgrade", 129], ["upgrade", 130]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
@@ -1557,7 +1597,7 @@ addLayer("al", {
                                 ["row", [["upgrade", 219], ["upgrade", 220], ["upgrade", 221]]],
                                 ["row", [["upgrade", 222], ["upgrade", 223], ["upgrade", 224]]],
                                 ["row", [["upgrade", 225], ["upgrade", 226], ["upgrade", 227]]],
-                                ["row", [["upgrade", 228], ["upgrade", 229]]],
+                                ["row", [["upgrade", 228], ["upgrade", 229], ["upgrade", 230]]],
                                 ["blank", "5px"],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [

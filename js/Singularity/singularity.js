@@ -175,12 +175,12 @@
         19: {
             title: "Singularity Upgrade IX",
             unlocked() { return true},
-            description: "Unlock core scraps, and both check back studies are always at max.",
+            description: "Unlock core scraps, a new fun upgrade, and keep CB studies on resets.",
             cost: new Decimal("1e23"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", lineHeight: "1", borderRadius: "15px", margin: "2px"},
         },
         20: {
             title: "Singularity Upgrade X",
@@ -195,7 +195,7 @@
         21: {
             title: "Singularity Upgrade XI",
             unlocked() { return true},
-            description: "Unlock starmetal alloy.",
+            description: "Unlock starmetal alloy and core enhancement.",
             cost: new Decimal("1e30"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",

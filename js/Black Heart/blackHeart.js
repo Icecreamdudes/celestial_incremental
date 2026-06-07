@@ -812,6 +812,11 @@ addLayer("bh", {
         if (player.bh.currentStage != "none") {
             // Only trigger when celestialite id is set
             if (player.bh.celestialite.id != "none") {
+                // Kill Celestialite
+                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
+                    celestialiteDeath()
+                }
+                
                 if (unpaused) {
                     // Celestialite Regen
                     if (player.bh.celestialite.regen.neq(0)) {
@@ -954,11 +959,6 @@ addLayer("bh", {
                             }
                         }                        
                     }
-                }
-
-                // Kill Celestialite
-                if (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal) {
-                    celestialiteDeath()
                 }
             }
 
@@ -1209,12 +1209,14 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("pu", 200)[2].sub(1))
         if (hasAchievement("achievements", 921)) player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(1)
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("darkTemple", 1007))
         if (hasUpgrade("depth2", 102)) player.bh.skillCostDiv = player.bh.skillCostDiv.mul(upgradeEffect("depth2", 102))
+        player.bh.skillCostDiv = player.bh.skillCostDiv.mul(levelableEffect("pu", 100)[2])
 
         player.bh.timeSpeed = new Decimal(1)
         player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
@@ -1274,6 +1276,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.bh.skillData["general_rest"].maxLevel.div(40))
         regenAdd = regenAdd.add(buyableEffect("sme", 134).sub(1))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
+        regenAdd = regenAdd.add(levelableEffect("pu", 300)[1].sub(1))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
@@ -2829,7 +2832,7 @@ addLayer("bh", {
         "Char-Eclipse": {
             title() {return "<img src='" + run(BHP["eclipse"].icon, BHP["eclipse"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 501).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 501).gt(0) || getLevelableTier("pet", 501).gt(0)},
             onClick() {
                 player.bh.characterSelection = "eclipse"
             },
@@ -2842,7 +2845,7 @@ addLayer("bh", {
         "Char-Geroa": {
             title() {return "<img src='" + run(BHP["geroa"].icon, BHP["geroa"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 502).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 502).gt(0) || getLevelableTier("pet", 502).gt(0)},
             onClick() {
                 player.bh.characterSelection = "geroa"
             },
@@ -2855,7 +2858,7 @@ addLayer("bh", {
         "Char-Vespasian": {
             title() {return "<img src='" + run(BHP["vespasian"].icon, BHP["vespasian"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return getLevelableAmount("pet", 503).gt(0)},
+            unlocked() {return getLevelableAmount("pet", 503).gt(0) || getLevelableTier("pet", 503).gt(0)},
             onClick() {
                 player.bh.characterSelection = "vespasian"
             },

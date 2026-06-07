@@ -860,7 +860,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a LOT of lore, probably the most emotional lore yet (Hopefully)<br>
 			- Added 2 new fighting characters<br>
 			- Added ultimate skills for Nav and Dice Five<br>
-			- Added 1 new punchcard<br> bv    
+			- Added 1 new punchcard<br>  
 			- Added rare space pets<br>
 			- Added radioactive pylon<br>
 			- Other stuff I may have forgot<br><br>

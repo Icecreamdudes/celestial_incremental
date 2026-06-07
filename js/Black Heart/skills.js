@@ -115,9 +115,12 @@ BHA.general_scream = {
 BHA.general_recklessAbandon = {
     name: "Reckless Abandon",
     description(char) {
-        let effect = new Decimal(20).add(player.bh.skillData["general_recklessAbandon"].level.mul(2))
+        let effect = new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Convert " + formatWhole(new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))) + "% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+        if (player.bh.currentStage != "none") return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+        return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency<br>Currently:<br>" +
+        formatSimple(player.bh.characterData[char.id].health) + " HP ⇒ " + formatSimple(player.bh.characterData[char.id].health.mul(0.75)) + " HP<br>" +
+        formatSimple(char.damage) + " DMG ⇒ " + formatSimple(char.damage.add(player.bh.characterData[char.id].health.mul(0.75).div(4).mul(effect.div(100)))) + " DMG"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_recklessAbandon"].maxLevel) + " HP"},
     char: "general",
@@ -131,8 +134,8 @@ BHA.general_recklessAbandon = {
     constantType: "effect",
     constantTarget: "self",
     effects: {
-        "damageAdd"(char) {return char.health.mul(Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)).mul(Decimal.add(0.2, player.bh.skillData["general_recklessAbandon"].level.mul(0.02))))}, // Additive Effect
-        "healthMult"(char) {return Decimal.sub(1, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05)))}, // Multiplicative Effect
+        "damageAdd"(char) {return char.health.mul(Decimal.mul(0.25, Decimal.add(0.25, player.bh.skillData["general_recklessAbandon"].level.mul(0.05))))}, // Additive Effect
+        "healthMult"(char) {return new Decimal(0.75)}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
@@ -788,8 +791,8 @@ BHA.geroa_selfRepair = {
         if (hasUpgrade("ir", 207)) return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(2))
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
-    cooldown: new Decimal(30),
-    cooldownCap: new Decimal(10),
+    cooldown: new Decimal(24),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",

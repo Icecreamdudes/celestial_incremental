@@ -156,12 +156,27 @@ const UPGRADE_RARITY_WEIGHTS = {
     epic: 10
 };
 
-function pickUpgrades() {
+const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
+    common: 30,
+    uncommon: 25,
+    rare: 25,
+    epic: 20,
+};
+
+function pickUpgrades(enhanced = false) {
     // Weighted random selection
     let pool = [];
-    for (let upg of UPGRADE_POOL) {
-        for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
-            pool.push(upg);
+    if (!enhanced) {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
+                pool.push(upg);
+            }
+        }
+    } else {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[upg.rarity]; i++) {
+                pool.push(upg);
+            }
         }
     }
     let chosen = [];
@@ -1680,6 +1695,8 @@ class SpaceArena {
                 let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // Mark Iridite defeat when boss dies
@@ -1693,6 +1710,8 @@ class SpaceArena {
                 let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
@@ -4974,9 +4993,9 @@ class SpaceArena {
         }
     }
 
-    showUpgradeChoice() {
+    showUpgradeChoice(enhanced = false) {
         this.upgradeChoiceActive = true;
-        this.upgradeChoices = pickUpgrades();
+        this.upgradeChoices = pickUpgrades(enhanced);
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
 

@@ -50,6 +50,7 @@ addLayer("bee", {
         player.bee.preAlephMult = player.bee.preAlephMult.mul(player.fl.glossaryEffects.preAleph)
         if (hasUpgrade("n", 22)) player.bee.preAlephMult = player.bee.preAlephMult.mul(player.al.royalJellyEffect)
         if (hasUpgrade("n", 61)) player.bee.preAlephMult = player.bee.preAlephMult.mul(player.n.highestNest.add(1).pow(0.5))
+        player.bee.preAlephMult = player.bee.preAlephMult.mul(buyableEffect("tw", 63))
 
         // Bee Calculations
         player.bee.bps = new Decimal(0)
@@ -74,6 +75,7 @@ addLayer("bee", {
         player.bee.bps = player.bee.bps.mul(player.bee.preAlephMult)
         if (hasUpgrade("n", 21)) player.bee.bps = player.bee.bps.mul(player.al.honeycombEffect)
         player.bee.bps = player.bee.bps.mul(levelableEffect("car", 312)[0])
+        player.bee.bps = player.bee.bps.mul(buyableEffect("tw", 23))
 
         // POWER MODIFIERS
         player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))

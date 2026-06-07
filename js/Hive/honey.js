@@ -7,6 +7,7 @@ const CELL_MILESTONES = [
 // HONEYDEW (SECRETION) IS NOTABLE
 // POLLEN CAKES IS NOTABLE
 // ADD STAMEN LAYER WHICH IS A FLOWER RESET LAYER
+// RESET LAYER AFTER NESTS IS A META LAYER THAT SWITCHES THE MAIN RESOURCE FROM BEES TO OTHER STUFF
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "HO", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -89,9 +90,12 @@ addLayer("ho", {
         if (hasUpgrade("al", 202)) player.ho.cellGain = player.ho.cellGain.mul(2)
         player.ho.cellGain = player.ho.cellGain.mul(player.bee.preAlephMult)
         if (hasUpgrade("za", 22)) player.ho.cellGain = player.ho.cellGain.mul(upgradeEffect("za", 22))
+        player.ho.cellGain = player.ho.cellGain.mul(buyableEffect("tw", 44))
 
         //FLOOR VALUE
         player.ho.cellGain = player.ho.cellGain.floor()
+
+        if (hasUpgrade("al", 230)) player.ho.cell = player.ho.cell.add(player.ho.cellGain.div(100).mul(delta))
 
         player.ho.honeyPerSecond = player.ho.cell.div(10)
         player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(buyableEffect("bee", 62))

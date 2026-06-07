@@ -982,6 +982,7 @@ function calcTarget(index, slot, target, action = "none") {
     } else if (slot < 4) {
         if (BHA[player.bh.characters[index].skills[slot].id] && BHA[player.bh.characters[index].skills[slot].id].properties && BHA[player.bh.characters[index].skills[slot].id].properties["storeTarget"] && action != "effect" && !stored) player.bh.characters[index].skills[slot].variables["specTarget"] = result
     }
+    if (result[0] == null) result = []
     return result
 }
 

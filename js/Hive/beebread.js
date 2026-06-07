@@ -3,7 +3,7 @@ const bbMilestone = [
     [new Decimal(1), new Decimal(25), new Decimal(1000), new Decimal(250000), new Decimal(1e7), new Decimal(5e9), new Decimal(1e12), new Decimal(1e15), new Decimal(1e40), new Decimal(1e90)],
     [new Decimal(1), new Decimal(15625), new Decimal(1e9), new Decimal(1.5e16), new Decimal(1e21), new Decimal(1e29), new Decimal(1e36), new Decimal(1e45), new Decimal(1e120), new Decimal(1e270)],
 ]
-
+// Add bee bread milestone glistening, which resets previous bee bread progress, but notably boosts one of your milestones (from top to bottom)
 addLayer("bb", {
     name: "Bee Bread", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BB", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -68,6 +68,10 @@ addLayer("bb", {
         if (hasUpgrade("al", 102)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(2)
         if (hasUpgrade("al", 119)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(upgradeEffect("al", 119))
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.bee.preAlephMult)
+        player.bb.beeBreadGain = player.bb.beeBreadGain.mul(buyableEffect("tw", 43))
+
+        // Per Second Gain
+        if (hasUpgrade("al", 130)) player.bb.beeBreadPerSecond = player.bb.beeBreadPerSecond.add(player.bb.beeBreadGain.div(100).mul(delta))
 
         // Per Second
         player.bb.beeBread = player.bb.beeBread.add(player.bb.beeBreadPerSecond.mul(delta))

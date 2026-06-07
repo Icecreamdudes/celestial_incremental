@@ -89,7 +89,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("cof", 18))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.se.starsExploreEffect[0][3])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(buyableEffect("fa", 15))
-        if (hasMilestone("n", 24)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.n.milestone14Effect)
+        if (hasMilestone("n", 22)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.n.milestone22Effect)
 
         // ROCKET FUEL SOFTCAP
         if (player.rf.rocketFuelToGet.gt("1e100000")) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.div("1e100000").pow(0.3).mul("1e100000")

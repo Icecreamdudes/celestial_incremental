@@ -4573,9 +4573,9 @@
         "DS-Zar-Dungeon-Zar-Fight-End": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/zarCutscene.mp3",
+            music: "music/cinematicCutscene.mp3",
             background: "linear-gradient(0deg, #6d6d6d 0%, #464646 100%)",
-            trigger() {return false }, //eventually make a trigger for when the cutscene before is finished
+            trigger() {return player.zarDungeon.zarDefeated }, //eventually make a trigger for when the cutscene before is finished
             dialogue: [
                 { text: "Before he takes his final breath, Nav lies the killing strike against Zar."  },
                 { text: "Zar falls down to the ground, and looks at Nav with pure regret."  },
@@ -4584,7 +4584,10 @@
                 { text: "Tears begin to fill Zar's eyes."  },
                 { text: "You stop Nav from continuing on her rage."  },
                 { text: "Nav, please don't. I don't know why, but celestials seem to regain their humanity during their final moments.", portrait: "resources/player.png"  },
-                { text: "Iridite... No, Illira... I'm sorry.", portrait: "resources/zar.png"  },
+                { text: "We never got to finish our mission.", portrait: "resources/zar.png"  },
+                { text: "I never even got to tell you the information I wanted to tell you...", portrait: "resources/zar.png"  },
+                { text: "It seems like I will be joining you now, Illira. I can almost see you... in paradise.....", portrait: "resources/zar.png"  },
+                { text: "It's almost as if Zar saw Iridite's soul during his last moments of life.."  },
                 //AFTER THE CINEMATIC
                 { text: "Zar's core fades away, and nothing remains."  },
                 { text: "He may have done horrible things to our universe... but his story seems tragic.", portrait: "resources/nav.png"  },
@@ -4633,12 +4636,12 @@
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/cutscenePiano.mp3",
-            background: "linear-gradient(0deg, #6d6d6d 0%, #464646 100%)",
-            trigger() {return false }, //dunno how this will be triggered
+            background: "linear-gradient(0deg, #daaf6a 0%, #d4a865 100%)",
+            trigger() {return player.c.cutscenes["DS-Zar-Dungeon-Zar-Fight-End"] > 1 && !cutsceneActive }, //dunno how this will be triggered
             dialogue: [
-                { text: "You feel an insurmountable presence surround you."  },
+                { text: "As you proceed to leave, you feel an insurmountable presence surround you."  },
                 { text: "You look all around you, and you see a being too great to even describe physically."  },
-                { text: "If you were to describe this being however, it would be a pair of floating eyes with two large hands and two wings."  },
+                { text: "If you were to describe this being, it would be a pair of floating eyes with two large hands and two wings."  },
                 { text: "However, its presence when presented towards you seems almost psychidelic, as if it existed along more than three dimensions."  },
                 { text: "At first, it appears to be an angel. But as you look closer, you see that it is not an angel."  },
                 { text: "It is a GOD. A being of immeasurable power and eternal wisdom."  },

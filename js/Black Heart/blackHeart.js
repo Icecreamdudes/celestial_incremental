@@ -1301,12 +1301,14 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("car", 112)[0])
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("pu", 200)[2].sub(1))
         if (hasAchievement("achievements", 921)) player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(1)
 
         player.bh.skillCostDiv = new Decimal(1)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(player.darkTemple.skillCost)
         player.bh.skillCostDiv = player.bh.skillCostDiv.mul(buyableEffect("darkTemple", 1007))
         if (hasUpgrade("depth2", 102)) player.bh.skillCostDiv = player.bh.skillCostDiv.mul(upgradeEffect("depth2", 102))
+        player.bh.skillCostDiv = player.bh.skillCostDiv.mul(levelableEffect("pu", 100)[2])
 
         player.bh.timeSpeed = new Decimal(1)
         player.bh.timeSpeed = player.bh.timeSpeed.add(bhTemp.timeAdd)
@@ -1371,6 +1373,7 @@ addLayer("bh", {
         regenAdd = regenAdd.add(buyableEffect("sme", 134).sub(1))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
         regenAdd = regenAdd.add(levelableEffect("car", 105)[0])
+        regenAdd = regenAdd.add(levelableEffect("pu", 300)[1].sub(1))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)

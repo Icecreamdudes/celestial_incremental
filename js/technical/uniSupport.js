@@ -233,7 +233,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
+    tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -292,7 +292,7 @@ addUniverse("UB", {
         return "Universe β<br>Hive"
     },
     symbol: "β",
-    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"], ["n"]],
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"], ["n", "tw"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",

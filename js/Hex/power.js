@@ -1173,8 +1173,7 @@ addLayer("hpw", {
             branches: [6],
             display() {
                 return "<h3>Might 目</h3>\n\
-                    Release the seal.\n\
-                    (This is irreversable)\n\ \n\
+                    Gain access to the seal.\n\ \n\
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power\n\
                     [COMING SOON]"
             },

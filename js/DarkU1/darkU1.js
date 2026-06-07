@@ -35,7 +35,7 @@
         player.du.pointGain = new Decimal(1)
         if (hasUpgrade("sma", 10)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("sma", 10))
         player.du.pointGain = player.du.pointGain.mul(player.dr.rankEffect)
-        player.du.pointGain = player.du.pointGain.mul(player.dr.tierEffect)
+        player.du.pointGain = player.du.pointGain.mul(player.dr.tierEffect) 
         player.du.pointGain = player.du.pointGain.mul(player.dr.tetrEffect)
         player.du.pointGain = player.du.pointGain.mul(player.dr.pentEffect)
         player.du.pointGain = player.du.pointGain.mul(player.dr.rankPointsEffect)
@@ -53,6 +53,7 @@
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgj", 11))
+        player.du.pointGain = player.du.pointGain.mul(levelableEffect("car", 401)[0])
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
         if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
 
@@ -69,7 +70,9 @@
         if (player.pet.legPetTimers[0].active) {
             player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.25).pow_base(10)
         }
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("st", 201)[0])
         player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(buyableEffect("rp", 12))
 
         // SOFTCAP 2
         player.du.pointSoftcap2 = new Decimal(0.1)
@@ -99,6 +102,7 @@
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }
+
     },
     bars: {},
     upgrades: {},

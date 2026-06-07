@@ -126,7 +126,7 @@
     },
     color: "white",
     tooltip: "Dice",
-    branches: ["cb"],
+    branches() { return !player.zarDungeon.zarDefeated ? "cb" : ["cb", "m"] },
     update(delta) {
         let onepersec = new Decimal(1)
 

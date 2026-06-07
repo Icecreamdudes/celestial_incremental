@@ -58,6 +58,8 @@ addLayer("stagnantSynestia", {
 
         player.stagnantSynestia.temporalMult = new Decimal(1)
         player.stagnantSynestia.temporalMult = player.stagnantSynestia.temporalMult.mul(player.darkTemple.stagnantCurMult)
+
+        player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.floor()
     },
     clickables: {
         "enter": {

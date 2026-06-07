@@ -99,6 +99,7 @@
         if (getLevelableTier("pu", 305, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
         if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
@@ -120,11 +121,14 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dv", 15))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("sme", 162))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dgj", 16))
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("car", 411)[0])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
         if (hasMilestone("prj", 104)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4));
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11))
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("st", 310)[0])
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(player.dt.timeEnergyEffect)
 
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.floor()
@@ -712,6 +716,13 @@
 
         player.bl.bloodDrain = false
 
+        player.rp.rerollPoints = new Decimal(0)
+        
+        player.rp.buyables[11] = new Decimal(0)
+        player.rp.buyables[12] = new Decimal(0)
+        player.rp.buyables[13] = new Decimal(0)
+
+        player.pu.rerolls = new Decimal(0)
         player.funify.funify = new Decimal(0)
         player.funify.funPoints = new Decimal(0)
         player.funify.funPointsGain = new Decimal(0)

@@ -48,6 +48,9 @@
         for (let i = 0; i < player.en.enhancersUnlocked.length; i++) {
             player.en.enhancerXP[i] = player.en.enhancerXP[i].add(player.en.enhancerXPPerSecond[i].mul(delta))
             if (player.en.enhancerXP[i].gte(player.en.enhancerXPReq[i])) {
+                 if (player.en.enhancerXPPerSecond[i].gte(player.en.enhancerXPReq[i].mul(10))) {
+                player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(player.en.enhancerXPPerSecond[i].div(player.en.enhancerXPReq[i]).mul(delta).floor())
+                 }
                 player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(1) //tentative to change if bulk leveling is added
                 player.en.enhancerXP[i] = new Decimal(0)
             }
@@ -418,7 +421,6 @@
                 }
             },
         },
-
         enhancer1Bar: {
             unlocked() { return player.en.enhancersUnlocked[0] },
             direction: RIGHT,
@@ -468,7 +470,7 @@
             title: "Focus Jocus",
             unlocked() { return true },
             description: "Earn 25% of jocus essence per second while in fear challenge.",
-            cost: new Decimal(10),
+            cost: new Decimal(100),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -478,7 +480,7 @@
             title: "Essence Weakener",
             unlocked() { return true },
             description: "Jocus essence weakens repli-leaf softcap, jocus essence and fear is always gained.",
-            cost: new Decimal(33),
+            cost: new Decimal(2222),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -492,7 +494,7 @@
             title: "Next Enhancer",
             unlocked() { return true },
             description: "Unlocks the next enhancer, and raises the first replicanti point softcap effect by ^0.01.",
-            cost: new Decimal(500),
+            cost: new Decimal(9999),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -502,7 +504,7 @@
             title: "Apathetic Enhancement",
             unlocked() { return true },
             description: "Apathy boosts enhncer XP gain.",
-            cost: new Decimal(2500),
+            cost: new Decimal(33333),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -516,7 +518,7 @@
             title: "Emotional Enhancer",
             unlocked() { return true },
             description: "Unlocks the third enhancer, and fear raises first 3 emotion effects.", //MAKE THIS ENHANCER PLEASE
-            cost: new Decimal(10000),
+            cost: new Decimal(100000),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -605,5 +607,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && false} //ascension pet requirement
+    layerShown() { return player.startedGame == true && player.ev.evolutionsUnlocked[13] } //ascension pet requirement
 })

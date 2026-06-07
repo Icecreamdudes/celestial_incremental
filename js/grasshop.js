@@ -251,7 +251,7 @@
         }
         
     },
-    branches: ["g"],
+    branches() { return !player.zarDungeon.zarDefeated ? "g" : ["p"] },
     clickables: {
         2: {
             title() { return "Buy Max On" },

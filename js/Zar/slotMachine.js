@@ -34,7 +34,22 @@
         chipsEffect: [new Decimal(1), new Decimal(1), new Decimal(1)],
 
         totalChipMult: new Decimal(1),
+
+        generateSpin: true,
     }},
+    automate() {
+        if (hasUpgrade("car", 17))
+        {
+            buyBuyable("sm", 101)
+            buyBuyable("sm", 102)
+            buyBuyable("sm", 103)
+            buyBuyable("sm", 104)
+            buyBuyable("sm", 105)
+            buyBuyable("sm", 106)
+            buyBuyable("sm", 107)
+            buyBuyable("sm", 108)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)",
@@ -89,19 +104,35 @@
 
 
         player.sm.totalChipMult = new Decimal(1)
-        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(0.5).add(1))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(player.sm.spinAmount.pow(levelableEffect("car", 210)[0]).pow(0.5).add(1))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sm", 108))
         if (hasUpgrade("cbs", 15)) player.sm.totalChipMult = player.sm.totalChipMult.mul(upgradeEffect("cbs", 15))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sme", 184))
+        player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("car", 42))
+        if (player.zarDungeon.zarDefeated) player.sm.totalChipMult = player.sm.totalChipMult.mul(10)
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(levelableEffect("car", 211)[0])
 
         player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(buyableEffect("sm", 12))
         player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[1] = player.sm.chipsToGet[1].mul(levelableEffect("car", 212)[0])
 
         player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(buyableEffect("sm", 13))
         player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(player.sm.totalChipMult)
+        player.sm.chipsToGet[2] = player.sm.chipsToGet[2].mul(levelableEffect("car", 213)[0])
+
+        player.sm.chipsToGet[0] = player.sm.chipsToGet[0].pow(buyableEffect("sm", 117))
+        player.sm.chipsToGet[1] = player.sm.chipsToGet[1].pow(buyableEffect("sm", 117))
+        player.sm.chipsToGet[2] = player.sm.chipsToGet[2].pow(buyableEffect("sm", 117))
+
+        if (hasUpgrade("car", 16))
+        {
+            player.sm.chips[0] = player.sm.chips[0].add(player.sm.chipsToGet[0].mul(Decimal.mul(delta, 0.05)))
+            player.sm.chips[1] = player.sm.chips[1].add(player.sm.chipsToGet[1].mul(Decimal.mul(delta, 0.05)))
+            player.sm.chips[2] = player.sm.chips[2].add(player.sm.chipsToGet[2].mul(Decimal.mul(delta, 0.05)))
+        }
 
         player.sm.chipsEffect[0] = player.sm.chips[0].div(2).add(1)
         player.sm.chipsEffect[1] = player.sm.chips[1].pow(0.75).div(2).add(1)
@@ -113,6 +144,15 @@
         }
 
         player.sm.reductionCooldown = player.sm.reductionCooldown.sub(delta)
+
+        if (player.sm.generateSpin) player.sm.spinAmount = player.sm.spinAmount.add(buyableEffect("sm", 113).mul(delta))
+        
+        for (let i = 0; i < 3; i++) {
+            if (player.sm.chips[i].lt(0))
+            {
+                player.sm.chips[i] = new Decimal(0)
+            }
+        }
     },
     randomizeSegments() {
         // Weighted pick but ensure result is different from current displayed index
@@ -194,6 +234,12 @@
                 if (player.tab == "sm")makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {x: 450 + i * 200, y: 500, text: "+" + formatWhole(Decimal.mul(3, mult)) + " paragon shards."})
             }
         }
+        if (hasUpgrade("car", 11))
+        {
+            player.sm.chips[0] = player.sm.chips[0].add(player.sm.chipsToGet[0].mul(mult.mul(0.25)))
+            player.sm.chips[1] = player.sm.chips[1].add(player.sm.chipsToGet[1].mul(mult.mul(0.25)))
+            player.sm.chips[2] = player.sm.chips[2].add(player.sm.chipsToGet[2].mul(mult.mul(0.25)))
+        }
     },
     spinSlots() {
         // Start a sequential spin: each slot spins for `spinLength` seconds in order
@@ -205,7 +251,7 @@
         player.sm.slotIndexes = [getRandomInt(5), getRandomInt(5), getRandomInt(5)]
     },
     slotReset() {
-        //reets everything before unlocking slots
+        //resets everything before unlocking slots
         player.za.chancePoints = new Decimal(0)
 
         player.cf.coinsFlipped = new Decimal(0)
@@ -304,7 +350,7 @@
             }
         },
         22: {
-            title() { return "<h6>Do a slots reset, but gain no rewards."},
+            title() { return "Do a slots reset, but gain no rewards."},
             tooltip() { return "Damn, you REALLY suck at this game." },
             canClick() { return true },
             unlocked() { return true },
@@ -313,6 +359,19 @@
             },
             style() { 
                 return { width: '125px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}
+            },
+        },
+        23: {
+            title() { return player.sm.generateSpin ? "Passive Spin Gain: ON" : "Passive Spin Gain: OFF" },
+            canClick() { return true },
+            unlocked() { return player.sm.buyables[113].gte(1) },
+            onClick() {
+                if (!player.sm.generateSpin) player.sm.generateSpin = true
+                else player.sm.generateSpin = false
+            },
+            style() { 
+                return { width: '125px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}
+
             },
         },
 
@@ -488,7 +547,7 @@
             },
             //branches: [102, 103],
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -497,7 +556,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -519,7 +578,7 @@
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -528,7 +587,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -550,18 +609,16 @@
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Yellow Chips"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("car", 17)) this.pay(buyonecost)
 
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
             style: {width: '140px', height: '140px', color: "black", background: "#fffd70ff", border: "5px solid #4d4b03ff", borderColor: "#4d4b03ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
@@ -582,7 +639,7 @@
             },
             branches: [101, 102],
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -591,7 +648,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -614,7 +671,7 @@
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -623,7 +680,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -646,7 +703,7 @@
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) +  " Yellow Chips"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -655,7 +712,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -678,18 +735,16 @@
             },
             branches: [104, 106],
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("car", 17)) this.pay(buyonecost)
 
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 }
             },
             style: {width: '140px', height: '140px', color: "black", background: "#ff7070ff", border: "5px solid #460000ff", borderColor: "#460000ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
@@ -710,7 +765,7 @@
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("car", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -719,7 +774,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("car", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -790,6 +845,198 @@
             },
             style: {width: '140px', height: '140px', color: "black", backgroundImage: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)", border: "5px solid #ebebeb", borderColor: "#ebebeb", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
+        112: {
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.cb.paragonShards},
+            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5) },
+            unlocked() { return player.sm.buyables[109].gte(10) && hasUpgrade("car", 14) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [109,],
+            display() {
+                return "Gain +" + format(tmp[this.layer].buyables[this.id].effect) + " wheel spins per second.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", backgroundImage: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)", border: "5px solid #ebebeb", borderColor: "#ebebeb", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        113: {
+            costBase() { return new Decimal(60) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.cb.evolutionShards},
+            pay(amt) { player.cb.evolutionShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.1) },
+            unlocked() { return player.sm.buyables[111].gte(10) && hasUpgrade("car", 14) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [111,],
+            display() {
+                return "Gain +" + format(tmp[this.layer].buyables[this.id].effect) + " slot spins per second.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Evolution Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", backgroundImage: "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)", border: "5px solid #cc92ff", borderColor: "#cc92ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        114: {
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.stagnantSynestia.temporalShard},
+            pay(amt) { player.stagnantSynestia.temporalShard = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.5).add(1) },
+            unlocked() { return player.sm.buyables[113].gte(5) && player.sm.buyables[112].gte(5) && hasUpgrade("car", 14) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [112, 113],
+            display() {
+                return "Boosts card generators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Temporal Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "white", backgroundImage: "linear-gradient(0deg, #2d667b 0%, #0a3870 100%)", border: "5px solid #027ca8", borderColor: "#027ca8", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        115: {
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.sm.chips[0]},
+            pay(amt) { player.sm.chips[0] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.025).add(1) },
+            unlocked() { return player.sm.buyables[114].gte(2) && hasUpgrade("car", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [114],
+            display() {
+                return "Raises chance point gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Red Chips"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "#ff7070ff", border: "5px solid #460000ff", borderColor: "#460000ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        116: {
+            costBase() { return new Decimal(4e6) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(200) },
+            currency() { return player.sm.chips[1]},
+            pay(amt) { player.sm.chips[1] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1) },
+            unlocked() { return player.sm.buyables[115].gte(5) && hasUpgrade("car", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [115],
+            display() {
+                return "Extends chance point, head, and tails softcaps by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blue Chips"
+            },  
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "#7970ffff", border: "5px solid #09035aff", borderColor: "#09035aff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        117: {
+            costBase() { return new Decimal(1e8) },
+            costGrowth() { return new Decimal(4) },
+            purchaseLimit() { return new Decimal(30) },
+            currency() { return player.sm.chips[2]},
+            pay(amt) { player.sm.chips[21] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.02).add(1) },
+            unlocked() { return player.sm.buyables[116].gte(5) && hasUpgrade("car", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            branches: [115],
+            display() {
+                return "Boosts all chip gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Yellow Chips"
+            },  
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "#fffd70ff", border: "5px solid #4d4b03ff", borderColor: "#4d4b03ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
     },
     milestones: {},
     challenges: {},
@@ -850,7 +1097,7 @@
                                     ["tooltip-row", [
                                         ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                         ["raw-html", () => { return formatWhole(player.stagnantSynestia.temporalShard)}, {width: "95px", height: "50px", color: "#0d62c4ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                        ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from check back battles)</small></div>"],
+                                        ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from temporal chasm)</small></div>"],
                                     ], {width: "150px", height: "50px"}],
                                 ], {height: "50px", backgroundColor: "black", border: "2px solid #635400ff", borderRadius: "10px", userSelect: "none"}],
                                 ["blank", "6px"],
@@ -882,57 +1129,57 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "10px"],
-                    ["style-column", [
-                    ["style-column", [
-                    ["style-column", [
-                        ["blank", "12px"],
-                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[0]) + "</h3> red chips." }, { "color": "#800000", "font-size": "16px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[1]) + "</h3> blue chips." }, { "color": "#000080", "font-size": "16px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You have <h3>" + format(player.sm.chips[2]) + "</h3> yellow chips." }, { "color": "#404000", "font-size": "16px", "font-family": "monospace" }],
-                        ["blank", "12px"],
-                        ["left-row", [
-                            ["tooltip-row", [
-                                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-                            ], {width: "148px", height: "50px", borderRight: "2px solid #635400"}],
-                            ["tooltip-row", [
-                                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-                            ], {width: "150px", height: "50px"}],
-                        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid #635400", borderRadius: "10px", userSelect: "none"}],
-                        ["blank", "13px"],
-                        ["always-scroll-column", [
-                            ["blank", "10px"],
-                            ["row", [
-                                ["ex-buyable", 101],
-                                ["ex-buyable", 102],
-                                ["ex-buyable", 103],
-                            ]],
-                            ["row", [
-                                ["ex-buyable", 104],
-                                ["ex-buyable", 105],
-                            ]],
-                            ["row", [
-                                ["ex-buyable", 107],
-                                ["ex-buyable", 106],
-                            ]],
-                            ["row", [
-                                ["ex-buyable", 108],
-                            ]],
-                            ["row", [
-                                ["ex-buyable", 109],
-                                ["ex-buyable", 111],
-                            ]],
-                        ], {width: "726px", height: "600px", backgroundColor: "#6354005f", border: "3px solid #635400", borderRadius: "15px 0 0 15px"}],
-                        ["blank", "6px"],
-                    ], {background: "#6354005f", width: "744px"}],
-                    ], {background: "linear-gradient(45deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)", border: "3px solid #635400",  borderRadius: "0px", width: "744px"}],
-                    ], () => {
-                        return {backgroundImage: "url(resources/ui/slot_machine_background_1.png)", backgroundPosition: (Date.now() / 1000 % 1 < 0.5) ? "25px 0px" : "", border: "3px solid #635400",  borderRadius: "13px", padding: "25px"}
-                    }],
+                    ["blank", "12.5px"],
+                        ["raw-html", function () { return "You have " + format(player.sm.chips[0]) + " red chips. (+" + format(player.sm.chipsToGet[0]) + ")" }, { "color": "#ff7070ff", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You have " + format(player.sm.chips[1]) + " blue chips. (+" + format(player.sm.chipsToGet[1]) + ")" }, { "color": "#7970ffff", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You have " + format(player.sm.chips[2]) + " yellow chips. (+" + format(player.sm.chipsToGet[2]) + ")" }, { "color": "#fffd70ff", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "12.5px"],
+                                    ["left-row", [
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+            ], {width: "150px", height: "50px"}],
+        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "12.5px"],
+                    ["always-scroll-column", [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["ex-buyable", 101],
+                            ["ex-buyable", 102],
+                            ["ex-buyable", 103],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 104],
+                            ["ex-buyable", 105],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 107],
+                            ["ex-buyable", 106],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 108],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 109],
+                            ["ex-buyable", 111],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 112],
+                            ["ex-buyable", 113],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 114],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 115], ["ex-buyable", 116], ["ex-buyable", 117],
+                        ]],
+                    ], {width: "775px", height: "600px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
             },
         },

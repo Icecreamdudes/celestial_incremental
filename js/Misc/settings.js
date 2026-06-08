@@ -700,10 +700,10 @@ addLayer("settings", {
                         ["blank", "10px"]
                         ["raw-html", "Game by Icecreamdude", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
                         ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
-                            "Content: Icecreamdude Forwaken<br>" +
+                            "Content: Icecreamdude Forwaken Akash Bumpy<br>" +
                             "Ideas: Nova<br>" +
-                            "Art: Jtoh_Sc Lemonsja<br>" +
-                            "Testing: Nova Piterpicher Vel<br>" +
+                            "Art: Jtoh_Sc Lemonsja Akash Bumpy<br>" +
+                            "Testing: Nova Piterpicher Vel Bumpy<br>" +
                             "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "255px"}],
                     ["style-row", [

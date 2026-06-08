@@ -870,8 +870,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },

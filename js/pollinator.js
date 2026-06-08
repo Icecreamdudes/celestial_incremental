@@ -174,7 +174,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("al", 104))
-            if (hasMilestone("n", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
+            if (player.n.highestNest.gt(0)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
@@ -237,6 +237,13 @@ addLayer("pol", {
         player.pol.currCount = new Decimal(0)
         for (let prop in player.pol.pollinatorEffects) {
             if (player.pol.pollinatorEffects[prop].enabled) player.pol.currCount = player.pol.currCount.add(1)
+        }
+
+        for (let key in player.pol.pollinatorEffects) {
+        let effs = player.pol.pollinatorEffects[key].effects
+        for (let i = 0; i < effs.length; i++) {
+            effs[i] = effs[i].pow(levelableEffect("car", 303)[0])
+        }
         }
 
         player.pol.maxCount = buyableEffect("pol", 15).add(1)

@@ -397,7 +397,7 @@
         },
         15: {
             title() { return player.ro.rocketCooldown.lt(0) ? player.ro.rocketImages[player.ro.rocketIndex] + "<br><br><h2>Launch" : "<br><br>" + player.ro.rocketImages[player.ro.rocketIndex] + "<br><br><h5>Cooldown: " + formatTime(player.ro.rocketCooldown) + "." },
-            canClick() { return player.ro.rocketCooldown.lt(0) && player.ro.rocketParts.gte(player.ro.rocketPartsReq) && player.ro.activatedFuel.gte(player.ro.activatedFuelReq) && player.cb.evolutionShards.gte(player.ro.evoCost) && player.cb.paragonShards.gte(player.ro.paragonCost)},
+            canClick() { return player.ro.rocketCooldown.lt(0) && player.ro.rocketParts.gte(player.ro.rocketPartsReq) && player.ro.activatedFuel.gte(player.ro.activatedFuelReq) && player.cb.evolutionShards.gte(player.ro.evoCost) && player.cb.paragonShards.gte(player.ro.paragonCost) && player.stagnantSynestia.temporalShard.gte(player.ro.temporalCost) },
             unlocked() { return true },
             onClick() {
                 player.au2.stars = player.au2.stars.add(player.au2.starsToGet)

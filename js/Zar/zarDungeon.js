@@ -903,9 +903,9 @@ addLayer("zarDungeon", {
             canClick() { return (player.zarDungeon.navToggle || player.zarDungeon.diceFiveToggle) && player.bh.currentStage != "zarDungeon" },
             unlocked: true,
             onClick() {          
-                if (player.bh.characters[2].id != "none")player.bh.characterData[player.bh.characters[0].id].selected = false
-                if (player.bh.characters[2].id != "none")player.bh.characterData[player.bh.characters[1].id].selected = false
-                if (player.bh.characters[2].id != "none")player.bh.characterData[player.bh.characters[2].id].selected = false
+                if (player.bh.characters[0].id != "none")player.bh.characterData[player.bh.characters[0].id].selected = 0
+                if (player.bh.characters[1].id != "none")player.bh.characterData[player.bh.characters[1].id].selected = 0
+                if (player.bh.characters[2].id != "none")player.bh.characterData[player.bh.characters[2].id].selected = 0
                 if (player.zarDungeon.navToggle) 
                 { 
                     player.bh.characterData["nav"].selected = true
@@ -916,7 +916,7 @@ addLayer("zarDungeon", {
                 }
                 else
                 {
-                    player.bh.characterData[player.bh.characters[0].id].selected = false
+                    if (player.bh.characters[0].id != "none") player.bh.characterData[player.bh.characters[0].id].selected = false
                     player.bh.characters[0].id = "none"
 
                     for (let i = 0; i < 4; i++) {
@@ -933,7 +933,7 @@ addLayer("zarDungeon", {
                 }
                 else
                 {
-                    player.bh.characterData[player.bh.characters[1].id].selected = false
+                    if (player.bh.characters[1].id != "none") player.bh.characterData[player.bh.characters[1].id].selected = false
                     player.bh.characters[1].id = "none"
 
                     for (let i = 0; i < 4; i++) {

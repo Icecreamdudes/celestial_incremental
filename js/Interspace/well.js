@@ -421,7 +421,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Well cycles boost well yield.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><h3>Req: 6 Light Fountain Cycles</h3>"
+                    s += "???</h2><br><h3>Req: 6 Light Fountain ↻</h3>"
                 }
                 return s
             },
@@ -459,7 +459,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Double light gain every 4 OoM of light.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><h3>Req: 3 Light Fountain II Cycles</h3>"
+                    s += "???</h2><br><h3>Req: 3 Light Fountain II ↻</h3>"
                 }
                 return s
             },
@@ -497,7 +497,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock projects and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 1,000,000 light well α yield.</h3>"
+                    s += "???</h2><br><br><h3>Req: 1,000,000 Light Well α yield.</h3>"
                 }
                 return s
             },
@@ -573,7 +573,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Weaken the light well cycle effect softcap every project cycle.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: Time capsule project level 5</h3>"
+                    s += "???</h2><br><br><h3>Req: 5 Time Capsule Project ↻</h3>"
                 }
                 return s
             },
@@ -611,7 +611,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the second project and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 1e15 light</h3>"
+                    s += "???</h2><br><br><h3>Req: 1e15 Light</h3>"
                 }
                 return s
             },
@@ -723,7 +723,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Arrow instead divides light fountain requirements.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Arrow instead divides Light Fountain requirements.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 300 Prisms</h3>"
                 }
@@ -763,7 +763,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the third project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 15 total project cycles</h3>"
+                    s += "???</h2><br><br><h3>Req: 15 total Project ↻</h3>"
                 }
                 return s
             },
@@ -837,7 +837,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Improve the formulae for light fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the formulas for light fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: Light Well δ unlocked</h3>"
                 }
@@ -877,7 +877,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Light well cooldowns will never exceed 1 minute.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: +100% light well ↻/s</h3>"
+                    s += "???</h2><br><br><h3>Req: +100% Light Well ↻/s</h3>"
                 }
                 return s
             },
@@ -915,7 +915,7 @@
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the fourth project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 30 total Project levels</h3>"
+                    s += "???</h2><br><br><h3>Req: 30 total Project ↻</h3>"
                 }
                 return s
             },

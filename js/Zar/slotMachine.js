@@ -35,7 +35,7 @@
 
         totalChipMult: new Decimal(1),
 
-        generateSpin: true,
+        generateSpin: false,
     }},
     automate() {
         if (hasUpgrade("car", 17))
@@ -143,9 +143,10 @@
             layers.sm.slotReset();
         }
 
+
         player.sm.reductionCooldown = player.sm.reductionCooldown.sub(delta)
 
-        if (player.sm.generateSpin) player.sm.spinAmount = player.sm.spinAmount.add(buyableEffect("sm", 113).mul(delta))
+        if (player.sm.generateSpin && player.sm.buyables[113].gte(1)) player.sm.spinAmount = player.sm.spinAmount.add(buyableEffect("sm", 113).mul(delta))
         
         for (let i = 0; i < 3; i++) {
             if (player.sm.chips[i].lt(0))

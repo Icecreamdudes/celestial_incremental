@@ -4669,6 +4669,50 @@ addLayer("pet", {
                 return look
             } 
         },
+        1401: {
+            image() { return this.canClick() ? "resources/Pets/enhanceDustEvoPet.png" : "resources/secret.png"},
+            title() { return "Enhance Dust" },
+            lore() { return "A strange airborne powder that has the properties of one of the ancient Jacorbian SPVs: Enhance Points." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to enhance points.<br>" +
+                    "^" + format(this.effect()[1]) + " to first three emotions.<br>"
+            },
+            levelLimit() { return new Decimal(10) },
+            effect() { 
+                return [
+                    getLevelableAmount(this.layer, this.id).pow(1.25).div(5).add(1), // Enhance Points
+                    getLevelableAmount(this.layer, this.id).div(40).add(1), // Emotions
+                ]
+            },
+            levelTooltip() { return "Costs Shards of Ascension." },
+            evoCan() { return true },
+            evoTooltip() { return ""},
+            evoClick() {
+                player.tab = "en"
+            },
+            // CLICK CODE
+            unlocked() { return player.d.diceSpaceUnlocked },
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
+            canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
+            currency() { return player.cbs.ascensionShards },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.25).floor() },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         2001: {
             image() { return this.canClick() ? "resources/Pets/cookie/simpleCookieEvo.png" : "resources/secret.png"},
             title() { return "Simple Cookie" },
@@ -5281,7 +5325,7 @@ addLayer("pet", {
                                 ["raw-html", "Ascension Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cbs.shrineReactivated ? {width: "631px", height: "40px", backgroundColor: "#c6f7ff", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", []],
+                                ["row", [["levelable", 1401],]],
                             ], () => { return player.cbs.shrineReactivated ? {width: "635px", background: "repeating-linear-gradient(-45deg, #637c80 0 15px, #7a999e 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],

@@ -38,6 +38,7 @@
         let onepersec = new Decimal(1)
 
         player.en.enhancePointsToGet = player.fu.apathy.pow(0.4).div(10)
+        player.en.enhancePointsToGet = player.en.enhancePointsToGet.mul(levelableEffect("pet", 1401)[0])
 
         player.en.enhancePointsEffect = player.en.enhancePoints.pow(0.3).add(1)
 

@@ -178,9 +178,9 @@ addLayer("depth1", {
             },
         },
         6: {
-            title: "<small>Should've been here a long time ago",
+            title: "Collectors Edition",
             unlocked: true,
-            description: "Gain 100% of time cubes per second.",
+            description: "Unlock new celestial themed punchcards.",
             cost: new Decimal(100),
             currencyLocation() {return player.depth1 },
             currencyDisplayName: "Dim Umbrite",
@@ -238,7 +238,7 @@ addLayer("depth1", {
         104: {
             title: "Vast Darkness",
             unlocked() {return hasUpgrade("darkTemple", 10)},
-            description: "Unlock a new space buyable in Dark-Uni 1.",
+            description: "Unlock a new DU1 space buyable.",
             cost: new Decimal(100000),
             currencyLocation() { return player.depth1 },
             currencyDisplayName: "Dim Umbrite",

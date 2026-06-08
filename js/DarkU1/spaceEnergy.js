@@ -47,6 +47,8 @@
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("ir", 4)[0])
         if (getLevelableTier("pu", 111, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 111)[0])
         if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
+        player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("car", 408)[0])
+        player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("st", 301)[0])
 
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
@@ -66,21 +68,25 @@
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(buyableEffect("dn", 14))
         if (getLevelableTier("pu", 212, true)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("pu", 212)[0])
+        player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
 
         player.ds.width = player.ds.width.add(player.ds.widthPerSecond.mul(delta))
         player.ds.widthPerSecond = buyableEffect("ds", 12)
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("dn", 14))
         if (getLevelableTier("pu", 212, true)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
+        player.ds.widthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
 
         player.ds.depth = player.ds.depth.add(player.ds.depthPerSecond.mul(delta))
         player.ds.depthPerSecond = buyableEffect("ds", 13)
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("dn", 14))
         if (getLevelableTier("pu", 212, true)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
+        player.ds.depthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
 
         player.ds.spissitude = player.ds.spissitude.add(player.ds.spissitudePerSecond.mul(delta))
         player.ds.spissitudePerSecond = buyableEffect("ds", 14)
+        player.ds.spissitudePerSecond = player.ds.spissitudePerSecond.mul(levelableEffect("st", 302)[0])
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)

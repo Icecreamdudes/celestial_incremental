@@ -22,6 +22,9 @@
         eclipseShardsToGetToGet: new Decimal(1),
         eclipseShardsReq: new Decimal(1e6),
         eclipseShardsValue: new Decimal(5),
+
+        timeSinceReset: new Decimal(0),
+        timeSinceEnter: new Decimal(0),
     }},
     automate() {
         if (hasUpgrade("sma", 201)) {
@@ -56,12 +59,19 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.sma.inStarmetalChallenge) {
+            player.le.timeSinceEnter = player.le.timeSinceEnter.add(delta)
+            player.le.timeSinceReset = player.le.timeSinceReset.add(delta)
+        }
+
         // Starmetal Alloy
         player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.5).floor()).mul(1e2)
         if (player.le.resetAmount.gte(3)) player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.5).floor()).mul(1e2)
         if (player.le.resetAmount.gte(8)) player.le.starmetalAlloyReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e2)
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.dn.normalityEffect)
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
+        player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(buyableEffect("funify", 12))
+        if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
 
 
@@ -89,6 +99,8 @@
         if (getLevelableTier("pu", 305, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -96,6 +108,7 @@
         if (player.le.resetAmount.gte(8)) player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e3)
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
+        if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -104,10 +117,13 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dv", 15))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("sme", 162))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dgj", 16))
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("car", 411)[0])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("st", 310)[0])
 
         if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.legPetTimers[0].active) {
             player.le.resetAmount = player.le.resetAmount.add(1)
@@ -448,6 +464,8 @@
         },
     },
     starmetalReset() {
+        player.le.timeSinceReset = new Decimal(0)
+
         player.du.points = new Decimal(0)
         player.du.pointGain = new Decimal(0)
         player.dr.rank = new Decimal(0)
@@ -520,6 +538,9 @@
         }
     },
     starmetalResetAgain() {
+        player.le.timeSinceReset = new Decimal(0)
+        player.le.timeSinceEnter = new Decimal(0)
+
         player.du.points = new Decimal(0)
         player.du.pointGain = new Decimal(0)
         player.dr.rank = new Decimal(0)
@@ -619,6 +640,7 @@
         player.ds.buyables[104] = new Decimal(0)
         player.ds.buyables[105] = new Decimal(0)
         player.ds.buyables[106] = new Decimal(0)
+        player.ds.buyables[107] = new Decimal(0)
 
         player.dv.clouds = new Decimal(0)
         player.dv.producingClouds = false
@@ -658,6 +680,24 @@
         }
 
         player.bl.bloodDrain = false
+
+        player.rp.rerollPoints = new Decimal(0)
+        
+        player.rp.buyables[11] = new Decimal(0)
+        player.rp.buyables[12] = new Decimal(0)
+        player.rp.buyables[13] = new Decimal(0)
+
+        player.pu.rerolls = new Decimal(0)
+        player.funify.funify = new Decimal(0)
+        player.funify.funPoints = new Decimal(0)
+        player.funify.funPointsGain = new Decimal(0)
+        
+        player.funify.buyables[11] = new Decimal(0)
+        player.funify.buyables[12] = new Decimal(0)
+        player.funify.buyables[13] = new Decimal(0)
+        player.funify.buyables[14] = new Decimal(0)
+        player.funify.buyables[15] = new Decimal(0)
+        player.funify.buyables[16] = new Decimal(0)
     },
     upgrades: {
         11: {

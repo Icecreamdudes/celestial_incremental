@@ -18,6 +18,20 @@
         highestSingularityPoints: new Decimal(0),
 
         sMax: false,
+
+        pylonEnergyMax: new Decimal(1e4),
+        pylonEnergy: new Decimal(0),
+        pylonEnergyEffect: new Decimal(1), //tickspeed
+        pylonEnergyEffect2: new Decimal(1), //radiation
+        pylonEnergyEffect3: new Decimal(1), //core scrap
+        pylonEnergyEffect4: new Decimal(1), //natural pylon energy
+        pylonEnergyPerSecond: new Decimal(0),
+        
+        pylonPassiveEffect: new Decimal(1), //singularity points (based on points)
+
+        pylonTier: new Decimal(1),
+        pylonTierEffect: new Decimal(1),
+        pylonBuilt: false,
     }},
     automate() {},
     nodeStyle: {
@@ -64,11 +78,13 @@
         if (hasUpgrade("ir", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ir", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("ir", 1)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.in.pylonPassiveEffect)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.s.pylonPassiveEffect)
 
         //Power modifiers
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("sb", 104))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(player.se.starsExploreEffect[1][0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(buyableEffect("gwaTemple", 26))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("car", 309)[0])
 
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
@@ -84,8 +100,64 @@
         //tickspeed
         player.uni["U3"].tickspeed = new Decimal(1)
         player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(buyableEffect("gwaTemple", 25))
+
+
+        //pylon
+        player.s.pylonEnergyMax = Decimal.pow(1e4, player.s.pylonTier)
+
+        if (hasUpgrade("s", 31) && player.s.pylonBuilt) {
+            player.s.pylonEnergyPerSecond = new Decimal(1)
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 1))
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 2))
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 3))
+
+            player.s.pylonPassiveEffect = player.points.pow(0.0001).add(1).pow(player.s.pylonTierEffect)
+        } else {
+            player.s.pylonEnergyPerSecond = new Decimal(0)
+
+            player.s.pylonPassiveEffect = new Decimal(1)
+        }
+
+        if (player.s.pylonEnergy.gte(player.s.pylonEnergyMax)) {
+            player.s.pylonEnergy = player.s.pylonEnergyMax
+            player.s.pylonEnergyPerSecond = new Decimal(0)
+        }
+        player.s.pylonEnergy = player.s.pylonEnergy.add(player.s.pylonEnergyPerSecond.mul(Decimal.div(delta, player.uni["U3"].tickspeed)))
+        
+        player.s.pylonEnergyEffect = player.s.pylonEnergy.add(1).log(10).div(6).add(1).pow(player.s.pylonTierEffect)
+        player.s.pylonEnergyEffect2 = player.s.pylonEnergy.add(1).pow(0.3).add(1).pow(player.s.pylonTierEffect)
+        player.s.pylonEnergyEffect3 = player.s.pylonEnergy.add(1).pow(0.25).add(1).pow(player.s.pylonTierEffect)
+        player.s.pylonEnergyEffect4 = player.s.pylonEnergy.pow(0.1).add(1).pow(player.s.pylonTierEffect)
+
+        player.s.pylonTierEffect = player.s.pylonTier.sub(1).pow(0.5).div(10).add(1)
+
+        player.uni["U3"].tickspeed = new Decimal(1)
+        player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(player.s.pylonEnergyEffect)
     },
-    clickables: {},
+    clickables: {
+        11: {
+            title() { return "<h2>Build the Universe 3 Pylon<br>Cost: 1e8 Radioactive Core Fragments" },
+            canClick() { return player.cof.coreFragments[4].gte(1e8) },
+            unlocked() { return !player.s.pylonBuilt },
+            onClick() {
+                player.cof.coreFragments[4] = player.cof.coreFragments[4].sub(1e8)
+
+                player.s.pylonBuilt = true
+            },
+            style: {width: "600px", minHeight: "200px", color: "#ffffff", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+        12: {
+            title() { return "<h2>Tier up the Radioactive Pylon" },
+            canClick() { return player.s.pylonEnergy.gte(player.s.pylonEnergyMax) },
+            unlocked() { return player.s.pylonEnergy.gte(player.s.pylonEnergyMax) },
+            onClick() {
+                player.s.pylonEnergy = new Decimal(0)
+
+                player.s.pylonTier = player.s.pylonTier.add(1)
+            },
+            style: {width: "600px", minHeight: "200px", color: "#ffffff", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+    },
     bars: {},
     upgrades: {
         11: {
@@ -292,8 +364,123 @@
             currencyInternalName: "singularityPoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+        31: {
+            title: "Singularity Upgrade XXI",
+            unlocked() { return player.zarDungeon.zarDefeated && player.n.pylonTier.gte(2)},
+            description: "Unlock radioactive pylon.",  
+            cost: new Decimal("1e7500"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     buyables: {
+        1: {
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[4] },
+            pay(amt) { player.cof.coreFragments[4] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(3).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor I"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
+        2: {
+            costBase() { return new Decimal(1e7) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[4] },
+            pay(amt) { player.cof.coreFragments[4] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(2.5).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor II"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
+        3: {
+            costBase() { return new Decimal(1e8) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.cof.coreFragments[4] },
+            pay(amt) { player.cof.coreFragments[4] = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(2).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor III"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Core Fragments'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
         11: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1000) },
@@ -521,6 +708,7 @@
                         ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
                         ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
                         ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27],["upgrade", 28],["upgrade", 29], ["upgrade", 30],
+                        ["upgrade", 31],
                     ], {maxWidth: "800px"}],
                 ]
             },
@@ -570,6 +758,34 @@
                     ["infobox", "2"],
                     ["infobox", "3"],
                     ["infobox", "4"],
+                ]
+            },
+            "Pylon": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return hasUpgrade("s", 31) },
+                content: [
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/radioactiveFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[4])}, {width: "103px", height: "50px", color: "#D3173A", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Radioactive Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["clickable", 11],
+                    ["raw-html", () => { return player.s.pylonBuilt ? "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (" + format(player.s.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts core scraps x" + format(player.s.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts natural pylon energy by x" + format(player.s.pylonEnergyEffect4) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.s.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3],]], 
+                    ["blank", "25px"],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts all pylon effects by ^" + format(player.s.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["clickable", 12],
                 ]
             },
         },

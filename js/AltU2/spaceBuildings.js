@@ -69,7 +69,7 @@
             currency() { return player.prj.storedTimeCapsules},
             pay(amt) { player.prj.storedTimeCapsules = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 35) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

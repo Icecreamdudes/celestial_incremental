@@ -31,6 +31,7 @@
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 
+		"Singularity/lightRift.js",
 		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js", "Check Back/compaction.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
 
@@ -234,7 +235,7 @@ function updateStyles() {
 			}
 			break;
 		case "co": case "ra": case "sd": case "cs":
-		case "cof":
+		case "cof": case "lightRift":
 			if (player.matosLair.milestone[25] == 0) layerBG = "linear-gradient(0deg, #260300)"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
@@ -278,7 +279,7 @@ function updateStyles() {
 					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
 					break;
 				default: 
-					layerBG = "black"
+					layerBG = "linear-gradient(0deg, black)"
 					break;
 			}
 			break;
@@ -409,7 +410,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer") {
+	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "lightRift") {
     	let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
 		// Add the dotted background if it doesn't already exist

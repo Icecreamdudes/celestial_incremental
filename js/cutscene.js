@@ -4115,7 +4115,7 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return player.bi.interspaceUnlocked },
+            trigger() {return player.lightRift.interspaceUnlocked },
             dialogue: [
                 { text: "The light bends through the air like it's liquid." },
                 { text: "It all merges into a single beam, then shoots back into the endless space." },

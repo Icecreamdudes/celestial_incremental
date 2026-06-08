@@ -595,7 +595,7 @@ addLayer("achievements", {
             image: "resources/achievements/12_01.png",
             tooltip: "<h3>Welcome to Inter Space</h3><hr style='margin-bottom:4px'>Enter interspace.",
             color: "#994d99",
-            complete() {return player.bi.interspaceUnlocked},
+            complete() {return player.lightRift.interspaceUnlocked},
             unlocked: true,
         },
         1202: {
@@ -923,7 +923,7 @@ addLayer("achievements", {
                 ],
             },
             13: {
-                unlocked() {return hasAchievement("achievements", 1201) || player.bi.interspaceUnlocked},
+                unlocked() {return hasAchievement("achievements", 1201) || player.lightRift.interspaceUnlocked},
                 content: [
                     ["top-column", [
                         ["row", [

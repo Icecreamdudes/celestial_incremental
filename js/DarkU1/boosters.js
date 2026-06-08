@@ -249,8 +249,8 @@
         },
         106: {
             effectDescription() { return "/2 to the eclipse timer tickspeed.<br>"},
-            unlocked() { return player.bi.interspaceUnlocked },
-            done() { return player.db.bestBoosters.gte(30) && player.bi.interspaceUnlocked },
+            unlocked() { return player.lightRift.interspaceUnlocked },
+            done() { return player.db.bestBoosters.gte(30) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -259,8 +259,8 @@
         },
         107: {
             effectDescription() { return "/1.2 to legendary summon cooldown.<br>"},
-            unlocked() { return player.bi.interspaceUnlocked },
-            done() { return player.db.bestBoosters.gte(70) && player.bi.interspaceUnlocked },
+            unlocked() { return player.lightRift.interspaceUnlocked },
+            done() { return player.db.bestBoosters.gte(70) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -269,8 +269,8 @@
         },
         108: {
             effectDescription() { return "x1.2 to starmetal alloy and eclipse shard gain again.<br>"},
-            unlocked() { return player.bi.interspaceUnlocked },
-            done() { return player.db.bestBoosters.gte(85) && player.bi.interspaceUnlocked },
+            unlocked() { return player.lightRift.interspaceUnlocked },
+            done() { return player.db.bestBoosters.gte(85) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}

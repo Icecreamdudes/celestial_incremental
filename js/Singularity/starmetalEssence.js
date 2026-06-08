@@ -2175,7 +2175,7 @@
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[105, "#3d996b"]],
             cost(x) {
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
@@ -2210,7 +2210,7 @@
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[191, "#3d996b"]],
             cost(x) {
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
@@ -2244,7 +2244,7 @@
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[191, "#3d996b"]],
             cost(x) {
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
@@ -2278,7 +2278,7 @@
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
             effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[192, "#3d996b"]],
             cost(x) {
                 return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
@@ -2347,7 +2347,7 @@
                     ], () => {
                         let look = {position: "relative", width: "800px", height: "780px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "0 0 30px 30px"}
                         if (player.ir.iriditeDefeated) look.height = "1340px"
-                        if (player.alephsChamber.milestone[25] > 0 || player.bi.interspaceUnlocked) look.height = "1420px"
+                        if (player.alephsChamber.milestone[25] > 0 || player.lightRift.interspaceUnlocked) look.height = "1420px"
                         return look
                     }],
                 ]

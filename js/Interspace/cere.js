@@ -16,7 +16,7 @@
             "border-color": "#ff7fbf",
         };
     },
-    tooltip: "Cere, the Celestial of Loops",
+    tooltip: "Cere, the Celestial of Cycles",
     color: "#ffdfef",
     update(delta) {
     },

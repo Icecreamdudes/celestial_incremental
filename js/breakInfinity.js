@@ -7,9 +7,6 @@
     startData() { return {
         unlocked: true,
 
-        interspaceUnlocked: false,
-        interspaceConditions: [false, false, false, false],
-
         // IAC: Infinity Autocruch
         IACtoggle: false,
         IACinput: new Decimal(0),
@@ -238,136 +235,6 @@
             style() {
                 let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
                 if (!player.bi.NACtype) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#bf8f8f"}
-                return look
-            },
-        },
-        101: {
-            title() { return "<h3>" + (player.bi.interspaceConditions[0] ? "<h3>CYCLED" : "<h3>DEPOSIT INFINITIES") },
-            canClick() { return player.in.infinities.gte(1e50) && !player.bi.interspaceConditions[0] },
-            unlocked() { return true },
-            onClick() {
-                player.bi.interspaceConditions[0] = true
-            },
-            style() {
-                let look = {width: "250px", minHeight: "50px", borderRadius: "0px"}
-                if (player.bi.interspaceConditions[0]) {
-                    look.backgroundColor = "#00000000"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                }
-                else if (this.canClick()) {
-                    look.backgroundColor = "#ff7fbf"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                } else {
-                    look.background = "#361e1e"
-                    look.color = "white"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        102: {
-            title() { return "<h3>" + (player.bi.interspaceConditions[1] ? "<h3>SUFFERED" : "<h3>DEPOSIT SINGULARITIES") },
-            canClick() { return player.s.singularities.gte(2e5) && !player.bi.interspaceConditions[1] },
-            unlocked() { return true },
-            onClick() {
-                player.bi.interspaceConditions[1] = true
-            },
-            style() {
-                let look = {width: "250px", minHeight: "50px", borderRadius: "0px"}
-                if (player.bi.interspaceConditions[1]) {
-                    look.backgroundColor = "#00000000"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                }
-                else if (this.canClick()) {
-                    look.backgroundColor = "#ff7fbf"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                } else {
-                    look.background = "#361e1e"
-                    look.color = "white"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        103: {
-            title() { return "<h3>" + (player.bi.interspaceConditions[2] ? "<h3>LOOPED" : "<h3>DEPOSIT STARS") },
-            canClick() { return player.au2.stars.gte(1e25) && !player.bi.interspaceConditions[2] },
-            unlocked() { return true },
-            onClick() {
-                player.bi.interspaceConditions[2] = true
-            },
-            style() {
-                let look = {width: "250px", minHeight: "50px", borderRadius: "0px"}
-                if (player.bi.interspaceConditions[2]) {
-                    look.backgroundColor = "#00000000"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                }
-                else if (this.canClick()) {
-                    look.backgroundColor = "#ff7fbf"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                } else {
-                    look.background = "#361e1e"
-                    look.color = "white"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        104: {
-            title() { return "<h3>" + (player.bi.interspaceConditions[3] ? "<h3>TORTURED" : "<h3>DEPOSIT CORE FRAGMENTS") },
-            canClick() { return player.cof.coreFragments[6].gte(1e6) && !player.bi.interspaceConditions[3] },
-            unlocked() { return true },
-            onClick() {
-                player.bi.interspaceConditions[3] = true
-            },
-            style() {
-                let look = {width: "250px", minHeight: "50px", borderRadius: "0px"}
-                if (player.bi.interspaceConditions[3]) {
-                    look.backgroundColor = "#00000000"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                }
-                else if (this.canClick()) {
-                    look.backgroundColor = "#ff7fbf"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                } else {
-                    look.background = "#361e1e"
-                    look.color = "white"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        105: {
-            title() { return "<h3>UNLOCK ???" },
-            canClick() { return player.bi.interspaceConditions[0] == true && player.bi.interspaceConditions[1] == true && player.bi.interspaceConditions[2] == true && player.bi.interspaceConditions[3] == true },
-            unlocked() { return true },
-            onClick() {
-                player.bi.interspaceUnlocked = true
-                player.tab = "wel"
-                player.universe = "UD"
-                player.subtabs["bi"]['stuff'] = 'Break Infinity Upgrades'
-
-                if (!hasAchievement("achievements", 1201)) completeAchievement("achievements", 1201)
-            },
-            style() {
-                let look = {width: "527px", minHeight: "50px", borderRadius: "0px 0px 16px 16px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ff7fbf"
-                    look.color = "black"
-                    look.border = "3px solid #5020807f"
-                } else {
-                    look.background = "#361e1e"
-                    look.color = "white"
-                    look.border = "3px solid #663737"
-                }
                 return look
             },
         },
@@ -794,56 +661,6 @@
                             ], {width: "400px", height: "100px"}],
                         ], {width: "400px", height: "250px", backgroundColor: "#475656"}],
                     ], {width: "803px", height: "250px", border: "3px solid #ccc"}],
-                ]
-            },
-            "Well of Infinity": {
-                buttonStyle() { return {background:"linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)" , color: "#502080", border: "2px solid #502080", borderRadius: "5px" } },
-                unlocked() { return true && !player.bi.interspaceUnlocked},
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["style-row", [
-                            ["style-column", [
-                                ["raw-html", "α", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
-                                ["style-row", [
-                                    ["raw-html", () => {return format(player.in.infinities) + " / 1e50<br>Infinities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
-                                ["blank", "3px", {width: "3px"}],
-                                ["clickable", 101],
-                            ], {width: "256px", height: "256px", background:"linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)", border: "3px solid #502080", borderRadius: "16px 0px 0px 0px"}],
-                        ["blank", "3px", {width: "3px"}],
-                            ["style-column", [
-                                ["raw-html", "β", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
-                                ["style-row", [
-                                    ["raw-html", () => {return format(player.s.singularities) + " / 1,000,000<br>Singularities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
-                                ["blank", "3px", {width: "3px"}],
-                                ["clickable", 102],
-                            ], {width: "256px", height: "256px", background:"linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)", border: "3px solid #502080", borderRadius: "0px 16px 0px 0px"}],
-                        ]],
-                        ["blank", "3px", {width: "3px"}],
-                        ["style-row", [
-                            ["style-column", [
-                                ["raw-html", "γ", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
-                                ["style-row", [
-                                    ["raw-html", () => {return format(player.au2.stars) + " / 1e25<br>Stars"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
-                                ["blank", "3px", {width: "3px"}],
-                                ["clickable", 103],
-                            ], {width: "256px", height: "256px", background:"linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)", border: "3px solid #502080", borderRadius: "0px"}],
-                        ["blank", "3px", {width: "3px"}],
-                            ["style-column", [
-                                ["raw-html", "δ", {color: "#502080", fontSize: "125px", fontFamily: "monospace"}],
-                                ["style-row", [
-                                    ["raw-html", () => {return format(player.cof.coreFragments[6]) + " / 1,000,000<br>Cosmic Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#502080", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
-                                ["blank", "3px", {width: "3px"}],
-                                ["clickable", 104],
-                            ], {width: "256px", height: "256px", background:"linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)", border: "3px solid #502080", borderRadius: "0px"}],
-                        ]],
-                        ["blank", "3px", {width: "3px"}],
-                        ["clickable", 105],
-                    ], {background: "#bf7fff 0%", border: "3px solid #502080", borderRadius: "21px", padding: "3px"}],
                 ]
             },
         },

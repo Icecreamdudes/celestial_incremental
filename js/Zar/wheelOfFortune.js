@@ -221,6 +221,28 @@
                 return look
             }
         },
+        13: {
+            title() { return player.wof.generateSpin ? "Passive Spin Gain: ON" : "Passive Spin Gain: OFF" },
+            canClick() { return true },
+            unlocked() { return player.sm.buyables[112].gte(1) },
+            onClick() {
+                if (!player.wof.generateSpin) player.wof.generateSpin = true
+                else player.wof.generateSpin = false
+            },
+            style() {
+                let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
+        },
         
         101: {
             title() { return "<h2>x" + format(player.wof.segmentGains[0]) + "</h2>"},
@@ -368,18 +390,6 @@
                 }
                 return look
             }
-        },
-        24: {
-            title() { return player.wof.generateSpin ? "Passive Spin Gain: ON" : "Passive Spin Gain: OFF" },
-            canClick() { return true },
-            unlocked() { return player.sm.buyables[112].gte(1) },
-            onClick() {
-                if (!player.wof.generateSpin) player.wof.generateSpin = true
-                else player.wof.generateSpin = false
-            },
-            style() { 
-                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #144b34ff 0%, #3d8165ff 50%, #144b34ff 100%)"}
-            },
         },
     },
     bars: {
@@ -640,6 +650,8 @@
                                 ["clickable", 11],
                                 ["blank", "3px"],
                                 ["clickable", 12],
+                                ["blank", "3px"],
+                                ["clickable", 13],
                             ], {width: "400px", height: "250px", borderRadius: "0px"}],
                         ], {width: "800px", height: "400px", background: "#00000000", borderRadius: "10px 10px 0px 0px"}],
                         ["style-row", [], {backgroundColor: "#5fc79cff", width: "100%", height: "3px"}],

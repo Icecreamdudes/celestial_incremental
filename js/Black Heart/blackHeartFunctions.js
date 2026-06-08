@@ -699,12 +699,12 @@ function celestialiteReward(gain) {
     if (gain.matosFragment) {
         gain.matosFragment = gain.matosFragment.mul(player.laboratory.matosMult).mul(generalMult).floor()
         player.laboratory.matosFragment = player.laboratory.matosFragment.add(gain.matosFragment)
-        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosFragment) + " matos dust! (You have " + formatWhole(player.laboratory.matosFragment) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosFragment) + " matos fragments! (You have " + formatWhole(player.laboratory.matosFragment) + ")")
     }
     if (gain.matosEssence) {
         gain.matosEssence = gain.matosEssence.mul(player.laboratory.matosMult).mul(generalMult).floor()
         player.laboratory.matosEssence = player.laboratory.matosEssence.add(gain.matosEssence)
-        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos dust! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos essence! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
     }
     if (gain.pips) {
         gain.pips = gain.pips.mul(generalMult).floor()

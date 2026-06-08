@@ -212,7 +212,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["bh"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "lightRift", "sme"], ["bh"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -363,9 +363,10 @@ addUniverse("UD", {
     tree: [["wel"], ["pri", "prj", "blu"], ["bum"], ["cer"]],
     nodeStyle() {
         let style = {
-            background: "linear-gradient(135deg, #ff7fbf 0%, #bf7fff 100%)",
+            background: "linear-gradient(135deg, #dfffdf 0%, #ffa1ff 100%)",
             backgroundOrigin: "border-box",
-        	borderColor: "#7f007f",
+        	borderColor: "#1a6641",
+            color: "#1a6641",
         }
         if (player.universe=="UD") {
             style.outline = "2px solid white"
@@ -374,5 +375,5 @@ addUniverse("UD", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.bi.interspaceUnlocked && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && player.lightRift.interspaceUnlocked && !player.sma.inStarmetalChallenge},
 })

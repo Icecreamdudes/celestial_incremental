@@ -537,9 +537,9 @@ addLayer("settings", {
         },
         110: {
             title() {return true ? "Teal Theme" : "[LOCKED]"},
-            canClick() {return options.theme != "teal" && player.bi.interspaceUnlocked},
+            canClick() {return options.theme != "teal" && player.lightRift.interspaceUnlocked},
             unlocked: "true",
-            tooltip() {return !player.bi.interspaceUnlocked ? "Obtained from a broken developer." : ""},
+            tooltip() {return !player.lightRift.interspaceUnlocked ? "Obtained from a broken developer." : ""},
             onClick() {
                 options.theme = "teal"
 	            changeTheme();

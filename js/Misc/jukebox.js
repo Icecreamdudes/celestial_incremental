@@ -283,7 +283,7 @@ addLayer("jukebox", {
             description: "Interspace",
             img: "resources/music/interspace.png",
             file: "music/interspace.mp3",
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
         },
 
 
@@ -520,7 +520,7 @@ addLayer("jukebox", {
             description: "Bumpy",
             img: "resources/music/bumpy.png",
             file: "music/bumpy.mp3",
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
         },
         "cere": {
             artist: "Icecreamdude",
@@ -528,7 +528,7 @@ addLayer("jukebox", {
             description: "Cere",
             img: "resources/music/cere.png",
             file: "music/bumpy.mp3",
-            unlocked() {return player.bi.interspaceUnlocked},
+            unlocked() {return player.lightRift.interspaceUnlocked},
         },
     },
     microtabs: {

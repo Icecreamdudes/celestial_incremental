@@ -1655,7 +1655,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Dedication",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts space rock gain based on stored time capsules. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(1e7),
             currencyLocation() { return player.ir },
@@ -1682,7 +1682,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Destruction II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "All ships deal 20% more damage."},
             cost: new Decimal(7e7),
             currencyLocation() { return player.ir },
@@ -1709,7 +1709,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Loyalty",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a second space building slot adder."},
             cost: new Decimal(1e9),
             currencyLocation() { return player.ir },
@@ -1736,7 +1736,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Familiar",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts light gain based on starmetal alloy. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(4e7),
             currencyLocation() { return player.ir },
@@ -1763,7 +1763,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Railgun",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a new ship: Railgun."},
             cost: new Decimal(1.5e8),
             currencyLocation() { return player.ir },
@@ -1790,7 +1790,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Unity",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Project effects are 5% stronger."},
             cost: new Decimal(2e9),
             currencyLocation() { return player.ir },
@@ -2026,7 +2026,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Focus",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts project speed by x1.2."},
             cost: new Decimal(300),
             currencyLocation() { return player.ir },
@@ -2049,7 +2049,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Momentum II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Space battle celestialite stats scale another 2% slower."},
             cost: new Decimal(600),
             currencyLocation() { return player.ir },
@@ -2072,7 +2072,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Empire",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Automate the first six space buildings."},
             cost: new Decimal(1500),
             currencyLocation() { return player.ir },

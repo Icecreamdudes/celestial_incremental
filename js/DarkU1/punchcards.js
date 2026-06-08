@@ -116,7 +116,7 @@ addLayer("pu", {
         }
         if (player.pu.legendarySelectionActive) {
             let choice = Math.floor(Math.random() * raritySelect[3].length)
-            player.pu.selectedPunchcards[3] = raritySelect[3][choice]
+            player.pu.selectedPunchcards[4] = raritySelect[3][choice]
         }
     },
     clickables: {
@@ -328,7 +328,7 @@ addLayer("pu", {
                 return player.pu.legendarySelectionActive
             },
             onClick() {
-                player.pu.selectionIndex = 3
+                player.pu.selectionIndex = 4
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}

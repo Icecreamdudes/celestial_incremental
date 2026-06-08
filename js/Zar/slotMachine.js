@@ -312,7 +312,7 @@
                 player.sm.reductionCooldown = new Decimal(3600)
             },
             style() {
-                let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }
+                let look = {width: '250px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px", margin: "1.5px" }
                 if (this.canClick()) {
                     look.backgroundImage = "linear-gradient(45deg, #eaebc3ff 0%, #fff 50%, #eaebc3ff 100%)"
                     look.border = "2px solid black"
@@ -369,10 +369,19 @@
                 if (!player.sm.generateSpin) player.sm.generateSpin = true
                 else player.sm.generateSpin = false
             },
-            style() { 
-                return { width: '125px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid #0f221aff", backgroundImage: "linear-gradient(180deg, #c1c436ff 0%, #eaebc3ff 50%, #c1c436ff 100%)"}
-
-            },
+            style() {
+                let look = {width: '250px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px", margin: "1.5px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(45deg, #eaebc3ff 0%, #fff 50%, #eaebc3ff 100%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
         },
 
         101: {
@@ -1068,7 +1077,7 @@
                                 ["blank", "10px"],
                                 ["clickable", 11],
                                 ["blank", "3px"],
-                                ["clickable", 12],
+                                ["row", [["clickable", 12],["clickable", 23],]],
                             ], {height: "250px", borderRadius: "0px"}],
                         ], {width: "594px", height: "501px", background: "#00000000", borderRadius: "0px"}],
                         ["style-row", [], {backgroundColor: "#635400", width: "100%", height: "3px"}],

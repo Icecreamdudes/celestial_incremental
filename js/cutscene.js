@@ -4745,8 +4745,9 @@
                 { text: "However, one puzzle is nothing in this universe.", portrait: "resources/akash.png"},
                 { text: "Sure, you gained a little bit of skill, but in reality, you still have a long way to go in the puzzle world.", portrait: "resources/akash.png"},
                 { text: "Solving more puzzles will be key here.", portrait: "resources/akash.png"},
-                { text: "Feel free to explore.", portrait: "resources/akash.png"},
-
+                { text: "Feel free to explore.", portrait: "resources/akash.png"}, 
+            ]
+        },
     },
     clickables: {
         11: {

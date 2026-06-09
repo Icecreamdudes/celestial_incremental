@@ -150,9 +150,9 @@
         },
         14: {
             title: "Vaporizer Upgrade IV",
-            unlocked() { return hasUpgrade("wel", 21) },
+            unlocked() { return hasMilestone("prj", 101) },
             description: "Unlock time capsules.",
-            cost: new Decimal(1e18),
+            cost: new Decimal(1e25),
             currencyLocation() { return player.dv },
             currencyDisplayName: "Clouds",
             currencyInternalName: "clouds",

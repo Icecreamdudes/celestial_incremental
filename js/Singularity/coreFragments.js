@@ -120,6 +120,7 @@
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("depth4", 3))
+            if (hasUpgrade("ir", 26)) player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(upgradeEffect("ir", 26));
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(player.depth4.negComboEffect)
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(player.prj.modules[2].completionEffect)
 

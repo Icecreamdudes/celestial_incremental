@@ -997,7 +997,7 @@ addLayer("zarDungeon", {
                         ["raw-html", "Perks for defeating Zar", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "500px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
                     ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return player.lightRift.interspaceUnlocked ? "Interspace" : "Well of Infinity (In Break Infinity)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.lightRift.interspaceUnlocked ? "Interspace" : "Light Rift (In Universe 3)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", "+1 OTF Slot", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", "Zar Punchcard", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", "Rare Space Pets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],

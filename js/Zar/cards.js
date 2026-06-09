@@ -1376,7 +1376,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.25).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },

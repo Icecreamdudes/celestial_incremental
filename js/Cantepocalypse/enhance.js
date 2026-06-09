@@ -524,7 +524,7 @@
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
             effect() {
-                return player.fu.fear.pow(0.125).div(4).add(1)
+                return player.fu.fear.pow(0.1).div(4).add(1)
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: "150px"},

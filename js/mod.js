@@ -1016,6 +1016,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added space exploration completion popups.<br>
 			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
+			- Changed some punchcard textures.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affects daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>

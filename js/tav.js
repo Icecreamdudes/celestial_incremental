@@ -115,9 +115,9 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
+            background: "linear-gradient(150deg, #31aeb0 0%, #b2d8d8 100%)",
             "background-origin": "border-box",
-            "border-color": "#31aeb0",
+            "border-color": "#008080",
             "color": "#008080",
         };
     },

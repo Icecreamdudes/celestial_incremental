@@ -877,17 +877,22 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>
 		Content:<br>
-			- Added the 3rd page of achievements.<br>
+			- Added page 3 of achievements.<br>
 			- Added a new evolution pet.<br>
 			- Added a new check back layer.<br><br>
 		Minor Changes:<br>
 			- Changed the styles of achievement page buttons.<br>
 			- Added missing achievement icons for page 2.<br>
-			- Added a few more savebank buttons (actual saves haven't been added yet).<br><br>
+			- Added a few more savebank buttons (actual saves haven't been added yet).<br>
+			- Added the button for page 4 of achievements (again, actual achs haven't been added yet).<br>
+			- Made some aesthetic changes to the bios in the hall of celestials.<br>
+			- Added some missing jukebox tracks.<br>
+			- Added some missing jukebox icons (credit to bumpy for making them).<br><br>
 		Bug Fixes:<br>
 			- Fixed legendary punchcards having the wrong color backgrounds.<br>
-			- Fixed star exploration node B2 having no effect.<br><br>
-	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br><br>
+			- Fixed star exploration node B2 having no effect.<br>
+			- Fixed Tav layer gradient not working (yes, this was supposed to be a thing, you can go in a past version and see that there was supposed to be a gradient).<br><br>
+	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br>
 		Content:<br>
 			- Added Enhance Points<br>
 			- Added Cards<br>

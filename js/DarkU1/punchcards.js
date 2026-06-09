@@ -2417,7 +2417,7 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }

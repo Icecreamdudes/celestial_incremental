@@ -112,13 +112,15 @@
             style: { width: '50px', "min-height": '50px' }, // Tera
         },
         18: {
-            title() { return "<h1>?" },
-            canClick() { return false },
+            title() { return player.zarDungeon.zarDefeated ? "<h1>⚅" : "<h1>?" },
+            canClick() { return player.zarDungeon.zarDefeated },
             unlocked() { return true },
+            tooltip() { return player.zarDungeon.zarDefeated ? "Zar, the Celestial of Chance" : ""},
             onClick() {
-                //player.ch.celestialIndex = new Decimal(7)
+                player.ch.celestialIndex = new Decimal(7)
             },
             style: { width: '50px', "min-height": '50px' }, // Zar
+            branches() {return player.zarDungeon.zarDefeated ? [11] : []},
         },
         19: {
             title() { return "<h1>☉" },
@@ -195,33 +197,108 @@
     infoboxes: {
         1: {
             title: "Tav, the Celestial of Limits",
-            body() { return "I have recently met Tav. Turns out, he is the nicest celestial I have ever met. This is strange, especially since Tav is a rare type of celestial where the celestial originates as a celestial, instead of being a different lifeform that got transformed into a celestial. Tav was created in order to protect against Cante, who is another celestial. Me and Cante have a very complicated relationship. We were supposed to design a superphysical universe together, but Cante's greed and exponentially rising power led him to cause it's destruction. As a result the original seven was forced to create Tav in order to oppose Cante's powers, and along with Tav came the barrier." },
-            unlocked() { return player.ch.celestialIndex.eq(0) },      
+            body() { return "<img src='resources/tav.png' width='100' height='100'><br>I have recently met Tav. Turns out, he is the nicest celestial I have ever met. This is strange, especially since Tav is a rare type of celestial where the celestial originates as a celestial, instead of being a different lifeform that got transformed into a celestial. Tav was created in order to protect against Cante, who is another celestial. Me and Cante have a very complicated relationship. We were supposed to design a superphysical universe together, but Cante's greed and exponentially rising power led him to cause it's destruction. As a result the original seven was forced to create Tav in order to oppose Cante's powers, and along with Tav came the barrier." },
+            unlocked() { return player.ch.celestialIndex.eq(0) },
+            titleStyle: {
+                "background-color": "#008080",
+                "border-color": "#008080",
+                "color": "#b2d8d8",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(150deg, #31aeb0 0%, #b2d8d8 100%)", 
+                "border-color": "#008080",
+                "color": "#008080",
+            },
         },
         2: {
             title: "Cante, the Celestial of Replicanti",
-            body() { return "Cante, Cante, Cante... That is a name I will never forget. We used to be great friends, when he was a part of the original seven. We were supposed to design the ideal superphysical universe. It was a universe that contained the most powerful of all superphysical values. But once we finished, Cante took matters into his own hands. He decided to take a portion of the superphysical values from our universe and run away. Without Cante's support, the universe fell apart into ruin. Cante's power exponentially rose, as well as his greed. The higher celestials were forced to seal Cante away using Tav, the celestial of limits. Cante's power should decrease..." },
-            unlocked() { return player.ch.celestialIndex.eq(1) },      
+            body() { return "<img src='resources/cante.png' width='100' height='100'><br>Cante, Cante, Cante... That is a name I will never forget. We used to be great friends, when he was a part of the original seven. We were supposed to design the ideal superphysical universe. It was a universe that contained the most powerful of all superphysical values. But once we finished, Cante took matters into his own hands. He decided to take a portion of the superphysical values from our universe and run away. Without Cante's support, the universe fell apart into ruin. Cante's power exponentially rose, as well as his greed. The higher celestials were forced to seal Cante away using Tav, the celestial of limits. Cante's power should decrease..." },
+            unlocked() { return player.ch.celestialIndex.eq(1) },
+            titleStyle: {
+                "background-color": "#0f354c",
+                "border-color": "#0f354c",
+                "color": "#7dd3f9",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)", 
+                "border-color": "#0f354c",
+                "color": "#0f354c",
+            },   
         },
         3: {
             title: "Jocus, the Celestial of Fun",
-            body() { return "When I first met Jocus, one thing that stood out is their extreme insanity. I don't understand anything about this guy, but all I know is that Jocus idolizes Cante a little bit too much, despite being Nova's servant. I still don't know much about Jocus... seems like a normal celestial that lost it's mind over time." },
-            unlocked() { return player.ch.celestialIndex.eq(2) },      
+            body() { return "<img src='resources/jocus.png' width='100' height='100'><br>When I first met Jocus, one thing that stood out is their extreme insanity. I don't understand anything about this guy, but all I know is that Jocus idolizes Cante a little bit too much, despite being Nova's servant. I still don't know much about Jocus... seems like a normal celestial that lost it's mind over time." },
+            unlocked() { return player.ch.celestialIndex.eq(2) },
+            titleStyle: {
+                "background-color": "#5e8503",
+                "border-color": "#5e8503",
+                "color": "#befa32",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(45deg, #fcff04 0%, #befa32 100%)", 
+                "border-color": "#5e8503",
+                "color": "#5e8503",
+            },
         },
         4: {
             title: "Matos, the Celestial of Machinery",
-            body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons for Matos' hatred." },
-            unlocked() { return player.ch.celestialIndex.eq(3) },      
+            body() { return "<img src='resources/matos.png' width='100' height='100'><br>The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons for Matos' hatred." },
+            unlocked() { return player.ch.celestialIndex.eq(3) },    
+            titleStyle: {
+                "background-color": "#350813",
+                "border-color": "#350813",
+                "color": "#a80c33",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(120deg, #8a0e79 0%, #a80c33 100%)", 
+                "border-color": "#350813",
+                "color": "#350813",
+            },  
         },
         5: {
             title: "Iridite, the Astral Celestial",
-            body() { return "The first of the novasent, Iridite was born as a member of the celestial hunting corporation. Living her entire life under these conditions, she never got to live her life like a normal human being. One day, she went on a mission that somehow got her turned into a celestial. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
+            body() { return "<img src='resources/iridite.png' width='100' height='100'><br>The first of the novasent, Iridite was born as a member of the celestial hunting corporation. Living her entire life under these conditions, she never got to live her life like a normal human being. One day, she went on a mission that somehow got her turned into a celestial. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
             unlocked() { return player.ch.celestialIndex.eq(4) },      
+            titleStyle: {
+                "background-color": "#eaf6f7",
+                "border-color": "#eaf6f7",
+                "color": "#151230",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(120deg, #000000 0%, #151230 100%)", 
+                "border-color": "#eaf6f7",
+                "color": "#eaf6f7",
+            },
         },
         6: {
             title: "Aleph, the Celestial of Swarms",
-            body() { return "A celestial who was once lived in the kingdom of celestials. She wanted to live a peaceful life, but tragedy struck her when her two brothers were killed by other celestials. Angered, she joined Avon's organization, but realized the threat that she would face. She fled to her own universe that Avon had gifted to her, which was the Hive. She spent the rest of her days building up and cultivating her swarm. She was happy. Her desire to build her swarm was greater than her desires to commit evil sins. However, that happiness faded when Nova invaded her universe and destroyed her swarm." },
-            unlocked() { return player.ch.celestialIndex.eq(5) },      
+            body() { return "<img src='resources/aleph.png' width='100' height='100'><br>A celestial who was once lived in the kingdom of celestials. She wanted to live a peaceful life, but tragedy struck her when her two brothers were killed by other celestials. Angered, she joined Avon's organization, but realized the threat that she would face. She fled to her own universe that Avon had gifted to her, which was the Hive. She spent the rest of her days building up and cultivating her swarm. She was happy. Her desire to build her swarm was greater than her desires to commit evil sins. However, that happiness faded when Nova invaded her universe and destroyed her swarm." },
+            unlocked() { return player.ch.celestialIndex.eq(5) },  
+            titleStyle: {
+                "background-color": "#3f003f",
+                "border-color": "#3f003f",
+                "color": "#a900a9",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(45deg, #660066 0%, #a900a9 100%)", 
+                "border-color": "#3f003f",
+                "color": "#3f003f",
+            },    
+        },
+        8: {
+            title: "Zar, the Celestial of Chance",
+            body() { return "<img src='resources/zar.png' width='100' height='100'><br>something something ascensionism something something" },
+            unlocked() { return player.ch.celestialIndex.eq(7) },  
+            titleStyle: {
+                "background-color": "#0e0e0e",
+                "border-color": "#0e0e0e",
+                "color": "#8d8d8d",
+            },
+            bodyStyle: {
+                "background": "linear-gradient(315deg, #474747ff 0%, #8d8d8dff 100%)", 
+                "border-color": "#0e0e0e",
+                "color": "#0e0e0e",
+            },     
         },
     },
     microtabs: {
@@ -281,6 +358,8 @@
                     ["infobox", 4],
                     ["infobox", 5],
                     ["infobox", 6],
+
+                    ["infobox", 8],
                 ]
             },
             "Matos Perks": {

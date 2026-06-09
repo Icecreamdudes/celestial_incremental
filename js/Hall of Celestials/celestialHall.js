@@ -114,15 +114,13 @@
             branches() {return player.zarDungeon.zarDefeated ? [16] : []},
         },
         18: {
-            title() { return player.zarDungeon.zarDefeated ? "<h1>⚅" : "<h1>?" },
-            canClick() { return player.zarDungeon.zarDefeated },
+            title() { return "<h1>?" },
+            canClick() { return false },
             unlocked() { return true },
-            tooltip() { return player.zarDungeon.zarDefeated ? "Zar, the Celestial of Chance" : ""},
             onClick() {
-                player.ch.celestialIndex = new Decimal(7)
+                //
             },
             style: { width: '50px', "min-height": '50px' }, // Zar
-            branches() {return player.zarDungeon.zarDefeated ? [11] : []},
         },
         19: {
             title() { return "<h1>☉" },
@@ -287,10 +285,10 @@
                 "color": "#3f003f",
             },    
         },
-        8: {
+        7: {
             title: "Zar, the Celestial of Chance",
-            body() { return "<img src='resources/zar.png' width='100' height='100'><br>something something ascensionism something something" },
-            unlocked() { return player.ch.celestialIndex.eq(7) },  
+            body() { return "<img src='resources/zar.png' width='100' height='100'><br>Zar was once an ordinary human who had lived a life in a modern-age universe. When a celestial somehow murdered everyone in his universe except for him, he got recruited into the CHC for possessing a unique soul. He went on the mission to find the source of the dark energy cloud alongside Iridite and Tera, but had also turned into a celestial. It is still unknown as to how this had happened, but we know that it was done by the celestials guarding the dark energy cloud. As a celestial, Zar became hopeless and desperate, so he decided to turn to Ascensionism. Through Ascensionism, he met Nova. There he became the first of the Novasent." },
+            unlocked() { return player.ch.celestialIndex.eq(6) },  
             titleStyle: {
                 "background-color": "#0e0e0e",
                 "border-color": "#0e0e0e",
@@ -300,12 +298,12 @@
                 "background": "linear-gradient(315deg, #474747ff 0%, #8d8d8dff 100%)", 
                 "border-color": "#0e0e0e",
                 "color": "#0e0e0e",
-            },     
+            },         
         },
-        7: {
-            title: "Zar, the Celestial of Chance",
-            body() { return "Zar was once an ordinary human who had lived a life in a modern-age universe. When a celestial somehow murdered everyone in his universe except for him, he got recruited into the CHC for possessing a unique soul. He went on the mission to find the source of the dark energy cloud alongside Iridite and Tera, but had also turned into a celestial. It is still unknown as to how this had happened, but we know that it was done by the celestials guarding the dark energy cloud. As a celestial, Zar became hopeless and desperate, so he decided to turn to Ascensionism. Through Ascensionism, he met Nova. There he became the first of the Novasent." },
-            unlocked() { return player.ch.celestialIndex.eq(6) },      
+        8: {
+            title: "Tera, the Celestial of Chance",
+            body() { return "<img src='resources/tera.png' width='100' height='100'><br>cere" },
+            unlocked() { return player.ch.celestialIndex.eq(7) },  
         },
     },
     microtabs: {
@@ -365,7 +363,7 @@
                     ["infobox", 4],
                     ["infobox", 5],
                     ["infobox", 6],
-
+                    ["infobox", 7],
                     ["infobox", 8],
                 ]
             },

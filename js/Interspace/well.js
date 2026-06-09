@@ -187,10 +187,10 @@
 
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
         if (hasUpgrade("wel", 23)) player.wel.lightWellCycleEffectSoftcap = player.wel.lightWellCycleEffectSoftcap
-        .add(player.prj.modules[1].completions.mul(0.02).min(0.1))
-        .add(player.prj.modules[2].completions.mul(0.02).min(0.1))
-        .add(player.prj.modules[3].completions.mul(0.02).min(0.1))
-        .add(player.prj.modules[4].completions.mul(0.02).min(0.1));
+        .add(player.prj.modules[1].completions.mul(0.01).min(0.1))
+        .add(player.prj.modules[2].completions.mul(0.01).min(0.1))
+        .add(player.prj.modules[3].completions.mul(0.01).min(0.1))
+        .add(player.prj.modules[4].completions.mul(0.01).min(0.1));
 
         player.wel.lightGain = new Decimal(1)
         player.wel.lightGain = player.wel.lightGain.mul(player.wel.fountains[1].completionEffect)
@@ -1588,7 +1588,7 @@
         },
         3: {
             title: "Cycle Fountain",
-            completionEffectStat: "Light Well Cycles",
+            completionEffectStat: "Light Well ↻",
             condition() {
                 return player.wel.bestLight.gte(5e4) || hasMilestone('prj', 204)
             },

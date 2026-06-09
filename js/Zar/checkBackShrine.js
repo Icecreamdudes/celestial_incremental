@@ -1421,7 +1421,7 @@ addLayer("cbs", {
             fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Unlock a new zone in space battle."},
-            cost: new Decimal("1.8e308"),
+            cost: new Decimal("1e400"),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",

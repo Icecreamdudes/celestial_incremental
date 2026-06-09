@@ -33,7 +33,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.dt.timeCapsulesToGet = player.dv.clouds.div(1e18).pow(0.2)
+        player.dt.timeCapsulesToGet = player.dv.clouds.div(1e25).pow(0.2)
         if (getLevelableTier("pu", 114, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 114)[0])
         if (getLevelableTier("pu", 215, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 215)[0])
 
@@ -74,7 +74,7 @@
     bars: {},
     clickables: {
         11: {
-            title() { return "<h3>Reset previous content, but gain time capsules. (based on clouds)</h3><br>Req: 1e18 Clouds" },
+            title() { return "<h3>Reset previous content, but gain time capsules. (based on clouds)</h3><br>Req: 1e25 Clouds" },
             canClick() { return player.dt.timeCapsulesToGet.gte(1) && player.dt.timeCapsuleResetSafety },
             unlocked() { return true },
             onClick() {

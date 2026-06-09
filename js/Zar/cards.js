@@ -321,7 +321,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -359,7 +359,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -397,7 +397,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -435,7 +435,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -473,7 +473,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.4).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -511,7 +511,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.625).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.5).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -549,7 +549,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.65).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.6).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -587,7 +587,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.7).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -625,7 +625,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.8).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -663,7 +663,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.9).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -701,7 +701,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -739,7 +739,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -777,7 +777,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -816,7 +816,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -854,7 +854,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -892,7 +892,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -930,7 +930,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -968,7 +968,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.4).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1006,7 +1006,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1044,7 +1044,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.4).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1082,7 +1082,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.7).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1120,7 +1120,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.8).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1158,7 +1158,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.9).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1196,7 +1196,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1234,7 +1234,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1272,7 +1272,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1311,7 +1311,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1349,7 +1349,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1387,7 +1387,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1425,7 +1425,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1463,7 +1463,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.4).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1501,7 +1501,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.625).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.5).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1539,7 +1539,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.65).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.6).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1577,7 +1577,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.7).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1615,7 +1615,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.8).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1653,7 +1653,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.9).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1680,7 +1680,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.au2.stars.pow(0.03).pow(getLevelableAmount(this.layer, this.id).mul(0.4)).add(1)
+                eff[0] = player.au2.stars.pow(0.025).pow(getLevelableAmount(this.layer, this.id).mul(0.2)).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1691,7 +1691,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1729,7 +1729,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1767,7 +1767,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1807,7 +1807,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1845,7 +1845,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.525).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1883,7 +1883,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.55).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1921,7 +1921,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.575).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1959,7 +1959,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.4).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -1997,7 +1997,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.625).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.5).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2035,7 +2035,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.65).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.6).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2073,7 +2073,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.675).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.7).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2111,7 +2111,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.8).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2149,7 +2149,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.725).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(2.9).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2187,7 +2187,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.75).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2225,7 +2225,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.775).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.1).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE
@@ -2263,7 +2263,7 @@
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
             xpReq() {
-                return getLevelableAmount(this.layer, this.id).add(1).pow(1.8).floor()
+                return getLevelableAmount(this.layer, this.id).add(1).pow(3.2).floor()
             },
             currency() { return getLevelableXP(this.layer, this.id) },
             // STYLE CODE

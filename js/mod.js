@@ -887,7 +887,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added the button for page 4 of achievements (again, actual achs haven't been added yet).<br>
 			- Made some aesthetic changes to the bios in the hall of celestials.<br>
 			- Added some missing jukebox tracks.<br>
-			- Added some missing jukebox icons (credit to bumpy for making them).<br><br>
+			- Added some missing jukebox icons (credit to bumpy for making them).<br>
+			- Added perks for defeating Cante (still WIP).<br>
+			- Added an entry to the perks for defeating Jocus.<br><br>
 		Bug Fixes:<br>
 			- Fixed legendary punchcards having the wrong color backgrounds.<br>
 			- Fixed star exploration node B2 having no effect.<br>

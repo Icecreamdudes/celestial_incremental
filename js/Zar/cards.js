@@ -1680,7 +1680,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.au2.stars.pow(0.03).pow(getLevelableAmount(this.layer, this.id).mul(0.4)).add(1)
+                eff[0] = player.au2.stars.pow(0.025).pow(getLevelableAmount(this.layer, this.id).mul(0.2)).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },

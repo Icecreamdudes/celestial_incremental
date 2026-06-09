@@ -110,7 +110,7 @@
             onClick() {
                 player.ch.celestialIndex = new Decimal(6)
             },
-            style: { width: '50px', "min-height": '50px' }, // Tera
+            style: { width: '50px', "min-height": '50px' }, // Zar
             branches() {return player.zarDungeon.zarDefeated ? [16] : []},
         },
         18: {
@@ -120,7 +120,7 @@
             onClick() {
                 //
             },
-            style: { width: '50px', "min-height": '50px' }, // Zar
+            style: { width: '50px', "min-height": '50px' }, // Tera
         },
         19: {
             title() { return "<h1>☉" },
@@ -301,7 +301,7 @@
             },         
         },
         8: {
-            title: "Tera, the Celestial of Chance",
+            title: "Tera, the Celestial of Tiers",
             body() { return "<img src='resources/tera.png' width='100' height='100'><br>cere" },
             unlocked() { return player.ch.celestialIndex.eq(7) },  
         },

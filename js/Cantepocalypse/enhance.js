@@ -49,7 +49,7 @@
         for (let i = 0; i < player.en.enhancersUnlocked.length; i++) {
             player.en.enhancerXP[i] = player.en.enhancerXP[i].add(player.en.enhancerXPPerSecond[i].mul(delta))
             if (player.en.enhancerXP[i].gte(player.en.enhancerXPReq[i])) {
-                 if (player.en.enhancerXPPerSecond[i].gte(player.en.enhancerXPReq[i].mul(10))) {
+                 if (player.en.enhancerXPPerSecond[i].gte(player.en.enhancerXPReq[i].mul(10)) && player.en.enhancerXPReq[i].gt(0)) {
                 player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(player.en.enhancerXPPerSecond[i].div(player.en.enhancerXPReq[i]).mul(delta).floor())
                  }
                 player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(1) //tentative to change if bulk leveling is added

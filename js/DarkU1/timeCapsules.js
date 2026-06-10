@@ -36,6 +36,7 @@
         player.dt.timeCapsulesToGet = player.dv.clouds.div(1e25).pow(0.2)
         if (getLevelableTier("pu", 114, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 114)[0])
         if (getLevelableTier("pu", 215, true)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(levelableEffect("pu", 215)[0])
+        if (hasAchievement("achievements", 1204)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(1.1)
 
         player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.floor()
 
@@ -47,6 +48,7 @@
         player.dt.timeEnergyToGet = player.dt.timeCapsules.pow(2)
         player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(buyableEffect("dt", 11))
         if (getLevelableTier("pu", 214, true)) player.dt.timeEnergyToGet = player.dt.timeEnergyToGet.mul(levelableEffect("pu", 214)[0])
+        if (hasAchievement("achievements", 1215)) player.dt.timeCapsulesToGet = player.dt.timeCapsulesToGet.mul(2)
 
         player.dt.timeEnergy = player.dt.timeEnergy.add(player.dt.timeEnergyToGet.mul(delta))
 

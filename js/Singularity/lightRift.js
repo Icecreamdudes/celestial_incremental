@@ -142,7 +142,7 @@ addLayer("lightRift", {
                 player.universe = "UD"
                 //player.subtabs["wel"]['stuff'] = 'Upgrades'
 
-                if (!hasAchievement("achievements", 1201)) completeAchievement("achievements", 1201)
+                if (!hasAchievement("achievements", 1201)) completeAchievement("achievements", 1201);
             },
             style() {
                 let look = {width: "527px", minHeight: "50px", borderRadius: "0px 0px 16px 16px"}

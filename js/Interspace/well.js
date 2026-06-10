@@ -219,6 +219,9 @@
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[7].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[10].completionEffect)
         if (hasMilestone("prj", 112)) player.wel.lightGain = player.wel.lightGain.mul(player.prj.milestone112Effect)
+
+        if (hasAchievement("achievements", 1203)) player.wel.lightGain = player.wel.lightGain.mul(1.05)
+        if (hasAchievement("achievements", 1208)) player.wel.lightGain = player.wel.lightGain.mul(1.2)
         
         // WELL CYCLE SPEED
 
@@ -229,6 +232,8 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
         if (hasMilestone("prj", 209)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.09)
         if (hasMilestone("prj", 304)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone304Effect)
+
+        if (player.wel.lightWellSpeed.gte(100) && !hasAchievement("achievements", 1210)) completeAchievement("achievements", 1210)
         
         // WELL CYCLES
 
@@ -237,6 +242,7 @@
         player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(player.pri.fountains[2].completionEffect)
         if (hasMilestone("prj", 102)) player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(2);
         player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(player.blu.blueshiftEffect)
+        if (hasAchievement("achievements", 1213)) player.wel.lightWellCycleYield = player.wel.lightWellCycleYield.mul(1.1);
 
         // WELLS
 
@@ -282,11 +288,15 @@
         player.wel.wellCycleProduct = player.wel.wellCycleProduct.div(player.wel.modules[4].completions.add(1))
         player.wel.wellCycleProduct = player.wel.wellCycleProduct.mul(player.wel.modules[4].completions.div(1e9).add(1))
 
+        // ACHIEVEMENT CYCLE GAIN
+
+        if (hasAchievement("achievements", 1202)) player.wel.modules[1].completionsGain = player.wel.modules[1].completionsGain.add(1)
+        if (hasAchievement("achievements", 1205)) player.wel.modules[2].completionsGain = player.wel.modules[2].completionsGain.add(1)
+
         // FOUNTAIN REQ DIVISOR
         player.wel.lightFountainReqDivisor = new Decimal(1)
-        if (hasUpgrade("wel", 33)) {
-            player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(player.pri.fountains[3].completionEffect)
-        }
+        player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(player.pri.fountains[3].completionEffect);
+        if (hasAchievement("achievements", 1208)) player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(1.25);
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.wel.fountains).forEach(i => {
@@ -298,11 +308,7 @@
             module.completionEffect = fountain.getCompletionEffect()
 
             if (module.automated && player.wel.light.gte(module.lightReq) && player.wel.light.gt(0)) {
-                if (hasUpgrade("wel", 33)) {
                     module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
-                } else {
-                    module.time = module.time.add(module.timeSpeed.mul(player.pri.fountains[3].completionEffect).div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(0.5).mul(delta));
-                }
             }
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
@@ -723,7 +729,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Arrow instead divides Light Fountain requirements.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "[NEED A NEW EFFECT]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 300 Prisms</h3>"
                 }
@@ -1058,7 +1064,7 @@
                 player.wel.lightGen = player.wel.lightGen.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[this.id].time = new Decimal(0)
                 player.wel.modules[this.id].completions = player.wel.modules[this.id].completions.add(player.wel.modules[this.id].completionsGain)
-                if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212);
+                if (!hasAchievement("achievements", 1213)) completeAchievement("achievements", 1213);
                 if (!hasAchievement("achievements", 1203) && player.wel.modules[this.id].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
@@ -2176,8 +2182,8 @@
                             ["blank", "25px"],
                             ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ["style-column", [
-                                ["raw-html", hasUpgrade("wel", 33) ? "<small>Fountain requirements are reduced by /" + formatShort(player.pri.fountains[3].completionEffect, 1) + ".</small>" : "<small>Automated fountains gain x" + formatShort(player.pri.fountains[3].completionEffect.mul(0.5), 1) + " progress.</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {display: layers.wel.fountains[1].canAuto() ? "" : "none !important"}],
+                                ["raw-html", "<small>Fountain requirements are reduced by /" + formatSimple(player.wel.lightFountainReqDivisor, 2) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {display: player.wel.lightFountainReqDivisor.gt(1) ? "" : "none !important"}],
                             ["blank", "10px"],
                         ]],
                         ["style-row", [
@@ -2278,7 +2284,7 @@ const makeWellFountain = function (id, effectIsWhole) {
                     ["raw-html", "<small>(" + format(player.wel.fountains[id].time, 1) + "/" + format(player.wel.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["style-column", [
-                        ["raw-html", player.wel.fountains[id].lightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.wel.fountains[id].lightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "-" + formatWhole(player.wel.fountains[id].lightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                     ], {background: "#4d9973", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
                     ["blank", "3px"],
                     ["style-row", [

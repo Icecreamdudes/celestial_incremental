@@ -20,7 +20,7 @@
         */
        enhancerXP: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
        enhancerXPPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-       enhancerXPReq: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+       enhancerXPReq: [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)],
        enhancersUnlocked: [true,false,false,false,false,],
 
        enhancerAllocated: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -61,8 +61,6 @@
 
         if (hasUpgrade("en", 13)) player.en.enhancersUnlocked[1] = true
         if (hasUpgrade("en", 15)) player.en.enhancersUnlocked[2] = true
-
-        player.en.enhancerXPReq = [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)] //very tentative to change
 
         player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.5).add(1).mul(10)
         if (player.en.enhancerLevels[0].gt(10000)) player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.65).add(1).mul(10)

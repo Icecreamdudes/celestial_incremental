@@ -2529,8 +2529,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.pow(1.5).pow_base(1.15).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = getLevelableAmount(this.layer, this.id).pow(2).div(10).add(1)
+                eff[0] = player.le.resetAmount.pow(1.25).pow_base(1.1).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(1.5).div(10).add(1)
                 return eff
             },
             // CLICK CODE

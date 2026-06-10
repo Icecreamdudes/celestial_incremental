@@ -106,7 +106,10 @@
     update(delta) {
 
         // STARLIGHT
-        player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(100).div(6).pow_base(2).floor()
+        player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(100).div(6).pow_base(2)
+        if (hasAchievement("achievements", 1221)) player.bum.starlightToGet = player.bum.starlightToGet.mul(1.2)
+        player.bum.starlightToGet = player.bum.starlightToGet.floor()
+
         if (player.bum.starshines.lte(0)) player.bum.starlightToGet = player.bum.starlightToGet.min(1);
 
         // STARSHINES
@@ -140,7 +143,7 @@
         if (isRewarded) {
             player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
             player.bum.starshines = player.bum.starshines.add(player.bum.starshinesToGet)
-            if (!hasAchievement("achievements", 1214)) completeAchievement("achievements", 1214);
+            if (!hasAchievement("achievements", 1216)) completeAchievement("achievements", 1216);
         }
         layers.blu.blueshiftReset(false)
 
@@ -1394,7 +1397,7 @@
         }
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.bum.starlight) + "</h3> starlight." }, {color: "#dfffdf", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + formatWhole(player.bum.starlightToGet) + ")"}, () => {

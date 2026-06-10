@@ -193,6 +193,7 @@
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
         if (!hasMilestone("prj", 207)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.prj.milestone207Effect);
+        if (hasAchievement("achievements", 1214)) player.pri.prismsToGet = player.pri.prismsToGet.mul(1.2);
 
         player.pri.prismsToGet = player.pri.prismsToGet.floor()
 
@@ -223,6 +224,23 @@
                 }
                 module.completions = module.completions.add(1)
                 module.time = new Decimal(0)
+                switch (i) {
+                    case '2': case '3':
+                        if (player.pri.fountains[2].completions.gt(0) && player.pri.fountains[3].completions.gt(0) && !hasAchievement("achievements", 1208)) completeAchievement("achievements", 1208);
+                        break;
+                    case '4': case '5': case '6':
+                        if (player.pri.fountains[4].completions.gt(0) && player.pri.fountains[5].completions.gt(0) && player.pri.fountains[6].completions.gt(0) && !hasAchievement("achievements", 1209)) completeAchievement("achievements", 1209);
+                        break;
+                    case '7': case '8': case '9': case '10':
+                        if (player.pri.fountains[7].completions.gt(0)) {
+                            if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212);
+                            if (player.pri.fountains[7].completions.gt(0) && player.pri.fountains[8].completions.gt(0) && player.pri.fountains[9].completions.gt(0) && player.pri.fountains[10].completions.gt(0) && !hasAchievement("achievements", 1214)) completeAchievement("achievements", 1214);
+                        }
+                        break;
+                    default:
+                        console.log(i)
+                        break;
+                }
             }
         });
     },
@@ -1044,8 +1062,8 @@
         },
         3: {
             title: "Arrow",
-            completionEffectPrefix: "x",
-            completionEffectSuffix: " Light Fountain ↻ Gen",
+            completionEffectPrefix: "/",
+            completionEffectSuffix: " Light Fountain Req",
             condition() {
                 return player.pri.fountains[1].completions.gt(0)
             },
@@ -1058,7 +1076,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
 
-                s = completions.add(1)
+                s = completions.add(1).pow(2)
                 if (hasMilestone("prj", 203)) s = s.pow(1.5)
 
                 return s
@@ -1625,7 +1643,7 @@
         },
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + format(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["style-row", [
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.pri.prisms) + "</h3> prisms." }, {color: "#d6ebff", fontSize: "24px", fontFamily: "monospace"}],
             ["style-row", [

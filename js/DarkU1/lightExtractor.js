@@ -146,8 +146,9 @@
             pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
             player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+            if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
             if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(5)) completeAchievement("achievements", 1206);
-            if (!hasAchievement("achievements", 1213) && player.dt.storedToGet.gte(3.6e3)) completeAchievement("achievements", 1213);
+            if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(1e4)) completeAchievement("achievements", 1215);
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
             player.le.starmetalAlloyPauseAgain = new Decimal(10)
@@ -259,8 +260,9 @@
             onClick() {
                 pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+                if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
                 if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(5)) completeAchievement("achievements", 1206);
-                if (!hasAchievement("achievements", 1213) && player.dt.storedToGet.gte(3.6e3)) completeAchievement("achievements", 1213);
+                if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(1e4)) completeAchievement("achievements", 1215);
 
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)

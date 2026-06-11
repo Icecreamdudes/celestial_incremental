@@ -4791,7 +4791,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#7aecff"}},
+            barStyle() { return {backgroundColor: "#c6f7ff"}}, // #7aecff for smth darker if needed
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
@@ -5307,17 +5307,10 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
                            ["style-column", [
                                 ["raw-html", "Shards of Ascension", {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.d.diceSpaceUnlocked ? {width: "535px", height: "40px", backgroundColor: "#18282b", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
+                            ], () => { return player.d.diceSpaceUnlocked ? {width: "535px", height: "40px", backgroundColor: "#273132", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 1401]]],
-                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
-                            ["style-column", [
-                                ["raw-html", "Ascension Shards", {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cbs.shrineReactivated ? {width: "535px", height: "40px", backgroundColor: "#273132", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
-                            ["style-column", [
-                                ["row", [["levelable", 2103], ["levelable", 2203],]],
-                            ], () => { return player.cbs.shrineReactivated ? {width: "525px", backgroundColor: "#131819", padding: "5px"} : {display: "none !important"}}], // placeholder reqs
-
+                                ["row", [["levelable", 1401], ["levelable", 2103],]],
+                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#131819", padding: "5px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],

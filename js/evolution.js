@@ -680,7 +680,7 @@
                     "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/3 Unsmith Ascensions" +
                     "<br>"  + formatWhole(getLevelableTier("pet", 110)) + "/1 Coin Fragment Ascensions" +
                      "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/15 Eff. Goldsmith Level" + 
-                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e12 Coin Dust" +
+                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e11 Coin Dust" +
                     "</div>"
                     
             }, // placeholder reqs
@@ -692,7 +692,7 @@
                     && getLevelableTier("pet", 103).gte(3)
                     && getLevelableTier("pet", 110).gte(1) 
                     && getLevelableAmount("pet", 1103).gte(15)
-                    && player.ev0.coinDust.gte(1e12)
+                    && player.ev0.coinDust.gte(1e11)
                 )
             },
             onClick() {

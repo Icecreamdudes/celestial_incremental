@@ -23,7 +23,7 @@ addLayer("ev15", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
-        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e12).pow(0.5)
+        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e11).pow(0.5)
         player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(buyableEffect("ev15", 11))
 
         if (player.ev15.diamondDust.lte(1e6)) { 
@@ -45,7 +45,7 @@ addLayer("ev15", {
     },
     clickables: {
         11: {
-            title() { return "<h2>Pressurize diamond dust, but reset previous coin dust content.</h2><br><h3>Req: 1e12 Coin Dust</h3>" },
+            title() { return "<h2>Pressurize diamond dust, but reset previous coin dust content.</h2><br><h3>Req: 1e11 Coin Dust</h3>" },
             canClick() { return player.ev0.coinDust.gte(1e10) },
             unlocked() { return true },
             onClick() {
@@ -69,7 +69,7 @@ addLayer("ev15", {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Diamond Dust Upgrade I</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "Simple, but powerful. x20 coin dust gain." + // MIDDLE
+                "Simple, but powerful. x10 coin dust gain." + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "2 Diamond Dust" + // BOTTOM
                 "</div></div>"
@@ -227,7 +227,7 @@ addLayer("ev15", {
             unlocked: true,
             cost(x) { 
                 let exp = new Decimal(1);
-                if (getBuyableAmount("ev15", 11).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
+                if (getBuyableAmount("ev15", 12).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
                 let cost = this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) 
                 return cost.pow(exp)
             },

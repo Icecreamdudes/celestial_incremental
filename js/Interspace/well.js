@@ -66,7 +66,7 @@
             },
             5: {
                 time: new Decimal(0),
-                maxTime: new Decimal(345600),
+                maxTime: new Decimal(120),
                 timeSpeed: new Decimal(1),
                 completionsGain: new Decimal(1),
                 completions: new Decimal(0),
@@ -187,10 +187,10 @@
 
         player.wel.lightWellCycleEffectSoftcap = new Decimal(0.5)
         if (hasUpgrade("wel", 23)) player.wel.lightWellCycleEffectSoftcap = player.wel.lightWellCycleEffectSoftcap
-        .add(player.prj.modules[1].completions.mul(0.01).min(0.1))
-        .add(player.prj.modules[2].completions.mul(0.01).min(0.1))
-        .add(player.prj.modules[3].completions.mul(0.01).min(0.1))
-        .add(player.prj.modules[4].completions.mul(0.01).min(0.1));
+        .add(player.prj.modules[1].completions.mul(0.01).min(0.05))
+        .add(player.prj.modules[2].completions.mul(0.01).min(0.05))
+        .add(player.prj.modules[3].completions.mul(0.01).min(0.05))
+        .add(player.prj.modules[4].completions.mul(0.01).min(0.05));
 
         player.wel.lightGain = new Decimal(1)
         player.wel.lightGain = player.wel.lightGain.mul(player.wel.fountains[1].completionEffect)
@@ -425,7 +425,9 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Well cycles boost well yield.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Well cycles boost well yield.<br>(x" +
+                    formatSimple(player.wel.modules[1].completionEffect.mul(player.wel.modules[2].completionEffect).mul(player.wel.modules[3].completionEffect), 2)
+                    + ")</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 6 Light Fountain ↻</h3>"
                 }
@@ -463,7 +465,9 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Double light gain every 4 OoM of light.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double light gain every 4 OoM of light.<br>(x" +
+                    formatSimple(player.wel.light.add(1).log(10000).floor().pow_base(2), 2)
+                    + ")</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 3 Light Fountain II ↻</h3>"
                 }
@@ -577,7 +581,12 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Weaken the light well cycle effect softcap every project cycle.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Weaken the light well cycle effect softcap every project cycle.<br>(+" +
+                    format(player.prj.modules[1].completions.mul(0.01).min(0.05)
+                    .add(player.prj.modules[2].completions.mul(0.01).min(0.05))
+                    .add(player.prj.modules[3].completions.mul(0.01).min(0.05))
+                    .add(player.prj.modules[4].completions.mul(0.01).min(0.05)), 2)
+                    + ")</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 5 Time Capsule Project ↻</h3>"
                 }
@@ -725,17 +734,17 @@
         },
         33: {
             unlocked() { return hasUpgrade("wel", 31) && hasUpgrade("wel", 32) },
-            condition() { return player.pri.bestPrisms.gte(300) },
+            condition() { return player.pri.bestPrisms.gte(100) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "[NEED A NEW EFFECT]</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Double project speed again and increase focus cap by +1.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 300 Prisms</h3>"
+                    s += "???</h2><br><br><h3>Req: 100 Prisms</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e28),
+            cost: new Decimal(1e25),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1769,7 +1778,12 @@
                                 ["raw-html", "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}],
                             ["style-column", [
-                                ["raw-html", "<small>Next blueshift at <h3>x" + formatWhole(new Decimal(100)) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace"}],
+                                ["raw-html", "<small>Next blueshift at <h3>x" + formatWhole(
+                                    player.blu.blueshifts[1].amount.add(1).pow_base(100)
+                                    .min(player.blu.blueshifts[2].amount.add(1).pow_base(600))
+                                    .min(player.blu.blueshifts[3].amount.add(1).pow_base(3000))
+                                    .min(player.blu.blueshifts[4].amount.add(1).pow_base(3456000))
+                                ) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: hasMilestone("prj", 301) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],

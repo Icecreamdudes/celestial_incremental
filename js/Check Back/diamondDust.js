@@ -23,7 +23,7 @@ addLayer("ev15", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
-        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e10).pow(0.5)
+        player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e12).pow(0.5)
         player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(buyableEffect("ev15", 11))
 
         if (player.ev15.diamondDust.lte(1e6)) { 
@@ -45,7 +45,7 @@ addLayer("ev15", {
     },
     clickables: {
         11: {
-            title() { return "<h2>Pressurize diamond dust, but reset previous coin dust content.</h2><br><h3>Req: 1e10 Coin Dust</h3>" },
+            title() { return "<h2>Pressurize diamond dust, but reset previous coin dust content.</h2><br><h3>Req: 1e12 Coin Dust</h3>" },
             canClick() { return player.ev0.coinDust.gte(1e10) },
             unlocked() { return true },
             onClick() {

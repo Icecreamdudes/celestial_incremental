@@ -674,13 +674,13 @@
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
                     "<br>"  + formatWhole(player.cb.evolutionShards) + "/22,222 Evolution Shards" +
                      "<br>"  + formatWhole(player.cb.paragonShards) + "/222 Paragon Shards" +
-                     "<br>"  + formatWhole(player.cbs.ascensionShards) + "/2 Ascension Shards" +
+                     "<br>"  + formatWhole(player.cbs.ascensionShards) + "/2 Shards of Ascension" +
                     "</div>" +
                     "<div class='evoContainer'><h3>Requires:</h3>" +
                     "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/3 Unsmith Ascensions" +
                     "<br>"  + formatWhole(getLevelableTier("pet", 110)) + "/1 Coin Fragment Ascensions" +
                      "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/15 Eff. Goldsmith Level" + 
-                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e10 Coin Dust" +
+                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e12 Coin Dust" +
                     "</div>"
                     
             }, // placeholder reqs
@@ -692,7 +692,7 @@
                     && getLevelableTier("pet", 103).gte(3)
                     && getLevelableTier("pet", 110).gte(1) 
                     && getLevelableAmount("pet", 1103).gte(15)
-                    && player.ev0.coinDust.gte(1e10)
+                    && player.ev0.coinDust.gte(1e12)
                 )
             },
             onClick() {
@@ -710,17 +710,17 @@
             title() {return "Extreme Demon"},
             description() {
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
-                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/1,250 Evolution Shards" +
-                     "<br>"  + formatWhole(player.cb.paragonShards) + "/75 Paragon Shards" +
-                     "<br>" + formatWhole(player.cbs.ascensionShards) + "/1 Ascension Shards" +
-                     "<br>"  + formatWhole(player.ev2.orbs) + "/25 Orbs" +
+                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/131,313 Evolution Shards" +
+                     "<br>"  + formatWhole(player.cb.paragonShards) + "/666 Paragon Shards" +
+                     "<br>" + formatWhole(player.cbs.ascensionShards) + "/4 Shards of Ascension" +
+                     "<br>"  + formatWhole(player.ev2.orbs) + "/500 Orbs" +
                     "</div>" +
                     "<div class='evoContainer'><h3>Requires:</h3>" +
-                    "<br>" + formatWhole(getLevelableTier("pet", 203)) + "/2 Normal Face Ascensions" +
-                     "<br>"  + formatWhole(getLevelableTier("pet", 104)) + "/2 Gd Checkpoint Ascensions" +
-                     "<br>"  + formatWhole(getLevelableAmount("pet", 1203)) + "/10 Insane Face Level" +
-                     "<br>"  + formatWhole(getLevelableAmount("pet", 1104)) + "/10 Paragon Checkpoint Level" + 
-                     "<br>"  + formatWhole(player.ev2.day) + "/40 Days of Daily Rewards" +
+                    "<br>" + formatWhole(getLevelableTier("pet", 203)) + "/3 Normal Face Ascensions" +
+                     "<br>"  + formatWhole(getLevelableTier("pet", 104)) + "/3 Gd Checkpoint Ascensions" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1203)) + "/15 Eff. Insane Face Level" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1104)) + "/15 Eff. Paragon Checkpoint Level" + 
+                     "<br>"  + formatWhole(player.ev2.day) + "/100 Days of Daily Rewards" +
                     "</div>"
             }, // placeholder reqs
             canClick() {
@@ -730,11 +730,11 @@
                     player.cbs.ascensionShards.gte(1) &&
                     player.ev2.orbs.gte(25) &&
 
-                    getLevelableTier("pet", 203).gte(2) &&
-                    getLevelableTier("pet", 104).gte(2) &&
-                    getLevelableAmount("pet", 1203).gte(10) &&
-                    getLevelableAmount("pet", 1104).gte(10) &&
-                    player.ev2.day.gte(40)
+                    getLevelableTier("pet", 203).gte(3) &&
+                    getLevelableTier("pet", 104).gte(3) &&
+                    getLevelableAmount("pet", 1203).gte(15) &&
+                    getLevelableAmount("pet", 1104).gte(15) &&
+                    player.ev2.day.gte(100)
                 )
             },
             onClick() {

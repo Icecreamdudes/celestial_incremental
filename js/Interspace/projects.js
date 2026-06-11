@@ -114,6 +114,7 @@
         if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasUpgrade("wel", 31)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasUpgrade("wel", 33)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasMilestone("prj", 205)) player.prj.maxFocused = player.prj.maxFocused.add(1);
         if (hasMilestone("prj", 302)) player.prj.maxFocused = player.prj.maxFocused.add(1);
 
@@ -125,6 +126,7 @@
         player.prj.projectSpeed = new Decimal(1)
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.prj.storedTimeCapsuleEffect)
         if (hasUpgrade("wel", 22)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
+        if (hasUpgrade("wel", 33)) player.prj.projectSpeed = player.prj.projectSpeed.mul(2);
         player.prj.projectSpeed = player.prj.projectSpeed.mul(player.pri.fountains[9].completionEffect);
         player.prj.projectSpeed = player.prj.projectSpeed.mul(buyableEffect("sme", 191))
 
@@ -717,7 +719,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Project speed boosts light. (x" + format(player.prj.milestone112Effect) + ")</small>" },
+            effectDescription() { return "<small>Project speed boosts light gain. (x" + format(player.prj.milestone112Effect) + ")</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },

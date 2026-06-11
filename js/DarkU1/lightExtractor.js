@@ -58,7 +58,7 @@
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
-
+        
         if (player.sma.inStarmetalChallenge) {
             player.le.timeSinceEnter = player.le.timeSinceEnter.add(delta)
             player.le.timeSinceReset = player.le.timeSinceReset.add(delta)

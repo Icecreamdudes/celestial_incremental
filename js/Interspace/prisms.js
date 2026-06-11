@@ -186,12 +186,13 @@
         if (player.pri.autoPrismaticInput.gte(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = player.pri.autoPrismaticInput
         if (player.pri.autoPrismaticInput.lt(0) && player.pri.autoPrismaticType) player.pri.autoPrismaticAmount = new Decimal(1)
 
-        let prismGainGrowth = new Decimal(0.41421356237)
-        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth.add(1))
+        let prismGainGrowth = new Decimal(1.5)
+        player.pri.prismsToGet = player.wel.light.add(1).log(10).sub(15).pow_base(prismGainGrowth)
         if (!hasMilestone("prj", 202)) player.pri.prismsToGet = player.pri.prismsToGet.min(1);
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
+        //player.pri.prismsToGet = player.pri.prismsToGet.mul(player.wel.light.add(1).log(10).div(25).pow(4).div(4).add(1).pow(2))
         if (!hasMilestone("prj", 207)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.prj.milestone207Effect);
         if (hasAchievement("achievements", 1214)) player.pri.prismsToGet = player.pri.prismsToGet.mul(1.2);
 
@@ -244,6 +245,13 @@
             }
         });
     },
+    /*
+    player.pri.fountains[1].completions = new Decimal(0); player.pri.fountains[2].completions = new Decimal(0);
+player.pri.fountains[3].completions = new Decimal(0); player.pri.fountains[4].completions = new Decimal(0);
+player.pri.fountains[5].completions = new Decimal(0); player.pri.fountains[6].completions = new Decimal(0);
+player.pri.fountains[7].completions = new Decimal(0); player.pri.fountains[8].completions = new Decimal(0);
+player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].completions = new Decimal(0);
+ */
     prismReset(isRewarded) {
         if (isRewarded) {
             player.pri.prisms = player.pri.prisms.add(player.pri.prismsToGet)
@@ -1122,7 +1130,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions.pow(0.75)
 
-                s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(4).add(1).pow(1.5)
+                s = player.pri.prisms.add(1).log10().div(4).add(1).pow(completions).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1).mul(8).add(1).pow(2)
 
                 return s
             },
@@ -1168,7 +1176,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
-                s = completions.pow(0.75).pow_base(1.5)
+                s = completions.pow(0.75).pow_base(1.5).sub(1).div(2).add(1)
 
                 return s
             },
@@ -1213,7 +1221,7 @@
             getCompletionEffect() {
                 let completions = player.pri.fountains[6].completions
 
-                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2).add(1)
+                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2.5).add(1)
 
                 return s
             },
@@ -1247,7 +1255,7 @@
             completionEffectPrefix: "x",
             completionEffectSuffix: " Light, based on well ↻",
             condition() {
-                return player.pri.fountains[4].completions.gte(12)
+                return player.pri.fountains[4].completions.gte(20)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
@@ -1269,7 +1277,7 @@
                 s = s.mul(completions.pow_base(2))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
-                s = s.pow(1.0625).mul(1.2e5)
+                s = s.pow(1.0625).mul(4e5)
 
                 return s
             },
@@ -1280,7 +1288,7 @@
                 s = s.mul(completions.pow_base(2))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
                 
-                s = s.mul(1.2e4)
+                s = s.mul(4e4)
 
                 return s.floor()
             },
@@ -1575,7 +1583,7 @@
                         } else {
                             look[7][1].push(
                             ["style-column", [
-                                ["raw-html", "Dodecahedron<br><small>Req: 12 Octahedron ↻</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Dodecahedron<br><small>Req: 20 Octahedron ↻</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }

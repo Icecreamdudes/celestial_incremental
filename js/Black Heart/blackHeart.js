@@ -836,7 +836,11 @@ addLayer("bh", {
                 player.laboratory.cooldown = player.laboratory.cooldownMax
                 player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldownMax.sub(30), -1)
             }
-            BHStageEnter(player.bh.autoEnter)
+            if (player.bh.autoEnter == "zarDungeon") {
+                BHStageEnter("zarDungeon", [player.zarDungeon.navToggle ? "nav" : "none", player.zarDungeon.diceFiveToggle ? "diceFive" : "none", "none"])
+            } else {
+                BHStageEnter(player.bh.autoEnter)
+            }
         }
         if (player.bh.exitConfirm.gt(0)) player.bh.exitConfirm = player.bh.exitConfirm.sub(normTime)
 

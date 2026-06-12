@@ -118,9 +118,13 @@ BHA.general_recklessAbandon = {
         let effect = new Decimal(25).add(player.bh.skillData["general_recklessAbandon"].level.mul(5))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
         if (player.bh.currentStage != "none") return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency"
-        return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency<br>Currently:<br>" +
-        formatSimple(player.bh.characterData[char.id].health) + " HP ⇒ " + formatSimple(player.bh.characterData[char.id].health.mul(0.75)) + " HP<br>" +
-        formatSimple(char.damage) + " DMG ⇒ " + formatSimple(char.damage.add(player.bh.characterData[char.id].health.mul(0.75).div(4).mul(effect.div(100)))) + " DMG"
+        if (player.bh.characterData[char.id]) {
+            return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency<br>Currently:<br>" +
+            formatSimple(player.bh.characterData[char.id].health) + " HP ⇒ " + formatSimple(player.bh.characterData[char.id].health.mul(0.75)) + " HP<br>" +
+            formatSimple(char.damage) + " DMG ⇒ " + formatSimple(char.damage.add(player.bh.characterData[char.id].health.mul(0.75).div(4).mul(effect.div(100)))) + " DMG"
+        } else {
+            return "Convert 25% of your health into damage, at " + formatSimple(effect) + "% efficiency"
+        }
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_recklessAbandon"].maxLevel) + " HP"},
     char: "general",

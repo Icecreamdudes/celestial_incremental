@@ -66,6 +66,8 @@
 
         if (player.car.cardGenerators.gte(1)) {
             player.car.cardPointsPerSecond = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)] 
+        } else {
+            player.car.cardPointsPerSecond = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)] 
         }
 
         player.car.cardPointsPerSecond[0] = player.car.cardPointsPerSecond[0].mul(buyableEffect("car", 11))
@@ -203,7 +205,7 @@
     clickables: {
         1: {
             title() {return "Level Up"},
-            canClick() {return getLevelableXP("car", layers.car.levelables.index).gte(tmp.car.levelables[layers.car.levelables.index].xpReq) && layers.car.levelables.index != 0},
+            canClick() {return Decimal.lt(getLevelableAmount("car", layers.car.levelables.index), layers.car.levelables[layers.car.levelables.index].levelLimit()) && getLevelableXP("car", layers.car.levelables.index).gte(tmp.car.levelables[layers.car.levelables.index].xpReq) && layers.car.levelables.index != 0},
             unlocked() {return true},
             onClick() {
                 addLevelableXP("car", layers.car.levelables.index, tmp.car.levelables[layers.car.levelables.index].xpReq.neg())
@@ -287,6 +289,7 @@
         0: {
             image() { return "resources/Punchcards/lockedPunchcard.png"},
             title() { return "No Card Selected." },
+            levelLimit() { return new Decimal(99) },
             description() { return "" },
             canSelect: false,
             currency() { return getLevelableXP(this.layer, this.id) },
@@ -1414,7 +1417,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).div(40).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1445,14 +1448,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to hex power (affected by hex power).<br>", //not implemented
+                    "^" + format(this.effect()[0], 3) + " to hex power.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.hpw.power.pow(0.01).pow(getLevelableAmount(this.layer, this.id).mul(0.3))
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).div(50).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1521,14 +1524,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to infinities (affected by infinites).<br>", //not implemented
+                    "^" + formatSimple(this.effect()[0], 3) + " to infinities.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.in.infinities.pow(0.01).pow(getLevelableAmount(this.layer, this.id).mul(0.15))
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.6).div(200).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1673,14 +1676,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to stars (affected by stars).<br>", //not implemented
+                    "^" + formatSimple(this.effect()[0], 3) + " to stars.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.au2.stars.pow(0.025).pow(getLevelableAmount(this.layer, this.id).mul(0.2)).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).div(100).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1711,14 +1714,14 @@
             levelLimit() { return new Decimal(99) },
             description() {
                 let str = [
-                    "x" + format(this.effect()[0]) + " to bees (affected by bees).<br>", //not implemented
+                    "^" + formatSimple(this.effect()[0], 3) + " to bees.<br>", //not implemented
                     "x" + format(this.effect()[1]) + " to diamond points.",
                 ]
                 return str.join("")
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.bee.bees.pow(0.005).pow(getLevelableAmount(this.layer, this.id).mul(0.5))
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.7).div(100).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },

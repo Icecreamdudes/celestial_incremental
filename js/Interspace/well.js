@@ -932,13 +932,13 @@
         },
         44: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return player.prj.completedProjects.gte(28) },
+            condition() { return player.prj.completedProjects.gte(30) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the fourth project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 28 total Project ↻</h3>"
+                    s += "???</h2><br><br><h3>Req: 30 total Project ↻</h3>"
                 }
                 return s
             },

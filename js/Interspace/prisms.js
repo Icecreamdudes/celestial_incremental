@@ -1177,7 +1177,6 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 let completions = player.pri.fountains[5].completions
 
                 s = completions.pow(0.75).pow_base(1.5).sub(1).div(2).add(1)
-                if (s.gte(1000)) s = s.div(1e3).sub(1).div(100).add(1).mul(1e3);
 
                 return s
             },

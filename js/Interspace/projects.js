@@ -173,6 +173,8 @@
 
         if (player.prj.pylonBuilt)
         {
+            player.prj.pylonEnergyMax = Decimal.pow(1e6, player.prj.pylonTier)
+
             player.prj.pylonEnergyPerSecond = new Decimal(1)
             player.prj.pylonEnergyPerSecond = player.prj.pylonEnergyPerSecond.mul(buyableEffect("prj", 11))
             player.prj.pylonEnergyPerSecond = player.prj.pylonEnergyPerSecond.mul(buyableEffect("prj", 12))
@@ -1590,7 +1592,7 @@
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "8px" } },
-                unlocked() { return false},
+                unlocked() { return true},
                 content: [
                     ["blank", "25px"],
                     ["left-row", [
@@ -1607,8 +1609,8 @@
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts A2 tickspeed by x" + format(player.prj.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts star gain by x" + format(player.prj.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts stored space energy and time capsules by x" + format(player.prj.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts natural pylon energy gain by x" + format(player.prj.pylonEnergyEffect4) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.prj.pylonBuilt ? "Passive effect: Boosts radiation gain by ^" + format(player.prj.pylonPassiveEffect, 4) + " (Based on rocket fuel)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Boosts technological pylon energy gain by x" + format(player.prj.pylonEnergyEffect4) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.prj.pylonBuilt ? "Passive effect: Boosts dark celestial point gain by ^" + format(player.prj.pylonPassiveEffect, 4) + " (Based on rocket fuel)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Your cosmic pylon is tier " + formatWhole(player.prj.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.prj.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["rounded-ex-buyable", 11], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 12], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 13],]], 

@@ -160,11 +160,10 @@
         // MILESTONE EFFECTS
 
         player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
-        if (hasMilestone("prj", 111)) player.prj.milestone105Effect = player.prj.milestone105Effect.pow(1.5);
-        player.prj.milestone112Effect = player.prj.projectSpeed.div(10).add(1)
+        player.prj.milestone112Effect = player.prj.projectSpeed.sub(1).div(100).add(1)
         player.prj.milestone207Effect = player.pri.prisms.add(1).log(1e4).floor().pow_base(1.5)
         player.prj.milestone210Effect = player.bum.starshines.pow_base(1.1).min(100)
-        player.prj.milestone304Effect = player.wel.modules[4].completions.div(1e9).add(1).log10().pow(0.75).pow_base(10).add(1).pow(0.25)
+        player.prj.milestone304Effect = player.wel.modules[4].completions.div(1e9).add(1).log10().pow(0.5).pow_base(10).add(1).pow(0.333)
 
         // MISC
 
@@ -698,7 +697,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Improve the 5 ↻ milestone effect.</small>" },
+            effectDescription() { return "<small>The blueshift effect applies to light well speed.</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
@@ -972,7 +971,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x1.09 light well speed, bumpy is so nice fr.</small>" },
+            effectDescription() { return "<small>x1.09 light well speed, do you dare get it before the reset layer?</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -1015,7 +1014,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock blueshifts.</small>" },
+            effectDescription() { return "<small>Unlock blueshifts. Unlock a pyramid automator every blueshift.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -1057,7 +1056,7 @@
             onComplete() {
                 doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock light well δ. Unlock a pyramid automator per blueshift after 1.</small>" },
+            effectDescription() { return "<small>Unlock light well δ.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -1520,7 +1519,7 @@
             },
             getTimeCapsuleReq() {
                 let completions = player.prj.modules[4].completions
-                let s = completions.add(1).pow(4).mul(2.5e4)
+                let s = completions.add(1).pow(4).mul(1e4)
                 
                 s = s.add(completions.sub(5).max(0).pow(4)).mul(completions.div(5).floor().pow_base(20))
 
@@ -1659,7 +1658,7 @@ const makeProject = function (id) {
             ], {verticalAlign: "bottom"}],
             ["style-column", [
                     ["style-column", [
-                    ["raw-html", formatWhole(player.prj.modules[id].completions) + " ↻<br><small>(x" + formatShort(layers.prj.projects[id].getCompletionEffect()) + " " + layers.prj.projects[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                    ["raw-html", formatWhole(player.prj.modules[id].completions) + " ↻<br><small>(x" + formatSimple(layers.prj.projects[id].getCompletionEffect(), 2) + " " + layers.prj.projects[id].completionEffectStat + ")</small>", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                 ], {background: "#663366", border: "3px solid #994d86", borderRadius: "0px", width: "388px", height: "44px"}],
             ], {background: "#994d86", border: "3px solid #663366", borderRadius: "0px", borderTop: "0px", height: "50px"}],
             ["style-column", [

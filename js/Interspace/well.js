@@ -209,7 +209,7 @@
             else player.wel.modules[3].completionEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[3].completionEffect)
 
-            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.5);
+            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.25);
             if (player.wel.modules[4].completionEffect.gte(100)) player.wel.modules[4].completionEffect = player.wel.modules[4].completionEffect.div(100).pow(0.5).mul(100);
         }
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
@@ -230,6 +230,7 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
+        if (hasMilestone("prj", 111)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.blu.blueshiftEffect);
         if (hasMilestone("prj", 209)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.09)
         if (hasMilestone("prj", 304)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone304Effect)
 
@@ -249,7 +250,7 @@
         player.wel.modules[1].maxTime = new Decimal(10)
         player.wel.modules[2].maxTime = new Decimal(60)
         player.wel.modules[3].maxTime = new Decimal(300)
-        player.wel.modules[4].maxTime = new Decimal(345600)
+        player.wel.modules[4].maxTime = new Decimal(2419000)
         player.wel.modules[5].maxTime = new Decimal(60)
         player.wel.modules[6].maxTime = new Decimal(1800)
         player.wel.modules[7].maxTime = new Decimal(21600)
@@ -257,7 +258,14 @@
 
         player.wel.wellCycleProduct = new Decimal(1)
         for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
-            player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
+
+            
+            if (hasUpgrade("wel", 43) && player.wel.modules[i].maxTime.gte(player.wel.modules[i].timeSpeed.mul(60))) {
+                player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].maxTime.div(60).mul(delta))
+            } else {
+                player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
+            }
+
             if (hasUpgrade("wel", 31)) player.wel.light = player.wel.light.add(layers.wel.clickables[i].lightGain().mul(new Decimal(1).sub(player.wel.modules[i].time.div(player.wel.modules[i].maxTime).min(1))).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta).mul(2));
 
             // CYCLE SPEED
@@ -308,7 +316,7 @@
             module.completionEffect = fountain.getCompletionEffect()
 
             if (module.automated && player.wel.light.gte(module.lightReq) && player.wel.light.gt(0)) {
-                    module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
+                module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
             }
             if (module.focused) {
                 module.time = module.time.add(module.timeSpeed.mul(delta))
@@ -828,7 +836,7 @@
                 return this.condition()
             },
             style() {
-                let look = {width: "200px", borderRadius: "0px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
+                let look = {width: "200px", borderRadius: "0 0 0 10px", border: "3px solid #0000007f", color: "#000000df", padding: "8px", margin: "1.5px"}
                 if (hasUpgrade(this.layer, this.id)) {
                     look.backgroundColor = "#4d9973"
                     look.border = "3px solid #336659"
@@ -858,7 +866,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e50),
+            cost: new Decimal(1e55),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -886,17 +894,17 @@
         },
         43: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return player.wel.modules[4].completions.gte(1e13) },
+            condition() { return player.blu.totalBlueshifts.gte(8) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Light well cooldowns will never exceed 1 minute.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Light well cooldowns can no longer exceed one minute. You're welcome.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: +100% Light Well ↻/s</h3>"
+                    s += "???</h2><br><br><h3>Req: 8 Blueshifts</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e80),
+            cost: new Decimal(1e67),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -924,17 +932,17 @@
         },
         44: {
             unlocked() { return hasUpgrade("wel", 34) },
-            condition() { return player.prj.completedProjects.gte(30) },
+            condition() { return player.prj.completedProjects.gte(28) },
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Unlock the fourth project.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
-                    s += "???</h2><br><br><h3>Req: 30 total Project ↻</h3>"
+                    s += "???</h2><br><br><h3>Req: 28 total Project ↻</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e99),
+            cost: new Decimal(1e75),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1078,7 +1086,7 @@
             },
             lightGain() {
                 let gain = new Decimal(0.01)
-                gain = gain.mul(player.wel.lightGain.div(1e45).pow(0.25))
+                gain = gain.mul(player.wel.lightGain.div(1e50).pow(0.25))
                 gain = gain.mul(player.blu.blueshifts[this.id].cycleGainMul)
                 if (gain.gte(1)) gain = gain.pow(0.5);
                 return gain
@@ -1782,7 +1790,7 @@
                                     player.blu.blueshifts[1].amount.add(1).pow_base(100)
                                     .min(player.blu.blueshifts[2].amount.add(1).pow_base(600))
                                     .min(player.blu.blueshifts[3].amount.add(1).pow_base(3000))
-                                    .min(player.blu.blueshifts[4].amount.add(1).pow_base(3456000))
+                                    .min(player.blu.blueshifts[4].amount.add(1).pow_base(24190000))
                                 ) + "</h3> speed.</small>", {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace"}],
                             ], {display: hasMilestone("prj", 301) ? "" : "none !important"}],
                         ]],
@@ -1940,7 +1948,7 @@
                     }
                     }
                     if (player.wel.modules[2].completions.gte(500) && hasMilestone("prj", 303)) {
-                    if (player.wel.modules[3].completions.gte(1e10) || player.wel.modules[4].completions.gt(0)) {
+                    if (player.wel.modules[3].completions.gte(1e12) || player.wel.modules[4].completions.gt(0)) {
                             // light well delta
                         look[4][1].push(["blank", "1px"])
                         look[4][1].push(
@@ -1984,7 +1992,7 @@
                         look[4][1].push(
                             ["style-column", [
                                 ["style-column", [
-                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e10 γ ↻</small>", {color: "white", fontSize: "16px"}],
+                                    ["raw-html", "Light Well δ</h2><br><small>Req: 1e12 γ ↻</small>", {color: "white", fontSize: "16px"}],
                                 ], {background: "black",border: "3px solid #663737", borderRadius: "103px 103px 16px 16px", width: "150px", height: "323px", lineHeight: "1"}],
                             ["blank", "9px"],
                         ]],

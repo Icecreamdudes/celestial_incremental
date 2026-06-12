@@ -705,7 +705,7 @@ addLayer("achievements", {
         1214: {
             name: "First Wonder of Interspace",
             image: "resources/achievements/12_14.png",
-            tooltip: "<h3>First Wonder of Interspace</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first ten pyramid<br>fountains.<br><br>Reward: Gain 20% more prisms.",
+            tooltip: "<h3>First Wonder of Interspace</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first nine pyramid<br>fountains.<br><br>Reward: Gain 20% more prisms.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,

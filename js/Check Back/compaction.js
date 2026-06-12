@@ -26,7 +26,7 @@ addLayer("ev15", {
             purchaseLimit() { return new Decimal(25) },
             currency() { return player.cb.evolutionShards},
             pay(amt) {player.cb.evolutionShards = this.currency().sub(amt)},
-            effect(x) { return new Decimal(1).div(getBuyableAmount(this.layer, this.id).pow(0.5).div(20).add(1))},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(20).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -34,7 +34,7 @@ addLayer("ev15", {
                 return "Level Stacking"
             },
             display() {
-                return "which are reducing the check back level requirement by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
+                return "which are raising check back XP by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Evolution Shards"
             },
             buy(mult) {

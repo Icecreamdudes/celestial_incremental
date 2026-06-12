@@ -2167,7 +2167,7 @@
         },
         191: {
             costBase() { return [new Decimal(10), new Decimal(4e7)] },
-            costGrowth() { return [new Decimal(2.5), new Decimal(1.3)] },
+            costGrowth() { return [new Decimal(8), new Decimal(1.3)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.prj.storedTimeCapsules, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -2201,15 +2201,15 @@
             },
         },
         192: {
-            costBase() { return [new Decimal(1e6), new Decimal(8e7)] },
-            costGrowth() { return [new Decimal(4), new Decimal(1.4)] },
+            costBase() { return [new Decimal(1e12), new Decimal(8e7)] },
+            costGrowth() { return [new Decimal(10000), new Decimal(1.4)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.sb.storedSpaceEnergy, player.sme.starmetalEssence]},
             pay(amt, amt2) {
                 player.sb.storedSpaceEnergy = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(50).add(1)},
             unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[191, "#3d996b"]],
             cost(x) {
@@ -2220,7 +2220,7 @@
             },
             display() {
                 return "<h3>SME-J2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Increase all well speeds by +5%.\n\
+                    Increase all well speeds by +2%.\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.sb.storedSpaceEnergy) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Stored Space Energy\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"

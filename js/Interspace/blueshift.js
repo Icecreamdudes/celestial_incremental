@@ -81,7 +81,7 @@
         player.blu.blueshifts[1].shiftBase = new Decimal(10)
         player.blu.blueshifts[2].shiftBase = new Decimal(20)
         player.blu.blueshifts[3].shiftBase = new Decimal(40)
-        player.blu.blueshifts[4].shiftBase = new Decimal(1e3)
+        player.blu.blueshifts[4].shiftBase = new Decimal(800)
         player.blu.blueshifts[5].shiftBase = new Decimal(6)
         player.blu.blueshifts[6].shiftBase = new Decimal(12)
         player.blu.blueshifts[7].shiftBase = new Decimal(24)
@@ -429,13 +429,13 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>When a fountain's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as prisms and the pyramid. Each blueshift done roots cycle speed and increases yield for its respective well. You also gain multipliers from total blueshifts done.</small>"
+                                    "<small>When a well's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as prisms and the pyramid. Each blueshift done roots cycle speed and increases yield for its respective well. You also gain multipliers from total blueshifts done.</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", height: "125px", padding: "3px"}],                   
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
                         ["blank", "25px"],
                         ["raw-html", "You have blueshifted <h3>" + formatWhole(player.blu.totalBlueshifts) + "</h3> times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts light well ↻ gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light well" + (hasMilestone("prj", 111) ? " speed and" : "") +" ↻ gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
 
                         ["style-row", [

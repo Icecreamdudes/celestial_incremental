@@ -235,7 +235,7 @@
                     case '7': case '8': case '9': case '10':
                         if (player.pri.fountains[7].completions.gt(0)) {
                             if (!hasAchievement("achievements", 1212)) completeAchievement("achievements", 1212);
-                            if (player.pri.fountains[7].completions.gt(0) && player.pri.fountains[8].completions.gt(0) && player.pri.fountains[9].completions.gt(0) && player.pri.fountains[10].completions.gt(0) && !hasAchievement("achievements", 1214)) completeAchievement("achievements", 1214);
+                            if (player.pri.fountains[7].completions.gt(0) && player.pri.fountains[8].completions.gt(0) && player.pri.fountains[9].completions.gt(0) && !hasAchievement("achievements", 1214)) completeAchievement("achievements", 1214);
                         }
                         break;
                     default:
@@ -988,7 +988,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return true
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(2) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(1) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[1].completions.pow(0.75)
@@ -1033,7 +1033,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return true
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(3) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(2) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[2].completions
@@ -1079,7 +1079,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return true
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(4) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(3) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[3].completions
@@ -1125,7 +1125,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(5) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(4) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[4].completions.pow(0.75)
@@ -1171,12 +1171,13 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(6) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(5) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[5].completions
 
                 s = completions.pow(0.75).pow_base(1.5).sub(1).div(2).add(1)
+                if (s.gte(1000)) s = s.div(1e3).sub(1).div(100).add(1).mul(1e3);
 
                 return s
             },
@@ -1185,7 +1186,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 let s = new Decimal(1)
 
                 s = s.mul(completions.pow_base(1.5))
-                s = s.mul(completions.sub(20).max(0).pow_base(1.25))
+                //s = s.mul(completions.sub(20).max(0).pow_base(1.25))
                 s = s.pow(1.0625).mul(1e3)
 
                 return s
@@ -1193,7 +1194,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
                 let s = completions.pow_base(1.5).mul(50)
-                s = s.mul(completions.sub(20).max(0).pow_base(1.25))
+                //s = s.mul(completions.sub(20).max(0).pow_base(1.25))
 
                 return s.floor()
             },
@@ -1216,7 +1217,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return player.pri.fountains[2].completions.gt(0) || player.pri.fountains[3].completions.gt(0)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(7) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(6) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[6].completions
@@ -1253,7 +1254,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
         7: {
             title: "Dodecahedron",
             completionEffectPrefix: "x",
-            completionEffectSuffix: " Light, based on well ↻",
+            completionEffectSuffix: " Prisms, based on well ↻",
             condition() {
                 return player.pri.fountains[4].completions.gte(20)
             },
@@ -1261,34 +1262,34 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(8) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(7) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[7].completions.pow(0.75)
 
-                s = player.wel.wellCycleProduct.log10().div(25).pow(4).add(1).pow(completions).log(10).add(1).pow(0.25).sub(1).pow_base(10).pow(4)
+                s = player.wel.wellCycleProduct.log10().div(25).pow(4).add(1).pow(completions).log(10).add(1).pow(0.25).sub(1).pow_base(10).pow(2)
 
                 return s
             },
             getTimeReq() {
                 let completions = player.pri.fountains[7].completions
-                let s = completions.pow(2)
+                let s = completions.add(1).pow(2)
 
-                s = s.mul(completions.pow_base(2))
+                s = s.mul(completions.pow_base(3))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
-                s = s.pow(1.0625).mul(4e5)
+                s = s.pow(1.0625).mul(2.4e6)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[7].completions
-                let s = completions.pow(2)
+                let s = completions.add(1).pow(2)
 
-                s = s.mul(completions.pow_base(2))
+                s = s.mul(completions.pow_base(3))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
                 
-                s = s.mul(4e4)
+                s = s.mul(1.2e5)
 
                 return s.floor()
             },
@@ -1305,18 +1306,18 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             completionEffectPrefix: "x",
             completionEffectSuffix: " Prisms",
             condition() {
-                return player.pri.totalPrisms.gte(1e5)
+                return player.pri.bestPrismsInOneReset.gte(4e5)
             },
             unlocked() {
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(9) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(8) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[8].completions
 
-                let s = completions.add(1).mul(completions).div(4).add(1)
+                let s = completions.add(1).mul(completions).div(2).add(1)
 
                 return s
             },
@@ -1327,13 +1328,13 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 s = s.mul(completions.pow_base(3))
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
-                s = s.pow(1.0625).mul(2e6)
+                s = s.pow(1.0625).mul(4e7)
 
                 return s
             },
             getprismReq() {
                 let completions = player.pri.fountains[8].completions
-                let s = completions.pow_base(3).mul(1e5)
+                let s = completions.pow_base(3).mul(1e6)
                 s = s.mul(completions.sub(20).max(0).pow_base(1.4))
 
                 return s.floor()
@@ -1357,12 +1358,12 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(10) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(9) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
 
-                s = completions.pow(0.5).pow_base(1.5)
+                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2.5).add(1)
 
                 return s
             },
@@ -1402,7 +1403,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return (player.pri.fountains[4].completions.gt(0) || player.pri.fountains[5].completions.gt(0) || player.pri.fountains[6].completions.gt(0)) && hasMilestone("prj", 302)
             },
             canAuto() {
-                return player.blu.totalBlueshifts.gte(11) && hasMilestone("prj", 303)
+                return player.blu.totalBlueshifts.gte(11) && hasMilestone("prj", 301)
             },
             getCompletionEffect() {
                 let completions = player.pri.fountains[10].completions
@@ -1518,7 +1519,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                     if (layers.pri.fountains[4].unlocked()) {
                             look[5][1].push(
                                 ["style-column", [
-                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 0 0 13px", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "13px 0 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[4].condition()) {
@@ -1556,7 +1557,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                         look[5][1].push(["blank", "6px", {width: "6px"}])
                             look[5][1].push(
                                 ["style-column", [
-                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 13px 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
+                                    ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0 13px 0 0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[6].condition()) {
@@ -1572,7 +1573,6 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
 
                     // dodecahedron
                     if (layers.pri.fountains[7].unlocked()) {
-                        look[7][1].push(["blank", "6px", {width: "6px"}])
                             look[7][1].push(
                                 ["style-column", [
                                     ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
@@ -1601,7 +1601,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                         } else {
                             look[7][1].push(
                             ["style-column", [
-                                ["raw-html", "Lense<br><small>Req: 100,000 total Prisms</small>", {color: "white", fontSize: "16px"}],
+                                ["raw-html", "Lense<br><small>Req: +500,000 Prisms in one reset</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
@@ -1609,23 +1609,23 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
 
                     // pentagon
                     if (layers.pri.fountains[9].unlocked()) {
-                        look[9][1].push(["blank", "6px", {width: "6px"}])
-                            look[9][1].push(
+                        look[7][1].push(["blank", "6px", {width: "6px"}])
+                            look[7][1].push(
                                 ["style-column", [
                                     ["style-column", [], {background: "#d6ebff", border: "3px solid #d6ebff", borderRadius: "0", borderRight: "0", width: "268px", height: "215px", marginLeft: "-5.25px"}],
                                 ], {width: "0", height: "0"}],
                             )
                         if (layers.pri.fountains[9].condition()) {
-                            look[9][1].push(makePrismFountain(9, false))
+                            look[7][1].push(makePrismFountain(9, false))
                         } else {
-                            look[9][1].push(
+                            look[7][1].push(
                             ["style-column", [
                                 ["raw-html", "Pentagon<br><small>Req: 200 Project Speed</small>", {color: "white", fontSize: "16px"}],
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
                     }
-
+                    /*
                     // Cube
                     if (layers.pri.fountains[10].unlocked()) {
                         look[9][1].push(["blank", "6px", {width: "6px"}])
@@ -1643,7 +1643,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                             ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
-                    }
+                    }*/
 
                     return look
                 }

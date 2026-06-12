@@ -19,7 +19,6 @@ addLayer("cb", {
         xpMult: new Decimal(1),
         req: new Decimal(4),
         reqDiv: new Decimal(1),
-        reqRoot: new Decimal(1),
         effectActivate: false,
 
         xpTimers: {
@@ -223,9 +222,6 @@ addLayer("cb", {
         player.cb.reqDiv = player.cb.reqDiv.mul(player.se.starsExploreEffect[2][1])
         if (hasUpgrade("darkTemple", 6)) player.cb.reqDiv = player.cb.reqDiv.mul(upgradeEffect("darkTemple", 6))
 
-        player.cb.reqRoot = new Decimal(1)
-        player.cb.reqRoot = player.cb.reqRoot.mul(buyableEffect("ev15", 11).recip())
-
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
         for (let i in player.cb.xpTimers) {
@@ -280,6 +276,8 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
             if (hasUpgrade("cbs", 18)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 18))
+                
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.pow(buyableEffect("ev15", 11))
 
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
@@ -465,13 +463,13 @@ addLayer("cb", {
     levelToXP(quantity) {
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
         if (quantity.lt(1000)) {
-            quantity = quantity.add(1.5).pow(2).div(2).div(player.cb.reqDiv).root(player.cb.reqRoot)
+            quantity = quantity.add(1.5).pow(2).div(2).div(player.cb.reqDiv)
         } else if (quantity.lt(10000)) {
-            quantity = quantity.pow(2.25).div(2).sub(2309705).div(player.cb.reqDiv).root(player.cb.reqRoot)
+            quantity = quantity.pow(2.25).div(2).sub(2309705).div(player.cb.reqDiv)
         } else if (quantity.lt(100000)) {
-            quantity = quantity.pow(2.5).sub(9502309705).div(player.cb.reqDiv).root(player.cb.reqRoot)
+            quantity = quantity.pow(2.5).sub(9502309705).div(player.cb.reqDiv)
         } else {
-            quantity = Decimal.pow(1000, quantity.pow(0.125)).sub(1323276439362).div(player.cb.reqDiv).root(player.cb.reqRoot)
+            quantity = Decimal.pow(1000, quantity.pow(0.125)).sub(1323276439362).div(player.cb.reqDiv)
         }
         return quantity
     },
@@ -479,13 +477,13 @@ addLayer("cb", {
         // The number the quantity is less then is XP equivalent to the level softcaps above
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
         if (quantity.lt(Decimal.div(501501, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).mul(2).pow(1/2).sub(1.5).floor()
+            quantity = quantity.mul(player.cb.reqDiv).mul(2).pow(1/2).sub(1.5).floor()
         } else if (quantity.lt(Decimal.div(497690295, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(2309705).mul(2).pow(4/9).floor()
+            quantity = quantity.mul(player.cb.reqDiv).add(2309705).mul(2).pow(4/9).floor()
         } else if (quantity.lt(Decimal.div(3152775350463, player.cb.reqDiv))) {
-            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(9502309705).pow(2/5).floor()
+            quantity = quantity.mul(player.cb.reqDiv).add(9502309705).pow(2/5).floor()
         } else {
-            quantity = quantity.mul(player.cb.reqDiv).pow(player.cb.reqRoot).add(1323276439362).log(10).div(3).pow(8).floor()
+            quantity = quantity.mul(player.cb.reqDiv).add(1323276439362).log(10).div(3).pow(8).floor()
         }
         return quantity
     },

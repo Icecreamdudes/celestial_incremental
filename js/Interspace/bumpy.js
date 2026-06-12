@@ -106,7 +106,7 @@
     update(delta) {
 
         // STARLIGHT
-        player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(100).div(6).pow_base(2)
+        player.bum.starlightToGet = player.wel.light.add(1).log(10).sub(75).div(6).pow_base(2)
         if (hasAchievement("achievements", 1221)) player.bum.starlightToGet = player.bum.starlightToGet.mul(1.2)
         player.bum.starlightToGet = player.bum.starlightToGet.floor()
 
@@ -162,8 +162,8 @@
     branches: ["prj"],
     clickables: {
         1: {
-            title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e100 Light" },
-            canClick() { return player.wel.light.gte(1e100)},
+            title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e75 Light" },
+            canClick() { return player.wel.light.gte(1e75)},
             unlocked() { return true },
             onClick() {
                 layers.bum.starlightReset(true)
@@ -413,7 +413,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Improve the formulae for pyramid fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Improve the formulas for pyramid fountain reqs, and bulk complete them.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 4 starshines done</h3>"
                 }
@@ -1276,32 +1276,6 @@
     },
     microtabs: {
         stuff: {
-            "Fountains": {
-                buttonStyle() { return { color: "white", borderRadius: "8px"} },
-                unlocked() { return true },
-                content() {
-                    let look = [
-                        ["blank", "25px"],
-                        ["style-row", [
-                            makeStarlightFountain(1, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(2, true),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(3, false),
-                        ]],
-                        ["blank", "6px", {width: "6px"}],
-                        ["style-row", [
-                            makeStarlightFountain(4, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(5, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(6, false),
-                        ]],
-                        ["blank", "25px"],
-                    ]
-                    return look
-                }
-            },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return true },
@@ -1328,6 +1302,32 @@
                     ]
                     return look
                 },
+            },
+            "Fountains": {
+                buttonStyle() { return { color: "white", borderRadius: "8px"} },
+                unlocked() { return true },
+                content() {
+                    let look = [
+                        ["blank", "25px"],
+                        ["style-row", [
+                            makeStarlightFountain(1, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(2, true),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(3, false),
+                        ]],
+                        ["blank", "6px", {width: "6px"}],
+                        ["style-row", [
+                            makeStarlightFountain(4, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(5, false),
+                            ["blank", "6px", {width: "6px"}],
+                            makeStarlightFountain(6, false),
+                        ]],
+                        ["blank", "25px"],
+                    ]
+                    return look
+                }
             },
             "Journal": {
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },

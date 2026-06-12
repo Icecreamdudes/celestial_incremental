@@ -275,16 +275,16 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
-            title: "I don't like bees but I do like honey.",
+            title: "I don't like bees but I do like flowers.",
             unlocked() { return hasUpgrade("za", 21) && player.al.show },
-            description: "Boosts honey-cells based on chance points.",
+            description: "Boosts flower gain based on chance points.",
             cost: new Decimal(1e40),
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px", width: '150px',},
             effect() {
-                return player.za.chancePoints.pow(0.06).add(1)
+                return Decimal.pow(1.5, player.za.chancePoints.add(1).log(10).pow(0.5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         },

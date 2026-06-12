@@ -1186,7 +1186,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 let s = new Decimal(1)
 
                 s = s.mul(completions.pow_base(1.5))
-                //s = s.mul(completions.sub(20).max(0).pow_base(1.25))
+                s = s.mul(completions.sub(20).max(0).pow_base(1.25))
                 s = s.pow(1.0625).mul(1e3)
 
                 return s
@@ -1194,7 +1194,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             getprismReq() {
                 let completions = player.pri.fountains[5].completions
                 let s = completions.pow_base(1.5).mul(50)
-                //s = s.mul(completions.sub(20).max(0).pow_base(1.25))
+                s = s.mul(completions.sub(20).max(0).pow_base(1.25))
 
                 return s.floor()
             },

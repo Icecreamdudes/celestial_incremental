@@ -967,6 +967,34 @@ addLayer("zarDungeon", {
             },
             style: {width: "200px", minHeight: "75px", color: "white", background: "linear-gradient(45deg, #4e4e4e 0%, #868686 100%)", border: "3px solid #000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
+        "Auto-Enter": {
+            title() {return player.bh.autoEnter ? "<div style='margin-bottom:-20px;line-height:1'>Auto Enter<br><small>[" + BHS[player.bh.autoEnter].nameCap + "]<br>[" + formatTime(Decimal.sub(30, player.bh.autoCooldown)) + "]</small></div>" : "Auto Enter<br><small>[Disabled]"},
+            canClick: true,
+            unlocked: true,
+            tooltip: "Activates after 30 seconds when exiting a BH stage",
+            onClick() {
+                if (player.bh.autoEnter) {
+                    player.bh.autoEnter = false
+                    player.bh.autoCooldown = new Decimal(0)
+                } else {
+                    player.bh.autoEnter = "zarDungeon"
+                }
+            },
+            style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},
+        },
+        "Auto-Exit": {
+            title() {return player.bh.autoExit ? "Auto Exit<br><small>[Enabled]" : "Auto Exit<br><small>[Disabled]"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.bh.autoExit) {
+                    player.bh.autoExit = false
+                } else {
+                    player.bh.autoExit = true
+                }
+            },
+            style: {width: "110px", minHeight: "55px", color: "var(--textColor)", background: "var(--miscButtonHover)", border: "3px solid var(--miscButton)", borderRadius: "15px"},
+        },
         "Nav-Toggle": {
             title() {return player.zarDungeon.navToggle ? "<div style='margin-bottom:-20px;line-height:1'>Nav<br><small>[Enabled]</small></div>" : "Nav<br><small>[Disabled]"},
             canClick: true,
@@ -1050,9 +1078,7 @@ addLayer("zarDungeon", {
                     }],
                 ], {width: "500px", height: "197px", background: "var(--layerBackground)"}],
                 ["style-row", [
-                    ["layer-proxy", ["bh", [
-                        ["row", [["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"]]],
-                    ]]], ["blank", ["10px", "10px"]], ["clickable", "Nav-Toggle"], ["blank", ["10px", "10px"]], ["clickable", "DiceFive-Toggle"],
+                    ["clickable", "Auto-Enter"], ["blank", ["10px", "10px"]], ["clickable", "Auto-Exit"], ["blank", ["10px", "10px"]], ["clickable", "Nav-Toggle"], ["blank", ["10px", "10px"]], ["clickable", "DiceFive-Toggle"],
                 ], {width: "500px", height: "70px", background: "var(--miscButtonDisable)", borderTop: "3px solid var(--regBorder)", borderRadius: "0 0 27px 0"}],
             ], {width: "500px", height: "420px", borderLeft: "3px solid var(--regBorder)"}],
         ], {width: "1200px", height: "420px"}],
@@ -1961,7 +1987,7 @@ function zarAttackBarrage(attackVariable) {
 
 window.addEventListener('load', (event) => {
     setTimeout(() => {
-    if (player.zarDungeon.barrageActive)
+    if (player && player.zarDungeon && player.zarDungeon.barrageActive)
     {
         zarFinalAttack(0)
     }

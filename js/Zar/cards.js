@@ -66,6 +66,8 @@
 
         if (player.car.cardGenerators.gte(1)) {
             player.car.cardPointsPerSecond = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)] 
+        } else {
+            player.car.cardPointsPerSecond = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)] 
         }
 
         player.car.cardPointsPerSecond[0] = player.car.cardPointsPerSecond[0].mul(buyableEffect("car", 11))

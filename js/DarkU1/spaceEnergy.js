@@ -75,14 +75,14 @@
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(buyableEffect("dn", 14))
         if (getLevelableTier("pu", 212, true)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
-        player.ds.widthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
+        player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("st", 302)[0])
 
         player.ds.depth = player.ds.depth.add(player.ds.depthPerSecond.mul(delta))
         player.ds.depthPerSecond = buyableEffect("ds", 13)
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("ds", 106))
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(buyableEffect("dn", 14))
         if (getLevelableTier("pu", 212, true)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
-        player.ds.depthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
+        player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("st", 302)[0])
 
         player.ds.spissitude = player.ds.spissitude.add(player.ds.spissitudePerSecond.mul(delta))
         player.ds.spissitudePerSecond = buyableEffect("ds", 14)

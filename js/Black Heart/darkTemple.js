@@ -1824,3 +1824,75 @@ function addObject(obj1, obj2, mult = 1) {
 
     return combined;
 }
+
+BHS.darkTemple = {
+    nameCap: "Dark Temple",
+    nameLow: "Dark Temple",
+    music: "music/confrontation.mp3",
+    comboLimit: 666,
+    comboScaling: 6,
+    comboScalingStart: 66,
+    generateCelestialite(combo) {
+        return "nac"
+    },
+}
+
+BHC.nac = {
+    name: "██████",
+    symbol: "█",
+    style: {
+        background: "radial-gradient(#116, black)",
+        color: "black",
+        borderColor: "#226",
+    },
+    health: new Decimal(666666666),
+    damage: new Decimal(666666),
+    attributes: {
+        "air": new Decimal(1), // Resistance DMG Mult
+        "warded": new Decimal(1), // Resistance DMG Mult
+        "stealthy": new Decimal(1), // Resistance DMG Mult
+        "anima": new Decimal(1), // Resistance DMG Mult
+    },
+    actions: {
+        0: {
+            name: "█████",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(6),
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "█████",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(12),
+            cooldown: new Decimal(12),
+        },
+        2: {
+            name: "█████",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(18),
+            cooldown: new Decimal(18),
+        },
+        3: {
+            name: "█████",
+            instant: true,
+            type: "damage",
+            target: "allPlayer",
+            method: "physical",
+            value: new Decimal(24),
+            cooldown: new Decimal(24),
+        },
+    },
+    reward() {
+        let gain = {}
+        return gain
+    },
+}

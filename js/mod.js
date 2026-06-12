@@ -455,7 +455,7 @@ function updateStyles() {
         	sun.style.width = "300px";
     	    sun.style.height = "300px";
 	        sun.style.borderRadius = "50%";
-        	sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
+			sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
     	    sun.style.boxShadow = "0 0 120px 60px #ffe06655";
 	        eclipse.appendChild(sun);
 

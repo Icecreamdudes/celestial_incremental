@@ -288,6 +288,7 @@
                     ["infobox", 4],
                     ["infobox", 5],
                     ["infobox", 6],
+                    ["infobox", 7],
                 ]
             },
             "Matos Perks": {

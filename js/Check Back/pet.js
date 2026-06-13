@@ -2461,9 +2461,12 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                let eff1 = amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1)
+                let eff2 = amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1)
+                if (hasUpgrade("ev15", 19)) eff2 = eff2.pow(upgradeEffect("ev15", 19))
                 return [
-                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fragmentation Mult
-                    amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Coin Dust Currencies
+                    eff1, // Fragmentation Mult
+                    eff2, // Coin Dust Currencies
                 ]
             },
             sellValue() { return new Decimal(20)},

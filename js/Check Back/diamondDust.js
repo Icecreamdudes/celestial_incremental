@@ -25,6 +25,9 @@ addLayer("ev15", {
 
         player.ev15.diamondDustToGet = player.ev0.coinDust.div(1e11).pow(0.5)
         player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(buyableEffect("ev15", 11))
+        if (hasUpgrade("ev15", 16)) player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(upgradeEffect("ev15", 16))
+        if (hasUpgrade("ev15", 18)) player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(upgradeEffect("ev15", 18))
+        if (hasUpgrade("ev15", 20)) player.ev15.diamondDustToGet = player.ev15.diamondDustToGet.mul(upgradeEffect("ev15", 20))
 
         if (player.ev15.diamondDust.lte(1e6)) { 
             player.ev15.diamondDustEffect = player.ev15.diamondDust.pow(0.625).add(1)
@@ -163,8 +166,193 @@ addLayer("ev15", {
                 return look
             },
         },
-        /*
         16: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade VI</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Shards of ascension boost diamond dust gain.<br>" + // MIDDLE
+                "Currently: x" + format(tmp[this.layer].upgrades[this.id].effect) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "24,000,000 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(2.4e7),
+            effect() {
+                let base = player.cbs.ascensionShards;
+                let exp = new Decimal(0.6);
+                let eff = base.plus(1).pow(exp);
+                return eff;
+            },
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        17: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade VII</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Decrease the cost growth of the first diamond dust buyable by 1.<br>" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "5.40e9 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(5.4e9),
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        18: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade VIII</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Pet points and XPBoost jointly boost diamond dust gain.<br>" + // MIDDLE
+                "Currently: x" + format(tmp[this.layer].upgrades[this.id].effect) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "7.20e11 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(7.2e11),
+            effect() {
+                let pp = player.cb.petPoints;
+                let xpb = player.cb.XPBoost;
+                let divider = new Decimal(5);
+                let eff1 = pp.plus(1).log10().div(divider).plus(1);
+                let eff2 = xpb.plus(1).log10().div(divider).plus(1);
+                let eff = eff1.times(eff2);
+                return eff;
+            },
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        19: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade IX</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Diamond dust boosts the second coin fragment effect.<br>" + // MIDDLE
+                "Currently: ^" + format(tmp[this.layer].upgrades[this.id].effect) +
+                (upgradeEffect("ev15", 19).gte(5) ? "<br>[HARDCAPPED]" : (upgradeEffect("ev15", 19).gte(4) ? "<br>[SOFTCAPPED]" : "")) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1.20e13 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1.2e13),
+            effect() {
+                let base = player.ev15.diamondDust;
+                let exp = new Decimal(0.45);
+                let softexp = new Decimal(0.25);
+                let eff = base.plus(1).log10().plus(1).pow(exp);
+                if (eff.gt(4)) eff = eff.div(4).pow(softexp).mul(4);
+                if (eff.gt(5)) eff = new Decimal(5);
+                return eff;
+            },
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        20: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade X</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Diamond dust boosts its own gain.<br>" + // MIDDLE
+                "Currently: x" + format(tmp[this.layer].upgrades[this.id].effect) +
+                (upgradeEffect("ev15", 20).gte(100) ? "<br>[SOFTCAPPED]" : "") +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "6.00e17 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(6e17),
+            effect() {
+                let base = player.ev15.diamondDust;
+                let exp = new Decimal(1.25);
+                let softexp = new Decimal(0.25);
+                let eff = base.plus(1).log10().plus(1).pow(exp);
+                if (eff.gt(100)) eff = eff.div(100).pow(softexp).mul(4);
+                return eff;
+            },
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        21: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade XI</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Shards of ascension boost buyable caps.<br>" + // MIDDLE
+                "Currently: +" + formatWhole(tmp[this.layer].upgrades[this.id].effect) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1.80e22 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1.8e22),
+            effect() {
+                let base = player.cbs.ascensionShards;
+                let exp = new Decimal(0.7);
+                let eff = base.plus(1).pow(exp).floor();
+                return eff;
+            },
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        22: {
+            unlocked: true,
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Diamond Dust Upgrade XII</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Unlock a third row of coin dust buyables.<br>[NOT IMPLEMENTED YET]" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "9.00e25 Diamond Dust" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(9e25),
+            currencyInternalName: "diamondDust",
+            currencyLayer: "ev15",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        /*
+        "C": {
             title: "Diamond Dust Upgrade VI",
             description: "Unlock coal.",
             cost: new Decimal(1800),
@@ -178,18 +366,30 @@ addLayer("ev15", {
     },
     buyables: {
         11: {
-            costBase() { return new Decimal(6) },
-            costGrowth() { return new Decimal(6) },
-            purchaseLimit() { return new Decimal(25) },
+            costBase() { 
+                let base = new Decimal(6) 
+                return base;
+            },
+            costGrowth() { 
+                let growth = new Decimal(6)
+                if (hasUpgrade("ev15", 17)) growth = growth.sub(1)
+                return growth;
+            },
+            purchaseLimit() { 
+                let cap = new Decimal(25)
+                if (hasUpgrade("ev15", 21)) cap = cap.plus(upgradeEffect("ev15", 21))
+                return cap
+            },
             currency() { return player.ev15.diamondDust},
             pay(amt) {player.ev15.diamondDust = this.currency().sub(amt)},
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id))},
             unlocked: true,
             cost(x) { 
                 let exp = new Decimal(1);
-                if (getBuyableAmount("ev15", 11).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
+                // if (getBuyableAmount("ev15", 11).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
                 let cost = this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase());
-                return cost.pow(exp);
+                let totalCost = cost.pow(exp);
+                return totalCost;
             },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -220,23 +420,28 @@ addLayer("ev15", {
         12: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(25) },
+            purchaseLimit() { 
+                let cap = new Decimal(25)
+                if (hasUpgrade("ev15", 21)) cap = cap.plus(upgradeEffect("ev15", 21))
+                return cap
+            },
             currency() { return player.ev15.diamondDust},
             pay(amt) {player.ev15.diamondDust = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(20).pow(1.1).floor()},
             unlocked: true,
             cost(x) { 
                 let exp = new Decimal(1);
-                if (getBuyableAmount("ev15", 12).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
+                // if (getBuyableAmount("ev15", 12).gte(10)) exp = exp.add(getBuyableAmount("ev15", 11).sub(10).div(10))
                 let cost = this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) 
-                return cost.pow(exp)
+                let totalCost = cost.pow(exp)
+                return totalCost;
             },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Unsmith Upgrader"
             },
             display() {
-                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " effective unsmith levels.\n\
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " effective unsmith levels.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Diamond Dust"
             },
             buy(mult) {
@@ -273,13 +478,16 @@ addLayer("ev15", {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#80ffff", borderRadius: "5px"} },
                 unlocked() {return true},
                 content: [
-                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],]],
+                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], 
+                     ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
+                    ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22],]],
                      ["blank", "15px"],
                      ["style-row", [["ex-buyable", 11], ["ex-buyable", 12],]],
                      ["blank", "15px"],
+                     /*
                      ["style-column", [
                         ["raw-html", "Buyable costs start increasing faster after 10 levels.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "600px", height: "30px", background: "#00ffff", borderRadius: "20px"}],
+                    ], {width: "600px", height: "30px", background: "#00ffff", borderRadius: "20px"}], */
                 ]
             },
             "Coal": {

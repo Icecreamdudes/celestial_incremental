@@ -348,7 +348,7 @@
                         }],
                     ]],
                     ["raw-html", () => { return "Divides starmetal alloy requirement by /" + format(player.dn.normalityEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "(Normality is kept on starmetal resets)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "(Normality is kept on starmetal storage resets, but not on exit)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],

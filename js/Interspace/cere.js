@@ -6,6 +6,8 @@
     position: 0,
     startData() { return {
         unlocked: true,
+
+        something: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {

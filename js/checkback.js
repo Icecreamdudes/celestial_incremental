@@ -277,8 +277,6 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
             if (hasUpgrade("cbs", 18)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 18))
                 
-            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.pow(buyableEffect("ev15", 11))
-
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
             if (player.po.halter.xp.enabled == 2 && player.cb.xpTimers[i].base.gt(player.po.halter.xp.halt)) player.cb.xpTimers[i].base = player.po.halter.xp.halt
@@ -331,7 +329,6 @@ addLayer("cb", {
         player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("pet", 1102)[1])
         player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("ir", 9)[0])
         if (hasUpgrade("cbs", 19)) player.cb.baseESC = player.cb.baseESC.mul(upgradeEffect("cbs", 19))
-        player.cb.baseESC = player.cb.baseESC.mul(buyableEffect("ev15", 11))
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(player.cb.baseESC)
         }
@@ -439,7 +436,6 @@ addLayer("cb", {
         } else if (player.cb.XPBoost.gte(1000)) {
             player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(Decimal.add(0.5, buyableEffect("sme", 116).sub(1))).mul(10))
         }
-        player.cb.XPBoostEffect = player.cb.XPBoostEffect.pow(buyableEffect("ev15", 13))
 
         // PITY
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))

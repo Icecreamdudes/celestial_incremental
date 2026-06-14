@@ -332,7 +332,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 3 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 4 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
                 return look
             },
         },

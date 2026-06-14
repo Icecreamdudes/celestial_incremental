@@ -83,5 +83,5 @@ addLayer("ep3", {
         ["blank", "25px"],
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame && (getLevelableAmount("pet", 407).gte(1) || getLevelableTier("pet", 407).gte(1)) || true}
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 407).gte(1) || getLevelableTier("pet", 407).gte(1))}
 })

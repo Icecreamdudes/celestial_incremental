@@ -32,7 +32,7 @@
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 
 		"Singularity/lightRift.js",
-		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js", "Check Back/compaction.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -308,7 +308,7 @@ function updateStyles() {
 			break;
 		case "prj":
 			if (player.subtabs["prj"]["stuff"] == "Pylon") {
-				layerBG = "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)"
+				layerBG = "linear-gradient(120deg, #595A5C 0%, #9c9c9c 100%)"
 			} else {
 				layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
 			}
@@ -358,9 +358,6 @@ function updateStyles() {
 			break;
 		case "leg":
 			layerBG = "linear-gradient(0deg, #eed200)"
-			break;
-		case "ev15":
-			layerBG = "linear-gradient(0deg, #02240b)"
 			break;
 		case "gwaTemple":
 			layerBG = "#676742"
@@ -432,7 +429,7 @@ function updateStyles() {
 			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
 	    }
 		const el = document.getElementById("dotted-background");
-		if (player.tab === "bum" || player.tab === "cer") {
+		if (player.tab === "bum" || player.tab === "cer" || (player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon")) {
 			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
 		} else {
 			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";

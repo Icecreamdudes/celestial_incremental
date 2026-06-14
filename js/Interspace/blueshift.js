@@ -1,6 +1,7 @@
 ﻿addLayer("blu", {
     name: "Blueshift",
     symbol: "BL",
+    universe: "UD",
     row: 1,
     position: 0,
     startData() { return {
@@ -58,6 +59,19 @@
                 shiftBase: new Decimal(96),
             },
         },
+        /*
+            IDEAS FOR WELL-BASED BLUESHIFT EFFECTS:
+
+            alpha: gain x(2^x^0.75) more light well cycles
+            beta: 
+            gamma: gain +^0.1 more prisms from light
+            delta: prism fountain cycles are 10% more effective
+
+            epsilon: speed up light wells by x(2^x^0.75)
+            zeta: 
+            eta: gain +^0.05 more starlight from light
+            theta: starlight fountain cycles are 10% more effective
+        */
         blueshiftEffectBase: new Decimal(2),
         blueshiftEffect: new Decimal(1),
     }},

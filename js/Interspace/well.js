@@ -1,6 +1,7 @@
 ﻿addLayer("wel", {
     name: "Wells of Light",
     symbol: "WE",
+    universe: "UD",
     row: 0,
     position: 0,
     startData() { return {
@@ -209,7 +210,7 @@
             else player.wel.modules[3].completionEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[3].completionEffect)
 
-            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.25);
+            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.25).add(1);
             if (player.wel.modules[4].completionEffect.gte(100)) player.wel.modules[4].completionEffect = player.wel.modules[4].completionEffect.div(100).pow(0.5).mul(100);
         }
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
@@ -217,7 +218,6 @@
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[1].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[4].completionEffect)
         player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[7].completionEffect)
-        player.wel.lightGain = player.wel.lightGain.mul(player.pri.fountains[10].completionEffect)
         if (hasMilestone("prj", 112)) player.wel.lightGain = player.wel.lightGain.mul(player.prj.milestone112Effect)
 
         if (hasAchievement("achievements", 1203)) player.wel.lightGain = player.wel.lightGain.mul(1.05)
@@ -230,9 +230,7 @@
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.pri.fountains[5].completionEffect)
         if (hasMilestone("prj", 105)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone105Effect)
         player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(buyableEffect("sme", 192))
-        if (hasMilestone("prj", 111)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.blu.blueshiftEffect);
         if (hasMilestone("prj", 209)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(1.09)
-        if (hasMilestone("prj", 304)) player.wel.lightWellSpeed = player.wel.lightWellSpeed.mul(player.prj.milestone304Effect)
 
         if (player.wel.lightWellSpeed.gte(100) && !hasAchievement("achievements", 1210)) completeAchievement("achievements", 1210)
         
@@ -1086,16 +1084,16 @@
             },
             lightGain() {
                 let gain = new Decimal(0.01)
-                gain = gain.mul(player.wel.lightGain.div(1e50).pow(0.25))
+                gain = gain.mul(player.wel.lightGain.div(1e40).pow(0.25))
                 gain = gain.mul(player.blu.blueshifts[this.id].cycleGainMul)
-                if (gain.gte(1)) gain = gain.pow(0.5);
-                return gain
+                gain = gain.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1)
+                return gain.mul(10).floor().div(10)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "0"}
                 if (this.canClick()) {
-                    look.backgroundColor = "#a8ffd3"
+                    look.backgroundColor = "#a8ffdf"
                     look.color = "black"
                     look.border = "3px solid #0000003f"
                 } else {
@@ -1958,20 +1956,20 @@
                                         ["style-column", [
                                             ["style-column", [
                                                 ["raw-html", formatShortestWhole(player.wel.modules[4].time.div(player.wel.modules[4].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                            ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
-                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659", marginTop: "81px",
+                                            ], {background: "#408069", border: "3px solid #274d48", borderRadius: "100px", width: "75px", height:"75px"}],
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #274d48", marginTop: "81px",
                                             background: player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ?
-                                            "conic-gradient(#ffdfdf " + (player.wel.modules[4].time.div(player.wel.modules[4].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffd3"
+                                            "conic-gradient(#ffdfdf " + (player.wel.modules[4].time.div(player.wel.modules[4].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffdf"
                                         }],
-                                    ], {background: "#4d9973", height: "75px", borderRadius: "75px 75px 0 0"}],
+                                    ], {background: "#408069", height: "75px", borderRadius: "75px 75px 0 0"}],
                                     ["style-column", [], {height: "61px"}],
                             ["blank", "9px"],
                             ["raw-html", "Light Well δ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ? formatTime(player.wel.modules[4].maxTime.sub(player.wel.modules[4].time).div(player.wel.modules[4].timeSpeed)) : formatTime(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
                             ["style-column", [
-                                    ["raw-html", "+" + formatShort(layers.wel.clickables[4].lightGain().mul(100)) + "% Light/s", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
+                                    ["raw-html", "+" + formatSimple(layers.wel.clickables[4].lightGain()) + " LR", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "#408069", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                             ["blank", "3px"],
                             ["hoverless-clickable", 4],
                             ["blank", "3px"],
@@ -1980,9 +1978,9 @@
                                     ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[4].bestCompletions) + " δ ↻</div>"],
                                 ], {}],
-                                ["raw-html", "(+" + formatShort(player.wel.modules[4].completionEffect) + "% ↻/s)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
-                            ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", height: "44px"}],
-                        ], {background: "#336659",border: "3px solid #336659", borderRadius: "103px 103px 16px 16px", width: "150px", boxShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
+                                ["raw-html", "(x" + formatShort(player.wel.modules[4].completionEffect) + " Light Rays)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
+                            ], {border: "3px solid #408069", borderRadius: "0 0 10px 10px", height: "44px"}],
+                        ], {background: "#274d48",border: "3px solid #274d48", borderRadius: "103px 103px 16px 16px", width: "150px", boxShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                         ["blank", "6px"],
                     ]],
                     )
@@ -2233,7 +2231,7 @@
                                 ["blank", "6px", {width: "6px"}],
                                 ["style-column", [
                                     ["raw-html", "Light Fountain II<br><small>Req: 1,500 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
                             )
                         }
                         if (layers.wel.fountains[2].condition()) {
@@ -2246,7 +2244,7 @@
                                 ["blank", "6px", {width: "6px"}],
                                 ["style-column", [
                                     ["raw-html", "Cycle Fountain<br><small>Req: 50,000 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
                                 )
                             }
                         }
@@ -2261,7 +2259,7 @@
                                 ["blank", "6px", {width: "6px"}],
                                 ["style-column", [
                                     ["raw-html", "Speed Fountain<br><small>Req: 1,500,000 Light</small>", {color: "white", fontSize: "16px"}],
-                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "206px", borderRadius: "10px", lineHeight: "1"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
                                 )
                             }
                         }
@@ -2278,7 +2276,7 @@
         ]
         return look
     },
-    playerhown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true}
 })
 
 const makeWellFountain = function (id, effectIsWhole) {
@@ -2289,15 +2287,15 @@ const makeWellFountain = function (id, effectIsWhole) {
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
-                            ], {background: "#ffdfdf", borderRadius: "0", width: "44px", height: (format(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(197))) + "px", marginTop: (format(new Decimal(197).sub(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(197)))) + "px"}],
-                        ], {background: "#0b1711", borderRadius: "10px 0 0 10px", width: "50px", height: "197px"}],
+                            ], {background: "#ffdfdf", borderRadius: "0", width: "44px", height: (format(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(207))) + "px", marginTop: (format(new Decimal(207).sub(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(207)))) + "px"}],
+                        ], {background: "#0b1711", borderRadius: "10px 0 0 10px", width: "50px", height: "207px"}],
                     ], {width: "50px", height: "0"}],
                     ["style-column", [
                         ["style-column", [
-                        ], {border: "3px solid #4d9973", borderRadius: "10px 0 0 10px", width: "44px", height: "197px"}],
+                        ], {border: "3px solid #4d9973", borderRadius: "10px 0 0 10px", width: "44px", height: "207px"}],
                     ], {width: "50px", height: "0"}],
-                ], {background: "#4d9973", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
-            ], {background: "#336659", border: "3px solid #336659", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
+                ], {background: "#4d9973", borderRadius: "10px 0 0 10px", width: "50px", height: "213px"}],
+            ], {background: "#336659", border: "3px solid #336659", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "213px"}],
             ["style-column", [
                 ["style-column", [
                     ["blank", "10px"],
@@ -2323,9 +2321,9 @@ const makeWellFountain = function (id, effectIsWhole) {
                             ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
                             ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.fountains[id].bestCompletions) + " " + layers.wel.fountains[id].title + " ↻</div>"],
                         ], {}],
-                        ["raw-html", "<small>(x" + (effectIsWhole ? formatWhole(layers.wel.fountains[id].getCompletionEffect()) : formatShort(layers.wel.fountains[id].getCompletionEffect())) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                    ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 0px", width: "197px", height: "44px"}],
-                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "50px"}],
+                        ["raw-html", "<small>(x" + (effectIsWhole ? formatWhole(layers.wel.fountains[id].getCompletionEffect()) : formatShort(layers.wel.fountains[id].getCompletionEffect())) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block", lineHeight: "1"}],
+                    ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 0px", width: "197px", height: "54px"}],
+                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "60px"}],
             ], {width: "206px"}]
         ]]
     return thisFountain

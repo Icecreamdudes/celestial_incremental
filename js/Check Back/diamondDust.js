@@ -49,7 +49,7 @@ addLayer("ev15", {
     clickables: {
         11: {
             title() { return "<h2>Pressurize diamond dust, but reset previous coin dust content.</h2><br><h3>Req: 1e11 Coin Dust</h3>" },
-            canClick() { return player.ev0.coinDust.gte(1e10) },
+            canClick() { return player.ev0.coinDust.gte(1e11) },
             unlocked() { return true },
             onClick() {
                 layers.ev15.diamondDustReset()

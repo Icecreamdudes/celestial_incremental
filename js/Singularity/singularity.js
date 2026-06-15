@@ -124,12 +124,12 @@
         }
         player.s.pylonEnergy = player.s.pylonEnergy.add(player.s.pylonEnergyPerSecond.mul(Decimal.div(delta, player.uni["U3"].tickspeed)))
         
-        player.s.pylonEnergyEffect = player.s.pylonEnergy.add(1).log(10).div(6).add(1).pow(player.s.pylonTierEffect)
-        player.s.pylonEnergyEffect2 = player.s.pylonEnergy.add(1).pow(0.3).add(1).pow(player.s.pylonTierEffect)
-        player.s.pylonEnergyEffect3 = player.s.pylonEnergy.add(1).pow(0.25).add(1).pow(player.s.pylonTierEffect)
+        player.s.pylonEnergyEffect = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).log(10).div(6).add(1)
+        player.s.pylonEnergyEffect2 = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).pow(0.3).add(1)
+        player.s.pylonEnergyEffect3 = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).pow(0.25).add(1)
         player.s.pylonEnergyEffect4 = player.s.pylonEnergy.pow(0.1).add(1).pow(player.s.pylonTierEffect)
 
-        player.s.pylonTierEffect = player.s.pylonTier.sub(1).pow(0.5).div(10).add(1)
+        player.s.pylonTierEffect = player.s.pylonTier.sub(1).div(10).add(1)
 
         player.uni["U3"].tickspeed = new Decimal(1)
         player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(player.s.pylonEnergyEffect)
@@ -505,7 +505,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         2: {
             costBase() { return new Decimal(1e7) },
@@ -540,7 +540,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         3: {
             costBase() { return new Decimal(1e8) },
@@ -575,7 +575,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         11: {
             costBase() { return new Decimal(1000) },
@@ -869,32 +869,32 @@
                 ]
             },
             "Pylon": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                buttonStyle() { return { borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("s", 31) },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [
                         ["tooltip-row", [
                             ["raw-html", "<img src='resources/fragments/radioactiveFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[4])}, {width: "103px", height: "50px", color: "#D3173A", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[4])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                             ["raw-html", "<div class='bottomTooltip'>Radioactive Core Fragments</div>"],
                         ], {width: "158px", height: "50px",}],
-                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #D3173A", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
-                    ["raw-html", () => { return player.s.pylonBuilt ? "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (" + format(player.s.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts core scraps x" + format(player.s.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts natural pylon energy by x" + format(player.s.pylonEnergyEffect4) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.s.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts all pylon effects by ^" + format(player.s.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (+" + format(player.s.pylonEnergyPerSecond) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation gain by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts core scrap gain by x" + format(player.s.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts natural pylon energy gain by x" + format(player.s.pylonEnergyEffect4) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Passive effect: Boosts singularity point gain by x" + format(player.s.pylonPassiveEffect) + " (based on points)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.s.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 1], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 2], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 3],]], 
+                    ["blank", "10px"],
                     ["clickable", 12],
-                ]
+                ],
             },
         },
     },

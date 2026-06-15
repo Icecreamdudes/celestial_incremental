@@ -711,7 +711,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>The blueshift effect applies to light well speed.</small>" },
+            effectDescription() { return "<small>The blueshift effect applies to prisms.</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasUpgrade("wel", 34) },
@@ -922,7 +922,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock auto-prismatic.</small>" },
+            effectDescription() { return "<small>The blueshift effect applies to prisms.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -1604,7 +1604,7 @@
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "8px" } },
-                unlocked() { return false },
+                unlocked() { return true },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [

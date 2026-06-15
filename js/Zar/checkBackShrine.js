@@ -119,6 +119,7 @@ addLayer("cbs", {
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 102))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 103))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(player.n.pylonEnergyEffect3)
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(levelableEffect("pu", 215)[1])
 
             player.cbs.pylonPassiveEffect = player.pol.pollinators.plus(1).log10().pow(0.002).div(5).add(1).pow(player.cbs.pylonTierEffect)
         } else {
@@ -1783,7 +1784,7 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2a6378", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
         102: {
             costBase() { return new Decimal(1500) },
@@ -1817,7 +1818,7 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2a6378", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
         103: {
             costBase() { return new Decimal(5000) },
@@ -1851,7 +1852,7 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '240px', height: '150px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#2a6378", backgroundImage: "linear-gradient(120deg, #2a6378 0%, #09366e 100%)" }
         },
     },
     milestones: {},
@@ -2254,7 +2255,7 @@ addLayer("cbs", {
                         ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.cbs.pylonBuilt ? "Your temporal pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                         ["blank", "10px"],
-                        ["row", [["ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["ex-buyable", 103],]], 
+                        ["row", [["rounded-ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 103],]], 
                         ["blank", "10px"],
                         ["clickable", 15],
 

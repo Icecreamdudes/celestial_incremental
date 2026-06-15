@@ -99,6 +99,7 @@
         if (getLevelableTier("pu", 305, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 305)[0])
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("bl", 22))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
 
         // Eclipse Shards
@@ -107,7 +108,7 @@
         if (player.le.resetAmount.gte(8)) player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(2.6).floor()).mul(1e3)
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
-        if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.mul(levelableEffect("pu", 200)[1])
+        if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -116,10 +117,13 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dv", 15))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("sme", 162))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dgj", 16))
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("car", 411)[0])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("st", 310)[0])
 
         if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.legPetTimers[0].active) {
             player.le.resetAmount = player.le.resetAmount.add(1)
@@ -677,6 +681,13 @@
 
         player.bl.bloodDrain = false
 
+        player.rp.rerollPoints = new Decimal(0)
+        
+        player.rp.buyables[11] = new Decimal(0)
+        player.rp.buyables[12] = new Decimal(0)
+        player.rp.buyables[13] = new Decimal(0)
+
+        player.pu.rerolls = new Decimal(0)
         player.funify.funify = new Decimal(0)
         player.funify.funPoints = new Decimal(0)
         player.funify.funPointsGain = new Decimal(0)
@@ -687,6 +698,8 @@
         player.funify.buyables[14] = new Decimal(0)
         player.funify.buyables[15] = new Decimal(0)
         player.funify.buyables[16] = new Decimal(0)
+
+        player.du.noPunchcards = true
     },
     upgrades: {
         11: {

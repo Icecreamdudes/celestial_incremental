@@ -65,7 +65,7 @@ function cleanseUniverse(universe) {
     let tree = universes[universe].tree
     for (let row in tree) {
         for (thing in tree[row]) {
-            player.thing = getStartLayerData(thing)
+            player.thing = getStartLayerData(tree[row][thing])
         }
     }
 }
@@ -101,7 +101,7 @@ function addUniverse(uniName, uniData){ // Call this to add universes from a dif
 addUniverse("U1", {
     name: "Universe 1<br>Overworld",
     symbol: "1",
-    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pol", "m"], ["pe", "rf", "d"], ["cb", "oi", "fa"]],
+    tree: [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pol", "m"], ["pe", "rf", "d"], ["cb", "fa"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
@@ -233,7 +233,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["funify", "le", "bl"], ["dr", "dp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
+    tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -338,7 +338,7 @@ addUniverse("DS", {
         return "Universe ε<br>Dice Space"
     },
     symbol: "ε",
-    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",]],
+    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",], ["zd",]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",

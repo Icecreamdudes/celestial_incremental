@@ -20,7 +20,7 @@
         */
        enhancerXP: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
        enhancerXPPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-       enhancerXPReq: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+       enhancerXPReq: [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)],
        enhancersUnlocked: [true,false,false,false,false,],
 
        enhancerAllocated: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -38,6 +38,7 @@
         let onepersec = new Decimal(1)
 
         player.en.enhancePointsToGet = player.fu.apathy.pow(0.4).div(10)
+        player.en.enhancePointsToGet = player.en.enhancePointsToGet.mul(levelableEffect("pet", 1401)[0])
 
         player.en.enhancePointsEffect = player.en.enhancePoints.pow(0.3).add(1)
 
@@ -45,19 +46,6 @@
         if (player.en.enhancePointsToAllocate.gt(player.en.enhancePoints)) player.en.enhancePointsToAllocate = player.en.enhancePoints
 
         //enhancers
-        for (let i = 0; i < player.en.enhancersUnlocked.length; i++) {
-            player.en.enhancerXP[i] = player.en.enhancerXP[i].add(player.en.enhancerXPPerSecond[i].mul(delta))
-            if (player.en.enhancerXP[i].gte(player.en.enhancerXPReq[i])) {
-                player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(1) //tentative to change if bulk leveling is added
-                player.en.enhancerXP[i] = new Decimal(0)
-            }
-            player.en.enhancerXPPerSecond[i] = player.en.enhancerAllocated[i]
-            if (hasUpgrade("en", 14)) player.en.enhancerXPPerSecond[i] = player.en.enhancerXPPerSecond[i].mul(upgradeEffect("en", 14))
-        }
-
-        if (hasUpgrade("en", 13)) player.en.enhancersUnlocked[1] = true
-        if (hasUpgrade("en", 15)) player.en.enhancersUnlocked[2] = true
-
         player.en.enhancerXPReq = [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)] //very tentative to change
 
         player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.5).add(1).mul(10)
@@ -68,6 +56,22 @@
 
         player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.75).add(1).mul(25000)
         if (player.en.enhancerLevels[2].gt(10000)) player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.85).add(1).mul(25000)
+
+        for (let i = 0; i < player.en.enhancersUnlocked.length; i++) {
+            player.en.enhancerXP[i] = player.en.enhancerXP[i].add(player.en.enhancerXPPerSecond[i].mul(delta))
+            if (player.en.enhancerXP[i].gte(player.en.enhancerXPReq[i])) {
+                 if (player.en.enhancerXPPerSecond[i].gte(player.en.enhancerXPReq[i].mul(10))) {
+                player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(player.en.enhancerXPPerSecond[i].div(player.en.enhancerXPReq[i]).mul(delta).floor())
+                 }
+                player.en.enhancerLevels[i] = player.en.enhancerLevels[i].add(1) //tentative to change if bulk leveling is added
+                player.en.enhancerXP[i] = new Decimal(0)
+            }
+            player.en.enhancerXPPerSecond[i] = player.en.enhancerAllocated[i]
+            if (hasUpgrade("en", 14)) player.en.enhancerXPPerSecond[i] = player.en.enhancerXPPerSecond[i].mul(upgradeEffect("en", 14))
+        }
+
+        if (hasUpgrade("en", 13)) player.en.enhancersUnlocked[1] = true
+        if (hasUpgrade("en", 15)) player.en.enhancersUnlocked[2] = true
 
         player.en.enhancersEffect[0] = player.en.enhancerLevels[0].pow(0.75).add(1)
         player.en.enhancersEffect[1] = player.en.enhancerLevels[1].pow(0.8).div(50).add(1)
@@ -418,7 +422,6 @@
                 }
             },
         },
-
         enhancer1Bar: {
             unlocked() { return player.en.enhancersUnlocked[0] },
             direction: RIGHT,
@@ -468,7 +471,7 @@
             title: "Focus Jocus",
             unlocked() { return true },
             description: "Earn 25% of jocus essence per second while in fear challenge.",
-            cost: new Decimal(10),
+            cost: new Decimal(100),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -478,7 +481,7 @@
             title: "Essence Weakener",
             unlocked() { return true },
             description: "Jocus essence weakens repli-leaf softcap, jocus essence and fear is always gained.",
-            cost: new Decimal(33),
+            cost: new Decimal(2222),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -492,7 +495,7 @@
             title: "Next Enhancer",
             unlocked() { return true },
             description: "Unlocks the next enhancer, and raises the first replicanti point softcap effect by ^0.01.",
-            cost: new Decimal(500),
+            cost: new Decimal(9999),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -502,7 +505,7 @@
             title: "Apathetic Enhancement",
             unlocked() { return true },
             description: "Apathy boosts enhncer XP gain.",
-            cost: new Decimal(2500),
+            cost: new Decimal(33333),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
@@ -516,12 +519,12 @@
             title: "Emotional Enhancer",
             unlocked() { return true },
             description: "Unlocks the third enhancer, and fear raises first 3 emotion effects.", //MAKE THIS ENHANCER PLEASE
-            cost: new Decimal(10000),
+            cost: new Decimal(100000),
             currencyLocation() { return player.en },
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
             effect() {
-                return player.fu.fear.pow(0.125).div(4).add(1)
+                return player.fu.fear.pow(0.1).div(4).add(1)
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: "150px"},
@@ -605,5 +608,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && false} //ascension pet requirement
+    layerShown() { return player.startedGame == true && player.ev.evolutionsUnlocked[13] } //ascension pet requirement
 })

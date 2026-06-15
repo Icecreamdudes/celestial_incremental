@@ -134,6 +134,8 @@ BH_CURRENCY = {
     "matosShard": ["Matos Shards", "laboratory"],
     "matosFragment": ["Matos Fragments", "laboratory"],
     "matosEssence": ["Matos Essence", "laboratory"],
+    "pips": ["Pips", "zd"],
+    "paragonShards": ["Paragon Shards", "cb"],
 }
 
 // Celestialite who has there explosion value equal to their max health, and an action that constantly reduces their max health called defuse (FOR LAB)
@@ -148,6 +150,7 @@ addLayer("bh", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        creationUsed: false,
 
         unlockConditions: {
             core: false,
@@ -503,6 +506,42 @@ addLayer("bh", {
                 mending: new Decimal(5),
                 potency: new Decimal(5),
             },
+            "creation": {
+                selected: false,
+                skills: {
+                    0: "creation_increment",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(10),
+                health: new Decimal(125),
+                damage: new Decimal(5),
+                defense: new Decimal(15),
+                regen: new Decimal(0.4),
+                agility: new Decimal(5),
+                luck: new Decimal(2.5),
+                mending: new Decimal(5),
+                potency: new Decimal(5),
+            },
+            "diceFive": {
+                selected: false,
+                skills: {
+                    0: "diceFive_diceSlice",
+                    1: "none", 
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(6),
+                health: new Decimal(75),
+                damage: new Decimal(3),
+                defense: new Decimal(5),
+                regen: new Decimal(0),
+                agility: new Decimal(8),
+                luck: new Decimal(25),
+                mending: new Decimal(5),
+                potency: new Decimal(5),
+            },
         },
 
         // Saved Skill Stats
@@ -529,6 +568,7 @@ addLayer("bh", {
             "nav_reboundingAura": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_fireball": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nav_soulShred": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "nav_violetResonance": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
 
             // SEL
             "sel_singleShot": {selected: ["sel", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
@@ -557,6 +597,18 @@ addLayer("bh", {
             "vespasian_overdrive": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_impale": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "vespasian_peakPerformance": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // CREATION
+            "creation_increment": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "creation_upgrade": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "creation_prestige": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "creation_mend": {selected: ["creation", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+
+            // DICE FIVE
+            "diceFive_diceSlice": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_luckyLift": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_coinToss": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "diceFive_snakeEyes": {selected: ["diceFive", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -703,6 +755,11 @@ addLayer("bh", {
             unpaused = !player.bh.bhPause
         }
 
+        if (cutsceneActive)
+        {
+            player.bh.bhPause = true
+        }
+
         // Stage Code
         player.bh.respawnMax = new Decimal(5)
         if (BHS[player.bh.currentStage].respawnTime) player.bh.respawnMax = BHS[player.bh.currentStage].respawnTime
@@ -736,7 +793,7 @@ addLayer("bh", {
         if (hasMilestone("db", 105)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         if (hasUpgrade("depth4", 3)) player.bh.comboScalingReduction = player.bh.comboScalingReduction + 0.002
         player.bh.comboScalingReduction = player.bh.comboScalingReduction + (buyableEffect("laboratory", 1).sub(1).toNumber())
-
+        player.bh.comboScalingReduction = player.bh.comboScalingReduction + levelableEffect("car", 113)[0].toNumber()
         player.bh.comboScaling = Math.max(player.bh.comboScaling - player.bh.comboScalingReduction , 1)
 
         player.bh.comboScalingStart = new Decimal(Infinity)
@@ -760,7 +817,16 @@ addLayer("bh", {
         }
 
         if (player.bh.currentStage == "none" && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
-            player.subtabs["bh"]["stuff"] = "dead"
+            if (player.bh.currentStage == "zarDungeon")
+            {
+                if (player.zd.buyables[14].gte(1)) player.tab = "zard"
+                options.fullscreen = false
+
+                player.subtabs["bh"]["stuff"] = "stages"
+            } else
+            {
+                player.subtabs["bh"]["stuff"] = "dead"
+            }
         }
 
         if (player.bh.currentStage == "none" && player.bh.autoEnter) player.bh.autoCooldown = player.bh.autoCooldown.add(normTime)
@@ -770,7 +836,11 @@ addLayer("bh", {
                 player.laboratory.cooldown = player.laboratory.cooldownMax
                 player.bh.autoCooldown = Decimal.mul(player.laboratory.cooldownMax.sub(30), -1)
             }
-            BHStageEnter(player.bh.autoEnter)
+            if (player.bh.autoEnter == "zarDungeon") {
+                BHStageEnter("zarDungeon", [player.zarDungeon.navToggle ? "nav" : "none", player.zarDungeon.diceFiveToggle ? "diceFive" : "none", "none"])
+            } else {
+                BHStageEnter(player.bh.autoEnter)
+            }
         }
         if (player.bh.exitConfirm.gt(0)) player.bh.exitConfirm = player.bh.exitConfirm.sub(normTime)
 
@@ -800,11 +870,30 @@ addLayer("bh", {
                     player.bh.celestialite.actions[i].cooldown = new Decimal(0)
                 }
 
+                if (player.bh.currentStage == "zarDungeon")
+                {
+                    if (player.zd.buyables[14].gte(1)) player.tab = "zard"
+                    options.fullscreen = false
+
+                    player.subtabs["bh"]["stuff"] = "stages"
+                } else
+                {
+                    player.subtabs["bh"]["stuff"] = "dead"
+                }
+
                 player.bh.currentStage = "none"
                 player.bh.combo = new Decimal(0)
                 player.bh.celestialite.id = "none"
 
-                player.subtabs["bh"]["stuff"] = "dead"
+                if (player.bh.characters[0].id == "creation") { //change when there is a formal unlock for the creation
+                player.bh.characters[0].id = "none"
+                player.bh.characterData[player.bh.characterSelection].selected = true
+                for (let i = 0; i < 4; i++) {
+                    player.bh.characters[0].skills[i].id = "none"
+                }
+                }
+                player.zarDungeon.reachedZar = false
+                player.zarDungeon.reachedZar2 = false
             }
         }
 
@@ -1193,6 +1282,12 @@ addLayer("bh", {
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("laboratory", 11).sub(1))
         player.bh.celestialite.curAdd = player.bh.celestialite.curAdd.add(buyableEffect("darkTemple", 1009).sub(1))
 
+        player.bh.celestialite.luck = BHC[player.bh.celestialite.id].luck ?? new Decimal(0)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(player.bh.celestialite.randomMult)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(scale)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.add(bhTemp[3].luckAdd)
+        player.bh.celestialite.luck = player.bh.celestialite.luck.mul(bhTemp[3].luckMult)
+
         player.bh.celestialite.attributes = BHC[player.bh.celestialite.id].attributes ?? {}
         player.bh.celestialite.attributes = Object.assign({}, player.bh.celestialite.attributes, bhTemp[3].attributes)
 
@@ -1209,6 +1304,7 @@ addLayer("bh", {
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth2.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth3.milestoneEffect)
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(player.depth4.milestoneEffect)
+        player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("car", 112)[0])
         player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(levelableEffect("pu", 200)[2].sub(1))
         if (hasAchievement("achievements", 921)) player.bh.maxSkillPoints = player.bh.maxSkillPoints.add(1)
 
@@ -1233,6 +1329,7 @@ addLayer("bh", {
         healthBase = healthBase.add(buyableEffect("depth1", 1))
         healthBase = healthBase.add(player.darkTemple.hpMult)
         if (hasUpgrade("ep2", 9101)) healthBase = healthBase.add(upgradeEffect("ep2", 9101))
+        healthBase = healthBase.add(levelableEffect("car", 102)[0])
 
         let healthAdd = new Decimal(0)
         healthAdd = healthAdd.add(buyableEffect("sme", 131))
@@ -1243,12 +1340,14 @@ addLayer("bh", {
         healthAdd = healthAdd.add(player.bh.skillData["nav_healSpell"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["geroa_selfRepair"].maxLevel)
         healthAdd = healthAdd.add(player.bh.skillData["vespasian_peakPerformance"].maxLevel)
+        healthAdd = healthAdd.add(levelableEffect("car", 101)[0])
 
         // =-- DAMAGE STUFF --= //
         let damageBase = new Decimal(1)
         damageBase = damageBase.add(buyableEffect("depth2", 1))
         damageBase = damageBase.add(player.darkTemple.dmgMult)
         if (hasUpgrade("ep2", 9103)) damageBase = damageBase.add(upgradeEffect("ep2", 9103))
+        damageBase = damageBase.add(levelableEffect("car", 104)[0])
 
         let damageAdd = new Decimal(0)
         damageAdd = damageAdd.add(buyableEffect("sme", 132))
@@ -1263,6 +1362,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
+        damageAdd = damageAdd.add(levelableEffect("car", 103)[0])
         if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
 
         // =-- REGEN STUFF --= //
@@ -1276,12 +1376,14 @@ addLayer("bh", {
         regenAdd = regenAdd.add(player.bh.skillData["general_rest"].maxLevel.div(40))
         regenAdd = regenAdd.add(buyableEffect("sme", 134).sub(1))
         regenAdd = regenAdd.add(buyableEffect("depth4", 1).sub(1))
+        regenAdd = regenAdd.add(levelableEffect("car", 105)[0])
         regenAdd = regenAdd.add(levelableEffect("pu", 300)[1].sub(1))
 
         // =-- AGILITY STUFF --= //
         let agilityBase = new Decimal(1)
         agilityBase = agilityBase.add(buyableEffect("depth3", 1))
         agilityBase = agilityBase.add(player.darkTemple.agiMult)
+        agilityBase = agilityBase.add(levelableEffect("car", 107)[0])
 
         let agilityAdd = new Decimal(0)
         agilityAdd = agilityAdd.add(player.darkTemple.agiAdd)
@@ -1294,6 +1396,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_poisonStinger"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
+        agilityAdd = agilityAdd.add(levelableEffect("car", 106)[0])
 
         // =-- DEFENSE STUFF --= //
         let defenseBase = new Decimal(1)
@@ -1307,6 +1410,7 @@ addLayer("bh", {
         defenseAdd = defenseAdd.add(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2))
         defenseAdd = defenseAdd.add(levelableEffect("pet", 310)[1])
         defenseAdd = defenseAdd.add(buyableEffect("stagnantSynestia", 1))
+        defenseAdd = defenseAdd.add(levelableEffect("car", 108)[0])
 
         // =-- LUCK STUFF --= //
         let luckBase = new Decimal(1)
@@ -1319,7 +1423,12 @@ addLayer("bh", {
         luckAdd = luckAdd.add(player.bh.skillData["sel_scavenger"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["nav_soulShred"].maxLevel.div(2))
         luckAdd = luckAdd.add(player.bh.skillData["vespasian_impale"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_diceSlice"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_luckyLift"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2))
+        luckAdd = luckAdd.add(player.bh.skillData["diceFive_snakeEyes"].maxLevel.div(2))
         if (hasUpgrade("ep2", 9105)) luckAdd = luckAdd.add(upgradeEffect("ep2", 9105))
+        luckAdd = luckAdd.add(levelableEffect("car", 109)[0])
 
         // =-- MENDING STUFF --= //
         let mendingBase = new Decimal(1)
@@ -1328,12 +1437,15 @@ addLayer("bh", {
         mendingAdd = mendingAdd.add(player.darkTemple.mndAdd)
         if (hasAchievement("achievements", 923)) mendingAdd = mendingAdd.add(1)
         if (player.alephsChamber.milestone[25] > 0) mendingAdd = mendingAdd.add(10)
+        mendingAdd = mendingAdd.add(levelableEffect("car", 110)[0])
+        mendingAdd = mendingAdd.add(player.bh.skillData["nav_violetResonance"].maxLevel)
 
         // =-- POTENCY STUFF --= //
         let potencyBase = new Decimal(1)
 
         let potencyAdd = new Decimal(0)
         potencyAdd = potencyAdd.add(player.darkTemple.potAdd)
+        potencyAdd = potencyAdd.add(levelableEffect("car", 111)[0])
 
         // =-- STAT CALCULATION --=
         for (let i = 0; i < 3; i++) {
@@ -1375,6 +1487,12 @@ addLayer("bh", {
             player.bh.characters[i].agility = player.bh.characters[i].agility.add(bhTemp[i].agilityAdd)
             player.bh.characters[i].agility = player.bh.characters[i].agility.mul(bhTemp[i].agilityMult)
 
+            if (player.bh.characters[i].id == "creation") {
+                player.bh.characters[i].damage = player.bh.characters[i].damage.mul(player.creation.prestigeEffect)
+                player.bh.characters[i].regen = player.bh.characters[i].regen.mul(player.creation.prestigeEffect)
+                player.bh.characters[i].agility = player.bh.characters[i].agility.mul(player.creation.prestigeEffect)
+            }
+
             // LUCK
             player.bh.characters[i].luck = run(BHP[player.bh.characters[i].id].luck, BHP[player.bh.characters[i].id]) ?? new Decimal(0)
             player.bh.characters[i].luck = player.bh.characters[i].luck.mul(luckBase)
@@ -1415,6 +1533,7 @@ addLayer("bh", {
                 player.bh.characters[i].skills[j].cooldownMax = BHA[player.bh.characters[i].skills[j].id].cooldown.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[i].agility)))
                 if (BHA[player.bh.characters[i].skills[j].id].cooldownCap) player.bh.characters[i].skills[j].cooldownMax = player.bh.characters[i].skills[j].cooldownMax.max(BHA[player.bh.characters[i].skills[j].id].cooldownCap)
             }
+        
         }
 
         // =-- STORED STAT CALCULATIONS --=
@@ -1475,6 +1594,20 @@ addLayer("bh", {
                     player.bh.stagnantTimer = new Decimal(10)
                 }
             }
+        }
+
+        //check if creation is used (the long way cause why not)
+        if (player.bh.characters[0].id == "creation") {
+            player.bh.creationUsed = true
+        }
+        if (player.bh.characters[1].id == "creation") {
+            player.bh.creationUsed = true
+        }
+        if (player.bh.characters[2].id == "creation") {
+            player.bh.creationUsed = true
+        }
+        if ((player.bh.characters[2].id != "creation") && (player.bh.characters[1].id != "creation") && (player.bh.characters[0].id != "creation")) {
+            player.bh.creationUsed = false
         }
     },
     clickables: {
@@ -1579,13 +1712,16 @@ addLayer("bh", {
             branches: [["Unlock-Clear", "#8a0e79"]]
         },
         "Leave": {
-            title() { return "<h2>Leave the black heart" },
+            title() { return "<h2>Leave the Black Heart" },
             canClick: true,
             unlocked: true,
             onClick() {
                 options.fullscreen = false
 
                 player.subtabs["bh"]["stuff"] = "stages"
+                if (player.universe == "DS") {
+                    if (player.zd.buyables[14].gte(1)) player.tab = "zd"
+                }
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px", margin: "-1.5px"}
@@ -2868,6 +3004,32 @@ addLayer("bh", {
                 return look
             },
         },
+        "Char-Creation": {
+            title() {return "<img src='" + run(BHP["creation"].icon, BHP["creation"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return false}, //change to false
+            onClick() {
+                player.bh.characterSelection = "creation"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.creation.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
+        "Char-DiceFive": {
+            title() {return "<img src='" + run(BHP["diceFive"].icon, BHP["diceFive"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return hasUpgrade("zd", 11)}, //change eventually
+            onClick() {
+                player.bh.characterSelection = "diceFive"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.diceFive.selected) look.filter = "brightness(50%)"
+                return look
+            },
+        },
         "Skill-Equip": {
             title() {return player.bh.skillData[player.bh.skillSelection].selected[0] != "none" ? "Unequip Skill" : "Equip Skill"},
             canClick() {
@@ -4136,7 +4298,7 @@ addLayer("bh", {
                         ["theme-scroll-column", [
                             ["blank", "2px"],
                             ["row", [
-                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"]
+                                ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Creation"], ["clickable", "Char-DiceFive"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],
@@ -4586,6 +4748,8 @@ addLayer("bh", {
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.anima ? "⚜︎<div class='bottomTooltip' style='margin-top:0px'>Anima<hr>Has " + formatSimple(Decimal.sub(1, player.bh.characters[0].attributes.anima).mul(100)) + "% resistance to<br>spirit attacks.</div>" : ""}, {color: "#6FF9F4", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                         ["tooltip-row", [["raw-html", () => {return player.bh.characters[0].attributes.negative ? "—<div class='bottomTooltip' style='margin-top:0px'>Negative<hr>Incoming attacks have a <br>" + formatSimple(Decimal.mul(player.bh.characters[0].attributes.negative, Decimal.div(Decimal.add(100, player.bh.characters[0].luck), 100)).mul(100)) + "% chance to be turned<br>into heals.</div>" : ""}, {color: "#44b", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", marginLeft: "2px"}]]],
                                     ], {width: "150px", height: "30px", marginTop: "-35px"}],
+                                    ["blank", ["25px", "5px"]],
+                                    ["row", [["raw-html", () => {return player.bh.creationUsed ? "You have <h3>" + format(player.creation.incrementalEnergy) + "</h3> incremental energy." : ""}, {color: "#c9acff", fontSize: "18px", fontFamily: "monospace"}]]],
                                 ], {margin: "5px"}],
                                 ["style-column", [
                                     ["clickable", "C1-Icon"],

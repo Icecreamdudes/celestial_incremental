@@ -28,7 +28,7 @@
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js", "Check Back/gwaTemple.js",
+		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
@@ -41,7 +41,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.25, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.26, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Battle Bonanza",
 }
 
@@ -147,8 +147,8 @@ function updateStyles() {
 			} else {
 				layerBG = "#001f18"
 			}
-			break;
-	    case "za": case "cf": case "wof": case "sm": case "car":
+			break; 
+	    case "za": case "cf": case "wof": case "sm": case "car": case "zd":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
@@ -214,7 +214,15 @@ function updateStyles() {
 		case "en":
 			layerBG = "#400c42"
 			break;
-		case "s": case "co": case "ra": case "sd": case "cs":
+		case "s":
+			if (player.s.pylonBuilt && player.subtabs["s"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(120deg, #801757 0%, #D3173A 100%)"
+			} else {
+				if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+				if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+			}
+			break;
+		case "co": case "ra": case "sd": case "cs":
 		case "cof":
 			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
@@ -226,6 +234,9 @@ function updateStyles() {
 			break;
 		case "bh":
 			switch (player.bh.currentStage) {
+				case "darkTemple":
+					layerBG = "radial-gradient(#000, #113)"
+					break;
 				case "depth1":
 					layerBG = "black"
 					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), #000000"
@@ -255,13 +266,16 @@ function updateStyles() {
 				case "laboratory":
 					layerBG = "linear-gradient(-180deg, #3a4625 0%, #172312 100%)"
 					break;
+			    case "zarDungeon":
+					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
+					break;
 				default: 
 					layerBG = "black"
 					break;
 			}
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
+		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
 			layerBG = "black"
 			break;
 		case "ch":
@@ -444,7 +458,7 @@ function updateStyles() {
         	sun.style.width = "300px";
     	    sun.style.height = "300px";
 	        sun.style.borderRadius = "50%";
-        	sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
+			sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
     	    sun.style.boxShadow = "0 0 120px 60px #ffe06655";
 	        eclipse.appendChild(sun);
 
@@ -686,7 +700,7 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "ds": case "dv": case "bl":
+		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp":
             player.musuniverse = "D1"
 			break;
 		case "ch":
@@ -710,7 +724,7 @@ function updateStyles() {
 		case "od": case "mu":
             player.musuniverse = "OD"
 			break;
-		case "za": case "cf": case "wof": case "sm": case "cbs": case "car":
+		case "za": case "cf": case "wof": case "sm": case "cbs": case "car": case "zd":
             player.musuniverse = "DS"
 			break;
 	}
@@ -756,6 +770,14 @@ function updateStyles() {
 								playAndLoopAudio("music/alephBattle.mp3", options.musicVolume/10)
 								break;
 							}
+							if (player.bh.currentStage == "zarDungeon" && player.bh.combo.eq(29)) {
+								playAndLoopAudio("music/zar.mp3", options.musicVolume/10)
+								break;
+							}
+							if (player.bh.currentStage == "depth1" && player.bh.combo.lt(0)) {
+								playAndLoopAudio("music/depth1Encore.mp3", options.musicVolume/10)
+								break;
+							}
 							// Default Behavior
 							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
 								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);
@@ -788,8 +810,7 @@ function updateStyles() {
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 						break;
 					case "DS":
-						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
-						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						if (!player.ir.inBattle) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
@@ -831,7 +852,34 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.12.6 - Bits and Bobs</h3><br>
+	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br><br>
+		Content:<br>
+			- Added Enhance Points<br>
+			- Added Cards<br>
+			- Added Zar's Dungeon<br>
+			- Added Blackjack minigame in Zar's Dungeon<br>
+			- Added Zar Bossfight<br>
+			- Added blue soul gamemode for bullet hell fights<br>
+			- Added a LOT of lore, probably the most emotional lore yet (Hopefully)<br>
+			- Added 2 new fighting characters<br>
+			- Added ultimate skills for Nav and Dice Five<br>
+			- Added 1 new punchcard<br>  
+			- Added rare space pets<br>
+			- Added radioactive pylon<br>
+			- Other stuff I may have forgot<br><br>
+		Balancing:<br>
+			- Removed UFO printing exploit.<br>
+			- Changed a couple few space pet formulas<br>
+			- Rebalanced a couple of Dice Space things<br>
+			- Rebalanced a couple of Alt-Universe 1 things<br>
+			- A bunch of other things I forgot<br><br>
+		Bux Fixes:<br>
+			- Fixed a bunch of typos<br>
+			- Fixed bug where buying max chip researches crashes the game<br>
+			- Fixed bug where cutscenes don't pause battles<br>
+			- Fixed several rounding and floating-point errors<br>
+			- A bunch of other things I forgot.<br><br>
+				<h3>v1.12.6 - Bits and Bobs</h3><br>
 		Content:<br>
 			- Added twigs layer<br>
 			- Added 3 new punchcards<br>
@@ -1763,7 +1811,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset"
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation"
 ]
 
 function getStartPoints(){
@@ -2204,5 +2252,12 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.25) {
 		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
+}
+
+function fixOldNaN(oldVersion) {
+	if (oldVersion < 190.26 && player && player.en && Decimal.eq(player.en.enhancerLevels[0], NaN)) {
+		cleanseUniverse("A1")
+		window.location.reload();
 	}
 }

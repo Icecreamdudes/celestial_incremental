@@ -145,7 +145,7 @@
 
         // ABILITY TIMER CODE
         for (let i = 0; i < player.rf.abilityTimers.length; i++) {
-            player.rf.abilityTimers[i] = player.rf.abilityTimers[i].sub(onepersec.mul(delta))
+            player.rf.abilityTimers[i] = player.rf.abilityTimers[i].sub(Decimal.div(onepersec.mul(delta), player.uni["U1"].tickspeed))
         }
         for (let i = 0; i < player.rf.abilityTimers.length; i++)
         {

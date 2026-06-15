@@ -100,6 +100,9 @@
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("wof", 14))
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(buyableEffect("cf", 33))
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(player.sm.chipsEffect[1])
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.mul(levelableEffect("car", 205)[0])
+        player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.pow(buyableEffect("sm", 116))
+
         player.cf.headsSoftcapStart = player.cf.headsSoftcapStart.pow(buyableEffect("sm", 111))
 
         if (player.cf.heads.gte(player.cf.headsSoftcapStart))
@@ -116,7 +119,11 @@
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("wof", 14))
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(buyableEffect("cf", 23))
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(player.sm.chipsEffect[1])
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.mul(levelableEffect("car", 207)[0])
+        player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.pow(buyableEffect("sm", 116))
+
         player.cf.tailsSoftcapStart = player.cf.tailsSoftcapStart.pow(buyableEffect("sm", 111))
+
 
         if (player.cf.tails.gte(player.cf.tailsSoftcapStart))
         {
@@ -135,7 +142,9 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("wof", 11))
         player.cf.headsToGet = player.cf.headsToGet.mul(player.sm.chipsEffect[1])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sm", 101))
+        player.cf.headsToGet = player.cf.headsToGet.mul(levelableEffect("car", 204)[0])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sme", 182))
+        player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("car", 22))
         
         player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
@@ -151,13 +160,22 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("wof", 11))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(player.sm.chipsEffect[1])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sm", 101))
+        player.cf.tailsToGet = player.cf.tailsToGet.mul(levelableEffect("car", 206)[0])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sme", 182))
+        player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("car", 22))
 
         player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 
 
         player.cf.tailsEffect = player.cf.tails.pow(0.5).add(1).pow(buyableEffect("cf", 14))
         player.cf.tailsEffect2 = player.cf.tails.div(10).pow(0.25).add(1).pow(buyableEffect("cf", 14))
+
+        //auto
+        if (hasUpgrade("car", 13))
+        {
+            player.cf.heads = player.cf.heads.add(player.cf.headsToGet.mul(delta))
+            player.cf.tails = player.cf.tails.add(player.cf.tailsToGet.mul(delta))
+        }
 
         //flip prices
         if (player.cf.coinsFlipped.lt(25)) player.cf.flipCost = player.cf.coinsFlipped.pow(1.5).div(3).add(1).mul(10)

@@ -32,8 +32,8 @@
             "Matos, the Celestial of Machinery",
             "Iridite, the Astral Celestial",
             "Aleph, the Celestial of Swarms",
-            "Tera, the Celestial of Tiers",
             "Zar, the Celestial of Chance",
+            "Tera, the Celestial of Tiers",
         ]
     },
     clickables: {
@@ -103,13 +103,15 @@
             branches() {return player.alephsChamber.milestone[25] > 0 ? [15] : []},
         },
         17: {
-            title() { return "<h1>?" },
-            canClick() { return false },
+            title() { return player.zarDungeon.zarDefeated ? "<h1>⚅" : "<h1>?"  },
+            canClick() { return player.zarDungeon.zarDefeated },
             unlocked() { return true },
+            tooltip() { return player.zarDungeon.zarDefeated ? "Zar, the Celestial of Chance" : ""},
             onClick() {
-                //player.ch.celestialIndex = new Decimal(6)
+                player.ch.celestialIndex = new Decimal(6)
             },
             style: { width: '50px', "min-height": '50px' }, // Tera
+            branches() {return player.zarDungeon.zarDefeated ? [16] : []},
         },
         18: {
             title() { return "<h1>?" },
@@ -215,13 +217,18 @@
         },
         5: {
             title: "Iridite, the Astral Celestial",
-            body() { return "The first of the novasent, Iridite was born as a member of the celestial hunting corporation. Living her entire life under these conditions, she never got to live her life like a normal human being. One day, she went on a mission that somehow got her turned into a celestial. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
+            body() { return "Iridite was born into a strange world where celestials roam alongside humans. Celestials have always taken control over her world and have always caused torment and tragedy. After her family was murdered by celestials, she was recruited to join the CHC. When she went on a mission to determine the cause of the dark energy cloud, she never returned. Turns out, she somehow turned into a celestial during her mission. When she was a celestial, she became obsessed with how celestials are made, and conducted many experiments on countless universes. Nova took sight of this, and asked her to join him as a novasent. She agreed, and was tasked with finding a universe suitable enough for Nova to take over as his own. That's how Nova discovered the domain of singularity." },
             unlocked() { return player.ch.celestialIndex.eq(4) },      
         },
         6: {
             title: "Aleph, the Celestial of Swarms",
             body() { return "A celestial who was once lived in the kingdom of celestials. She wanted to live a peaceful life, but tragedy struck her when her two brothers were killed by other celestials. Angered, she joined Avon's organization, but realized the threat that she would face. She fled to her own universe that Avon had gifted to her, which was the Hive. She spent the rest of her days building up and cultivating her swarm. She was happy. Her desire to build her swarm was greater than her desires to commit evil sins. However, that happiness faded when Nova invaded her universe and destroyed her swarm." },
             unlocked() { return player.ch.celestialIndex.eq(5) },      
+        },
+        7: {
+            title: "Zar, the Celestial of Chance",
+            body() { return "Zar was once an ordinary human who had lived a life in a modern-age universe. When a celestial somehow murdered everyone in his universe except for him, he got recruited into the CHC for possessing a unique soul. He went on the mission to find the source of the dark energy cloud alongside Iridite and Tera, but had also turned into a celestial. It is still unknown as to how this had happened, but we know that it was done by the celestials guarding the dark energy cloud. As a celestial, Zar became hopeless and desperate, so he decided to turn to Ascensionism. Through Ascensionism, he met Nova. There he became the first of the Novasent." },
+            unlocked() { return player.ch.celestialIndex.eq(6) },      
         },
     },
     microtabs: {
@@ -281,6 +288,7 @@
                     ["infobox", 4],
                     ["infobox", 5],
                     ["infobox", 6],
+                    ["infobox", 7],
                 ]
             },
             "Matos Perks": {

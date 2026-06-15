@@ -824,7 +824,7 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "bh": case "cof": case "sme":
+		case "sma": case "bh": case "cof": case "sme": case "lightRift":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":

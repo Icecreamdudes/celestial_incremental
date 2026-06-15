@@ -30,7 +30,7 @@ addLayer("lightRift", {
     clickables: {
         101: {
             title() { return "<h3>" + (player.lightRift.interspaceConditions[0] ? "<h3>THE" : "<h3>DEPOSIT SPACE ENERGY") },
-            canClick() { return player.sb.storedSpaceEnergy.gte(1e12) && !player.lightRift.interspaceConditions[0] },
+            canClick() { return player.sb.storedSpaceEnergy.gte(1e20) && !player.lightRift.interspaceConditions[0] },
             unlocked() { return true },
             onClick() {
                 player.lightRift.interspaceConditions[0] = true
@@ -178,7 +178,7 @@ addLayer("lightRift", {
                             ["style-column", [
                                 ["raw-html", "α", {color: "#1a6641", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.sb.storedSpaceEnergy) + " / 1e12<br>Stored Space Energy"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.sb.storedSpaceEnergy) + " / 1e20<br>Stored Space Energy"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#1a6641", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 101],

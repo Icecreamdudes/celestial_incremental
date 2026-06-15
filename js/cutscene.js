@@ -4710,11 +4710,14 @@
         },
         "U3-Light-Rift": {
             type: "normal",
+            background: "#260300",
+            music: "music/singularityWaltzPiano.mp3",
             portrait: "resources/secret.png",
-            trigger() {return player.tab == "lightRift" && false},
+            trigger() {return player.tab == "lightRift"},
             dialogue: [
-                { text: "Four shafts of light appear in the distance, illuminating the sky."  },
-                { text: "I'll go investi.", portrait: "resources/player.png"  },
+                { text: "Marcel appears at the temple."},
+                { text: "A developer has volunteered to mentor you.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
+                { text: "His universe is a bit remote, so I'm going to need you to collect a few things before we can get there.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
             ],
         },
         "UD-Start": {

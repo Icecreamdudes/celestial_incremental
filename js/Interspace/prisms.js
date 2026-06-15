@@ -2337,7 +2337,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                         ["clickable", "autoPrismaticToggle"],
                     ], {width: "200px", height: "100px"}],
                 ], {width: "400px", height: "100px", backgroundColor: "#335966", borderRadius: "10px"}],
-            ], () => {return {display: hasMilestone("prj", 206) ? "" : "none !important"}}],
+            ], () => {return {display: hasMilestone("prj", 206) && false ? "" : "none !important"}}],
         ]],
         ["blank", "15px"],
         ["style-column", [

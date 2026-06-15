@@ -282,7 +282,7 @@
             player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(player.blu.blueshifts[i].cycleGainMul)
 
             // CYCLE GEN
-            if (i < 4) player.wel.modules[i].completions = player.wel.modules[i].completions.add(player.wel.modules[i].completionsGain.mul(player.wel.modules[4].completionEffect).div(100).mul(delta));
+            //if (i < 4) player.wel.modules[i].completions = player.wel.modules[i].completions.add(player.wel.modules[i].completionsGain.mul(player.wel.modules[4].completionEffect).div(100).mul(delta));
 
             // LIGHT GEN
             player.wel.light = player.wel.light.add(layers.wel.clickables[i].lightGain().mul(player.wel.lightGen).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta));

@@ -323,6 +323,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
             if (hasUpgrade("cbs", 102)) player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(upgradeEffect("cbs", 102))
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
@@ -504,7 +505,7 @@ addLayer("cb", {
         layers.sp.update(time)
         if (offline) layers.cbs.update(time)
     },
-    branches: ["m"],
+    branches() { return !player.zarDungeon.zarDefeated ? "m" : ["rf"] },
     clickables: {
         11: {
             title() { return player.cb.xpTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[0].current) + "." : "<h3>+" + format(player.cb.xpTimers[0].base.mul(player.cb.xpMult)) + " XP."},

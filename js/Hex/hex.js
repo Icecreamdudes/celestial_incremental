@@ -57,6 +57,7 @@
 
         // POWER
         if (hasUpgrade("hve", 61)) player.h.hexPointGain = player.h.hexPointGain.pow(1.03)
+        player.h.hexPointGain = player.h.hexPointGain.pow(levelableEffect("car", 304)[0])
 
         // SOFTCAPS
         if (inChallenge("hrm", 14)) player.h.hexPointGain = player.h.hexPointGain.pow(Decimal.add(0.1, player.hsa.sacredEffect))

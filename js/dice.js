@@ -126,7 +126,7 @@
     },
     color: "white",
     tooltip: "Dice",
-    branches: ["cb"],
+    branches() { return !player.zarDungeon.zarDefeated ? "cb" : ["cb", "m"] },
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -746,6 +746,8 @@
         if (hasUpgrade("cs", 801)) player.d.diceScore = player.d.diceScore.mul(10)
         if (hasUpgrade("cs", 803)) player.d.diceScore = player.d.diceScore.mul(player.d.challengeDicePointsEffect2)
 
+        player.d.diceScore = player.d.diceScore.add(1).pow(buyableEffect("zd", 12)).sub(1)
+
         if (player.d.currentBoosterRoll == 0) {
                 player.d.addDiceEffect = player.d.diceScore.mul(0.0025).pow(1.1)
                 if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(player.cs.scraps.dice.effect)
@@ -1105,6 +1107,8 @@
                 if (hasUpgrade("ep2", 13)) eff = eff.mul(upgradeEffect("ep2", 13))
                 if (hasUpgrade("cs", 801)) eff = eff.mul(10)
                 if (hasUpgrade("cs", 803)) eff = eff.mul(player.d.challengeDicePointsEffect2)
+
+                eff = eff.add(1).pow(buyableEffect("zd", 12)).sub(1)
                 eff = eff.add(1).pow(player.cs.scraps.dice.effect).sub(1)
                 return eff
             },

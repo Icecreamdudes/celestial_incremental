@@ -125,6 +125,7 @@
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
         if (hasUpgrade("depth1", 5)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
         player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("sme", 122))
+        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(levelableEffect("car", 306)[0])
 
         //----------------------------------------
 

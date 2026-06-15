@@ -61,6 +61,7 @@
             player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(buyableEffect("sme", 102))
             if (hasMilestone("db", 103)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(1.4)
             if (player.ir.iriditeDefeated) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(1.5)
+            player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(levelableEffect("st", 307)[0])
 
 
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
@@ -69,6 +70,7 @@
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("al", 205))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pu", 305)[2])
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("depth4", 4))
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("st", 306)[0])
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i])) {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)

@@ -239,6 +239,13 @@ addLayer("pol", {
             if (player.pol.pollinatorEffects[prop].enabled) player.pol.currCount = player.pol.currCount.add(1)
         }
 
+        for (let key in player.pol.pollinatorEffects) {
+        let effs = player.pol.pollinatorEffects[key].effects
+        for (let i = 0; i < effs.length; i++) {
+            effs[i] = effs[i].pow(levelableEffect("car", 303)[0])
+        }
+        }
+
         player.pol.maxCount = buyableEffect("pol", 15).add(1)
     },
     clickables: {

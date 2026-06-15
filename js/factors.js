@@ -62,7 +62,7 @@
     nodeStyle() {},
     tooltip: "Factors",
     color() { return "#83cecf" },
-    branches: ["r"],
+    branches() { return !player.zarDungeon.zarDefeated ? "r" : ["r", "t", "g"] },
     update(delta) {
         let onepersec = new Decimal(1)
 

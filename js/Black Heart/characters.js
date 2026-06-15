@@ -114,3 +114,31 @@ BHP.vespasian = {
     mending() {return new Decimal(5).mul(player.bh.baseMult)},
     potency() {return new Decimal(5).mul(player.bh.baseMult)},
 }
+BHP.creation = {
+    name: "The Creation",
+    color: "#8a76b0", //linear-gradient(90deg, #7a97b9, #8a76b0)
+    icon: "resources/player.png",
+    health: new Decimal(125),
+    damage: new Decimal(5),
+    defense: new Decimal(15),
+    regen: new Decimal(0.4),
+    agility: new Decimal(5),
+    luck: new Decimal(2.5),
+    mending() {return new Decimal(5).mul(player.bh.baseMult)},
+    potency() {return new Decimal(5).mul(player.bh.baseMult)},
+}
+BHP.diceFive = {
+    name() {return player.zarDungeon.zarDefeated ? "Dice Five's Husk" : "Dice Five"},
+    color: "#a3a3a3", 
+    icon() {return player.zarDungeon.zarDefeated ? "resources/diceFiveFHusk.png" : "resources/diceFiveF.png"},
+    health: new Decimal(75),
+    damage: new Decimal(3),
+    defense: new Decimal(5),
+    regen: new Decimal(0),
+    agility: new Decimal(5),
+    luck: new Decimal(50),
+    mending: new Decimal(5),
+    potency: new Decimal(5),
+    mending() {return new Decimal(5).mul(player.bh.baseMult)},
+    potency() {return new Decimal(5).mul(player.bh.baseMult)},
+}

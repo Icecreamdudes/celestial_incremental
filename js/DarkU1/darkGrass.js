@@ -64,13 +64,14 @@
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         if (hasMilestone("dgj", 11)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.dgj.milestone1Effect)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgj", 14))
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("car", 406)[0])
         
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
 
         //post softcap
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("ds", 103))
-
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("rp", 11))
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
@@ -86,12 +87,14 @@
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
         if (hasMilestone("dgj", 11)) player.dgr.grassValue = player.dgr.grassValue.mul(player.dgj.milestone1Effect)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgj", 14))
+        player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("car", 406)[0])
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
 
         //post softcap
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
+        player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("rp", 11))
 
         let autoMult = new Decimal(1)
         if (hasMilestone("dgj", 15)) autoMult = autoMult.mul(player.dgj.milestone5Effect)

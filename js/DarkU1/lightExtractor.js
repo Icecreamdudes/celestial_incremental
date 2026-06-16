@@ -698,6 +698,8 @@
         player.funify.buyables[14] = new Decimal(0)
         player.funify.buyables[15] = new Decimal(0)
         player.funify.buyables[16] = new Decimal(0)
+
+        player.du.noPunchcards = true
     },
     upgrades: {
         11: {

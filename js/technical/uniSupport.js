@@ -65,7 +65,7 @@ function cleanseUniverse(universe) {
     let tree = universes[universe].tree
     for (let row in tree) {
         for (thing in tree[row]) {
-            player.thing = getStartLayerData(thing)
+            player.thing = getStartLayerData(tree[row][thing])
         }
     }
 }

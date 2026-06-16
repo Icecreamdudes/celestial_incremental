@@ -1,10 +1,7 @@
-﻿/*
-
-             */
-addLayer("lightRift", {
+﻿addLayer("lightRift", {
     name: "Light Rift",
     symbol: "LR",
-    universe: "U3",
+    universe: "U1",
     row: 4,
     position: 0,
     startData() { return {
@@ -12,6 +9,7 @@ addLayer("lightRift", {
 
         interspaceUnlocked: false,
         interspaceConditions: [false, false, false, false],
+        interspaceConditionsMet: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -25,6 +23,8 @@ addLayer("lightRift", {
     tooltip: "Light Rift",
     color: "#ffdfef",
     update(delta) {
+        player.lightRift.interspaceConditionsMet = 0
+        player.lightRift.interspaceConditions.forEach((v) => (v === true && player.lightRift.interspaceConditionsMet++));
     },
     branches: [],
     clickables: {

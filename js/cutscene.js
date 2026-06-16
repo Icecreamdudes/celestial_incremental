@@ -4713,10 +4713,12 @@
             background: "#260300",
             music: "music/singularityWaltzPiano.mp3",
             portrait: "resources/secret.png",
-            trigger() {return player.tab == "lightRift"},
+            trigger() {return player.tab == "lightRift" && false},
             dialogue: [
-                { text: "Marcel appears at the temple."},
-                { text: "A developer has volunteered to mentor you.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
+                { text: "Marcel visits you."},
+                { text: "You have one more place to visit before.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
+                { text: "Okay...?", portrait: "resources/player.png"},
+                { text: "He doesn't elaborate. How strange."},
                 { text: "His universe is a bit remote, so I'm going to need you to collect a few things before we can get there.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
             ],
         },
@@ -4725,22 +4727,24 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return player.lightRift.interspaceUnlocked },
+            trigger() {return player.lightRift.interspaceUnlocked && false },
             dialogue: [
-                { text: "The light bends through the air like it's liquid." },
-                { text: "It all merges into a single beam, then shoots back into the endless space." },
-                { text: "What a show.", portrait: "resources/Player.png"  },
-                { text: "I'm unaware of what he wants, but the situation must be urgent for him to contact you so soon.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "pretend some wacky shit happens here." },
             ],
         },
         "UD-LightWellAlpha": {
             type: "normal",
             portrait: "resources/secret.png",
             trigger() {return hasUpgrade("wel", 11) },
-            dialogue: [
+            dialogue: [/*
+                { text: "This city rests upon an enormous reservoir of liquid light rich in superphysical energy.", portrait: "resources/bumpy.png" },
+                { text: "It will remain full for an eternity.", portrait: "resources/bumpy.png" },*/
                 { text: "Bumpy hands you a bucket." },
-                { text: "Use this to pull liquid light from the fountain basins.", portrait: "resources/bumpy.png" },
-                { text: "Do not get it in your eyes.", portrait: "resources/bumpy.png" },
+                { text: "Use this to pull liquid light from the wells.", portrait: "resources/bumpy.png" },
+                { text: "Pour it into fountains to harness its energy.", portrait: "resources/bumpy.png" },
+                { text: "Wait... is this just manual labor??", portrait: "resources/player.png"},
+                { text: "For now, hehe.", portrait: "resources/bumpy.png" },
+                { text: "Take as many breaks as you need.", portrait: "resources/bumpy.png" },
             ],
         },
         "UD-LightWellBeta": {
@@ -4748,8 +4752,10 @@
             portrait: "resources/secret.png",
             trigger() {return player.wel.modules[1].completions.gte(50) },
             dialogue: [
-                { text: "Manual labor sucks.", portrait: "resources/player.png" },
-                { text: "beta.", portrait: "resources/bumpy.png" },
+                { text: "This sucks.", portrait: "resources/player.png" },
+                { text: "Nah, I wish I had the time to do whatever you're doing.", portrait: "resources/bumpy.png" },
+                { text: "An entire city full of people is a lot to manage on your own, isn't it?", portrait: "resources/player.png" },
+                { text: "It is. On my own...", portrait: "resources/bumpy.png" },
             ],
         },
         "UD-LightWellGamma": {
@@ -4757,7 +4763,7 @@
             portrait: "resources/secret.png",
             trigger() {return player.wel.modules[2].completions.gte(500) },
             dialogue: [
-                { text: "gamma.", portrait: "resources/bumpy.png" },
+                { text: ".", portrait: "resources/bumpy.png" },
             ],
         },
         "UD-LightRowTwo": {

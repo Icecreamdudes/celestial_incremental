@@ -4750,12 +4750,19 @@
         "UD-LightWellBeta": {
             type: "normal",
             portrait: "resources/secret.png",
+            music: "music/bumpy.mp3",
+            background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
             trigger() {return player.wel.modules[1].completions.gte(50) },
             dialogue: [
-                { text: "This sucks.", portrait: "resources/player.png" },
-                { text: "Nah, I wish I had the time to do whatever you're doing.", portrait: "resources/bumpy.png" },
-                { text: "An entire city full of people is a lot to manage on your own, isn't it?", portrait: "resources/player.png" },
-                { text: "It is. On my own...", portrait: "resources/bumpy.png" },
+                { text: "Bumpy is inspecting a well on a corner adjacent to you." },
+                { text: "I think this one's broken. How about you help me fix it?", portrait: "resources/bumpy.png" },
+                { text: "I'm not familiar with this kind of technology...", portrait: "resources/player.png" },
+                { text: "Neither am I. These are the work of one of my co-founders...", portrait: "resources/bumpy.png" },
+                { text: "Her machines weren't usually that difficult to analyze, but I'm still unfamiliar with these ones.", portrait: "resources/bumpy.png" },
+                { text: "Well what do we need?", portrait: "resources/player.png" },
+                { text: "Hmmm... need light for that... blue mhmm... and projects...", portrait: "resources/bumpy.png" },
+                { text: "Uh I think we're getting ahead of ourselves. Just keep gathering light.", portrait: "resources/bumpy.png" },
+                { text: "Okay then.", portrait: "resources/player.png" },
             ],
         },
         "UD-LightWellGamma": {
@@ -4763,17 +4770,8 @@
             portrait: "resources/secret.png",
             trigger() {return player.wel.modules[2].completions.gte(500) },
             dialogue: [
+                { text: "This sucks.", portrait: "resources/player.png" },
                 { text: ".", portrait: "resources/bumpy.png" },
-            ],
-        },
-        "UD-LightRowTwo": {
-            type: "normal",
-            portrait: "resources/secret.png",
-            music: "music/bumpy.mp3",
-            background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return hasUpgrade("wel", 14) },
-            dialogue: [
-                { text: "row two.", portrait: "resources/bumpy.png" },
             ],
         },
         "UD-ProjectsUnlocked": {
@@ -4781,9 +4779,18 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return hasUpgrade("wel", 21) },
+            trigger() {return player.tab == "prj" },
             dialogue: [
-                { text: "porject.", portrait: "resources/bumpy.png" },
+                { text: "Brace yourself.", portrait: "resources/bumpy.png" },
+                { text: "Bumpy points toward the statue in the center of the plaza." },
+                { text: "It portrays three people holding up a large glass prism." },
+                { text: "Bumpy reaches out his opposite hand toward the figure. His palm projects a beam of light into the prism." },
+                { text: "The ground begins to descend." },
+                { text: "Woah.", portrait: "resources/player.png" },
+                { text: "We're descending into the heart of the city.", portrait: "resources/bumpy.png" },
+                { text: "It's where me and my co-founders designed pretty much everything.", portrait: "resources/bumpy.png" },
+                { text: "How did just the three of you make all of this, anyway?", portrait: "resources/player.png" },
+                { text: "I'm about to show you!", portrait: "resources/bumpy.png" },
             ],
         },
         "D1-TimeCapsules": {
@@ -4794,11 +4801,10 @@
             trigger() {return false},
             dialogue: [
                 { text: "Just as Bumpy predicted, a new superphysical value appeared during the eclipse: time capsules." },
-                { text: "You feel a strange sense of familiarity with this one." },
-                { text: "Like it's a piece of something greater." },
-                { text: "There's surely a reason you feel this way." },
+                { text: "It takes the place of space energy during the eclipse." },
+                { text: "The parallels are clear." },
             ],
-        },
+        },//
         "UD-StoredTimeCapsule": {
             type: "normal",
             portrait: "resources/secret.png",
@@ -4819,14 +4825,37 @@
                 { text: "Got it.", portrait: "resources/player.png" },
             ],
         },
-        "UD-PrismaticProjectLvl1": {
+        "UD-PrismaticProjectStart": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            music: "music/bumpy.mp3",
+            background: "linear-gradient(135deg, #bf8fbf 0%, #b4bfb4 100%)",
+            trigger() {return player.prj.modules[2].focused == true },
+            dialogue: [
+                { text: "Your vision flashes a brilliant white." },
+                { text: "Two people appear in front of you. One looks just like Bumpy." },
+                { text: "The other has feathery black wings and shoulder-length, messy, pale green hair." },
+                { text: "Do you think I'm cooking with this one?", portrait: "resources/memoryBumpy.png" },
+                { text: "[they talk about prisms, which turn light into electricity]", portrait: "resources/humanCere.png" },
+            ],
+        },
+        "UD-Prismatic": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return hasMilestone("prj", 201) },
+            trigger() {return player.pri.totalPrisms.gt(0) },
             dialogue: [
-                { text: "You enter a flashback."},
+                { text: "Brace yourself.", portrait: "resources/bumpy.png" },
+                { text: "Bumpy points toward the statue in the center of the plaza." },
+                { text: "It portrays three people holding up a large glass prism." },
+                { text: "Bumpy reaches out his opposite hand toward the figure. His palm projects a beam of light into the prism." },
+                { text: "The ground begins to descend." },
+                { text: "Woah.", portrait: "resources/player.png" },
+                { text: "We're descending into the heart of the city.", portrait: "resources/bumpy.png" },
+                { text: "It's where me and my co-founders designed pretty much everything.", portrait: "resources/bumpy.png" },
+                { text: "How did just the three of you make all of this, anyway?", portrait: "resources/player.png" },
+                { text: "I'm about to show you!", portrait: "resources/bumpy.png" },
             ],
         },
         "UD-BlueshiftProjectLvl1": {
@@ -4893,7 +4922,7 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #bf8fbf 0%, #b4bfb4 100%)",
-            trigger() {return hasMilestone("prj", 401) },
+            trigger() {return player.prj.modules[4].focused == true },
             dialogue: [
                 { text: "You enter a flashback."},
                 { text: "A crowd is running through a narrow street, likely fleeing from something."},

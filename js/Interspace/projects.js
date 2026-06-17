@@ -1604,7 +1604,7 @@
             },
             "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "8px" } },
-                unlocked() { return true },
+                unlocked() { return false },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [

@@ -472,7 +472,7 @@
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
                     s += "Double light gain every 4 OoM of light.<br>(x" +
-                    formatSimple(player.wel.light.add(1).log(10000).floor().pow_base(2), 2)
+                    formatSimple(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2), 2)
                     + ")</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: 3 Light Fountain II ↻</h3>"
@@ -1495,9 +1495,9 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[1].completions
-                let s = new Decimal(60)
+                let s = new Decimal(120)
 
-                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(Math.pow(1.4, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1560,9 +1560,9 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[2].completions
-                let s = new Decimal(2.7e4)
+                let s = new Decimal(3.6e4)
 
-                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(Math.pow(1.6, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1625,9 +1625,9 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[3].completions
-                let s = new Decimal(3e6)
+                let s = new Decimal(1.8e6)
 
-                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(Math.pow(5, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))
@@ -1690,9 +1690,9 @@
             },
             getTimeReq() {
                 let completions = player.wel.fountains[4].completions
-                let s = new Decimal(1e8)
+                let s = new Decimal(7.2e7)
 
-                if (!hasUpgrade("wel", 42)) s = s.mul(completions.add(1));
+                if (!hasUpgrade("wel", 42)) s = s.mul(completions.mul(0.25).add(1));
                 s = s.mul(completions.pow_base(Math.pow(4, 1.0625)))
                 if (completions.gte(400)) {
                     s = s.pow(completions.sub(400).div(400).add(1))

@@ -202,6 +202,8 @@ addLayer("ep2", {
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sp", 33))
         if (hasUpgrade("ev8", 21)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(1.4)
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sme", 113))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep1", 17))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep1", 104))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
 

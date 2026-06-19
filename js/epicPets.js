@@ -52,6 +52,8 @@
             if (hasUpgrade("ep2", 11)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(upgradeEffect("ep2", 11))
             player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("sp", 13))
             player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("sme", 113))
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("ep1", 17))
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("ep1", 105))
         }
 
         player.ep0.timers[0].max = new Decimal(60)

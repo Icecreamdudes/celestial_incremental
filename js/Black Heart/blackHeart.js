@@ -1341,6 +1341,7 @@ addLayer("bh", {
         player.bh.baseMult = new Decimal(1)
         if (hasUpgrade("depth1", 101)) player.bh.baseMult = player.bh.baseMult.mul(1.05)
         player.bh.baseMult = player.bh.baseMult.mul(buyableEffect("darkTemple", 1011))
+        if (player.ep1.dragonEvolutionIndex >= 3) player.bh.baseMult = player.bh.baseMult.mul(1.05);
 
 
         // =-- HEALTH STUFF --= //

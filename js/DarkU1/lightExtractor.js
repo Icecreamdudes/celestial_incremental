@@ -105,6 +105,7 @@
         if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
 
         player.le.starmetalAlloyValue = new Decimal(1)
+        player.le.starmetalAlloyValue = player.le.starmetalAlloyValue.mul(buyableEffect("ep1", 15))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -130,6 +131,7 @@
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("st", 310)[0])
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(player.dt.timeEnergyEffect)
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("ep1", 15))
 
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.floor()
 

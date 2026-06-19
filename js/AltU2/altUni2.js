@@ -50,6 +50,7 @@
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("cof", 29)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("fa", 16)).floor()
+        if (player.ep1.dragonEvolutionIndex >= 4) player.au2.starsToGet = player.au2.starsToGet.mul(3);
 
         //Star Softcap
         player.au2.starSoftcapStart = new Decimal(1e6)

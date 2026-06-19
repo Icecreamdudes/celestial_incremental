@@ -882,7 +882,7 @@
                     ], {width: "158px", height: "50px", background: "black", border: "2px solid #D3173A", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
-                    ["raw-html", () => { return "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (+" + format(player.s.pylonEnergyPerSecond) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.s.pylonBuilt ? "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (+" + format(player.s.pylonEnergyPerSecond) + "/s)." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation gain by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],

@@ -83,6 +83,11 @@
             player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
             player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
         }
+        if (player.ep1.dragonEvolutionIndex >= 6) {
+            player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(1.1)
+            player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(1.1)
+            player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(1.1)
+        }
 
         if (hasUpgrade("s", 12)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(Decimal.mul(player.om.diceMasteryPointsToGet.mul(delta), 0.04))
         if (hasUpgrade("s", 12)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(Decimal.mul(player.om.rocketFuelMasteryPointsToGet.mul(delta), 0.04))

@@ -2342,11 +2342,11 @@ const makeWellFountain = function (id, effectIsWhole) {
                     ], {background: "#4d9973", borderRadius: "0 10px 0px 0px", width: "200px", height:"25px"}],
                     ["blank", "3px"],
                     ["style-row", [
-                        ["hoverless-clickable", id + 1000],
+                        ["hoverless-clickable", id + 2000],
                         ["style-row", [
                             ["blank", "3px", {width: "3px"}],
                         ], {display: layers.wel.fountains[id].canAuto() ? "" : "none !important"}],
-                        ["hoverless-clickable", id + 2000],
+                        ["hoverless-clickable", id + 3000],
                     ], {height: "45px"}]
                 ], {background: "#336659", border: "3px solid #336659", borderRadius: "0 10px 0px 0px", width: "200px", height: "150px"}],
                 ["style-column", [

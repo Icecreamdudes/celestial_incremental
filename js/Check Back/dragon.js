@@ -17,32 +17,32 @@ const DRAGONS = {
     3: {
         name: "Dark Dragon",
         id: "matossian",
-        bonusInfo: "x6 Gold<br>x3 Radiation<br>+0.01 Gold Buyable Base<br>+10% Characters' Base Stats",
+        bonusInfo: "x6 Gold<br>x3 Radiation<br>+0.01 Gold Buyable Base<br>+5% Characters' Base Stats",
     },
     4: {
         name: "Space Dragon",
         id: "space",
-        bonusInfo: "x18 Gold<br>x3 Radiation<br>+0.01 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP",
+        bonusInfo: "x18 Gold<br>x3 Radiation<br>+0.01 Gold Buyable Base<br>+5% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP",
     },
     5: {
         name: "Core Dragon",
         id: "core",
-        bonusInfo: "x18 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP",
+        bonusInfo: "x18 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+5% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP",
     },
     6: {
         name: "Otherworldly Dragon",
         id: "otherworldly",
-        bonusInfo: "x18, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.25 Mastery Point Effects",
+        bonusInfo: "x18, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+5% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.1 Mastery Point Effects",
     },
     7: {
         name: "Hex Dragon",
         id: "hex",
-        bonusInfo: "x126, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.25 Mastery Point Effects<br>x7 Hex Power",
+        bonusInfo: "x126, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+5% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.1 Mastery Point Effects<br>x7 Hex Power",
     },
     8: {
         name: "Anti-Dragon",
         id: "anti",
-        bonusInfo: "x42, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+10% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.15 Mastery Point Effects<br>x7 Hex Power<br>x3 Fire<br>x3 Magic",
+        bonusInfo: "x42, ^1.025 Gold<br>x3 Radiation<br>+0.02 Gold Buyable Base<br>+5% Characters' Base Stats<br>x3 Stars<br>x3 Check Back XP<br>^1.1 Mastery Point Effects<br>x7 Hex Power<br>x3 Fire<br>x3 Magic",
     },
 }
 addLayer("ep1", {
@@ -86,6 +86,7 @@ addLayer("ep1", {
 
         platinumShards: new Decimal(0),
         platinumShardPity: new Decimal(0),
+        platinumSCMult: new Decimal(1),
 
         platinumTimers: {
             0: {
@@ -108,6 +109,7 @@ addLayer("ep1", {
         goldBuyableBase: new Decimal(1.01),
 
         upgrade201Effect: new Decimal(1),
+        upgrade203Effect: new Decimal(1),
 
         magic: new Decimal(0),
         baseMagicToGet: new Decimal(0),
@@ -147,6 +149,7 @@ addLayer("ep1", {
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 206))
         if (hasUpgrade("ev8", 21)) player.ep1.goldToGet = player.ep1.goldToGet.mul(1.4)
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("sme", 113))
+        player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 17))
 
         if (player.ep1.dragonEvolutionIndex >= 6) player.ep1.goldToGet = player.ep1.goldToGet.pow(1.025);
 
@@ -171,17 +174,28 @@ addLayer("ep1", {
         player.ep1.goldTimers[0].platinumSC = new Decimal(0.01)
         player.ep1.goldTimers[1].platinumSC = new Decimal(0.05)
         player.ep1.goldTimers[2].platinumSC = new Decimal(0.25)
+        player.ep1.platinumTimers[0].base = new Decimal(1)
+        player.ep1.platinumTimers[1].base = new Decimal(2)
+        player.ep1.platinumTimers[2].base = new Decimal(3)
+        
+        player.ep1.platinumSCMult = new Decimal(1)
+        player.ep1.platinumSCMult = player.ep1.platinumSCMult.mul(buyableEffect("ep1", 203))
         
         for (let i in player.ep1.goldTimers) {
             player.ep1.goldTimers[i].max = player.ep1.goldTimers[i].max.div(buyableEffect("pet", 6))
             player.ep1.goldTimers[i].max = player.ep1.goldTimers[i].max.div(player.ep1.upgrade201Effect)
 
             player.ep1.goldTimers[i].current = player.ep1.goldTimers[i].current.sub(onepersec.mul(delta))
+
+            player.ep1.goldTimers[i].platinumSC = player.ep1.goldTimers[i].platinumSC.mul(player.ep1.platinumSCMult)
         }
         for (let i in player.ep1.platinumTimers) {
             player.ep1.platinumTimers[i].max = player.ep1.platinumTimers[i].max.div(buyableEffect("pet", 6))
 
             player.ep1.platinumTimers[i].current = player.ep1.platinumTimers[i].current.sub(onepersec.mul(delta))
+
+            player.ep1.platinumTimers[i].base = player.ep1.platinumTimers[i].base.mul(player.ep1.platinumSCMult)
+            player.ep1.platinumTimers[i].base = player.ep1.platinumTimers[i].base.floor()
         }
         if (player.ep1.platinumShardPity.gte(100)) {
             player.ep1.platinumShards = player.ep1.platinumShards.add(player.ep1.platinumShardPity.div(100).floor())
@@ -192,7 +206,7 @@ addLayer("ep1", {
         player.ep1.goldBuyableBase = new Decimal(1.01)
         if (player.ep1.dragonEvolutionIndex >= 2) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.01);
         if (player.ep1.dragonEvolutionIndex >= 5) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.01);
-        player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(buyableEffect("ep1", 102))
+        player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(buyableEffect("ep1", 102).sub(1))
         if (hasUpgrade("ep1", 204)) player.ep1.goldBuyableBase = player.ep1.goldBuyableBase.add(0.005);
 
         // FIRE GAIN
@@ -219,6 +233,13 @@ addLayer("ep1", {
         // OTHER EFFECTS
 
         player.ep1.upgrade201Effect = player.sma.starmetalAlloy.add(1).log10().pow(1.25).div(10).add(1)
+        player.ep1.upgrade203Effect = getBuyableAmount("ep1", 201)
+        .add(getBuyableAmount("ep1", 202))
+        .add(getBuyableAmount("ep1", 203))
+        .add(getBuyableAmount("ep1", 204))
+        .add(getBuyableAmount("ep1", 205))
+        .add(getBuyableAmount("ep1", 206))
+        .pow_base(1.01)
 
         player.ep1.upgrade301Effect = player.ep1.fire.add(1).log10().pow(0.5).pow_base(10).div(100).add(1)
         player.ep1.upgrade302Effect = player.cbs.ascensionShards.div(10).add(1)
@@ -251,7 +272,7 @@ addLayer("ep1", {
     clickables: {
         1: {
             display() {
-                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>1%</div>"
+                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>" + formatSimple(player.ep1.goldTimers[0].platinumSC.mul(100)) + "%</div>"
                 if (this.canClick()) {
                     return text + "<h2>+" + format(player.ep1.goldToGet.mul(player.ep1.goldTimers[0].base)) + " Gold.</h2>"
                 } else {
@@ -285,7 +306,7 @@ addLayer("ep1", {
         },
         2: {
             display() {
-                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>5%</div>"
+                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>" + formatSimple(player.ep1.goldTimers[1].platinumSC.mul(100)) + "%</div>"
                 if (this.canClick()) {
                     return text + "<h2>+" + format(player.ep1.goldToGet.mul(player.ep1.goldTimers[1].base)) + " Gold.</h2>"
                 } else {
@@ -319,7 +340,7 @@ addLayer("ep1", {
         },
         3: {
             display() {
-                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>25%</div>"
+                let text = "<div class='bottomTooltip', style='border:0px'>Platinum Shard Rarity:<br>" + formatSimple(player.ep1.goldTimers[2].platinumSC.mul(100)) + "%</div>"
                 if (this.canClick()) {
                     return text + "<h2>+" + format(player.ep1.goldToGet.mul(player.ep1.goldTimers[2].base)) + " Gold.</h2>"
                 } else {
@@ -354,7 +375,7 @@ addLayer("ep1", {
         4: {
             display() {
                 if (this.canClick()) {
-                    return "<h2>+1 Platinum Shard.</h2>"
+                    return "<h2>+" + formatWhole(player.ep1.platinumTimers[0].base) + " Platinum Shard.</h2>"
                 } else {
                     return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[0].current) + ".</h2>"
                 }
@@ -380,7 +401,7 @@ addLayer("ep1", {
         5: {
             display() {
                 if (this.canClick()) {
-                    return "<h2>+2 Platinum Shards.</h2>"
+                    return "<h2>+" + formatWhole(player.ep1.platinumTimers[1].base) + " Platinum Shards.</h2>"
                 } else {
                     return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[1].current) + ".</h2>"
                 }
@@ -406,7 +427,7 @@ addLayer("ep1", {
         6: {
             display() {
                 if (this.canClick()) {
-                    return "<h2>+3 Platinum Shards.</h2>"
+                    return "<h2>+" + formatWhole(player.ep1.platinumTimers[2].base) + " Platinum Shards.</h2>"
                 } else {
                     return "<h2>Check back in " + formatTime(player.ep1.platinumTimers[2].current) + ".</h2>"
                 }
@@ -481,7 +502,7 @@ addLayer("ep1", {
             }
         },
         13: {
-            display() { return "<h2>Embed ancient machinery into your dragon.</h2><br>Boosts all character's base stats by +10%, and double gold gain.<br>Requires 10,000 Fire, 100 Evolution Shards, <s>and a max level core</s>."},
+            display() { return "<h2>Embed ancient machinery into your dragon.</h2><br>Boosts all character's base stats by +5%, and double gold gain.<br>Requires 10,000 Fire, 100 Evolution Shards, <s>and a max level core</s>."},
             canClick() {
                 let t = false
                 if (player.ma.matosDefeated) t = true;
@@ -562,7 +583,7 @@ addLayer("ep1", {
             }
         },
         16: {
-            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.15.<br>Requires e15 gold, 25 platinum shards, and 1 shard of ascension."},
+            display() { return "<h2>Infuse your dragon with otherworldly powers.</h2><br>Boosts gold gain by ^1.025 and mastery point effects by ^1.1.<br>Requires e15 gold, 25 platinum shards, and 1 shard of ascension."},
             canClick() { return player.ep1.gold.gte(1e15) && player.ep1.platinumShards.gte(25) },
             unlocked() { return player.ep1.dragonEvolutionIndex == 5 },
             onClick() { player.ep1.dragonEvolutionIndex = 6 },
@@ -789,7 +810,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Flaming Core (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Fiery Core (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
                 return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e3) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
@@ -1126,7 +1147,7 @@ addLayer("ep1", {
             pay(amt) { player.ep1.fire = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.001)
-                return eff
+                return eff.add(1)
             },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
@@ -1135,7 +1156,7 @@ addLayer("ep1", {
                 return "Mountains of Gold (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Add +' + format(tmp[this.layer].buyables[this.id].effect, 3) + ' to the gold buyable base.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                return 'Add +' + format(tmp[this.layer].buyables[this.id].effect.sub(1), 3) + ' to the gold buyable base.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Fire'
             },
             buy(mult) {
@@ -1375,7 +1396,7 @@ addLayer("ep1", {
                 return "Gold Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts gold gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                return 'Boosts gold gain by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1423,7 +1444,7 @@ addLayer("ep1", {
                 return "Fire Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                return 'Boosts fire gain by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1461,7 +1482,7 @@ addLayer("ep1", {
             currency() { return player.ep1.platinumShards},
             pay(amt) { player.ep1.platinumShards = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.05).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
                 return eff
             },
             unlocked() { return true },
@@ -1471,7 +1492,7 @@ addLayer("ep1", {
                 return "Platinum Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts platinum shard chance by x' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                return 'Boosts platinum shard chance by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1519,7 +1540,7 @@ addLayer("ep1", {
                 return "Gold Transformation II (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts gold gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                return 'Boosts gold gain by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1567,7 +1588,7 @@ addLayer("ep1", {
                 return "Fire Transformation II (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts fire gain by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' +'\n\
+                return 'Boosts fire gain by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1615,7 +1636,7 @@ addLayer("ep1", {
                 return "Epic Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts the first 6 epic pet currencies by x' + format(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
+                return 'Boosts the first 6 epic pet currencies by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {
@@ -1809,7 +1830,7 @@ addLayer("ep1", {
                 return "Buyable Squared"
             },
             description() {
-                return "Boost gold gain by x1.02 for each platinum buyable level."
+                return "Boost gold gain by x1.01 for each platinum buyable level."
             },
             unlocked() { return true },
             cost: new Decimal(32),
@@ -1818,8 +1839,11 @@ addLayer("ep1", {
             currencyInternalName: "platinumShards",
             fullDisplay() {
                 return "<span style='font-size:16px;line-height:1'>" + this.title() + "</span><br><span style='font-size:10px'>"
-                + this.description()
+                + this.description() + " (x" + formatSimple(this.effect(), 2) + ")"
                 + "<br>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>"
+            },
+            effect() {
+                return player.ep1.upgrade203Effect
             },
             style() {
                 let look = {backgroundColor: "#bfbfbf", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", borderRadius: "0px", textAlign: "left", width: '292px', maxHeight: '85.5px', minHeight: '85.5px', paddingLeft: "8px", paddingRight: "8px"}
@@ -2159,7 +2183,7 @@ addLayer("ep1", {
                                                 return text
                                             }, {color: "#1f1f1f", fontSize: "18px"}],
                                             ["raw-html", () => {
-                                                return "<div class='bottomTooltip'><small>Obtained from gold buttons<br>Pity: " + format(player.ep1.platinumShardPity) + "/100</small></div>"
+                                                return "<div class='bottomTooltip'><small>Obtained from gold buttons<br>Pity: " + formatSimple(player.ep1.platinumShardPity) + "/100</small></div>"
                                             }],
                                         ]]
                                     ], {height: "25px"}],

@@ -95,6 +95,7 @@
 
         //tickspeed
         player.uni["D1"].tickspeed = new Decimal(1)
+        if (hasMilestone("db", 19)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.db.milestone9Effect)
         player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.dt.timeCapsuleEffect)
         player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(buyableEffect("dt", 14))
         if (getLevelableTier("pu", 309, true)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(levelableEffect("pu", 309)[0])

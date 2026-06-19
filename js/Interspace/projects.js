@@ -389,7 +389,7 @@
     bars: {},
     upgrades: {},
     buyables: {
-        11: {
+        101: {
             costBase() { return new Decimal(1e8) },
             costGrowth() { return new Decimal(1.25) },
             purchaseLimit() { return new Decimal(500) },
@@ -424,7 +424,7 @@
             style: { width: '240px', height: '180px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #595A5C 0%, #9c9c9c 100%)" },
             progressColor: "#9c9c9c",
         },
-        12: {
+        102: {
             costBase() { return new Decimal(8e8) },
             costGrowth() { return new Decimal(1.3) },
             purchaseLimit() { return new Decimal(500) },
@@ -459,7 +459,7 @@
             style: { width: '240px', height: '180px', color: "white", border: "2px solid #000000bf", backgroundImage: "linear-gradient(120deg, #595A5C 0%, #9c9c9c 100%)" },
             progressColor: "#9c9c9c",
         },
-        13: {
+        103: {
             costBase() { return new Decimal(6.4e9) },
             costGrowth() { return new Decimal(1.35) },
             purchaseLimit() { return new Decimal(500) },
@@ -1625,7 +1625,7 @@
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Passive effect: Boosts dark celestial point gain by ^" + format(player.prj.pylonPassiveEffect, 4) + " (Based on starlight)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.prj.pylonBuilt ? "Your technological pylon is tier " + formatWhole(player.prj.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.prj.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["blank", "10px"],
-                    ["row", [["rounded-ex-buyable", 11], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 12], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 13],]], 
+                    ["row", [["rounded-ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 103],]], 
                     ["blank", "10px"],
                     ["clickable", 202],
                 ],

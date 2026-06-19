@@ -539,6 +539,10 @@ addLayer("pet", {
             },
         },
         eclipsePity: 0,
+        
+
+        eclipseTimerTickspeedDivisor: new Decimal(1),
+        eclipseTimerTickspeedMultiplier: new Decimal(1),
     }},
     nodeStyle() {},
     tooltip: "Pets",
@@ -740,17 +744,21 @@ addLayer("pet", {
 
         if (getLevelableTier("pu", 303, true)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[0])
         
-        let abilityTimeDecrease = new Decimal(1)
-        abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
-        if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.div(player.dgj.milestone3Effect)
-        if (hasUpgrade("sma", 206)) abilityTimeDecrease = abilityTimeDecrease.div(1.2)
-        abilityTimeDecrease = abilityTimeDecrease.div(buyableEffect("dt", 13))
-        if (hasMilestone("db", 17)) abilityTimeDecrease = abilityTimeDecrease.div(2)
-        if (hasMilestone("db", 106)) abilityTimeDecrease = abilityTimeDecrease.div(2)
-        if (hasMilestone("prj", 109)) abilityTimeDecrease = abilityTimeDecrease.div(1.5)
-        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
-        abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("st", 309)[0])
+        player.pet.eclipseTimerTickspeedDivisor = new Decimal(1)
+        if (getLevelableTier("pu", 303, true)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("pu", 303)[0])
+        if (hasMilestone("dgj", 16)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(player.dgj.milestone3Effect)
+        if (hasUpgrade("sma", 206)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(1.2)
+        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(buyableEffect("dt", 13))
+        if (hasMilestone("db", 17)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(2)
+        if (hasMilestone("db", 18)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(player.db.milestone8Effect)
+        if (hasMilestone("db", 106)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(2)
+        if (hasMilestone("prj", 109)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(1.5)
+        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("st", 309)[0])
+
+        player.pet.eclipseTimerTickspeedMultiplier = new Decimal(1)
+        player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(player.dv.timeDrainRate)
+
+        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(player.pet.eclipseTimerTickspeedMultiplier.div(player.pet.eclipseTimerTickspeedDivisor).mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
 

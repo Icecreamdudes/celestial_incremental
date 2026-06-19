@@ -19,6 +19,8 @@
         milestone1Effect: new Decimal(1),
         milestone2Effect: new Decimal(1),
         milestone4Effect: new Decimal(1),
+        milestone8Effect: new Decimal(1),
+        milestone9Effect: new Decimal(1),
 
         permaMilestone4Effect: new Decimal(1),
 
@@ -76,6 +78,8 @@
         player.db.milestone1Effect = Decimal.pow(100, player.db.boosters.pow(0.75))
         player.db.milestone2Effect = player.du.points.add(1).pow(0.15).div(30).add(1)
         player.db.milestone4Effect = player.db.boosters.sub(11).max(0).pow(0.666).pow_base(2.5)
+        player.db.milestone8Effect = player.sma.starmetalAlloy.div(1e10).add(1).log(10).pow(2).div(50).add(1)
+        player.db.milestone9Effect = player.pet.eclipseTimerTickspeedDivisor
 
         player.db.permaMilestone4Effect = player.db.bestBoosters.sub(12).pow(0.35).div(10).add(1)
     },
@@ -135,7 +139,7 @@
     buyables: {},
     milestones: {
         11: {
-            effectDescription() { return "Boosters divide the eclipse shard requirement<br>Currently: /" + format(player.db.milestone1Effect) + "." },
+            effectDescription() { return "Boosters divide the eclipse shard requirement.<br>Currently: /" + format(player.db.milestone1Effect) + "." },
             done() { return player.db.boosters.gte(1) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
@@ -144,7 +148,7 @@
             },
         },
         12: {
-            effectDescription() { return "Point gain is boosted by itself<br>Currently: x" + format(player.db.milestone2Effect) + "." },
+            effectDescription() { return "Point gain is boosted by itself.<br>Currently: x" + format(player.db.milestone2Effect) + "." },
             done() { return player.db.boosters.gte(3) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
@@ -162,7 +166,7 @@
             },
         },
         14: {
-            effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters<br>Currently: x" + format(player.db.milestone4Effect) + "." },
+            effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters.<br>Currently: x" + format(player.db.milestone4Effect) + "." },
             unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(1)},
             done() { return player.db.boosters.gte(12) && getBuyableAmount("sme", 161).gte(1) },
             style() {
@@ -193,6 +197,24 @@
         17: {
             effectDescription() { return "/2 to the eclipse timer tickspeed." },
             done() { return player.db.boosters.gte(45) && player.ir.iriditeDefeated },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        18: {
+            effectDescription() { return "Starmetal alloy reduces the eclipse timer tickspeed.<br>Currently: /" + format(player.db.milestone8Effect) + "." },
+            done() { return player.db.boosters.gte(90) && player.lightRift.interspaceUnlocked },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        19: {
+            effectDescription() { return "Divisors to the eclipse timer tickspeed multiply D1 tickspeed.<br>Currently: x" + format(player.db.milestone9Effect) + "." },
+            done() { return player.db.boosters.gte(100) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -352,6 +374,18 @@
                                 ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
                                 ["titleless-milestone", 17],
                             ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "90", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 18],
+                            ]],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["raw-html", "100", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
+                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ["titleless-milestone", 19],
+                            ]],
                             ], () => {return player.db.milestoneTab == 0 ? {} : {display: "none !important"}}],
 
                             // PERMANENT
@@ -421,6 +455,7 @@
         ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ['blank', '25px'],
     ],
     layerShown() { return hasUpgrade("le", 101) },
     deactivated() { return !player.sma.inStarmetalChallenge},

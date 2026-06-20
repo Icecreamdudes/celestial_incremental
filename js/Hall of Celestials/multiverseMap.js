@@ -1,6 +1,6 @@
 ﻿addLayer("mm", {
     name: "Multiverse Map", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "✶", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "MM", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -195,8 +195,8 @@
                 let look = {position: "relative", top: this.yPos + "px", left: this.xPos + "px", color: universes[this.universeId()].nodeStyle().color, background: universes[this.universeId()].nodeStyle().background, backgroundColor: universes[this.universeId()].nodeStyle().backgroundColor, border: "3px solid " + universes[this.universeId()].nodeStyle().borderColor, width: "100px", minHeight: "100px", fontSize: "32px", borderRadius: "50%"}
                 return look
             },
-            xPos: -900,
-            yPos: -200,
+            xPos: -1000,
+            yPos: 600,
         },
         411: {
             universeId() { return "DS"},
@@ -241,7 +241,7 @@
                                 createMultiverseMapConnection(401, 407),
                                 createMultiverseMapConnection(402, 408),
                                 createMultiverseMapConnection(404, 409),
-                                createMultiverseMapConnection(402, 410),
+                                createMultiverseMapConnection(405, 410),
                                 createMultiverseMapConnection(401, 411),
                             ], {width: "0", height: "0"}],
                             ["style-column", [["clickable", 401]], {width: "0", height: "0"}],

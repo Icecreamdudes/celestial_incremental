@@ -1375,14 +1375,6 @@ addLayer("ev8", {
                     ["clickable", 199],
                 ]
             },
-            "Ascension": {
-                buttonStyle() { return {color: "black", borderColor: "black", backgroundColor: "#4b79ff", borderRadius: "5px"} },
-                unlocked() { return true },
-                content: [
-                    ["blank", "10px"],
-                    ["clickable", 201],
-                ]
-            },
             "Research": {
                 buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", background: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px"} },
                 unlocked() { return true },

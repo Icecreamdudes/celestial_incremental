@@ -1079,7 +1079,7 @@
             },
         },
         "lightWell4_collect": {
-            title() { return "NYI" },//"<h3>Collect</h3> ↻"
+            title() { return "UNFINISHED" },//"<h3>Collect</h3> ↻"
             canClick() { return player.wel.modules[4].time.gte(player.wel.modules[4].maxTime) && false},
             unlocked() { return true },
             onClick() {
@@ -1806,7 +1806,7 @@
                 unlocked() { return hasUpgrade("wel", 11) },
                 content() {
                     let look = [
-                        ["blank", "0px"],
+                        ["style-column", [], {width: "0", height: "0"}],
                         ["style-column", [
                             ["style-column", [
                                 ["blank", "25px"],

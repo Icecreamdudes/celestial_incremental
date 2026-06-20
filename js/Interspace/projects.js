@@ -711,7 +711,7 @@
             onComplete() {
                 doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>...</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -922,7 +922,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>The blueshift effect applies to prisms.</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -943,7 +943,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>x1.5 prism gain every 4 OoM of prisms.</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -1030,7 +1030,7 @@
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) || true },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1523,6 +1523,8 @@
 
                 s = completions.pow(0.85).pow_base(1.15)
 
+                s = s.pow(buyableEffect("sme", 194))
+
                 return s
             },
             getTimeReq() {
@@ -1570,6 +1572,8 @@
                 let completions = player.prj.modules[2].completions
 
                 s = completions.pow(0.85).pow_base(1.25)
+
+                s = s.pow(buyableEffect("sme", 194))
 
                 return s
             },
@@ -1619,6 +1623,8 @@
 
                 s = completions.pow(0.85).pow_base(1.2)
 
+                s = s.pow(buyableEffect("sme", 194))
+
                 return s
             },
             getTimeReq() {
@@ -1666,6 +1672,8 @@
                 let completions = player.prj.modules[4].completions
 
                 s = completions.pow(0.85).pow_base(7)
+
+                s = s.pow(buyableEffect("sme", 194))
 
                 return s
             },

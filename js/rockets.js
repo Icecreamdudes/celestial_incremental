@@ -94,6 +94,7 @@
 
         player.ro.activatedFuelToGet = player.ro.activatedFuelContributions[0].mul(player.ro.activatedFuelContributions[1]).mul(player.ro.activatedFuelContributions[2]).mul(player.ro.activatedFuelContributions[3])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[1])
+        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 1209)[1])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("sme", 151))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
@@ -110,7 +111,6 @@
 
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[2]).floor()
-        player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 1209)[1]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("sme", 151))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)

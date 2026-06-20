@@ -4752,7 +4752,7 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return player.wel.modules[1].completions.gte(50) },
+            trigger() {return player.wel.modules[1].completions.gte(50) && false },
             dialogue: [
                 { text: "Another well lights up on the corner to your right. Meanwhile, Bumpy inspects the one to your left." },
                 { text: "I think this one's broken. Would you like to help me fix it?", portrait: "resources/bumpy.png" },
@@ -4770,7 +4770,7 @@
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
             background: "linear-gradient(135deg, #2e152e 0%, #384038 100%)",
-            trigger() {return player.tab == "prj" },
+            trigger() {return player.tab == "prj" && false },
             dialogue: [
                 { text: "Brace yourself.", portrait: "resources/bumpy.png" },
                 { text: "Bumpy points at the plaza's center. His finger projects a beam of light into the prism." },

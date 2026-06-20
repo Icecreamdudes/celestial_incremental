@@ -2175,7 +2175,7 @@
                 player.prj.storedTimeCapsules = this.currency()[0].sub(amt)
                 player.sme.starmetalEssence = this.currency()[1].sub(amt2)
             },
-            effect(x) {return getBuyableAmount(this.layer, this.id).div(10).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
             unlocked() {return player.lightRift.interspaceUnlocked},
             branches: [[105, "#3d996b"]],
             cost(x) {
@@ -2186,7 +2186,7 @@
             },
             display() {
                 return "<h3>SME-J1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Increase project speed by +10%.\n\
+                    Increase project speed by +5%.\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.prj.storedTimeCapsules) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Stored Time Capsules\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
@@ -2202,8 +2202,8 @@
             },
         },
         192: {
-            costBase() { return [new Decimal(1e12), new Decimal(8e7)] },
-            costGrowth() { return [new Decimal(10000), new Decimal(1.4)] },
+            costBase() { return [new Decimal(1e22), new Decimal(1e8)] },
+            costGrowth() { return [new Decimal(1000), new Decimal(1.5)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.sb.storedSpaceEnergy, player.sme.starmetalEssence]},
             pay(amt, amt2) {

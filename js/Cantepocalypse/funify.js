@@ -1,6 +1,6 @@
 ﻿addLayer("fu", {
     name() {
-        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
+        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, the Celestial of Fun"
     }, // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
         return !player.fu.jocusCelestialActivate ? "Fu" : "☻"
@@ -129,7 +129,7 @@
         };
     },
     tooltip() {
-        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
+        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, the Celestial of Fun"
     },
     color: "#fcff04",
     branches: ["oi", 'gs'],

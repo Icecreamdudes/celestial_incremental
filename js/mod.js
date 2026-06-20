@@ -990,18 +990,18 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<h3>v1.14 - The Interspace Update Part I: Wells of Light</h3><br>
 		Content:<br>
-			- Added universe δ.<br>
+			- Added universe δ.<span style="color:yellow"> [WIP]</span><br>
 			- Remade the dragon pet.<br>
-			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<br>
+			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<span style="color:yellow"> [WIP]</span><br>
 			- Added a pet evolution that allows progressing through iridite content without entering space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
-			- Added space zone IV.<br>
+			- Added space zone IV.<span style="color:yellow"> [WIP]</span><br>
 			- Added a ship.<br>
 			- Added more star tree upgrades.<span style="color:yellow"> [WIP]</span><br>
-			- Revamped the check back shrine.<br>
+			- Revamped the check back shrine.<span style="color:yellow"> [WIP]</span><br>
 			- Added two check back blessings.<br>
 			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
 			- Added an ascension pet.<span style="color:yellow"> [WIP]</span><br>
-			- Added five punchcards.<br>
+			- Added four punchcards.<br>
 			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
 		<br>QoL:<br>
 			- Remade a lot of check back UI.<br>
@@ -1025,7 +1025,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
-			- Cutscene "DS-Zar-Slot-Spin" now correctly triggers after spinning the slots.<br>
+			- Added "the" to the jocus layer tooltip.<br>
 		<br>
 
 	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br><br>

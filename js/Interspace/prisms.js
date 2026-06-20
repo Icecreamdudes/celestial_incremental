@@ -256,8 +256,7 @@
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
-        //player.pri.prismsToGet = player.pri.prismsToGet.mul(player.wel.light.add(1).log(10).div(25).pow(4).div(4).add(1).pow(2))
-        if (!hasMilestone("prj", 207)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.prj.milestone207Effect);
+        //if (hasMilestone("prj", 206)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.blu.blueshiftEffect);
         if (hasAchievement("achievements", 1214)) player.pri.prismsToGet = player.pri.prismsToGet.mul(1.2);
 
         player.pri.prismsToGet = player.pri.prismsToGet.floor()

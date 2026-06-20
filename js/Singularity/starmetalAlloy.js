@@ -11,6 +11,7 @@
 
         starmetalExitTime: new Decimal(0),
         eclipseExitTime: new Decimal(0),
+        exitTimeSpeed: new Decimal(1),
 
         inStarmetalChallenge: false,
 
@@ -123,8 +124,11 @@
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
 
-        player.sma.starmetalExitTime = player.sma.starmetalExitTime.add(delta)
-        player.sma.eclipseExitTime = player.sma.eclipseExitTime.add(delta)
+        player.sma.exitTimeSpeed = new Decimal(1)
+        player.sma.exitTimeSpeed = player.sma.exitTimeSpeed.mul(buyableEffect("sme", 193))
+
+        player.sma.starmetalExitTime = player.sma.starmetalExitTime.add(player.sma.exitTimeSpeed.mul(delta))
+        player.sma.eclipseExitTime = player.sma.eclipseExitTime.add(player.sma.exitTimeSpeed.mul(delta))
     },
     clickables: {
         11: {

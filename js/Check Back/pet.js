@@ -4555,7 +4555,7 @@ addLayer("pet", {
             lore() { return "he pilot spaecship." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to ship damage.<br>" +
-                    "x" + format(this.effect()[1]) + " to rocket parts.<br>"
+                    "x" + format(this.effect()[1]) + " to activated fuel.<br>"
             },
             levelLimit() { return new Decimal(10) },
             effect() { 

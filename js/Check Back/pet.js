@@ -5620,7 +5620,7 @@ addLayer("pet", {
                                         case 3:
                                             return "(" + formatWhole(player.pet.singularityFragments) + ")"
                                         case 4:
-                                            return "(" + player.pet.levelables[110][1] + "/" + tmp.pet.levelables[110].xpReq + ")"
+                                            return "(" + formatWhole(player.pet.levelables[110][1]) + "/" + tmp.pet.levelables[110].xpReq + ")"
                                         case 5:
                                             return "(" + player.pet.levelables[210][1] + "/" + tmp.pet.levelables[210].xpReq + ")"
                                         case 6:

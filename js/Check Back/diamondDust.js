@@ -337,12 +337,12 @@ addLayer("ev15", {
                 return "<div style='height:25px;display:flex;align-items:center'><div>" +
                 "<h3>Diamond Dust Upgrade XII</h3>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "Unlock a third row of coin dust buyables.<br>[NOT IMPLEMENTED YET]" + // MIDDLE
+                "Unlock a third row of coin dust buyables (kept on diamond dust reset)." + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "9.00e25 Diamond Dust" + // BOTTOM
+                "9.00e24 Diamond Dust" + // BOTTOM
                 "</div></div>"
             },
-            cost: new Decimal(9e25),
+            cost: new Decimal(9e24),
             currencyInternalName: "diamondDust",
             currencyLayer: "ev15",
             //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},

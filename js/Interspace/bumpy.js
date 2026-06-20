@@ -1411,7 +1411,7 @@
         ["blank", "15px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 401)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 401) || true}
 })
 
 const makeStarlightFountain = function (id, effectIsWhole) {

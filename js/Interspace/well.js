@@ -1079,8 +1079,8 @@
             },
         },
         "lightWell4_collect": {
-            title() { return "<h3>Collect</h3> ↻" },
-            canClick() { return player.wel.modules[4].time.gte(player.wel.modules[4].maxTime)},
+            title() { return "NYI" },//"<h3>Collect</h3> ↻"
+            canClick() { return player.wel.modules[4].time.gte(player.wel.modules[4].maxTime) && false},
             unlocked() { return true },
             onClick() {
                 tickProjects(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).div(2))

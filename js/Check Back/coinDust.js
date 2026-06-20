@@ -63,6 +63,7 @@ addLayer("ev0", {
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(levelableEffect("pet", 110)[1])
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(levelableEffect("pet", 2103)[2])
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(player.ev15.diamondDustEffect)
+        player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(buyableEffect("ev0", 23))
 
         player.ev0.coinShards = player.ev0.coinShards.add(player.ev0.coinShardsPerSecond.mul(delta))
 
@@ -72,10 +73,18 @@ addLayer("ev0", {
         11: {
             costBase() { return new Decimal(0.1) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(200) },
+            purchaseLimit() { 
+                let cap = new Decimal(200) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinDust},
             pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                eff = eff.pow(buyableEffect("ev0", 22))
+                return eff
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -107,10 +116,18 @@ addLayer("ev0", {
         12: {
             costBase() { return new Decimal(0.25) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { 
+                let cap = new Decimal(100) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinDust},
             pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).add(1)
+                eff = eff.pow(buyableEffect("ev0", 22))
+                return eff
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -142,10 +159,18 @@ addLayer("ev0", {
         13: {
             costBase() { return new Decimal(0.6) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { 
+                let cap = new Decimal(100) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinDust},
             pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).add(1)
+                eff = eff.pow(buyableEffect("ev0", 22))
+                return eff
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -177,10 +202,18 @@ addLayer("ev0", {
         14: {
             costBase() { return new Decimal(1.5) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { 
+                let cap = new Decimal(100) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinDust},
             pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).add(1)
+                eff = eff.pow(buyableEffect("ev0", 22))
+                return eff
+            },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -212,7 +245,11 @@ addLayer("ev0", {
         15: {
             costBase() { return new Decimal(6) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { 
+                let cap = new Decimal(50) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.cb.evolutionShards},
             pay(amt) {player.cb.evolutionShards = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01) },
@@ -247,7 +284,11 @@ addLayer("ev0", {
         16: {
             costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { 
+                let cap = new Decimal(50) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.cb.paragonShards},
             pay(amt) {player.cb.paragonShards = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
@@ -282,7 +323,11 @@ addLayer("ev0", {
         17: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { 
+                let cap = new Decimal(50) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinDust},
             pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
@@ -317,7 +362,11 @@ addLayer("ev0", {
         18: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(10) },
+            purchaseLimit() { 
+                let cap = new Decimal(10) 
+                cap = cap.add(buyableEffect("ev0", 21))
+                return cap
+            },
             currency() { return player.ev0.coinShards},
             pay(amt) {player.ev0.coinShards = this.currency().sub(amt)},
             effect(x) { return new Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
@@ -348,6 +397,164 @@ addLayer("ev0", {
                 }
             },
             style: { width: '275px', height: '150px', backgroundColor: "#D79E00", backgroundImage: 'linear-gradient(90deg, #CDA800, #D79E00)'}
+        },
+        21: {
+            costBase() { return new Decimal(1e30) },
+            costGrowth() { return new Decimal(20) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.ev0.coinDust},
+            pay(amt) {player.ev0.coinDust = this.currency().sub(amt)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id)
+                return eff
+            },
+            unlocked() {return hasUpgrade("ev15", 22)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Buyable Cap Extender"
+            },
+            display() {
+                return "which are increasing all previous coin dust buyable caps by +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#B59410", backgroundImage: 'linear-gradient(90deg, #997d0c, #B59410)'}
+        },
+        22: {
+            costBase() { return new Decimal(1e15) },
+            costGrowth() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.ev0.coinShards},
+            pay(amt) {player.ev0.coinShards = this.currency().sub(amt)},
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).plus(1).pow(0.35)
+                return eff
+            },
+            unlocked() {return hasUpgrade("ev15", 22)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "First Row Booster"
+            },
+            display() {
+                return "which are raising first row coin dust buyable effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Shards"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#B59410", backgroundImage: 'linear-gradient(90deg, #997d0c, #B59410)'}
+        },
+        23: {
+            costBase() { return new Decimal(75) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return getLevelableXP("pet", 110)},
+            pay(amt) {
+                setLevelableXP("pet", 110, this.currency().sub(amt))
+            },
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1)
+                return eff
+            },
+            unlocked() {return hasUpgrade("ev15", 22)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Shard Generator F"
+            },
+            display() {
+                return "which are multiplying coin shard gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Coin Fragment Pets"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#B59410", backgroundImage: 'linear-gradient(90deg, #997d0c, #B59410)'}
+        },
+        24: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(15) },
+            currency() { return player.cbs.ascensionShards},
+            pay(amt) {
+                player.cbs.ascensionShards = this.currency().sub(amt)
+            },
+            effect(x) { 
+                let eff = getBuyableAmount(this.layer, this.id).add(1).pow(0.8)
+                return eff
+            },
+            unlocked() {return hasUpgrade("ev15", 22)},
+            cost(x) { 
+                return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+            },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Temporal Pylon Booster"
+            },
+            display() {
+                return "which are multiplying temporal pylon energy by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Shards of Ascension"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', backgroundColor: "#B59410", backgroundImage: 'linear-gradient(90deg, #997d0c, #B59410)'}
         },
     },
     tabFormat: [
@@ -387,6 +594,10 @@ addLayer("ev0", {
         ["blank", "25px"],
         ["style-row", [
             ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18],
+        ], {maxWidth: "1200px"}],
+        ["blank", "25px"],
+        ["style-row", [
+            ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24],
         ], {maxWidth: "1200px"}],
         ["blank", "25px"],
     ],

@@ -147,6 +147,7 @@ addLayer("ep1", {
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 201))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 204))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 206))
+        if (hasUpgrade("ep1", 203)) player.ep1.goldToGet = player.ep1.goldToGet.mul(player.ep1.upgrade203Effect)
         if (hasUpgrade("ev8", 21)) player.ep1.goldToGet = player.ep1.goldToGet.mul(1.4)
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("sme", 113))
         player.ep1.goldToGet = player.ep1.goldToGet.mul(buyableEffect("ep1", 17))
@@ -1636,7 +1637,7 @@ addLayer("ep1", {
                 return "Epic Transformation (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts the first 6 epic pet currencies by x' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.' +'\n\
+                return 'Boosts the first 6 epic pet currencies by x' + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + '.' +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Platinum Shards'
             },
             buy(mult) {

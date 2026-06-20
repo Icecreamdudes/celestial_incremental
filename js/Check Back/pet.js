@@ -1488,7 +1488,7 @@ addLayer("pet", {
         141: {
             title() { return "<img src='resources/antiSingularityEpicPetFragmentFull.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
             canClick: true,
-            unlocked() { return hasUpgrade("bum", 13) || true },
+            unlocked() { return hasUpgrade("bum", 13) },
             onClick() {
                 player.pet.fragShopIndex = 10
             },
@@ -3860,7 +3860,7 @@ addLayer("pet", {
         407: {
             image() { return this.canClick() ? "resources/Pets/goobertEpicPet.png" : "resources/secret.png"},
             title() { return "Goobert" },
-            lore() { return "A starlight-infused house cat that freely roams Bumpy's studio. It gives a superphysical presence similar to that of a celestialite." }, 
+            lore() { return "A starlight-infused house cat that freely roams the pyramid. It gives a superphysical presence similar to that of a celestialite." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to light <small>(based on stars)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to starlight <small>(based on star power)</small>.<br>" +

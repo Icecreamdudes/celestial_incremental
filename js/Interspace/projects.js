@@ -964,7 +964,7 @@
             onComplete() {
                 doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
             },
-            effectDescription() { return "<small>Unlock a time mode for auto-prismatic.</small>" },
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },

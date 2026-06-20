@@ -98,5 +98,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("bum", 44) || true}
+    layerShown() { return player.startedGame == true && hasUpgrade("bum", 44)}
 })

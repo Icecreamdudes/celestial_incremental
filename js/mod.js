@@ -494,7 +494,6 @@ function updateStyles() {
 	        lightRayBackground.remove();
 	    }
 	}
-	console.log(format(player.bh.fadeBackground))
 	if (player.tab === "bh" && player.bh.fadeBackground < 4) {
 	    var fadeBackground = document.getElementById("fade-background");
 	    if (fadeBackground) {

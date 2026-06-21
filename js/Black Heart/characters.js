@@ -147,7 +147,7 @@ BHP.bumpy = {
     color: "#bf6090",
     icon: "resources/bumpyFighting.png",
     health: new Decimal(48),
-    damage: new Decimal(16),
+    damage: new Decimal(12),
     defense: new Decimal(24),
     regen: new Decimal(1),
     agility: new Decimal(4),

@@ -12,7 +12,7 @@
         spaceEnergyToGet: new Decimal(0),
         storedSpaceEnergyToGet: new Decimal(0),
 
-        spaceEnergyPause: new Decimal(0),
+        spaceEnergyResetSafety: false,
 
         //space
         space: new Decimal(0),
@@ -51,9 +51,6 @@
         if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("car", 408)[0])
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("st", 301)[0])
-            
-        player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
-        if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
 
         player.ds.spaceEnergyEffect = player.ds.spaceEnergy.add(1).log(10).pow(1.4).div(25).add(1)
 
@@ -95,16 +92,18 @@
         if (hasUpgrade("laboratory", 15)) player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.div(5).pow(0.8)
         if (hasMilestone("prj", 104)) player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(player.sma.starmetalExitTime.min(21600).div(900).add(1).pow(0.4));
         player.ds.storedSpaceEnergyToGet = player.ds.storedSpaceEnergyToGet.mul(buyableEffect("st", 207))
+
+        player.ds.spaceEnergyResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset previous content for space energy.<br>(based on normality)</h2>" },
-            canClick() { return player.ds.spaceEnergyToGet.gte(1) },
+            canClick() { return player.ds.spaceEnergyToGet.gte(1) && !player.ds.spaceEnergyResetSafety},
             unlocked() { return true },
             onClick() {
-                player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet)
-                player.ds.spaceEnergyPause = new Decimal(6)
+                layers.ds.spaceEnergyReset(true)
+                player.ds.spaceEnergyResetSafety = true
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -114,8 +113,9 @@
             }
         },
     },
-    spaceEnergyReset()
+    spaceEnergyReset(isRewarded = false)
     {
+        if (isRewarded) player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet);
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)

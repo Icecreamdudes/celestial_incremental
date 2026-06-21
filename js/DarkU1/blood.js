@@ -171,13 +171,16 @@
 
         101: {
             title() { return "<h2>Perform a starmetal equivalent reset for blood. (Based on points, decreases with blood)" },
-            canClick() { return player.bl.bloodToGet.gte(1) },
+            canClick() { return player.bl.bloodToGet.gte(1) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.bl.blood = player.bl.blood.add(player.bl.bloodToGet)
 
-                player.le.starmetalAlloyPause = new Decimal(10)
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"

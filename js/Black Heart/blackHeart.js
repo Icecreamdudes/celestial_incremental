@@ -550,7 +550,7 @@ addLayer("bh", {
                     2: "none",
                     3: "none",
                 },
-                usedSP: new Decimal(10),
+                usedSP: new Decimal(16),
                 health: new Decimal(48),
                 damage: new Decimal(12),
                 defense: new Decimal(12),
@@ -632,7 +632,7 @@ addLayer("bh", {
             "bumpy_starbeam": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "bumpy_flashbang": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "bumpy_tunnelVision": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
-            "bumpy_deltaRayBurst": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_deltaRayBurst": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -674,7 +674,7 @@ addLayer("bh", {
 
         // Misc
 
-        fadeBackground: 0,
+        fadeBackground: 4,
     }},
     automate() {},
     nodeStyle() {
@@ -4833,6 +4833,30 @@ addLayer("bh", {
                         ["style-column", [
                             ["style-row", [], () => {return BHS[player.bh.currentStage].timeStagnation ? {height: "66px"} : {display: "none !important"}}],
                             ["clickable", "Celestialite-Icon"],
+                            ["style-column", [
+                                ["style-column", [
+
+                                ], () => {
+                                    let look = {width: "0", height: "0", position: "absolute", top: "0", zIndex: "-2002"}
+                                    if (player.bh.fadeBackground < 4) {
+                                        look.background = "linear-gradient(90deg, #802050 6.25%, #bf6090 0 12.5%, #ffe0f0 0 87.5%, #bf6090 0 93.75%, #802050 0 100%)"
+                                        if (player.bh.fadeBackground < 0.25) {
+                                            look.width = (Math.pow(player.bh.fadeBackground * 4, 0.5) * 250) + "px"
+                                            look.transform = "translate(-" + (Math.pow(player.bh.fadeBackground * 4, 0.5) * 125) + "px)"
+                                        } else if (player.bh.fadeBackground < 3.75) {
+                                            look.width = "250px" 
+                                            look.transform = "translate(-125px)"
+                                        } else {
+                                            look.width = (Math.pow(16 - (player.bh.fadeBackground * 4), 2) * 250) + "px" 
+                                            look.transform = "translate(-" + (Math.pow(16 - (player.bh.fadeBackground * 4), 2) * 125) + "px)"
+                                        }
+                                        look.height = "100%"
+                                    }
+                                    return look
+                                }]
+                            ], () => {
+                                return player.bh.fadeBackground < 4 ? {width: "250px", height: "0"} : {width: "0", height: "0"}
+                            }],
                             ["style-row", [
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.air ? "≋<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has " + formatSimple(Decimal.sub(1, player.bh.celestialite.attributes.air).mul(100)) + "% resistance to<br>melee attacks.</div>" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.warded ? "⬢<div class='bottomTooltip' style='margin-top:0px'>Warded<hr>Has " + formatSimple(Decimal.sub(1, player.bh.celestialite.attributes.warded).mul(100)) + "% resistance to<br>magic attacks.</div>" : ""}, {color: "#ccccff", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],

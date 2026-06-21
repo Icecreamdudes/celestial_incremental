@@ -796,7 +796,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e32),
+            cost: new Decimal(1e33),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",

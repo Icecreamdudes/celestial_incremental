@@ -1593,8 +1593,8 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px"}
-                player.pet.summonIndex.eq(2) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "##f78400"
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
+                player.pet.summonIndex.eq(2) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
                 return look
             },
         },
@@ -3878,7 +3878,7 @@ addLayer("pet", {
             sellValue() { return new Decimal(500)},
             shopLayer() { return "sp" },
             // CLICK CODE
-            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            unlocked() { return hasUpgrade("bum", 13) },
             canClick() { return player.pet.antiSingularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -5296,7 +5296,7 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "629px", height: "40px", backgroundColor: "#eed200", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 501], ["levelable", 502], ["levelable", 503]]],
-                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "630px", background: "repeating-linear-gradient(-45deg, #786a00 0 15px, #998700 0 30px)", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "650px", height: "522px"}],
                     ], {width: "650px", height: "700px", backgroundColor: "#060917"}],

@@ -310,7 +310,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Extreme Forces"
+                return "Intense Forces"
             },
             display() {
                 return "which are boosting the time capsule effect by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\

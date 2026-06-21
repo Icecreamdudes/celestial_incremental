@@ -632,6 +632,7 @@ addLayer("bh", {
             "bumpy_starbeam": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "bumpy_flashbang": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "bumpy_tunnelVision": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_deltaRayBurst": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -670,6 +671,10 @@ addLayer("bh", {
         // General Currencies
         darkEssence: new Decimal(0),
         darkEther: new Decimal(0),
+
+        // Misc
+
+        fadeBackground: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -1240,6 +1245,10 @@ addLayer("bh", {
                     celestialiteSpawn()
                 }
             }
+
+            // Misc
+
+            player.bh.fadeBackground += delta.toNumber()
         }
 
         // =-- Calculate celestialite stats --=
@@ -3057,7 +3066,7 @@ addLayer("bh", {
         "Char-Bumpy": {
             title() {return "<img src='" + run(BHP["bumpy"].icon, BHP["bumpy"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
             canClick: true,
-            unlocked() {return false},
+            unlocked() {return false /*|| true*/},
             onClick() {
                 player.bh.characterSelection = "bumpy"
             },

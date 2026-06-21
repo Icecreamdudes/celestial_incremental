@@ -494,7 +494,36 @@ function updateStyles() {
 	        lightRayBackground.remove();
 	    }
 	}
-
+	console.log(format(player.bh.fadeBackground))
+	if (player.tab === "bh" && player.bh.fadeBackground < 4) {
+	    var fadeBackground = document.getElementById("fade-background");
+	    if (fadeBackground) {
+	        fadeBackground.remove();
+	    }
+	    fadeBackground = document.createElement("div");
+        fadeBackground.id = "fade-background";
+    	fadeBackground.style.position = "fixed";
+	    fadeBackground.style.top = "0";
+        fadeBackground.style.left = "0";
+    	fadeBackground.style.width = "100%";
+	    fadeBackground.style.height = "100%";
+        fadeBackground.style.overflow = "hidden";
+    	fadeBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+		if (player.bh.fadeBackground < 0.25) {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, " + (4 * player.bh.fadeBackground) + ")"; // Fade gradient in
+		} else if (player.bh.fadeBackground < 3.75) {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, 1)"; // solid black
+		} else {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, " + (16 - (4 * player.bh.fadeBackground)) + ")"; // Fade gradient out
+		}
+        document.body.appendChild(fadeBackground);
+    // Add the fade background if it doesn't already exist
+	} else {
+	    const fadeBackground = document.getElementById("fade-background");
+	    if (fadeBackground) {
+	        fadeBackground.remove();
+	    }
+	}
 
 
 	if (!options.performanceMode && player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {

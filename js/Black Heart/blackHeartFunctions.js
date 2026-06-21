@@ -1369,3 +1369,9 @@ function navHealEffect(x, y)
     }, 1, 'normal', {x: x, y: y});
 }
 
+function bumpyUltimateEffect(x, y) {
+    if (typeof options !== 'undefined' && options.toggleParticle === false) return;
+
+    player.bh.fadeBackground = 0
+}
+

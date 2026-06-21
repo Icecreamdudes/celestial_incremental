@@ -7,7 +7,7 @@
     startData() { return {
         unlocked: true,
 
-        timeCapsuleResetSafety: true,
+        timeCapsuleResetSafety: false,
 
         timeCapsules: new Decimal(0),
         timeCapsuleEffect: new Decimal(1),
@@ -71,17 +71,18 @@
         
         // reset cooldown
         
-        player.dt.timeCapsuleResetSafety = true
+        player.dt.timeCapsuleResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h3>Reset previous content, but gain time capsules. (based on clouds)</h3><br>Req: 1e25 Clouds" },
-            canClick() { return player.dt.timeCapsulesToGet.gte(1) && player.dt.timeCapsuleResetSafety },
+            canClick() { return player.dt.timeCapsulesToGet.gte(1) && !player.dt.timeCapsuleResetSafety },
             unlocked() { return true },
             onClick() {
-                player.dt.timeCapsuleResetSafety = false
                 layers.dt.timeCapsuleReset();
+
+                player.dt.timeCapsuleResetSafety = true
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

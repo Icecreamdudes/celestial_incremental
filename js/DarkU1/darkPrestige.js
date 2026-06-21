@@ -10,7 +10,7 @@
         prestigePoints: new Decimal(0),
         prestigePointsEffect: new Decimal(0),
         prestigePointsToGet: new Decimal(0),
-        prestigePause: new Decimal(0),
+        prestigeResetSafety: false,
     }},
     automate() {
         if (hasUpgrade("dn", 11) || hasMilestone("db", 15)) {
@@ -59,11 +59,6 @@
         //post softcap multipliers
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("ds", 101))
 
-        if (player.dp.prestigePause.gte(0)) {
-            layers.dp.prestigeReset();
-        }
-        player.dp.prestigePause = player.dp.prestigePause.sub(1)
-
         player.dp.prestigePointsEffect = player.dp.prestigePoints.pow(0.4).add(1)
 
         player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(buyableEffect("dn", 12)).mul(delta))
@@ -74,17 +69,19 @@
         {
             player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(delta))
         }
+        player.dp.prestigeResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset previous content for prestige points." },
-            canClick() { return player.dp.prestigePointsToGet.gte(1) },
+            canClick() { return player.dp.prestigePointsToGet.gte(1) && !player.dp.prestigeResetSafety},
             unlocked() { return true },
             onClick() {
-                player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet)
-                player.dp.prestigePause = new Decimal(10)
+                layers.dp.prestigeReset(true)
+                player.dp.prestigeResetSafety = true
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #102e67", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -92,7 +89,8 @@
             }
         },
     },
-    prestigeReset() {
+    prestigeReset(isRewarded = false) {
+        if (isRewarded) player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet);
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)

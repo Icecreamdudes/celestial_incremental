@@ -11,7 +11,7 @@
         normalityEffect: new Decimal(1),
         normalityToGet: new Decimal(0), //based on points
 
-        normalityPause: new Decimal(0),
+        normalityResetSafety: false,
 
         nMax: false,
     }},
@@ -52,19 +52,19 @@
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
-        player.dn.normalityPause = player.dn.normalityPause.sub(1)
-        if (player.dn.normalityPause.gte(1)) layers.dn.normalityReset();
+        player.dn.normalityResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset previous content except grass for normality.<br>(Based on points)" },
-            canClick() { return player.dn.normalityToGet.gte(1) },
+            canClick() { return player.dn.normalityToGet.gte(1) && !player.dn.normalityResetSafety },
             unlocked() { return true },
             onClick() {
-                player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
-                player.dn.normalityPause = new Decimal(10)
+                layers.dn.normalityReset(true)
+                player.dn.normalityResetSafety = true
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #c1df00", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -72,7 +72,8 @@
             }
         },
     },
-    normalityReset() {
+    normalityReset(isRewarded = false) {
+        if (isRewarded) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet);
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)

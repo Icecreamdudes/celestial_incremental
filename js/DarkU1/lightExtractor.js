@@ -14,6 +14,8 @@
         starmetalAlloyPause: new Decimal(0),
         starmetalAlloyPauseAgain: new Decimal(0),
 
+        universeResetSafety: false,
+
         resetAmount: new Decimal(0),
         highestReset: new Decimal(0),
 
@@ -145,7 +147,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
             player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
             if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
@@ -175,22 +177,27 @@
 
             layers.pu.generateSelection();
         }
+        player.le.universeResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset everything in this universe for stored starmetal alloy.<br>Req: " + format(player.le.starmetalAlloyReq) + " Points" },
-            canClick() { return player.du.points.gte(player.le.starmetalAlloyReq) },
+            canClick() { return player.du.points.gte(player.le.starmetalAlloyReq) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.le.resetAmount = player.le.resetAmount.add(1)
                 if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
-                player.le.starmetalAlloyPause = new Decimal(10)
 
                 player.pu.storedSelections = player.pu.storedSelections.add(1)
 
                 player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
+
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -202,7 +209,7 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -237,16 +244,19 @@
         },
         13: {
             title() { return "<h2>Reset everything in this universe for stored eclipse shards.<br>Req: " + format(player.le.eclipseShardsReq) + " Points" },
-            canClick() { return player.du.points.gte(player.le.eclipseShardsReq) },
+            canClick() { return player.du.points.gte(player.le.eclipseShardsReq) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.le.resetAmount = player.le.resetAmount.add(1)
                 if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
-                player.le.starmetalAlloyPause = new Decimal(10)
 
                 player.pu.storedSelections = player.pu.storedSelections.add(1)
 
                 player.le.eclipseShardsToGet = player.le.eclipseShardsToGet.add(player.le.eclipseShardsToGetToGet)
+
+                player.le.universeResetSafety = true
+                
+                layers.le.starmetalReset()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -260,7 +270,7 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
                 player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
                 if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
                 if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(5)) completeAchievement("achievements", 1206);

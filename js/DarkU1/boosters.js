@@ -61,7 +61,8 @@
         player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e8).mul(player.db.boosterReqDivisor).log(4).sub(player.db.boosters).max(0).floor();
         if (player.db.boosters.add(player.db.boosterBulk).gte(3)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).mul(player.db.boosterReqDivisor).log(6).sub(1).root(1.25).add(1).sub(player.db.boosters).max(new Decimal(3).sub(player.db.boosters)).max(0).floor();
         if (player.db.boosters.add(player.db.boosterBulk).gte(7)) player.db.boosterBulk = player.du.points.pow(player.db.boosterReqRoot).add(1).div(1e10).mul(player.db.boosterReqDivisor).log(9).sub(1).root(1.4).add(1).sub(player.db.boosters).max(new Decimal(7).sub(player.db.boosters)).max(0).floor();
-        
+        if (!hasUpgrade("dv", 13)) player.db.boosterBulk = player.db.boosterBulk.min(1);
+
         player.db.boosterReq = player.db.boosterReq.div(player.db.boosterReqDivisor).root(player.db.boosterReqRoot)
         if (player.db.boosters.gte(100)) { 
             player.db.boosterReq = player.db.boosterReq.pow(player.db.boosters.sub(100).mul(0.05).add(1))
@@ -119,13 +120,15 @@
         },
         11: {
             title() { return "<h2>Reset previous content for boosters.<br>Req: " + format(player.db.boosterReq) + " points</h2>" },
-            canClick() { return player.du.points.gte(player.db.boosterReq) },
+            canClick() { return player.du.points.gte(player.db.boosterReq) && !player.dg.generatorResetSafety},
             unlocked() { return true },
             onClick() {
-                hasUpgrade("dv", 13) ? player.db.boosters = player.db.boosters.add(player.db.boosterBulk) : player.db.boosters = player.db.boosters.add(1);
-                player.points = player.points.sub(player.db.boosterReq)
+                player.db.boosters = player.db.boosters.add(player.db.boosterBulk)
+                player.db.boosterBulk = new Decimal(0)
 
-                player.dg.generatorPause = new Decimal(10)
+                player.dg.generatorResetSafety = true
+
+                layers.dg.generatorReset()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

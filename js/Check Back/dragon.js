@@ -506,7 +506,7 @@ addLayer("ep1", {
             display() { return "<h2>Embed ancient machinery into your dragon.</h2><br>Boosts all character's base stats by +5%, and double gold gain.<br>Requires 10,000 Fire, 100 Evolution Shards, <s>and a max level core</s>."},
             canClick() {
                 let t = false
-                if (player.ma.matosDefeated) t = true;
+                if (player.matosLair.milestone[25] >= 1) t = true;
                 for (let i = 0; i > player.co.cores; i++) {
                     if (player.co.cores[i].level.gte(99)) {t = true}
                 }

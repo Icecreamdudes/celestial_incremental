@@ -241,9 +241,9 @@
         },
         103: {
             effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
-            unlocked() { return player.ma.matosDefeated },
-            done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
-            unlocked() {return player.ma.matosDefeated},
+            unlocked() { return player.matosLair.milestone[25] >= 1 },
+            done() { return player.db.bestBoosters.gte(10) && player.matosLair.milestone[25] >= 1 },
+            unlocked() {return player.matosLair.milestone[25] >= 1},
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -252,8 +252,8 @@
         },
         104: {
             effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
-            unlocked() { return player.ma.matosDefeated },
-            done() { return player.db.bestBoosters.gte(15) && player.ma.matosDefeated },
+            unlocked() { return player.matosLair.milestone[25] >= 1 },
+            done() { return player.db.bestBoosters.gte(15) && player.matosLair.milestone[25] >= 1 },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}

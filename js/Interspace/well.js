@@ -310,7 +310,7 @@
         // FOUNTAIN REQ DIVISOR
         player.wel.lightFountainReqDivisor = new Decimal(1)
         player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(player.pri.fountains[3].completionEffect);
-        if (hasAchievement("achievements", 1208)) player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(1.25);
+        if (hasAchievement("achievements", 1209)) player.wel.lightFountainReqDivisor = player.wel.lightFountainReqDivisor.mul(1.25);
 
         // FOUNTAIN PROGRESS
         Object.keys(layers.wel.fountains).forEach(i => {

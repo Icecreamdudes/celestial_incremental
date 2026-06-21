@@ -2202,7 +2202,7 @@
             },
         },
         192: {
-            costBase() { return [new Decimal(1e22), new Decimal(1e8)] },
+            costBase() { return [new Decimal(1e25), new Decimal(1e8)] },
             costGrowth() { return [new Decimal(1000), new Decimal(1.5)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.sb.storedSpaceEnergy, player.sme.starmetalEssence]},

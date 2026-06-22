@@ -4735,7 +4735,7 @@
         "UD-LightWellAlpha": {
             type: "normal",
             portrait: "resources/secret.png",
-            trigger() {return hasUpgrade("wel", 11) },
+            trigger() {return hasUpgrade("wel", 11) && false },
             dialogue: [/*
                 { text: "This city rests upon an enormous reservoir of liquid light rich in superphysical energy.", portrait: "resources/bumpy.png" },
                 { text: "It will remain full for an eternity.", portrait: "resources/bumpy.png" },*/

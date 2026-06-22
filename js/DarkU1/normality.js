@@ -25,9 +25,11 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
+            background: "linear-gradient(180deg, #c1df00 0%, #6a990c 100%)",
+            //background: "linear-gradient(0deg, #2f6608 0%, #86990c 100%)",
             "background-origin": "border-box",
-            "border-color": "#80ff6f",
+            "border-color": "#346608",
+            //"border-color": "#c1df00",
             "color": "#eaf6f7",
         };
     },

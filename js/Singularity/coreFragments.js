@@ -44,8 +44,8 @@
         return {
             background: "linear-gradient(120deg,rgb(128, 24, 11) 0%,rgb(136, 6, 82) 100%)",
             backgroundOrigin: "border-box",
-            borderColor: "#000000",
-            color: "#000000",
+            borderColor: "#2e011b",
+            color: "#2e011b",
         };
     },
     tooltip: "Core Fragments",

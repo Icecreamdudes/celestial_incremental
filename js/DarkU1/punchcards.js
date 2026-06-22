@@ -186,7 +186,7 @@ addLayer("pu", {
             onClick() {
                 setLevelableTier("pu", player.pu.selectedPunchcards[player.pu.selectionIndex], new Decimal(1))
                 player.pu.storedSelections = player.pu.storedSelections.sub(player.pu.selectionCost)
-
+                player.du.noPunchcards = false
                 layers.pu.generateSelection();
             },
             style() {

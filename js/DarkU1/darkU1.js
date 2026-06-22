@@ -12,6 +12,9 @@
         pointSoftcap2: new Decimal(0.1),
         secondSoftcapStart: new Decimal(1.79e308),
         pointGain: new Decimal(0),
+
+        noPunchcards: true,
+        aniciffoSummon: false,
     }},
     automate() {},
     nodeStyle() {
@@ -89,7 +92,6 @@
 
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
-            
         // POST SOFTCAP MULTIPLIERS
         if (getLevelableTier("pu", 100, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 100)[1])
 
@@ -102,6 +104,14 @@
             
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
+        }
+
+        //Conditions for aniciffo unlock (very secret)
+        if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && player.pet.legPetTimers[0].current.lte(30)) {
+            player.du.aniciffoSummon = true
+        } else
+        {
+            player.du.aniciffoSummon = false
         }
 
     },

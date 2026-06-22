@@ -498,9 +498,7 @@
     milestones: {
         // TIME CAPSULES
         101: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock a cloud upgrade in D1 eclipse.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 1 },
@@ -519,9 +517,7 @@
             },
         },
         102: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x2 light well ↻ gain and unlock 1 punchcard per project ↻ up to 5.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 1 },
@@ -540,9 +536,7 @@
             },
         },
         103: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x2 light gain and get a fourth punchcard choice.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 1 },
@@ -561,9 +555,7 @@
             },
         },
         104: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock time-based bonuses to D1 exit rewards.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 1 },
@@ -582,9 +574,7 @@
             },
         },
         105: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Project speed boosts light well speed. (x" + format(player.prj.milestone105Effect) + ")</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 1 },
@@ -603,9 +593,7 @@
             },
         },
         106: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock more time energy buyables.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 1 },
@@ -624,9 +612,7 @@
             },
         },
         107: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 1 },
@@ -645,9 +631,7 @@
             },
         },
         108: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 1 },
@@ -666,9 +650,7 @@
             },
         },
         109: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>/1.5 to the eclipse timer tickspeed.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 1 },
@@ -687,9 +669,7 @@
             },
         },
         110: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Keep boosters on time capsule resets.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 1 },
@@ -708,9 +688,7 @@
             },
         },
         111: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
@@ -729,9 +707,7 @@
             },
         },
         112: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Project speed boosts light gain. (x" + format(player.prj.milestone112Effect) + ")</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 1 },
@@ -750,9 +726,7 @@
             },
         },
         113: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Automate cloud upgrades.</small>" },
             cycleReq() { return new Decimal(15) },
             projectId() { return 1 },
@@ -771,9 +745,7 @@
             },
         },
         114: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Automate cloud buyables.</small>" },
             cycleReq() { return new Decimal(16) },
             projectId() { return 1 },
@@ -792,10 +764,8 @@
             },
         },
         115: {
-            onComplete() {
-                doPopup("none", "Time Capsules<br>is now level " + formatWhole(player.prj.modules[1].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
-            effectDescription() { return "<small>Unlock a legendary punchcard.</small>" },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
+            effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(20) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
@@ -814,9 +784,7 @@
         },
         // PRISMATIC
         201: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock prismatic. Unlock a light fountain automator every primsatic.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 2 },
@@ -835,9 +803,7 @@
             },
         },
         202: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Enable gaining more than one prism on reset.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 2 },
@@ -856,9 +822,7 @@
             },
         },
         203: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Improve the spiral and arrow prismatic fountains. x2 Prism gain.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
@@ -877,9 +841,7 @@
             },
         },
         204: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Retain focus on prismatic.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 2 },
@@ -898,9 +860,7 @@
             },
         },
         205: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Increase focus cap by +1 and x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 2 },
@@ -919,9 +879,7 @@
             },
         },
         206: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
@@ -940,9 +898,7 @@
             },
         },
         207: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 2 },
@@ -961,9 +917,7 @@
             },
         },
         208: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 2 },
@@ -982,9 +936,7 @@
             },
         },
         209: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x1.09 light well speed, do you dare get it before the reset layer?</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 2 },
@@ -1003,9 +955,7 @@
             },
         },
         210: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x1.1 light gain per starshine done. (x" + format(player.prj.milestone210Effect) + ", caps at x100)</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 2 },
@@ -1024,9 +974,7 @@
             },
         },
         211: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 2 },
@@ -1045,9 +993,7 @@
             },
         },
         212: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 2 },
@@ -1066,9 +1012,7 @@
             },
         },
         213: {
-            onComplete() {
-                doPopup("none", "Prismatic<br>is now level " + formatWhole(player.prj.modules[2].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(15) },
             projectId() { return 2 },
@@ -1088,9 +1032,7 @@
         },
         // BLUESHIFT
         301: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock blueshifts. Unlock a pyramid automator every blueshift.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 3 },
@@ -1109,9 +1051,7 @@
             },
         },
         302: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock the fourth row of the pyramid. Increase focus cap by +1.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
@@ -1130,9 +1070,7 @@
             },
         },
         303: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock light well δ.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 3 },
@@ -1151,9 +1089,7 @@
             },
         },
         304: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>δ ↻ boosts light well speed. (x" + format(player.prj.milestone304Effect) + ")</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
@@ -1172,9 +1108,7 @@
             },
         },
         305: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x2 stored time capsules.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
@@ -1193,9 +1127,7 @@
             },
         },
         306: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock auto-blueshift.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 3 },
@@ -1214,9 +1146,7 @@
             },
         },
         307: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 3 },
@@ -1235,9 +1165,7 @@
             },
         },
         308: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 3 },
@@ -1256,9 +1184,7 @@
             },
         },
         309: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>???</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 3 },
@@ -1277,9 +1203,7 @@
             },
         },
         310: {
-            onComplete() {
-                doPopup("none", "Blueshift<br>is now level " + formatWhole(player.prj.modules[3].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock blueshifts for prism wells.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 3 },
@@ -1299,9 +1223,7 @@
         },
         // STARSHINE
         401: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock starshine and Bumpy's journal.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 4 },
@@ -1320,9 +1242,7 @@
             },
         },
         402: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x2 starlight per project ↻ after 1. Keep fountain unlocks on blueshift.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 4 },
@@ -1341,9 +1261,7 @@
             },
         },
         403: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x10 light and always generate 10%. Unlock the fifth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 4 },
@@ -1362,9 +1280,7 @@
             },
         },
         404: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x10 light well ↻ and always generate 1%. Extend the AU2 star trees.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 4 },
@@ -1383,9 +1299,7 @@
             },
         },
         405: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Keep stored SPVs on starshine. Unlock project studies.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 4 },
@@ -1404,9 +1318,7 @@
             },
         },
         406: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock Prism Well ε.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 4 },
@@ -1425,9 +1337,7 @@
             },
         },
         407: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock the sixth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 4 },
@@ -1446,9 +1356,7 @@
             },
         },
         408: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Halve anti-singularity fragment cost and double goobert point gain.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 4 },
@@ -1467,9 +1375,7 @@
             },
         },
         409: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>Unlock the final pyramid fountain. Improve project ↻ effects.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 4 },
@@ -1488,9 +1394,7 @@
             },
         },
         410: {
-            onComplete() {
-                doPopup("none", "Starshine<br>is now level " + formatWhole(player.prj.modules[4].completions) + "!", "Project Level-Up!", 5, "#dfffdf")
-            },
+            requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
             effectDescription() { return "<small>x10 light gain. The grind is on.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 4 },

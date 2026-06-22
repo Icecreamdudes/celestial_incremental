@@ -116,34 +116,13 @@
     spaceEnergyReset(isRewarded = false)
     {
         if (isRewarded) player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet);
-        player.du.points = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
-
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
-
-        player.dg.generators = new Decimal(0)
-        player.dg.generatorPower = new Decimal(0)
-
-        player.dg.buyables[11] = new Decimal(0)
-        player.dg.buyables[12] = new Decimal(0)
-        player.dg.buyables[13] = new Decimal(0)
-        player.dg.buyables[14] = new Decimal(0)
-        player.dg.buyables[15] = new Decimal(0)
-        player.dg.buyables[16] = new Decimal(0)
+        
+        layers.dn.normalityReset()
 
         player.dn.normality = new Decimal(0)
+        player.dn.normalityToGet = new Decimal(0)
+        player.dn.normalityEffect = new Decimal(1)
+
         player.dn.buyables[11] = new Decimal(0)
         player.dn.buyables[12] = new Decimal(0)
         player.dn.buyables[13] = new Decimal(0)
@@ -158,12 +137,22 @@
 
         if (!hasUpgrade("sma", 20)) {
             player.ds.length = new Decimal(1)
+            player.ds.lengthPerSecond = new Decimal(1)
             player.ds.width = new Decimal(1)
+            player.ds.widthPerSecond = new Decimal(1)
             player.ds.depth = new Decimal(1)
+            player.ds.depthPerSecond = new Decimal(1)
             player.ds.spissitude = new Decimal(1)
+            player.ds.spissitudePerSecond = new Decimal(1)
+            player.ds.space = new Decimal(1)
+            player.ds.spaceEffect = new Decimal(1)
         }
 
         player.dgr.grass = new Decimal(0)
+        player.dgr.maxGrass = new Decimal(1)
+        player.dgr.grassValue = new Decimal(0)
+        player.dgr.grassEffect = new Decimal(1)
+        player.dgr.grassEclipseEffect = new Decimal(1)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
             setGridData("dgr", i, new Decimal(0))
 

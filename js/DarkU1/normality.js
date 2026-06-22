@@ -74,25 +74,12 @@
     },
     normalityReset(isRewarded = false) {
         if (isRewarded) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet);
-        player.du.points = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
 
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
+        layers.dg.generatorReset()
 
         player.dg.generators = new Decimal(0)
-        player.dg.generatorPower = new Decimal(0)
+        player.dg.generatorEffect = new Decimal(0)
+        player.dg.generatorsToGet = new Decimal(0)
 
         player.dg.buyables[11] = new Decimal(0)
         player.dg.buyables[12] = new Decimal(0)

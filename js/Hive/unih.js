@@ -74,12 +74,12 @@ addLayer("bee", {
         if (hasUpgrade("al", 216)) player.bee.bps = player.bee.bps.mul(upgradeEffect("al", 216))
         player.bee.bps = player.bee.bps.mul(player.bee.preAlephMult)
         if (hasUpgrade("n", 21)) player.bee.bps = player.bee.bps.mul(player.al.honeycombEffect)
-        player.bee.bps = player.bee.bps.mul(levelableEffect("car", 312)[0])
         player.bee.bps = player.bee.bps.mul(buyableEffect("tw", 23))
 
         // POWER MODIFIERS
         player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))
         player.bee.bps = player.bee.bps.pow(buyableEffect("sme", 175))
+        player.bee.bps = player.bee.bps.pow(levelableEffect("car", 312)[0])
 
         player.bee.bees = player.bee.bees.add(player.bee.bps.mul(delta))
 

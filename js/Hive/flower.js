@@ -369,6 +369,7 @@ addLayer("fl", {
         if (hasUpgrade("al", 213)) player.fl.flowerGain = player.fl.flowerGain.mul(player.ho.effects.flower.effect2)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bpl.roles.empress.effect)
         player.fl.flowerGain = player.fl.flowerGain.mul(player.bee.preAlephMult)
+        if (hasUpgrade("za", 22)) player.fl.flowerGain = player.fl.flowerGain.mul(upgradeEffect("za", 22))
         player.fl.flowerGain = player.fl.flowerGain.mul(buyableEffect("tw", 22))
 
         // FLOWER AUTOMATION

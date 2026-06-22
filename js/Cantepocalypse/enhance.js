@@ -20,7 +20,7 @@
         */
        enhancerXP: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
        enhancerXPPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-       enhancerXPReq: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+       enhancerXPReq: [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)],
        enhancersUnlocked: [true,false,false,false,false,],
 
        enhancerAllocated: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
@@ -46,6 +46,17 @@
         if (player.en.enhancePointsToAllocate.gt(player.en.enhancePoints)) player.en.enhancePointsToAllocate = player.en.enhancePoints
 
         //enhancers
+        player.en.enhancerXPReq = [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)] //very tentative to change
+
+        player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.5).add(1).mul(10)
+        if (player.en.enhancerLevels[0].gt(10000)) player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.65).add(1).mul(10)
+        
+        player.en.enhancerXPReq[1] = player.en.enhancerLevels[1].pow(0.65).add(1).mul(1000)
+        if (player.en.enhancerLevels[1].gt(10000)) player.en.enhancerXPReq[1] = player.en.enhancerLevels[1].pow(0.75).add(1).mul(1000)
+
+        player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.75).add(1).mul(25000)
+        if (player.en.enhancerLevels[2].gt(10000)) player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.85).add(1).mul(25000)
+
         for (let i = 0; i < player.en.enhancersUnlocked.length; i++) {
             player.en.enhancerXP[i] = player.en.enhancerXP[i].add(player.en.enhancerXPPerSecond[i].mul(delta))
             if (player.en.enhancerXP[i].gte(player.en.enhancerXPReq[i])) {
@@ -61,17 +72,6 @@
 
         if (hasUpgrade("en", 13)) player.en.enhancersUnlocked[1] = true
         if (hasUpgrade("en", 15)) player.en.enhancersUnlocked[2] = true
-
-        player.en.enhancerXPReq = [new Decimal(10), new Decimal(1000), new Decimal(25000), new Decimal(125000), new Decimal(6250000)] //very tentative to change
-
-        player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.5).add(1).mul(10)
-        if (player.en.enhancerLevels[0].gt(10000)) player.en.enhancerXPReq[0] = player.en.enhancerLevels[0].pow(0.65).add(1).mul(10)
-        
-        player.en.enhancerXPReq[1] = player.en.enhancerLevels[1].pow(0.65).add(1).mul(1000)
-        if (player.en.enhancerLevels[1].gt(10000)) player.en.enhancerXPReq[1] = player.en.enhancerLevels[1].pow(0.75).add(1).mul(1000)
-
-        player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.75).add(1).mul(25000)
-        if (player.en.enhancerLevels[2].gt(10000)) player.en.enhancerXPReq[2] = player.en.enhancerLevels[2].pow(0.85).add(1).mul(25000)
 
         player.en.enhancersEffect[0] = player.en.enhancerLevels[0].pow(0.75).add(1)
         player.en.enhancersEffect[1] = player.en.enhancerLevels[1].pow(0.8).div(50).add(1)

@@ -48,7 +48,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.25, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.26, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Battle Bonanza",
 }
 
@@ -246,6 +246,9 @@ function updateStyles() {
 			break;
 		case "bh":
 			switch (player.bh.currentStage) {
+				case "darkTemple":
+					layerBG = "radial-gradient(#000, #113)"
+					break;
 				case "depth1":
 					layerBG = "black"
 					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), #000000"
@@ -608,7 +611,7 @@ function updateStyles() {
         	sun.style.width = "300px";
     	    sun.style.height = "300px";
 	        sun.style.borderRadius = "50%";
-        	sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
+			sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
     	    sun.style.boxShadow = "0 0 120px 60px #ffe06655";
 	        eclipse.appendChild(sun);
 
@@ -2458,5 +2461,12 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.25) {
 		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
+}
+
+function fixOldNaN(oldVersion) {
+	if (oldVersion < 190.26 && player && player.en && Decimal.eq(player.en.enhancerLevels[0], NaN)) {
+		cleanseUniverse("A1")
+		window.location.reload();
 	}
 }

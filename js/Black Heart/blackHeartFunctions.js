@@ -991,8 +991,40 @@ function bhLog(line) {
     if (player.bh.log.length > 10) player.bh.log.shift(); // Ensure log size remains consistent
 }
 
-function BHStageEnter(stage) {
+function BHStageEnter(stage, chars = false) {
     player.subtabs["bh"]["stuff"] = "battle"
+
+    if (chars) {
+        for (let c = 0; c < 3; c++) {
+            if (chars[c] == "none") {
+                if (player.bh.characters[c].id != "none") player.bh.characterData[player.bh.characters[c].id].selected = 0
+                
+                player.bh.characters[c].id = "none"
+                for (let j = 0; j < 4; j++) {
+                    player.bh.characters[c].skills[j].id = "none"
+                }
+            } else {
+                if (player.bh.characterData[chars[c]].selected) {
+                    player.bh.characterData[chars[c]].selected = 0
+                    for (let i = 0; i < 3; i++) {
+                        if (player.bh.characters[i].id == chars[c]) {
+                            player.bh.characters[i].id = "none"
+                            for (let j = 0; j < 4; j++) {
+                                player.bh.characters[i].skills[j].id = "none"
+                            }
+                        }
+                    }
+                }
+                if (player.bh.characters[c].id != "none") player.bh.characterData[player.bh.characters[c].id].selected = 0
+                player.bh.characters[c].id = chars[c]
+
+                player.bh.characterData[chars[c]].selected = c+1
+                for (let i = 0; i < 4; i++) {
+                    player.bh.characters[c].skills[i].id = player.bh.characterData[chars[c]].skills[i]
+                }
+            }
+        }
+    }
 
     for (let i = 0; i < 3; i++) {
         player.bh.characters[i].health = player.bh.characters[i].maxHealth

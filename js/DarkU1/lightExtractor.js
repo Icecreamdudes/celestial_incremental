@@ -49,6 +49,7 @@
     },
     nodeStyle() {
         return {
+            //384166
             background: "linear-gradient(15deg, #4cc1c7 0%, #2a79ad 50%, #1a2f78 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#8ca3ff",

@@ -91,14 +91,25 @@
     },
     prestigeReset(isRewarded = false) {
         if (isRewarded) player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet);
+
         player.du.points = new Decimal(0)
+        player.du.pointGain = new Decimal(0)
         player.dr.rank = new Decimal(0)
+        player.dr.rankEffect = new Decimal(1)
         player.dr.tier = new Decimal(0)
+        player.dr.tierEffect = new Decimal(1)
         player.dr.tetr = new Decimal(0)
+        player.dr.tetrEffect = new Decimal(1)
 
         player.dr.rankPoints = new Decimal(0)
+        player.dr.rankPointsEffect = new Decimal(1)
+        player.dr.rankPointsPerSecond = new Decimal(0)
         player.dr.tierPoints = new Decimal(0)
+        player.dr.tierPointsPerSecond = new Decimal(0)
+        player.dr.tierPointsEffect = new Decimal(1)
         player.dr.tetrPoints = new Decimal(0)
+        player.dr.tetrPointsPerSecond = new Decimal(0)
+        player.dr.tetrPointsEffect = new Decimal(1)
     },
     upgrades: {},
     buyables: {

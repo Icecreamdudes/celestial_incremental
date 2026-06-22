@@ -142,6 +142,7 @@
     buyables: {},
     milestones: {
         11: {
+            requirementDescription: "1 Booster",
             effectDescription() { return "Boosters divide the eclipse shard requirement.<br>Currently: /" + format(player.db.milestone1Effect) + "." },
             done() { return player.db.boosters.gte(1) },
             style() {
@@ -151,6 +152,7 @@
             },
         },
         12: {
+            requirementDescription: "3 Boosters",
             effectDescription() { return "Point gain is boosted by itself.<br>Currently: x" + format(player.db.milestone2Effect) + "." },
             done() { return player.db.boosters.gte(3) },
             style() {
@@ -160,6 +162,7 @@
             },
         },
         13: {
+            requirementDescription: "7 Boosters",
             effectDescription() { return "Boost rank points by x1000, tier points by x100, tetr points by x10." },
             done() { return player.db.boosters.gte(7) },
             style() {
@@ -169,6 +172,7 @@
             },
         },
         14: {
+            requirementDescription: "12 Boosters",
             effectDescription() { return "Gain 10% of grass value per second, and boost grass value and capacity based on boosters.<br>Currently: x" + format(player.db.milestone4Effect) + "." },
             unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(1)},
             done() { return player.db.boosters.gte(12) && getBuyableAmount("sme", 161).gte(1) },
@@ -179,6 +183,7 @@
             },
         },
         15: {
+            requirementDescription: "16 Boosters",
             effectDescription() { return "Gain 100% of prestige points per second and autobuy all prestige point buyables." },
             unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(2)},
             done() { return player.db.boosters.gte(16) && getBuyableAmount("sme", 161).gte(2) },
@@ -189,6 +194,7 @@
             },
         },
         16: {
+            requirementDescription: "30 Boosters",
             effectDescription() { return "Autobuy all grass buyables." },
             done() { return player.db.boosters.gte(30) && player.ir.iriditeDefeated },
             style() {
@@ -198,6 +204,7 @@
             },
         },
         17: {
+            requirementDescription: "45 Boosters",
             effectDescription() { return "/2 to the eclipse timer tickspeed." },
             done() { return player.db.boosters.gte(45) && player.ir.iriditeDefeated },
             style() {
@@ -207,6 +214,7 @@
             },
         },
         18: {
+            requirementDescription: "90 Boosters",
             effectDescription() { return "Starmetal alloy reduces the eclipse timer tickspeed.<br>Currently: /" + format(player.db.milestone8Effect) + "." },
             done() { return player.db.boosters.gte(90) && player.lightRift.interspaceUnlocked },
             style() {
@@ -216,6 +224,7 @@
             },
         },
         19: {
+            requirementDescription: "100 Boosters",
             effectDescription() { return "Divisors to the eclipse timer tickspeed multiply D1 tickspeed.<br>Currently: x" + format(player.db.milestone9Effect) + "." },
             done() { return player.db.boosters.gte(100) && player.lightRift.interspaceUnlocked },
             style() {
@@ -225,6 +234,7 @@
             },
         },
         101: {
+            requirementDescription: "1 Total Booster",
             effectDescription: "x1.25 to check back XP gain.",
             done() { return player.db.bestBoosters.gte(1) },
             style() {
@@ -234,6 +244,7 @@
             },
         },
         102: {
+            requirementDescription: "5 Total Boosters",
             effectDescription: "x1.2 to starmetal alloy and eclipse shard gain.",
             done() { return player.db.bestBoosters.gte(5) },
             style() {
@@ -243,6 +254,7 @@
             },
         },
         103: {
+            requirementDescription: "10 Total Boosters",
             effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "/1.4 to starmetal essence generator time."},
             unlocked() { return player.matosLair.milestone[25] >= 1 },
             done() { return player.db.bestBoosters.gte(10) && player.matosLair.milestone[25] >= 1 },
@@ -254,6 +266,7 @@
             },
         },
         104: {
+            requirementDescription: "15 Total Boosters",
             effectDescription() {return player.matosLair.milestone[25] == 0 ? "[BUFFED FEATURE NOT UNLOCKED]" : "Best boosters divides star exploration times.<br>Currently: /" + format(player.db.permaMilestone4Effect) + "." },
             unlocked() { return player.matosLair.milestone[25] >= 1 },
             done() { return player.db.bestBoosters.gte(15) && player.matosLair.milestone[25] >= 1 },
@@ -264,6 +277,7 @@
             },
         },
         105: {
+            requirementDescription: "20 Total Boosters",
             effectDescription() {return "Reduce black heart combo softcap scaling by -0.2%."},
             done() {return player.db.bestBoosters.gte(20)},
             style() {
@@ -273,6 +287,7 @@
             },
         },
         106: {
+            requirementDescription: "30 Total Boosters",
             effectDescription() { return "/2 to the eclipse timer tickspeed.<br>"},
             unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.bestBoosters.gte(30) && player.lightRift.interspaceUnlocked },
@@ -283,6 +298,7 @@
             },
         },
         107: {
+            requirementDescription: "70 Total Boosters",
             effectDescription() { return "/1.2 to legendary summon cooldown.<br>"},
             unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.bestBoosters.gte(70) && player.lightRift.interspaceUnlocked },
@@ -293,6 +309,7 @@
             },
         },
         108: {
+            requirementDescription: "85 Total Boosters",
             effectDescription() { return "x1.2 to starmetal alloy and eclipse shard gain again.<br>"},
             unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.bestBoosters.gte(85) && player.lightRift.interspaceUnlocked },

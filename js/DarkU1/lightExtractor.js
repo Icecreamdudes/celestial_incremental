@@ -499,35 +499,7 @@
     starmetalReset() {
         player.le.timeSinceReset = new Decimal(0)
 
-        player.du.points = new Decimal(0)
-        player.du.pointGain = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
-        player.dr.pent = new Decimal(0)
-
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.rankPointsPerSecond = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tierPointsPerSecond = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-        player.dr.tetrPointsPerSecond = new Decimal(0)
-        player.dr.pentPoints = new Decimal(0)
-        player.dr.pentPointsPerSecond = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.prestigePointsToGet = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
-
-        player.dg.generators = new Decimal(0)
-        player.dg.generatorsToGet = new Decimal(0)
-        player.dg.generatorPower = new Decimal(0)
-        player.dg.generatorPowerPerSecond = new Decimal(0)
+        layers.dn.normalityReset()
 
         for (let i = 0; i < player.le.upgrades.length; i++) {
             if (+player.le.upgrades[i] < 102) {
@@ -535,13 +507,6 @@
                 i--;
             }
         }
-
-        player.dg.buyables[11] = new Decimal(0)
-        player.dg.buyables[12] = new Decimal(0)
-        player.dg.buyables[13] = new Decimal(0)
-        player.dg.buyables[14] = new Decimal(0)
-        player.dg.buyables[15] = new Decimal(0)
-        player.dg.buyables[16] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {

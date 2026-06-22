@@ -82,16 +82,12 @@
     bars: {},
     generatorReset(isRewarded = false) {
         if (isRewarded) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet);
-        player.du.points = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
 
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
+        layers.dp.prestigeReset()
 
         player.dp.prestigePoints = new Decimal(0)
+        player.dp.prestigePointsToGet = new Decimal(0)
+        player.dp.prestigePointsEffect = new Decimal(1)
         player.dp.buyables[11] = new Decimal(0)
         player.dp.buyables[12] = new Decimal(0)
         player.dp.buyables[13] = new Decimal(0)
@@ -100,6 +96,8 @@
         player.dp.buyables[16] = new Decimal(0)
 
         player.dg.generatorPower = new Decimal(0)
+        player.dg.generatorPowerPerSecond = new Decimal(0)
+        player.dg.generatorPowerEffect = new Decimal(1)
     },
     clickables: {
         11: {

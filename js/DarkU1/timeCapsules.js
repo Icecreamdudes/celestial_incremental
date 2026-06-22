@@ -92,26 +92,13 @@
             }
         },
     },
-    timeCapsuleReset()
-    {
+    timeCapsuleReset() {
         player.dt.timeCapsules = player.dt.timeCapsules.add(player.dt.timeCapsulesToGet)
 
-        player.du.points = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
+        player.db.boosters = player.db.boosters.add(player.db.boosterBulk)
+        player.db.boosterBulk = new Decimal(0)
 
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
+        layers.dg.generatorReset()
 
         if (!hasMilestone("prj", 110)) {
             player.db.boosters = new Decimal(0)
@@ -151,7 +138,8 @@
         player.dgr.buyables[15] = new Decimal(0)
         player.dgr.buyables[16] = new Decimal(0)
 
-        player.dv.upgrades = [11, 14]
+        if (hasUpgrade("dv", 11)) player.dv.upgrades = [11, 14];
+        else player.dv.upgrades = [14];
     },
     upgrades: {},
     buyables: {

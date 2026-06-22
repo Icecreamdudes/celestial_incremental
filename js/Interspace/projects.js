@@ -1450,7 +1450,6 @@
             },
             getStatReq() {
                 let completions = player.prj.modules[1].completions
-                completions = new Decimal(9)
                 if (completions.eq(0)) return new Decimal(0);
                 let s = new Decimal(1e8)
 

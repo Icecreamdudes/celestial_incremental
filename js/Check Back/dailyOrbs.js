@@ -257,7 +257,7 @@ addLayer("ev2", {
             onClick() {
                 player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                layers.cb.instantProduction(player.ev2.skipTime.mul(player.ev2.orbAssign).mul(60))
+                layers.cb.instantProduction(player.ev2.skipTime.mul(player.ev2.orbAssign).mul(60), false, false)
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },

@@ -39,6 +39,7 @@
             buyBuyable("wof", 13)
             buyBuyable("wof", 14)
             buyBuyable("wof", 15)
+            buyBuyable("wof", 16)
         }
     },
     nodeStyle() {

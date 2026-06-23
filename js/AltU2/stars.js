@@ -694,7 +694,7 @@ addLayer("st", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.eq(0) ? new Decimal(1) : Decimal.pow(0.98, amt.mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))), // Softcap 
+                    amt.eq(0) ? new Decimal(1) : Decimal.pow(0.98, amt.mul(Decimal.pow(1.25, getLevelableTier(this.layer, this.id)))), // Softcap 
                 ]
             },
             sacValue() { return new Decimal(1)},

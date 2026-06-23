@@ -584,7 +584,7 @@
                 return "Space Buyable Space Boost"
             },
             display() {
-                return "which are raising the first 6 space buyables effects by ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
+                return "which are raising the first 6 space buyables' effects by ^" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space"
             },
             buy(mult) {

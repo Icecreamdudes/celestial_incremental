@@ -521,7 +521,7 @@ addLayer("achievements", {
         216: {
             name: "A little harder...",
             image: "resources/achievements/3_16.png",
-            tooltip: "<h3>A little harder...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e6 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
+            tooltip: "<h3>A little harder...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of at least 1e6 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,
@@ -529,7 +529,7 @@ addLayer("achievements", {
         217: {
             name: "A step up...",
             image: "resources/achievements/3_17.png",
-            tooltip: "<h3>A step up...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of 1e7 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
+            tooltip: "<h3>A step up...</h3><hr style='margin-bottom:4px'>Collapse Tav's Domain with a<br>cap of at least 1e7 matter.<br><br>Reward: Increase matter<br>gain by 25%.",
             color: "#b2d8d8",
             unlocked: true,
             marked: true,

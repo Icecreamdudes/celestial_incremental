@@ -892,11 +892,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added some missing jukebox tracks.<br>
 			- Added some missing jukebox icons (credit to bumpy for making them).<br>
 			- Added perks for defeating Cante (still WIP).<br>
-			- Added an entry to the perks for defeating Jocus.<br><br>
+			- Added an entry to the perks for defeating Jocus.<br>
+			- Added a gradient to Tav's layer (this was supposed to be in a past version, but wasn't formatted correctly lol)<br><br>
 		Bug Fixes:<br>
 			- Fixed legendary punchcards having the wrong color backgrounds.<br>
-			- Fixed star exploration node B2 having no effect.<br>
-			- Fixed Tav layer gradient not working (yes, this was supposed to be a thing, you can go in a past version and see that there was supposed to be a gradient).<br><br>
+			- Fixed star exploration node B2 having no effect.<br><br>
 	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br>
 		Content:<br>
 			- Added Enhance Points<br>

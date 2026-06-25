@@ -36,6 +36,17 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
     player.ir.battleLevel = level
 }
 
+const createConnectionComponent = function(x1, y1, x2, y2, color) {
+    return ["style-row", [], {
+        position: "relative",
+            left: () => {return ((x1 + x2) / 2) - 50 + "px"},
+            top: () => {return ((y1 + y2) / 2) + "px"},
+            transform: () => {return "rotate(" + Math.atan2(y2 - y1, x2 - x1) + "rad)"},
+            width: () => {return Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2)) + "px"},
+            height: "0px", border: "3px dotted " + color, borderBottom: "0", margin: "-3px",
+        }]
+}
+
 addLayer("ir", {
     name: "Iridite",
     symbol: "✦",
@@ -1575,7 +1586,7 @@ addLayer("ir", {
             },
             title: "Decay",
             unlocked() { return true },
-            description() { return "Boosts punchcard XP gained from blood by x1.25."},
+            description() { return "Boosts star dimension production by x3."},
             cost: new Decimal(1e7),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
@@ -2159,7 +2170,7 @@ addLayer("ir", {
             },
             title: "Version 2.0",
             unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Increase Geroa's base stats by 20%",
+            description() { return "Increase Geroa's base stats by 20%"},
             cost: new Decimal(250),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
@@ -2225,6 +2236,10 @@ addLayer("ir", {
             "spaceZone3": {
                 unlocked: true,
                 embedLayer: 'spaceZone3',
+            },
+            "evolutionField": {
+                unlocked: true,
+                embedLayer: 'evolutionField',
             },
             "spaceZone4": {
                 unlocked: true,
@@ -2302,6 +2317,15 @@ addLayer("ir", {
                         ["style-column", [
                             ["centered-draggable-scroll-row", [
                                 ["style-row", [
+
+                                    // Connections
+                                    ["style-column", [
+                                        createConnectionComponent(0, 0, 100, 0, "#5e4ee6"),
+                                        createConnectionComponent(100, 0, 200, 0, "#5e4ee6"),
+                                        createConnectionComponent(100, 0, 100, -100, "#5e4ee6"),
+                                        //createConnectionComponent(100, -100, 0, -100, "#5e4ee6"),
+                                        createConnectionComponent(100, 0, 100, 100, "#5e4ee6"),
+                                    ], {width: "0", height: "0"}],
 
                                     // Zone I
                                     ["tooltip-row", [
@@ -2397,6 +2421,28 @@ addLayer("ir", {
                                         }], 
                                         ["raw-html", () => {return "<div class='bottomTooltip'>Zone IV</div>"}],
                                     ], {width: "0", height: "0", position: "relative", left: "100px", top: "100px"}],
+
+                                    // Evolution Field
+                                    ["tooltip-row", [
+                                        ["category-button", ["Ev", "stages", "evolutionField"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(black, #4b79ff) border-box",
+                                                border: "8px solid #0000",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["ir"]["stages"] == "evolutionField") str.outline = "3px solid #fff"
+                                            return str
+                                        }], 
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Evolution Field</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "0px", top: "-100px", display: "none !important"}],
+                                    ["style-column", [
+                                        ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #d487fd, #4b79ff) border-box", border: "4px solid #0000", borderRadius: "50%", width: "67px", height: "67px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "-37.5px", top: "-100px", pointerEvents: "none", display: "none !important"}],
 
                                 ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/map.png)"}],
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #5e4ee6", borderBottom: "3px solid #5e4ee6", flexFlow: "column"}],

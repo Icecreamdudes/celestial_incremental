@@ -1824,8 +1824,8 @@ addLayer("bh", {
                 player.bh.stagnantTimer = new Decimal(10)
             },
             style() {
-                let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021124"}
-                this.canClick() ? look.background = "linear-gradient(to right, #094394, #052653)" : look.background = "#bf8f8f",
+                let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021924"}
+                this.canClick() ? look.background = "linear-gradient(to right, #094394, #053a54)" : look.background = "#bf8f8f",
                 this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
                 return look
             },
@@ -1842,7 +1842,7 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "46px", minHeight: "46px", background: "linear-gradient(to right, #094394, #052653)", color: "#ccd8ff", fontSize: "8px", border: "4px solid #021124", borderRadius: "10px", marginLeft: "-4px"}
+                let look = {width: "46px", minHeight: "46px", background: "linear-gradient(to right, #094394, #053a54)", color: "#ccd8ff", fontSize: "8px", border: "4px solid #021924", borderRadius: "10px", marginLeft: "-4px"}
                 if (!player.bh.stagnantAuto) look.filter = "brightness(50%)"
                 return look
             },
@@ -3219,7 +3219,7 @@ addLayer("bh", {
                 player.bh.currentTree = 1
             },
             style() {
-                let look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#094394, #052653)", border: "6px solid #021124", color: "#0091DC", borderRadius: "0"}
+                let look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#094394, #053a54)", border: "6px solid #021924", color: "#0091DC", borderRadius: "0"}
                 if (!this.canClick()) look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#222, #000)", border: "6px solid #333", color: "#666", borderRadius: "0"}
                 if (player.bh.currentTree == 1) {look.outline = "2px solid #ccc", look.outlineOffset = "-2px"}
                 return look

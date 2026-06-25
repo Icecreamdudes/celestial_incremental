@@ -18,7 +18,7 @@
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
-		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/spaceZone4.js", 
+		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/evolutionField.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
@@ -1026,14 +1026,16 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<span style="color:yellow"> [WIP]</span><br>
 			- Added a pet evolution that allows progressing through iridite content without entering space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
 			- Added space zone IV.<span style="color:yellow"> [WIP]</span><br>
+			- Added more iridite upgrades.<span style="color:yellow"> [WIP]</span><br>
+			- Added the multiverse map.<br>
 			- Added a ship.<br>
+			- Added four punchcards.<br>
+			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
+			- Added a new fighting character.<span style="color:yellow"> [WIP]</span><br>
+			- Added two themes.<br>
 			- Added more star tree upgrades.<span style="color:yellow"> [WIP]</span><br>
 			- Revamped the check back shrine.<span style="color:yellow"> [WIP]</span><br>
 			- Added two check back blessings.<br>
-			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
-			- Added an ascension pet.<span style="color:yellow"> [WIP]</span><br>
-			- Added four punchcards.<br>
-			- Added two themes unlocked in the new universe.<span style="color:yellow"> [WIP]</span><br>
 		<br>QoL:<br>
 			- Remade a lot of check back UI.<br>
 			- Shifted the hue of check back's blue.<br>
@@ -1045,17 +1047,21 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 			- Changed some punchcard textures.<br>
+			- Space exploration now shows a popup when it completes.<br>
+			- Changed pylon UI.<br>
 		<br>Balancing:<br>
-			- Daily orb time skips no longer affects daily orb cooldown.<br>
+			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
 			- The evolution fragment pet's pet point button now has a chance to grant fragments.<br>
-			- Added upgrades that boost paragon shard chance.<span style="color:yellow"> [WIP]</span><br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
 			- Increased the scaling of both unavoidable softcaps during an eclipse.<br>
 			- Heavily weakened the negative effect of clouds.<br>
 			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
+			- Reduced the effect scaling of upgrade "Emotional Enhancer".<br>
+			- Deflated ancient and paradox pylon energies.<br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
+			- Fixed dark universe reset cheese.<br>
 			- Added "the" to the jocus layer tooltip.<br>
 		<br>
 
@@ -1257,7 +1263,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Stagnant Synestia.<br>
 			- Added Depth 4.<br>
 			- Added Laboratory.<br>
-			- Added Alephs Chamber.<br>
+			- Added Aleph's Chamber.<br>
 			- Added Grass Jump.<br>
 			- Added Nests.<br>
 			- Added the Natural Pylon.<br><br>

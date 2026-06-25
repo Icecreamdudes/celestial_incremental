@@ -227,7 +227,7 @@
 
         player.in.pylonEnergyEffect = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.75).pow_base(10).sub(1).div(10).add(1)
         player.in.pylonEnergyEffect2 = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.5).pow_base(10).sub(1).div(10).add(1)
-        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.25).pow_base(10).sub(1).div(10).pow(2).add(1)
+        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.4).pow_base(10).sub(1).div(10).pow(2).add(1)
         
 
         player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
@@ -479,10 +479,10 @@
         11: {
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(8).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -513,10 +513,10 @@
         12: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(8).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -547,10 +547,10 @@
         13: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(8).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

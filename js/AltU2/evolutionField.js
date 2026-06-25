@@ -1,13 +1,13 @@
-addLayer("spaceZone2", {
-    name: "Zone II", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "II", // This appears on the layer's node. Default is the id with the first letter capitalized
+addLayer("evolutionField", {
+    name: "Evolution Field", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Ev", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-        
-        zone2Mult: new Decimal(1),
+
+        evolutionFieldMult: new Decimal(1),
 
         highestCombo: new Decimal(0),
         comboEffect: new Decimal(1),
@@ -40,27 +40,27 @@ addLayer("spaceZone2", {
         if (player.subtabs["ir"]["spaceStages"] == "spaceZone2") str.outline = "3px solid #fff"
         return str
     },
-    tooltip: "Zone II",
-    branches: ["spaceZone1"],
+    tooltip: "Evolution Field",
+    branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
         
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Zone II",
+            title: "<h2>Enter Evolution Field",
             canClick: true,
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone2"
+                player.ir.battleStage = "zone3"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
+                
+                player.ir.primaryColor = "#d487fd"
+                player.ir.secondaryColor = "#4b79ff"
 
-                player.ir.primaryColor = "#904ee6"
-                player.ir.secondaryColor = "#64078f"
-
-                arena = new SpaceArena(800, 800, 3200, 3200);
+                arena = new SpaceArena(800, 800, 800, 800);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
@@ -74,7 +74,7 @@ addLayer("spaceZone2", {
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
             },
-            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#64078f, black)", border: "3px solid #904ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(black, #4b79ff) border-box", border: "3px solid #0000", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
     },
     upgrades: {
@@ -85,7 +85,10 @@ addLayer("spaceZone2", {
         ["style-column", [
             ["style-row", [
                 ["style-column", [
-                    ["clickable", "enter"],
+                    ["hoverless-clickable", "enter"],
+                    ["style-column", [
+                        ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #d487fd, #4b79ff) border-box", border: "3px solid #0000", borderRadius: "20px", width: "344px", minHeight: "69px"}],
+                    ], {width: "0", height: "0", position: "relative", left: "-175px", top: "-37.5px", pointerEvents: "none"}],
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],

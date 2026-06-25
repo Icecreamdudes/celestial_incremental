@@ -4055,7 +4055,7 @@
             portrait: "resources/secret.png",
             music: "music/mysteryCutscene.mp3",
             background: "#5c4b4b",
-            trigger() {return hasUpgrade("cbs", 17) },
+            trigger() {return hasUpgrade("za", 21) },
             dialogue: [
                 { text: "While you are sitting in the check back shrine, you notice a new door magically appear."},
                 { text: "We did it. Past this door, we can finally expose Zar's weakness.", portrait: "resources/diceFive.png"  },

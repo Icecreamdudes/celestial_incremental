@@ -37,7 +37,7 @@ addLayer("alephsChamber", {
         if (player.subtabs["bh"]["stages"] == "alephsChamber") str.outline = "3px solid #999"
         return str
     },
-    tooltip: "Alephs Chamber",
+    tooltip: "Aleph's Chamber",
     tooltipLocked: "Reach 25 combo in depth 4 to unlock.",
     branches: ["depth4"],
     color: "#b33793",
@@ -46,7 +46,7 @@ addLayer("alephsChamber", {
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Alephs Chamber",
+            title: "<h2>Enter Aleph's Chamber",
             canClick: true,
             unlocked: true,
             onClick() {
@@ -91,14 +91,14 @@ addLayer("alephsChamber", {
             ["style-column", [
                 ["style-column", [
                     ["style-column", [
-                        ["raw-html", "Alephs Chamber", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "Aleph's Chamber", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
                     ["clickable", "enter"],
                 ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
                 ["top-column", [
                     ["style-column", [
                         ["raw-html", "3 Characters", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", "Unlock Alephs Perks", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "Unlock Aleph's Perks", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
                     ], () => {
                         let look = {width: "232px", height: "58px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
                         if (player.alephsChamber.milestone[25] >= 1) look.background = "#77bf5f"

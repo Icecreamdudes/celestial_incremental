@@ -223,7 +223,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div id="scrCon" class="upgScrollRowTable upgDraggableScrollRow scrollCentered instant">
+		<div id="scrCon" class="upgScrollRowTable upgDraggableScrollRow scrollCentered instant" ref='scrollable' @pointerdown='startDragging' @pointerleave='stopDragging' @pointerup='stopDragging' @pointermove='move'>
 			<div class="upgScrollRow" v-bind:style="look" >
 				<div style="margin:0" v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -232,7 +232,36 @@ function loadVue() {
 				</div>
 			</div>
 		</div>
-		`
+		`,
+		data() { return { mouseDown: false, startX: 0, startY: 0, scrollLeft: 0, scrollTop: 0 }},
+		mounted() {
+			let c = this.$refs.scrollable
+        	c.scrollLeft = (c.scrollWidth - c.clientWidth ) / 2;
+        	c.scrollTop = (c.scrollHeight - c.clientHeight ) / 2;
+		},
+		methods: {
+			startDragging(e) {
+				let c = this.$refs.scrollable
+			  	this.mouseDown = true;
+			  	e.preventDefault();
+			  	this.startX = e.pageX - c.offsetLeft;
+			  	this.startY = e.pageY - c.offsetTop;
+			  	this.scrollLeft = c.scrollLeft;
+			  	this.scrollTop = c.scrollTop;
+			},
+			stopDragging() {
+			  	this.mouseDown = false;
+			},
+			move(e) {
+			  	if (!this.mouseDown) return; 
+				let c = this.$refs.scrollable
+			  	e.preventDefault();
+			  	const scrollX = e.pageX - c.offsetLeft - this.startX;
+			  	const scrollY = e.pageY - c.offsetTop - this.startY;
+			  	c.scrollLeft = this.scrollLeft - scrollX;
+			  	c.scrollTop = this.scrollTop - scrollY;
+			}
+		}
 	})
 
 	// data = an array of Components to be displayed in a column
@@ -1838,47 +1867,4 @@ function loadVue() {
 			gridRun,
 		},
 	})
-	
-	let items = document.getElementsByClassName("scrollCentered")
-	for (let i = 0; i < items.length; i++) {
-        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
-        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
-		
-		items[i].addEventListener('mousemove', function (e) {
-			move(e, items[i])
-		}, false);
-		items[i].addEventListener('mousedown', function (e) {
-			startDragging(e, items[i])
-		}, false);
-		items[i].addEventListener('mouseup', function (e) {
-			stopDragging(e, items[i])
-		}, false);
-		items[i].addEventListener('mouseleave', function (e) {
-			stopDragging(e, items[i])
-		}, false);
-	}
-}
-let mouseDown = false;
-let startX, startY, scrollLeft, scrollTop;
-
-const startDragging = (e, v) => {
-  e.preventDefault();
-  mouseDown = true;
-  startX = e.pageX - v.offsetLeft;
-  startY = e.pageY - v.offsetTop;
-  scrollLeft = v.scrollLeft;
-  scrollTop = v.scrollTop;
-}
-
-const stopDragging = (e, v) => {
-  mouseDown = false;
-}
-
-const move = (e, v) => {
-  e.preventDefault();
-  if(!mouseDown) { return; }
-  const scrollX = e.pageX - v.offsetLeft - startX;
-  const scrollY = e.pageY - v.offsetTop - startY;
-  v.scrollLeft = scrollLeft - scrollX;
-  v.scrollTop = scrollTop - scrollY;
 }

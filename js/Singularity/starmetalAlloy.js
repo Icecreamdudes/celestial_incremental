@@ -119,7 +119,7 @@
             player.subtabs["le"]["stuff"] = "Main"
             player.subtabs.pu["stuff"] = "Selection"
 
-            pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
@@ -137,6 +137,7 @@
             unlocked: true,
             onClick() {
                 player.sma.inStarmetalChallenge = true
+                player.uni["D1"].paused = false
                 player.universe = "D1"
                 player.tab = "le"
                 changeTheme()
@@ -148,7 +149,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -162,6 +163,7 @@
                 player.pet.legPetTimers[0].active = true
 
                 player.sma.inStarmetalChallenge = true
+                player.uni["D1"].paused = false
                 player.universe = "D1"
                 player.tab = "le"
                 changeTheme()
@@ -172,7 +174,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}

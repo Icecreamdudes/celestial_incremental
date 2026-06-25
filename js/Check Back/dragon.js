@@ -119,9 +119,6 @@ addLayer("ep1", {
 
         upgrade301Effect: new Decimal(1),
         upgrade302Effect: new Decimal(1),
-
-        isInThisTab: false,
-        wasInThisTab: false,
     }},
     nodeStyle: {
         background: "linear-gradient(-90deg, #30bf30 0%, #008040 100%)",
@@ -246,6 +243,7 @@ addLayer("ep1", {
         player.ep1.upgrade302Effect = player.cbs.ascensionShards.div(10).add(1)
 
         // SCROLLING CONTAINER
+        /*
         player.ep1.isInThisTab = player.tab == "ep1"
         if (player.ep1.isInThisTab && !player.ep1.wasInThisTab) {
 	        let items = document.getElementsByClassName("scrollCentered")
@@ -253,22 +251,22 @@ addLayer("ep1", {
             for (let i = 0; i < items.length; i++) {
     	        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
     	        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
-		        items[i].addEventListener('mousemove', function (e) {
+		        items[i].addEventListener('pointermove', function (e) {
 			        move(e, items[i])
 		        }, false);
-		        items[i].addEventListener('mousedown', function (e) {
+		        items[i].addEventListener('pointerdown', function (e) {
 			        startDragging(e, items[i])
 		        }, false);
-		        items[i].addEventListener('mouseup', function (e) {
+		        items[i].addEventListener('pointerup', function (e) {
 		        	stopDragging(e, items[i])
 		        }, false);
-		        items[i].addEventListener('mouseleave', function (e) {
+		        items[i].addEventListener('pointerleave', function (e) {
 		        	stopDragging(e, items[i])
 		        }, false);
 
             }
         }
-        player.ep1.wasInThisTab = player.ep1.isInThisTab
+        player.ep1.wasInThisTab = player.ep1.isInThisTab*/
     },
     clickables: {
         1: {
@@ -2211,7 +2209,7 @@ addLayer("ep1", {
                                     ]],
                                 ], () => {
                                     let look = {backgroundColor: "#c3d1de", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
-                                        if (player.ep1.dragonEvolutionIndex < 2) look.display = "none !important";
+                                        if (player.ep1.dragonEvolutionIndex <= 4) look.display = "none !important";
                                         return look
                                     }], 
                             ], {position: "relative", left: "325px", top: "0px", width: "0px", height: "0px"}],

@@ -5,9 +5,6 @@
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-
-        isInThisTab: false,
-        wasInThisTab: false,
     }},
     automate() {},
     nodeStyle() {
@@ -21,30 +18,6 @@
     tooltip: "Multiverse Map",
     color: "#30bfbf",
     update(delta) {
-
-        player.mm.isInThisTab = player.tab == "mm"
-        if (player.mm.isInThisTab && !player.mm.wasInThisTab) {
-	        let items = document.getElementsByClassName("scrollCentered")
-
-            for (let i = 0; i < items.length; i++) {
-    	        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
-    	        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
-		        items[i].addEventListener('mousemove', function (e) {
-			        move(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mousedown', function (e) {
-			        startDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseup', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseleave', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-
-            }
-        }
-        player.mm.wasInThisTab = player.mm.isInThisTab
     },
     branches: ["ch"],
     clickables: {

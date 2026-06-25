@@ -245,11 +245,6 @@ addLayer("ir", {
 
         adsFought: false,
         adsDefeated: false,
-
-        isInStagesTab: false,
-        wasInStagesTab: false,
-        isInUpgradesTab: false,
-        wasInUpgradesTab: false,
     }},
     automate() {},
     nodeStyle() {
@@ -264,32 +259,6 @@ addLayer("ir", {
     branches: ["pl", "se"],
     color: "#151230",
     update(delta) {
-
-        player.ir.isInStagesTab = player.tab == "ir" && player.subtabs["ir"].stuff == "stages"
-        player.ir.isInUpgradesTab = player.tab == "ir" && player.subtabs["ir"].stuff == "upgrades"
-        if ((player.ir.isInStagesTab && !player.ir.wasInStagesTab) || (player.ir.isInUpgradesTab && !player.ir.wasInUpgradesTab)) {
-	        let items = document.getElementsByClassName("scrollCentered")
-
-            for (let i = 0; i < items.length; i++) {
-    	        items[i].scrollLeft = (items[i].scrollWidth - items[i].clientWidth ) / 2;
-    	        items[i].scrollTop = (items[i].scrollHeight - items[i].clientHeight ) / 2;
-		        items[i].addEventListener('mousemove', function (e) {
-			        move(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mousedown', function (e) {
-			        startDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseup', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-		        items[i].addEventListener('mouseleave', function (e) {
-		        	stopDragging(e, items[i])
-		        }, false);
-
-            }
-        }
-        player.ir.wasInStagesTab = player.ir.isInStagesTab
-        player.ir.wasInUpgradesTab = player.ir.isInUpgradesTab
 
         if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";

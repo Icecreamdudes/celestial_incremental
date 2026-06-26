@@ -1,5 +1,5 @@
 ﻿let modInfo = {
-	name: "Celestial Incremental",
+	name: "CI-Test",
 	id: "celestial", // NEVER CHANGE THIS, IF YOU DO ALL SAVES WILL DIE
 	author: "Icecreamdude",
 	pointsName: "celestial points",
@@ -29,7 +29,9 @@
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
-
+		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
+		"Puzzle World/akash.js", "Puzzle World/elements.js", 
+		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
 
@@ -310,6 +312,21 @@ function updateStyles() {
 	    case "bl":
 			layerBG = "#130000ff"
 			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
+			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
+			break;
+		case "pf":
+			layerBG = "linear-gradient(135deg, #202020ff 0%, #000000ff 50%, #202020ff 100%)"
+			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
 			break;
@@ -321,6 +338,12 @@ function updateStyles() {
 			break;
 		case "ev8":
 			layerBG = "#252525"
+			break;
+		case "ev15":
+			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
+			break;
+		case "ev16":
+			layerBG = "linear-gradient(0deg, #200020, #400040)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
 			layerBG = "#7d3f98"
@@ -651,6 +674,9 @@ function updateStyles() {
 				break;
 			case "DS":
 				sideBG = "radial-gradient(circle, #303030ff, #000000)"
+				break;
+			case "UZ":
+				sideBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
 				break;	
 			default:
 				sideBG = "#0b0b0b"
@@ -852,7 +878,26 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br><br>
+	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>
+		Content:<br>
+			- Added page 3 of achievements.<br>
+			- Added a new evolution pet.<br>
+			- Added a new check back layer.<br><br>
+		Minor Changes:<br>
+			- Changed the styles of achievement page buttons.<br>
+			- Added missing achievement icons for page 2.<br>
+			- Added a few more savebank buttons (actual saves haven't been added yet).<br>
+			- Added the button for page 4 of achievements (again, actual achs haven't been added yet).<br>
+			- Made some aesthetic changes to the bios in the hall of celestials.<br>
+			- Added some missing jukebox tracks.<br>
+			- Added some missing jukebox icons (credit to bumpy for making them).<br>
+			- Added perks for defeating Cante (still WIP).<br>
+			- Added an entry to the perks for defeating Jocus.<br>
+			- Added a gradient to Tav's layer (this was supposed to be in a past version, but wasn't formatted correctly lol)<br><br>
+		Bug Fixes:<br>
+			- Fixed legendary punchcards having the wrong color backgrounds.<br>
+			- Fixed star exploration node B2 having no effect.<br><br>
+	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br>
 		Content:<br>
 			- Added Enhance Points<br>
 			- Added Cards<br>
@@ -1811,7 +1856,10 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation"
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
+	"diamondDustReset",
+	"openChest",
+	"checkAchs",
 ]
 
 function getStartPoints(){

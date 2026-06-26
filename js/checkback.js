@@ -245,6 +245,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 101)[1])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 205)[0])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 301)[1])
+            if (hasAchievement("achievements", 208)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.5)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.ev0.coinDustEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cb.XPBoostEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.d.boosterEffects[12])
@@ -1320,6 +1321,7 @@ addLayer("cb", {
             unlocked() { return true },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[0].base)
                 player.cb.boostTimers[0].current = player.cb.boostTimers[0].max
 
@@ -1348,6 +1350,7 @@ addLayer("cb", {
             unlocked() { return player.cb.highestLevel.gte(666) },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[1].base)
                 player.cb.boostTimers[1].current = player.cb.boostTimers[1].max
 
@@ -1376,6 +1379,7 @@ addLayer("cb", {
             unlocked() { return hasUpgrade("stagnantSynestia", 5)},
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)
                 player.cb.boostTimers[2].current = player.cb.boostTimers[2].max
 

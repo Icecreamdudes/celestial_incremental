@@ -118,7 +118,7 @@ addLayer("savebank", {
             style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: 'linear-gradient(140deg, red 0%, black 120%)', borderRadius: '0px', border: '2px solid white'},
         },
         19: {
-            title() { return "Starmetal<br>Matos" },
+            title() { return "Starmetal<br>Black Heart" },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -127,13 +127,22 @@ addLayer("savebank", {
             style: { width: '125px', minHeight: '50px', color: '#282363', background: 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%, #60cfeb 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         21: {
-            title() { return "Matos<br>End" },
+            title() { return "Black Heart<br>Iridite" },
             canClick: true,
             unlocked: true,
             onClick() {
-                player.subtabs["savebank"]["stuff"] = "Matos-End"
+                player.subtabs["savebank"]["stuff"] = "Matos-CBF"
             },
             style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
+        },
+        22: {
+            title() { return "Iridite<br>Hive" },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.subtabs["savebank"]["stuff"] = "CBF-EoIr"
+            },
+            style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(0, 0, 0) 0%,rgb(8, 8, 32) 100%)', borderRadius: '0px', border: '2px solid white', color: 'white'},
         },
         // Start-Checkback
         101: {
@@ -1250,7 +1259,7 @@ addLayer("savebank", {
             },
             "Starmetal-Matos": {
                 buttonStyle() { return { 'color': 'white' } },
-                style: { background: '#2D0000' },
+                style: { background: '#000000' },
                 unlocked: true,
                 content: [
                     ["blank", "25px"],
@@ -1258,9 +1267,19 @@ addLayer("savebank", {
                     ["blank", "25px"],
                 ]
             },
-            "Matos-End": {
+            "Matos-CBF": {
                 buttonStyle() { return { 'color': 'white' } },
-                style: { background: '#2D0000' },
+                style: { background: '#200008' },
+                unlocked: true,
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", "WIP"],
+                    ["blank", "25px"],
+                ]
+            },
+            "CBF-EoIr": {
+                buttonStyle() { return { 'color': 'white' } },
+                style: { background: '#000020' },
                 unlocked: true,
                 content: [
                     ["blank", "25px"],
@@ -1277,6 +1296,7 @@ addLayer("savebank", {
             ["scroll-row", [
                 ["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15],
                 ["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18], ["hoverless-clickable", 19], ["hoverless-clickable", 21],
+                ["hoverless-clickable", 22],
             ], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)"}],
             ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],

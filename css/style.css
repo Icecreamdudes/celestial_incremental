@@ -403,6 +403,26 @@ h1, h2, h3, b, input {
 	text-align: left;
 }
 
+.levelableExtraText {
+	position: absolute;
+	right: 2.5%;
+	bottom: 10%;
+	width: 90%;
+	height: 20%;
+	color: lightcoral;
+	font-size: 14px;
+	padding-right: 5%;
+	text-shadow:
+    1px 1px 1px black,
+    -1px 1px 1px black,
+    -1px -1px 1px black,
+    1px -1px 1px black;
+	text-align: right;
+	vertical-align: bottom;
+}
+
+
+
 .levelableBottom {
 	width: 90%;
 	height: 15px;

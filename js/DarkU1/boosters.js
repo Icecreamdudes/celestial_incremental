@@ -242,4 +242,13 @@
     ],
     layerShown() { return hasUpgrade("le", 101) },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "b", 
+            description: "B: Reset for Boosters",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },  
+    ]
 })

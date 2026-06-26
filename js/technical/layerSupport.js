@@ -40,9 +40,11 @@ function updateHotkeys()
         hk = layers[layer].hotkeys
         if (hk){
             for (id in hk){
-				hotkeys[hk[id].key] = hk[id]
-                hotkeys[hk[id].key].layer = layer
-                hotkeys[hk[id].key].id = id
+                keyString = layers[layer].universe + "_" + hk[id].key
+                console.log(layer,keyString)
+				hotkeys[keyString] = hk[id]
+                hotkeys[keyString].layer = layer
+                hotkeys[keyString].id = id
                 if (hk[id].unlocked === undefined)
                     hk[id].unlocked = true
             }

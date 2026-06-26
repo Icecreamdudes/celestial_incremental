@@ -362,7 +362,8 @@ document.onkeydown = function (e) {
 	if (ctrlDown && hotkeys[key]) e.preventDefault()
 	if (hotkeys[key]) {
 		let k = hotkeys[key]
-		if (player[k.layer].unlocked && tmp[k.layer].hotkeys[k.id].unlocked)
+		//console.log(k)
+		if (player[k.layer].unlocked && tmp[k.layer].hotkeys[k.id].unlocked && !tmp[k.layer].hotkeys[k.id].isAutomated)
 			k.onPress()
 	}
 }

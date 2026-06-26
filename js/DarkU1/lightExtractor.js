@@ -1,6 +1,7 @@
 ﻿addLayer("le", {
     name: "Light Extractor", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "LE", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1184,4 +1185,20 @@
     ],
     layerShown() { return player.sma.inStarmetalChallenge },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "m", 
+            description: "M: Reset for Starmetal",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "e", 
+            description: "E: Reset for Eclipse Shards",
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },  
+    ]
 })

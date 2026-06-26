@@ -890,5 +890,48 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) },
+
+        hotkeys: [
+        {
+            key: "2", 
+            description: "2: Rank Reset",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                hasUpgrade("p", 17)
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "3", 
+            description: "3: Tier Reset",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                hasUpgrade("p", 18)
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "4", 
+            description: "4: Tetr Reset",
+            unlocked() {
+                return hasUpgrade("i", 13)
+            },
+            isAutomated() {
+                hasUpgrade("p", 22)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        }
+    ],
+
 })

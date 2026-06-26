@@ -8,10 +8,11 @@ addLayer("spaceZone4", {
         unlocked: true,
         
         zone4Mult: new Decimal(1),
-
-        highestCombo: new Decimal(0),
-        comboEffect: new Decimal(1),
-        comboStart: 0,
+        
+        highestLevel: new Decimal(0),
+        LevelStart: new Decimal(0),
+        levelScaling: new Decimal(1.1),
+        levelScalingStart: new Decimal(20),
 
         milestone: {
             10: 0,
@@ -53,7 +54,7 @@ addLayer("spaceZone4", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone4"
+                player.ir.battleStage = "spaceZone4"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 

@@ -698,13 +698,13 @@ addLayer("ep1", {
         },
         12: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(1.5) },
+            costGrowth() { return new Decimal(2.5) },
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
                 let eff = player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id))
-                if (eff.gte(1e3)) eff = eff.div(1e3).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(1e3);
+                if (eff.gte(100)) eff = eff.div(100).log10().add(1).pow(0.5).sub(1).pow_base(10).mul(100);
                 return eff
             },
             unlocked() { return player.ep1.dragonEvolutionIndex >= 1 },
@@ -714,7 +714,7 @@ addLayer("ep1", {
                 return "Fiery Emotions (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Boosts first four emotions gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e3) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                return 'Boosts first four emotions gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(100) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Gold'
             },
             buy(mult) {

@@ -8,10 +8,11 @@ addLayer("spaceZone3", {
         unlocked: true,
         
         zone3Mult: new Decimal(1),
-
-        highestCombo: new Decimal(0),
-        comboEffect: new Decimal(1),
-        comboStart: 0,
+        
+        highestLevel: new Decimal(0),
+        LevelStart: new Decimal(0),
+        levelScaling: new Decimal(1.1),
+        levelScalingStart: new Decimal(20),
 
         milestone: {
             10: 0,
@@ -44,7 +45,6 @@ addLayer("spaceZone3", {
     branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
-        
     },
     clickables: {
         "enter": {
@@ -53,14 +53,14 @@ addLayer("spaceZone3", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone3"
+                player.ir.battleStage = "spaceZone3"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
                 
                 player.ir.primaryColor = "#e64ebd"
                 player.ir.secondaryColor = "#8f0749"
 
-                arena = new SpaceArena(800, 800, 800, 800);
+                arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 

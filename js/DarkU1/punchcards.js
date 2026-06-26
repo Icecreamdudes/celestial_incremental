@@ -44,6 +44,9 @@ addLayer("pu", {
             if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 402) {
                 player.pu.selectionCost = new Decimal(2)
             }
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 403) {
+                player.pu.selectionCost = new Decimal(9)
+            }
         } else {
             player.pu.selectionCost = new Decimal(1)
         }
@@ -51,6 +54,7 @@ addLayer("pu", {
         player.pu.legendaryPunchcardsUnlocked = new Decimal(0)
         if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
         if (run(layers.pu.levelables[402].canSelect, layers.pu.levelables[402]) && !getLevelableTier("pu", 402, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+        if (run(layers.pu.levelables[403].canSelect, layers.pu.levelables[403]) && !getLevelableTier("pu", 403, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
 
         player.pu.legendaryPunchcardChance = Decimal.add(0.04, player.pu.legendaryPunchcardsUnlocked.sub(1).mul(0.02))
         player.pu.legendaryPunchcardChance = player.pu.legendaryPunchcardChance.add(buyableEffect("rp", 13))
@@ -71,6 +75,12 @@ addLayer("pu", {
 
         player.pu.legendaryRaise = new Decimal(1)
         player.pu.legendaryRaise = player.pu.legendaryRaise.mul(player.bl.bloodEffect)
+
+        if (player.du.aniciffoSummon)
+        {
+            player.pu.legendarySelectionActive = true
+            player.pu.selectedPunchcards[3] = 403
+        }
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0]
@@ -2422,6 +2432,60 @@ addLayer("pu", {
                 return look
             }
         },
+        403: {
+            image() {return this.canClick() ? "resources/Punchcards/legendaryPunchcard3.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Aniciffo"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "<h5>Unlock Aniciffo, the Celestial of Radioactivity<br>",
+                    "x" + format(this.effect()[0]) + " to points (based on eclipse timer)<br>",
+                    "x-1 to eclipse timer tickspeed<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to radioactive pylon energy gain",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.0125).add(1.4)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.005).add(2).min(2.5)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.pet.legPetTimers[0].current.pow(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(1.5).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("le", 201) && player.pet.legPetTimers[0].active && player.du.aniciffoSummon) || this.canClick()},
+            canSelect() {return hasUpgrade("le", 201) && player.pet.legPetTimers[0].active && player.du.aniciffoSummon},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.85).mul(100000).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(7079000).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
     },
     microtabs: {
         stuff: {
@@ -2513,7 +2577,7 @@ addLayer("pu", {
                                 ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "60px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
-                                ["levelable", 401], ["levelable", 402],
+                                ["levelable", 401], ["levelable", 402], ["levelable", 403],
                             ], () => {return hasUpgrade("le", 201) ? {width: "525px", backgroundColor: "#200815ff", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],

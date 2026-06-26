@@ -268,6 +268,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
             if (hasUpgrade("cbs", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 101))
+            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("ani", 22))
 
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)

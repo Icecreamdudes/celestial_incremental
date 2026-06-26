@@ -58,6 +58,7 @@
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("car", 401)[0])
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
         if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
+        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 403)[0])
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
@@ -96,7 +97,10 @@
         player.du.pointSoftcap = player.du.pointSoftcap.pow(buyableEffect("rp", 12))
 
         //Conditions for aniciffo unlock (very secret)
-        if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && player.pet.legPetTimers[0].current.lte(30)) {
+        if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && (player.pet.legPetTimers[0].current.lte(30) || hasUpgrade("ani", 18)) && player.bl.noxDefeated && player.pet.legPetTimers[0].active) {
+            player.du.aniciffoSummon = true
+        } else if (player.le.resetAmount.gte(10) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && !player.pet.legPetTimers[0].active && hasUpgrade("ani", 16)) 
+        {
             player.du.aniciffoSummon = true
         } else
         {

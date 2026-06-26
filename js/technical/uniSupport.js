@@ -251,6 +251,27 @@ addUniverse("D1", {
     uniShown() { return player.startedGame && player.sma.inStarmetalChallenge},
 })
 
+addUniverse("AD1", {
+    name: "Alt-Dark Universe 1<br>The Decay Horizon",
+    symbol: "AD1",
+    tree: [["sr", "ani", "tr"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)",
+			backgroundOrigin: "border-box",
+			color: "#ffffff",
+			borderColor: "#032209",
+        }
+        if (player.universe=="AD1") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.sma.inStarmetalChallenge && getLevelableTier("pu", 403, true)},
+})
+
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",

@@ -4084,7 +4084,6 @@
 
             ],
         },
-
         //REMINDER: Make enhance dust pet cutscene (reference the presence of ascension shards, and marcel's statue)
         "CB-Enhance-Dust": {
             type: "normal",
@@ -4707,6 +4706,47 @@
                 { text: "If your theory is correct, you can create rift in the Black Heart to travel to the Hex universe."},
                 { text: "It would be a risk, but a necessary risk in order to outsmart the celestials."},
             ],
+        },
+            //note: you can also use the original dice space song for cutscenes
+        /*
+        "CB-Goldsmith-Evo": {
+            type: "normal",
+            background: "#094599",
+            portrait: "resources/secret.png",
+            music: "music/marcel.mp3",
+            trigger() {return player.ev.evolutionsUnlocked[15]},
+            dialogue: [
+                { text: "Marcel visits you.", },
+                { text: 'And you did it again.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'I can see that you\'ve put the very rare ascension shards to good use.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'Unsmith has now turned into a more valuable diamond.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'With Diamondsmith\'s superphysical power, you should be able to further boost your coin dust.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'However, there\'s a cost.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'You\'ll need to reset most of your prior coin dust progress. But it\'s nothing you haven\'t done before.', portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: 'That does seem a bit harsh, considering that I\'ve been accumulating coin dust for a while...', portrait: "resources/player.png"  },
+                { text: 'But I think I must do the reset to meet Platonic.', portrait: "resources/player.png"  },
+                { text: "Even within the pet worlds, you'll need to reset prior progress.", },
+                { text: "But thinking realistically, almost nothing comes without giving something up.", },
+            ],
+        },
+        */ // commenting this b/c the enhance dust cutscene is a thing and already mentions asc-shards
+        "UZ-Puzzle-1": {
+            type: "normal",
+            background: "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)",
+            portrait: "resources/secret.png",
+            music: "music/akashCutscene.mp3",
+            trigger() {return player.ak.akashUnlocked },
+            dialogue: [
+                { text: "In a rather short period of time, you solve the first puzzle in this strange new universe." }, 
+                { text: "Well, since you solved the puzzle, I'm going to introduce myself.", portrait: "resources/akash.png"},
+                { text: "My name is Akash, the Celestial of Puzzles.", portrait: "resources/akash.png"},
+                { text: "You become more cautious."},
+                { text: "Don't worry, you'll be fine.", portrait: "resources/akash.png"},
+                { text: "However, one puzzle is nothing in this universe.", portrait: "resources/akash.png"},
+                { text: "Sure, you gained a little bit of skill, but in reality, you still have a long way to go in the puzzle world.", portrait: "resources/akash.png"},
+                { text: "Solving more puzzles will be key here.", portrait: "resources/akash.png"},
+                { text: "Feel free to explore.", portrait: "resources/akash.png"}, 
+            ]
         },
     },
     clickables: {

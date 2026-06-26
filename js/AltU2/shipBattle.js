@@ -187,8 +187,29 @@ function pickUpgrades(enhanced = false) {
     return chosen;
 }
 
-
 class SpaceArena {
+    /*
+        Check if coordinates are visible on screen:
+            - If true, then return coords with no changes.
+            - If false, then screen-wrap the coords.
+            - If true, then return screen-wrapped coords.
+            - If false, then return null.
+    */
+    getWrappedCoords(xy, w, h) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        let maxDistX = ((this.canvasWidth + w) / 2)
+        let maxDistY = ((this.canvasHeight + h) / 2)
+        if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
+        else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
+        if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
+        else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
+        if (Math.abs(coordX - shipX) - (w / 2) <= (this.canvasWidth / 2) && Math.abs(coordY - shipY) - (h / 2) <= (this.canvasHeight / 2)) return [coordX, coordY];
+        else return null;
+    }
+
         // Expand the arena to cover the entire screen and make it transparent
     enterIriditeFullscreen() {
         if (!this.arenaDiv || this._iriditeFullscreen) return;
@@ -1998,6 +2019,10 @@ class SpaceArena {
 
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
+            if (bullet.x < 0) bullet.x = this.width;
+            if (bullet.x > this.width) bullet.x = 0;
+            if (bullet.y < 0) bullet.y = this.height;
+            if (bullet.y > this.height) bullet.y = 0;
             bullet.life--;
 
             // Giant bullets bounce off arena edges and dissipate after life expires
@@ -4339,6 +4364,7 @@ class SpaceArena {
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
                 this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.globalAlpha = Math.max(0.2, trail.timer / 60);
                 this.ctx.beginPath();
                 this.ctx.arc(trail.x, trail.y, trail.radius, 0, 2 * Math.PI);
@@ -4439,15 +4465,18 @@ class SpaceArena {
                 this.ctx.restore();
             } else {
                 this.ctx.save();
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.beginPath();
+
                 let r = bullet.fromEnemy ? 6 : ((player.ir.shipType == 2 || player.ir.shipType == 10) ? 10 : 4);
                 // larger radius for homing enemy projectiles
                 if (bullet.fromEnemy && bullet.homing) r = 10;
                 if (bullet.giant) r = bullet.radius || 18;
-                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
-                this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
-                this.ctx.fill();
+                let wrapped = this.getWrappedCoords([bullet.x, bullet.y], r * 2, r * 2)
+                if (wrapped != null) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
+                    this.ctx.fill();
+                }
                 this.ctx.restore();
             }
             // Evolver primary shard rendering (crystal shard with facets)

@@ -2634,7 +2634,7 @@ addLayer("ir", {
                                         ], {width: "636px", background: "#bf41bf3f", border: "3px solid #bf41bf", borderRadius: "19px"}],
                                     ], {width: "0", height: "0", position: "relative", left: "548px", top: "666px"}],
 
-                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/zone1.png)"}],
+                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/spaceZone1.png)"}],
                             ], {width: "800px", height: "677px", flexFlow: "column"}]
                         ]],
                         /*["style-row", [

@@ -177,6 +177,7 @@ addLayer("ep1", {
         player.ep1.platinumTimers[2].base = new Decimal(3)
         
         player.ep1.platinumSCMult = new Decimal(1)
+        player.ep1.platinumSCMult = player.ep1.platinumSCMult.mul(buyableEffect("ep1", 106))
         player.ep1.platinumSCMult = player.ep1.platinumSCMult.mul(buyableEffect("ep1", 203))
         
         for (let i in player.ep1.goldTimers) {
@@ -654,7 +655,7 @@ addLayer("ep1", {
         11: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(1e3) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) { return player.ep1.goldBuyableBase.pow(getBuyableAmount(this.layer, this.id)).sub(1).mul(10) },
@@ -699,7 +700,7 @@ addLayer("ep1", {
         12: {
             costBase() { return new Decimal(100) },
             costGrowth() { return new Decimal(2.5) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -748,7 +749,7 @@ addLayer("ep1", {
         13: {
             costBase() { return new Decimal(1e4) },
             costGrowth() { return new Decimal(6) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -797,7 +798,7 @@ addLayer("ep1", {
         14: {
             costBase() { return new Decimal(1e5) },
             costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -846,7 +847,7 @@ addLayer("ep1", {
         15: {
             costBase() { return new Decimal(1e8) },
             costGrowth() { return new Decimal(12) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -895,7 +896,7 @@ addLayer("ep1", {
         16: {
             costBase() { return new Decimal(1e11) },
             costGrowth() { return new Decimal(12) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -944,7 +945,7 @@ addLayer("ep1", {
         17: {
             costBase() { return new Decimal(1e18) },
             costGrowth() { return new Decimal(6) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -993,7 +994,7 @@ addLayer("ep1", {
         18: {
             costBase() { return new Decimal(1e28) },
             costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -1042,7 +1043,7 @@ addLayer("ep1", {
         19: {
             costBase() { return new Decimal(1e35) },
             costGrowth() { return new Decimal(144) },
-            purchaseLimit() { return new Decimal(150) },
+            purchaseLimit() { return new Decimal(1200) },
             currency() { return player.ep1.gold},
             pay(amt) { player.ep1.gold = this.currency().sub(amt) },
             effect(x) {
@@ -1152,7 +1153,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Mountains of Gold (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Mountain of Gold (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
                 return 'Add +' + format(tmp[this.layer].buyables[this.id].effect.sub(1), 3) + ' to the gold buyable base.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
@@ -1200,7 +1201,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Burning Hotter (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Hotter Fire (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
                 return 'Boosts the fire effect by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
@@ -1332,8 +1333,8 @@ addLayer("ep1", {
         },
         106: {
             costBase() { return new Decimal(1e10) },
-            costGrowth() { return new Decimal(100) },
-            purchaseLimit() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.ep1.fire},
             pay(amt) { player.ep1.fire = this.currency().sub(amt) },
             effect(x) {
@@ -1344,10 +1345,10 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "pretty good upgrade (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
+                return "Alchemical Flame (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")"
             },
             display() {
-                return 'Reduces legendary summon cooldown by /' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
+                return 'Boost platinum shard chance by x' + format(tmp[this.layer].buyables[this.id].effect, 1) + '.' + (this.effect().gte(1e6) ? "<span style='color:red'> [SOFTCAPPED]</span>" : "") +'\n\
                     Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Fire'
             },
             buy(mult) {
@@ -1766,7 +1767,7 @@ addLayer("ep1", {
     upgrades: {
         201: {
             title() {
-                return "Heavy Metals"
+                return "Platinum Pickaxe"
             },
             description() {
                 return "Reduces gold button cooldown by /" + format(player.ep1.upgrade201Effect) + ", based on starmetal alloy."
@@ -1826,7 +1827,7 @@ addLayer("ep1", {
         },
         203: {
             title() {
-                return "Buyable Squared"
+                return "Advanced Transformations"
             },
             description() {
                 return "Boost gold gain by x1.01 for each platinum buyable level."
@@ -1859,7 +1860,7 @@ addLayer("ep1", {
         },
         204: {
             title() {
-                return "A Little Bit of Everything"
+                return "Precious Metal"
             },
             description() {
                 return "+0.005 to the gold buyable base."

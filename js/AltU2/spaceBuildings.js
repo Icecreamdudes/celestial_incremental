@@ -172,7 +172,7 @@
             purchaseLimit() {return buyableEffect("sb", 12).add(buyableEffect("sb", 13))},
             currency() { return player.ir.spaceGem},
             pay(amt) { player.ir.spaceGem = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).mul(player.sb.sseEffect).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.01).mul(player.sb.sseEffect).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -180,7 +180,7 @@
                 return "Tertiary Space Building"
             },
             display() {
-                return "Boosts infinity points by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Boosts infinity points by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Gems"
             },
             buy(mult) {
@@ -206,7 +206,7 @@
             purchaseLimit() {return buyableEffect("sb", 12).add(buyableEffect("sb", 13))},
             currency() { return player.ir.spaceGem},
             pay(amt) { player.ir.spaceGem = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.015).mul(player.sb.sseEffect).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.015).mul(player.sb.sseEffect).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -214,7 +214,7 @@
                 return "Quarternary Space Building"
             },
             display() {
-                return "Boosts singularity points by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Boosts singularity points by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Gems"
             },
             buy(mult) {
@@ -240,7 +240,7 @@
             purchaseLimit() {return buyableEffect("sb", 12).add(buyableEffect("sb", 13))},
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).mul(player.sb.sseEffect).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.02).mul(player.sb.sseEffect).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -248,7 +248,7 @@
                 return "Quinary Space Building"
             },
             display() {
-                return "Boosts antimatter gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Boosts antimatter gain by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Rocks"
             },
             buy(mult) {
@@ -274,7 +274,7 @@
             purchaseLimit() {return buyableEffect("sb", 12).add(buyableEffect("sb", 13))},
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).mul(player.sb.sseEffect).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.03).mul(player.sb.sseEffect).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -282,7 +282,7 @@
                 return "Senary Space Building"
             },
             display() {
-                return "Boosts factor power, rank, tier, and tetr effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "Boosts factor power, rank, tier, and tetr effects by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Space Rocks"
             },
             buy(mult) {

@@ -43,6 +43,7 @@
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ds", 104))
         if (getLevelableTier("pu", 110, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("pu", 110)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("car", 407)[0])
+        if (getLevelableTier("pu", 403, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(player.sr.radiation.effect)
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)
@@ -50,6 +51,7 @@
         if (hasUpgrade("sma", 208) && player.pet.legPetTimers[0].current.lte(0)) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet.mul(0.01).mul(delta))
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
+        if (getLevelableTier("pu", 403, true)) player.dn.normalityEffect = player.dn.normalityEffect.pow(buyableEffect("ani", 23))
 
         player.dn.normalityPause = player.dn.normalityPause.sub(1)
         if (player.dn.normalityPause.gte(1)) layers.dn.normalityReset();

@@ -49,6 +49,7 @@
         player.db.boosterReq = player.db.boosterReq.pow(buyableEffect("dv", 13))
 
         player.db.boosterEffect = Decimal.pow(5, player.db.boosters)
+        if (getLevelableTier("pu", 403, true)) player.db.boosterEffect = player.db.boosterEffect.pow(buyableEffect("ani", 33))
 
         if (player.db.boosters.gt(player.db.bestBoosters)) { 
             player.db.bestBoosters = player.db.boosters
@@ -70,7 +71,7 @@
                 player.db.boosters = player.db.boosters.add(1)
                 player.points = player.points.sub(player.db.boosterReq)
 
-                player.dg.generatorPause = new Decimal(10)
+                if (!hasUpgrade("ani", 19)) player.dg.generatorPause = new Decimal(10)
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

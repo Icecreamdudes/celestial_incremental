@@ -72,6 +72,9 @@
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(buyableEffect("funify", 12))
         if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.tr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.sr.spaceDecayEffect)
+
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
 
 
@@ -101,6 +104,7 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ani.stones.cosmic.effect)
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -109,6 +113,8 @@
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
         if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.tr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.sr.spaceDecayEffect)
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -119,6 +125,7 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dgj", 16))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("car", 411)[0])
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.ani.stones.temporal.effect)
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
@@ -192,6 +199,9 @@
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
+
+                player.ani.stones.cosmic.amount = player.ani.stones.cosmic.amount.add(player.ani.stones.cosmic.toGet)
+
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -245,7 +255,11 @@
             unlocked() { return true },
             onClick() {
                 pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
+
+                player.ani.stones.temporal.amount = player.ani.stones.temporal.amount.add(player.ani.stones.temporal.toGet)
+
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -700,6 +714,11 @@
         player.funify.buyables[16] = new Decimal(0)
 
         player.du.noPunchcards = true
+
+        if (player.pu.selectedPunchcards[3] == 403) {
+            player.pu.selectedPunchcards[3] = 0
+            player.pu.legendarySelectionActive = false
+        }
     },
     upgrades: {
         11: {

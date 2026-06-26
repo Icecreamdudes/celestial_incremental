@@ -72,15 +72,15 @@ addLayer("jukebox", {
             },
         },
         13: {
-            title: "Black Heart",
+            title: "Battle",
             canClick: true,
             unlocked() {return player.bh.unlockConditions.done},
             onClick() {
-                player.subtabs["jukebox"]["stuff"] = "Black Heart"
+                player.subtabs["jukebox"]["stuff"] = "Battle"
             },
             style() {
                 let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
-                if (player.subtabs["jukebox"]["stuff"] == "Black Heart") look.borderColor = "var(--selected)"
+                if (player.subtabs["jukebox"]["stuff"] == "Battle") look.borderColor = "var(--selected)"
                 return look
             },
         },
@@ -505,6 +505,22 @@ addLayer("jukebox", {
             file: "music/navTheme.mp3",
             unlocked() {return player.zarDungeon.zarDefeated},
         },
+        "zar-battle": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Zar",
+            img: "resources/music/template.png",
+            file: "music/zar.mp3",
+            unlocked() {return player.zarDungeon.zarDefeated},
+        },
+        "negative-depth-1": {
+            artist: "Icecreamdude",
+            name: "N/A",
+            description: "Negative Depth 1",
+            img: "resources/music/template.png",
+            file: "music/depth1Encore.mp3",
+            unlocked() {return hasUpgrade("darkTemple", 10)},
+        },
     },
     microtabs: {
         stuff: {
@@ -517,9 +533,9 @@ addLayer("jukebox", {
                         ["jukebox", "none"], ["jukebox", "universe-1"], ["jukebox", "checkback"], ["jukebox", "portal"],
                         ["jukebox", "universe-2"], ["jukebox", "infinity-challenge"], ["jukebox", "hex"], ["jukebox", "tav-domain"],
                         ["jukebox", "alt-1"], ["jukebox", "universe-3"], ["jukebox", "dark-universe-1"], ["jukebox", "universe-3-B"],
-                        ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"], ["jukebox", "space-battle"],
-                        ["jukebox", "iridite-fight"], ["jukebox", "hive"], ["jukebox", "dice-space"], ["jukebox", "casino"], ["jukebox", "blood-battle"],
-                        ["jukebox", "nox"], ["jukebox", "ascension-spirit"], ["jukebox", "zar"],
+                        ["jukebox", "eclipse"], ["jukebox", "hall-of-celestials"], ["jukebox", "alt-2"],  
+                        ["jukebox", "hive"], ["jukebox", "dice-space"], ["jukebox", "blood-battle"],
+                        ["jukebox", "nox"], ["jukebox", "ascension-spirit"],
                     ]],
                     ["blank", "2px"],
                 ],
@@ -539,15 +555,17 @@ addLayer("jukebox", {
                     ["blank", "2px"],
                 ],
             },
-            "Black Heart": {
+            "Battle": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked: true,
                 content: [
                     ["blank", "2px"],
                     ["row", [
                         ["jukebox", "none"], ["jukebox", "black-heart"], ["jukebox", "depth-1"], ["jukebox", "depth-2"],
-                        ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "stagnant-synestia"],
-                        ["jukebox", "depth-4"], ["jukebox", "laboratory"], ["jukebox", "aleph-fight"],
+                        ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "space-battle"],
+                        ["jukebox", "iridite-fight"], ["jukebox", "stagnant-synestia"],
+                        ["jukebox", "depth-4"], ["jukebox", "laboratory"], ["jukebox", "aleph-fight"], ["jukebox", "casino"], ["jukebox", "zar-battle"],
+                        ["jukebox", "negative-depth-1"],
                     ]],
                     ["blank", "2px"],
                 ],

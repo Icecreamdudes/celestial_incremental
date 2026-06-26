@@ -734,7 +734,17 @@ addLayer("pet", {
         if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
         if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.div(player.dgj.milestone3Effect)
         if (hasUpgrade("sma", 206)) abilityTimeDecrease = abilityTimeDecrease.div(1.2)
-        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(player.ani.darkRadiationEffect)
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 11))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 12))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 13))
+        if (getLevelableTier("pu", 403, true))
+        {
+            if (player.pet.legPetTimers[0].active) player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.add(abilityTimeDecrease.mul(delta))
+        } else
+        {
+            player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
+        }
         abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("st", 309)[0])
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)

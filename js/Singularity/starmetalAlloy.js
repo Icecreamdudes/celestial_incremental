@@ -1024,6 +1024,30 @@
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]
             },
+            "Radiation Stones": {
+                buttonStyle() { return { border: "2px solid #74ff8f", borderRadius: "10px" } },
+                unlocked() { return hasUpgrade("ani", 22) },
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", () => { return "Both radiation stone types are gained based on dark universe 1 resets and claimed on leaving dark universe 1." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Dark universe 1 reset amount must be greater than amount required for unlocking Aniciffo punchcard." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.temporal.amount) + "</h3> temporal radiation stones. (+" + format(player.ani.stones.temporal.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Boosts eclipse shard gain by x" + format(player.ani.stones.temporal.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["layer-proxy", ["ani", [
+                        ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ]]],
+                    ["blank", "25px"],
+                    ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.cosmic.amount) + "</h3> cosmic radiation stones. (+" + format(player.ani.stones.cosmic.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Boosts SMA gain by x" + format(player.ani.stones.cosmic.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["layer-proxy", ["ani", [
+                        ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
+                    ]]],
+                    ["blank", "25px"],
+                ]
+            },
         },
     }, 
     tabFormat: [

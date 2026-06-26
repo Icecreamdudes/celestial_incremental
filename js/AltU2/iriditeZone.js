@@ -6,10 +6,11 @@ addLayer("iriditeZone", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-
+        
         highestLevel: new Decimal(0),
-        levelEffect: new Decimal(1),
-        levelStart: 0,
+        LevelStart: new Decimal(0),
+        levelScaling: new Decimal(1.1),
+        levelScalingStart: new Decimal(20),
     }},
     automate() {},
     nodeStyle() {
@@ -37,7 +38,7 @@ addLayer("iriditeZone", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "iridite"
+                player.ir.battleStage = "iriditeZone"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 

@@ -59,8 +59,8 @@ addLayer("ir", {
         iriditeUnlocked: false,
 
         inBattle: false,
-        battleStage: "zone1",
-        comboScalingReduction: new Decimal(1.1),
+        battleStage: "spaceZone1",
+        levelScalingMult: new Decimal(1),
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
@@ -276,6 +276,8 @@ addLayer("ir", {
         }
 
         if (options.fullscreen && player.tab == "ir" && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
+        
+        player.ir.levelScalingMult = player.ir.battleLevel.sub(player[player.ir.battleStage].levelScalingStart).add(1).max(0).pow_base(player[player.ir.battleStage].levelScaling)
 
         // Ship max health by type
         if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)
@@ -2647,7 +2649,10 @@ addLayer("ir", {
                 unlocked() { return false },
                 content() { return [
                     ["style-column", [
-                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / 100</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / 100</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
+                        ["style-row", [
+                            ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
+                        ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
                     ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0"}],
                     ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
                     ["blank", "800px"],

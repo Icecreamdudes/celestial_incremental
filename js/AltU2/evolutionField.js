@@ -53,7 +53,7 @@ addLayer("evolutionField", {
             unlocked: true,
             onClick() {
                 player.ir.inBattle = true
-                player.ir.battleStage = "zone3"
+                player.ir.battleStage = "spaceZone3"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
                 

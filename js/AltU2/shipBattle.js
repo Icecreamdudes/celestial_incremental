@@ -16,29 +16,29 @@ function getRandomInt(max) {
 const UPGRADE_POOL = [
     // Common
     {
-        name: "Attack Damage Up",
-        description: "+10% attack damage",
+        name() { return "Attack Damage Up"},
+        description() { return "+10% attack damage"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.1; }
     },
     {
-        name: "XP Gain Up",
-        description: "+10% XP gain",
+        name() { return "XP Gain Up"},
+        description() { return "+10% XP gain"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.xpGain *= 1.1; }
     },
     {
-        name: "Loot Gain Up",
-        description: "+10% loot gain",
+        name() { return "Loot Gain Up"},
+        description() { return "+10% loot gain"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.lootGain *= 1.1; }
     },
     // Uncommon
     {
-        name: "Health Regen",
+        name() { return "Health Regen"},
         description() {
             let regen = 0.5
             regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
@@ -53,51 +53,51 @@ const UPGRADE_POOL = [
         }
     },
     {
-        name: "XP Gain Up",
-        description: "+20% XP gain",
+        name() { return "XP Gain Up"},
+        description() { return "+20% XP gain"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.xpGain *= 1.2; }
     },
     {
-        name: "Loot Gain Up",
-        description: "+20% loot gain",
+        name() { return "Loot Gain Up"},
+        description() { return "+20% loot gain"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.lootGain *= 1.2; }
     },
     {
-        name: "Attack Damage Up",
-        description: "+15% attack damage",
+        name() { return "Attack Damage Up"},
+        description() { return "+15% attack damage"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.15; }
     },
     {
-        name: "Attack Speed Up",
-        description: "8% faster attack speed",
+        name() { return "Attack Speed Up"},
+        description() { return "8% faster attack speed"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.attackSpeed *= 0.92; }
     },
     // Rare
     {
-        name: "Damage Reduction",
-        description: "Take 10% less damage",
+        name() { return "Damage Reduction"},
+        description() { return "Take 10% less damage"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgradeEffects.damageReduction *= 0.9; }
     },
     {
-        name: "Movement Speed Up",
-        description: "+1 max velocity",
+        name() { return "Movement Speed Up"},
+        description() { return "+1 max velocity"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgradeEffects.moveSpeed += 1; }
     },
     {
-        name: "Gem Gain Up",
-        description: "+10% gem gain",
+        name() { return "Gem Gain Up"},
+        description() { return "+10% gem gain"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgradeEffects.gemGain *= 1.1; }
@@ -111,28 +111,28 @@ const UPGRADE_POOL = [
     },
     // Epic
     {
-        name: "Epic Attack",
-        description: "+20% attack damage, +8% attack speed",
+        name() { return "Epic Attack"},
+        description() { return "+20% attack damage, +8% attack speed"},
         rarity: "epic",
         color: "#b44cff",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.2; arena.upgradeEffects.attackSpeed *= 0.92; }
     },
     {
-        name: "Epic XP",
-        description: "+50% XP gain",
+        name() { return "Epic XP"},
+        description() { return "+50% XP gain"},
         rarity: "epic",
         color: "#b44cff",
         effect(arena) { arena.upgradeEffects.xpGain *= 1.5; }
     },
     {
-        name: "Epic Reward",
-        description: "+30% loot gain, +5% gem gain",
+        name() { return "Epic Reward"},
+        description() { return "+30% loot gain, +5% gem gain"},
         rarity: "epic",
         color: "#b44cff",
         effect(arena) { arena.upgradeEffects.lootGain *= 1.3; arena.upgradeEffects.gemGain *= 1.05; }
     },
     {
-        name: "Epic Defense",
+        name() { return "Epic Defense"},
         description() {
             let regen = 0.5
             regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
@@ -1009,7 +1009,6 @@ class SpaceArena {
             overflow: 'hidden',
 	        "transition-duration": "0s",
         });
-        console.log(this.arenaDiv)
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
@@ -3572,8 +3571,7 @@ class SpaceArena {
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = Math.pow(3, asteroid.unit);
-                if (asteroid.type == "metal") xp = Math.pow(xp, 1.3)
+                let xp = asteroid.big ? new Decimal(9) : new Decimal(3);
                 xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
@@ -4648,20 +4646,20 @@ class SpaceArena {
             this.ctx.restore();
             
             this.ctx.save();
-            this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y);
+            this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y + (this.canvasHeight / 2));
             //(this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y
             this.ctx.globalAlpha = 1;
             this.ctx.font = "bold 48px monospace";
             this.ctx.fillStyle = "#fff";
             this.ctx.textAlign = "center";
-            this.ctx.fillText("Choose an Upgrade!", this.width / 2, 120);
+            this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 150);
 
             let spacing = 262.5;
             let boxWidth = 250;
             let boxHeight = 150;
             let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
-            let startX = (this.width - totalWidth) / 2;
-            let boxY = this.height / 2 - boxHeight / 2;
+            let startX = (this.canvasWidth - totalWidth) / 2;
+            let boxY = (this.canvasHeight - boxHeight) / 2;
 
             for (let i = 0; i < this.upgradeChoices.length; i++) {
                 let upg = this.upgradeChoices[i];
@@ -4690,7 +4688,7 @@ class SpaceArena {
                 this.ctx.font = "bold 24px monospace";
                 this.ctx.fillStyle = upg.color;
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 30);
+                this.ctx.fillText(upg.name(), boxX + boxWidth / 2, boxY + 30);
 
                 let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
                 this.ctx.font = "italic 18px monospace";
@@ -4699,7 +4697,7 @@ class SpaceArena {
 
                 this.ctx.font = "16px monospace";
                 this.ctx.fillStyle = "#fff";
-                let desc = upg.description;
+                let desc = upg.description();
                 let descLines = [];
                 let words = desc.split(" ");
                 let line = "";
@@ -4724,7 +4722,7 @@ class SpaceArena {
             if (this.selectedUpgradeIndex !== null) {
                 let confirmWidth = 250;
                 let confirmHeight = 50;
-                let confirmX = this.width / 2 - confirmWidth / 2;
+                let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
                 let confirmY = boxY + boxHeight + 40;
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
@@ -4757,12 +4755,12 @@ class SpaceArena {
             let rect = this.canvas.getBoundingClientRect();
             let x = e.clientX - rect.left;
             let y = e.clientY - rect.top;
-            let spacing = 340;
-            let boxWidth = 320;
-            let boxHeight = 220;
+            let spacing = 262.5;
+            let boxWidth = 250;
+            let boxHeight = 150;
             let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
-            let startX = (this.width - totalWidth) / 2;
-            let boxY = this.height / 2 - boxHeight / 2;
+            let startX = (this.canvasWidth - totalWidth) / 2;
+            let boxY = (this.canvasHeight - boxHeight) / 2;
 
             for (let i = 0; i < this.upgradeChoices.length; i++) {
                 let boxX = startX + i * spacing;
@@ -4781,7 +4779,7 @@ class SpaceArena {
             if (this.selectedUpgradeIndex !== null) {
                 let confirmWidth = 180;
                 let confirmHeight = 50;
-                let confirmX = this.width / 2 - confirmWidth / 2;
+                let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
                 let confirmY = boxY + boxHeight + 40;
                 if (
                     x > confirmX &&

@@ -1,4 +1,4 @@
-const petShopShardName = ["Evolution Shard", "Paragon Shard"]
+const petShopShardName = ["Evolution Shard", "Paragon Shard", "Ascension Shard"]
 const petShopCrateName = ["Common Crate", "Common/Uncommon Crate", "Uncommon Crate", "Antimatter Crate", "Replicanti Crate", "Rare Crate"]
 const petShopBase = {
     common: {
@@ -622,6 +622,12 @@ addLayer("pet", {
         player.pet.fragShopCost1 = fragShopBase[player.pet.fragShopIndex][0].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
         player.pet.fragShopCost2 = fragShopBase[player.pet.fragShopIndex][1].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
         player.pet.fragShopCost3 = fragShopBase[player.pet.fragShopIndex][2].mul(fragMul).mul(player.pet.fragShopBulk).mul(10).floor().div(10)
+
+        // MODIFIERS FOR FRAG FRAGMENTS
+        if (hasUpgrade("ev15", 13) && player.pet.fragShopIndex == 4) {
+            player.pet.fragShopCost2 = new Decimal(0)
+            player.pet.fragShopCost3 = new Decimal(0)
+        }
 
         for (let i in player.pet.fragShop) {
             player.pet.fragShop[i].current = player.pet.fragShop[i].current.sub(onepersec.mul(delta))
@@ -2160,7 +2166,7 @@ addLayer("pet", {
             },
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
-                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0])
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40)).add(levelableEffect("pet", 1103)[0]).add(buyableEffect("ev15", 12))
                 if ((player.points.lt(1e100) && !hasMilestone("ip", 24)) || inChallenge("ip", 13)) amt = amt.sub(1)
                 return [
                     amt.pow(2.7).pow(Decimal.pow(4, getLevelableTier(this.layer, this.id))).add(1), // Factor Power Gain
@@ -2455,9 +2461,12 @@ addLayer("pet", {
             levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                let eff1 = amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1)
+                let eff2 = amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1)
+                if (hasUpgrade("ev15", 19)) eff2 = eff2.pow(upgradeEffect("ev15", 19))
                 return [
-                    amt.mul(0.05).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Fragmentation Mult
-                    amt.mul(0.1).mul(Decimal.pow(2, getLevelableTier(this.layer, this.id))).add(1), // Coin Dust Currencies
+                    eff1, // Fragmentation Mult
+                    eff2, // Coin Dust Currencies
                 ]
             },
             sellValue() { return new Decimal(20)},
@@ -4062,9 +4071,10 @@ addLayer("pet", {
             },
             levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
+                let amt = getLevelableAmount(this.layer, this.id).add(levelableEffect("pet", 2103)[0])
                 return [
-                    getLevelableAmount(this.layer, this.id), // Effective Unsmith Levels
-                    getLevelableAmount(this.layer, this.id).pow(1.15), // Base Coin Dust Gain Per Hour
+                    amt, // Effective Unsmith Levels
+                    amt.pow(1.15), // Base Coin Dust Gain Per Hour
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -4287,9 +4297,10 @@ addLayer("pet", {
             },
             levelLimit() { return getBuyableAmount("sme", 111).gt(0) ? new Decimal(10).add(buyableEffect("sme", 111)) : new Decimal(10) },
             effect() { 
+                let amt = getLevelableAmount(this.layer, this.id).add(levelableEffect("pet", 2203)[0])
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // Pet Point Button Cooldown
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), // XPBoost
+                    amt.mul(0.02).add(1), // Pet Point Button Cooldown
+                    amt.mul(0.03).add(1), // XPBoost
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -4738,6 +4749,102 @@ addLayer("pet", {
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        2103: {
+            // diamondsmith stuff
+            image() { return this.canClick() ? "resources/Pets/diamondsmithEvoPet.png" : "resources/secret.png"},
+            title() { return "Diamondsmith" },
+            lore() { return "With the immense power of shards of ascension, Goldsmith's superphysical energy has been condensed even more, now into an iridescent diamond." },
+            description() {
+                return "Unlock diamond dust.<br>" +
+                    "+" + format(this.effect()[0]) + " effective goldsmith levels.<br>" +
+                    "x" + format(this.effect()[1]) + " to coin dust.<br>" +
+                    "x" + format(this.effect()[2]) + " to coin shards."
+            },
+            levelLimit() { return new Decimal(10) },
+            levelTooltip() { return "Costs Asc Shards." },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id)
+                return [
+                    amt.mul(2), // Effective Goldsmith Levels
+                    amt.mul(2).plus(1), // Coin Dust
+                    amt.plus(2).div(2) // Coin Shards
+                ] 
+            },
+            evoCan() {return true},
+            evoTooltip() {return ""},
+            evoClick() {
+                player.tab = "ev15"
+            },
+            // CLICK CODE
+            unlocked() { return player.cbs.shrineReactivated},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
+            canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.75).floor().plus(1) },
+            currency() { return player.cbs.ascensionShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#c6f7ff"}}, // #7aecff for smth darker if needed
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        2203: {
+            // extreme demon stuff
+            image() { return this.canClick() ? "resources/Pets/extremeDemonEvoPet.png" : "resources/secret.png"},
+            title() { return "Extreme Demon" },
+            lore() { return "The lobotomy within the already insane face has magnified so much that it has turned into an absolute bloodbath. You should probably stay away from it..." },
+            description() {
+                return "Unlock the treasure room.<br>" +
+                    "+" + format(this.effect()[0]) + " effective insane face levels.<br>" +
+                    "x" + format(this.effect()[1]) + " to orbs.<br>"
+            },
+            levelLimit() { return new Decimal(10) },
+            levelTooltip() { return "Costs Asc Shards." },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id)
+                return [
+                    amt.mul(2), // Effective Insane Face Levels
+                    amt.div(4).plus(1), // Orbs
+                ] 
+            },
+            evoCan() {return true},
+            evoTooltip() {return ""},
+            evoClick() {
+                player.tab = "ev16"
+            },
+            // CLICK CODE
+            unlocked() { return player.cbs.shrineReactivated},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cbs.ascensionShards = player.cbs.ascensionShards.sub(amt) },
+            canAfford() { return player.cbs.ascensionShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.5).floor() },
+            currency() { return player.cbs.ascensionShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#200000" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             }
@@ -5203,10 +5310,10 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
                            ["style-column", [
                                 ["raw-html", "Shards of Ascension", {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.d.diceSpaceUnlocked ? {width: "535px", height: "40px", backgroundColor: "#18282b", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
+                            ], () => { return player.d.diceSpaceUnlocked ? {width: "535px", height: "40px", backgroundColor: "#273132", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 1401]]],
-                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
+                                ["row", [["levelable", 1401], ["levelable", 2103],]],
+                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#131819", padding: "5px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],
@@ -5513,7 +5620,7 @@ addLayer("pet", {
                                         case 3:
                                             return "(" + formatWhole(player.pet.singularityFragments) + ")"
                                         case 4:
-                                            return "(" + player.pet.levelables[110][1] + "/" + tmp.pet.levelables[110].xpReq + ")"
+                                            return "(" + formatWhole(player.pet.levelables[110][1]) + "/" + tmp.pet.levelables[110].xpReq + ")"
                                         case 5:
                                             return "(" + player.pet.levelables[210][1] + "/" + tmp.pet.levelables[210].xpReq + ")"
                                         case 6:

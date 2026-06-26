@@ -254,7 +254,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ep0", "ep1", "ep2", "sp"]],
+    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ev15", "ev16"], ["ep0", "ep1", "ep2", "sp"]],
     nodeStyle() {
         return {
             background: "#094599",
@@ -354,4 +354,48 @@ addUniverse("DS", {
     },
     uniShown() { return player.d.diceSpaceUnlocked && !player.sma.inStarmetalChallenge }, //make it something
     disabled() {return false}
+})
+
+addUniverse("UZ", {
+    name() {
+        return "Universe ζ<br>Puzzle World"
+    },
+    symbol: "ζ",
+    tree: [["pf", "ak", ],["el",]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)",
+            backgroundOrigin: "border-box",
+            color: "#ff0080",
+            borderColor: "#ff0080ff",
+        }
+        if (player.universe=="UZ") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return false && !player.sma.inStarmetalChallenge },
+    disabled() {return false}
+})
+
+addUniverse("PF", {
+    name: "Puzzle Fighting",
+    symbol: "҂",
+    tree: [],
+    nodeStyle() {
+        let style = {
+            background: "black",
+            backgroundOrigin: "border-box",
+            borderColor: "#8a0e79",
+            color: "#cf15b6",
+        }
+        if (player.universe=="PF") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
 })

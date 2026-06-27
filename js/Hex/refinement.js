@@ -74,6 +74,9 @@ addLayer("hre", {
         for (let i = 0; i < 6; i++) {
             player.hre.refinementEffect[i][1] = player.hre.refinementEffect[i][1].pow(player.hpu.purifiers[2].effect)
         }
+
+        // CHECK FOR ACHS
+        if (!hasAchievement("achievements", 303) && player.hre.refinement.gte(30)) completeAchievement("achievements", 303)
     },
     clickables: {
         1: {

@@ -246,6 +246,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 205)[0])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 301)[1])
             if (hasAchievement("achievements", 208)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.5)
+            if (hasAchievement("achievements", 305)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.ev0.coinDustEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cb.XPBoostEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.d.boosterEffects[12])
@@ -449,6 +450,9 @@ addLayer("cb", {
         if (player.cb.paragonShards.lte(0)) {
             player.cb.paragonShards = new Decimal(0)
         }
+
+        // Check for achs
+        if (!hasAchievement("achievements", 305) && player.cb.level.gte(1000)) completeAchievement("achievements", 305)
     },
     levelToXP(quantity) {
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level

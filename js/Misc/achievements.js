@@ -933,7 +933,7 @@ addLayer("achievements", {
         1218: {
             name: "okay this is getting ridiculous",
             image: "resources/achievements/12_00.png",
-            tooltip: "<h3>okay this is getting<br>ridiculous</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first thirteen<br>pyramid fountains.<br><br>Reward: Pyramid fountains<br>are 20% cheaper.",
+            tooltip: "<h3>okay this is getting<br>ridiculous</h3><hr style='margin-bottom:4px'>Get at least 1 ↻ for each<br>of the first twelve<br>pyramid fountains.<br><br>Reward: Pyramid fountains<br>are 20% cheaper.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,
@@ -1181,10 +1181,10 @@ addLayer("achievements", {
                 ["style-row", [
                     ["category-button", ["~ 3 ~<br><h6>Tav</h6>", "stars", 3], {width: "155px", height: "40px", color: "#b2d8d8", background: "#354040", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[3].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                /*
                 ["style-row", [
                     ["category-button", ["~ 4 ~<br><h6>Break Infinity</h6>", "stars", 4], {width: "155px", height: "40px", color: "#2b7f0a", background: "#113204", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[4].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
-                /*
                 ["style-row", [
                     ["category-button", ["~ 5 ~<br><h6>Cante</h6>", "stars", 5], {width: "155px", height: "40px", color: "#43aad9", background: "#032737", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[5].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
@@ -1200,20 +1200,17 @@ addLayer("achievements", {
                 ["style-row", [
                     ["category-button", ["~ 9 ~<br><h6>Iridite</h6>", "stars", 9], {width: "155px", height: "40px", color: "#5a4fcf", background: "#160239", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[9].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                */
                 ["style-row", [
                     ["category-button", ["~ 10 ~<br><h6>Early Hive</h6>", "stars", 10], {width: "155px", height: "40px", color: "#f9c901", background: "#352300", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[10].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                /*
                 ["style-row", [
                     ["category-button", ["~ 11 ~<br><h6>Early Zar</h6>", "stars", 11], {width: "155px", height: "40px", color: "#c0c0c0", background: "#606060", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[11].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 */
-
-                
                 ["style-row", [
-                    ["category-button", ["~ 10 ~<br><h6>Early Hive</h6>", "stars", 10], {width: "155px", height: "40px", color: "#f9c901", background: "#352300", borderRight: "3px solid white"}],
-                ], () => {return tmp.achievements.microtabs.stars[10].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
-                ["style-row", [
-                    ["category-button", ["<span style='color:#e6e687'>★★★</span>★★<small style='color:#c00'></small>", "stars", 13], {width: "155px", height: "40px", color: "#88e688", background: "#2e152e", borderRight: "3px solid white"}],
+                    ["category-button", ["~ 13 ~<br><h6>Early Interspace</h6>", "stars", 13], {width: "155px", height: "40px", color: "#e0ffe0", background: "#402040", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[13].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
             ], {width: "170px", height: "415px"}],
             ["style-column", [

@@ -76,7 +76,7 @@ addLayer("hre", {
         }
 
         // CHECK FOR ACHS
-        if (!hasAchievement("achievements", 303) && player.hre.refinement.gte(30)) completeAchievement("achievements", 303)
+        // if (!hasAchievement("achievements", 303) && player.hre.refinement.gte(30)) completeAchievement("achievements", 303)
     },
     clickables: {
         1: {

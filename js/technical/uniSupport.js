@@ -377,7 +377,7 @@ addUniverse("UD", {
     },
     uniShown() { return player.startedGame && player.lightRift.interspaceUnlocked && !player.sma.inStarmetalChallenge},
 })
-/*
+
 addUniverse("UZ", {
     name() {
         return "Universe ζ<br>Puzzle World"
@@ -420,4 +420,4 @@ addUniverse("PF", {
         }
         return style
     },
-})*/
+})

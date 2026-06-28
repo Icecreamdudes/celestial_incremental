@@ -15,7 +15,8 @@ addLayer("ev1", {
     nodeStyle: {
         background: "linear-gradient(140deg, #b00000 0%, #bda500 50%, #b00000 100%)",
 		backgroundOrigin: "border-box",
-		borderColor: "#750000"
+		borderColor: "#750000",
+        color: "#750000",
     },
     tooltip: "Button Enhancement",
     color: "white",

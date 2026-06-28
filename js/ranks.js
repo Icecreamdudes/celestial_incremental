@@ -262,7 +262,7 @@
         }
 
         // Check for achs
-        if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
+        // if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
     },
     getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {

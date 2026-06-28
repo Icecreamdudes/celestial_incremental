@@ -452,7 +452,7 @@ addLayer("cb", {
         }
 
         // Check for achs
-        if (!hasAchievement("achievements", 305) && player.cb.level.gte(1000)) completeAchievement("achievements", 305)
+        // if (!hasAchievement("achievements", 305) && player.cb.level.gte(1000)) completeAchievement("achievements", 305)
     },
     levelToXP(quantity) {
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level

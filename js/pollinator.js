@@ -250,7 +250,7 @@ addLayer("pol", {
         player.pol.maxCount = buyableEffect("pol", 15).add(1)
 
         // CHECK FOR ACHS
-        if (!hasAchievement("achievements", 302) && hasUpgrade("pol", 14)) completeAchievement("achievements", 302)
+        // if (!hasAchievement("achievements", 302) && hasUpgrade("pol", 14)) completeAchievement("achievements", 302)
     },
     clickables: {
         1: {

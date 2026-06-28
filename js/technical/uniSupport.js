@@ -267,7 +267,7 @@ addUniverse("CB", {
 addUniverse("CH", {
     name: "Universe γ<br>Hall of Celestials",
     symbol: "γ",
-    tree: [["ch"]],
+    tree: [["ch"],["hk"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",

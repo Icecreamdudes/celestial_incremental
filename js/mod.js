@@ -35,9 +35,9 @@
 		"Singularity/lightRift.js",
 		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
-		/*
+		
 		"Puzzle World/akash.js", "Puzzle World/elements.js", 
-		"Puzzle World/Puzzle Fighting/puzzleFighting.js",*/
+		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 

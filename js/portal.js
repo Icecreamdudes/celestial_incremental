@@ -307,6 +307,7 @@
             unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
             onClick() {
                 player.po.breakInfinity = true
+                // if (!hasAchievement("achievements", 301)) completeAchievement("achievements", 301)
             },
             style: {
                 width: '200px',

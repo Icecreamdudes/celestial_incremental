@@ -200,14 +200,23 @@ class SpaceArena {
         let coordY = xy[1]
         let shipX = this.ship.x
         let shipY = this.ship.y
-        let maxDistX = ((this.canvasWidth + w) / 2)
-        let maxDistY = ((this.canvasHeight + h) / 2)
+        let maxDistX = (this.canvasWidth + w) / 2
+        let maxDistY = (this.canvasHeight + h) / 2
         if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
         else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
         if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
         else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
         if (Math.abs(coordX - shipX) - (w / 2) <= (this.canvasWidth / 2) && Math.abs(coordY - shipY) - (h / 2) <= (this.canvasHeight / 2)) return [coordX, coordY];
         else return null;
+    }
+    getClosestCoords(xy) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        if (Math.abs(coordX - shipX) > this.canvasWidth / 2) coordX += coordX - shipX > 0 ? -this.canvasWidth : this.canvasWidth;
+        if (Math.abs(coordY - shipY) > this.canvasHeight) coordY += coordY - shipY > 0 ? -this.canvasHeight : this.canvasHeight;
+        return [coordX, coordY];
     }
 
         // Expand the arena to cover the entire screen and make it transparent
@@ -3361,14 +3370,18 @@ class SpaceArena {
                 asteroid.phased = !asteroid.phased;
                 asteroid.phaseTimer = 60 + Math.floor(Math.random() * 120);
             }
-            let outLeft = asteroid.x + Math.min(...asteroid.shape.map(p => p.x)) < 0;
-            let outRight = asteroid.x + Math.max(...asteroid.shape.map(p => p.x)) > this.width;
-            let outTop = asteroid.y + Math.min(...asteroid.shape.map(p => p.y)) < 0;
-            let outBottom = asteroid.y + Math.max(...asteroid.shape.map(p => p.y)) > this.height;
-            if (outLeft) asteroid.x = this.width - Math.max(...asteroid.shape.map(p => p.x));
-            if (outRight) asteroid.x = -Math.min(...asteroid.shape.map(p => p.x));
-            if (outTop) asteroid.y = this.height - Math.max(...asteroid.shape.map(p => p.y));
-            if (outBottom) asteroid.y = -Math.min(...asteroid.shape.map(p => p.y));
+            if (asteroid.x < 0) {
+                asteroid.x = this.width;
+            }
+            if (asteroid.x > this.width) {
+                asteroid.x = 0;
+            }
+            if (asteroid.y < 0) {
+                asteroid.y = this.height;
+            }
+            if (asteroid.y > this.height) {
+                asteroid.y = 0;
+            }
         }
 
         // Bullet-asteroid collision
@@ -3679,8 +3692,9 @@ class SpaceArena {
 
         // Update XP orbs (move toward ship, pick up if close)
         for (let orb of this.xpOrbs) {
-            let dx = this.ship.x - orb.x;
-            let dy = this.ship.y - orb.y;
+            let closest = this.getClosestCoords([orb.x, orb.y])
+            let dx = closest[0] - orb.x;
+            let dy = closest[1] - orb.y;
             let dist = Math.sqrt(dx * dx + dy * dy);
             let speed = 2;
             if (dist > 5) {
@@ -3690,6 +3704,18 @@ class SpaceArena {
             if (dist < 30 && !orb.picked) {
                 player.ir.battleXP = player.ir.battleXP.add(orb.amount);
                 orb.picked = true;
+            }
+            if (orb.x < 0) {
+                orb.x = this.width;
+            }
+            if (orb.x > this.width) {
+                orb.x = 0;
+            }
+            if (orb.y < 0) {
+                orb.y = this.height;
+            }
+            if (orb.y > this.height) {
+                orb.y = 0;
             }
             orb.timer--;
         }
@@ -4458,7 +4484,7 @@ class SpaceArena {
                 this.ctx.font = `${fontSize}px monospace`;
                 this.ctx.textAlign = "center";
                 this.ctx.textBaseline = "middle";
-                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffec8b";
+                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffff00";//ffec8b
                 this.ctx.shadowColor = "#fff1";
                 if (!options.performanceMode) {this.ctx.shadowBlur = bullet.giant ? 18 : 6} else {this.ctx.shadowBlur = 0};
                 this.ctx.fillText("✦", 0, 0);
@@ -4474,7 +4500,7 @@ class SpaceArena {
                 if (wrapped != null) {
                     this.ctx.beginPath();
                     this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
-                    this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
+                    this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffff00";
                     this.ctx.fill();
                 }
                 this.ctx.restore();
@@ -4598,39 +4624,43 @@ class SpaceArena {
         for (let asteroid of this.asteroids) {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
-            this.ctx.translate(asteroid.x, asteroid.y);
-            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-            this.ctx.beginPath();
-            let shape = asteroid.shape;
-            if (shape && shape.length > 0) {
-                this.ctx.moveTo(shape[0].x, shape[0].y);
-                for (let i = 1; i < shape.length; i++) {
-                    this.ctx.lineTo(shape[i].x, shape[i].y);
-                }
-                this.ctx.closePath();
-            }
-            this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
-            this.ctx.fill();
-
-            if (!asteroid.phased) {
-                this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            
+            let wrapped = this.getWrappedCoords([asteroid.x, asteroid.y], asteroid.size, asteroid.size)
+            if (wrapped != null) {
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.fillStyle = "#151230";
-                this.ctx.fillRect(asteroid.x - asteroid.size - 2, asteroid.y - asteroid.size - 20, asteroid.size * 2 + 4, 13);
-                let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
-                this.ctx.fillStyle = "#bf0000";
-                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 9);
+                this.ctx.beginPath();
+                let shape = asteroid.shape;
+                if (shape && shape.length > 0) {
+                    this.ctx.moveTo(shape[0].x, shape[0].y);
+                    for (let i = 1; i < shape.length; i++) {
+                        this.ctx.lineTo(shape[i].x, shape[i].y);
+                    }
+                    this.ctx.closePath();
+                }
+                this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
+                this.ctx.fill();
 
-                let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
-                this.ctx.font = "12px monospace";
-                this.ctx.fillStyle = "#151230";
-                this.ctx.textAlign = "center";
-                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 + 1)
-                this.ctx.fillText(t, asteroid.x + 1, asteroid.y - asteroid.size - 9 - 1)
-                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 + 1)
-                this.ctx.fillText(t, asteroid.x - 1, asteroid.y - asteroid.size - 9 - 1)
-                this.ctx.fillStyle = "white";
-                this.ctx.fillText(t, asteroid.x, asteroid.y - asteroid.size - 9)
+                if (!asteroid.phased) {
+                    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                    this.ctx.fillStyle = "#151230";
+                    this.ctx.fillRect(wrapped[0] - asteroid.size - 2, wrapped[1] - asteroid.size - 20, asteroid.size * 2 + 4, 13);
+                    let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
+                    this.ctx.fillStyle = "#bf0000";
+                    this.ctx.fillRect(wrapped[0] - asteroid.size, wrapped[1] - asteroid.size - 18, barWidth, 9);
+
+                    let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
+                    this.ctx.font = "12px monospace";
+                    this.ctx.fillStyle = "#151230";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 + 1)
+                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 - 1)
+                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 + 1)
+                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 - 1)
+                    this.ctx.fillStyle = "white";
+                    this.ctx.fillText(t, wrapped[0], wrapped[1] - asteroid.size - 9)
+                }
             }
             this.ctx.restore();
         }
@@ -4638,12 +4668,17 @@ class SpaceArena {
         // Draw XP orbs
         for (let orb of this.xpOrbs) {
             this.ctx.save();
-            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-            this.ctx.globalAlpha = 0.8;
-            this.ctx.beginPath();
-            this.ctx.arc(orb.x, orb.y, 6, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#fff";
-            this.ctx.fill();
+            //this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+            let wrapped = this.getWrappedCoords([orb.x, orb.y], 4, 4)
+            if (wrapped != null) {
+                this.ctx.globalAlpha = 0.8;
+                this.ctx.beginPath();
+                this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, 4, 0, 2 * Math.PI);
+                this.ctx.shadowBlur = 4;
+                this.ctx.shadowColor = "#0000ff";
+                this.ctx.fillStyle = "white";
+                this.ctx.fill();
+            }
             this.ctx.restore();
         }
 

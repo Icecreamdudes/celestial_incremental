@@ -82,7 +82,7 @@
         },
         103: {
             title() { return "<h3>" + (player.lightRift.interspaceConditions[2] ? "<h3>MUST" : "<h3>DEPOSIT STARS") },
-            canClick() { return player.au2.stars.gte(1e35) && !player.lightRift.interspaceConditions[2] },
+            canClick() { return player.au2.stars.gte(1e40) && !player.lightRift.interspaceConditions[2] },
             unlocked() { return true },
             onClick() {
                 player.lightRift.interspaceConditions[2] = true
@@ -198,7 +198,7 @@
                             ["style-column", [
                                 ["raw-html", "γ", {color: "#1a6641", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.au2.stars) + " / 1e35<br>Stars"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.au2.stars) + " / 1e40<br>Stars"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#1a6641", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 103],

@@ -4729,10 +4729,10 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            barStyle() { return {backgroundColor: "#5cafbf"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#222222"
+                this.canClick() ? look.backgroundColor = "#bf2fbf" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             } 
@@ -4927,7 +4927,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}}, // #7aecff for smth darker if needed
+            barStyle() { return {backgroundColor: "#5cafbf"}}, // #7aecff for smth darker if needed
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
@@ -4974,7 +4974,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            barStyle() { return {backgroundColor: "#5cafbf"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#200000" : look.backgroundColor = "#222222"

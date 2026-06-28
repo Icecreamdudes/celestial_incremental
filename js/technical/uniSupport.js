@@ -420,4 +420,5 @@ addUniverse("PF", {
         }
         return style
     },
+    uniShown() { return false && !player.sma.inStarmetalChallenge },
 })

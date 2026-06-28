@@ -527,7 +527,7 @@ addLayer("jukebox", {
             description: "Akash",
             img: "resources/music/akash.png",
             file: "music/akashCutscene.mp3",
-            unlocked() {return player.ak.akashUnlocked},
+            unlocked() {return false},
         },
     },
     microtabs: {
@@ -559,7 +559,7 @@ addLayer("jukebox", {
                         ["jukebox", "singularity-waltz"], ["jukebox", "jocus"], ["jukebox", "matos-box"], ["jukebox", "matos"],
                         ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], ["jukebox", "zar"], 
                         ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], ["jukebox", "lament"], ["jukebox", "nav"],
-                        ["jukebox", "zar-death"], ["jukebox", "akash"],
+                        ["jukebox", "zar-death"],
                     ]],
                     ["blank", "2px"],
                 ],

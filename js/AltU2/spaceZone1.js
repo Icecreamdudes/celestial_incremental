@@ -45,6 +45,7 @@ addLayer("spaceZone1", {
     branches: [],
     color: "#5e4ee6",
     update(delta) {
+        player.spaceZone1.levelScaling = new Decimal(1.1)
     },
     clickables: {
         "enter": {
@@ -87,7 +88,7 @@ addLayer("spaceZone1", {
                 ["style-column", [
                     ["style-column", [
                         ["style-column", [
-                            ["raw-html", "Zone 1", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", "Zone I", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["clickable", "enter"],
                     ], {width: "397px", height: "147px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
@@ -105,26 +106,7 @@ addLayer("spaceZone1", {
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],
             ["style-column", [
-                ["style-row", [
-                    ["raw-html", function () { return "You have <span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(player.ir.spaceRock) + " space rocks</span> and <span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(player.ir.spaceGem) + " space gems</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                ], {background: "#37078f", borderBottom: "3px solid #5e4ee6", width: "800px", height: "40px"}],
-
-                ["layer-proxy", ["ir", [
-                    ["always-scroll-column", [
-                        ["row", [
-                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
-                        ]],
-                        ["row", [
-                            ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
-                        ]],
-                        ["row", [
-                            ["upgrade", 19], ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
-                        ]],
-                        ["row", [
-                            ["upgrade", 104], ["upgrade", 105], ["upgrade", 106],
-                        ]],
-                    ], {width: "800px", height: "314px"}]
-                ]]]
+                // STUFF
             ], {width: "800px", height: "357px"}],
         ], {width: "800px", height: "720px"}],
     ],

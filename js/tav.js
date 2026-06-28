@@ -115,9 +115,9 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
+            background: "linear-gradient(150deg, #31aeb0 0%, #b2d8d8 100%)",
             "background-origin": "border-box",
-            "border-color": "#31aeb0",
+            "border-color": "#008080",
             "color": "#008080",
         };
     },
@@ -136,6 +136,7 @@
                 player.tab = "revc"
             }
             else if (hasUpgrade("ta", 12) || player.ta.negativeInfinityPoints.gte(1000)) {
+                layers.revc.checkAchs();
                 layers.revc.reverseCrunch()
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
 
@@ -147,6 +148,11 @@
         if (player.ta.unlockedReverseBreak && !hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(2.5, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
         if (player.ta.unlockedReverseBreak && hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(5, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
         if (hasUpgrade('ta', 12)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
+        if (hasAchievement("achievements", 204)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
+        if (hasAchievement("achievements", 209)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
+        if (hasAchievement("achievements", 214)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
+        if (hasAchievement("achievements", 218)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
+        if (hasAchievement("achievements", 223)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("m", 16))
 
         // NIP MULTIPLIERS
@@ -255,6 +261,21 @@
 
         if (player.ta.galaxyLimitInput.gte(0)) player.ta.galaxyLimit = player.ta.galaxyLimitInput.floor()
         if (player.ta.galaxyLimitInput.lt(0)) player.ta.galaxyLimit = new Decimal(0)
+
+        // CHECK FOR ACHIEVEMENTS
+        if (!hasAchievement("achievements", 203) && hasUpgrade("ta", 13)) completeAchievement("achievements", 203)
+        if (!hasAchievement("achievements", 205) && hasUpgrade("ta", 15)) completeAchievement("achievements", 205)
+        if (!hasAchievement("achievements", 206) && hasUpgrade("ta", 16)) completeAchievement("achievements", 206)
+        if (!hasAchievement("achievements", 207) && hasUpgrade("ta", 17)) completeAchievement("achievements", 207)
+        if (!hasAchievement("achievements", 210) && hasUpgrade("ta", 18)) completeAchievement("achievements", 210)
+        if (!hasAchievement("achievements", 212) && hasUpgrade("ta", 19)) completeAchievement("achievements", 212)
+        if (!hasAchievement("achievements", 213) && hasUpgrade("ta", 21)) completeAchievement("achievements", 213)
+
+        if (!hasAchievement("achievements", 204)
+        && getBuyableAmount("ta", 21).gte(1)
+        && getBuyableAmount("ta", 25).gte(1)
+        && getBuyableAmount("ta", 29).gte(1)
+        && getBuyableAmount("ta", 31).gte(1)) completeAchievement("achievements", 204)
     },
     negativeInfinityReset() {
         player.ad.antimatter = new Decimal(10)
@@ -309,6 +330,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                layers.revc.checkAchs();
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
@@ -1127,6 +1149,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 202)) completeAchievement("achievements", 202)
                 if (mult != true && !hasUpgrade("bi", 104)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -1874,6 +1897,7 @@ addLayer("revc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                layers.revc.checkAchs();
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
                 player.tab = "ad"
                 player.revc.minipause = new Decimal(3)
@@ -1884,6 +1908,18 @@ addLayer("revc", {
     reverseCrunch(){
         player.ta.reachedNegativeInfinity = false
         player.ta.negativeInfinityPause = new Decimal(5)
+        if (!hasAchievement("achievements", 201)) completeAchievement("achievements", 201)
+    },
+    checkAchs() {
+        if (getBuyableAmount("ad", 18).lte(0)) {
+            if (getBuyableAmount("ad", 17).lte(0)) {
+                if (!hasAchievement("achievements", 223)) completeAchievement("achievements", 223)
+            }
+        if (!hasAchievement("achievements", 218)) completeAchievement("achievements", 218)
+        }
+        if (getBuyableAmount("ad", 3).lte(0)) {
+            if (!hasAchievement("achievements", 209)) completeAchievement("achievements", 209)
+        }
     },
     bars: {},
     upgrades: {},

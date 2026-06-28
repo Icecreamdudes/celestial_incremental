@@ -254,7 +254,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2"], ["ev15", "ev8", "ep16"], ["ep0", "ep1", "ep2"], ["sp", "ep3"]],
+    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2"], ["ev15", "ev8", "ev16"], ["ep0", "ep1", "ep2"], ["sp", "ep3"]],
     nodeStyle() {
         return {
             background: "#094599",
@@ -339,7 +339,7 @@ addUniverse("DS", {
         return "Universe ε<br>Dice Space"
     },
     symbol: "ε",
-    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",], ["zd",]],
+    tree: [["za"], ["cf", "wof"], ["sm"], ["cbs", "car"], ["zd"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
@@ -377,13 +377,13 @@ addUniverse("UD", {
     },
     uniShown() { return player.startedGame && player.lightRift.interspaceUnlocked && !player.sma.inStarmetalChallenge},
 })
-
+/*
 addUniverse("UZ", {
     name() {
         return "Universe ζ<br>Puzzle World"
     },
     symbol: "ζ",
-    tree: [["pf", "ak", ],["el",]],
+    tree: [["pf", "ak"], ["el"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)",
@@ -420,4 +420,4 @@ addUniverse("PF", {
         }
         return style
     },
-})
+})*/

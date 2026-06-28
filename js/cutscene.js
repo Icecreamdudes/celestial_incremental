@@ -4735,7 +4735,7 @@
             background: "linear-gradient(135deg, #ff0080ff 0%, #e00070ff 50%, #ff0080ff 100%)",
             portrait: "resources/secret.png",
             music: "music/akashCutscene.mp3",
-            trigger() {return player.ak.akashUnlocked },
+            trigger() {return false },
             dialogue: [
                 { text: "In a rather short period of time, you solve the first puzzle in this strange new universe." }, 
                 { text: "Well, since you solved the puzzle, I'm going to introduce myself.", portrait: "resources/akash.png"},

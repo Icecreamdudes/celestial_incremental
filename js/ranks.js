@@ -165,6 +165,7 @@
         let pentDiv = new Decimal(1)
         if (hasAchievement("achievements", 17)) pentDiv = pentDiv.mul(8)
         if (hasAchievement("achievements", 112)) pentDiv = pentDiv.mul(10)
+        if (hasAchievement("achievements", 304)) pentDiv = pentDiv.mul(100)
         pentDiv = pentDiv.mul(buyableEffect("g", 19))
         if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
         
@@ -259,6 +260,9 @@
             player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(player.cs.scraps.point.effect)
             if (hasUpgrade("cs", 104)) player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(2)
         }
+
+        // Check for achs
+        // if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
     },
     getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {

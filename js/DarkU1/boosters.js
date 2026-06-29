@@ -60,6 +60,10 @@
         player.db.milestone4Effect = player.db.boosters.add(1).pow(1.2).div(3).add(1)
 
         player.db.permaMilestone4Effect = player.db.bestBoosters.add(1).pow(0.35).div(10).add(1)
+
+        if (hasUpgrade("ani", 25) && player.du.points.gte(player.db.boosterReq)) {
+            player.db.boosters = player.db.boosters.add(1)
+        }
     },
     bars: {},
     clickables: {

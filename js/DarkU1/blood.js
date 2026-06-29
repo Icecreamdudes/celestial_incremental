@@ -798,7 +798,7 @@
                     ], {width: "800px", border: "3px solid #f57171ff", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
                         ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "With the fifth pylon built, you'll see what this world has truly been. Eclipse, you must create your field again, but don't get punchcards early on within. When the clock hits thirty, go get your reward, and your opponent spawns with great accord.", {color: "#74ff8f", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],

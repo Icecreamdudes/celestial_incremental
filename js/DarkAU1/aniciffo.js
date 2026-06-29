@@ -1,6 +1,6 @@
 ﻿addLayer("ani", {
     name: "Aniciffo, the Celestial of Radioactivity", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "☣︎ ", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "<img src='resources/radiation/whiteRadiation.png' style='width:calc(60%);height:calc(60%);margin:-12.5%'></img>",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -10,6 +10,7 @@
         darkRadiationEffect: new Decimal(1),
         darkRadiationEffect2: new Decimal(1),
         darkRadiationToGet: new Decimal(1),
+        darkRadiationToggle: true,
 
         timer: {
             current: new Decimal(0),
@@ -24,6 +25,7 @@
                 toGet: new Decimal(0),
                 cost: new Decimal(5),
                 effect: new Decimal(1),
+                toggle: true,
             },
             orange: {
                 current: new Decimal(0),
@@ -32,6 +34,7 @@
                 toGet: new Decimal(0),
                 cost: new Decimal(5),
                 effect: new Decimal(1),
+                toggle: true,
             },
             yellow: {
                 current: new Decimal(0),
@@ -40,6 +43,7 @@
                 toGet: new Decimal(0),
                 cost: new Decimal(5),
                 effect: new Decimal(1),
+                toggle: true,
             },
             green: {
                 current: new Decimal(0),
@@ -48,6 +52,16 @@
                 toGet: new Decimal(0),
                 cost: new Decimal(250),
                 effect: new Decimal(1),
+                toggle: true,
+            },
+            blue: {
+                current: new Decimal(0),
+                max: new Decimal(15),
+                amount: new Decimal(0),
+                toGet: new Decimal(0),
+                cost: new Decimal(3),
+                effect: new Decimal(1),
+                toggle: true,
             },
         },
 
@@ -93,6 +107,7 @@
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.tr.radiation.effect2)
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.sr.radiation.effect2)
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("ani", 21))
+        if (hasUpgrade("hr", 12)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(upgradeEffect("hr", 12))
 
         if (player.ani.darkRadiation.div(3).pow(0.65).add(1).lte(1e6))
         {
@@ -123,6 +138,7 @@
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("ani", 12))
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("tr", 14))
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("ani", 31))
+        if (hasUpgrade("mr", 12)) player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(upgradeEffect("mr", 12))
 
         player.ani.radiation.red.max = new Decimal(6)
         if (hasUpgrade("ani", 19)) player.ani.radiation.red.max = player.ani.radiation.red.max.div(3)
@@ -143,6 +159,7 @@
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(player.ani.radiation.yellow.effect)
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("tr", 15))
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("ani", 31))
+        if (hasUpgrade("mr", 12)) player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(upgradeEffect("mr", 12))
 
         player.ani.radiation.orange.max = new Decimal(9)
         if (hasUpgrade("ani", 19)) player.ani.radiation.orange.max = player.ani.radiation.orange.max.div(3)
@@ -163,6 +180,7 @@
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("tr", 16))
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(player.ani.radiation.green.effect)
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("ani", 31))
+        if (hasUpgrade("mr", 12)) player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(upgradeEffect("mr", 12))
 
         player.ani.radiation.yellow.max = new Decimal(12)
         if (hasUpgrade("ani", 19)) player.ani.radiation.yellow.max = player.ani.radiation.yellow.max.div(3)
@@ -178,6 +196,8 @@
         player.ani.radiation.green.cost = player.ani.radiation.green.amount.add(1).mul(250)
 
         player.ani.radiation.green.toGet = new Decimal(1)
+        player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(player.ani.radiation.blue.effect)
+        if (hasUpgrade("mr", 12)) player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(upgradeEffect("mr", 12))
 
         player.ani.radiation.green.max = new Decimal(10)
 
@@ -186,12 +206,28 @@
             player.ani.radiation.green.current = player.ani.radiation.green.max
         }
 
+        //blue
+        player.ani.radiation.blue.effect = player.ani.radiation.blue.amount.pow(0.7).add(1)
+
+        player.ani.radiation.blue.cost = player.ani.radiation.blue.amount.pow(1.25).add(1).mul(3)
+
+        player.ani.radiation.blue.toGet = new Decimal(1)
+        if (hasUpgrade("mr", 12)) player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(upgradeEffect("mr", 12))
+
+        player.ani.radiation.blue.max = new Decimal(15)
+
+        if (player.ani.radiation.blue.current.lt(0)) {
+            makeShinies(blueRadiation, new Decimal(1))
+            player.ani.radiation.blue.current = player.ani.radiation.blue.max
+        }
+
         if (player.musuniverse == "AD1") {
-            player.ani.timer.current = player.ani.timer.current.sub(delta)
-            if (hasUpgrade("ani", 11)) player.ani.radiation.red.current = player.ani.radiation.red.current.sub(delta)
-            if (hasUpgrade("ani", 13)) player.ani.radiation.orange.current = player.ani.radiation.orange.current.sub(delta)
-            if (hasUpgrade("ani", 14)) player.ani.radiation.yellow.current = player.ani.radiation.yellow.current.sub(delta)
-            if (hasUpgrade("ani", 21)) player.ani.radiation.green.current = player.ani.radiation.green.current.sub(delta)
+            if (player.ani.darkRadiationToggle) player.ani.timer.current = player.ani.timer.current.sub(delta)
+            if (hasUpgrade("ani", 11) && player.ani.radiation.red.toggle) player.ani.radiation.red.current = player.ani.radiation.red.current.sub(delta)
+            if (hasUpgrade("ani", 13) && player.ani.radiation.orange.toggle) player.ani.radiation.orange.current = player.ani.radiation.orange.current.sub(delta)
+            if (hasUpgrade("ani", 14) && player.ani.radiation.yellow.toggle) player.ani.radiation.yellow.current = player.ani.radiation.yellow.current.sub(delta)
+            if (hasUpgrade("ani", 21) && player.ani.radiation.green.toggle) player.ani.radiation.green.current = player.ani.radiation.green.current.sub(delta)
+            if (hasUpgrade("mr", 11) && player.ani.radiation.blue.toggle) player.ani.radiation.blue.current = player.ani.radiation.blue.current.sub(delta)
         }
 
 
@@ -217,6 +253,166 @@
     },
     bars: {},
     clickables: {
+        11: {
+            title() { return player.ani.darkRadiationToggle ? "<h4>Dark Radiation<br>On</h3>" : "<h4>Dark Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                if (player.ani.darkRadiationToggle)
+                { 
+                    player.ani.darkRadiationToggle = false
+                }
+                else 
+                {
+                    player.ani.darkRadiationToggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        12: {
+            title() { return player.ani.radiation.red.toggle ? "<h4>Red Radiation<br>On</h3>" : "<h4>Red Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 11) },
+            onClick() {
+                if (player.ani.radiation.red.toggle)
+                { 
+                    player.ani.radiation.red.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.red.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        13: {
+            title() { return player.ani.radiation.orange.toggle ? "<h4>Orange Radiation<br>On</h3>" : "<h4>Orange Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 13) },
+            onClick() {
+                if (player.ani.radiation.orange.toggle)
+                { 
+                    player.ani.radiation.orange.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.orange.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        14: {
+            title() { return player.ani.radiation.yellow.toggle ? "<h4>Yellow Radiation<br>On</h3>" : "<h4>Yellow Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 14) },
+            onClick() {
+                if (player.ani.radiation.yellow.toggle)
+                { 
+                    player.ani.radiation.yellow.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.yellow.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        15: {
+            title() { return player.ani.radiation.green.toggle ? "<h4>Green Radiation<br>On</h3>" : "<h4>Green Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 21) },
+            onClick() {
+                if (player.ani.radiation.green.toggle)
+                { 
+                    player.ani.radiation.green.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.green.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        16: {
+            title() { return player.tr.radiation.toggle ? "<h4>Time Radiation<br>On</h3>" : "<h4>Time Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 14) },
+            onClick() {
+                if (player.tr.radiation.toggle)
+                { 
+                    player.tr.radiation.toggle = false
+                }
+                else 
+                {
+                    player.tr.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        17: {
+            title() { return player.sr.radiation.toggle ? "<h4>Space Radiation<br>On</h3>" : "<h4>Space Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 16) },
+            onClick() {
+                if (player.sr.radiation.toggle)
+                { 
+                    player.sr.radiation.toggle = false
+                }
+                else 
+                {
+                    player.sr.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        18: {
+            title() { return player.mr.radiation.toggle ? "<h4>Mind Radiation<br>On</h3>" : "<h4>Mind Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 24) },
+            onClick() {
+                if (player.mr.radiation.toggle)
+                { 
+                    player.mr.radiation.toggle = false
+                }
+                else 
+                {
+                    player.mr.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        19: {
+            title() { return player.hr.radiation.toggle ? "<h4>Heart Radiation<br>On</h3>" : "<h4>Heart Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 24) },
+            onClick() {
+                if (player.hr.radiation.toggle)
+                { 
+                    player.hr.radiation.toggle = false
+                }
+                else 
+                {
+                    player.hr.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        21: {
+            title() { return player.ani.radiation.blue.toggle ? "<h4>Blue Radiation<br>On</h3>" : "<h4>Blue Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("mr", 11) },
+            onClick() {
+                if (player.ani.radiation.blue.toggle)
+                { 
+                    player.ani.radiation.blue.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.blue.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
     },
     upgrades: {
         11: {
@@ -378,6 +574,34 @@
             unlocked() { return hasUpgrade("ani", 22) },
             description: "Autobuy dark radiation buyables.",
             cost: new Decimal(1e12),
+            currencyLocation() { return player.ani },
+            currencyDisplayName: "Dark Radiation",
+            currencyInternalName: "darkRadiation",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#74ff8f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#048500" : look.backgroundColor = "#adffaa"
+                return look
+            }
+        },
+        24: {
+            title: "Aniciffo Upgrade XIII",
+            unlocked() { return hasUpgrade("ani", 23) },
+            description: "Unlock mind and heart radiation.",
+            cost: new Decimal(1e13),
+            currencyLocation() { return player.ani },
+            currencyDisplayName: "Dark Radiation",
+            currencyInternalName: "darkRadiation",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#74ff8f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#048500" : look.backgroundColor = "#adffaa"
+                return look
+            }
+        },
+        25: {
+            title: "Aniciffo Upgrade XIV",
+            unlocked() { return hasUpgrade("ani", 24) },
+            description: "Automatically perform a booster reset each tick.",
+            cost: new Decimal(1e14),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -583,7 +807,7 @@
             currency() { return player.ani.stones.temporal.amount},
             pay(amt) { player.ani.stones.temporal.amount = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.5).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).pow(0.9).mul(2.5).add(1)
                 return eff
             },
             unlocked() { return true },
@@ -853,7 +1077,17 @@
                     ["raw-html", () => { return "All effects that boost Dark Universe 1 are only active with the aniciffo punchcard." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17],]],
-                    ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],]],
+                    ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],]],
+                    ["row", [["upgrade", 25],]],
+                ]
+            },
+            "Particle Toggle": {
+                buttonStyle() { return { border: "2px solid #74ff8f", borderRadius: "10px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 21], ]],
+                    ["row", [ ["clickable", 16], ["clickable", 17],["clickable", 18], ["clickable", 19],]],
                 ]
             },
             "Buyables": {
@@ -884,6 +1118,10 @@
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "You have <h3>" + format(player.ani.radiation.green.amount) + "</h3> green radiation. (+" + format(player.ani.radiation.green.toGet) + "/" + formatTime(player.ani.radiation.green.max) + ")" : "" }, {color: "#38dc33", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "Boosts yellow radiation gain by x<h3>" + format(player.ani.radiation.green.effect) + "</h3>." : "" }, {color: "#38dc33", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "Costs <h3>" + format(player.ani.radiation.green.cost) + "</h3> yellow radiation." : "" }, {color: "#38dc33", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "You have <h3>" + format(player.ani.radiation.blue.amount) + "</h3> blue radiation. (+" + format(player.ani.radiation.blue.toGet) + "/" + formatTime(player.ani.radiation.blue.max) + ")" : "" }, {color: "#0c3d8b", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Boosts green radiation gain by x<h3>" + format(player.ani.radiation.blue.effect) + "</h3>." : "" }, {color: "#0c3d8b", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Costs <h3>" + format(player.ani.radiation.blue.cost) + "</h3> green radiation." : "" }, {color: "#0c3d8b", fontSize: "16px", fontFamily: "monospace"}],
                 ]
             },
             "Radiation Stones": {
@@ -1023,6 +1261,28 @@ const greenRadiation = {
             player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.sub(player.ani.radiation.green.cost)
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.green.toGet) + " Green Radiation<br>-" + format(player.ani.radiation.green.cost) + " Yellow Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+    },
+}
+const blueRadiation = {
+    image: "resources/radiation/blueRadiation.png",
+    time() {
+        let time = new Decimal(5) //subject to change
+        return time
+    },
+    fadeInTime: 2,
+    fadeOutTime: 1,
+    class: "goldenCookie",
+    onClick(index, slot) {
+        if (player.ani.radiation.green.amount.gte(player.ani.radiation.blue.cost)) {
+            player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.add(player.ani.radiation.blue.toGet)
+            player.ani.radiation.green.amount = player.ani.radiation.green.amount.sub(player.ani.radiation.blue.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.blue.toGet) + " Blue Radiation<br>-" + format(player.ani.radiation.blue.cost) + " Green Radiation</small>"})
         } else
         {
             Vue.delete(particles, this.id)

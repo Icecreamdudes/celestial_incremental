@@ -59,6 +59,8 @@
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
         if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 403)[0])
+        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.mr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.hr.radiation.effect)
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)

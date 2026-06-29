@@ -47,6 +47,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 116))
+        if (hasAchievement("achievements", 1003)) player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(1.2)
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
@@ -73,6 +74,7 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("zd", 11))
         if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
         if (player.zarDungeon.zarDefeated) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1000)
+        if (hasAchievement("achievements", 1002)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1.25)
 
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         

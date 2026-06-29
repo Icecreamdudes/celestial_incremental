@@ -15,6 +15,7 @@
             toGet: new Decimal(0),
             effect: new Decimal(1), //normality
             effect2: new Decimal(1), //dark radiation (again yes i know)
+            toggle: true,
         },
 
         spaceDecay: new Decimal(0),
@@ -34,7 +35,7 @@
             backgroundOrigin: "border-box",
             borderColor: "#ffffff",
             color: "#f6fff5",
-            transform: "translate(-25px, 17px)",
+            transform: "translate(-25px, 20px)",
         };
     },
     tooltip: "Space Radiation",
@@ -61,7 +62,7 @@
             player.sr.particleClick = new Decimal(0)
         }
 
-        if (player.musuniverse == "AD1" && hasUpgrade("ani", 17) && player.sr.radiation.toGet.gt(1) && !player.pet.legPetTimers[0].active) {
+        if (player.musuniverse == "AD1" && hasUpgrade("ani", 17) && player.sr.radiation.toGet.gt(1) && !player.pet.legPetTimers[0].active && player.sr.radiation.toggle) {
             player.sr.radiation.current = player.sr.radiation.current.sub(delta)
         }
         if (player.sr.radiation.current.lt(0)) {

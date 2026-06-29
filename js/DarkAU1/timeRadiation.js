@@ -15,6 +15,7 @@
             toGet: new Decimal(0),
             effect: new Decimal(1),
             effect2: new Decimal(1),
+            toggle: true,
         }
     }},
     automate() {
@@ -26,7 +27,7 @@
             backgroundOrigin: "border-box",
             //borderColor: "#74ff8f",
             color: "#f6fff5",
-            transform: "translate(25px, 17px)",
+            transform: "translate(25px, 20px)",
         };
     },
     tooltip: "Time Radiation",
@@ -54,7 +55,7 @@
             player.tr.particleClick = new Decimal(0)
         }
 
-        if (player.musuniverse == "AD1" && hasUpgrade("ani", 15) && player.tr.radiation.toGet.gt(1) && player.pet.legPetTimers[0].active) {
+        if (player.musuniverse == "AD1" && hasUpgrade("ani", 15) && player.tr.radiation.toGet.gt(1) && player.pet.legPetTimers[0].active && player.tr.radiation.toggle) {
             player.tr.radiation.current = player.tr.radiation.current.sub(delta)
         }
         if (player.tr.radiation.current.lt(0)) {

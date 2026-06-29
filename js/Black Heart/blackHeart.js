@@ -1364,6 +1364,7 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
         damageAdd = damageAdd.add(levelableEffect("car", 103)[0])
         if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
+        if (hasAchievement("achievements", 1004)) damageAdd = damageAdd.add(1)
 
         // =-- REGEN STUFF --= //
         let regenBase = new Decimal(1)
@@ -3188,6 +3189,7 @@ addLayer("bh", {
                 return look
             },
         },
+        
     },
     bars: {
         "timer": {

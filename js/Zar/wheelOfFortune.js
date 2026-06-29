@@ -100,6 +100,7 @@
         if (player.wof.wheelsSpinned.gte(150)) player.wof.spinCost = player.wof.wheelsSpinned.mul(5).pow(5).add(1).mul(10000)
         if (player.wof.wheelsSpinned.gte(250)) player.wof.spinCost = player.wof.wheelsSpinned.mul(5).pow(10).add(1).mul(10000)
         player.wof.spinCost = player.wof.spinCost.div(buyableEffect("cf", 34))
+        if (hasAchievement("achievements", 1005)) player.wof.spinCost = player.wof.spinCost.div(1.5)
 
         player.wof.spinPause = player.wof.spinPause.sub(1)
         if (player.wof.spinPause.gte(0)) {

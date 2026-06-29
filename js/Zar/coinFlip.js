@@ -145,6 +145,7 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(levelableEffect("car", 204)[0])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sme", 182))
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("car", 22))
+        if (hasAchievement("achievements", 1006)) player.cf.headsToGet = player.cf.headsToGet.mul(1.5)
         
         player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
@@ -163,6 +164,7 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(levelableEffect("car", 206)[0])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sme", 182))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("car", 22))
+        if (hasAchievement("achievements", 1006)) player.cf.tailsToGet = player.cf.tailsToGet.mul(1.5)
 
         player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 
@@ -280,6 +282,8 @@
                 player.cf.buyables[32] = new Decimal(0)
                 player.cf.buyables[33] = new Decimal(0)
                 player.cf.buyables[34] = new Decimal(0)
+
+                if (!hasAchievement("achievements", 1003)) completeAchievement("achievements", 1003)
             },
             onHold() {player.cf.coinExploit = Decimal.add(player.cf.coinExploit, 0.1)},
             style() { 

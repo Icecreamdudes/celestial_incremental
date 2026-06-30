@@ -271,6 +271,8 @@ addLayer("ir", {
     color: "#151230",
     update(delta) {
 
+        if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
+
         if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }

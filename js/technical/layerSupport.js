@@ -45,10 +45,12 @@ function updateHotkeys()
             knownHotkeys[uni] = {};
     }
     for (layer in layers){
-        if(!layers[layer].universe) continue; // need universe for each hotkey
+        
         let hks = layers[layer].hotkeys
         if (hks){
             for (id in hks){
+                if(!layers[layer].universe && !hks[id].global) continue; // need universe for non-global hotkey
+
                 uniCategory = hks[id].global ? 'global' : layers[layer].universe
                 keyString = hks[id].key
 				hotkeys[uniCategory][keyString] = hks[id]

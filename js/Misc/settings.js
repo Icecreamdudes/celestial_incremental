@@ -653,5 +653,15 @@ addLayer("settings", {
         ["blank", "25px"],
     ],
     layerShown() { return false },
+    hotkeys: [
+        {
+            key: "M", 
+            description: "Toggle Music",
+            onPress() {
+                toggleOpt('musicToggle')
+            },
+            global: true
+        },
+    ]
     
 })

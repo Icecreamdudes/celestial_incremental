@@ -819,6 +819,15 @@
     ],
     layerShown() { return getLevelableTier("pu", 401, true) },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "l", 
+            description: "Reset for Blood",
+            onPress() {
+                clickClickable(this.layer, 101)
+            },
+        }
+	]
 })
 
 // BloodArena: same as SpaceArena but with a dark red background

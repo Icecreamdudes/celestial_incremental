@@ -246,7 +246,7 @@
     hotkeys: [
         {
             key: "b", 
-            description: "B: Reset for Boosters",
+            description: "Reset for Boosters",
             onPress() {
                 clickClickable(this.layer, 11)
             },

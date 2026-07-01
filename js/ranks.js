@@ -896,15 +896,15 @@
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 11) },
 
-        hotkeys: [
+    hotkeys: [
         {
             key: "2", 
-            description: "2: Rank Reset",
+            description: "Rank Up",
             unlocked() {
                 return hasUpgrade("i", 11)
             },
             isAutomated() {
-                hasUpgrade("p", 17)
+                return hasUpgrade("p", 17)
             },
             onPress() {
                 clickClickable(this.layer, 11)
@@ -912,12 +912,12 @@
         },
         {
             key: "3", 
-            description: "3: Tier Reset",
+            description: "Tier Up",
             unlocked() {
                 return hasUpgrade("i", 11)
             },
             isAutomated() {
-                hasUpgrade("p", 18)
+                return hasUpgrade("p", 18)
             },
             onPress() {
                 clickClickable(this.layer, 12)
@@ -925,12 +925,25 @@
         },
         {
             key: "4", 
-            description: "4: Tetr Reset",
+            description: "Tetr Up",
             unlocked() {
                 return hasUpgrade("i", 13)
             },
             isAutomated() {
-                hasUpgrade("p", 22)
+                return hasUpgrade("p", 22)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },
+        {
+            key: "5", 
+            description: "Pent Up",
+            unlocked() {
+                return hasUpgrade("i", 18)
+            },
+            isAutomated() {
+                return hasUpgrade("i", 27)
             },
             onPress() {
                 clickClickable(this.layer, 13)

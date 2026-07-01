@@ -3462,7 +3462,16 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 19) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 19) },
+    hotkeys: [
+        {
+            key: "f", 
+            description: "Funify",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })
 
 // hai icecreamdude-senpai :3

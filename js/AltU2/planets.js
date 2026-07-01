@@ -293,5 +293,14 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.st.buyables[202].gte(1) }
+    layerShown() { return player.st.buyables[202].gte(1) },
+    hotkeys: [
+        {
+            key: "p", 
+            description: "Find Planets",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

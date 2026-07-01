@@ -688,7 +688,7 @@
     hotkeys: [
         {
             key: "s", 
-            description: "S: Space Energy",
+            description: "Gain Space Energy",
             onPress() {
                 clickClickable(this.layer, 11)
             },

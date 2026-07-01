@@ -567,5 +567,54 @@ addLayer("ne", {
             }],
         ], {width: "820px"}],
     ],
-    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 1) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 1)}
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 1) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 1)},
+    hotkeys: [
+        {
+            key: "1", 
+            description: "Gain Nectar α",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        },
+        {
+            key: "2", 
+            description: "Gain Nectar β",
+            unlocked() {
+                return hasUpgrade("ne", 103)
+            },
+            onPress() {
+                clickClickable(this.layer, 2)
+            },
+        },
+        {
+            key: "3", 
+            description: "Gain Nectar γ",
+            unlocked() {
+                return hasUpgrade("ne", 203)
+            },
+            onPress() {
+                clickClickable(this.layer, 3)
+            },
+        },
+        {
+            key: "4", 
+            description: "Gain Nectar δ",
+            unlocked() {
+                return hasUpgrade("ne", 303)
+            },
+            onPress() {
+                clickClickable(this.layer, 4)
+            },
+        },
+        {
+            key: "5", 
+            description: "Gain Nectar ε",
+            unlocked() {
+                return hasUpgrade("al", 211)
+            },
+            onPress() {
+                clickClickable(this.layer, 5)
+            },
+        }
+	]
 })

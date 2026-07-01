@@ -112,7 +112,6 @@ function keyTable(uniID) {
             }
         }
     }
-    // console.log(table)
     return table
 }
 

@@ -354,7 +354,6 @@
             key: "p", 
             description: "Dark Prestige",
             onPress() {
-                console.log('hi')
                 clickClickable(this.layer, 11)
             },
         },  

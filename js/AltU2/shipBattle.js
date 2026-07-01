@@ -195,28 +195,65 @@ class SpaceArena {
             - If true, then return screen-wrapped coords.
             - If false, then return null.
     */
-    getWrappedCoords(xy, w, h) {
+    getVisibleWrappedCoords(xy, wh) {
         let coordX = xy[0]
         let coordY = xy[1]
         let shipX = this.ship.x
         let shipY = this.ship.y
-        let maxDistX = (this.canvasWidth + w) / 2
-        let maxDistY = (this.canvasHeight + h) / 2
+        let maxDistX = (this.canvasWidth + wh[0]) / 2
+        let maxDistY = (this.canvasHeight + wh[1]) / 2
         if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
         else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
         if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
         else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
-        if (Math.abs(coordX - shipX) - (w / 2) <= (this.canvasWidth / 2) && Math.abs(coordY - shipY) - (h / 2) <= (this.canvasHeight / 2)) return [coordX, coordY];
+        if (Math.abs(coordX - shipX) - (wh[0] / 2) <= (this.canvasWidth / 2) && Math.abs(coordY - shipY) - (wh[1] / 2) <= (this.canvasHeight / 2)) return [coordX, coordY];
         else return null;
     }
+    getWrappedCoords(xy) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        let maxDistX = this.canvasWidth / 2
+        let maxDistY = this.canvasHeight / 2
+        if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
+        else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
+        if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
+        else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
+        return [coordX, coordY];
+    }
+    /*
+        Get the ship coords closest to the provided point:
+        - Don't make changes if distance to ship is less than half the arena dimension.
+        - ship - coord > 0 : ship, edge, coord -> coord, edge, ship.
+        - NOT ship - coord > 0 : coord, edge, ship -> ship, edge, coord.
+    */
     getClosestCoords(xy) {
         let coordX = xy[0]
         let coordY = xy[1]
         let shipX = this.ship.x
         let shipY = this.ship.y
-        if (Math.abs(coordX - shipX) > this.canvasWidth / 2) coordX += coordX - shipX > 0 ? -this.canvasWidth : this.canvasWidth;
-        if (Math.abs(coordY - shipY) > this.canvasHeight) coordY += coordY - shipY > 0 ? -this.canvasHeight : this.canvasHeight;
-        return [coordX, coordY];
+        if (Math.abs(shipX - coordX) > this.width / 2) shipX += (shipX - coordX > 0 ? -this.width : this.width);
+        if (Math.abs(shipY - coordY) > this.height / 2) shipY += (shipY - coordY > 0 ? -this.height : this.height);
+        return [shipX, shipY];
+    }
+    drawMinimapIcon(color, diameter, xy) {
+        this.ctx.fillStyle = color
+        let aspectRatio = this.width / this.height
+        let wrapped = this.getWrappedCoords([xy[0], xy[1]])
+        if (aspectRatio < 1) {
+            this.ctx.fillRect(
+                (160 * aspectRatio * ((((xy[0] - this.ship.x + this.width / 2) % this.width + this.width) % this.width) / this.width)) + (80 * (1 - aspectRatio)) + (20 - (diameter / 2)),
+                (160 * ((((xy[1] - this.ship.y + this.height / 2) % this.height + this.height) % this.height) / this.height)) + (20 - (diameter / 2)),
+                diameter, diameter
+            );
+        } else {
+            this.ctx.fillRect(
+                (160 * ((((xy[0] - this.ship.x + this.width / 2) % this.width + this.width) % this.width) / this.width)) + (20 - (diameter / 2)),
+                (160 * (1 / aspectRatio) * ((((xy[1] - this.ship.y + this.height / 2) % this.height + this.height) % this.height) / this.height)) + (80 * (1 - (1 / aspectRatio))) + (20 - (diameter / 2)),
+                diameter, diameter
+            );
+        }
     }
 
         // Expand the arena to cover the entire screen and make it transparent
@@ -3686,7 +3723,7 @@ class SpaceArena {
                 y: orb.y,
                 amount: orb.amount,
                 picked: false,
-                timer: 300
+                timer: 600
             });
         }
 
@@ -3705,18 +3742,8 @@ class SpaceArena {
                 player.ir.battleXP = player.ir.battleXP.add(orb.amount);
                 orb.picked = true;
             }
-            if (orb.x < 0) {
-                orb.x = this.width;
-            }
-            if (orb.x > this.width) {
-                orb.x = 0;
-            }
-            if (orb.y < 0) {
-                orb.y = this.height;
-            }
-            if (orb.y > this.height) {
-                orb.y = 0;
-            }
+            orb.x %= this.width
+            orb.y %= this.height
             orb.timer--;
         }
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
@@ -4496,7 +4523,7 @@ class SpaceArena {
                 // larger radius for homing enemy projectiles
                 if (bullet.fromEnemy && bullet.homing) r = 10;
                 if (bullet.giant) r = bullet.radius || 18;
-                let wrapped = this.getWrappedCoords([bullet.x, bullet.y], r * 2, r * 2)
+                let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [r * 2, r * 2])
                 if (wrapped != null) {
                     this.ctx.beginPath();
                     this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
@@ -4625,7 +4652,7 @@ class SpaceArena {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
             
-            let wrapped = this.getWrappedCoords([asteroid.x, asteroid.y], asteroid.size, asteroid.size)
+            let wrapped = this.getVisibleWrappedCoords([asteroid.x, asteroid.y], [asteroid.size, asteroid.size])
             if (wrapped != null) {
                 this.ctx.translate(wrapped[0], wrapped[1]);
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
@@ -4669,7 +4696,7 @@ class SpaceArena {
         for (let orb of this.xpOrbs) {
             this.ctx.save();
             //this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-            let wrapped = this.getWrappedCoords([orb.x, orb.y], 4, 4)
+            let wrapped = this.getVisibleWrappedCoords([orb.x, orb.y], [4, 4])
             if (wrapped != null) {
                 this.ctx.globalAlpha = 0.8;
                 this.ctx.beginPath();
@@ -4685,21 +4712,61 @@ class SpaceArena {
         // Draw loot flashes
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
-            this.ctx.save();
-            ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-            this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
-            this.ctx.font = flash.style;
-            this.ctx.fillStyle = flash.color;
-            this.ctx.textAlign = "center";
-            this.ctx.fillText(
-                flash.text,
-                flash.x,
-                flash.y - 30 - (120 - flash.timer)
-            );
-            this.ctx.restore();
+            let wrapped = this.getVisibleWrappedCoords([flash.x, flash.y - 30 - (120 - flash.timer)], [400, 50])
+            if (wrapped != null) {
+                this.ctx.save();
+                this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
+                this.ctx.font = flash.style;
+                this.ctx.fillStyle = flash.color;
+                this.ctx.textAlign = "center";
+                this.ctx.fillText(
+                    flash.text,
+                    wrapped[0] + (this.canvasWidth / 2) - this.ship.x,
+                    wrapped[1] + (this.canvasHeight / 2) - this.ship.y,
+                );
+                this.ctx.restore();
+            }            
             flash.timer--;
             if (flash.timer <= 0) this.lootFlashes.splice(i, 1);
         }
+
+
+        // Draw minimap
+
+        this.ctx.save();
+        this.ctx.globalAlpha = 1
+        this.ctx.fillStyle = "#0000007f";
+        this.ctx.strokeStyle = player.ir.primaryColor;
+        this.ctx.lineWidth = 3;
+        let aspectRatio = this.width / this.height
+        if (aspectRatio < 1) {
+            this.ctx.fillRect(20 + (80 * (1 - aspectRatio)), 20, 160 * aspectRatio, 160);
+            this.ctx.strokeRect(20 + (80 * (1 - aspectRatio)), 20, 160 * aspectRatio, 160);
+        } else {
+            this.ctx.fillRect(20, 20 + (80 * (1 - (1 / aspectRatio))), 160, 160 * (1 / aspectRatio));
+            this.ctx.strokeRect(20, 20 + (80 * (1 - (1 / aspectRatio))), 160, 160 * (1 / aspectRatio));
+        }
+        this.ctx.fillStyle = "yellow";
+        this.ctx.fillRect(98, 98, 4, 4);
+        
+        for (let asteroid of this.asteroids) {
+            this.ctx.save();
+            this.drawMinimapIcon("gray", 4, [asteroid.x, asteroid.y])
+            this.ctx.restore();
+        }
+        for (let orb of this.xpOrbs) {
+            this.ctx.save();
+            this.drawMinimapIcon("blue", 2, [orb.x, orb.y])
+            this.ctx.restore();
+        }
+        for (let bullet of this.bullets) {
+            this.ctx.save();
+            this.drawMinimapIcon("yellow", 2, [bullet.x, bullet.y])
+            this.ctx.restore();
+        }
+
+        this.ctx.restore();
+
 
         // Draw upgrade choice overlay (unchanged)
         if (this.upgradeChoiceActive) {

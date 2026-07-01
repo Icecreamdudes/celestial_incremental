@@ -356,7 +356,6 @@ ctrlDown = false
 document.onkeydown = function (e) {
 	if (player === undefined) return;
 	if(e.target.tagName == "INPUT") return;
-	console.log(e)
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey
 	if (tmp.gameEnded && !player.keepGoing) return;

@@ -611,6 +611,20 @@
                 return look
             }
         },
+        26: {
+            title: "Aniciffo Upgrade XV",
+            unlocked() { return hasUpgrade("ani", 25) },
+            description: "Unlock radioactive punchcards.",
+            cost: new Decimal(1e20),
+            currencyLocation() { return player.ani },
+            currencyDisplayName: "Dark Radiation",
+            currencyInternalName: "darkRadiation",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#74ff8f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#048500" : look.backgroundColor = "#adffaa"
+                return look
+            }
+        },
     },
     buyables: {
         11: {
@@ -1078,7 +1092,7 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17],]],
                     ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],]],
-                    ["row", [["upgrade", 25],]],
+                    ["row", [["upgrade", 25],["upgrade", 26],]],
                 ]
             },
             "Particle Toggle": {
@@ -1095,7 +1109,7 @@
                 unlocked() { return hasUpgrade("ani", 13) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], ["dark-buyable", 14]]],
                 ]
             },
             "Color Radiation": {
@@ -1103,25 +1117,31 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
+                    ["style-column", [
                     ["raw-html", () => { return hasUpgrade("ani", 11) ? "You have <h3>" + format(player.ani.radiation.red.amount) + "</h3> red radiation. (+" + format(player.ani.radiation.red.toGet) + "/" + formatTime(player.ani.radiation.red.max) + ")" : "" }, {color: "#d30a00", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 11) ? "Boosts dark radiation gain by x<h3>" + format(player.ani.radiation.red.effect) + "</h3>." : "" }, {color: "#d30a00", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 11) ? "Costs <h3>" + format(player.ani.radiation.red.cost) + "</h3> dark radiation." : "" }, {color: "#d30a00", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ], () => {return hasUpgrade("ani", 11) ? {width: "1510px", height: "100px", border: "2px solid, #46040073", backgroundColor: "#d30b0050",} : {display: "none !important"}}],
+                    ["style-column", [
                     ["raw-html", () => { return hasUpgrade("ani", 13) ? "You have <h3>" + format(player.ani.radiation.orange.amount) + "</h3> orange radiation. (+" + format(player.ani.radiation.orange.toGet) + "/" + formatTime(player.ani.radiation.orange.max) + ")" : "" }, {color: "#ee7a0b", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 13) ? "Boosts red radiation gain by x<h3>" + format(player.ani.radiation.orange.effect) + "</h3>." : "" }, {color: "#ee7a0b", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 13) ? "Costs <h3>" + format(player.ani.radiation.orange.cost) + "</h3> red radiation." : "" }, {color: "#ee7a0b", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ], () => {return hasUpgrade("ani", 13) ? {width: "1510px", height: "100px", border: "2px solid, #5f300373", backgroundColor: "#ee7a0b50",}: {display: "none !important"}}],
+                    ["style-column", [
                     ["raw-html", () => { return hasUpgrade("ani", 14) ? "You have <h3>" + format(player.ani.radiation.yellow.amount) + "</h3> yellow radiation. (+" + format(player.ani.radiation.yellow.toGet) + "/" + formatTime(player.ani.radiation.yellow.max) + ")" : "" }, {color: "#ffdb18", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 14) ? "Boosts orange radiation gain by x<h3>" + format(player.ani.radiation.yellow.effect) + "</h3>." : "" }, {color: "#ffdb18", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 14) ? "Costs <h3>" + format(player.ani.radiation.yellow.cost) + "</h3> orange radiation." : "" }, {color: "#ffdb18", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ], () => {return hasUpgrade("ani", 14) ?  {width: "1510px", height: "100px", border: "2px solid, #6b5c0873", backgroundColor: "#ffdb1850",}: {display: "none !important"}}],
+                    ["style-column", [
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "You have <h3>" + format(player.ani.radiation.green.amount) + "</h3> green radiation. (+" + format(player.ani.radiation.green.toGet) + "/" + formatTime(player.ani.radiation.green.max) + ")" : "" }, {color: "#38dc33", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "Boosts yellow radiation gain by x<h3>" + format(player.ani.radiation.green.effect) + "</h3>." : "" }, {color: "#38dc33", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("ani", 21) ? "Costs <h3>" + format(player.ani.radiation.green.cost) + "</h3> yellow radiation." : "" }, {color: "#38dc33", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "You have <h3>" + format(player.ani.radiation.blue.amount) + "</h3> blue radiation. (+" + format(player.ani.radiation.blue.toGet) + "/" + formatTime(player.ani.radiation.blue.max) + ")" : "" }, {color: "#0c3d8b", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Boosts green radiation gain by x<h3>" + format(player.ani.radiation.blue.effect) + "</h3>." : "" }, {color: "#0c3d8b", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Costs <h3>" + format(player.ani.radiation.blue.cost) + "</h3> green radiation." : "" }, {color: "#0c3d8b", fontSize: "16px", fontFamily: "monospace"}],
+                    ], () => {return hasUpgrade("ani", 21) ?  {width: "1510px", height: "100px", border: "2px solid, #1b661873", backgroundColor: "#38dc3350",}: {display: "none !important"}}],
+                    ["style-column", [
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "You have <h3>" + format(player.ani.radiation.blue.amount) + "</h3> blue radiation. (+" + format(player.ani.radiation.blue.toGet) + "/" + formatTime(player.ani.radiation.blue.max) + ")" : "" }, {color: "#1e74fd", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Boosts green radiation gain by x<h3>" + format(player.ani.radiation.blue.effect) + "</h3>." : "" }, {color: "#1e74fd", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasUpgrade("mr", 11) ? "Costs <h3>" + format(player.ani.radiation.blue.cost) + "</h3> green radiation." : "" }, {color: "#1e74fd", fontSize: "16px", fontFamily: "monospace"}],
+                    ], () => {return hasUpgrade("mr", 11) ?  {width: "1510px", height: "100px", border: "2px solid, #061c3f73", backgroundColor: "#0c3d8b50",}: {display: "none !important"}}],
                 ]
             },
             "Radiation Stones": {
@@ -1132,16 +1152,22 @@
                     ["raw-html", () => { return "Both radiation stone types are gained based on dark universe 1 resets and claimed on leaving dark universe 1." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Dark universe 1 reset amount must be greater than amount required for unlocking Aniciffo punchcard." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
+                    ["style-row", [
+                    ["style-column", [
                     ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.temporal.amount) + "</h3> temporal radiation stones. (+" + format(player.ani.stones.temporal.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts eclipse shard gain by x" + format(player.ani.stones.temporal.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
-                    ["blank", "25px"],
+                    ["row", [["dark-buyable", 21], ["dark-buyable", 22],]],
+                    ["row", [["dark-buyable", 23], ["dark-buyable", 24]]],
+                    ], () => {return true ? {width: "700px", height: "400px",}: {display: "none !important"}}],
+                    ["style-column", [
                     ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.cosmic.amount) + "</h3> cosmic radiation stones. (+" + format(player.ani.stones.cosmic.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts SMA gain by x" + format(player.ani.stones.cosmic.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
-                    ["blank", "25px"],
+                    ["row", [["dark-buyable", 31], ["dark-buyable", 32],]],
+                    ["row", [["dark-buyable", 33], ["dark-buyable", 34]]],
+                    ], () => {return true ? {width: "700px", height: "400px",}: {display: "none !important"}}],
+                    ], () => {return true ? {width: "1400px", height: "400px",}: {display: "none !important"}}],
                 ]
             },
         },

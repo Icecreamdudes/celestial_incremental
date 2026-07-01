@@ -74,6 +74,7 @@
         if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
         if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.tr.radiation.effect)
         if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.sr.spaceDecayEffect)
+        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(upgradeEffect("mr", 14))
 
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
 
@@ -116,6 +117,7 @@
         if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
         if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.tr.radiation.effect)
         if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.sr.spaceDecayEffect)
+        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("mr", 14))
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet

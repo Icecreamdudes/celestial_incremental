@@ -61,6 +61,7 @@
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 403)[0])
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.mr.radiation.effect)
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.hr.radiation.effect)
+        if (getLevelableTier("pu", 403, true) && hasUpgrade("hr", 14)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("hr", 14))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)

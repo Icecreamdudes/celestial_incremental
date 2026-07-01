@@ -46,6 +46,7 @@
         player.sr.radiation.effect2 = player.sr.radiation.amount.pow(0.5).div(3).add(1) //dark radiation
 
         player.sr.radiation.toGet = player.ds.space.pow(0.12).div(5000)
+        if (hasUpgrade("mr", 13)) player.sr.radiation.toGet = player.sr.radiation.toGet.mul(upgradeEffect("mr", 13))
 
         player.sr.radiation.max = new Decimal(45)
 
@@ -318,7 +319,7 @@
                     ["raw-html", () => { return "Divides universe reset requirement by /<h3>" + format(player.sr.spaceDecayEffect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts time radiation gain by x<h3>" + format(player.sr.spaceDecayEffect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3], ["ex-buyable", 4],]],
+                    ["row", [["dark-buyable", 1], ["dark-buyable", 2], ["dark-buyable", 3], ["dark-buyable", 4],]],
                 ]
             },
         },

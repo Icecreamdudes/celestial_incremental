@@ -129,6 +129,56 @@
                 return look
             }
         },
+        13: {
+            title: "Mind Upgrade III",
+            unlocked() { return true },
+            description: "Boost space radiation based on mind radiation.",
+            cost: new Decimal(250),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            effect() {
+                return player.mr.radiation.amount.pow(0.35).div(6).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
+        14: {
+            title: "Mind Upgrade IV",
+            unlocked() { return true },
+            description: "Divide universe reset req based on dark radiation.",
+            cost: new Decimal(1000),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            effect() {
+                return player.ani.darkRadiation.pow(1.25).add(1)
+            },
+            effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
+        15: {
+            title: "Mind Upgrade V",
+            unlocked() { return true },
+            description: "-1 punchcard selection from aniciffo selection cost.",
+            cost: new Decimal(10000),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
     },
     buyables: {
     },
@@ -152,7 +202,7 @@
                     ["raw-html", () => { return "Boosts space buyable effects by ^<h3>" + format(player.mr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Performs a space radiation level reset" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12],]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],]],
                     ["blank", "25px"],
                 ]
             },

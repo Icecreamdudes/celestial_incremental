@@ -26,6 +26,7 @@
             buyBuyable("dn", 12)
             buyBuyable("dn", 13)
             buyBuyable("dn", 14)
+            buyBuyable("dn", 15)
         }
     },
     nodeStyle() {

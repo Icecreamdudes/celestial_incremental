@@ -39,6 +39,7 @@
 
         player.tr.radiation.toGet = player.pet.legPetTimers[0].current.pow(0.5).div(250)
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(player.sr.spaceDecayEffect2)
+        if (hasUpgrade("hr", 13)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(upgradeEffect("hr", 13))
 
         player.tr.radiation.max = new Decimal(30)
 
@@ -332,8 +333,8 @@
                     ["raw-html", () => { return "Boosts dark radiation gain by x<h3>" + format(player.tr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Resets colored radiation, buyables and eclipse timer." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],]],
+                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],]],
+                    ["row", [["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16],]],
                 ]
             },
         },

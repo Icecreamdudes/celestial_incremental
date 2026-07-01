@@ -46,6 +46,7 @@ addLayer("pu", {
             }
             if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 403) {
                 player.pu.selectionCost = new Decimal(9)
+                if (hasUpgrade("mr", 15)) player.pu.selectionCost = player.pu.selectionCost.sub(1)
             }
         } else {
             player.pu.selectionCost = new Decimal(1)
@@ -2564,6 +2565,12 @@ addLayer("pu", {
                                 ["levelable", 200], ["levelable", 209], ["levelable", 210], ["levelable", 211],
                                 ["levelable", 212], ["levelable", 213],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
+
+                            ["style-column", [
+                                ["raw-html", () => { return "Radioactive (20%)<h6>[Takes priority over other card rarities]"}, {color: "#1d8e19", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "535px", height: "40px", backgroundColor: "#146111", borderTop: "3px solid #1d8e19", borderBottom: "3px solid #1d8e19", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-row", [
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "525px", backgroundColor: "#082407", padding: "5px"} : {display: "none !important"}}],
 
                             ["style-column", [
                                 ["raw-html", "Epic (10%)", {color: "#003f7f", fontSize: "20px", fontFamily: "monospace"}],

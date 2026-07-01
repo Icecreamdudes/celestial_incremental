@@ -794,6 +794,7 @@ addLayer("pet", {
         //cooldown
         player.pet.legPetTimers[0].cooldownMax = new Decimal(1800)
         player.pet.legPetTimers[0].cooldownMax = player.pet.legPetTimers[0].cooldownMax.div(levelableEffect("pet", 501)[3])
+        if (hasUpgrade("hr", 15)) player.pet.legPetTimers[0].cooldownMax = new Decimal(0)
 
         player.pet.legPetTimers[1].cooldownMax = new Decimal(7200)
         for (let thing in player.pet.legPetTimers) {

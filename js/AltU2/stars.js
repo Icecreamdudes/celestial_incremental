@@ -1074,17 +1074,407 @@ addLayer("st", {
                 return look
             }  
         },
-        // Normality
-        // Space Energy
-        // Space
-        // Length/Width/Depth
-        // Blood
-        // Clouds
-        // Grass Jump Req
-        // Starmetal Essence (Gain and/or cooldown)
-        // Eclipse Shards
-        // Eclipse Timer Tickspeed
-        // Punchcard XP
+        //Rare
+        301: {
+            image() { return this.canClick() ? "resources/Pets/novaRarePet.png" : "resources/secret.png"},
+            title() { return "Nova" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to space energy.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.add(1).pow(1.4).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        302: {
+            image() { return this.canClick() ? "resources/Pets/diceRarePet.png" : "resources/secret.png"},
+            title() { return "Dice" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to length, width, depth and spissitude.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.4).add(1).pow(1.2).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        303: {
+            image() { return this.canClick() ? "resources/Pets/ufoRarePet.png" : "resources/secret.png"},
+            title() { return "Drippy Ufo" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to blood.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.2).add(1).pow(0.8).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        304: {
+            image() { return this.canClick() ? "resources/Pets/goofyAhhThingRarePet.png" : "resources/secret.png"},
+            title() { return "Goofy Ahh Thing" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to clouds.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.4).add(1).pow(0.85).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        305: {
+            image() { return this.canClick() ? "resources/Pets/antimatterRarePet.png" : "resources/secret.png"},
+            title() { return "Antimatter" },
+            description() {
+                return "/" + format(this.effect()[0]) + " to grass jump req.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(12).add(1).pow(4.5).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Starmetal Req
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        306: {
+            image() { return this.canClick() ? "resources/Pets/hexShadowRarePet.png" : "resources/secret.png"},
+            title() { return "Hex Shadow" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to starmetal essence gain.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.3).add(1).pow(0.75).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        307: {
+            image() { return this.canClick() ? "resources/Pets/grassSquareRarePet.png" : "resources/secret.png"},
+            title() { return "Grass Square" },
+            description() {
+                return "/" + format(this.effect()[0]) + " to starmetal essence cooldown.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.2).add(1).pow(0.8).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        308: {
+            image() { return this.canClick() ? "resources/Pets/impossibleTriangleRarePet.png" : "resources/secret.png"},
+            title() { return "Impossible Triangle" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to eclipse shards.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.2).add(1).pow(0.6).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        309: {
+            image() { return this.canClick() ? "resources/Pets/forbiddenCoreRarePet.png" : "resources/secret.png"},
+            title() { return "Forbidden Core" },
+            description() {
+                return "/" + format(this.effect()[0]) + " to eclipse timer tickspeed.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.1).add(1).pow(0.7).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        310: {
+            image() { return this.canClick() ? "resources/Pets/evolutionFragmentRarePet.png" : "resources/secret.png"},
+            title() { return "Evolution Fragment" },
+            description() {
+                return "x" + format(this.effect()[0]) + " to eclipse punchcard XP conversion rate.<br>"
+            },
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50)},
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    amt.mul(0.25).add(1).pow(0.75).pow(Decimal.pow(1.5, getLevelableTier(this.layer, this.id))), 
+                ]
+            },
+            sacValue() { return new Decimal(1)},
+            // CLICK CODE
+            unlocked() { return player.zarDungeon.zarDefeated },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                return amt.mul(7).add(10).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#37078f"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#866dde" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        // Space Energy - Nova
+        // Length/Width/Depth - Dice
+        // Blood - Drippy Ufo
+        // Clouds - GAT
+        // Grass Jump Req - Antimatter
+        // Starmetal Essence Gain - Shadow
+        // Starmetal Essence Cooldown - Grass
+        // Eclipse Shards - Impossible triangle
+        // Eclipse Timer Tickspeed - Forbidden Core
+        // Punchcard XP - Evolution fragment
     },
     upgrades: {},
     buyables: {
@@ -2102,6 +2492,13 @@ addLayer("st", {
                                 ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
                                 ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
                             ], {width: "525px", backgroundColor: "#0f1c18", padding: "5px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Rare"}, {color: "#866dde", fontSize: "24px", fontFamily: "monospace"}],
+                            ], () => { return player.zarDungeon.zarDefeated ? {width: "535px", height: "40px", backgroundColor: "#2c224d", borderTop: "3px solid #866dde", borderBottom: "3px solid #866dde", userSelect: "none"}: {display: "none !important"}}],
+                            ["style-column", [
+                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
+                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
+                            ], {width: "525px", backgroundColor: "#151024", padding: "5px"}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", borderRadius: "5px 5px 5px 5px"}],
                 ]

@@ -33,6 +33,7 @@
                 player.h.hexPointGain = player.i.bestPoints.add(1).log(60).pow(0.6)
             }
         }
+        if (hasAchievement("achievements", 303)) player.h.hexPointGain = player.h.hexPointGain.mul(1.5)
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[1][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[2][1])
@@ -57,6 +58,7 @@
 
         // POWER
         if (hasUpgrade("hve", 61)) player.h.hexPointGain = player.h.hexPointGain.pow(1.03)
+        player.h.hexPointGain = player.h.hexPointGain.pow(levelableEffect("car", 304)[0])
 
         // SOFTCAPS
         if (inChallenge("hrm", 14)) player.h.hexPointGain = player.h.hexPointGain.pow(Decimal.add(0.1, player.hsa.sacredEffect))

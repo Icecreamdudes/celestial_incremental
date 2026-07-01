@@ -16,20 +16,22 @@
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
-		"Singularity/core.js", "Singularity/coreFragments.js", 
+		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
-		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
+		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js", "Hive/twig.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
  		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
-		"Hive/nest.js", "Check Back/gwaTemple.js",
-
+		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
+		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
+		"Puzzle World/akash.js", "Puzzle World/elements.js", 
+		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
 	],
 
@@ -41,7 +43,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.25, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190.26, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "Battle Bonanza",
 }
 
@@ -147,8 +149,8 @@ function updateStyles() {
 			} else {
 				layerBG = "#001f18"
 			}
-			break;
-	    case "za": case "cf": case "wof": case "sm": case "car":
+			break; 
+	    case "za": case "cf": case "wof": case "sm": case "car": case "zd":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
@@ -214,7 +216,15 @@ function updateStyles() {
 		case "en":
 			layerBG = "#400c42"
 			break;
-		case "s": case "co": case "ra": case "sd": case "cs":
+		case "s":
+			if (player.s.pylonBuilt && player.subtabs["s"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(120deg, #801757 0%, #D3173A 100%)"
+			} else {
+				if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+				if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
+			}
+			break;
+		case "co": case "ra": case "sd": case "cs":
 		case "cof":
 			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
@@ -226,6 +236,9 @@ function updateStyles() {
 			break;
 		case "bh":
 			switch (player.bh.currentStage) {
+				case "darkTemple":
+					layerBG = "radial-gradient(#000, #113)"
+					break;
 				case "depth1":
 					layerBG = "black"
 					if (player.bh.combo.lt(0)) layerBG = "radial-gradient(#00000066, #22226666), #000000"
@@ -255,13 +268,16 @@ function updateStyles() {
 				case "laboratory":
 					layerBG = "linear-gradient(-180deg, #3a4625 0%, #172312 100%)"
 					break;
+			    case "zarDungeon":
+					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
+					break;
 				default: 
 					layerBG = "black"
 					break;
 			}
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
+		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
 			layerBG = "black"
 			break;
 		case "ch":
@@ -287,11 +303,29 @@ function updateStyles() {
 				layerBG = "linear-gradient(to right, #443812, #432236)"
 			}
 			break;
+		case "tw":
+			layerBG = "#021507"
+			break;
 		case "cb":
 			layerBG = "#021124"
 			break;
 	    case "bl":
 			layerBG = "#130000ff"
+			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
+			break;
+		case "ak": 
+			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
+			break;
+		case "el":
+			layerBG = "#181020"
+			break;
+		case "pf":
+			layerBG = "linear-gradient(135deg, #202020ff 0%, #000000ff 50%, #202020ff 100%)"
 			break;
 		case "ev0":
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
@@ -304,6 +338,12 @@ function updateStyles() {
 			break;
 		case "ev8":
 			layerBG = "#252525"
+			break;
+		case "ev15":
+			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
+			break;
+		case "ev16":
+			layerBG = "linear-gradient(0deg, #200020, #400040)"
 			break;
 		case "ep0": case "ep1": case "ep2": case "sp":
 			layerBG = "#7d3f98"
@@ -441,7 +481,7 @@ function updateStyles() {
         	sun.style.width = "300px";
     	    sun.style.height = "300px";
 	        sun.style.borderRadius = "50%";
-        	sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
+			sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
     	    sun.style.boxShadow = "0 0 120px 60px #ffe06655";
 	        eclipse.appendChild(sun);
 
@@ -634,6 +674,9 @@ function updateStyles() {
 				break;
 			case "DS":
 				sideBG = "radial-gradient(circle, #303030ff, #000000)"
+				break;
+			case "UZ":
+				sideBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
 				break;	
 			default:
 				sideBG = "#0b0b0b"
@@ -660,7 +703,8 @@ function updateStyles() {
 			player.musuniverse = "CS"
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
-		case "hpu": case "hpw": case "hrm":
+		case "hpu": case "hpw": case "hrm": case "hve": case "hsa":
+		case "tera":
 			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":
@@ -682,7 +726,7 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "ds": case "dv": case "bl":
+		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp":
             player.musuniverse = "D1"
 			break;
 		case "ch":
@@ -695,7 +739,7 @@ function updateStyles() {
 			player.musuniverse = "MI"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
-		case "ho": case "wa": case "al": case "n":
+		case "ho": case "wa": case "al": case "n": case "tw":
 			player.musuniverse = "UB"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
@@ -706,7 +750,7 @@ function updateStyles() {
 		case "od": case "mu":
             player.musuniverse = "OD"
 			break;
-		case "za": case "cf": case "wof": case "sm": case "cbs": case "car":
+		case "za": case "cf": case "wof": case "sm": case "cbs": case "car": case "zd":
             player.musuniverse = "DS"
 			break;
 	}
@@ -752,6 +796,14 @@ function updateStyles() {
 								playAndLoopAudio("music/alephBattle.mp3", options.musicVolume/10)
 								break;
 							}
+							if (player.bh.currentStage == "zarDungeon" && player.bh.combo.eq(29)) {
+								playAndLoopAudio("music/zar.mp3", options.musicVolume/10)
+								break;
+							}
+							if (player.bh.currentStage == "depth1" && player.bh.combo.lt(0)) {
+								playAndLoopAudio("music/depth1Encore.mp3", options.musicVolume/10)
+								break;
+							}
 							// Default Behavior
 							if (BHS[player.bh.currentStage] && BHS[player.bh.currentStage].music) {
 								playAndLoopAudio(BHS[player.bh.currentStage].music, options.musicVolume/10);
@@ -784,8 +836,7 @@ function updateStyles() {
 						playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 						break;
 					case "DS":
-						if (!hasUpgrade("za", 16)) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
-						if (hasUpgrade("za", 16) && !player.ir.inBattle) playAndLoopAudio("music/casino.mp3", options.musicVolume/10)
+						if (!player.ir.inBattle) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
 						break;
 					case "CB":
@@ -827,6 +878,75 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>
+		Content:<br>
+			- Added page 3 of achievements.<br>
+			- Added a new evolution pet.<br>
+			- Added a new check back layer.<br><br>
+		Minor Changes:<br>
+			- Changed the styles of achievement page buttons.<br>
+			- Added missing achievement icons for page 2.<br>
+			- Added a few more savebank buttons (actual saves haven't been added yet).<br>
+			- Added the button for page 4 of achievements (again, actual achs haven't been added yet).<br>
+			- Made some aesthetic changes to the bios in the hall of celestials.<br>
+			- Added some missing jukebox tracks.<br>
+			- Added some missing jukebox icons (credit to bumpy for making them).<br>
+			- Added perks for defeating Cante (still WIP).<br>
+			- Added an entry to the perks for defeating Jocus.<br>
+			- Added a gradient to Tav's layer (this was supposed to be in a past version, but wasn't formatted correctly lol)<br><br>
+		Bug Fixes:<br>
+			- Fixed legendary punchcards having the wrong color backgrounds.<br>
+			- Fixed star exploration node B2 having no effect.<br><br>
+	<h3>v1.13 - The Novasent Update Part III: Shreds of Fate</h3><br>
+		Content:<br>
+			- Added Enhance Points<br>
+			- Added Cards<br>
+			- Added Zar's Dungeon<br>
+			- Added Blackjack minigame in Zar's Dungeon<br>
+			- Added Zar Bossfight<br>
+			- Added blue soul gamemode for bullet hell fights<br>
+			- Added a LOT of lore, probably the most emotional lore yet (Hopefully)<br>
+			- Added 2 new fighting characters<br>
+			- Added ultimate skills for Nav and Dice Five<br>
+			- Added 1 new punchcard<br>  
+			- Added rare space pets<br>
+			- Added radioactive pylon<br>
+			- Other stuff I may have forgot<br><br>
+		Balancing:<br>
+			- Removed UFO printing exploit.<br>
+			- Changed a couple few space pet formulas<br>
+			- Rebalanced a couple of Dice Space things<br>
+			- Rebalanced a couple of Alt-Universe 1 things<br>
+			- A bunch of other things I forgot<br><br>
+		Bux Fixes:<br>
+			- Fixed a bunch of typos<br>
+			- Fixed bug where buying max chip researches crashes the game<br>
+			- Fixed bug where cutscenes don't pause battles<br>
+			- Fixed several rounding and floating-point errors<br>
+			- A bunch of other things I forgot.<br><br>
+				<h3>v1.12.6 - Bits and Bobs</h3><br>
+		Content:<br>
+			- Added twigs layer<br>
+			- Added 3 new punchcards<br>
+			- Added Jocus perks<br>
+			- Redid nest milestones<br>
+			- Added 2 more aleph upgrades<br><br>
+		Minor Changes:<br>
+			- Fun layers "Mood Triangle" tab now updates based on the shape<br>
+			- Increased SME generator buyable heights to accommodate different browsers<br>
+			- BH skill reckless abandon now tells you how it changes the stats<br>
+			- Clarified that -D1's "Vast Darkness" upgrade unlocks the buyable in DU1<br>
+			- Added text to tell you how much your aleph resources effect nest gain<br><br>
+		Balancing:<br>
+			- Buffed skill points from later runes<br>
+			- Changed reckless abandon to not scale health converted<br>
+			- Reduced the cost for Geroa's "Version 2.0" upgrade<br>
+			- External hive buffing aleph buyables are no longer reset on nest resets<br>
+			- Nerfed nest effect<br>
+			- Slightly nerfed nest upgrade 5:2 (previously 4:2)<br><br>
+		Bugfixes:<br>
+			- Fixed the 7th DU1 space buyable not resetting on DU1 leave<br>
+			- Fixed some punchcards not having borders<br><br>
 	<h3>v1.12.5 - Battle Bonanza</h3><br>
 		Content:<br>
 			- Added ??? temple bestowals<br>
@@ -1736,7 +1856,10 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset"
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
+	"diamondDustReset",
+	"openChest",
+	"checkAchs",
 ]
 
 function getStartPoints(){
@@ -2177,5 +2300,12 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.25) {
 		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
+}
+
+function fixOldNaN(oldVersion) {
+	if (oldVersion < 190.26 && player && player.en && Decimal.eq(player.en.enhancerLevels[0], NaN)) {
+		cleanseUniverse("A1")
+		window.location.reload();
 	}
 }

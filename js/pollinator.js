@@ -160,6 +160,7 @@ addLayer("pol", {
         if (hasUpgrade("i", 22)) {
             // START OF POLLINATORS
             player.pol.pollinatorsPerSecond = player.g.grass.add(1).log(10).pow(0.75).div(3)
+            if (hasAchievement("achievements", 302)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(1.25)
             if (hasUpgrade("pol", 12)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("pol", 12))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 12))
             if (hasUpgrade("g", 23)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("g", 23))
@@ -174,7 +175,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("al", 104))
-            if (hasMilestone("n", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
+            if (player.n.highestNest.gt(0)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.n.nestEffect)
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
@@ -239,7 +240,17 @@ addLayer("pol", {
             if (player.pol.pollinatorEffects[prop].enabled) player.pol.currCount = player.pol.currCount.add(1)
         }
 
+        for (let key in player.pol.pollinatorEffects) {
+        let effs = player.pol.pollinatorEffects[key].effects
+        for (let i = 0; i < effs.length; i++) {
+            effs[i] = effs[i].pow(levelableEffect("car", 303)[0])
+        }
+        }
+
         player.pol.maxCount = buyableEffect("pol", 15).add(1)
+
+        // CHECK FOR ACHS
+        // if (!hasAchievement("achievements", 302) && hasUpgrade("pol", 14)) completeAchievement("achievements", 302)
     },
     clickables: {
         1: {

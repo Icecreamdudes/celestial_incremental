@@ -1594,6 +1594,15 @@ button > * {
 	margin-bottom: 10px;
 }
 
+.chestContainer {
+	background: rgba(0,0,0,0.5);
+	border-radius: 15px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
 .goldenCookie {
 	width: 96px !important;
 	height: 96px !important;
@@ -1843,4 +1852,20 @@ button > * {
 .bhSkill.outline {
 	outline: 2px solid white;
 	outline-offset: -2px;
+}
+
+.twigContainer {
+	position:absolute;
+	top:0;
+	width:80px;
+	height:72px;
+	box-sizing:border-box;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 16px;
+	border:5px solid rgba(0,0,0,0.3);
+	margin:0;
+	padding:0;
 }

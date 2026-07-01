@@ -28,6 +28,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("sme", 144))
         player.hpw.powerGain = player.hpw.powerGain.mul(buyableEffect("al", 206))
         if (player.alephsChamber.milestone[25] > 0) player.hpw.powerGain = player.hpw.powerGain.mul(36)
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("car", 305)[0])
 
         // POWER MODIFIERS
         player.hpw.powerGain = player.hpw.powerGain.pow(levelableEffect("pu", 210)[1])
@@ -1171,8 +1172,7 @@ addLayer("hpw", {
             branches: [6],
             display() {
                 return "<h3>Might 目</h3>\n\
-                    Release the seal.\n\
-                    (This is irreversable)\n\ \n\
+                    Gain access to the seal.\n\ \n\
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power\n\
                     [COMING SOON]"
             },

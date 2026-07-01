@@ -113,6 +113,8 @@
 
 
         // START OF INFINITY POINT MODIFIERS
+        if (hasAchievement("achievements", 211)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(1.5)
+        if (hasAchievement("achievements", 301)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(2)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosters[2].effect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.boosterEffects[11])
@@ -188,6 +190,7 @@
 
         // POWER MODIFIERS
         if (player.tad.altInfinities.infected.milestone.gte(2)) player.in.infinitiesToGet = player.in.infinitiesToGet.pow(player.tad.altInfinities.infected.effect2)
+        player.in.infinitiesToGet = player.in.infinitiesToGet.pow(levelableEffect("car", 307)[0])
 
         // ABNORMAL MODIFIERS
         if (player.po.halter.infinities.enabled == 1) player.in.infinitiesToGet = player.in.infinitiesToGet.div(player.po.halter.infinities.halt)

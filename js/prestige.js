@@ -54,7 +54,7 @@
     },
     tooltip: "Prestige",
     color: "#31aeb0",
-    branches: ["r"],
+    branches() { return !player.zarDungeon.zarDefeated ? "r" : ["r", "pol"] },
     update(delta) {
         let onepersec = new Decimal(1)
 

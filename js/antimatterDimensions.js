@@ -125,6 +125,7 @@
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
         if (hasUpgrade("depth1", 5)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
         player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("sme", 122))
+        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(levelableEffect("car", 306)[0])
 
         //----------------------------------------
 
@@ -276,6 +277,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                layers.revc.checkAchs();
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },

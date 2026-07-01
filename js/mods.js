@@ -45,7 +45,7 @@
             buyBuyable("m", 18)
         }
     },
-    branches: ["gh"],
+    branches() { return !player.zarDungeon.zarDefeated ? "gh" : ["gh", "g"] },
     nodeStyle() {},
     tooltip: "Mods",
     color: "#1377BF",

@@ -10,7 +10,8 @@
         evolutionDisplayIndex: new Decimal(-1),
         evolutionsUnlocked: [false, false, false, false, false,
             false, false, false, false, false,
-            false, false, false, false],
+            false, false, false, false, false,
+            false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -26,6 +27,9 @@
         11 - Blob
         12 - Egg Man
         13 - Enhance Dust
+        14 - ???
+        15 - Goldsmith
+        16 - Insane Face
         */
     }},
     nodeStyle() {},
@@ -181,6 +185,28 @@
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
         },
+        115: {
+            title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return true},
+            unlocked() { return tmp.pet.levelables[1103].canClick && !player.ev.evolutionsUnlocked[15] && player.cbs.shrineReactivated}, // placeholder req
+            tooltip() { return "███████ ██████ coin dust<br>██████████" }, // further boosts coin dust production
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(15)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" }
+        },
+        116: {
+            title() { return "<img src='resources/Pets/extremeDemonEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
+            },
+            canClick() {return true},
+            unlocked() { return tmp.pet.levelables[1203].canClick && !player.ev.evolutionsUnlocked[16] && false}, // placeholder req
+            tooltip() { return "██████ ██████████ orbs ███ ████,<br>██████ even more loot" }, // allows exchanging orbs for keys, giving even more loot
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(16)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #200000", borderRadius: "0px", padding: "0px" }
+        },
 
         201: {
             title() { return "<img src='resources/Pets/cookie/simpleCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
@@ -226,7 +252,7 @@
         301: {
             title() { return "<img src='resources/Pets/enhanceDustEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[109].canClick && player.d.diceSpaceUnlocked && false},
+            unlocked() { return tmp.pet.levelables[109].canClick && player.d.diceSpaceUnlocked && !player.ev.evolutionsUnlocked[13]},
             tooltip() { return "███████ ███████ ██████ in Alt-Universe 1." },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(201)
@@ -361,6 +387,7 @@
 
                 player.ev.evolutionsUnlocked[3] = true
                 setLevelableAmount("pet", 1101, new Decimal(1))
+                // if (!hasAchievement("achievements", 306)) completeAchievement("achievements", 306)
             }
         },
         4: {
@@ -504,7 +531,6 @@
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(30) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
-                && (getLevelableAmount("pet", 206).gte(6) || getLevelableTier("pet", 206).gt(0))
                 && getLevelableAmount("pet", 206).add(getLevelableTier("pet", 206).mul(5).min(40)).gte(6)
                 && getLevelableAmount("pet", 207).add(getLevelableTier("pet", 207).mul(5).min(40)).gte(6)
                 && player.ca.rememberanceCores.gte(5))
@@ -641,6 +667,87 @@
 
                 player.ev.evolutionsUnlocked[12] = true
                 setLevelableAmount("pet", 1102, new Decimal(1))
+            }
+        },
+        15: {
+            title() { return "Diamondsmith"},
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/22,222 Evolution Shards" +
+                     "<br>"  + formatWhole(player.cb.paragonShards) + "/222 Paragon Shards" +
+                     "<br>"  + formatWhole(player.cbs.ascensionShards) + "/2 Shards of Ascension" +
+                    "</div>" +
+                    "<div class='evoContainer'><h3>Requires:</h3>" +
+                    "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/3 Unsmith Ascensions" +
+                    "<br>"  + formatWhole(getLevelableTier("pet", 110)) + "/1 Coin Fragment Ascensions" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/15 Eff. Goldsmith Level" + 
+                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e11 Coin Dust" +
+                    "</div>"
+                    
+            }, // placeholder reqs
+            canClick() {
+                return (
+                    player.cb.evolutionShards.gte(22222) 
+                    && player.cb.paragonShards.gte(222) 
+                    && player.cbs.ascensionShards.gte(2) 
+                    && getLevelableTier("pet", 103).gte(3)
+                    && getLevelableTier("pet", 110).gte(1) 
+                    && getLevelableAmount("pet", 1103).gte(15)
+                    && player.ev0.coinDust.gte(1e11)
+                )
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(22222)
+                player.cb.paragonShards = player.cb.paragonShards.sub(222)
+                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(2)
+
+                player.ev.evolutionsUnlocked[15] = true
+                setLevelableAmount("pet", 2103, new Decimal(1))
+            }
+        },
+        16: {
+            title() {return "Extreme Demon"},
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                    "<br>"  + formatWhole(player.cb.evolutionShards) + "/131,313 Evolution Shards" +
+                     "<br>"  + formatWhole(player.cb.paragonShards) + "/666 Paragon Shards" +
+                     "<br>" + formatWhole(player.cbs.ascensionShards) + "/4 Shards of Ascension" +
+                     "<br>"  + formatWhole(player.ev2.orbs) + "/500 Orbs" +
+                    "</div>" +
+                    "<div class='evoContainer'><h3>Requires:</h3>" +
+                    "<br>" + formatWhole(getLevelableTier("pet", 203)) + "/3 Normal Face Ascensions" +
+                     "<br>"  + formatWhole(getLevelableTier("pet", 104)) + "/3 Gd Checkpoint Ascensions" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1203)) + "/15 Eff. Insane Face Level" +
+                     "<br>"  + formatWhole(getLevelableAmount("pet", 1104)) + "/15 Eff. Paragon Checkpoint Level" + 
+                     "<br>"  + formatWhole(player.ev2.day) + "/100 Days of Daily Rewards" +
+                    "</div>"
+            }, // placeholder reqs
+            canClick() {
+                return (
+                    player.cb.evolutionShards.gte(1250) &&
+                    player.cb.paragonShards.gte(75) &&
+                    player.cbs.ascensionShards.gte(1) &&
+                    player.ev2.orbs.gte(25) &&
+
+                    getLevelableTier("pet", 203).gte(3) &&
+                    getLevelableTier("pet", 104).gte(3) &&
+                    getLevelableAmount("pet", 1203).gte(15) &&
+                    getLevelableAmount("pet", 1104).gte(15) &&
+                    player.ev2.day.gte(100)
+                )
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(1250)
+                player.cb.paragonShards = player.cb.paragonShards.sub(75)
+                player.cbs.ascensionShards = player.cbs.ascensionShards.sub(1)
+                player.ev2.orbs = player.ev2.orbs.sub(25)
+
+                player.ev.evolutionsUnlocked[16] = true
+                setLevelableAmount("pet", 2203, new Decimal(1))
             }
         },
 
@@ -786,8 +893,8 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(250)
                 player.cbs.ascensionShards = player.cbs.ascensionShards.sub(3)
 
-                player.ev.evolutionsUnlocked[12] = true
-                setLevelableAmount("pet", 1102, new Decimal(1))
+                player.ev.evolutionsUnlocked[13] = true
+                setLevelableAmount("pet", 1401, new Decimal(1))
             }
         },
     },
@@ -858,7 +965,8 @@
                     ["row", [
                         ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                         ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112],
+                        ["bt-clickable", 106], ["bt-clickable", 111], ["bt-clickable", 112], ["bt-clickable", 113], ["bt-clickable", 114],
+                        ["bt-clickable", 115], ["bt-clickable", 116],
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
 

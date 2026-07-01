@@ -49,6 +49,8 @@
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
 
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 
@@ -701,6 +703,11 @@
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
                         ], {width: "408px"}],
                     ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
             },
             "Blood Battle": {
@@ -795,7 +802,7 @@
                         ["blank", "10px"],
                         ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "\"Humanities\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
@@ -2090,6 +2097,8 @@ class BloodArena extends SpaceArena {
                                     this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(noxGuarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
                                 }
                             } catch (e) {}
+                            arena.showUpgradeChoice(true);
+                            arena.upgradeChoiceActive = true
                         }
                     } catch (e) {}
                     // If a Large Leech died, spawn several small leeches at its position

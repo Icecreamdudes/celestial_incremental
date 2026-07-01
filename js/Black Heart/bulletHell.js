@@ -1,4 +1,5 @@
 //bulletHell(700, 500, 12, 500, 275)
+//bulletHellBlue({"bulletRain": {bulletPerSec: 8, bulletRadius: 12, enemySpeed: 4}}, {width:800, height:600, duration:15, gravity:0.2, jumpStrength:-12})
 function bulletHell(actions, values = {}, exitAction = () => {}) {
     let info = {}
     info.width = values.width || 700
@@ -204,8 +205,17 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.px = playerX
         info.py = playerY
     }
+    // Blue-mode (platformer) settings
+    info.blueMode = info.values.blueMode || false;
+    if (info.blueMode) {
+        info.gravity = info.values.gravity ?? 0.6;
+        info.jumpStrength = info.values.jumpStrength ?? -12;
+        info.vx = 0;
+        info.vy = 0;
+        info.onGround = true;
+    }
     info.pr = 18;
-    info.speed = 5;
+    info.speed = 5.5;
     info.pos = {x: 0, y: 0}
     info.keys = {up: false, down: false, left: false, right: false}
     if (info.goalType) {
@@ -218,6 +228,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         }
     }
 
+    
     // Black box position in global coordinates
     info.boxLeft = gameCanvas.getBoundingClientRect().left;
     info.boxTop = gameCanvas.getBoundingClientRect().top;
@@ -232,6 +243,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     function updatePos(e, touch = false) {
         if (touch) e = e.touches[0]
+        // Always track mouse position; in blueMode Y is used to set gravity/jump, but not direct vertical movement
         info.pos.x = e.clientX - info.boxLeft
         info.pos.y = e.clientY - info.boxTop
     }
@@ -288,6 +300,39 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     bossCtx.fillStyle = "#fff";
                     bossCtx.fill();
                 },
+            });
+        }
+    }
+
+    info.fireDiceSpikeRadialBurst = (bx, by, id) => {
+        for (let i = 0; i < info.actions[id].bulletsPerBurst; i++) {
+            const angle = (2 * Math.PI * i) / info.actions[id].bulletsPerBurst;
+            info.bullets.push({
+                x: bx,
+                y: by,
+                vx: Math.cos(angle) * info.actions[id].bulletSpeed,
+                vy: Math.sin(angle) * info.actions[id].bulletSpeed,
+                r: 30,
+                // triangular spike that points along velocity
+                color: Math.random() < 0.5 ? '#000' : '#fff',
+                draw(b, bossCtx) {
+                    const angle = Math.atan2(b.vy, b.vx);
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(angle);
+                    // triangle
+                    bossCtx.beginPath();
+                    bossCtx.moveTo(b.r, 0);
+                    bossCtx.lineTo(-b.r * 0.6, b.r * 0.7);
+                    bossCtx.lineTo(-b.r * 0.6, -b.r * 0.7);
+                    bossCtx.closePath();
+                    bossCtx.fillStyle = b.color;
+                    bossCtx.fill();
+                    bossCtx.lineWidth = 2;
+                    bossCtx.strokeStyle = (b.color === '#000') ? '#fff' : '#000';
+                    bossCtx.stroke();
+                    bossCtx.restore();
+                }
             });
         }
     }
@@ -549,6 +594,24 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         return Math.abs(originalArea - (area1 + area2 + area3)) < 10;
     }
 
+    info.pointToSegmentDist = (px, py, x1, y1, x2, y2) => {
+        const vx = x2 - x1, vy = y2 - y1;
+        const wx = px - x1, wy = py - y1;
+        const c = (vx * wx + vy * wy) / (vx * vx + vy * vy || 1);
+        const t = Math.max(0, Math.min(1, c));
+        const qx = x1 + vx * t, qy = y1 + vy * t;
+        const dx = px - qx, dy = py - qy;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    info.pointToTriangleDistance = (px, py, x1, y1, x2, y2, x3, y3) => {
+        if (info.isPointInTriangle(px, py, x1, y1, x2, y2, x3, y3)) return 0;
+        const d1 = info.pointToSegmentDist(px, py, x1, y1, x2, y2);
+        const d2 = info.pointToSegmentDist(px, py, x2, y2, x3, y3);
+        const d3 = info.pointToSegmentDist(px, py, x3, y3, x1, y1);
+        return Math.min(d1, d2, d3);
+    }
+
 
     // Pixel-perfect wall collision for smooth movement (DON'T USE WITH 'MOVE WITH SUBARENA')
     function canMoveTo(nx, ny) {
@@ -603,8 +666,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
     function animate(ts) {
         if (!info.active) return;
-        // End early if all characters are dead
-        if (info.allCharactersDead()) {
+        // End early if celestialite is dead
+        if (player.bh.celestialite.id == "none" || (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal)) {
             info.exitAction()
             if (!options.bhKeyboard) {
                 window.removeEventListener("mousemove", mouseHandler);
@@ -612,6 +675,27 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             } else {
                 window.removeEventListener("keydown", keydownHandler);
                 window.removeEventListener("keyup", keyupHandler);
+            }
+            if (overlay.parentNode) overlay.remove();
+            bhState.active = false;
+            info.active = false;
+            player.subtabs["bh"]["stuff"] = "battle";
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
+            options.fullscreen = info.full;
+            localStorage.setItem('bhState', JSON.stringify(info));
+        }
+        // End early if all characters are dead
+        if (info.allCharactersDead()) {
+            info.exitAction()
+            if (!options.bhKeyboard) {
+                window.removeEventListener("mousemove", mouseHandler);
+                window.removeEventListener("touchmove", touchHandler);
+                window.removeEventListener("click", clickHandler);
+            } else {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+                window.removeEventListener("click", clickHandler);
             }
             if (overlay.parentNode) overlay.remove();
             bhState.active = false;
@@ -635,48 +719,96 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (info.suby >= info.height - info.subHeight) { info.suby = info.height - info.subHeight; info.subvy = -Math.abs(info.subvy); }
         }
 
-        // Move Player
-        let dx = 0; let dy = 0
-        if (!options.bhKeyboard) {
-            dx = info.pos.x - info.px
-            dy = info.pos.y - info.py
-            if (info.subArena && info.moveWithSub) {
-                dx -= info.subx
-                dy -= info.suby
+        // Move Player (normal or blue-mode platformer)
+        // If blueMode: compute jump height from vertical distance between mouse and diamond (gravity stays constant)
+        if (info.blueMode) {
+            // compute based on vertical distance (only consider mouse above the diamond for jump height)
+            const dy = (info.py - (info.pos.y || info.py)); // positive if mouse is above
+            const absdy = Math.max(0, Math.min(dy, info.height));
+            const factor = info.height > 0 ? (absdy / info.height) : 0;
+            const jMin = info.values.jumpMin ?? 40; // in pixels
+            const jMax = info.values.jumpMax ?? 220; // in pixels
+            info.computedJumpHeight = jMin + factor * (jMax - jMin); // desired jump apex height in px
+
+            // Horizontal movement influenced by mouse X (info.pos.x) and keyboard arrows
+            let targetX = info.pos.x || info.px;
+            if (options.bhKeyboard) {
+                if (info.keys.left) targetX = info.px - 6;
+                if (info.keys.right) targetX = info.px + 6;
             }
-        } else {
-            if (info.keys.up) dy -= 5;
-            if (info.keys.down) dy += 5;
-            if (info.keys.left) dx -= 5;
-            if (info.keys.right) dx += 5;
-        }
-        let angle = Math.atan2(dy, dx);
-        if (dx < -3 || dx > 3 || dy < -3 || dy > 3) {
-            if (info.cellSize) {
-                let npx = info.px + Math.cos(angle) * info.speed, npy = info.py + Math.sin(angle) * info.speed;
-                // Try moving in both axes, then x only, then y only
-                if (canMoveTo(npx, npy)) {
-                    info.px = npx; info.py = npy
-                } else if (canMoveTo(npx, info.py)) {
-                    info.px = npx;
-                } else if (canMoveTo(info.px, npy)) {
-                    info.py = npy
-                }
+            // Smooth horizontal movement plus velocity
+            info.px += (targetX - info.px) * 0.035 + (info.vx || 0);
+
+            // Apply gravity
+            info.vy = (info.vy || 0) + (info.gravity || 0.6) * 0.65;
+            info.py += info.vy;
+
+            // Floor collision (respect subArena if used)
+            let groundY = info.subArena && info.moveWithSub ? (info.subHeight - info.pr) : (info.height - info.pr);
+            if (info.py >= groundY) {
+                info.py = groundY;
+                info.vy = 0;
+                info.onGround = true;
             } else {
-                info.px += Math.cos(angle) * info.speed;
-                info.py += Math.sin(angle) * info.speed;
+                info.onGround = false;
             }
+
+            // Friction on horizontal velocity
+            info.vx *= 0.9;
+
+            // Clamp horizontal position
             if (info.subArena) {
                 if (info.moveWithSub) {
                     info.px = Math.max(info.pr, Math.min(info.subWidth - info.pr, info.px));
-                    info.py = Math.max(info.pr, Math.min(info.subHeight - info.pr, info.py));
                 } else {
                     info.px = Math.max(info.pr + info.subx, Math.min(info.subWidth + info.subx - info.pr, info.px));
-                    info.py = Math.max(info.pr + info.suby, Math.min(info.subHeight + info.suby - info.pr, info.py));
                 }
             } else {
                 info.px = Math.max(info.pr, Math.min(gameCanvas.width - info.pr, info.px));
-                info.py = Math.max(info.pr, Math.min(gameCanvas.height - info.pr, info.py));
+            }
+        } else {
+            let dx = 0; let dy = 0
+            if (!options.bhKeyboard) {
+                dx = info.pos.x - info.px
+                dy = info.pos.y - info.py
+                if (info.subArena && info.moveWithSub) {
+                    dx -= info.subx
+                    dy -= info.suby
+                }
+            } else {
+                if (info.keys.up) dy -= 5;
+                if (info.keys.down) dy += 5;
+                if (info.keys.left) dx -= 5;
+                if (info.keys.right) dx += 5;
+            }
+            let angle = Math.atan2(dy, dx);
+            if (dx < -3 || dx > 3 || dy < -3 || dy > 3) {
+                if (info.cellSize) {
+                    let npx = info.px + Math.cos(angle) * info.speed, npy = info.py + Math.sin(angle) * info.speed;
+                    // Try moving in both axes, then x only, then y only
+                    if (canMoveTo(npx, npy)) {
+                        info.px = npx; info.py = npy
+                    } else if (canMoveTo(npx, info.py)) {
+                        info.px = npx;
+                    } else if (canMoveTo(info.px, npy)) {
+                        info.py = npy
+                    }
+                } else {
+                    info.px += Math.cos(angle) * info.speed;
+                    info.py += Math.sin(angle) * info.speed;
+                }
+                if (info.subArena) {
+                    if (info.moveWithSub) {
+                        info.px = Math.max(info.pr, Math.min(info.subWidth - info.pr, info.px));
+                        info.py = Math.max(info.pr, Math.min(info.subHeight - info.pr, info.py));
+                    } else {
+                        info.px = Math.max(info.pr + info.subx, Math.min(info.subWidth + info.subx - info.pr, info.px));
+                        info.py = Math.max(info.pr + info.suby, Math.min(info.subHeight + info.suby - info.pr, info.py));
+                    }
+                } else {
+                    info.px = Math.max(info.pr, Math.min(gameCanvas.width - info.pr, info.px));
+                    info.py = Math.max(info.pr, Math.min(gameCanvas.height - info.pr, info.py));
+                }
             }
         }
 
@@ -697,9 +829,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 if (!options.bhKeyboard) {
                     window.removeEventListener("mousemove", mouseHandler);
                     window.removeEventListener("touchmove", touchHandler);
+                    window.removeEventListener("click", clickHandler);
                 } else {
                     window.removeEventListener("keydown", keydownHandler);
                     window.removeEventListener("keyup", keyupHandler);
+                    window.removeEventListener("click", clickHandler);
                 }
                 if (overlay.parentNode) overlay.remove();
                 bhState.active = false;
@@ -727,7 +861,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Remove bullets that go off screen
         info.bullets = info.bullets.filter(b => {
-            if (b.offScreen) return b.x > -2000 && b.x < info.width + 2000 && b.y > -2000 && b.y < info.height + 2000
+            if (b.offScreen) {
+                return b.x > info.boxLeft && b.x < info.boxLeft + info.width && b.y > info.boxTop && b.y < info.boxTop + info.height
+            }
             if (b.name && (b.name == "bomb" || b.name == "minibomb") && b.exploded) return false
             if (b.name && (b.name == "knife" || b.name == "bigKnife")) {
                 return b.x > -b.r && b.x < info.width + b.r && b.y > -b.r && b.y < info.height + b.r
@@ -748,6 +884,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Only call takeDamage once per frame if hit
         let playerHit = false;
+        let hitByBigKnife = false;
 
         // Check collision between player and each bullet
         for (let b of info.bullets) {
@@ -770,16 +907,20 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     }
                 }
             } else if (b.name && b.name == "bigKnife") {
-                playerHit = info.isPointInTriangle(
-                    playerX,
-                    playerY,
-                    (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * (-(b.width + info.pr) / 2)) + b.x,
-                    (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * (-(b.width + info.pr) / 2)) + b.y,
-                    (Math.cos(b.angle) * ((b.r + info.pr) / 2)) + b.x,
-                    (Math.sin(b.angle) * ((b.r + info.pr) / 2)) + b.y,
-                    (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * ((b.width + info.pr) / 2)) + b.x,
-                    (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * ((b.width + info.pr) / 2)) + b.y,
-                )
+                const playerGlobalX = info.boxLeft + playerX;
+                const playerGlobalY = info.boxTop + playerY;
+                const x1 = (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * (-(b.width + info.pr) / 2)) + b.x;
+                const y1 = (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * (-(b.width + info.pr) / 2)) + b.y;
+                const x2 = (Math.cos(b.angle) * ((b.r + info.pr) / 2)) + b.x;
+                const y2 = (Math.sin(b.angle) * ((b.r + info.pr) / 2)) + b.y;
+                const x3 = (Math.cos(b.angle) * (-(b.r + info.pr) / 2)) - (Math.sin(b.angle) * ((b.width + info.pr) / 2)) + b.x;
+                const y3 = (Math.sin(b.angle) * (-(b.r + info.pr) / 2)) + (Math.cos(b.angle) * ((b.width + info.pr) / 2)) + b.y;
+                const dist = info.pointToTriangleDistance(playerGlobalX, playerGlobalY, x1, y1, x2, y2, x3, y3);
+                if (dist <= info.pr) {
+                    playerHit = true;
+                    hitByBigKnife = true;
+                    break;
+                }
             } else if (b.boxRender) {
                 const dx = playerX - b.x;
                 const dy = playerY - b.y;
@@ -799,15 +940,21 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             }
         }
 
+        // Consider platform/spike hits set by attacks
+        if (info.platformHit) {
+            playerHit = true;
+            info.platformHit = false;
+        }
+
         // Take damage (only when in a BH stage)
         if (playerHit && player && player.bh && player.bh.currentStage && player.bh.currentStage != "none") {
             const now = Date.now();
-            // Immortality frames: only allow damage every 400ms
+            // Immortality frames: only allow damage every 100ms
             if (typeof window.lastDamageTime !== "number") window.lastDamageTime = Date.now();
-            if (now - window.lastDamageTime > 400) {
-                window.lastDamageTime = now;
-                bhAttack(player.bh.celestialite.damage, 3, 0, "randomPlayer")
-            }
+                if (now - window.lastDamageTime > 100) {
+                    window.lastDamageTime = now;
+                    bhAttack(player.bh.celestialite.damage.mul(0.25), 3, 0, "randomPlayer")
+                }
         }
 
         // Start draw
@@ -904,6 +1051,48 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 b.draw(b, info.ctx)
             }
         }
+
+        // Draw sliding platforms and ground spikes if present
+        if (info.platforms && info.platforms.length) {
+            for (let p of info.platforms) {
+                info.ctx.save();
+                info.ctx.fillStyle = p.color || '#888';
+                if (!options.performanceMode) {
+                    info.ctx.shadowColor = '#000';
+                    info.ctx.shadowBlur = 8;
+                }
+                info.ctx.fillRect(p.x, p.y, p.w, p.h);
+                // Draw spikes on top of platform if present
+                if (p.hasSpikes) {
+                    info.ctx.fillStyle = p.spikeColor || '#ddd';
+                    const spW = p.spikeW || 12;
+                    const spH = p.spikeH || 12;
+                    for (let sx = p.x; sx < p.x + p.w; sx += spW) {
+                        info.ctx.beginPath();
+                        info.ctx.moveTo(sx, p.y);
+                        info.ctx.lineTo(Math.min(sx + spW / 2, p.x + p.w), p.y - spH);
+                        info.ctx.lineTo(Math.min(sx + spW, p.x + p.w), p.y);
+                        info.ctx.closePath();
+                        info.ctx.fill();
+                    }
+                }
+                info.ctx.restore();
+            }
+        }
+        if (info.spikes && info.spikes.length) {
+            info.ctx.save();
+            info.ctx.fillStyle = '#ddd';
+            for (let s of info.spikes) {
+                const sx = s.x, sy = s.y, sw = s.w, sh = s.h;
+                info.ctx.beginPath();
+                info.ctx.moveTo(sx, sy + sh);
+                info.ctx.lineTo(sx + sw / 2, sy);
+                info.ctx.lineTo(sx + sw, sy + sh);
+                info.ctx.closePath();
+                info.ctx.fill();
+            }
+            info.ctx.restore();
+        }
         // Draw player (red diamond) in the box
         if (info.subArena && info.moveWithSub) {
             info.ctx.translate(info.subx + info.px, info.suby + info.py);
@@ -918,8 +1107,14 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.ctx.lineTo(0, info.pr);
         info.ctx.lineTo(-info.pr, 0);
         info.ctx.closePath();
-        info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
-        if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
+        // Blue-mode diamond color
+        if (info.blueMode) {
+            info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#22a" : "#116";
+            if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#22a" : "#116";
+        } else {
+            info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
+            if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
+        }
         if (!options.performanceMode) info.ctx.shadowBlur = 8;
         info.ctx.fill();
         info.ctx.restore();
@@ -938,18 +1133,60 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     }
     function keydownHandler(e) {
         updateKeys(e, true);
+        // If blueMode and space pressed, jump
+        if (info.blueMode && (e.code === 'Space' || e.key === ' ' || e.key === 'Spacebar')) {
+            if (info.onGround) {
+                const height = info.computedJumpHeight || (Math.abs(info.jumpStrength) || (info.values.jumpMin ?? 40));
+                const g = Math.abs(info.gravity) || (info.values.gravity ?? 0.6);
+                const vy0 = Math.sqrt(2 * g * height);
+                info.vy = -vy0;
+                info.onGround = false;
+            }
+            e.preventDefault();
+            return;
+        }
         e.preventDefault();
     }
     function keyupHandler(e) {
         updateKeys(e, false);
         e.preventDefault();
     }
+    function clickHandler(e) {
+        // Clicking jumps toward clicked horizontal position when in blueMode
+        if (info.blueMode) {
+            const clickX = e.clientX - info.boxLeft;
+            const clickY = e.clientY - info.boxTop;
+            // vertical jump toward clicked Y using computed jump height
+            if (info.onGround) {
+                const dy = info.py - clickY; // positive if click is above
+                const absdy = Math.max(0, Math.min(dy, info.height));
+                const factor = info.height > 0 ? (absdy / info.height) : 0;
+                const jMin = info.values.jumpMin ?? 40;
+                const jMax = info.values.jumpMax ?? 220;
+                const height = jMin + factor * (jMax - jMin);
+                const g = Math.abs(info.gravity) || (info.values.gravity ?? 0.6);
+                const vy0 = Math.sqrt(2 * g * height);
+                info.vy = -vy0;
+                info.onGround = false;
+            }
+            // nudge horizontal velocity toward click
+            const dx = clickX - info.px;
+            info.vx = (info.vx || 0) + dx * 0.08;
+            e.preventDefault();
+            return;
+        }
+        updatePos(e);
+        e.preventDefault();
+    }
+
     if (!options.bhKeyboard) {
         window.addEventListener("mousemove", mouseHandler);
         window.addEventListener("touchmove", touchHandler);
+        window.addEventListener("click", clickHandler);
     } else {
         window.addEventListener("keydown", keydownHandler);
         window.addEventListener("keyup", keyupHandler);
+        window.addEventListener("click", clickHandler);
     }
 
     // Save handlers and overlay for cleanup on reload
@@ -957,6 +1194,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     bhState.bossCanvas = bossCanvas;
     bhState.mouseHandler = mouseHandler;
     bhState.touchHandler = touchHandler;
+    bhState.clickHandler = clickHandler;
 
     // End the minigame after duration
     bhState.timer = setTimeout(() => {
@@ -964,9 +1202,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (!options.bhKeyboard) {
             window.removeEventListener("mousemove", mouseHandler);
             window.removeEventListener("touchmove", touchHandler);
+            window.removeEventListener("click", clickHandler);
         } else {
             window.removeEventListener("keydown", keydownHandler);
             window.removeEventListener("keyup", keyupHandler);
+            window.removeEventListener("click", clickHandler);
 
         }
         if (overlay.parentNode) overlay.remove();
@@ -982,6 +1222,17 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 }
 
 // --- AUTO-RESUME ON RELOAD ---
+// Wrapper for a blue-diamond, platformer-style bulletHell
+function bulletHellBlue(actions, values = {}, exitAction = () => {}) {
+    values = values || {};
+    values.blueMode = true;
+    // sensible defaults for platformer feel
+    if (typeof values.gravity === 'undefined') values.gravity = 0.6;
+    if (typeof values.jumpStrength === 'undefined') values.jumpStrength = -12;
+    return bulletHell(actions, values, exitAction);
+}
+// Ensure global accessibility
+try { window.bulletHellBlue = bulletHellBlue } catch (e) { /* ignore in non-browser env */ }
 let storedInfo = localStorage.getItem('bhState')
 if (storedInfo && storedInfo != "") {
     storedInfo = JSON.parse(storedInfo)
@@ -1126,6 +1377,10 @@ BHB.rotatingCircleRadialBurst = {
         return info
     },
     moveFunc(info, ticks, id) {
+        // Ensure sensible defaults so bursts actually spawn
+        info.actions[id].bulletsPerBurst = info.actions[id].bulletsPerBurst || 12;
+        info.actions[id].bulletSpeed = info.actions[id].bulletSpeed || 5;
+
         for (let b of info.bullets) {
             if (b.name && b.name == "circle") {
                 b.orbitAngle += b.orbitSpeed;
@@ -2301,3 +2556,1016 @@ BHB.waveBees = {
 }
 
 // A wave of bees on the top and bottom of the screen, requiring you to move up and down
+
+
+//ZAR
+
+BHB.diceAttack = {
+    //bulletHell({"diceAttack": {diceAmount: 2, intervalDiv: 1}}, {duration: 10})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].diceAmount; i++) {
+            let angleOffset = (2 * Math.PI * i) / info.actions[id].diceAmount;
+            info.bullets.push({
+                name: "dice",
+                x: info.boxLeft + info.px + 200 * Math.cos(angleOffset),
+                y: info.boxTop + info.py + 200 * Math.sin(angleOffset),
+                vx: 0,
+                vy: 0,
+                r: 20,
+                orbitRadius: 200,
+                orbitAngle: angleOffset,
+                orbitSpeed: 0.005, // same speed
+                shootInterval: (500 + Math.floor(Math.random() * 600) + i * 150) / (info.actions[id].intervalDiv || 1), // each dice has a different interval
+                lastShotTime: 0,
+                draw(b, bossCtx) {
+                    const size = b.r * 2;
+                    const cornerRadius = b.r * 0.2; // Adjust for roundness
+
+                    bossCtx.translate(b.x, b.y);
+                    // bossCtx.rotate(Math.PI / 2); // Optional: remove if you don't want it spinning 90deg
+
+                    // 1. Draw the Die Body (Rounded Square)
+                    bossCtx.beginPath();
+                    bossCtx.roundRect(-b.r, -b.r, size, size, cornerRadius); 
+                    bossCtx.fillStyle = "#fff";
+    
+                    if (!options.performanceMode) {
+                        bossCtx.shadowColor = "#fff";
+                        bossCtx.shadowBlur = 16;
+                    }
+                    bossCtx.fill();
+
+                    // 2. Draw the Pips (Dots)
+                    // Turning off shadow for the dots so they look like holes
+                    bossCtx.shadowBlur = 0;
+                    bossCtx.fillStyle = "#000"; // Black dots
+    
+                    const pipRadius = b.r * 0.2;
+    
+                    // Example: Drawing a "1" (Center Dot)
+                    const offset = b.r * 0.5;
+                    [[-offset, -offset], [offset, -offset], [-offset, offset], [offset, offset]].forEach(p => {
+                        bossCtx.beginPath();
+                        bossCtx.arc(p[0], p[1], pipRadius, 0, Math.PI * 2);
+                        bossCtx.fill();
+                    })
+                    bossCtx.resetTransform();
+                }
+            });
+        }
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        // Update each dice's orbit and position, and handle shooting
+        for (let b of info.bullets) {
+            if (b.name && b.name == "dice") {
+                b.orbitAngle += b.orbitSpeed;
+                const playerGlobalX = info.boxLeft + info.px;
+                const playerGlobalY = info.boxTop + info.py;
+                const targetBx = playerGlobalX + b.orbitRadius * Math.cos(b.orbitAngle);
+                const targetBy = playerGlobalY + b.orbitRadius * Math.sin(b.orbitAngle);
+                // Smoothly move boss towards target position (lerp)
+                const lerpFactor = 0.05;
+                b.x += (targetBx - b.x) * lerpFactor;
+                b.y += (targetBy - b.y) * lerpFactor;
+
+                // Each dice shoots at its own interval
+                if (!b.lastShotTime) b.lastShotTime = ticks;
+                if (ticks - b.lastShotTime > b.shootInterval) {
+                    info.shootAtPlayer(b.x, b.y, id, 2);
+                    b.lastShotTime = ticks;
+                }
+            }
+        }
+        return info
+    },
+}
+BHB.bouncingDice = {
+    //bulletHell({"bouncingDice": {diceCount: 6, enemySpeed: 2}}, {duration: 15})
+    codeFunc(info, id) {
+        const br = 25;
+        for (let i = 0; i < info.actions[id].diceCount; i++) {
+            // Random position, not too close to player
+            let angle = Math.random() * 2 * Math.PI;
+            let dist = Math.random() * (info.width / 2 - br - info.pr) + br + info.pr + 10;
+            let bx = info.width / 2 + Math.cos(angle) * dist + info.boxLeft;
+            let by = info.height / 2 + Math.sin(angle) * dist + info.boxTop;
+            // Random velocity
+            let theta = Math.random() * 2 * Math.PI;
+            let vx = Math.cos(theta) * info.actions[id].enemySpeed;
+            let vy = Math.sin(theta) * info.actions[id].enemySpeed;
+            info.bullets.push({
+                name: "dice",
+                x: bx,
+                y: by,
+                vx: vx,
+                vy: vy,
+                r: br,
+                shootInterval: (500 + Math.floor(Math.random() * 600) + i * 100) / (info.actions[id].intervalDiv || 1), // each dice has a different interval
+                lastShotTime: 0,
+                draw(b, bossCtx) {
+                    const size = b.r * 2;
+                    const cornerRadius = b.r * 0.2; // Adjust for roundness
+
+                    bossCtx.translate(b.x, b.y);
+                    // bossCtx.rotate(Math.PI / 2); // Optional: remove if you don't want it spinning 90deg
+
+                    // 1. Draw the Die Body (Rounded Square)
+                    bossCtx.beginPath();
+                    bossCtx.roundRect(-b.r, -b.r, size, size, cornerRadius); 
+                    bossCtx.fillStyle = "#fff";
+    
+                    if (!options.performanceMode) {
+                        bossCtx.shadowColor = "#fff";
+                        bossCtx.shadowBlur = 16;
+                    }
+                    bossCtx.fill();
+
+                    // 2. Draw the Pips (Dots)
+                    // Turning off shadow for the dots so they look like holes
+                    bossCtx.shadowBlur = 0;
+                    bossCtx.fillStyle = "#000"; // Black dots
+    
+                    const pipRadius = b.r * 0.2;
+    
+                    // Example: Drawing a "1" (Center Dot)
+                    const offset = b.r*0.5;
+                    [[-offset, -offset], [-offset, offset], [offset, offset], [offset, -offset]].forEach(p => {
+                        bossCtx.beginPath();
+                        bossCtx.arc(p[0], p[1], pipRadius, 0, Math.PI * 2);
+                        bossCtx.fill();
+                    })
+                    bossCtx.resetTransform();
+                }
+            });
+        }
+
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        for (let b of info.bullets) {
+            if (b.name && b.name == "dice") {
+                // Bounce off walls
+                if (b.x < b.r + info.boxLeft) {b.x = b.r + info.boxLeft; b.vx *= -1}
+                if (b.x > info.width - b.r + info.boxLeft) {b.x = info.width - b.r + info.boxLeft; b.vx *= -1}
+                if (b.y < b.r + info.boxTop) {b.y = b.r + info.boxTop; b.vy *= -1}
+                if (b.y > info.height - b.r + info.boxTop) {b.y = info.height - b.r + info.boxTop; b.vy *= -1}
+            }
+                // Each dice shoots at its own interval
+            if (!b.lastShotTime) b.lastShotTime = ticks;
+            if (ticks - b.lastShotTime > b.shootInterval) {
+                info.shootAtPlayer(b.x, b.y, id, 3);
+                b.lastShotTime = ticks;
+            }
+        }
+
+        return info
+    }
+}
+
+
+BHB.diceAttackNoOrbit = {
+    //bulletHell({"diceAttackNoOrbit": {diceAmount: 3, intervalDiv: 0.75}}, {duration: 10})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].diceAmount; i++) {
+            let angleOffset = (2 * Math.PI * i) / info.actions[id].diceAmount;
+            info.bullets.push({
+                name: "dice",
+                x: info.boxLeft + info.px + 200 * Math.cos(angleOffset),
+                y: info.boxTop + info.py + 200 * Math.sin(angleOffset),
+                vx: 0,
+                vy: 0,
+                r: 20,
+                orbitRadius: 200,
+                orbitAngle: angleOffset,
+                orbitSpeed: 0, // same speed
+                shootInterval: (500 + Math.floor(Math.random() * 600) + i * 150) / (info.actions[id].intervalDiv || 1), // each dice has a different interval
+                lastShotTime: 0,
+                draw(b, bossCtx) {
+                    const size = b.r * 2;
+                    const cornerRadius = b.r * 0.2; // Adjust for roundness
+
+                    bossCtx.translate(b.x, b.y);
+                    // bossCtx.rotate(Math.PI / 2); // Optional: remove if you don't want it spinning 90deg
+
+                    // 1. Draw the Die Body (Rounded Square)
+                    bossCtx.beginPath();
+                    bossCtx.roundRect(-b.r, -b.r, size, size, cornerRadius); 
+                    bossCtx.fillStyle = "#fff";
+    
+                    if (!options.performanceMode) {
+                        bossCtx.shadowColor = "#fff";
+                        bossCtx.shadowBlur = 16;
+                    }
+                    bossCtx.fill();
+
+                    // 2. Draw the Pips (Dots)
+                    // Turning off shadow for the dots so they look like holes
+                    bossCtx.shadowBlur = 0;
+                    bossCtx.fillStyle = "#000"; // Black dots
+    
+                    const pipRadius = b.r * 0.2;
+    
+                    // Example: Drawing a "1" (Center Dot)
+                    const offset = 0;
+                    [[offset, -offset]].forEach(p => {
+                        bossCtx.beginPath();
+                        bossCtx.arc(p[0], p[1], pipRadius, 0, Math.PI * 2);
+                        bossCtx.fill();
+                    })
+                    bossCtx.resetTransform();
+                }
+            });
+        }
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        // Update each dice's orbit and position, and handle shooting
+        for (let b of info.bullets) {
+            if (b.name && b.name == "dice") {
+                b.orbitAngle += b.orbitSpeed;
+                const playerGlobalX = info.boxLeft + info.px;
+                const playerGlobalY = info.boxTop + info.py;
+                const targetBx = playerGlobalX + b.orbitRadius * Math.cos(b.orbitAngle);
+                const targetBy = playerGlobalY + b.orbitRadius * Math.sin(b.orbitAngle);
+                // Smoothly move boss towards target position (lerp)
+                const lerpFactor = 0.05;
+                b.x += (targetBx - b.x) * lerpFactor;
+                b.y += (targetBy - b.y) * lerpFactor;
+
+                // Each dice shoots at its own interval
+                if (!b.lastShotTime) b.lastShotTime = ticks;
+                if (ticks - b.lastShotTime > b.shootInterval) {
+                    info.shootAtPlayer(b.x, b.y, id, 4);
+                    b.lastShotTime = ticks;
+                }
+            }
+        }
+        return info
+    },
+}
+BHB.pipRain = {
+    //bulletHell({"pipRain": {bulletPerSec: 7}}, {duration: 12})
+    moveFunc(info, ticks, id) {
+        // Rain Bullets
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            let bx = Math.random() * info.width + info.boxLeft;
+            let by = -bulletRadius;
+            let bul = {x: bx, y: by, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            info.bullets.push(bul);
+            let bx2 = Math.random() * info.width + info.boxLeft;
+            let by2 = window.innerHeight + bulletRadius;
+            let bul2 = {x: bx2, y: by2, vx: 0, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#000000";bossCtx.fill()}}
+            info.bullets.push(bul2);
+        }
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;        // Rain Bullets
+        return info
+    },
+}
+BHB.pipRainHorizontal = {
+    //bulletHell({"pipRainHorizontal": {bulletPerSec: 7}}, {duration: 12})
+    moveFunc(info, ticks, id) {
+        // Rain Bullets
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            let bx = window.innerWidth + bulletRadius;
+            let by = Math.random() * info.height + info.boxTop
+            let bul = {x: bx, y: by, vx: -bulletSpeed, vy: 0, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            info.bullets.push(bul);
+            let bx2 = 0;
+            let by2 = Math.random() * info.height + info.boxTop;
+            let bul2 = {x: bx2, y: by2, vx: bulletSpeed, vy: 0, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#000000";bossCtx.fill()}}
+            info.bullets.push(bul2);
+        }
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;        // Rain Bullets
+        return info
+    },
+}
+BHB.pipRainUltimate = {
+    //bulletHell({"pipRainUltimate": {bulletPerSec: 3}}, {duration: 12})
+    moveFunc(info, ticks, id) {
+        // Rain Bullets
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 4;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            let bx = Math.random() * info.width + info.boxLeft;
+            let by = -bulletRadius;
+            let bul = {x: bx, y: by, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            info.bullets.push(bul);
+            let bx2 = Math.random() * info.width + info.boxLeft;
+            let by2 = window.innerHeight + bulletRadius;
+            let bul2 = {x: bx2, y: by2, vx: 0, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#000000";bossCtx.fill()}}
+            info.bullets.push(bul2);
+            let bx3 = window.innerWidth + bulletRadius;
+            let by3 = Math.random() * info.height + info.boxTop
+            let bul3 = {x: bx3, y: by3, vx: -bulletSpeed, vy: 0, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#fff";bossCtx.fill()}}
+            info.bullets.push(bul3);
+            let bx4 = 0;
+            let by4 = Math.random() * info.height + info.boxTop;
+            let bul4 = {x: bx4, y: by4, vx: bulletSpeed, vy: 0, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#000000";bossCtx.fill()}}
+            info.bullets.push(bul4);
+        }
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;        // Rain Bullets
+        return info
+    },
+}
+//bulletHellBlue({"bouncingDice": {diceCount: 4, enemySpeed: 2}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:150})
+
+BHB.diceSpikes = {
+    // bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 4, spikeSize: 28}}, {width: 1200, height: 600, duration: 12, transparent: false})
+    // bulletHell({"diceSpikes": {spawnPerSec: 6, bulletPerSec: 6, enemySpeed: 4, bulletSpeed: 2, spikeSize: 28, rain: true}}, {width: 1200, height: 600, duration: 12, transparent: false})
+    moveFunc(info, ticks, id) {
+        const spikeSize = info.actions[id].spikeSize ?? 28;
+        const speed = info.actions[id].enemySpeed ?? 6;
+        const spawnPerSec = info.actions[id].spawnPerSec ?? 2.2;
+        const bulletPerSec = info.actions[id].bulletPerSec ?? 6;
+
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * spawnPerSec);
+
+        // Allow `rain` to be specified on the action (info.actions[id].rain)
+        if ((info.actions && info.actions[id] && info.actions[id].rain) || info.rain) {
+            // Reuse existing pipRain behavior so toggling `rain` matches pipRain effects.
+            if (BHB && BHB.pipRain && typeof BHB.pipRain.moveFunc === 'function') {
+                info = BHB.pipRain.moveFunc(info, ticks, id) || info;
+            }
+            // Optionally spawn horizontal pip rain if configured
+            if (info.actions && info.actions[id] && info.actions[id].horizontalRain && BHB && BHB.pipRainHorizontal && typeof BHB.pipRainHorizontal.moveFunc === 'function') {
+                info = BHB.pipRainHorizontal.moveFunc(info, ticks, id) || info;
+            }
+        }
+
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            // choose side: -1 = left, 1 = right
+            const side = Math.random() < 0.5 ? -1 : 1;
+            const x = side === -1 ? (info.boxLeft - spikeSize) : (info.boxLeft + info.width + spikeSize);
+            const y = Math.random() * info.height + info.boxTop;
+
+            // velocity aimed roughly towards player with a small random offset
+            const targetX = info.px ?? (info.boxLeft + info.width/2);
+            const targetY = info.py ?? (info.boxTop + info.height/2);
+            const dx = (targetX + (Math.random() - 0.5) * 80) - x;
+            const dy = (targetY + (Math.random() - 0.5) * 80) - y;
+            const dist = Math.hypot(dx, dy) || 1;
+            const vx = (dx / dist) * speed;
+            const vy = (dy / dist) * speed;
+
+            // triangular spike that points along velocity
+            const color = Math.random() < 0.5 ? '#000' : '#fff';
+            const bul = {
+                x, y, vx, vy, r: spikeSize, color,
+                draw(b, bossCtx) {
+                    const angle = Math.atan2(b.vy, b.vx);
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    bossCtx.rotate(angle);
+                    // triangle
+                    bossCtx.beginPath();
+                    bossCtx.moveTo(b.r, 0);
+                    bossCtx.lineTo(-b.r * 0.6, b.r * 0.7);
+                    bossCtx.lineTo(-b.r * 0.6, -b.r * 0.7);
+                    bossCtx.closePath();
+                    bossCtx.fillStyle = b.color;
+                    bossCtx.fill();
+                    bossCtx.lineWidth = 2;
+                    bossCtx.strokeStyle = (b.color === '#000') ? '#fff' : '#000';
+                    bossCtx.stroke();
+                    bossCtx.restore();
+                }
+            };
+
+            info.bullets.push(bul);
+        }
+
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;
+
+        // update existing bullets' positions
+        for (let b of info.bullets) {
+            if (b.vx !== undefined) {
+                b.x += b.vx;
+                b.y += b.vy;
+            }
+        }
+
+        return info;
+    },
+}
+BHB.diceSpikesPlatformer = {
+    // bulletHellBlue({"diceSpikesPlatformer": {bulletPerSec: 1.2, enemySpeed: 3, spikeHeight: 80, spikeWidth: 60}}, {width:800, height:300, duration:15, jumpMin:6, jumpMax:150, gravity: 0.2})
+    moveFunc(info, ticks, id) {
+        // Based on pipRainHorizontal: spawn groups of spikes sliding along bottom
+        const spikeHeight = info.actions[id].spikeHeight ?? 64;
+        const spikeWidth = info.actions[id].spikeWidth ?? 40;
+        const bulletSpeed = info.actions[id].enemySpeed ?? 6;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        let bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * (info.actions[id].bulletPerSec ?? 1.2));
+        if (!info.actions[id].__diceSpikesInit) { info.actions[id].__diceSpikesInit = true; bulletsToSpawn = Math.max(1, bulletsToSpawn); }
+
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            const count = 1 + Math.floor(Math.random() * 4);
+            const fromLeft = Math.random() < 0.5;
+            let curSpikeHeight = spikeHeight;
+            let curSpikeWidth = spikeWidth;
+            if (count === 1) {
+                curSpikeHeight = Math.round(spikeHeight * 1.6);
+                curSpikeWidth = Math.round(spikeWidth * 1.5);
+            }
+            const spacing = curSpikeWidth * 1.15;
+
+            // always place at bottom of the arena (center of spike sits curSpikeHeight/2 above bottom)
+            const by = info.boxTop + info.height - curSpikeHeight / 2;
+
+            if (fromLeft) {
+                // shift group so the rightmost spike is just off-screen, preventing immediate culling
+                const bxBase = info.boxLeft - curSpikeWidth - 8 + (count - 1) * spacing;
+                for (let k = 0; k < count; k++) {
+                    const bx = bxBase - k * spacing;
+                    info.bullets.push({
+                        name: "bigKnife",
+                        x: bx,
+                        y: by,
+                        offScreen: true,
+                        r: curSpikeHeight,
+                        width: curSpikeWidth,
+                        angle: -Math.PI/2,
+                        vx: bulletSpeed,
+                        vy: 0,
+                        draw(b, bossCtx) {
+                            bossCtx.save();
+                            bossCtx.translate(b.x, b.y);
+                            bossCtx.rotate(b.angle);
+                            bossCtx.beginPath();
+                            bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                            bossCtx.lineTo(b.r / 2, 0);
+                            bossCtx.lineTo(-b.r / 2, b.width / 2);
+                            bossCtx.closePath();
+
+                                    bossCtx.fillStyle = b.color;
+                                    if (!options.performanceMode) bossCtx.shadowColor = b.color;
+                                    if (!options.performanceMode) bossCtx.shadowBlur = 8;
+                                    bossCtx.fill();
+                                    bossCtx.lineWidth = 2;
+                                    bossCtx.strokeStyle = (b.color === '#000') ? '#fff' : '#000';
+                                    bossCtx.stroke();
+
+                            bossCtx.restore();
+                        }
+                    })
+                }
+            } else {
+                // shift group so the leftmost spike is just off-screen on the right side
+                const bxBase = info.boxLeft + info.width + curSpikeWidth + 8 - (count - 1) * spacing;
+                for (let k = 0; k < count; k++) {
+                    const bx = bxBase + k * spacing;
+                    info.bullets.push({
+                        name: "bigKnife",
+                        x: bx,
+                        y: by,
+                        offScreen: true,
+                        r: curSpikeHeight,
+                        width: curSpikeWidth,
+                        angle: -Math.PI/2,
+                        vx: -bulletSpeed,
+                        vy: 0,
+                        draw(b, bossCtx) {
+                            bossCtx.save();
+                            bossCtx.translate(b.x, b.y);
+                            bossCtx.rotate(b.angle);
+                            bossCtx.beginPath();
+                            bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                            bossCtx.lineTo(b.r / 2, 0);
+                            bossCtx.lineTo(-b.r / 2, b.width / 2);
+                            bossCtx.closePath();
+                            bossCtx.fillStyle = '#fff';
+                            if (!options.performanceMode) bossCtx.shadowColor = '#fff';
+                            if (!options.performanceMode) bossCtx.shadowBlur = 8;
+                            bossCtx.fill();
+                            bossCtx.lineWidth = 2;
+                            bossCtx.strokeStyle = '#000';
+                            bossCtx.stroke();
+
+                            // no pips for platformer spikes; color handled above
+                            bossCtx.restore();
+                        }
+                    })
+                }
+            }
+        }
+
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;
+
+        return info;
+    },
+}
+
+BHB.spikePlatformAttack = {
+    //bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+    //bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.4, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, rain: true, bulletPerSec: 10}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+    codeFunc(info, id) {
+        // Create spikes filling the entire ground
+        const spikeH = info.actions[id].spikeHeight || 36;
+        const spikeW = info.actions[id].spikeWidth || 28;
+        info.spikes = [];
+        for (let x = 0; x < info.width; x += spikeW) {
+            info.spikes.push({ x: x, y: info.height - spikeH, w: spikeW, h: spikeH });
+        }
+
+        // Create sliding platforms slightly above the spikes
+        const pCount = info.actions[id].platformCount || 4;
+        info.platforms = [];
+        // determine vertical slots so only 1 platform can appear at each height
+        const minAbove = info.actions[id].platformMinAbove || 40;
+        const maxAbove = info.actions[id].platformMaxAbove || Math.max(120, Math.min(220, info.height - spikeH - 60));
+        let heights = [];
+        if (pCount <= 1) {
+            heights = [info.height - spikeH - Math.floor((minAbove + maxAbove) / 2)];
+        } else {
+            for (let i = 0; i < pCount; i++) {
+                const t = i / (pCount - 1);
+                const above = Math.floor(minAbove + t * (maxAbove - minAbove));
+                heights.push(info.height - spikeH - above);
+            }
+        }
+        // shuffle heights so order is not predictable
+        for (let i = heights.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [heights[i], heights[j]] = [heights[j], heights[i]];
+        }
+
+        const spikeChance = typeof info.actions[id].platformSpikeChance !== 'undefined' ? info.actions[id].platformSpikeChance : (info.actions[id].spikeOnPlatformPercent || 0.25);
+
+        for (let i = 0; i < pCount; i++) {
+            const w = Math.floor((info.actions[id].platformMinW || 80) + Math.random() * (((info.actions[id].platformMaxW || 160)) - (info.actions[id].platformMinW || 80)));
+            const h = 14;
+            const y = heights[i % heights.length];
+            // place platform ensuring an extra horizontal gap between platforms
+            const extraGap = typeof info.actions[id].platformExtraGap !== 'undefined' ? info.actions[id].platformExtraGap : 50;
+            let x = Math.random() * (info.width - w);
+            let placed = false;
+            let attempts = 0;
+            while (!placed && attempts < 60) {
+                let ok = true;
+                for (let q of info.platforms) {
+                    if (!(x + w + extraGap <= q.x || x >= q.x + q.w + extraGap)) { ok = false; break; }
+                }
+                if (ok) { placed = true; break; }
+                x = Math.random() * (info.width - w);
+                attempts++;
+            }
+            if (!placed) {
+                // fallback: scan for first fitting position
+                for (let cx = 0; cx <= info.width - w; cx += 4) {
+                    let ok2 = true;
+                    for (let q of info.platforms) {
+                        if (!(cx + w + extraGap <= q.x || cx >= q.x + q.w + extraGap)) { ok2 = false; break; }
+                    }
+                    if (ok2) { x = cx; placed = true; break; }
+                }
+            }
+            // if still not placed, x remains random (may overlap)
+            const speed = ((Math.random() < 0.5) ? -1 : 1) * (info.actions[id].platformSpeed || 2.5) * (0.6 + Math.random() * 1.4);
+            const hasSpikes = Math.random() < spikeChance;
+            const pSpikeW = Math.max(8, Math.min((info.actions[id].platformSpikeWidth || Math.floor(spikeW/1.6)), Math.floor(w/3)));
+            const pSpikeH = Math.max(6, Math.min((info.actions[id].platformSpikeHeight || Math.floor(spikeH*0.6)), 24));
+            info.platforms.push({ x: x, y: y, w: w, h: h, vx: speed, color: info.actions[id].platformColor || '#9aa', hasSpikes: hasSpikes, spikeW: pSpikeW, spikeH: pSpikeH });
+        }
+
+        // timing for spike damage
+        info.actions[id].lastSpikeDamageTime = info.actions[id].lastSpikeDamageTime || 0;
+        return info;
+    },
+    moveFunc(info, ticks, id) {
+        // Update platforms positions
+        if (info.platforms) {
+            for (let p of info.platforms) {
+                p.x += p.vx;
+                // wrap-around horizontally
+                if (p.vx > 0 && p.x > info.width) p.x = -p.w;
+                if (p.vx < 0 && p.x + p.w < 0) p.x = info.width;
+            }
+        }
+
+        // Player support and spike damage checks (only relevant in blueMode/platformer)
+        if (info.blueMode) {
+            let playerX = info.px;
+            let playerY = info.py;
+            if (info.subArena && info.moveWithSub) { playerX += info.subx; playerY += info.suby }
+
+            // Platforms: allow standing on top
+            if (info.platforms) {
+                for (let p of info.platforms) {
+                    // check horizontal overlap with a small tolerance
+                    if (playerX + info.pr > p.x && playerX - info.pr < p.x + p.w) {
+                        const feetY = playerY + info.pr;
+                        // If player's feet are touching or just below the platform top and falling, snap to platform
+                        if (feetY >= p.y - 6 && feetY <= p.y + 10 && (info.vy || 0) >= -2) {
+                            info.py = p.y - info.pr;
+                            info.vy = 0;
+                            info.onGround = true;
+                            if (p.hasSpikes) {
+                                const now = Date.now();
+                                if (!info.actions[id].lastSpikeDamageTime) info.actions[id].lastSpikeDamageTime = 0;
+                                if (now - info.actions[id].lastSpikeDamageTime > 0) {
+                                    info.platformHit = true;
+                                    info.actions[id].lastSpikeDamageTime = now;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Spikes: if player's feet intersect the spike band, deal damage periodically
+            if (info.spikes && info.spikes.length) {
+                const spikeTop = info.height - (info.actions[id].spikeHeight || 36);
+                const feetY = info.py + info.pr;
+                if (feetY >= spikeTop) {
+                    // if player's x overlaps any spike
+                    for (let s of info.spikes) {
+                        if (info.px + info.pr > s.x && info.px - info.pr < s.x + s.w) {
+                            const now = Date.now();
+                            if (!info.actions[id].lastSpikeDamageTime) info.actions[id].lastSpikeDamageTime = 0;
+                            if (now - info.actions[id].lastSpikeDamageTime > 0) {
+                                info.platformHit = true; // reuse central damage handling
+                                info.actions[id].lastSpikeDamageTime = now;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Allow `rain` to be specified on the action (info.actions[id].rain)
+        if ((info.actions && info.actions[id] && info.actions[id].rain) || info.rain) {
+            // Reuse existing pipRain behavior so toggling `rain` matches pipRain effects.
+            if (BHB && BHB.pipRain && typeof BHB.pipRain.moveFunc === 'function') {
+                info = BHB.pipRain.moveFunc(info, ticks, id) || info;
+            }
+            // Optionally spawn horizontal pip rain if configured
+            if (info.actions && info.actions[id] && info.actions[id].horizontalRain && BHB && BHB.pipRainHorizontal && typeof BHB.pipRainHorizontal.moveFunc === 'function') {
+                info = BHB.pipRainHorizontal.moveFunc(info, ticks, id) || info;
+            }
+        }
+
+        return info;
+    },
+}
+//    bulletHellBlue({"spikePlatformAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 4, platformSpikeChance: 0.3, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, rain: true, bulletPerSec: 3}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+
+BHB.dieBouncer = {
+    //bulletHell({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:36, lastTick:false}}, {width: 400, height: 400, duration: 10})
+    codeFunc(info, id) {
+        const amount = info.actions[id].dieAmount || 1;
+        for (let i = 0; i < amount; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const speed = info.actions[id].enemySpeed || 3;
+            const bx = info.width / 2 + Math.cos(theta) * (info.width / 4) + info.boxLeft;
+            const by = info.height / 2 + Math.sin(theta) * (info.height / 4) + info.boxTop;
+            info.bullets.push({
+                name: "die",
+                x: bx,
+                y: by,
+                vx: Math.cos(theta) * speed,
+                vy: Math.sin(theta) * speed,
+                r: info.actions[id].size || 28,
+                angle: theta,
+                pulsingRed: false,
+                lungeTimer: 0,
+                bounceCooldown: 0,
+                draw(b, bossCtx) {
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    // Die face
+                    const s = b.r * 2;
+                    bossCtx.fillStyle = b.pulsingRed ? '#f88' : '#fff';
+                    bossCtx.strokeStyle = '#000';
+                    bossCtx.lineWidth = Math.max(2, b.r/8);
+                    bossCtx.fillRect(-b.r, -b.r, s, s);
+                    bossCtx.strokeRect(-b.r, -b.r, s, s);
+                    // Draw six pips (three left, three right)
+                    bossCtx.fillStyle = '#000';
+                    const pip = Math.max(1, Math.floor(b.r/6));
+                    const ox = b.r * 0.6;
+                    const oy = b.r * 0.45;
+                    bossCtx.beginPath(); bossCtx.arc(-ox, -oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(-ox, 0, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(-ox, oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, -oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, 0, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.restore();
+                }
+            })
+        }
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        let dt = ticks - (info.actions[id].lastTick || ticks);
+        for (let b of info.bullets) {
+            if (b.name && b.name == "die") {
+                let bounced = false;
+                if (b.x < b.r + info.boxLeft) { b.x = b.r + info.boxLeft; b.vx *= -1; bounced = true; }
+                if (b.x > info.width - b.r + info.boxLeft) { b.x = info.width - b.r + info.boxLeft; b.vx *= -1; bounced = true; }
+                if (b.y < b.r + info.boxTop) { b.y = b.r + info.boxTop; b.vy *= -1; bounced = true; }
+                if (b.y > info.height - b.r + info.boxTop) { b.y = info.height - b.r + info.boxTop; b.vy *= -1; bounced = true; }
+
+                if (bounced && (!b._lastBounce || ticks - b._lastBounce > 60)) {
+                    b._lastBounce = ticks;
+                    // Spawn 3 spikes aimed at player (centered + offsets)
+                    let px = info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+                    let py = info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+                    let base = Math.atan2(py - b.y, px - b.x);
+                    for (let s = -1; s <= 1; s++) {
+                        // Use exact diceSpikes aiming: spawn off-screen and aim roughly at player with random offset
+                        const spikeSize = (info.actions['diceSpikes'] && info.actions['diceSpikes'].spikeSize) || info.actions[id].spikeSize || info.actions[id].spikeRadius || 28;
+                        const speed = (info.actions['diceSpikes'] && info.actions['diceSpikes'].enemySpeed) || info.actions[id].spikeSpeed || 6;
+                        // spawn at screen edges (not arena) and aim directly at player
+                        const side = Math.random() < 0.5 ? -1 : 1;
+                        const sx = side === -1 ? -spikeSize : (window.innerWidth + spikeSize);
+                        const sy = Math.random() * window.innerHeight;
+                        const playerGlobalX = info.boxLeft + (info.px || 0) + (info.subArena && info.moveWithSub ? info.subx : 0);
+                        const playerGlobalY = info.boxTop + (info.py || 0) + (info.subArena && info.moveWithSub ? info.suby : 0);
+                        const dx = playerGlobalX - sx;
+                        const dy = playerGlobalY - sy;
+                        const dist = Math.hypot(dx, dy) || 1;
+                        const vx = (dx / dist) * speed;
+                        const vy = (dy / dist) * speed;
+                        const color = Math.random() < 0.5 ? '#000' : '#fff';
+                        info.bullets.push({
+                            x: sx,
+                            y: sy,
+                            vx: vx,
+                            vy: vy,
+                            r: spikeSize,
+                            color: color,
+                            name: 'dieSpike',
+                            draw(sb, bossCtx) {
+                                const angle = Math.atan2(sb.vy, sb.vx);
+                                bossCtx.save();
+                                bossCtx.translate(sb.x, sb.y);
+                                bossCtx.rotate(angle);
+                                bossCtx.beginPath();
+                                bossCtx.moveTo(sb.r, 0);
+                                bossCtx.lineTo(-sb.r * 0.6, sb.r * 0.7);
+                                bossCtx.lineTo(-sb.r * 0.6, -sb.r * 0.7);
+                                bossCtx.closePath();
+                                bossCtx.fillStyle = sb.color;
+                                bossCtx.fill();
+                                bossCtx.lineWidth = 2;
+                                bossCtx.strokeStyle = (sb.color === '#000') ? '#fff' : '#000';
+                                bossCtx.stroke();
+                                bossCtx.restore();
+                            }
+                        })
+                    }
+
+                    // Charge briefly (speed up like charged bees)
+                    if (!b.pulsingRed) {
+                        b.vx *= (info.actions[id].chargeMult || 1.6);
+                        b.vy *= (info.actions[id].chargeMult || 1.6);
+                        b.pulsingRed = true;
+                        b.lungeTimer = 700;
+                    }
+                }
+
+                if (b.pulsingRed) {
+                    b.lungeTimer -= dt;
+                    if (b.lungeTimer <= 0) {
+                        b.vx = b.vx / (info.actions[id].chargeMult || 1.6);
+                        b.vy = b.vy / (info.actions[id].chargeMult || 1.6);
+                        b.pulsingRed = false;
+                    }
+                }
+            }
+        }
+        info.actions[id].lastTick = ticks;
+        return info
+    }
+}
+
+//bulletHellBlue({"dieBouncer": {dieAmount: 1, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:5, spikeRadius:30, lastTick:false}}, {width: 800, height: 600, duration: 10, jumpMin:6, jumpMax:250, gravity: 0.2})
+//bulletHell({"dieBouncer": {dieAmount: 2, size: 50, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: 1200, height: 600, duration: 10})
+
+BHB.movingDieRadialBurstAttack = {
+    //bulletHell({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 1000, bulletsPerBurst: 7, enemySpeed: 1.5, bulletSpeed: 5}}, {duration: 12})
+    codeFunc(info, id) {
+        for (let i = 0; i < info.actions[id].circleAmount; i++) {
+            info.bullets.push({
+                name: "circle",
+                x: Math.random() * (info.width - 120) + 60 + info.boxLeft,
+                y: info.height + info.boxTop,
+                vx: info.actions[id].enemySpeed * 2,
+                vy: 0,
+                r: 40,
+                lastBurstTime: 0,
+                draw(b, bossCtx) {
+                    bossCtx.save();
+                    bossCtx.translate(b.x, b.y);
+                    // Die face
+                    const s = b.r * 2;
+                    bossCtx.fillStyle = b.pulsingRed ? '#f88' : '#fff';
+                    bossCtx.strokeStyle = '#000';
+                    bossCtx.lineWidth = Math.max(2, b.r/8);
+                    bossCtx.fillRect(-b.r, -b.r, s, s);
+                    bossCtx.strokeRect(-b.r, -b.r, s, s);
+                    // Draw six pips (three left, three right)
+                    bossCtx.fillStyle = '#000';
+                    const pip = Math.max(1, Math.floor(b.r/6));
+                    const ox = b.r * 0.6;
+                    const oy = b.r * 0.45;
+                    bossCtx.beginPath(); bossCtx.arc(-ox, -oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(-ox, 0, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(-ox, oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, -oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, 0, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.beginPath(); bossCtx.arc(ox, oy, pip, 0, Math.PI*2); bossCtx.fill();
+                    bossCtx.restore();
+                }
+            });
+        }
+        return info
+    },
+    moveFunc(info, ticks, id) {
+        for (let b of info.bullets) {
+            if (b.name && b.name == "circle") {
+                // Bounce off walls
+                if (b.x < b.r + info.boxLeft) {b.x = b.r + info.boxLeft; b.vx *= -1}
+                if (b.x > info.width - b.r + info.boxLeft) {b.x = info.width - b.r + info.boxLeft; b.vx *= -1}
+                if (b.y < b.r + info.boxTop) {b.y = b.r + info.boxTop; b.vy *= -1}
+                if (b.y > info.height - b.r + info.boxTop) {b.y = info.height - b.r + info.boxTop; b.vy *= -1}
+
+                // Burst
+                if (!b.lastBurstTime) b.lastBurstTime = Date.now()
+                if (Date.now() - b.lastBurstTime > info.actions[id].burstInterval) {
+                    info.fireDiceSpikeRadialBurst(b.x, b.y, id)
+                    b.lastBurstTime = Date.now()
+                }
+            }
+        }
+        return info
+    },
+    
+}
+//bulletHellBlue({"movingDieRadialBurstAttack": {circleAmount: 1, burstInterval: 800, bulletsPerBurst: 6, enemySpeed: 1.5, bulletSpeed: 5}}, {width:800, height:600, duration:15, jumpMin:6, jumpMax:250, gravity: 0.2})
+
+//bulletHell({"pipRainUltimate": {bulletPerSec: 6}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true,})
+//bulletHell({"dieBouncer": {dieAmount: 4, size: 60, enemySpeed: 3, chargeMult: 1.6, spikeSpeed:6, spikeRadius:30, lastTick:false}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true,})
+
+BHB.zarUltimateAttack = {
+//bulletHellBlue({"zarUltimateAttack": {spikeHeight: 50, spikeWidth: 28, platformCount: 6, spawnPerSec: 4, bulletPerSec: 6, enemySpeed: 3, spikeSize: 28, platformSpikeChance: 0.1, platformSpeed: 1.5, platformMinW: 203, platformMaxW: 203, diceSpikes: true, bulletPerSec: 10}}, {width: window.innerWidth, height: window.innerHeight, duration: 19, transparent: true, saveContent: true, jumpMin:6, jumpMax:350, gravity: 0.2})
+    codeFunc(info, id) {
+        // Create spikes filling the entire ground
+        const spikeH = info.actions[id].spikeHeight || 36;
+        const spikeW = info.actions[id].spikeWidth || 28;
+        info.spikes = [];
+        for (let x = 0; x < info.width; x += spikeW) {
+            info.spikes.push({ x: x, y: info.height - spikeH, w: spikeW, h: spikeH });
+        }
+
+        // Create sliding platforms slightly above the spikes
+        const pCount = info.actions[id].platformCount || 6;
+        info.platforms = [];
+        // determine vertical slots so only 1 platform can appear at each height
+        const minAbove = info.actions[id].platformMinAbove || 80;
+        const maxAbove = info.actions[id].platformMaxAbove || Math.max(120, Math.min(220, info.height - spikeH - 60)) * 2;
+        let heights = [];
+        if (pCount <= 1) {
+            heights = [info.height - spikeH - Math.floor((minAbove + maxAbove) / 2)];
+        } else {
+            for (let i = 0; i < pCount; i++) {
+                const t = i / (pCount - 1);
+                const above = Math.floor(minAbove + t * (maxAbove - minAbove));
+                heights.push(info.height - spikeH - above);
+            }
+        }
+        // shuffle heights so order is not predictable
+        for (let i = heights.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [heights[i], heights[j]] = [heights[j], heights[i]];
+        }
+
+        const spikeChance = typeof info.actions[id].platformSpikeChance !== 'undefined' ? info.actions[id].platformSpikeChance : (info.actions[id].spikeOnPlatformPercent || 0.25);
+
+        for (let i = 0; i < pCount; i++) {
+            const w = Math.floor((info.actions[id].platformMinW || 80) + Math.random() * (((info.actions[id].platformMaxW || 160)) - (info.actions[id].platformMinW || 80)));
+            const h = 14;
+            const y = heights[i % heights.length];
+            // place platform ensuring an extra horizontal gap between platforms
+            const extraGap = typeof info.actions[id].platformExtraGap !== 'undefined' ? info.actions[id].platformExtraGap : 50;
+            let x = Math.random() * (info.width - w);
+            let placed = false;
+            let attempts = 0;
+            while (!placed && attempts < 60) {
+                let ok = true;
+                for (let q of info.platforms) {
+                    if (!(x + w + extraGap <= q.x || x >= q.x + q.w + extraGap)) { ok = false; break; }
+                }
+                if (ok) { placed = true; break; }
+                x = Math.random() * (info.width - w);
+                attempts++;
+            }
+            if (!placed) {
+                // fallback: scan for first fitting position
+                for (let cx = 0; cx <= info.width - w; cx += 4) {
+                    let ok2 = true;
+                    for (let q of info.platforms) {
+                        if (!(cx + w + extraGap <= q.x || cx >= q.x + q.w + extraGap)) { ok2 = false; break; }
+                    }
+                    if (ok2) { x = cx; placed = true; break; }
+                }
+            }
+            // if still not placed, x remains random (may overlap)
+            const speed = ((Math.random() < 0.5) ? -1 : 1) * (info.actions[id].platformSpeed || 2.5) * (0.6 + Math.random() * 1.4);
+            const hasSpikes = Math.random() < spikeChance;
+            const pSpikeW = Math.max(8, Math.min((info.actions[id].platformSpikeWidth || Math.floor(spikeW/1.6)), Math.floor(w/3)));
+            const pSpikeH = Math.max(6, Math.min((info.actions[id].platformSpikeHeight || Math.floor(spikeH*0.6)), 24));
+            info.platforms.push({ x: x, y: y, w: w, h: h, vx: speed, color: info.actions[id].platformColor || '#9aa', hasSpikes: hasSpikes, spikeW: pSpikeW, spikeH: pSpikeH });
+        }
+
+        // timing for spike damage
+        info.actions[id].lastSpikeDamageTime = info.actions[id].lastSpikeDamageTime || 0;
+        return info;
+    },
+    moveFunc(info, ticks, id) {
+        // Update platforms positions
+        if (info.platforms) {
+            for (let p of info.platforms) {
+                p.x += p.vx;
+                // wrap-around horizontally
+                if (p.vx > 0 && p.x > info.width) p.x = -p.w;
+                if (p.vx < 0 && p.x + p.w < 0) p.x = info.width;
+            }
+        }
+
+        // Player support and spike damage checks (only relevant in blueMode/platformer)
+        if (info.blueMode) {
+            let playerX = info.px;
+            let playerY = info.py;
+            if (info.subArena && info.moveWithSub) { playerX += info.subx; playerY += info.suby }
+
+            // Platforms: allow standing on top
+            if (info.platforms) {
+                for (let p of info.platforms) {
+                    // check horizontal overlap with a small tolerance
+                    if (playerX + info.pr > p.x && playerX - info.pr < p.x + p.w) {
+                        const feetY = playerY + info.pr;
+                        // If player's feet are touching or just below the platform top and falling, snap to platform
+                        if (feetY >= p.y - 6 && feetY <= p.y + 10 && (info.vy || 0) >= -2) {
+                            info.py = p.y - info.pr;
+                            info.vy = 0;
+                            info.onGround = true;
+                            if (p.hasSpikes) {
+                                const now = Date.now();
+                                if (!info.actions[id].lastSpikeDamageTime) info.actions[id].lastSpikeDamageTime = 0;
+                                if (now - info.actions[id].lastSpikeDamageTime > 0) {
+                                    info.platformHit = true;
+                                    info.actions[id].lastSpikeDamageTime = now;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Spikes: if player's feet intersect the spike band, deal damage periodically
+            if (info.spikes && info.spikes.length) {
+                const spikeTop = info.height - (info.actions[id].spikeHeight || 36);
+                const feetY = info.py + info.pr;
+                if (feetY >= spikeTop) {
+                    // if player's x overlaps any spike
+                    for (let s of info.spikes) {
+                        if (info.px + info.pr > s.x && info.px - info.pr < s.x + s.w) {
+                            const now = Date.now();
+                            if (!info.actions[id].lastSpikeDamageTime) info.actions[id].lastSpikeDamageTime = 0;
+                            if (now - info.actions[id].lastSpikeDamageTime > 0) {
+                                info.platformHit = true; // reuse central damage handling
+                                info.actions[id].lastSpikeDamageTime = now;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Allow `rain` to be specified on the action (info.actions[id].rain)
+        if ((info.actions && info.actions[id] && info.actions[id].diceSpikes) || info.diceSpikes) {
+            // Reuse existing pipRain behavior so toggling `rain` matches pipRain effects.
+            if (BHB && BHB.diceSpikes && typeof BHB.diceSpikes.moveFunc === 'function') {
+                info = BHB.diceSpikes.moveFunc(info, ticks, id) || info;
+            }
+        }
+
+        return info;
+    },
+}

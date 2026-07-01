@@ -46,6 +46,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pu", 110)[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("sme", 141))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("ir", 7)[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.s.pylonEnergyEffect2)
 
         // POWER MODIFIERS
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.pow(player.se.starsExploreEffect[1][1])

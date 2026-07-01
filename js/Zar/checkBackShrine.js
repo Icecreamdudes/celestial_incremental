@@ -101,6 +101,7 @@
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 22))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("cbs", 23))
             player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(player.n.pylonEnergyEffect3)
+            player.cbs.pylonEnergyToGet = player.cbs.pylonEnergyToGet.mul(buyableEffect("ev0", 24))
 
             player.cbs.pylonPassiveEffect = player.pol.pollinators.plus(1).log10().pow(0.002).div(5).add(1).pow(player.cbs.pylonTierEffect)
         } else {
@@ -1419,6 +1420,22 @@ class VisualEffectsManager {
                 size: { start: 6, end: 0 },
                 gravity: 0
             }
+            ,
+            lotusPetal: {
+                lifetime: 1400,
+                speed: { min: 0.5, max: 2 },
+                color: { start: '#b366ff', end: 'rgba(150,80,255,0)' },
+                size: { start: 18, end: 8 },
+                gravity: -0.005,
+                friction: 0.98
+            },
+            lotusShard: {
+                lifetime: 1200,
+                speed: { min: 4, max: 18 },
+                color: { start: '#d7a3ff', end: 'rgba(200,130,255,0)' },
+                size: { start: 3, end: 1 },
+                friction: 0.96
+            }
         };
         return configs[type] || configs.energyBurst;
     }
@@ -1492,10 +1509,49 @@ class VisualEffectsManager {
             
             ctx.save();
             ctx.globalAlpha = particle.alpha;
-            ctx.fillStyle = particle.color;
-            ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            ctx.fill();
+            // Custom rendering for special particle types
+            if (particle.type === 'lotusPetal') {
+                const lifeRatio = particle.life / particle.maxLife;
+                const petalSize = particle.size * (0.6 + 0.8 * lifeRatio);
+                ctx.translate(particle.x, particle.y);
+                ctx.rotate(particle.angle || 0);
+                const g = ctx.createRadialGradient(0, 0, 0, 0, 0, petalSize * 1.6);
+                g.addColorStop(0, particle.color);
+                g.addColorStop(0.6, 'rgba(160,80,255,0.25)');
+                g.addColorStop(1, 'rgba(160,80,255,0)');
+                ctx.fillStyle = g;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, petalSize * 1.2, petalSize, 0, 0, Math.PI * 2);
+                ctx.fill();
+                // inner glass highlight
+                ctx.globalAlpha = particle.alpha * 0.6;
+                ctx.fillStyle = 'rgba(220,180,255,0.9)';
+                ctx.beginPath();
+                ctx.ellipse(0, -petalSize * 0.15, petalSize * 0.5, petalSize * 0.35, 0, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (particle.type === 'lotusShard') {
+                ctx.translate(particle.x, particle.y);
+                ctx.rotate(particle.angle || 0);
+                ctx.fillStyle = particle.color;
+                ctx.beginPath();
+                ctx.moveTo(0, -particle.size);
+                ctx.lineTo(particle.size, particle.size);
+                ctx.lineTo(-particle.size, particle.size);
+                ctx.closePath();
+                ctx.fill();
+                // glow
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.fillStyle = 'rgba(180,120,255,0.45)';
+                ctx.beginPath();
+                ctx.arc(0, 0, particle.size * 2.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            } else {
+                ctx.fillStyle = particle.color;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
             ctx.restore();
         }
         

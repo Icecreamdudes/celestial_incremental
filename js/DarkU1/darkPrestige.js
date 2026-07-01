@@ -35,8 +35,8 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.du.points.div(1000).pow(0.25).lt(1e7)) player.dp.prestigePointsToGet = player.du.points.div(1000).pow(0.25)
-        if (player.du.points.div(1000).pow(0.25).gte(1e7)) player.dp.prestigePointsToGet = player.du.points.div(10000).pow(0.01).mul(5e6)
+        if (player.du.points.lt(1e31)) player.dp.prestigePointsToGet = player.du.points.div(1000).pow(0.25)
+        if (player.du.points.gte(1e31)) player.dp.prestigePointsToGet = player.du.points.div(10000).pow(0.01).mul(5.37e6)
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dg", 13))
         if (getLevelableTier("pu", 102, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 102)[0])
         if (getLevelableTier("pu", 102, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dp", 14))
@@ -47,6 +47,7 @@
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dv", 14))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgj", 12))
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("car", 403)[0])
 
         //power
         if (player.pet.legPetTimers[0].active) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
@@ -278,7 +279,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dp.prestigePoints},
             pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return getLevelableTier("pu", 208, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

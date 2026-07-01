@@ -92,6 +92,7 @@
 
         player.po.featureSlotsMax = new Decimal(1)
         if (hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if (player.zarDungeon.zarDefeated) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice) {
@@ -306,6 +307,7 @@
             unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
             onClick() {
                 player.po.breakInfinity = true
+                // if (!hasAchievement("achievements", 301)) completeAchievement("achievements", 301)
             },
             style: {
                 width: '200px',

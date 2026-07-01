@@ -245,6 +245,8 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 101)[1])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 205)[0])
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(levelableEffect("pet", 301)[1])
+            if (hasAchievement("achievements", 208)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(1.5)
+            if (hasAchievement("achievements", 305)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.ev0.coinDustEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.cb.XPBoostEffect)
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(player.d.boosterEffects[12])
@@ -323,6 +325,7 @@ addLayer("cb", {
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
             player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
             if (hasUpgrade("cbs", 102)) player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(upgradeEffect("cbs", 102))
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
@@ -343,6 +346,7 @@ addLayer("cb", {
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("cof", 32))
             player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(player.cbs.pylonEnergyEffect3)
             if (hasUpgrade("gwaTemple", 10)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
+            if (hasChallenge("fu", 11)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.1)
         }
 
         player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202)).mul(buyableEffect("ev1", 204))
@@ -446,6 +450,9 @@ addLayer("cb", {
         if (player.cb.paragonShards.lte(0)) {
             player.cb.paragonShards = new Decimal(0)
         }
+
+        // Check for achs
+        // if (!hasAchievement("achievements", 305) && player.cb.level.gte(1000)) completeAchievement("achievements", 305)
     },
     levelToXP(quantity) {
         // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
@@ -503,7 +510,7 @@ addLayer("cb", {
         layers.sp.update(time)
         if (offline) layers.cbs.update(time)
     },
-    branches: ["m"],
+    branches() { return !player.zarDungeon.zarDefeated ? "m" : ["rf"] },
     clickables: {
         11: {
             title() { return player.cb.xpTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[0].current) + "." : "<h3>+" + format(player.cb.xpTimers[0].base.mul(player.cb.xpMult)) + " XP."},
@@ -993,7 +1000,10 @@ addLayer("cb", {
             title() { return player.cb.crateTimers[6].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.crateTimers[6].current) + "." : "<h3>Collect a random singularity pet."},
             canClick() { return player.cb.crateTimers[6].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
-            tooltip() { return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"},
+            tooltip() {
+                if (player.cb.highestLevel.lt(100000)) return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>30% - Singularity Fragment"
+                return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"
+            },
             onClick() {
                 player.cb.crateTimers[6].current = player.cb.crateTimers[6].max
                 layers.cb.petButton7(player.cb.crateTimers[6].base);
@@ -1315,6 +1325,7 @@ addLayer("cb", {
             unlocked() { return true },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[0].base)
                 player.cb.boostTimers[0].current = player.cb.boostTimers[0].max
 
@@ -1343,6 +1354,7 @@ addLayer("cb", {
             unlocked() { return player.cb.highestLevel.gte(666) },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[1].base)
                 player.cb.boostTimers[1].current = player.cb.boostTimers[1].max
 
@@ -1371,6 +1383,7 @@ addLayer("cb", {
             unlocked() { return hasUpgrade("stagnantSynestia", 5)},
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
             onClick() {
+                if (!hasAchievement("achievements", 208)) completeAchievement("achievements", 208)
                 player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[2].base)
                 player.cb.boostTimers[2].current = player.cb.boostTimers[2].max
 
@@ -1872,15 +1885,23 @@ addLayer("cb", {
             addLevelableXP("pet", 308, guarantee.mul(18))
             addLevelableXP("pet", 309, guarantee.mul(18))
             player.cb.paragonShards = player.cb.paragonShards.add(guarantee.mul(3))
-            player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(25))
-            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(8));
-            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(8));
-            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(8));
+            if (player.cb.highestLevel.gte(100000)) {
+                player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(25))
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(8));
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(8));
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(8));
+            } else {
+                player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(30))
+            }
             reward[0] = reward[0].add(guarantee.mul(18))
             reward[1] = reward[1].add(guarantee.mul(18))
             reward[2] = reward[2].add(guarantee.mul(3))
-            reward[3] = reward[3].add(guarantee.mul(25))
-            reward[4] = reward[4].add(guarantee.mul(8))
+            if (player.cb.highestLevel.gte(100000)) {
+                reward[3] = reward[3].add(guarantee.mul(25))
+                reward[4] = reward[4].add(guarantee.mul(8))
+            } else {
+                reward[3] = reward[3].add(guarantee.mul(30))
+            }
             amt = amt.sub(guarantee.mul(20))
         }
         if (amt.lt(20)) {
@@ -1902,7 +1923,7 @@ addLayer("cb", {
                     let gainedShards = getRandomInt(1) + 1
                     player.cb.paragonShards = player.cb.paragonShards.add(gainedShards);
                     reward[2] = reward[2].add(gainedShards)
-                } else if (rng < 0.3 && rng > 0.05) {
+                } else if (rng < 0.3 && (rng > 0.05 || player.cb.highestLevel.lt(100000))) {
                     let gainedFragments = getRandomInt(2) + 4
                     player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
                     reward[3] = reward[3].add(gainedFragments)
@@ -2395,7 +2416,7 @@ addLayer("cb", {
         ["raw-html", () => { return player.cb.highestLevel.lt(7500) && player.cb.highestLevel.gte(3000) ?  "You will unlock something at level 7,500! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(15000) && player.cb.highestLevel.gte(7500) ?  "You will unlock something at level 15,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(15000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[CRATE TAB] [FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[CRATE TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.cb.highestLevel.lt(100000) && player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) ?  "You will unlock something at level 100,000! <small>[PET TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(250000) && player.cb.highestLevel.gte(100000) && player.bh.unlockConditions.done ?  "You will unlock something at level 250,000! <small>[FRAGMENTATION]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],

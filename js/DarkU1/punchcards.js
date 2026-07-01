@@ -10,10 +10,19 @@ addLayer("pu", {
         selectedPunchcards: [0, 0, 0, 0],
         storedSelections: new Decimal(0),
         selectionIndex: 0,
+        commonRaise: new Decimal(1),
+        rareRaise: new Decimal(1),
+        epicRaise: new Decimal(1),
+        legendaryRaise: new Decimal(1),
 
         selectionCost: new Decimal(0),
 
         legendarySelectionActive: false,
+        legendaryPunchcardsUnlocked: new Decimal(0),
+        legendaryPunchcardChance: new Decimal(0), 
+
+        rerolls: new Decimal(0),
+        rerollCost: new Decimal(1),
     }},
     nodeStyle() {
         return {
@@ -32,9 +41,36 @@ addLayer("pu", {
             } else {
                 player.pu.selectionCost = new Decimal(5)
             }
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 402) {
+                player.pu.selectionCost = new Decimal(2)
+            }
         } else {
             player.pu.selectionCost = new Decimal(1)
         }
+
+        player.pu.legendaryPunchcardsUnlocked = new Decimal(0)
+        if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+        if (run(layers.pu.levelables[402].canSelect, layers.pu.levelables[402]) && !getLevelableTier("pu", 402, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+
+        player.pu.legendaryPunchcardChance = Decimal.add(0.04, player.pu.legendaryPunchcardsUnlocked.sub(1).mul(0.02))
+        player.pu.legendaryPunchcardChance = player.pu.legendaryPunchcardChance.add(buyableEffect("rp", 13))
+
+        //reroll
+        player.pu.rerollCost = player.pu.rerolls.pow(1.2).add(1).mul(5)
+        player.pu.commonRaise = new Decimal(1)
+        player.pu.commonRaise = player.pu.commonRaise.mul(buyableEffect("funify", 14))
+        player.pu.commonRaise = player.pu.commonRaise.mul(player.bl.bloodEffect)
+
+        player.pu.rareRaise = new Decimal(1)
+        player.pu.rareRaise = player.pu.rareRaise.mul(buyableEffect("funify", 15))
+        player.pu.rareRaise = player.pu.rareRaise.mul(player.bl.bloodEffect)
+
+        player.pu.epicRaise = new Decimal(1)
+        player.pu.epicRaise = player.pu.epicRaise.mul(buyableEffect("funify", 16))
+        player.pu.epicRaise = player.pu.epicRaise.mul(player.bl.bloodEffect)
+
+        player.pu.legendaryRaise = new Decimal(1)
+        player.pu.legendaryRaise = player.pu.legendaryRaise.mul(player.bl.bloodEffect)
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0]
@@ -44,6 +80,7 @@ addLayer("pu", {
                 if (prop >= 100 && prop < 200) raritySelect[0].push(prop) // COMMON
                 if (prop >= 200 && prop < 300) raritySelect[1].push(prop) // RARE
                 if (prop >= 300 && prop < 400) raritySelect[2].push(prop) // EPIC
+                if (prop >= 400 && prop < 500) raritySelect[3].push(prop) // LEGENDARY
             }
         }
         for (let i = 0; i < 3; i++) {
@@ -70,7 +107,7 @@ addLayer("pu", {
 
         //legendary
         let random = Math.random()
-        if (random < 0.04)
+        if (random < player.pu.legendaryPunchcardChance)
         {
             if (hasUpgrade("le", 201)) player.pu.legendarySelectionActive = true
         } else
@@ -78,9 +115,8 @@ addLayer("pu", {
             player.pu.legendarySelectionActive = false
         }
         if (player.pu.legendarySelectionActive) {
-
-            if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.selectedPunchcards[3] = 401 //MAKE THEM RANDOMIZED EVENTUALLY
-
+            let choice = Math.floor(Math.random() * raritySelect[3].length)
+            player.pu.selectedPunchcards[3] = raritySelect[3][choice]
         }
     },
     clickables: {
@@ -127,6 +163,22 @@ addLayer("pu", {
             },
         },
 
+        9: {
+            title() { return "Reroll Punchcards<br>Req: " + format(player.pu.rerollCost) + " Reroll Points</h5>" },
+            canClick() { return player.rp.rerollPoints.gte(player.pu.rerollCost)},
+            unlocked() { return getLevelableTier("pu", 402, true)},
+            tooltip() { return "You have " + format(player.rp.rerollPoints) + " Reroll Points."},
+            onClick() {
+                player.rp.rerollPoints = player.rp.rerollPoints.sub(player.pu.rerollCost)
+                player.pu.rerolls = player.pu.rerolls.add(1)
+                layers.pu.generateSelection();
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", color: "white", border: "2px solid #384166", borderRadius: "10px", fontSize: "8px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
+        },
         10: {
             title() { return "Activate this card" },
             canClick() { return player.pu.storedSelections.gte(player.pu.selectionCost) && player.pu.selectedPunchcards[player.pu.selectionIndex] != 0},
@@ -134,7 +186,7 @@ addLayer("pu", {
             onClick() {
                 setLevelableTier("pu", player.pu.selectedPunchcards[player.pu.selectionIndex], new Decimal(1))
                 player.pu.storedSelections = player.pu.storedSelections.sub(player.pu.selectionCost)
-
+                player.du.noPunchcards = false
                 layers.pu.generateSelection();
             },
             style() {
@@ -266,6 +318,61 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() { return {width: '80px', height: '152px', backgroundColor: '#222222'} } 
         },
+        100: {
+            image() {return this.canClick() ? "resources/Punchcards/commonPunchcard0.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Tav"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "<small>/" + format(this.effect()[0]) + " to starmetal requirement (Based on universe resets)<br>",
+                    "x" + format(this.effect()[1]) + " to points after softcaps (Based on SMA on leave)</small><br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "/" + format(this.effect()[2]) + " to skill level cap cost",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = Decimal.pow(5, player.le.resetAmount).pow(this.effectScale()).pow(player.pu.commonRaise)
+                eff[1] = player.le.starmetalAlloyToGetTrue.add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).div(20).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).div(100).add(1.4)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("depth1", 6) && !player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return hasUpgrade("depth1", 6) && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.5).mul(10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(9)).mul(364.83).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
         101: {
             image() {return this.canClick() ? "resources/Punchcards/commonPunchcard1.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
@@ -295,8 +402,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.du.points.pow(0.08).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = player.le.starmetalAlloyToGetTrue.floor().add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.du.points.pow(0.08).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
+                eff[1] = player.le.starmetalAlloyToGetTrue.floor().add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(1000, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(30, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e30)
                 return eff
@@ -350,7 +457,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dp.prestigePoints.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dp.prestigePoints.pow(0.2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(100, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(10, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e20)
                 return eff
@@ -404,8 +511,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = this.effectScale().mul(0.5).add(1).pow(player.bl.bloodEffect)
-                eff[1] = player.du.points.pow(0.1).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = this.effectScale().mul(0.5).add(1).pow(player.pu.commonRaise)
+                eff[1] = player.du.points.pow(0.1).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(30, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(5, getLevelableAmount(this.layer, this.id).sub(10)).mul(5.9e14)
                 return eff
@@ -459,8 +566,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = this.effectScale().mul(0.6).add(1).pow(player.bl.bloodEffect)
-                eff[1] = player.du.points.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = this.effectScale().mul(0.6).add(1).pow(player.pu.commonRaise)
+                eff[1] = player.du.points.pow(0.2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(10, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(3, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e10)
                 return eff
@@ -514,8 +621,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = this.effectScale().mul(0.7).add(1).pow(player.bl.bloodEffect)
-                eff[1] = player.du.points.pow(0.4).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = this.effectScale().mul(0.7).add(1).pow(player.pu.commonRaise)
+                eff[1] = player.du.points.pow(0.4).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(50, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(7, getLevelableAmount(this.layer, this.id).sub(10)).mul(9.77e16)
                 return eff
@@ -569,9 +676,9 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dg.generators.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(400, getLevelableAmount(this.layer, this.id)).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(20, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e26).pow(player.bl.bloodEffect)
+                eff[0] = player.dg.generators.pow(0.2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(400, getLevelableAmount(this.layer, this.id)).pow(player.pu.commonRaise)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(20, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e26).pow(player.pu.commonRaise)
                 return eff
             },
             // CLICK CODE
@@ -623,7 +730,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dg.generatorPower.pow(0.25).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dg.generatorPower.pow(0.25).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.5).add(6)
                 return eff
@@ -677,8 +784,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow(1.5, this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = player.dgr.grass.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = Decimal.pow(1.5, this.effectScale()).pow(player.pu.commonRaise)
+                eff[1] = player.dgr.grass.pow(0.2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(4, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(10)).mul(1048576)
                 return eff
@@ -732,8 +839,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.db.boosters.pow(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = player.le.eclipseShardsToGetTrue.floor().div(0.5).add(1).pow(0.5).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.db.boosters.pow(2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
+                eff[1] = player.le.eclipseShardsToGetTrue.floor().div(0.5).add(1).pow(0.5).pow(this.effectScale()).pow(player.pu.commonRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
                 return eff
@@ -786,7 +893,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dn.normality.pow(0.2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dn.normality.pow(0.2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).pow(1.3).add(1)
                 return eff
             },
@@ -838,7 +945,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.ds.spaceEnergy.pow(0.25).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.ds.spaceEnergy.pow(0.25).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.025).add(1)
                 return eff
             },
@@ -890,7 +997,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dv.clouds.pow(0.15).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dv.clouds.pow(0.15).div(2).add(1).pow(this.effectScale()).pow(player.pu.commonRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 return eff
             },
@@ -942,7 +1049,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow(5, player.dgj.grassJump).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = Decimal.pow(5, player.dgj.grassJump).pow(this.effectScale()).pow(player.pu.commonRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.02).add(1)
                 return eff
             },
@@ -962,6 +1069,61 @@ addLayer("pu", {
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f7f7f" : look.backgroundColor = "#3f3f3f"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        200: {
+            image() {return this.canClick() ? "resources/Punchcards/rarePunchcard0.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Cante"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "x" + formatSimple(this.effect()[0]) + " to points <small>(Based on time since uni-reset)</small><br>",
+                    "/" + format(this.effect()[1]) + " to eclipse req. <small>(Based on time in eclipse)</small><br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "+" + formatWhole(this.effect()[2].sub(1)) + " skill points [Next at Lv" + formatWhole(Decimal.sumArithmeticSeries(this.effect()[2], new Decimal(1), new Decimal(1), new Decimal(0))) + "]",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
+                let time1 = player.le.timeSinceReset.gt(300) ? player.le.timeSinceReset.div(300).pow(0.5).mul(300) : player.le.timeSinceReset
+                eff[0] = Decimal.pow(1.15, time1).pow(this.effectScale()).pow(player.pu.rareRaise)
+                let time2 = player.le.timeSinceEnter.gt(1800) ? player.le.timeSinceEnter.div(1800).pow(0.5).mul(1800) : player.le.timeSinceReset
+                eff[1] = Decimal.pow(1.05, time2).pow(this.effectScale()).pow(player.pu.rareRaise)
+                eff[2] = Decimal.affordArithmeticSeries(getLevelableAmount(this.layer, this.id), new Decimal(1), new Decimal(1), new Decimal(0)).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return hasUpgrade("depth1", 6)},
+            canSelect() {return hasUpgrade("depth1", 6) && player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.6).mul(25).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.25, getLevelableAmount(this.layer, this.id).sub(9)).mul(1159.23).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#7f5f00" : look.backgroundColor = "#3f2f00"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -995,8 +1157,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow(0.7, this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = player.du.pointSoftcap.pow(0.08).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = Decimal.pow(0.7, this.effectScale()).pow(player.pu.rareRaise)
+                eff[1] = player.du.pointSoftcap.pow(0.08).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.02).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.01).add(1.1)
                 return eff
@@ -1050,8 +1212,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = this.effectScale().mul(0.1).add(1).pow(player.bl.bloodEffect)
-                eff[1] = player.du.points.pow(0.08).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = this.effectScale().mul(0.1).add(1).pow(player.pu.rareRaise)
+                eff[1] = player.du.points.pow(0.08).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.06).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.03).add(1.3)
                 return eff
@@ -1105,8 +1267,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
-                eff[0] = player.dg.generators.pow(0.6).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = Decimal.pow(1.5, this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dg.generators.pow(0.6).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
+                eff[1] = Decimal.pow(1.5, this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)
                 return eff
@@ -1160,8 +1322,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dg.generators.pow(0.4).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = Decimal.pow(1.5, this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dg.generators.pow(0.4).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
+                eff[1] = Decimal.pow(1.5, this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.4).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(3)
                 return eff
@@ -1215,7 +1377,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dg.generators.pow(0.15).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dg.generators.pow(0.15).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.3).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.15).add(2.5)
                 return eff
@@ -1269,7 +1431,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dp.prestigePoints.pow(0.1).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dp.prestigePoints.pow(0.1).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(4, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(10)).mul(1048576)
                 return eff
@@ -1323,7 +1485,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = this.effectScale().mul(0.3).add(1).pow(player.bl.bloodEffect)
+                eff[0] = this.effectScale().mul(0.3).add(1).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(100, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(30, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e20)
                 return eff
@@ -1377,7 +1539,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dp.prestigePoints.pow(0.08).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dp.prestigePoints.pow(0.08).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).add(1).pow(2)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).add(1).pow(1.5).mul(3.32)
                 return eff
@@ -1431,7 +1593,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dn.normality.pow(0.01).mul(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dn.normality.pow(0.01).mul(5).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(2.5)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).sub(9).pow(2.2).mul(2020)
                 return eff
@@ -1485,7 +1647,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dn.normality.pow(0.11).mul(100).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dn.normality.pow(0.11).mul(100).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(100).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(500).add(1.08)
                 return eff
@@ -1538,7 +1700,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dv.clouds.pow(0.25).mul(100).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dv.clouds.pow(0.25).mul(100).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).sub(9).mul(0.1).pow(0.8).add(1).mul(2)
                 return eff
@@ -1592,7 +1754,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.ds.space.plus(1).log10().pow(1.5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.ds.space.plus(1).log10().pow(1.5).add(1).pow(this.effectScale()).pow(player.pu.rareRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 return eff
             },
@@ -1644,7 +1806,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow(2, player.du.points.add(1).log(1e10)).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = Decimal.pow(2, player.du.points.add(1).log(1e10)).pow(this.effectScale()).pow(player.pu.rareRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).div(20).add(1)
                 return eff
             },
@@ -1669,6 +1831,60 @@ addLayer("pu", {
             }
         },
 
+        300: {
+            image() {return this.canClick() ? "resources/Punchcards/epicPunchcard0.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Jocus"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlock Funify<br>",
+                    "/" + formatSimple(this.effect()[0]) + " to funify requirement<small> (Based on fun points)</small><br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "+" + formatSimple(this.effect()[1].sub(1), 3) + " to character regen",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.funify.funPoints.add(1).pow(this.effectScale()).pow(player.pu.epicRaise)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(500).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).div(1000).add(1.01)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return hasUpgrade("depth1", 6) || this.canClick()},
+            canSelect() {return hasUpgrade("depth1", 6) && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).mul(75).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(4420.07).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
         301: {
             image() {return this.canClick() ? "resources/Punchcards/epicPunchcard1.png" : "resources/Punchcards/lockedPunchcard.png"},
             title() {
@@ -1697,8 +1913,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                if (player.sma.starmetalAlloy.lt(100000)) eff[0] = player.sma.starmetalAlloy.add(1).pow(0.8).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (player.sma.starmetalAlloy.gte(100000)) eff[0] = player.sma.starmetalAlloy.div(100000).pow(0.2).mul(10000).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                if (player.sma.starmetalAlloy.lt(100000)) eff[0] = player.sma.starmetalAlloy.add(1).pow(0.8).pow(this.effectScale()).pow(player.pu.epicRaise)
+                if (player.sma.starmetalAlloy.gte(100000)) eff[0] = player.sma.starmetalAlloy.div(100000).pow(0.2).mul(10000).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(10, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(3, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e10)
                 return eff
@@ -1751,7 +1967,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.div(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.div(5).add(1).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)
                 return eff
@@ -1804,7 +2020,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.add(1).pow(0.15).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.add(1).pow(0.15).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1.5)
                 return eff
@@ -1857,7 +2073,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.add(1).pow(0.1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.add(1).pow(0.1).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.25)
                 return eff
@@ -1911,7 +2127,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.pow(1.25).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.pow(1.25).div(2).add(1).pow(this.effectScale()).pow(player.pu.epicRaise)
                 eff[1] = Decimal.div(1, player.le.resetAmount.pow(0.7).mul(0.2).add(1))
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)
@@ -1966,8 +2182,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = Decimal.pow(0.8, this.effectScale()).pow(player.bl.bloodEffect)
-                eff[1] = player.dn.normality.pow(0.65).pow(this.effectScale()).add(1).pow(player.bl.bloodEffect)
+                eff[0] = Decimal.pow(0.8, this.effectScale()).pow(player.pu.epicRaise)
+                eff[1] = player.dn.normality.pow(0.65).pow(this.effectScale()).add(1).pow(player.pu.epicRaise)
                 eff[2] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 return eff
             },
@@ -2019,8 +2235,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                if (player.sma.eclipseShards.lt(10000)) eff[0] = player.sma.eclipseShards.add(1).pow(0.5).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (player.sma.eclipseShards.gte(10000)) eff[0] = player.sma.eclipseShards.div(10000).pow(0.1).mul(100).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                if (player.sma.eclipseShards.lt(10000)) eff[0] = player.sma.eclipseShards.add(1).pow(0.5).pow(this.effectScale()).pow(player.pu.epicRaise)
+                if (player.sma.eclipseShards.gte(10000)) eff[0] = player.sma.eclipseShards.div(10000).pow(0.1).mul(100).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(5, getLevelableAmount(this.layer, this.id))
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e5)
                 return eff
@@ -2074,7 +2290,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dgr.grass.pow(0.05).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.dgr.grass.pow(0.05).add(1).pow(this.effectScale()).pow(player.pu.epicRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).div(20).add(1)
                 return eff
             },
@@ -2129,7 +2345,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.div(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.div(3).add(1).pow(this.effectScale()).pow(player.pu.legendaryRaise)
                 eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
                 return eff
             },
@@ -2148,7 +2364,60 @@ addLayer("pu", {
             barStyle() { return {backgroundColor: "#1a3b0f"}},
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
-                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        402: {
+            image() {return this.canClick() ? "resources/Punchcards/legendaryPunchcard2.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Zar"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlock Reroll Points<br>",
+                    "x" + format(this.effect()[0]) + " to reroll point gain (based on universe resets)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to Zar chips",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.0125).add(1.4)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.005).add(2).min(2.5)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.le.resetAmount.div(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (player.zarDungeon.zarDefeated && hasUpgrade("le", 201)) || this.canClick()},
+            canSelect() {return player.zarDungeon.zarDefeated && hasUpgrade("le", 201)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.85).mul(100000).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(7079000).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -2177,7 +2446,7 @@ addLayer("pu", {
                                     return str.substring(0, str.indexOf("</span>"))
                                 }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                             ], {width: "525px", height: "60px"}],
-                            ["clickable", 10],
+                            ["row", [["clickable", 10], ["blank", "25px"], ["clickable", 9],]],
                             ["blank", "10px"],
                         ], {width: "550px", height: "170px"}],
                         ["style-column", [
@@ -2191,15 +2460,14 @@ addLayer("pu", {
                                         ["style-column", [
                     ["style-column", [
                             ["raw-html", () => {
-                                let cost = 5
-                                if (player.bl.noxDefeated && player.pu.selectedPunchcards[3] == 401) cost = 3
-                                return "Legendary Punchcards<br><small>(Costs " + cost + " Punchcard Selections)"
+                                return "Legendary Punchcards<br><small>(Costs " + formatWhole(player.pu.selectionCost) + " Punchcard Selections)"
                             }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "550px", height: "50px"}],
                         ["style-column", [
                             ["row", [["clickable", 14],]],
                         ], {width: "550px", height: "150px", backgroundColor: "#33011bff"}],
                     ], () => {return player.pu.legendarySelectionActive ? {returnwidth: "550px", height: "200px", border: "3px solid white", backgroundColor: "#330d22ff"} : {display: "none !important"}}],
+                
                 ]
             },
             "Collection": {
@@ -2219,8 +2487,8 @@ addLayer("pu", {
                             ["style-row", [
                                 ["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104],
                                 ["levelable", 105], ["levelable", 106], ["levelable", 107], ["levelable", 108],
-                                ["levelable", 109], ["levelable", 110], ["levelable", 111], ["levelable", 112],
-                                ["levelable", 113],
+                                ["levelable", 109], ["levelable", 100], ["levelable", 110], ["levelable", 111],
+                                ["levelable", 112], ["levelable", 113],
                             ], {width: "525px", backgroundColor: "#191919", padding: "5px"}],
 
                             ["style-column", [
@@ -2229,8 +2497,8 @@ addLayer("pu", {
                             ["style-row", [
                                 ["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204],
                                 ["levelable", 205], ["levelable", 206], ["levelable", 207], ["levelable", 208],
-                                ["levelable", 209], ["levelable", 210], ["levelable", 211], ["levelable", 212],
-                                ["levelable", 213],
+                                ["levelable", 200], ["levelable", 209], ["levelable", 210], ["levelable", 211],
+                                ["levelable", 212], ["levelable", 213],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
 
                             ["style-column", [
@@ -2238,13 +2506,14 @@ addLayer("pu", {
                             ], () => {return hasUpgrade("sma", 17) ? {width: "535px", height: "40px", backgroundColor: "#001932", borderTop: "3px solid #003f7f", borderBottom: "3px solid #003f7f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304],  
-                                ["levelable", 305], ["levelable", 306], ["levelable", 307], ["levelable", 308],
+                                ["levelable", 300], ["levelable", 305], ["levelable", 306], ["levelable", 307],
+                                ["levelable", 308],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#000c19", padding: "5px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Legendary (4%) <br><h6>[Takes priority over other card rarities]", {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "40px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "60px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
-                                ["levelable", 401],
+                                ["levelable", 401], ["levelable", 402],
                             ], () => {return hasUpgrade("le", 201) ? {width: "525px", backgroundColor: "#200815ff", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],

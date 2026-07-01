@@ -498,28 +498,28 @@
     hotkeys: [
         {
             key: "2", 
-            description: "2: Dark Ranks",
+            description: "Dark Rank Up",
             onPress() {
                 clickClickable(this.layer, 11)
             },
         },
         {
             key: "3", 
-            description: "3: Dark Tiers",
+            description: "Dark Tier Up",
             onPress() {
                 clickClickable(this.layer, 12)
             },
         },
         {
             key: "4", 
-            description: "4: Dark Tetr",
+            description: "Dark Tetr Up",
             onPress() {
                 clickClickable(this.layer, 13)
             },
         },
         {
             key: "5", 
-            description: "5: Dark Pent",
+            description: "Dark Pent Up",
             onPress() {
                 clickClickable(this.layer, 14)
             },

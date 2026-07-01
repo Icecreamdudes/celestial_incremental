@@ -395,7 +395,7 @@
     hotkeys: [
         {
             key: "g", 
-            description: "G: Reset for Generators",
+            description: "Reset for Generators",
             onPress() {
                 clickClickable(this.layer, 11)
             },

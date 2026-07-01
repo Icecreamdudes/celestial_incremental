@@ -375,7 +375,7 @@
     hotkeys: [
         {
             key: "n", 
-            description: "N: Reset for Normality",
+            description: "Reset for Normality",
             onPress() {
                 clickClickable(this.layer, 11)
             },

@@ -1,6 +1,7 @@
 ﻿addLayer("i", {
     name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -750,7 +751,17 @@
     layerShown() {
         if (player.startedGame == false) return true
         return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge
-    }
+    },
+    hotkeys: [
+        {
+            key: "M", 
+            description: "Toggle Music",
+            onPress() {
+                toggleOpt('musicToggle')
+            },
+            global: true
+        },
+    ]
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {
@@ -821,16 +832,3 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
-    document.addEventListener('keydown', function(event) {
-        if (event.altKey && options.toggleHotkey) {
-            if (!options.musicToggle) 
-            {
-                options.musicToggle = true
-                doPopup("milestone", "Music is toggled on.", "Milestone Gotten!", 3, "#ffffff")
-            } else
-            {
-                options.musicToggle = false
-                doPopup("milestone", "Music is toggled off.", "Milestone Gotten!", 3, "#ffffff")
-            }
-        }
-    });

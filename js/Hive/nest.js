@@ -980,5 +980,14 @@ addLayer("n", {
         ["microtabs", "Tabs", {borderWidth: "0"}],
         ["blank", "20px"],
     ],
-    layerShown() { return player.startedGame && hasMilestone("dgj", 14)}
+    layerShown() { return player.startedGame && hasMilestone("dgj", 14)},
+    hotkeys: [
+        {
+            key: "n", 
+            description: "Gain Nests",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        }
+	]
 })

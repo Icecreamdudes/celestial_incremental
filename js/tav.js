@@ -1856,7 +1856,16 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasChallenge("ip", 18)}
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasChallenge("ip", 18)},
+    hotkeys: [
+        {
+            key: "n", 
+            description: "Reverse Crunch",
+            onPress() {
+                clickClickable(this.layer, 15)
+            },
+        }
+	]
 })
 addLayer("revc", {
     name: "Reverse Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.

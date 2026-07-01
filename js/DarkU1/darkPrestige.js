@@ -352,7 +352,7 @@
     hotkeys: [
         {
             key: "p", 
-            description: "P: Reset for Prestige",
+            description: "Dark Prestige",
             onPress() {
                 console.log('hi')
                 clickClickable(this.layer, 11)

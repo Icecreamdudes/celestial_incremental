@@ -1187,15 +1187,15 @@
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {
-            key: "m", 
-            description: "M: Reset for Starmetal",
+            key: "x", 
+            description: "Reset for Starmetal",
             onPress() {
                 clickClickable(this.layer, 11)
             },
         },
         {
             key: "e", 
-            description: "E: Reset for Eclipse Shards",
+            description: "Reset for Eclipse Shards",
             onPress() {
                 clickClickable(this.layer, 13)
             },

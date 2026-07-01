@@ -44,6 +44,7 @@ function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     		for (row in tree) {
 	    		for (thing in tree[row]) {
                     if (tree[row][thing] == "bh" && universe == "U3") continue
+                    if(!layers[tree[row][thing]].update) continue
                     layers[tree[row][thing]].update(time)
                 }
             }
@@ -267,7 +268,7 @@ addUniverse("CB", {
 addUniverse("CH", {
     name: "Universe γ<br>Hall of Celestials",
     symbol: "γ",
-    tree: [["ch"],["hk"]],
+    tree: [["ch"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",

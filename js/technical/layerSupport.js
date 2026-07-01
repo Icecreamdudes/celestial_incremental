@@ -29,26 +29,37 @@ function layerDeactivated(layer) {
 
 var LAYERS = Object.keys(layers);
 
-var hotkeys = {};
-
 var maxRow = 0;
 
+
+var hotkeys = {};
+var knownHotkeys = {global: {}};
 function updateHotkeys()
 {
-    hotkeys = {};
-    for (layer in layers){
-        hk = layers[layer].hotkeys
-        if (hk){
-            for (id in hk){
+    hotkeys = {global: {}};
 
-                uni = hk[id].global ? 'global' : layers[layer].universe
-                keyString = uni + "_" + hk[id].key
-				hotkeys[keyString] = hk[id]
-                hotkeys[keyString].layer = layer
-                hotkeys[keyString].id = id
-                hotkeys[keyString].uni = uni
-                if (hk[id].unlocked === undefined)
-                    hk[id].unlocked = true
+    for(uni in universes) {
+        if(hotkeys[uni] == undefined)
+            hotkeys[uni] = {};
+        if(knownHotkeys[uni] == undefined)
+            knownHotkeys[uni] = {};
+    }
+    for (layer in layers){
+        if(!layers[layer].universe) continue; // need universe for each hotkey
+        let hks = layers[layer].hotkeys
+        if (hks){
+            for (id in hks){
+                uniCategory = hks[id].global ? 'global' : layers[layer].universe
+                keyString = hks[id].key
+				hotkeys[uniCategory][keyString] = hks[id]
+                hotkeys[uniCategory][keyString].layer = layer
+                hotkeys[uniCategory][keyString].id = id
+                hotkeys[uniCategory][keyString].uni = layers[layer].universe
+                if (hks[id].unlocked === undefined)
+                    hks[id].unlocked = true
+
+                if(layers[layer].layerShown() !== false && hks[id].unlocked) 
+                    knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
             }
         }
     }

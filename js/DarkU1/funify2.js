@@ -316,7 +316,7 @@ addLayer("funify", {
     hotkeys: [
         {
             key: "f", 
-            description: "F: Reset for Funify",
+            description: "Dark Funify",
             onPress() {
                 clickClickable(this.layer, 11)
             },

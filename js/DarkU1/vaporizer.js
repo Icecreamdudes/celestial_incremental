@@ -332,4 +332,21 @@
     ],
     layerShown() { return hasUpgrade("le", 102) },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "v", 
+            description: "Toggle Vaporizer",
+            onPress() {
+                if(!player.dv.producingClouds){
+                    clickClickable(this.layer, 11)
+                    doPopup("none", "Vaporizer turned on!", "Toggle", 5, "rgb(233, 233, 233)", false)
+                }
+                else {
+                    clickClickable(this.layer, 12)
+                    doPopup("none", "Vaporizer turned off!", "Toggle", 5, "rgb(233, 233, 233)", false)
+                }
+
+            },
+        }
+	]
 })

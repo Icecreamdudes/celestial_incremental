@@ -888,5 +888,14 @@
 
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 12) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 12) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "c", 
+            description: "Flip Coin",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

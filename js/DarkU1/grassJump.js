@@ -466,4 +466,13 @@ addLayer("dgj", {
     ],
     layerShown() { return hasUpgrade("le", 202) },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "j", 
+            description: "Grass Jump",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

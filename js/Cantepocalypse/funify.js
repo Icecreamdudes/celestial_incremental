@@ -2483,7 +2483,7 @@
                 return "Softcap Weakener #1"
             },
             display() {
-                return "which are weakening the first replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are weakening the first replicanti point softcap by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {
@@ -2517,7 +2517,7 @@
                 return "Softcap Extender #2"
             },
             display() {
-                return "which are extending the second replicanti point by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are extending the second replicanti point softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {
@@ -2551,7 +2551,7 @@
                 return "Softcap Weakener #2"
             },
             display() {
-                return "which are weakening the second replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are weakening the second replicanti point softcap by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
             buy(mult) {
@@ -3462,7 +3462,16 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 19) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 19) },
+    hotkeys: [
+        {
+            key: "f", 
+            description: "Funify",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })
 
 // hai icecreamdude-senpai :3

@@ -983,7 +983,39 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)},
+    hotkeys: [
+        {
+            key: "x", 
+            description: "Reset replicanti for galaxy dust",
+            unlocked() {
+                return player.ca.unlockedCante
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "r", 
+            description: "Reset replicanti for replicanti galaxies",
+            unlocked() {
+                return player.ca.unlockedCante && hasUpgrade("bi", 26)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },
+        {
+            key: "c", 
+            description: "Convert a Cante core into a remembrance core",
+            unlocked() {
+                return player.ca.unlockedCante
+            },
+            onPress() {
+                clickClickable(this.layer, 15)
+            },
+        }
+	]
 })
 
 // i came up with this guy's name

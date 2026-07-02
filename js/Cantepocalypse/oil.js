@@ -882,5 +882,28 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("gs", 17) }
+    layerShown() { return player.startedGame == true && hasMilestone("gs", 17) },
+    hotkeys: [
+        {
+            key: "o", 
+            description: "Gain Oil",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "p", 
+            description: "Gain Proto Memories",
+            onPress() {
+                clickClickable(this.layer, 14)
+            },
+        },
+        {
+            key: "c", 
+            description: "Convert a Cante core into a remembrance core",
+            onPress() {
+                clickClickable('ca', 15)
+            },
+        }
+	]
 })

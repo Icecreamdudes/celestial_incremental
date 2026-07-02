@@ -1379,7 +1379,16 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],
-    layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))}
+    layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))},
+    hotkeys: [
+        {
+            key: "d", 
+            description: "Roll Dice",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);

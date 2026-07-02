@@ -62,6 +62,9 @@ function updateHotkeys()
 
                 if(layers[layer].layerShown() !== false && hks[id].unlocked) 
                     knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
+                
+                if(layer == 'settings') 
+                    knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
             }
         }
     }

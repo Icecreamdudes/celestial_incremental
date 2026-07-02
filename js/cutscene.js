@@ -1,4 +1,4 @@
-﻿-addLayer("c", {
+﻿addLayer("c", {
     name: "cutscene", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -674,7 +674,7 @@
                 { text: "The cloaked being appears.", },
                 { text: 'I\'m late... Damn it.', portrait: "resources/secret.png"  },
                 { text: 'Looks like you beat all 8 challenges, and found the celestial.', portrait: "resources/secret.png"  },
-                { text: "Tav takes one look at the cloaked being, jolts up, and runs away, frightened.", },
+                { text: "Tav takes one look at the cloaked being, jolts up, and runs away, freightened.", },
                 { text: "What's his deal...", portrait: "resources/secret.png"  },
                 { text: "Tav's action confuses you.", },
                 { text: "You don't want to act friendly to the celestials.", portrait: "resources/secret.png"  },
@@ -889,7 +889,7 @@
                 { text: "You have defeated your first celestial.", },
             ],
         },
- /*       "U2-Tav-End": {
+        "U2-Tav-End": {
             type: "cinematic",
             background: "#000000",
             portrait: "resources/secret.png",
@@ -904,7 +904,7 @@
                 { text: "<h1>You will face many dangers in your future. I know it.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
                 { text: "<h1>Good luck.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
             ],
-        }, */
+        },
         "U2-Break-Infinity": {
             type: "normal",
             background: "#000000",
@@ -3474,7 +3474,7 @@
             type: "normal",
             background: "linear-gradient(-180deg, #000000 100%)",
             portrait: "resources/secret.png",
-            music: "music/noxCutscene.mp3",
+            music: "music/aniciffoCutscene.mp3",
             trigger() {return hasUpgrade("le", 201)},
             dialogue: [
                 { text: "Your arsenal of superphysical values in the dark universe grows.", },
@@ -3499,7 +3499,7 @@
             type: "normal",
             background: "linear-gradient(-180deg, #000000 100%)",
             portrait: "resources/secret.png",
-            music: "music/noxCutscene.mp3",
+            music: "music/aniciffoCutscene.mp3",
             trigger() {return getLevelableTier("pu", 401, true)},
             dialogue: [
                 { text: "You see a strange reddish-pink punchcard appear in front of you.", },
@@ -3553,7 +3553,7 @@
         "D1-Nox-Intro": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/noxCutscene.mp3",
+            music: "music/aniciffoCutscene.mp3",
             trigger() {return player.ir.battleLevel.gte(12) && player.subtabs["bl"]['stuff'] == 'Battle'},
             dialogue: [
                 { text: "You become tired of fighting these blood creatures.", },
@@ -3573,7 +3573,7 @@
         "D1-Nox-Battle-Start": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/noxCutscene.mp3",
+            music: "music/aniciffoCutscene.mp3",
             trigger() {return player.bl.noxFightActive},
             dialogue: [
                 { text: "Where is it?", portrait: "resources/nox.png"  },
@@ -3591,7 +3591,7 @@
         "D1-Nox-Battle-End": {
             type: "normal",
             portrait: "resources/secret.png",
-            music: "music/noxCutscene.mp3",
+            music: "music/aniciffoCutscene.mp3",
             trigger() {return player.bl.noxDefeated},
             dialogue: [
                 { text: "Damn... You're kinda strong. I'll just let you keep your blood stones.", portrait: "resources/nox.png"  },
@@ -3909,7 +3909,7 @@
                 { text: "I don't believe he's actually dead. His soul definitely exists, somewhere. I just know it.", portrait: "resources/nav.png"  },
                 { text: "Yeah, I think so too, but we have to be realistic. If we ever want to bring him back, we'll have to face Nova.", portrait: "resources/player.png"  },
                 { text: "A dice man enters the room."  },
-                { text: "Hello Creation, and hello Nav. You can call me Dice Five, because I have five dots on my head.", portrait: "resources/diceFive.png"  },
+                { text: "Hello Creation, and hello, Nav. You can call me Five, because I have five dots on my head.", portrait: "resources/diceFive.png"  },
                 { text: "Oh great, another one of you guys.", portrait: "resources/player.png"  },
                 { text: "You see, unlike the others, I am here to help you. Please follow me.", portrait: "resources/diceFive.png"  },
                 { text: "..." },
@@ -3925,7 +3925,7 @@
                 { text: "It isn't. That statue is based off a man I know. He's a friend of mine, who has helped me with my foresight abilities.", portrait: "resources/player.png"  },
                 { text: "I don't know why there is a statue of him here.", portrait: "resources/player.png"  },
                 { text: "That man was a great prophet of my religion.", portrait: "resources/diceFive.png"  },
-                { text: "I am the last surviving member of a community of Ascensionists from my home universe.", portrait: "resources/diceFive.png"  },
+                { text: "I am the last surviving member of a community of Ascensionists living in this universe.", portrait: "resources/diceFive.png"  },
                 /*
                 random lore drop: ascensionists believe that mortals can ascend to the higher plane of existence
                 */
@@ -3990,7 +3990,7 @@
                 { text: "Alright. I will now be able to reactivate the shrine. Thanks guys. I will help you on your mission to defeat Zar.", portrait: "resources/diceFive.png"  },
             ],
         },
-        "DS-Zar-Shrine-Reactivate": {
+        "DS-Zar-Shrine": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/mysteryCutscene.mp3",
@@ -4064,8 +4064,8 @@
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/mysteryCutscene.mp3",
-            background: "#5c4b4b",
-            trigger() {return hasUpgrade("za", 21) },
+            background: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)",
+            trigger() {return hasUpgrade("cbs", 17) },
             dialogue: [
                 { text: "While you are sitting in the check back shrine, you notice a new door magically appear."},
                 { text: "We did it. Past this door, we can finally expose Zar's weakness.", portrait: "resources/diceFive.png"  },
@@ -4859,6 +4859,22 @@
                 { text: "If we follow that direction, we should be able to find the celestial.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "Nox looks at you."  },
                 { text: "Also, if you harness the power of these stones, maybe you'll be able to counter this celestial a lot easier.", portrait: "resources/nox.png"  },
+
+            ],
+        },
+        "AD1-MindAndHeart": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            background: "linear-gradient(90deg, #1a331e, #032209)",
+            music: "music/noxCutscene.mp3",
+            trigger() {return hasUpgrade("ani", 24)},
+            dialogue: [
+                { text: "Strange circular green blobs and red heart shaped blobs appear in the sky."  },
+                { text: "That bastard really did steal the entire framework...", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "What is the prestreestuck framework even about?", portrait: "resources/player.png"  },
+                { text: "Duducat was inspired by a webcomic that he had read, and decided to make a framework based on that comic.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "At the time, he wasn't sure what the framework was supposed to achieve, but now is a more important time than ever to retrive the framework.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "If we harness the power of METANESS, we can achieve great things. ", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
 
             ],
         },

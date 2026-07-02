@@ -30,6 +30,7 @@
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 		"DarkAU1/aniciffo.js", "DarkAU1/timeRadiation.js", "DarkAU1/spaceRadiation.js", "DarkAU1/mindRadiation.js", "DarkAU1/heartRadiation.js",
+		"DarkAU1/decay.js",
 		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
 		"Puzzle World/akash.js", "Puzzle World/elements.js", 
 		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
@@ -283,6 +284,9 @@ function updateStyles() {
 			break;
 		case "ani": case "tr": case "sr": case "mr": case "hr":
 			layerBG = "url(resources/ad1bg.png)"
+			break;
+		case "dec":
+			layerBG = "url(resources/ad1bg2.png)"
 			break;
 		case "ch":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
@@ -733,7 +737,7 @@ function updateStyles() {
 		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp": case "funify":
             player.musuniverse = "D1"
 			break;
-		case "ani": case "tr": case "sr": case "mr": case "hr":
+		case "ani": case "tr": case "sr": case "mr": case "hr": case "dec":
             player.musuniverse = "AD1"
 			break;
 		case "ch":

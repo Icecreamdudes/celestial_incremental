@@ -108,6 +108,7 @@
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.sr.radiation.effect2)
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("ani", 21))
         if (hasUpgrade("hr", 12)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(upgradeEffect("hr", 12))
+        if (getLevelableTier("pu", 501, true)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 501)[0])
 
         if (player.ani.darkRadiation.div(3).pow(0.65).add(1).lte(1e6))
         {

@@ -703,4 +703,13 @@ addLayer("hcu", {
         ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("ta", 16) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "j", 
+            description: "Buy Max Jinxes",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        }
+	]
 });

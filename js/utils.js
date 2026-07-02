@@ -189,6 +189,8 @@ function showTab(name, prev) {
 	needCanvasUpdate = true
 	document.activeElement.blur()
 
+	updateHotkeys() // to add 'discovered' hotkeys to the list
+
 }
 
 
@@ -353,6 +355,7 @@ ctrlDown = false
 
 document.onkeydown = function (e) {
 	if (player === undefined) return;
+	if(e.target.tagName == "INPUT") return;
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey
 	if (tmp.gameEnded && !player.keepGoing) return;
@@ -360,9 +363,18 @@ document.onkeydown = function (e) {
 	if (ctrlDown) key = "ctrl+" + key
 	if (onFocused) return
 	if (ctrlDown && hotkeys[key]) e.preventDefault()
-	if (hotkeys[key]) {
-		let k = hotkeys[key]
-		if (player[k.layer].unlocked && tmp[k.layer].hotkeys[k.id].unlocked)
+		
+	let k = undefined
+	if(hotkeys[player.universe][key])
+		k = hotkeys[player.universe][key]
+	if(hotkeys.global[key])
+		k = hotkeys.global[key]
+
+	if (k) {
+		if (
+			(readData(layers[k.layer].layerShown) || k.layer == "OR") // make hotkeys in origin always active
+			&& tmp[k.layer].hotkeys[k.id].unlocked && !tmp[k.layer].hotkeys[k.id].isAutomated
+		)
 			k.onPress()
 	}
 }

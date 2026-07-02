@@ -1,5 +1,5 @@
 ﻿﻿addLayer("du", {
-    name: "Dark Universe I: Abscence of Light", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Dark Universe I: Absence of Light", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -23,7 +23,7 @@
             "border-color": "#151515",
         };
     },
-    tooltip: "Dark Universe 1 - Abscence of Light",
+    tooltip: "Dark Universe 1 - Absence of Light",
     branches: ["in"],
     color: "black",
     update(delta) {
@@ -132,4 +132,5 @@
     ],
     layerShown() { return player.sma.inStarmetalChallenge},
     deactivated() { return !player.sma.inStarmetalChallenge},
+
 })

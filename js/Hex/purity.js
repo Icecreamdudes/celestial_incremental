@@ -363,4 +363,13 @@ addLayer("hpu", {
         ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("i", 29) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "p", 
+            description: "Purify",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        }
+	]
 });

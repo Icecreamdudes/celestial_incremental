@@ -575,5 +575,14 @@
         ["raw-html", () => { return player.za.chancePoints.gte(player.za.chancePointsSoftcapStart) ? "After " + format(player.za.chancePointsSoftcapStart) + " chance points, gain is divided by /" + format(player.za.chancePointsSoftcapEffect) + "." : "Softcap start: " + format(player.za.chancePointsSoftcapStart) + "." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 13) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 13) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "w", 
+            description: "Spin Wheel",
+            onPress() {
+                clickClickable(this.layer, 21)
+            },
+        }
+	]
 })

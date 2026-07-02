@@ -813,5 +813,32 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 14) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 14) },
+    hotkeys: [
+        {
+            key: "p", 
+            description: "Prestige",
+            isAutomated() {
+                return hasUpgrade("rf", 12) || (hasMilestone("ip", 12) && !inChallenge("ip", 14))
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+
+        {
+            key: "c", 
+            description: "Crystallize",
+
+            unlocked() {
+                return hasUpgrade("i", 24)
+            },
+            isAutomated() {
+                return hasMilestone("s", 16)
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+	]
 })

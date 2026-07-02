@@ -1421,5 +1421,25 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],
-    layerShown() { return player.startedGame == true && hasMilestone("r", 12) }
+    layerShown() { return player.startedGame == true && hasMilestone("r", 12) },
+    hotkeys: [
+        {
+            key: "h", 
+            description: "Grasshop",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "s", 
+            description: "Steelie",
+            unlocked() {
+                return hasUpgrade("i", 23)
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+	]
+
 })

@@ -801,6 +801,7 @@ function loadVue() {
 						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
 						<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && layers[layer].levelableAscend && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
 					</div>
+					<div class="levelableExtraText" v-if="tmp[layer].levelables[data].challengeType" v-html="tmp[layer].levelables[data].challengeType"></div>
 				</div>
 				<div class="levelableBottom">
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">

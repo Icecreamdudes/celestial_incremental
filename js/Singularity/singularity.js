@@ -804,5 +804,22 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "s", 
+            description: "Singularity",
+            onPress() {
+                clickClickable("co",1000)
+            },
+        },
+        {
+            key: "S", 
+            description: "Singularity",
+            onPress() {
+                clickClickable("co",1000)
+            },
+            global:true
+        }
+	]
 })

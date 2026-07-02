@@ -1141,7 +1141,16 @@
         ["raw-html", () => { return player.za.chancePoints.gte(player.za.chancePointsSoftcapStart) ? "After " + format(player.za.chancePointsSoftcapStart) + " chance points, gain is divided by /" + format(player.za.chancePointsSoftcapEffect) + "." : "Softcap start: " + format(player.za.chancePointsSoftcapStart) + "." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 16) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 16) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "s", 
+            description: "Spin Slot Machine",
+            onPress() {
+                clickClickable(this.layer, 21)
+            },
+        }
+	]
 })
 //makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 550, y: 450, text: "Lucky!<br><small>Double Rewards!</small>"})
 //makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 550, y: 450, text: "Jackpot!<br><small>Quadruple Rewards!</small>"})

@@ -731,5 +731,14 @@
             ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 20]], {maxWidth: "650px"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) }
+    layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) },
+    hotkeys: [
+        {
+            key: "r", 
+            description: "Gain Rocket Fuel",
+            onPress() {
+                clickClickable(this.layer, 2)
+            },
+        }
+	]
 })

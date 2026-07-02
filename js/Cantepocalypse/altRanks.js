@@ -183,7 +183,31 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) },
+
+    hotkeys: [
+        {
+            key: "2", 
+            description: "Alt-Rank Up",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "3", 
+            description: "Alt-Tier Up",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "4", 
+            description: "Alt-Tetr Up",
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        }
+	]
 })
 
 // hai icecreamdude-senpai :3

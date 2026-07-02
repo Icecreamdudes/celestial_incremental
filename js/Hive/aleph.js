@@ -1795,5 +1795,21 @@ addLayer("al", {
         ["microtabs", "Tabs", {borderWidth: "0"}],
         ["blank", "20px"],
     ],
-    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(95) || player.al.show) }
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(95) || player.al.show) },
+    hotkeys: [
+        {
+            key: "c", 
+            description: "Gain Honeycombs",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        },
+        {
+            key: "j", 
+            description: "Gain Royal Jelly",
+            onPress() {
+                clickClickable(this.layer, 2)
+            },
+        }
+	]
 })

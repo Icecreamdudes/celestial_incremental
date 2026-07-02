@@ -894,5 +894,61 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) },
+
+    hotkeys: [
+        {
+            key: "2", 
+            description: "Rank Up",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 17)
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "3", 
+            description: "Tier Up",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 18)
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "4", 
+            description: "Tetr Up",
+            unlocked() {
+                return hasUpgrade("i", 13)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 22)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },
+        {
+            key: "5", 
+            description: "Pent Up",
+            unlocked() {
+                return hasUpgrade("i", 18)
+            },
+            isAutomated() {
+                return hasUpgrade("i", 27)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        }
+    ],
+
 })

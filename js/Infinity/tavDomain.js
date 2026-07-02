@@ -2,16 +2,27 @@
 addNode("tac", {
     color: "#5b629a",
     symbol: "Ac",
+    universe: "U2",
     tooltip: "Accumulation",
     canClick: true,
     onClick() {
         player.subtabs["tad"]["Domain"] = "Accumulation"
     },
     layerShown() {return true},
+    hotkeys: [
+        {
+            key: "a", 
+            description: "Max Accumulators",
+            onPress() {
+                clickClickable("tad", 25)
+            },
+        }
+	]
 })
 addNode("tco", {
     color: "#094242",
     symbol: "Co",
+    universe: "U2",
     tooltip: "Compression",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -19,10 +30,20 @@ addNode("tco", {
         player.subtabs["tad"]["Domain"] = "Compression"
     },
     layerShown() {return hasUpgrade("tad", 125)},
+    hotkeys: [
+        {
+            key: "k", 
+            description: "Compress",
+            onPress() {
+                clickClickable("tad", 41)
+            },
+        }
+	]
 })
 addNode("tma", {
     color: "#6d228b",
     symbol: "Ma",
+    universe: "U2",
     tooltip: "Magnification",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -30,10 +51,20 @@ addNode("tma", {
         player.subtabs["tad"]["Domain"] = "Magnification"
     },
     layerShown() {return hasUpgrade("tad", 145)},
+    hotkeys: [
+        {
+            key: "q", 
+            description: "Magnify",
+            onPress() {
+                clickClickable(this.layer, 31)
+            },
+        }
+	]
 })
 addNode("tst", {
     color: "#b9bcd5",
     symbol: "St",
+    universe: "U2",
     tooltip: "Stabilization",
     canClick: true,
     onClick() {
@@ -44,6 +75,7 @@ addNode("tst", {
 addNode("tex", {
     color: "#ffd5b3",
     symbol: "Ex",
+    universe: "U2",
     tooltip: "Exponentiation",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -51,6 +83,15 @@ addNode("tex", {
         player.subtabs["tad"]["Domain"] = "Exponentiation"
     },
     layerShown() {return hasUpgrade("depth1", 103)},
+    hotkeys: [
+        {
+            key: "e", 
+            description: "Exponentiate",
+            onPress() {
+                clickClickable("tad", 11)
+            },
+        }
+	]
 })
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.

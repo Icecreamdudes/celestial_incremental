@@ -2690,5 +2690,14 @@ addLayer("st", {
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.au2.au2Unlocked }
+    layerShown() { return player.au2.au2Unlocked },
+    hotkeys: [
+        {
+            key: "l", 
+            description: "Launch Rocket",
+            onPress() {
+                clickClickable("ro", 15)
+            },
+        }
+	]
 })

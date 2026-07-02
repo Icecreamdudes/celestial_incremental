@@ -355,4 +355,48 @@ addLayer("hpr", {
         ["blank", "25px"],
     ],
     layerShown() { return !inChallenge("hrm", 16) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "1", 
+            description: "Gain α provenance",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        },
+        {
+            key: "2", 
+            description: "Gain β provenance",
+            onPress() {
+                clickClickable(this.layer, 2)
+            },
+        },
+        {
+            key: "3", 
+            description: "Gain γ provenance",
+            onPress() {
+                clickClickable(this.layer, 3)
+            },
+        },
+        {
+            key: "4", 
+            description: "Gain δ provenance",
+            onPress() {
+                clickClickable(this.layer, 4)
+            },
+        },
+        {
+            key: "5", 
+            description: "Gain ε provenance",
+            onPress() {
+                clickClickable(this.layer, 5)
+            },
+        },
+        {
+            key: "6", 
+            description: "Gain ζ provenance",
+            onPress() {
+                clickClickable(this.layer, 6)
+            },
+        }
+	]
 });

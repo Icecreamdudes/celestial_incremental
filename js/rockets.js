@@ -1295,5 +1295,36 @@
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("s", 26)}
+    layerShown() { return player.startedGame == true && hasUpgrade("s", 26)},
+    hotkeys: [
+        {
+            key: "u", 
+            description: "Make Activated Fuel",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "o", 
+            description: "Make Rocket Parts",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "l", 
+            description: "Launch Rocket",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "L", 
+            description: "Launch Rocket",
+            global:true,
+            onPress() {
+                clickClickable("ro", 15)
+            },
+        },
+	]
 })

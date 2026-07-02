@@ -974,7 +974,30 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)) || hasMilestone("s", 19)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)) || hasMilestone("s", 19)},
+    hotkeys: [
+        {
+            key: "6", 
+            description: "Max All Antimatter Dimensions",
+            onPress() {
+                clickClickable(this.layer, 4)
+            },
+        },
+        {
+            key: "7", 
+            description: "Buy Dimension Boost",
+            onPress() {
+                buyBuyable(this.layer, 2)
+            },
+        },
+        {
+            key: "8", 
+            description: "Buy Antimatter Galaxy",
+            onPress() {
+                buyBuyable(this.layer, 3)
+            },
+        },
+	]
 })
 
 // my friend ice LOVES copying and stealing game ideas to put in his own games

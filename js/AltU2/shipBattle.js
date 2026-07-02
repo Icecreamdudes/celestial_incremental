@@ -266,12 +266,14 @@ class SpaceArena {
             left: this.arenaDiv.style.left,
             top: this.arenaDiv.style.top,
             transform: this.arenaDiv.style.transform,
-            width: this.arenaDiv.style.width,
-            height: this.arenaDiv.style.height,
-            background: this.arenaDiv.style.background,
+            width: this.width,
+            height: this.height,
+            backgroundImage: this.arenaDiv.style.backgroundImage,
             border: this.arenaDiv.style.border,
             overflow: this.arenaDiv.style.overflow,
-            zIndex: this.arenaDiv.style.zIndex
+            zIndex: this.arenaDiv.style.zIndex,
+            canvasWidth: this.canvasWidth,
+            canvasHeight: this.canvasHeight,
         };
         this._prevWidth = this.width;
         this._prevHeight = this.height;
@@ -283,18 +285,20 @@ class SpaceArena {
             transform: 'none',
             width: '100vw',
             height: '100vh',
-            background: 'transparent',
+            backgroundImage: this._prevArenaStyle.backgroundImage,
             border: 'none',
             overflow: 'hidden',
             zIndex: 10000
         });
+        this.canvasWidth = window.innerWidth
+        this.canvasHeight = window.innerHeight
 
         // Resize canvas and internal dimensions to match window
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        this.width = 3200;
+        this.height = 3200;
         if (this.canvas) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
+            this.canvas.width = this.canvasWidth;
+            this.canvas.height = this.canvasHeight;
         }
 
         // Re-center player ship (keeps player visually centered)
@@ -306,11 +310,11 @@ class SpaceArena {
         // Keep the canvas sized during window resize while in fullscreen boss mode
         this._onWindowResize = () => {
             if (!this._iriditeFullscreen) return;
-            this.width = window.innerWidth;
-            this.height = window.innerHeight;
+                this.canvasWidth = window.innerWidth
+                this.canvasHeight = window.innerHeight
             if (this.canvas) {
-                this.canvas.width = this.width;
-                this.canvas.height = this.height;
+                this.canvas.width = this.canvasWidth;
+                this.canvas.height = this.canvasHeight;
             }
             // keep ship centered
             if (this.ship) {
@@ -332,17 +336,17 @@ class SpaceArena {
             left: s.left || '50%',
             top: s.top || '50%',
             transform: s.transform || 'translate(-50%, -50%)',
-            width: s.width || (this._prevWidth ? (this._prevWidth + 'px') : '800px'),
-            height: s.height || (this._prevHeight ? (this._prevHeight + 'px') : '600px'),
-            background: s.background || '#181a2b',
+            backgroundImage: s.backgroundImage || 'url(resources/ui/spaceBattle/iriditeZone.png)',
             border: s.border || '3px solid #fff',
             overflow: s.overflow || 'hidden',
             zIndex: s.zIndex || 9999
         });
+        this.width = this._prevArenaStyle.width
+        this.height = this._prevArenaStyle.height
+        this.canvasWidth = this._prevArenaStyle.canvasWidth
+        this.canvasHeight = this._prevArenaStyle.canvasHeight
 
         // Restore canvas size and internal dimensions
-        this.width = this._prevWidth || this.width;
-        this.height = this._prevHeight || this.height;
         if (this.canvas) {
             this.canvas.width = this.width;
             this.canvas.height = this.height;
@@ -616,6 +620,7 @@ class SpaceArena {
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgradeEffects = this.getDefaultUpgradeEffects();
+        this.resourceMult = 1;
 
         // Enemy system
         this.enemies = [];
@@ -748,7 +753,7 @@ class SpaceArena {
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#003";
                     ctx.textAlign = "center";
-                    ctx.fillText("Δ", enemy.x, enemy.y + 6);
+                    ctx.fillText("δ", enemy.x, enemy.y + 6);
                     ctx.restore();
                 }
             },
@@ -1055,6 +1060,7 @@ class SpaceArena {
             maxHp: 0,
             moveSpeed: 0,
             lootGain: 1,
+            gemGain: 1,
             xpGain: 1,
         };
     }
@@ -1144,7 +1150,7 @@ class SpaceArena {
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            angle = Math.atan2(this.mouseY - 400, this.mouseX - 400);
+            angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
@@ -1670,6 +1676,13 @@ class SpaceArena {
                 if (Math.random() < 0.03) {
                     player.ir.spaceGem = player.ir.spaceGem.add(1);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
+                }
+            }
+            
+            if (!enemy.alive) {
+                let i = this.enemies.indexOf(enemy);
+                if (i > -1) {
+                  this.enemies.splice(i, 1);
                 }
             }
         };
@@ -3829,20 +3842,19 @@ class SpaceArena {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Draw ship
+        this.ctx.save();
+        this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
         if (player.ir.shipType == 3) {
-            this.ctx.save();
-            ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
             this.ctx.shadowColor = "#ffffffff";
             if (!options.performanceMode) {this.ctx.shadowBlur = 16} else {this.ctx.shadowBlur = 0};
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 1) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -3852,11 +3864,10 @@ class SpaceArena {
             this.ctx.closePath();
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 2) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -3866,12 +3877,11 @@ class SpaceArena {
             this.ctx.closePath();
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
             // Body
             this.ctx.fillStyle = "#dbefff";
@@ -3893,12 +3903,11 @@ class SpaceArena {
             this.ctx.strokeStyle = "#89a6ff";
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
@@ -3931,11 +3940,10 @@ class SpaceArena {
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 6) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
  
             this.ctx.beginPath();
@@ -3956,11 +3964,10 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.stroke(); 
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 7) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
  
             // BODY
@@ -3980,11 +3987,10 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.stroke();
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 8) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
+            
             this.ctx.rotate(this.ship.angle);
 
             // Miniature Iridite visuals
@@ -4040,7 +4046,6 @@ class SpaceArena {
                         this.ctx.restore();
                     }
                 }
-                this.ctx.restore();
             };
 
             drawWing(false);
@@ -4054,7 +4059,6 @@ class SpaceArena {
             this.ctx.textBaseline = "middle";
             this.ctx.fillStyle = "#e0ccffff";
             this.ctx.fillText("✦", 0, 0);
-            this.ctx.restore();
 
             this.ctx.restore();
         }
@@ -4070,8 +4074,6 @@ class SpaceArena {
             const maxThickness = r * 0.8;
             const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
 
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -4085,14 +4087,11 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
             this.ctx.fillRect(0, -Math.max(1, thickness * 0.12), beamLen * 0.75, Math.max(1, thickness * 0.12) * 2);
-            this.ctx.restore();
             this.ctx.globalCompositeOperation = "source-over";
         }
 
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             let lenShip = Math.max(18, this.ship.radius || 20);
 
@@ -4124,11 +4123,8 @@ class SpaceArena {
             this.ctx.lineWidth = Math.max(1, lenShip * 0.05);
             this.ctx.stroke();
 
-            this.ctx.restore();
         }
         if (player.ir.shipType == 10) {
-            this.ctx.save();
-            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
             this.ctx.rotate(this.ship.angle);
             this.ctx.strokeStyle = "#30bf78";
             this.ctx.fillStyle = "#30bf78";
@@ -4210,8 +4206,8 @@ class SpaceArena {
             else this.ctx.fillStyle = "#800040"
             this.ctx.fill();
 
-            this.ctx.restore();
         }
+        this.ctx.restore();
 
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
@@ -4761,7 +4757,16 @@ class SpaceArena {
         }
         for (let bullet of this.bullets) {
             this.ctx.save();
-            this.drawMinimapIcon("yellow", 2, [bullet.x, bullet.y])
+            if (bullet.fromEnemy) {
+                this.drawMinimapIcon("red", 2, [bullet.x, bullet.y])
+            } else {
+                this.drawMinimapIcon("yellow", 2, [bullet.x, bullet.y])
+            }
+            this.ctx.restore();
+        }
+        for (let enemy of this.enemies) {
+            this.ctx.save();
+            this.drawMinimapIcon("red", 4, [enemy.x, enemy.y])
             this.ctx.restore();
         }
 

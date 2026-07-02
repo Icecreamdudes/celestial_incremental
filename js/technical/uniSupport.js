@@ -254,7 +254,7 @@ addUniverse("D1", {
 addUniverse("AD1", {
     name: "Alt-Dark Universe 1<br>The Decay Horizon",
     symbol: "AD1",
-    tree: [["mr"], ["sr", "ani", "tr"], ["hr"]],
+    tree: [["dec"], ["mr"], ["sr", "ani", "tr"], ["hr"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)",

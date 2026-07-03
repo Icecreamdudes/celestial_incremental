@@ -13,15 +13,15 @@
     automate() {},
     nodeStyle() {
         return {
-            background: "linear-gradient(15deg, #5f5f5fff 0%, #c5c5c5ff 50%, #5f5f5fff 100%)",
+            background: "linear-gradient(15deg, #5f5f5f 12.5%, #bfbfbf 50%, #5f5f5f 87.5%)",
             backgroundOrigin: "border-box",
-            borderColor: "#464646ff",
-            color: "#eaf6f7",
+            borderColor: "#464646",
+            color: "white",
         };
     },
     tooltip: "Space Buildings",
     branches: ["ir"],
-    color: "#464646ff",
+    color: "#464646",
     update(delta) {
         let onepersec = new Decimal(1)
 

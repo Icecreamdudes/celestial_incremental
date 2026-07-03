@@ -226,6 +226,45 @@ function constructBarStyle(layer, id) {
 	return style
 }
 
+function constructExBarStyle(layer, id) {
+	let bar = tmp[layer].bars[id]
+	let style = {}
+	
+	let tempProgress
+	if (bar.progress instanceof Decimal)
+		tempProgress = (1 -Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100
+ 	else
+ 		tempProgress = (1 -Math.min(Math.max(bar.progress, 0), 1)) * 100
+
+	style.dims = {'width': bar.width, 'height': bar.height}
+	let dir = bar.direction
+	style.fillDims = {'width': "calc(" + bar.width + " + 0.5px)", 'height': "calc(" + bar.height + " + 0.5px)"}
+
+	switch(bar.direction) {
+		case UP:
+			style.fillDims['clip-path'] = 'inset(' + tempProgress + '% 0% 0% 0%)'
+			style.fillDims.width = "calc(" + bar.width + " + 1px)"
+			break;
+		case DOWN:
+			style.fillDims['clip-path'] = 'inset(0% 0% ' + tempProgress + '% 0%)'
+			style.fillDims.width = "calc(" + bar.width + " + 1px)"
+			break;
+		case RIGHT:
+			style.fillDims['clip-path'] = 'inset(0% ' + tempProgress + '% 0% 0%)'
+			break;
+		case LEFT:
+			style.fillDims['clip-path'] = 'inset(0% 0% 0% ' + tempProgress + '%)'
+			break;
+		case DEFAULT:
+			style.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)'
+	}
+
+	if (bar.instant) {
+		style.fillDims['transition-duration'] = '0s'
+	}
+	return style
+}
+
 function constructTabFormat(layer, id, family){
 	let tabTemp, tabLayer, tabFunc, location, key
 	if (id === undefined){

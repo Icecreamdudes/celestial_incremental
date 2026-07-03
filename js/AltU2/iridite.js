@@ -326,6 +326,7 @@ addLayer("ir", {
         if (player.tab == "bl" && player.ir.battleLevel.gt(20)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(20)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
+        player.ir.battleXPReq = player.ir.battleXPReq.div(10) // TEMP
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && !arena.upgradeChoiceActive) {
@@ -358,23 +359,23 @@ addLayer("ir", {
         healthBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width: 398.5,
-            height: 40,
+            width() {return player.ir.iriditeFightActive ? "calc(100vw - 6px)" : "398.5px"},
+            height: "40px",
             progress() {
                 return player.ir.shipHealth.div(player.ir.shipHealthMax);
             },
             borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
-            fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
+            fillStyle: { background: "linear-gradient(15deg, #808000 0%, #545400 100%)"},
             display() {
-                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + " HP" ;
+                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + " HP";
             },
         },
         xpBar: {
-            unlocked() { return true },
+            unlocked() { return !(player.ir.iriditeFightActive) },
             direction: RIGHT,
-            width: 398.5,
-            height: 40,
+            width: "398.5px",
+            height: "40px",
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
@@ -382,7 +383,27 @@ addLayer("ir", {
             baseStyle: {background: "#151230",},
             fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #000080 100%)"},
             display() {
-                return formatWhole(player.ir.battleXP) + "/" + formatWhole(player.ir.battleXPReq) + " XP" ;
+                return formatWhole(player.ir.battleXP) + "/" + formatWhole(player.ir.battleXPReq) + " XP";
+            },
+        },
+        bossHealthBar: {
+            unlocked() { return player.ir.iriditeFightActive },
+            direction: RIGHT,
+            width() {return player.ir.iriditeFightActive ? "calc(100vw - 6px)" : "398.5px"},
+            height: "60px",
+            progress() {
+                if (arena && player.ir.iriditeFightActive && arena.enemies.length > 0) {
+                    return arena.enemies[0].health / arena.enemies[0].maxHealth
+                } else return 1;
+            },
+            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderRadius: "0", color: "white"}},
+            baseStyle: {background: "#151230"},
+            fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
+            display() {
+                if (arena && player.ir.iriditeFightActive && arena.enemies.length > 0) {
+                    return "<h3>IRIDITE</h3><br>" + formatSimple(arena.enemies[0].health) + "/" + formatSimple(arena.enemies[0].maxHealth) + " HP";
+                } else return "<h3>???</h3><br>???/??? HP";
+                
             },
         },
     },
@@ -539,7 +560,7 @@ addLayer("ir", {
                 return "Shoots extremely fast piercing bullets with precision. Automatically aims at cosmic celestialites, might affect movement."
             },
             levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
+            effect() {
                 return [
                     getLevelableAmount(this.layer, this.id).mul(0.3).add(1), //space energy
                     getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.08).add(1), // infinity points
@@ -916,7 +937,7 @@ addLayer("ir", {
         12: {
             title() { return "Leave Battle" },
             canClick() { return true },
-            unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
+            unlocked() { return true || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
                 player.ir.inBattle = false
                 options.fullscreen = false
@@ -995,7 +1016,7 @@ addLayer("ir", {
         15: {
             title() { return player.ir.autoShoot ? "Auto-Shoot<br>[ENABLED]" : "Auto-Shoot<br>[DISABLED]" },
             canClick() { return true },
-            unlocked() { return !player.ir.iriditeFightActive},
+            unlocked() { return true},
             onClick() {
                 if (player.ir.autoShoot) {
                     player.ir.autoShoot = false
@@ -2650,14 +2671,16 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
                 content() { return [
+                    ["style-column", [], {height: (player.ir.iriditeFightActive) ? "10px" : "0"}],
                     ["style-column", [
                         ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / 100</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                         ["style-row", [
                             ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                         ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
-                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0"}],
-                    ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "800px"],
+                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (player.ir.iriditeFightActive) ? "none !important" : ""}],
+                    ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
+                    ["style-column", [], {height: (player.ir.iriditeFightActive) ? "calc(100vh - 279px)" : "800px"}],
+                    ["row", [["ex-bar", "bossHealthBar"],]],
                     ["style-column", [
                         ["blank", "9px", {width: "6px"}],
                         ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -2665,7 +2688,7 @@ addLayer("ir", {
                         ["row", [
                             ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15],
                         ]],
-                    ], {width: "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0"}],
+                    ], {width: (player.ir.iriditeFightActive) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (player.ir.iriditeFightActive) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
                 ]}
             },
             "Refresh Page :(": {
@@ -2694,7 +2717,6 @@ addLayer("ir", {
     },
     tabFormat: [
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
-        ["blank", "25px"],
     ],
     layerShown() { return player.se.starsExploreCount[0][5].gte(1) }
 });

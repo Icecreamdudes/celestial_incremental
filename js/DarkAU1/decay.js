@@ -7,6 +7,12 @@
         unlocked: true,
 
         decay: new Decimal(0),
+        decayPerSecond: new Decimal(0),
+        decayEffect: new Decimal(1),
+
+        stability: new Decimal(0),
+        stabilityPerSecond: new Decimal(0),
+        stabilityEffect: new Decimal(1),
     }},
     automate() {
     },
@@ -22,7 +28,13 @@
     branches: [["ani", "#74e3ff"], ["sr", "#74e3ff"], ["tr", "#74e3ff"]],
     color: "#74e3ff",
     update(delta) {
+        //decay
+        player.dec.decay = player.dec.decay.add(player.dec.decayPerSecond.mul(delta))
 
+        //stability
+        player.dec.stability = player.dec.stability.add(player.dec.stabilityPerSecond.mul(delta))
+
+        if (getLevelableTier("pu", 501, true)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(levelableEffect("pu", 501)[0])
     },
     bars: {},
     clickables: {
@@ -43,7 +55,21 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", () => { return "Unlike other Alt-DarkU1 content, Decay content is reset on exiting D1." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Unlike other Alt-Dark U1 content, some decay content is reset on exiting D1." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+        ["raw-html", () => { return "You have <h3>" + format(player.dec.decay) + "</h3> decay." }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.dec.decayPerSecond) + "</h3> decay per second." }, {color: "#ffffff", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+        ["raw-html", () => { return "You have <h3>" + format(player.dec.stability) + "</h3> stability." }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.dec.stabilityPerSecond) + "</h3> stability per second." }, {color: "#ffffff", fontSize: "20px", fontFamily: "monospace"}],
+
+                ]
+            },
+            "Carbon-14": {
+                buttonStyle() { return { border: "2px solid #74e3ff", borderRadius: "10px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
 
                 ]
             },

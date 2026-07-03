@@ -281,17 +281,17 @@ class SpaceArena {
         // Apply fullscreen & transparent styles
         Object.assign(this.arenaDiv.style, {
             left: '0px',
-            top: '0px',
+            top: '103px',
             transform: 'none',
-            width: '100vw',
-            height: '100vh',
+            width: 'calc(100vw - 6px)',
+            height: 'calc(100vh - 276px)',
             backgroundImage: this._prevArenaStyle.backgroundImage,
-            border: 'none',
+            border: '3px solid white',
             overflow: 'hidden',
             zIndex: 10000
         });
-        this.canvasWidth = window.innerWidth
-        this.canvasHeight = window.innerHeight
+        this.canvasWidth = window.innerWidth - 6
+        this.canvasHeight = window.innerHeight - 276
 
         // Resize canvas and internal dimensions to match window
         this.width = 3200;
@@ -315,11 +315,6 @@ class SpaceArena {
             if (this.canvas) {
                 this.canvas.width = this.canvasWidth;
                 this.canvas.height = this.canvasHeight;
-            }
-            // keep ship centered
-            if (this.ship) {
-                this.ship.x = this.width / 2;
-                this.ship.y = this.height / 2;
             }
         };
 
@@ -614,7 +609,7 @@ class SpaceArena {
         this.running = false;
         this.loop = null;
         this.asteroidSpawnTimer = 0;
-        this.maxAsteroids = 10;
+        this.maxAsteroids = 16;
         this.lootFlashes = [];
         this.upgradeChoiceActive = false;
         this.upgradeChoices = [];

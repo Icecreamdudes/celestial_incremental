@@ -1406,6 +1406,23 @@ function loadVue() {
 		</div></div>
 		`
 	})
+	// data = id of the bar
+	Vue.component('ex-bar', {
+		props: ['layer', 'data'],
+		computed: {
+			style() {return constructExBarStyle(this.layer, this.data)}
+		},
+		template: `
+		<div v-if="tmp[layer].bars && tmp[layer].bars[data].unlocked" v-bind:style="{'position': 'relative'}"><div v-bind:style="[run(layers[layer].bars[data].style, layers[layer].bars[data]), style.dims, {'display': 'table'}]">
+			<div class = "overlayTextContainer barBorder" v-bind:style="[tmp[layer].bars[data].borderStyle, style.dims]">
+				<span class = "overlayText" v-bind:style="[run(layers[layer].bars[data].style, layers[layer].bars[data]), tmp[layer].bars[data].textStyle]" v-html="run(layers[layer].bars[data].display, layers[layer].bars[data])"></span>
+			</div>
+			<div class ="barBG barBorder" v-bind:style="[run(layers[layer].bars[data].style, layers[layer].bars[data]), tmp[layer].bars[data].baseStyle, tmp[layer].bars[data].borderStyle,  style.dims]">
+				<div class ="fill" v-bind:style="[run(layers[layer].bars[data].style, layers[layer].bars[data]), tmp[layer].bars[data].fillStyle, style.fillDims]"></div>
+			</div>
+		</div></div>
+		`
+	})
 
 
 	Vue.component('achievements', {

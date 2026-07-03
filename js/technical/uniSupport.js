@@ -190,7 +190,7 @@ addUniverse("A1", {
 addUniverse("A2", {
     name: "Alt-Universe 2<br>Cosmic Cosmos",
     symbol: "A2",
-    tree: [["st"], ["pl", "se"], ["ir"], ["sb"]],
+    tree: [["st"], ["pl", "sh", "se"], ["ir"], ["sb"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",

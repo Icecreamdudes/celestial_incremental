@@ -17,7 +17,7 @@
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
-		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
+		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js",
 		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/evolutionField.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
@@ -393,7 +393,7 @@ function updateStyles() {
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
-	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || player.tab === "sa" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || player.tab === "sa" || player.tab === "sh" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
 	    // Add the galaxy background if it doesn't already exist
     	if (!document.getElementById("galaxy-background")) {
 	        const galaxyBackground = document.createElement("div");
@@ -887,7 +887,7 @@ function updateStyles() {
 		case "ch": case "mm":
             player.musuniverse = "CH"
 			break;
-		case "au2": case "st": case "pl": case "ir": case "se": case "sb": case "sa":
+		case "au2": case "st": case "pl": case "ir": case "se": case "sb": case "sa": case "sh":
 			player.musuniverse = "A2"
 			break;
 		case "mi":

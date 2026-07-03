@@ -22,7 +22,7 @@
         return {
             background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)",
             backgroundOrigin: "border-box",
-            borderColor: "#59c2ff",
+            borderColor: "#99daff",
             color: "#eaf6f7",
         };
     },

@@ -1841,13 +1841,11 @@
                                             ["style-column", [
                                                 ["raw-html", formatShortestWhole(player.wel.modules[1].time.div(player.wel.modules[1].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                             ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
-                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659", marginTop: "81px",
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659",
                                             background: player.wel.modules[1].time.lt(player.wel.modules[1].maxTime) ?
                                             "conic-gradient(#ffdfdf " + (player.wel.modules[1].time.div(player.wel.modules[1].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffd3"
                                         }],
-                                    ], {background: "#4d9973", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                    ["style-column", [], {height: "61px"}],
-                                    ["blank", "9px"],
+                                    ], {background: "linear-gradient(0deg, #336659 50%, #4d9973 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                                     ["raw-html", "Light Well α", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", player.wel.modules[1].time.lt(player.wel.modules[1].maxTime) ? formatTime(player.wel.modules[1].maxTime.sub(player.wel.modules[1].time).div(player.wel.modules[1].timeSpeed).max(0.1)) : formatTime(player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).max(0.1)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                                     ["blank", "9px"],
@@ -1886,13 +1884,11 @@
                                         ["style-column", [
                                             ["raw-html", formatShortestWhole(player.wel.modules[2].time.div(player.wel.modules[2].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                         ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
-                                    ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659", marginTop: "81px",
+                                    ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659",
                                         background: player.wel.modules[2].time.lt(player.wel.modules[2].maxTime) ?
                                         "conic-gradient(#ffdfdf " + (player.wel.modules[2].time.div(player.wel.modules[2].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffd3"
                                     }],
-                                ], {background: "#4d9973", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                ["style-column", [], {height: "61px"}],
-                            ["blank", "9px"],
+                                ], {background: "linear-gradient(0deg, #336659 50%, #4d9973 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                             ["raw-html", "Light Well β", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", player.wel.modules[2].time.lt(player.wel.modules[2].maxTime) ? formatTime(player.wel.modules[2].maxTime.sub(player.wel.modules[2].time).div(player.wel.modules[2].timeSpeed)) : formatTime(player.wel.modules[2].maxTime.div(player.wel.modules[2].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[2].maxTime.div(player.wel.modules[2].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
@@ -1938,13 +1934,11 @@
                                             ["style-column", [
                                                 ["raw-html", formatShortestWhole(player.wel.modules[3].time.div(player.wel.modules[3].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                             ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "100px", width: "75px", height:"75px"}],
-                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659", marginTop: "81px",
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #336659",
                                             background: player.wel.modules[3].time.lt(player.wel.modules[3].maxTime) ?
                                             "conic-gradient(#ffdfdf " + (player.wel.modules[3].time.div(player.wel.modules[3].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffd3"
                                         }],
-                                    ], {background: "#4d9973", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                    ["style-column", [], {height: "61px"}],
-                            ["blank", "9px"],
+                                    ], {background: "linear-gradient(0deg, #336659 50%, #4d9973 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                             ["raw-html", "Light Well γ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", player.wel.modules[3].time.lt(player.wel.modules[3].maxTime) ? formatTime(player.wel.modules[3].maxTime.sub(player.wel.modules[3].time).div(player.wel.modules[3].timeSpeed)) : formatTime(player.wel.modules[3].maxTime.div(player.wel.modules[3].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[3].maxTime.div(player.wel.modules[3].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
@@ -1991,13 +1985,11 @@
                                             ["style-column", [
                                                 ["raw-html", formatShortestWhole(player.wel.modules[4].time.div(player.wel.modules[4].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                             ], {background: "#408069", border: "3px solid #274d48", borderRadius: "100px", width: "75px", height:"75px"}],
-                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #274d48", marginTop: "81px",
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #274d48",
                                             background: player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ?
                                             "conic-gradient(#ffdfdf " + (player.wel.modules[4].time.div(player.wel.modules[4].maxTime)).min(1).max(0) * 360 + "deg, #0b1711 0deg)" : "#a8ffdf"
                                         }],
-                                    ], {background: "#408069", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                    ["style-column", [], {height: "61px"}],
-                            ["blank", "9px"],
+                                    ], {background: "linear-gradient(0deg, #274d48 50%, #408069 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                             ["raw-html", "Light Well δ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ? formatTime(player.wel.modules[4].maxTime.sub(player.wel.modules[4].time).div(player.wel.modules[4].timeSpeed)) : formatTime(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
@@ -2045,13 +2037,11 @@
                                             ["style-column", [
                                                 ["raw-html", formatShortestWhole(player.wel.modules[5].time.div(player.wel.modules[5].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                             ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
-                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                        ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966",
                                             background: player.wel.modules[5].time.lt(player.wel.modules[5].maxTime) ?
                                             "conic-gradient(#d6ebff " + (player.wel.modules[5].time.div(player.wel.modules[5].maxTime)).min(1).max(0) * 360 + "deg, #0b1417 0deg)" : "#d6ebff"
                                         }],
-                                    ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                    ["style-column", [], {height: "61px"}],
-                            ["blank", "9px"],
+                                    ], {background: "linear-gradient(0deg, #335966 50%, #4d9999 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                             ["raw-html", "Prism Well ε", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", player.wel.modules[5].time.lt(player.wel.modules[5].maxTime) ? formatTime(player.wel.modules[5].maxTime.sub(player.wel.modules[5].time).div(player.wel.modules[5].timeSpeed)) : formatTime(player.wel.modules[5].maxTime.div(player.wel.modules[5].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["blank", "9px"],
@@ -2083,13 +2073,11 @@
                                                 ["style-column", [
                                                     ["raw-html", formatShortestWhole(player.wel.modules[6].time.div(player.wel.modules[6].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
-                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966",
                                                 background: player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ?
                                                 "conic-gradient(#d6ebff " + (player.wel.modules[6].time.div(player.wel.modules[6].maxTime)).min(1).max(0) * 360 + "deg, #0b1417 0deg)" : "#d6ebff"
                                             }],
-                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                        ["style-column", [], {height: "61px"}],
-                                ["blank", "9px"],
+                                        ], {background: "linear-gradient(0deg, #335966 50%, #4d9999 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                                 ["raw-html", "Prism Well ζ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", player.wel.modules[6].time.lt(player.wel.modules[6].maxTime) ? formatTime(player.wel.modules[6].maxTime.sub(player.wel.modules[6].time).div(player.wel.modules[6].timeSpeed)) : formatTime(player.wel.modules[6].maxTime.div(player.wel.modules[6].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["blank", "9px"],
@@ -2133,13 +2121,11 @@
                                                 ["style-column", [
                                                     ["raw-html", formatShortestWhole(player.wel.modules[7].time.div(player.wel.modules[7].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
-                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966",
                                                 background: player.wel.modules[7].time.lt(player.wel.modules[7].maxTime) ?
                                                 "conic-gradient(#d6ebff " + (player.wel.modules[7].time.div(player.wel.modules[7].maxTime)).min(1).max(0) * 360 + "deg, #0b1417 0deg)" : "#d6ebff"
                                             }],
-                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                        ["style-column", [], {height: "61px"}],
-                                ["blank", "9px"],
+                                        ], {background: "linear-gradient(0deg, #335966 50%, #4d9999 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                                 ["raw-html", "Prism Well η", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", player.wel.modules[7].time.lt(player.wel.modules[7].maxTime) ? formatTime(player.wel.modules[7].maxTime.sub(player.wel.modules[7].time).div(player.wel.modules[7].timeSpeed)) : formatTime(player.wel.modules[7].maxTime.div(player.wel.modules[7].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["blank", "9px"],
@@ -2183,13 +2169,11 @@
                                                 ["style-column", [
                                                     ["raw-html", formatShortestWhole(player.wel.modules[8].time.div(player.wel.modules[8].maxTime).min(1).max(0).mul(100).floor()) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                                                 ], {background: "#4d9999", border: "3px solid #335966", borderRadius: "100px", width: "75px", height:"75px"}],
-                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966", marginTop: "81px",
+                                            ], {borderRadius: "50%", width: "125px", height:"125px", margin: "9.5px", border: "3px solid #335966",
                                                 background: player.wel.modules[8].time.lt(player.wel.modules[8].maxTime) ?
                                                 "conic-gradient(#d6ebff " + (player.wel.modules[8].time.div(player.wel.modules[8].maxTime)).min(1).max(0) * 360 + "deg, #0b1417 0deg)" : "#d6ebff"
                                             }],
-                                        ], {background: "#4d9999", height: "75px", borderRadius: "75px 75px 0 0"}],
-                                        ["style-column", [], {height: "61px"}],
-                                ["blank", "9px"],
+                                        ], {background: "linear-gradient(0deg, #335966 50%, #4d9999 50% )", height: "150px", borderRadius: "75px 75px 0 0"}],
                                 ["raw-html", "Prism Well θ", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", player.wel.modules[8].time.lt(player.wel.modules[8].maxTime) ? formatTime(player.wel.modules[8].maxTime.sub(player.wel.modules[8].time).div(player.wel.modules[8].timeSpeed)) : formatTime(player.wel.modules[8].maxTime.div(player.wel.modules[8].timeSpeed)) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ["blank", "9px"],

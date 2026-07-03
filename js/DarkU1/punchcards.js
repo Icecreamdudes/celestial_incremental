@@ -1,7 +1,6 @@
 addLayer("pu", {
     name: "Punchcards", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "PU", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -52,7 +51,7 @@ addLayer("pu", {
         }
         if (player.pu.selectedPunchcards[player.pu.selectionIndex] >= 500) {
             player.pu.selectionCost = new Decimal(2)
-        } else {
+        } else if (player.pu.selectedPunchcards[player.pu.selectionIndex] < 400) {
             player.pu.selectionCost = new Decimal(1)
         }
 
@@ -2556,10 +2555,10 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "Unlocks carbon-14 decay<br>",
-                    "x" + format(this.effect()[0]) + " to dark radiation (based on grass jumps)<br>",
+                    "x" + format(this.effect()[0]) + " to stability (based on dark radiation)<br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to natural pylon energy",
+                    "x" + format(this.effect()[1]) + " to dark radiation (based on grass jumps)",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -2573,9 +2572,8 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dgj.grassJump.pow(0.8).div(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(10, getLevelableAmount(this.layer, this.id))
-                eff[1] = getLevelableAmount(this.layer, this.id).pow(1.25).div(4).add(1)
+                eff[0] = player.ani.darkRadiation.pow(0.05).div(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.dgj.grassJump.pow(0.8).div(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 return eff
             },
             // CLICK CODE

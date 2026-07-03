@@ -62,7 +62,7 @@
 
         player.db.permaMilestone4Effect = player.db.bestBoosters.add(1).pow(0.35).div(10).add(1)
 
-        if (hasUpgrade("ani", 25) && player.du.points.gte(player.db.boosterReq)) {
+        if (hasUpgrade("ani", 25) && player.du.points.gte(player.db.boosterReq) && player.pet.legPetTimers[0].active) {
             player.db.boosters = player.db.boosters.add(1)
         }
     },

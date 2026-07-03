@@ -1542,7 +1542,7 @@
                 return s
             },
             getTimeBulk() {
-                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(60).add(1).log(Math.pow(1.4, 1.0625))
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(120).add(1).log(Math.pow(1.4, 1.0625))
                 if (unscaledBulk.gt(400)) {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
@@ -1607,7 +1607,7 @@
                 return s
             },
             getTimeBulk() {
-                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(2.7e4).add(1).log(Math.pow(1.6, 1.0625))
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(3.6e4).add(1).log(Math.pow(1.6, 1.0625))
                 if (unscaledBulk.gt(400)) {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
@@ -1672,7 +1672,7 @@
                 return s
             },
             getTimeBulk() {
-                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(3e6).add(1).log(Math.pow(5, 1.0625))
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(1.8e6).add(1).log(Math.pow(5, 1.0625))
                 if (unscaledBulk.gt(400)) {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
@@ -1737,7 +1737,7 @@
                 return s
             },
             getTimeBulk() {
-                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(1e8).add(1).log(Math.pow(4, 1.0625))
+                let unscaledBulk = player.wel.fountains[1].time.mul(player.wel.lightFountainReqDivisor).div(7.2e7).add(1).log(Math.pow(4, 1.0625))
                 if (unscaledBulk.gt(400)) {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()

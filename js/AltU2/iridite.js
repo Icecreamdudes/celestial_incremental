@@ -326,7 +326,7 @@ addLayer("ir", {
         if (player.tab == "bl" && player.ir.battleLevel.gt(20)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(20)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
-        player.ir.battleXPReq = player.ir.battleXPReq.div(10) // TEMP
+        //player.ir.battleXPReq = player.ir.battleXPReq.div(10) // TEMP
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && !arena.upgradeChoiceActive) {
@@ -338,12 +338,12 @@ addLayer("ir", {
             }
         }
 
-        if (player.ir.battleLevel.gte(10) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
+        if (player.ir.battleLevel.gte(10) && player.ir.battleStage == "spaceZone2" && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
             spawnUfoBoss();
             player.ir.ufoFought = true
         }
 
-        if (player.ir.battleLevel.gte(1) && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
+        if (player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
             summonIridite();
             player.ir.iriditeFought = true
         }

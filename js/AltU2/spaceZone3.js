@@ -61,7 +61,7 @@ addLayer("spaceZone3", {
                 player.ir.primaryColor = "#e64ebd"
                 player.ir.secondaryColor = "#8f0749"
 
-                arena = new SpaceArena(800, 800, 1600, 3200);
+                arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 

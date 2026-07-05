@@ -622,8 +622,9 @@ class SpaceArena {
         this.enemyTypes = {
             alphaShip: {
                 name: "Alpha Ship",
+                symbol: "α",
                 radius: 24,
-                color: "#4c8cff",
+                color: "#3054bf",
                 healthMin: 200,
                 healthMax: 300,
                 damage: 6,
@@ -637,25 +638,29 @@ class SpaceArena {
                 rockDrop: [10, 20],
                 xpDrop: [10, 15],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("α", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             betaShip: {
                 // Machine-gun style: rapid burst (many small bullets)
                 name: "Beta Ship",
-                radius: 20,
+                symbol: "β",
+                radius: 24,
                 color: "#ffb84c",
                 healthMin: 150,
                 healthMax: 200,
@@ -670,24 +675,28 @@ class SpaceArena {
                 rockDrop: [6, 14],
                 xpDrop: [6, 10],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("β", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             
             gammaShip: {
                 name: "Gamma Ship",
+                symbol: "γ",
                 radius: 28,
                 color: "#b44cff",
                 healthMin: 160,
@@ -703,25 +712,29 @@ class SpaceArena {
                 rockDrop: [18, 30],
                 xpDrop: [18, 26],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 12} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("γ", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
 
             // Hard-mode enemies (activated at battleLevel >= 8)
             deltaShip: {
                 name: "Delta",
+                symbol: "δ",
                 radius: 28,
                 color: "#66ffe6",
                 healthMin: 320,
@@ -737,24 +750,28 @@ class SpaceArena {
                 rockDrop: [8, 18],
                 xpDrop: [12, 18],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#bff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 20px monospace";
-                    ctx.fillStyle = "#003";
-                    ctx.textAlign = "center";
-                    ctx.fillText("δ", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             epsilonShip: {
                 name: "Epsilon",
-                radius: 26,
+                symbol: "ε",
+                radius: 28,
                 color: "#ff66d9",
                 healthMin: 400,
                 healthMax: 500,
@@ -769,24 +786,28 @@ class SpaceArena {
                 rockDrop: [12, 22],
                 xpDrop: [14, 22],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#ffd";
-                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 20px monospace";
-                    ctx.fillStyle = "#111";
-                    ctx.textAlign = "center";
-                    ctx.fillText("ε", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             zetaShip: {
                 name: "Zeta",
-                radius: 22,
+                symbol: "ζ",
+                radius: 24,
                 color: "#ffe066",
                 healthMin: 300,
                 healthMax: 400,
@@ -802,23 +823,27 @@ class SpaceArena {
                 rockDrop: [14, 26],
                 xpDrop: [16, 24],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff6";
-                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 18px monospace";
-                    ctx.fillStyle = "#111";
-                    ctx.textAlign = "center";
-                    ctx.fillText("ζ", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             etaShip: {
                 name: "Eta",
+                symbol: "η",
                 radius: 16,
                 color: "#9eff66",
                 healthMin: 250,
@@ -834,19 +859,22 @@ class SpaceArena {
                 rockDrop: [5, 12],
                 xpDrop: [8, 14],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#cfc";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 16px monospace";
-                    ctx.fillStyle = "#021";
-                    ctx.textAlign = "center";
-                    ctx.fillText("η", enemy.x, enemy.y + 5);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             // Miniboss: UFO
@@ -904,139 +932,143 @@ class SpaceArena {
                 bulletCooldown: 40,
                 rockDrop: [250, 450],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate(enemy.x, enemy.y);
-                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
 
-                    // wing flap drive
-                    const phase = (enemy.wingPhase || 0);
-                    // normalized flap t in [0,1], eased for realistic acceleration/deceleration
-                    let raw = Math.sin(phase);
-                    let t = (raw + 1) / 2;
-                    let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-                    const r = enemy.radius;
-                    // wider spread on upstroke, tighter on downstroke
-                    const spreadBase = 0.9 + ease * 0.6;
-                    const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
-
-                    // Glow for whole boss
-                    ctx.shadowColor = "rgba(240,230,255,0.9)";
-                    if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
-
-                    // wing drawing function; draws a richer, layered feather set (no back/filler blob)
-                    const drawWing = (mirror = false) => {
                         ctx.save();
-                        if (mirror) ctx.scale(-1, 1);
+                        ctx.translate(wrapped[0], wrapped[1]);
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
 
-                        // root transform (each wing attached slightly outward)
-                        ctx.translate(r * 0.56, r * 0.02);
-                        // base rotation: open/close with flap
-                        let baseAngle = -0.22 - tipBend * 0.14;
-                        ctx.rotate(baseAngle);
+                        // wing flap drive
+                        const phase = (enemy.wingPhase || 0);
+                        // normalized flap t in [0,1], eased for realistic acceleration/deceleration
+                        let raw = Math.sin(phase);
+                        let t = (raw + 1) / 2;
+                        let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-                        // three feather groups: primaries, secondaries, coverts — fuller counts and gradual taper
-                        const groups = [
-                            { count: 8, len: r * 1.08, width: r * 0.32, offset: 0.0, light: -8 },
-                            { count: 7, len: r * 0.82, width: r * 0.26, offset: 0.08, light: -2 },
-                            { count: 6, len: r * 0.56, width: r * 0.2, offset: 0.16, light: 6 },
-                            { count: 4, len: r * 0.36, width: r * 0.14, offset: 0.28, light: 10 } // extra small coverts for fullness
-                        ];
+                        const r = enemy.radius;
+                        // wider spread on upstroke, tighter on downstroke
+                        const spreadBase = 0.9 + ease * 0.6;
+                        const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
-                        for (let gi = 0; gi < groups.length; gi++) {
-                            const g = groups[gi];
-                            // angular spread for this group
-                            const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
-                            for (let i = 0; i < g.count; i++) {
-                                // normalized position along wing span - center is 0
-                                let norm = (i / (g.count - 1)) - 0.5;
-                                // base position along the wing
-                                let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
-                                let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
-                                // feather angle and variation
-                                let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
-                                // feather shape
-                                let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
-                                let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
+                        // Glow for whole boss
+                        ctx.shadowColor = "rgba(240,230,255,0.9)";
+                        if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
 
-                                ctx.save();
-                                ctx.translate(bx, by);
-                                ctx.rotate(featherAngle);
+                        // wing drawing function; draws a richer, layered feather set (no back/filler blob)
+                        const drawWing = (mirror = false) => {
+                            ctx.save();
+                            if (mirror) ctx.scale(-1, 1);
 
-                                // feather silhouette with slight concave edge for natural look
-                                ctx.beginPath();
-                                ctx.moveTo(0, 0);
-                                ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
-                                ctx.lineTo(len * 0.86, width * 0.14);
-                                ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
-                                ctx.closePath();
+                            // root transform (each wing attached slightly outward)
+                            ctx.translate(r * 0.56, r * 0.02);
+                            // base rotation: open/close with flap
+                            let baseAngle = -0.22 - tipBend * 0.14;
+                            ctx.rotate(baseAngle);
 
-                                // feather gradient for depth
-                                let fg = ctx.createLinearGradient(0, -width, len, width);
-                                fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.98)`);
-                                fg.addColorStop(0.5, `rgba(${232 + g.light},${226 + g.light},${246 - g.light},0.92)`);
-                                fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.86)`);
-                                ctx.fillStyle = fg;
-                                ctx.fill();
+                            // three feather groups: primaries, secondaries, coverts — fuller counts and gradual taper
+                            const groups = [
+                                { count: 8, len: r * 1.08, width: r * 0.32, offset: 0.0, light: -8 },
+                                { count: 7, len: r * 0.82, width: r * 0.26, offset: 0.08, light: -2 },
+                                { count: 6, len: r * 0.56, width: r * 0.2, offset: 0.16, light: 6 },
+                                { count: 4, len: r * 0.36, width: r * 0.14, offset: 0.28, light: 10 } // extra small coverts for fullness
+                            ];
 
-                                // central shaft highlight (subtle)
-                                ctx.beginPath();
-                                ctx.moveTo(len * 0.08, -width * 0.02);
-                                ctx.lineTo(len * 0.72, -width * 0.02);
-                                ctx.strokeStyle = "rgba(255,255,255,0.24)";
-                                ctx.lineWidth = Math.max(1, r * 0.01);
-                                ctx.stroke();
+                            for (let gi = 0; gi < groups.length; gi++) {
+                                const g = groups[gi];
+                                // angular spread for this group
+                                const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
+                                for (let i = 0; i < g.count; i++) {
+                                    // normalized position along wing span - center is 0
+                                    let norm = (i / (g.count - 1)) - 0.5;
+                                    // base position along the wing
+                                    let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
+                                    let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
+                                    // feather angle and variation
+                                    let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
+                                    // feather shape
+                                    let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
+                                    let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
 
-                                ctx.restore();
+                                    ctx.save();
+                                    ctx.translate(bx, by);
+                                    ctx.rotate(featherAngle);
+
+                                    // feather silhouette with slight concave edge for natural look
+                                    ctx.beginPath();
+                                    ctx.moveTo(0, 0);
+                                    ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
+                                    ctx.lineTo(len * 0.86, width * 0.14);
+                                    ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
+                                    ctx.closePath();
+
+                                    // feather gradient for depth
+                                    let fg = ctx.createLinearGradient(0, -width, len, width);
+                                    fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.98)`);
+                                    fg.addColorStop(0.5, `rgba(${232 + g.light},${226 + g.light},${246 - g.light},0.92)`);
+                                    fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.86)`);
+                                    ctx.fillStyle = fg;
+                                    ctx.fill();
+
+                                    // central shaft highlight (subtle)
+                                    ctx.beginPath();
+                                    ctx.moveTo(len * 0.08, -width * 0.02);
+                                    ctx.lineTo(len * 0.72, -width * 0.02);
+                                    ctx.strokeStyle = "rgba(255,255,255,0.24)";
+                                    ctx.lineWidth = Math.max(1, r * 0.01);
+                                    ctx.stroke();
+
+                                    ctx.restore();
+                                }
                             }
-                        }
 
-                        // Outer rim/fold to shape the wing edge (thin stroke)
+                            // Outer rim/fold to shape the wing edge (thin stroke)
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.moveTo(0, 0);
+                            ctx.bezierCurveTo(r * 0.18, -r * 0.5 * spreadBase, r * 0.95, -r * 0.28 * spreadBase, r * 1.04, -r * 0.04);
+                            ctx.lineTo(r * 0.92, r * 0.02);
+                            ctx.bezierCurveTo(r * 0.6, r * 0.42 * spreadBase, r * 0.18, r * 0.46 * spreadBase, 0, r * 0.28);
+                            ctx.closePath();
+                            ctx.strokeStyle = "rgba(255,255,255,0.12)";
+                            ctx.lineWidth = Math.max(1, r * 0.02);
+                            ctx.stroke();
+                            ctx.restore();
+
+                            ctx.restore();
+                        };
+
+                        // Draw left and right wings (right wing mirrored to avoid vertical inversion)
+                        drawWing(false); // left-looking (draws to right in local coords)
+                        drawWing(true);  // mirrored right wing
+
+                        // Thin white circle showing hitbox (centered)
                         ctx.save();
+                        ctx.shadowBlur = 0;
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = "rgba(255,255,255,0.95)";
                         ctx.beginPath();
-                        ctx.moveTo(0, 0);
-                        ctx.bezierCurveTo(r * 0.18, -r * 0.5 * spreadBase, r * 0.95, -r * 0.28 * spreadBase, r * 1.04, -r * 0.04);
-                        ctx.lineTo(r * 0.92, r * 0.02);
-                        ctx.bezierCurveTo(r * 0.6, r * 0.42 * spreadBase, r * 0.18, r * 0.46 * spreadBase, 0, r * 0.28);
-                        ctx.closePath();
-                        ctx.strokeStyle = "rgba(255,255,255,0.12)";
-                        ctx.lineWidth = Math.max(1, r * 0.02);
+                        ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
                         ctx.stroke();
                         ctx.restore();
 
+                        // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
+                        ctx.save();
+                        if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
+                        const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
+                        ctx.font = `${fontSize}px monospace`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle"; // ensure center vertically
+                        ctx.fillStyle = "#e0ccffff";
+                        ctx.fillText("✦", 0, 8); // exact center
+                        // subtle stroke for definition
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = "rgba(240,200,80,0.12)";
+                        ctx.strokeText("✦", 0, 8);
                         ctx.restore();
-                    };
 
-                    // Draw left and right wings (right wing mirrored to avoid vertical inversion)
-                    drawWing(false); // left-looking (draws to right in local coords)
-                    drawWing(true);  // mirrored right wing
-
-                    // Thin white circle showing hitbox (centered)
-                    ctx.save();
-                    ctx.shadowBlur = 0;
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = "rgba(255,255,255,0.95)";
-                    ctx.beginPath();
-                    ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.restore();
-
-                    // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
-                    ctx.save();
-                    if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
-                    const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
-                    ctx.font = `${fontSize}px monospace`;
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle"; // ensure center vertically
-                    ctx.fillStyle = "#e0ccffff";
-                    ctx.fillText("✦", 0, 0); // exact center
-                    // subtle stroke for definition
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = "rgba(240,200,80,0.12)";
-                    ctx.strokeText("✦", 0, 0);
-                    ctx.restore();
-
-                    ctx.restore();
+                        ctx.restore();
+                    }
                 }
             },
         };
@@ -1418,6 +1450,7 @@ class SpaceArena {
         let wanderAngle = angle;
         let enemy = {
             type: typeName,
+            symbol: type.symbol,
             x: this.ship.x + Math.cos(angle) * 200,
             y: this.ship.y + Math.sin(angle) * 200,
             vx: Math.cos(angle) * (type.wanderSpeed || 1),
@@ -2020,12 +2053,13 @@ class SpaceArena {
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
         for (let bullet of this.bullets) {
+            let closest = this.getClosestCoords([bullet.x, bullet.y])
             // Homing behavior: enemy homing bullets should home to the player;
             // player-fired homing bullets should home to enemies.
             if (bullet.homing) {
                 if (bullet.fromEnemy) {
                     // Home to player: compute desired and rotate toward it with clamped turn.
-                    let desired = Math.atan2(this.ship.y - bullet.y, this.ship.x - bullet.x);
+                    let desired = Math.atan2(closest[1] - bullet.y, closest[0] - bullet.x);
                     let current = Math.atan2(bullet.vy, bullet.vx);
                     let diff = desired - current;
                     while (diff > Math.PI) diff -= 2 * Math.PI;
@@ -2170,6 +2204,11 @@ class SpaceArena {
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
             const type = this.enemyTypes[enemy.type];
+            let closest = this.getClosestCoords([enemy.x, enemy.y])
+            let dx = closest[0] - enemy.x;
+            let dy = closest[1] - enemy.y;
+            let dist = Math.hypot(dx, dy) || 1;
+            let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
 
             if (enemy.type === "iriditeBoss") {
                 // If the asteroid minigame is paused, also pause Iridite boss actions
@@ -2178,6 +2217,7 @@ class SpaceArena {
                     continue;
                 }
                 player.ir.iriditePhase = enemy.phase
+
 
                 // ensure wingPhase exists and animate it (controls flap)
                 if (typeof enemy.wingPhase !== "number") enemy.wingPhase = Math.random() * Math.PI * 2;
@@ -2206,40 +2246,38 @@ class SpaceArena {
                     enemy.attackTimer--;
                     if (enemy.attackTimer <= 0) {
                         let r = Math.random();
+                        let dr = ((dist - 400) / 1600);
                         // make dagger and shortBurst available in all phases;
                         // add laser possibility in phase 3+
                         if (enemy.phase === 1) {
-                            if (r < 0.28) enemy.state = "radial";
-                            else if (r < 0.36) enemy.state = "homing";
-                            else if (r < 0.60) enemy.state = "dagger";
-                            else if (r < 0.80) enemy.state = "shortBurst";
-                            else enemy.state = "lunge";
+                            if (Math.random() < dr) enemy.state = "lunge";
+                            else if (r < 0.3) enemy.state = "dagger"; // 30%
+                            else if (r < 0.5) enemy.state = "homing"; // 20%
+                            else if (r < 0.75) enemy.state = "radial"; // 25%
+                            else enemy.state = "shortBurst"; // 25%
                         } else if (enemy.phase === 2) {
-                            if (r < 0.20) enemy.state = "radial";
-                            else if (r < 0.42) enemy.state = "homing";
-                            else if (r < 0.64) enemy.state = "raining";
-                            else if (r < 0.82) enemy.state = "dagger";
-                            else if (r < 0.92) enemy.state = "shortBurst";
-                            else if (r < 0.96) enemy.state = "lunge";
-                            else enemy.state = "lunge";
+                            if (Math.random() < dr) enemy.state = "lunge";
+                            else if (r < 0.25) enemy.state = "dagger"; // 25%
+                            else if (r < 0.4) enemy.state = "homing"; // 15%
+                            else if (r < 0.6) enemy.state = "radial"; // 20%
+                            else if (r < 0.8) enemy.state = "shortBurst"; // 20%
+                            else enemy.state = "raining"; // 20%
                         } else if (enemy.phase === 3) {
-                            if (r < 0.16) enemy.state = "lunge";
-                            else if (r < 0.36) enemy.state = "homing";
-                            else if (r < 0.54) enemy.state = "raining";
-                            else if (r < 0.72) enemy.state = "dagger";
-                            else if (r < 0.82) enemy.state = "burst";
-                            else if (r < 0.90) enemy.state = "giant";
-                            else if (r < 0.98) enemy.state = "laser";
+                            if (r < 0.2) enemy.state = "homing";
+                            else if (r < 0.38) enemy.state = "raining";
+                            else if (r < 0.54) enemy.state = "dagger";
+                            else if (r < 0.64) enemy.state = "burst";
+                            else if (r < 0.72) enemy.state = "giant";
+                            else if (r < 0.8) enemy.state = "laser";
                             else enemy.state = "lunge";
                         } else {
                             // phase 4 (very aggressive)
-                            if (r < 0.10) enemy.state = "lunge";
-                            else if (r < 0.18) enemy.state = "homing";
-                            else if (r < 0.28) enemy.state = "raining";
-                            else if (r < 0.44) enemy.state = "dagger";
-                            else if (r < 0.64) enemy.state = "burst";
-                            else if (r < 0.76) enemy.state = "giant";
-                            else if (r < 0.98) enemy.state = "laser";
+                            if (r < 0.08) enemy.state = "homing";
+                            else if (r < 0.18) enemy.state = "raining";
+                            else if (r < 0.34) enemy.state = "dagger";
+                            else if (r < 0.54) enemy.state = "burst";
+                            else if (r < 0.66) enemy.state = "giant";
+                            else if (r < 0.88) enemy.state = "laser";
                             else enemy.state = "lunge";
                         }
 
@@ -2290,9 +2328,8 @@ class SpaceArena {
                             // plan 5 directions around player
                             let count = 5;
                             for (let i = 0; i < count; i++) {
-                                let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let ang = base + (i - (count - 1) / 2) * 0.28 + (Math.random() - 0.5) * 0.18;
-                                let cosA = Math.cos(ang), sinA = Math.sin(ang);
+                                let baseAng = ang + (i - (count - 1) / 2) * 0.28 + (Math.random() - 0.5) * 0.18;
+                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
                                 let cx = enemy.x, cy = enemy.y;
                                 let ts = [];
                                 if (Math.abs(cosA) > 1e-6) {
@@ -2320,7 +2357,7 @@ class SpaceArena {
                             // laser duration and rotation speed
                             enemy._laserTimer = 180 + enemy.phase * 40; // frames total (3s +)
                             enemy._laserActive = false;
-                            enemy._laserAngle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            enemy._laserAngle = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             enemy._laserSpin = (Math.random() < 0.5 ? 1 : -1) * (0.006 + enemy.phase * 0.004); // radians/frame
                             enemy._laserHitCooldown = 0;
                         }
@@ -2333,13 +2370,13 @@ class SpaceArena {
                         let pieces = 14 + enemy.phase * 2;
                         let baseSpread = (enemy.phase >= 3) ? 0.5 : 0;
                         for (let i = 0; i < pieces; i++) {
-                            let angle = (i / pieces) * Math.PI * 2 + (Math.random() - 0.5) * baseSpread;
+                            let baseAng = (i / pieces) * Math.PI * 2 + (Math.random() - 0.5) * baseSpread;
                             let spd = 6;
                             this.bullets.push({
-                                x: enemy.x + Math.cos(angle) * (enemy.radius - 6),
-                                y: enemy.y + Math.sin(angle) * (enemy.radius - 6),
-                                vx: Math.cos(angle) * spd,
-                                vy: Math.sin(angle) * spd,
+                                x: enemy.x + Math.cos(baseAng) * (enemy.radius - 6),
+                                y: enemy.y + Math.sin(baseAng) * (enemy.radius - 6),
+                                vx: Math.cos(baseAng) * spd,
+                                vy: Math.sin(baseAng) * spd,
                                 life: 240,
                                 damage: 5,
                                 pierce: 0,
@@ -2363,7 +2400,7 @@ class SpaceArena {
                 if (enemy.state === "homing") {
                     if (enemy._actionCooldown <= 0) {
                         // spawn homing projectile aimed at player (initial direction toward player)
-                        let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x) + (Math.random() - 0.5) * 0.12;
+                        let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x) + (Math.random() - 0.5) * 0.12;
                         let spd = 3.5; // stronger initial speed
                         // normalize (defensive) and set vx/vy
                         let vx = Math.cos(ang) * spd;
@@ -2395,12 +2432,15 @@ class SpaceArena {
                 }
                 // --- Lunge: single directed dash toward player (any phase) ---
                 if (enemy.state === "lunge") {
+                    // End lunge if close to the player
+                    if (dist < 150) {
+                        enemy.state = "idle";
+                        enemy.attackTimer = 60 - enemy.phase * 10;
+                        enemy._lungeHit = 0;
+                    }
                     if (enemy._lungeTimer > 0) {
                         // compute normalized direction to player
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
-                        let dist = Math.hypot(dx, dy) || 1;
-                        let strength = 6 + enemy.phase * 1.2; // per-frame movement
+                        let strength = 6 + enemy.phase * 1.5; // per-frame movement
                         let vx = (dx / dist) * strength;
                         let vy = (dy / dist) * strength;
                         enemy.x += vx;
@@ -2408,8 +2448,8 @@ class SpaceArena {
 
                         // light contact damage while lunging (once per hit cooldown)
                         let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-                        let sdx = this.ship.x - enemy.x;
-                        let sdy = this.ship.y - enemy.y;
+                        let sdx = closest[0] - enemy.x;
+                        let sdy = closest[1] - enemy.y;
                         let sdist = Math.hypot(sdx, sdy);
                         if (sdist < enemy.radius + shipRadius) {
                             if (!enemy._lungeHit) {
@@ -2436,18 +2476,20 @@ class SpaceArena {
                         if (enemy._rainingInterval <= 0) {
                             enemy._rainingInterval = Math.max(6, 18 - enemy.phase * 2);
                             // spawn a small cluster each tick
-                            let count = 1 + Math.floor(enemy.phase / 2);
+                            let count = 2 + Math.floor(enemy.phase / 2);
                             for (let i = 0; i < count; i++) {
-                                let sx = Math.random() * this.width;
-                                let sy = -20 - Math.random() * 80;
-                                let vx = (Math.random() - 0.5) * 0.8;
-                                let vy = 3 + Math.random() * (1 + enemy.phase * 0.5);
+                                let rPos = Math.random() - 0.5
+                                let rAng = Math.random() - 0.5
+                                let sx = enemy.x + (rPos * 1200 * Math.cos(ang + (Math.PI/2))) - (600 * Math.cos(ang));
+                                let sy = enemy.y + (rPos * 1200 * Math.sin(ang + (Math.PI/2))) - (600 * Math.sin(ang));
+                                let vx = Math.cos(ang + (rAng * 0.125 * Math.PI)) * 6;
+                                let vy = Math.sin(ang + (rAng * 0.125 * Math.PI)) * 6;
                                 this.bullets.push({
                                     x: sx,
                                     y: sy,
                                     vx: vx,
                                     vy: vy,
-                                    life: 400,
+                                    life: 600,
                                     damage: 4 + enemy.phase,
                                     pierce: 0,
                                     fromEnemy: true,
@@ -2469,8 +2511,8 @@ class SpaceArena {
                         if (!enemy._daggerConverge.point) {
                             // choose a random interior converge point (biased toward player)
                             const jitter = 80;
-                            const cx = Math.max(80, Math.min(this.width - 80, this.ship.x + (Math.random() - 0.5) * jitter));
-                            const cy = Math.max(80, Math.min(this.height - 80, this.ship.y + (Math.random() - 0.5) * jitter));
+                            const cx = Math.max(80, Math.min(this.width - 80, closest[0] + (Math.random() - 0.5) * jitter));
+                            const cy = Math.max(80, Math.min(this.height - 80, closest[1] + (Math.random() - 0.5) * jitter));
                             enemy._daggerConverge.point = { x: cx, y: cy };
                             // choose origins around the arena edge
                             const originCount = 8 + Math.floor(enemy.phase * 2);
@@ -2530,9 +2572,9 @@ class SpaceArena {
                             let lineCount = 2 + Math.min(5, Math.floor(enemy.phase) + 1);
                             enemy._daggerPrep = 48;
                             for (let i = 0; i < lineCount; i++) {
-                                let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let angle = base + (Math.random() - 0.5) * 1.2 + (i - (lineCount - 1) / 2) * 0.18;
-                                let cosA = Math.cos(angle), sinA = Math.sin(angle);
+                                let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
+                                let baseAng = base + (Math.random() - 0.5) * 1.2 + (i - (lineCount - 1) / 2) * 0.18;
+                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
                                 let cx = enemy.x, cy = enemy.y;
                                 let ts = [];
                                 if (Math.abs(cosA) > 1e-6) {
@@ -2640,7 +2682,7 @@ class SpaceArena {
                 if (enemy.state === "shortBurst") {
                     if (enemy._shortBurstShots > 0) {
                         if (enemy._actionCooldown <= 0) {
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let pellets = 6 + Math.floor(enemy.phase * 1.5);
                             let spread = 0.28 - enemy.phase * 0.02;
                             let speed = 10 + enemy.phase * 0.6;
@@ -2685,8 +2727,8 @@ class SpaceArena {
                         // check ship intersection with beam (in world space)
                         if (enemy._laserActive && enemy._laserHitCooldown <= 0) {
                             // compute perpendicular distance to beam line
-                            let bx = this.ship.x - enemy.x;
-                            let by = this.ship.y - enemy.y;
+                            let bx = closest[0] - enemy.x;
+                            let by = closest[1] - enemy.y;
                             let ang = enemy._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
                             // projection along beam
@@ -2717,7 +2759,7 @@ class SpaceArena {
                     if (enemy._burstShots > 0) {
                         if (enemy._actionCooldown <= 0) {
                             // spawn shotgun spread aimed at player
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let pellets = 7 + enemy.phase; // number of pellets
                             let spread = 0.36; // total spread radians
                             let speed = 9 + enemy.phase * 0.6;
@@ -2749,6 +2791,7 @@ class SpaceArena {
                 }
                 // Dash sequence using precomputed random targets
                 if (enemy.dashing) {
+
                     if (!enemy._dashState) enemy._dashState = "prepare";
 
                     // In dash 'prepare' select next target and compute direction
@@ -2765,11 +2808,8 @@ class SpaceArena {
                             if (enemy._dashTargets && enemy._dashTargets.length > 0) {
                                 targetPos = enemy._dashTargets.shift();
                             } else {
-                                targetPos = { x: this.ship.x, y: this.ship.y };
+                                targetPos = { x: closest[0], y: closest[1] };
                             }
-                            let dx = targetPos.x - enemy.x;
-                            let dy = targetPos.y - enemy.y;
-                            let dist = Math.hypot(dx, dy) || 1;
                             enemy._dashDir = { x: dx / dist, y: dy / dist };
                             // store target pos & remaining distance so we can know when to pick next
                             enemy._dashTargetPos = targetPos;
@@ -2796,8 +2836,8 @@ class SpaceArena {
                         enemy._dashRemainingDistance -= moved;
 
                         // contact damage (apply once per collision and immediately knockback & damage)
-                        let sx = this.ship.x - enemy.x;
-                        let sy = this.ship.y - enemy.y;
+                        let sx = closest[0] - enemy.x;
+                        let sy = closest[1] - enemy.y;
                         let sdist = Math.hypot(sx, sy);
                         let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                         if (sdist < enemy.radius + shipRadius) {
@@ -2808,13 +2848,13 @@ class SpaceArena {
                                 let impactDmg = (5) * this.upgradeEffects.damageReduction;
                                 this.applyShipDamage(impactDmg);
                                 // reduced knockback
-                                let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                                let kn = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                                 if (player.ir.shipType == 3 || player.ir.shipType == 7) {
                                     this.ship.vx += Math.cos(kn) * 6;
                                     this.ship.vy += Math.sin(kn) * 6;
                                 } else {
-                                    this.ship.x += Math.cos(kn) * 4;
-                                    this.ship.y += Math.sin(kn) * 4;
+                                    closest[0] += Math.cos(kn) * 4;
+                                    closest[1] += Math.sin(kn) * 4;
                                 }
                                 if (player.ir.shipHealth.lte(0)) this.onShipDeath();
                             }
@@ -2848,17 +2888,12 @@ class SpaceArena {
                         }
                     }
 
-                    // ensure boss stays in bounds while dashing
-                    if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                    if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                    if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                    if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
                 }
 
                 // Follow player when idle (instead of drifting to center)
                 if (!enemy.dashing && enemy.state === "idle") {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     // follow speed small; slightly increase by phase so later phases close gap faster
                     let followSpeed = 0.5 + enemy.phase * 0.25;
@@ -2869,13 +2904,9 @@ class SpaceArena {
                     enemy.wanderAngle += (Math.random() - 0.5) * 0.01;
                 }
 
-                // Keep boss inside arena
-                if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-
                 // continue to next enemy after special boss handling
+                enemy.x = ((enemy.x % this.width) + this.width) % this.width
+                enemy.y = ((enemy.y % this.height) + this.height) % this.height
                 continue;
             }
 
@@ -2884,8 +2915,8 @@ class SpaceArena {
                 // --- UFO Miniboss behavior ---
                 if (enemy.type === "ufoBoss") {
                     // Hovering: maintain an orbit distance ~220 from player
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     let desiredDist = 220;
                     // Move toward or away to keep distance
@@ -2929,7 +2960,7 @@ class SpaceArena {
                         if (enemy.burstShots > 0 && (enemy.burstIntervalCounter === undefined || enemy.burstIntervalCounter <= 0)) {
                             enemy.burstIntervalCounter = enemy.burstInterval;
                             // shoot a spread toward player
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let spread = 0.24;
                             let bulletsThisShot = 3;
                             for (let i = 0; i < bulletsThisShot; i++) {
@@ -2992,6 +3023,8 @@ class SpaceArena {
                     if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
 
                     // continue to next enemy handling
+                    enemy.x = ((enemy.x % this.width) + this.width) % this.width
+                    enemy.y = ((enemy.y % this.height) + this.height) % this.height
                     continue;
             }
             // --- Alpha Ship behavior ---
@@ -3032,8 +3065,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.alphaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.alphaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     let speed = this.enemyTypes.alphaShip.bulletSpeed;
                     this.bullets.push({
@@ -3061,8 +3094,8 @@ class SpaceArena {
 
                 // Occasionally dash toward player
                 if (!enemy.dashCooldown || enemy.dashCooldown <= 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     enemy.vx = Math.cos(angle) * (enemy.wanderSpeed * 2.5);
                     enemy.vy = Math.sin(angle) * (enemy.wanderSpeed * 2.5);
@@ -3100,8 +3133,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.betaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.betaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let baseAngle = Math.atan2(dy, dx);
                     let spread = 0.14;
                     let bulletsThisShot = 1;
@@ -3175,8 +3208,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.gammaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.gammaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     let speed = this.enemyTypes.gammaShip.bulletSpeed;
                     this.bullets.push({
@@ -3201,8 +3234,8 @@ class SpaceArena {
                     enemy.changeDirTimer = 60;
                     // choose a new random angle biased toward player occasionally
                     if (Math.random() < 0.6) {
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
+                        let dx = closest[0] - enemy.x;
+                        let dy = closest[1] - enemy.y;
                         enemy.wanderAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.6;
                     } else {
                         enemy.wanderAngle += (Math.random() - 0.5) * 2.0;
@@ -3321,8 +3354,8 @@ class SpaceArena {
                     enemy.roundTimer--;
                     if (enemy.roundTimer <= 0) {
                         // Fire one round: perRoundBullets bullets aimed at player with spread
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
+                        let dx = closest[0] - enemy.x;
+                        let dy = closest[1] - enemy.y;
                         let baseAngle = Math.atan2(dy, dx);
                         let bullets = enemy.perRoundBullets || 3;
                         let spread = 0.25;
@@ -3351,8 +3384,8 @@ class SpaceArena {
             // --- Eta behavior: follows player and shoots every ~2s ---
             if (enemy.type === "etaShip") {
                 // follow
-                let dx = this.ship.x - enemy.x;
-                let dy = this.ship.y - enemy.y;
+                let dx = closest[0] - enemy.x;
+                let dy = closest[1] - enemy.y;
                 let dist = Math.sqrt(dx * dx + dy * dy) || 1;
                 let angleToPlayer = Math.atan2(dy, dx);
                 enemy.vx = Math.cos(angleToPlayer) * enemy.wanderSpeed;
@@ -3365,7 +3398,7 @@ class SpaceArena {
                 if (enemy.shootCooldown <= 0) {
                     enemy.shootCooldown = this.enemyTypes.etaShip.bulletCooldown;
                     let speed = this.enemyTypes.etaShip.bulletSpeed;
-                    let angle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                    let angle = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                     this.bullets.push({
                         x: enemy.x + Math.cos(angle) * enemy.radius,
                         y: enemy.y + Math.sin(angle) * enemy.radius,
@@ -3379,14 +3412,17 @@ class SpaceArena {
                     });
                 }
             }
+            enemy.x = ((enemy.x % this.width) + this.width) % this.width
+            enemy.y = ((enemy.y % this.height) + this.height) % this.height
         }
 
         // Gamma Ship trail damage
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
+                let closest = this.getClosestCoords([trail.x, trail.y])
                 trail.timer--;
-                let dx = this.ship.x - trail.x;
-                let dy = this.ship.y - trail.y;
+                let dx = closest[0] - trail.x;
+                let dy = closest[1] - trail.y;
                 let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
@@ -3750,8 +3786,8 @@ class SpaceArena {
                 player.ir.battleXP = player.ir.battleXP.add(orb.amount);
                 orb.picked = true;
             }
-            orb.x %= this.width
-            orb.y %= this.height
+            orb.x = ((orb.x % this.width) + this.width) % this.width
+            orb.y = ((orb.y % this.height) + this.height) % this.height
             orb.timer--;
         }
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
@@ -4207,26 +4243,27 @@ class SpaceArena {
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
             let type = this.enemyTypes[enemy.type];
-            if (type && type.draw) {
+            let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+            if (type && type.draw && wrapped) {
                 type.draw(this.ctx, enemy);
                 this.ctx.save();
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.fillStyle = "#151230";
-                this.ctx.fillRect(enemy.x - enemy.radius - 2, enemy.y - enemy.radius - 20, enemy.radius * 2 + 4, 13);
+                this.ctx.fillRect(wrapped[0] - enemy.radius - 2, wrapped[1] - enemy.radius - 20, enemy.radius * 2 + 4, 13);
                 let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
                 this.ctx.fillStyle = "#bf0000";
-                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 9);
+                this.ctx.fillRect(wrapped[0] - enemy.radius, wrapped[1] - enemy.radius - 18, barWidth, 9);
 
                 let t = Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth)
                 this.ctx.font = "12px monospace";
                 this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 + 1)
-                this.ctx.fillText(t, enemy.x + 1, enemy.y - enemy.radius - 9 - 1)
-                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 + 1)
-                this.ctx.fillText(t, enemy.x - 1, enemy.y - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 - 1)
                 this.ctx.fillStyle = "white";
-                this.ctx.fillText(t, enemy.x, enemy.y - enemy.radius - 9)
+                this.ctx.fillText(t, wrapped[0], wrapped[1] - enemy.radius - 9)
 
                 this.ctx.restore();
             }
@@ -4246,7 +4283,7 @@ class SpaceArena {
                     const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
                     // draw glow
                     this.ctx.save();
-                    this.ctx.translate(enemy.x, enemy.y);
+                    this.ctx.translate(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
                     this.ctx.rotate(angle);
                     // additive glow
                     this.ctx.globalCompositeOperation = "lighter";
@@ -4284,12 +4321,12 @@ class SpaceArena {
                         this.ctx.strokeStyle = `rgba(255,40,40,${alpha})`;
                         this.ctx.lineWidth = 2 + Math.max(0, 4 * alpha);
                         this.ctx.beginPath();
-                        this.ctx.moveTo(enemy.x, enemy.y);
-                        this.ctx.lineTo(warn.tx, warn.ty);
+                        this.ctx.moveTo(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         this.ctx.fillStyle = `rgba(255,50,50,${alpha})`;
                         this.ctx.beginPath();
-                        this.ctx.arc(warn.tx, warn.ty, 6 * alpha + 2, 0, Math.PI * 2);
+                        this.ctx.arc(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y, 6 * alpha + 2, 0, Math.PI * 2);
                         this.ctx.fill();
                         this.ctx.restore();
                         if (typeof warn.timer === "number") warn.timer--;
@@ -4305,15 +4342,15 @@ class SpaceArena {
                         this.ctx.strokeStyle = `rgba(255,60,60,${0.25 * alpha})`;
                         this.ctx.lineWidth = 14 * (0.3 + 0.7 * alpha);
                         this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         // sharp red core
                         this.ctx.strokeStyle = `rgba(255,20,20,${0.95 * alpha})`;
                         this.ctx.lineWidth = 2;
                         this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         // little markers along the line
                         const markers = 6;
@@ -4323,7 +4360,7 @@ class SpaceArena {
                             let my = ln.y1 + (ln.y2 - ln.y1) * t;
                             this.ctx.fillStyle = `rgba(255,90,90,${0.6 * alpha})`;
                             this.ctx.beginPath();
-                            this.ctx.arc(mx, my, 2 + 2 * alpha, 0, Math.PI * 2);
+                            this.ctx.arc(mx + (this.canvasWidth / 2) - this.ship.x, my + (this.canvasHeight / 2) - this.ship.y, 2 + 2 * alpha, 0, Math.PI * 2);
                             this.ctx.fill();
                         }
                         this.ctx.restore();
@@ -4420,13 +4457,16 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
+            let radius = bullet.radius || 20
+            let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [radius * 2, radius * 2])
+            if (!wrapped) continue;
             // Skip ritual projectiles - RitualArena handles these with custom visuals
             if (bullet.ritualOrb || bullet.ritualBlade) continue;
             
             if (bullet.massiveSword) {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.rotate(bullet.rot || 0);
 
@@ -4479,7 +4519,7 @@ class SpaceArena {
             } else if (bullet.star) {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
@@ -4514,19 +4554,16 @@ class SpaceArena {
                 // larger radius for homing enemy projectiles
                 if (bullet.fromEnemy && bullet.homing) r = 10;
                 if (bullet.giant) r = bullet.radius || 18;
-                let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [r * 2, r * 2])
-                if (wrapped != null) {
-                    this.ctx.beginPath();
-                    this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
-                    this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffff00";
-                    this.ctx.fill();
-                }
+                this.ctx.beginPath();
+                this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
+                this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffff00";
+                this.ctx.fill();
                 this.ctx.restore();
             }
             // Evolver primary shard rendering (crystal shard with facets)
             if (bullet.evolverShard) {
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(56, (bullet.radius || 26) * 2);
@@ -4603,7 +4640,7 @@ class SpaceArena {
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.radius || 4;
-                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
+                this.ctx.arc(wrapped[0], wrapped[1], r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = '#5fb8ff';
                 this.ctx.fill();
                 this.ctx.strokeStyle = '#2c3e50';
@@ -4614,7 +4651,7 @@ class SpaceArena {
             // Evolver mini shard rendering (smaller triangle)
             if (bullet.evolverMini) {
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);

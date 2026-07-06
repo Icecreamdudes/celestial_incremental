@@ -1223,7 +1223,7 @@ addLayer("pet", {
         },
         // FRAGMENTATION INCREMENTORS
         111: {
-            title() { return player.pet.evoIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this rows amounts by x" + formatSimple(player.pet.evoInput.pow(0.8).div(2).add(1)) + "."},
+            title() { return player.pet.evoIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this row's amounts by x" + formatSimple(player.pet.evoInput.pow(0.8).div(2).add(1)) + "."},
             canClick() {return !player.pet.evoIncUsed && player.pet.evoInput.gt(0) && player.cb.evolutionShards.gte(player.pet.evoInput)},
             unlocked: true,
             tooltip() {
@@ -1248,7 +1248,7 @@ addLayer("pet", {
             },
         },
         112: {
-            title() { return player.pet.paraIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this rows amounts by x" + formatSimple(player.pet.paraInput.pow(1.2).add(1)) + "."},
+            title() { return player.pet.paraIncUsed ? "<h3>Can be used after selection re-roll" : "<h3>Multiply this row's amounts by x" + formatSimple(player.pet.paraInput.pow(1.2).add(1)) + "."},
             canClick() {return !player.pet.paraIncUsed && player.pet.paraInput.gt(0) && player.cb.paragonShards.gte(player.pet.paraInput)},
             unlocked: true,
             tooltip() {

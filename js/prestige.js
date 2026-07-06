@@ -827,7 +827,7 @@
         },
 
         {
-            key: "c", 
+            key: "y", 
             description: "Crystallize",
 
             unlocked() {

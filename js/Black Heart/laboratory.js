@@ -79,7 +79,7 @@ addLayer("laboratory", {
         1: {
             title: "MD-01",
             unlocked: true,
-            description: "Unlocks Vespasians \"Paralytic Bite\" skill.",
+            description: "Unlocks Vespasian's \"Paralytic Bite\" skill.",
             cost: new Decimal(64),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -93,7 +93,7 @@ addLayer("laboratory", {
         2: {
             title: "MD-02",
             unlocked: true,
-            description: "Unlocks Vespasians \"Overdrive\" skill.",
+            description: "Unlocks Vespasian's \"Overdrive\" skill.",
             cost: new Decimal(1024),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -107,7 +107,7 @@ addLayer("laboratory", {
         3: {
             title: "MD-03",
             unlocked: true,
-            description: "Increases Vespasians base agility by +10.",
+            description: "Increases Vespasian's base agility by +10.",
             cost: new Decimal(16384),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Dust",
@@ -169,7 +169,7 @@ addLayer("laboratory", {
         11: {
             title: "MS-01",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "Unlocks Vespasians \"Impale\" skill.",
+            description: "Unlocks Vespasian's \"Impale\" skill.",
             cost: new Decimal(4),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",
@@ -183,7 +183,7 @@ addLayer("laboratory", {
         12: {
             title: "MS-02",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "Unlocks Vespasians \"Peak Performance\" skill.",
+            description: "Unlocks Vespasian's \"Peak Performance\" skill.",
             cost: new Decimal(64),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",
@@ -197,7 +197,7 @@ addLayer("laboratory", {
         13: {
             title: "MS-03",
             unlocked() {return player.laboratory.highestCombo.gt(5)},
-            description: "Increases Vespasians base damage by +4.",
+            description: "Increases Vespasian's base damage by +4.",
             cost: new Decimal(1024),
             currencyLocation() { return player.laboratory },
             currencyDisplayName: "Matos Shards",

@@ -486,7 +486,7 @@
                 return "Extending softcap eh?"
             },
             display() {
-                return 'which are extending the chance points softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are extending the chance point softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {

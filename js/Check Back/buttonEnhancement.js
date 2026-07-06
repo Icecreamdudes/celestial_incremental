@@ -2499,6 +2499,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 1", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 101,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[0].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[0].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2513,6 +2516,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 2", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 102,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[1].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[1].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2527,6 +2533,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 3", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 103,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[2].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[2].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2541,6 +2550,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 4", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 104,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[3].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[3].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2555,6 +2567,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 5", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 105,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[4].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[4].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2569,6 +2584,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 6", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 106,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[5].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[5].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
@@ -2583,6 +2601,9 @@ addLayer("ev1", {
                             ["style-column", [
                                 ["raw-html", "Crate Button 7", {color: "#dbe4ff", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "250px", height: "37px", borderBottom: "3px solid #17254c"}],
+                            ["layer-proxy",["cb",
+                                [["clickable", 107,{"width":"250px"}]],
+                            ]],
                             ["style-column", [
                                 ["raw-html", () => {return "Crate Roll Chance: " + formatSimple(player.cb.crateTimers[6].base.mul(100), 1) + "%"}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],
                                 ["raw-html", () => {return "Cooldown: " + formatTime(player.cb.crateTimers[6].max)}, {color: "#dbe4ff", fontSize: "16px", fontFamily: "monospace"}],

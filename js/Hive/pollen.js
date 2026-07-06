@@ -439,6 +439,14 @@ addLayer("bpl", {
     layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 2) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 2)},
     hotkeys: [
         {
+            key: "[", 
+            description: "Choose Pollen Path",
+            onPress() {
+                if(player.bee.path == 0)
+                    player.bee.path = 1
+            },
+        },
+        {
             key: "d", 
             description: "Convert Pollen to Drones",
             onPress() {

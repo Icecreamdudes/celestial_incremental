@@ -1132,7 +1132,7 @@ addLayer("tad", {
             },
         },
         203: {
-            title: "EXPAND YOUR HIVES LIMITS<br>Req: 5,000 of each T3 Alt-Infinity",
+            title: "EXPAND YOUR HIVE'S LIMITS<br>Req: 5,000 of each T3 Alt-Infinity",
             canClick() {
                 return !player.tad.hiveExpand && player.tad.altInfinities.infected.amount.gte(5000) && player.tad.altInfinities.infested.amount.gte(5000)
             },
@@ -3327,5 +3327,27 @@ addLayer("tad", {
         ["microtabs", "Tabs", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}
+    layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)},
+    hotkeys: [
+        {
+            key: "[", 
+            description: "Decrease Matter Cap",
+            unlocked() {
+                hasUpgrade(this.layer,15)
+            },
+            onPress() {
+                clickClickable(this.layer, 3)
+            },
+        },
+        {
+            key: "]", 
+            description: "Increase Matter Cap",
+            unlocked() {
+                hasUpgrade(this.layer,15)
+            },
+            onPress() {
+                clickClickable(this.layer, 6)
+            },
+        }
+	]
 })

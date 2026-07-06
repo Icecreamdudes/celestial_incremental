@@ -656,7 +656,7 @@ class SpaceArena {
                     ctx.font = "bold 20px monospace";
                     ctx.fillStyle = "#003";
                     ctx.textAlign = "center";
-                    ctx.fillText("Δ", enemy.x, enemy.y + 6);
+                    ctx.fillText("δ", enemy.x, enemy.y + 6);
                     ctx.restore();
                 }
             },

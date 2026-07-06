@@ -570,6 +570,14 @@ addLayer("ne", {
     layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 1) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 1)},
     hotkeys: [
         {
+            key: "]", 
+            description: "Choose Nectar Path",
+            onPress() {
+                if(player.bee.path == 0)
+                    player.bee.path = 2
+            },
+        },
+        {
             key: "1", 
             description: "Gain Nectar α",
             onPress() {

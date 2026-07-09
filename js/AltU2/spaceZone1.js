@@ -149,7 +149,7 @@ SB_celestialites.alphaShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 150
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -252,7 +252,7 @@ SB_celestialites.betaShip = {
     initialize(celestialite) {
         celestialite.attackCooldown = 300
         celestialite.burstsRemaining = 2
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 450
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -360,7 +360,7 @@ SB_celestialites.gammaShip = {
         celestialite.attackCooldown = 300
         celestialite.trailCooldown = 60
         celestialite.defenseCooldown = 0
-        celestialite.targetingTimer = 300
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -510,7 +510,7 @@ SB_celestialites.deltaShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 150
-        celestialite.targetingTimer = 300
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -605,7 +605,7 @@ SB_celestialites.epsilonShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 240
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2

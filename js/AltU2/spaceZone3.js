@@ -121,13 +121,12 @@ SB_zones.spaceZone3 = {
     nameLow: "zone iii",
     levelLimit: 100,
     asteroidLimit: 16,
-    celestialiteLimit: 4,
+    celestialiteLimit: 6,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         
-        let cel = ["lambdaShip"]
-        //let cel = ["betaShip", "etaShip", "thetaShip", "iotaShip", "kappaShip"]
-        //if (level >= 20) cel = cel.concat(["kappaShip", "lambdaShip"]);
+        let cel = ["zetaShip", "thetaShip", "iotaShip", "kappaShip"]
+        if (level >= 20) cel = cel.concat(["lambdaShip", "muShip"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
@@ -154,7 +153,7 @@ SB_celestialites.iotaShip = {
     initialize(celestialite) {
         celestialite.attackCooldown = 240
         celestialite.burstsRemaining = 4
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 450
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -264,10 +263,10 @@ SB_celestialites.kappaShip = {
         return gain
     },
     initialize(celestialite) {
-        celestialite.attackCooldown = 600
+        celestialite.attackCooldown = 300
         celestialite.burstsRemaining = 16
-        celestialite.targetingTimer = 150
-        celestialite.turnTimer = 300
+        celestialite.targetingTimer = 0
+        celestialite.turnTimer = 150
 
         celestialite.moveAng = Math.random() * Math.PI * 2
         celestialite.dvx = 0.9
@@ -293,7 +292,7 @@ SB_celestialites.kappaShip = {
 
         // Attack the player
         if ((celestialite.attackCooldown <= 60 && celestialite.burstsRemaining >= 16)) {
-            celestialite.moveAng = celestialite.playerAng
+            celestialite.moveAng = celestialite.playerAng + (Math.random() - 0.5) * Math.PI * 4
         }
         if ((celestialite.attackCooldown <= 0 || (celestialite.attackCooldown <= celestialite.burstsRemaining * 10)) && celestialite.targetingTimer > 0) {
             celestialite.burstsRemaining--
@@ -313,16 +312,16 @@ SB_celestialites.kappaShip = {
             }
             if (celestialite.attackCooldown <= 0) {
                 celestialite.burstsRemaining = 16
-                celestialite.attackCooldown = 600
+                celestialite.attackCooldown = 300
+                celestialite.moveAng = celestialite.playerAng
             }
         }
 
         // Handle celestialite movement changes
         if (celestialite.targetingTimer > 0) {
-            celestialite.moveAng = celestialite.playerAng + Math.PI / 2
             if (celestialite.attackCooldown > 190 && celestialite.attackCooldown < 570) {
-                celestialite.ax = Math.cos(celestialite.moveAng) * 0.375 + (Math.cos(celestialite.playerAng) * (celestialite.playerDist / 300 - 1))
-                celestialite.ay = Math.sin(celestialite.moveAng) * 0.375 + (Math.sin(celestialite.playerAng) * (celestialite.playerDist / 300 - 1))
+                celestialite.ax = Math.cos(celestialite.moveAng) * 0.375
+                celestialite.ay = Math.sin(celestialite.moveAng) * 0.375
             } else {
                 celestialite.ax = 0
                 celestialite.ay = 0
@@ -344,7 +343,7 @@ SB_celestialites.kappaShip = {
                 fromEnemy: true,
                 radius: 4,
             });
-            celestialite.turnTimer = 600;
+            celestialite.turnTimer = 300;
         }
     },
     onAttacked(celestialite, damage, attacker) {
@@ -379,8 +378,8 @@ SB_celestialites.lambdaShip = {
     symbol: "λ",
     radius: 24,
     color: "#004040",
-    health: new Decimal(500),
-    damage: new Decimal(10),
+    health: new Decimal(400),
+    damage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -394,7 +393,9 @@ SB_celestialites.lambdaShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 150
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
+
+        celestialite.preferredDistance = 250 + Math.random() * 100
 
         celestialite.moveAng = Math.random() * Math.PI * 2
         celestialite.dvx = 0.9
@@ -432,13 +433,14 @@ SB_celestialites.lambdaShip = {
                 radius: 4,
             });
             celestialite.attackCooldown = 150
+            celestialite.preferredDistance = 250 + Math.random() * 100
         }
 
         // Handle celestialite movement changes
         if (celestialite.targetingTimer > 0) {
             celestialite.moveAng = celestialite.playerAng + Math.PI / 2
-            celestialite.ax = Math.cos(celestialite.moveAng) * 0.375 + (Math.cos(celestialite.playerAng) * (celestialite.playerDist / 300 - 1))
-            celestialite.ay = Math.sin(celestialite.moveAng) * 0.375 + (Math.sin(celestialite.playerAng) * (celestialite.playerDist / 300 - 1))
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.375 + (Math.cos(celestialite.playerAng) * (celestialite.playerDist / celestialite.preferredDistance - 1))
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.375 + (Math.sin(celestialite.playerAng) * (celestialite.playerDist / celestialite.preferredDistance - 1))
         } else {
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.75
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.75
@@ -464,6 +466,109 @@ SB_celestialites.lambdaShip = {
             ctx.fill();
             ctx.font = "bold 32px monospace";
             ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText(celestialite.symbol, wrapped[0], wrapped[1] + 9);
+            ctx.restore();
+        }
+    },
+}
+
+SB_celestialites.muShip = {
+    name: "Mu Ship",
+    symbol: "μ",
+    radius: 32,
+    color: "#000",
+    health: new Decimal(250),
+    damage: new Decimal(12),
+    regen: new Decimal(1),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.9) {
+            gain.spaceRock = Decimal.add(10, getRandomInt(5))
+        } else {
+            gain.spaceGem = Decimal.add(1, getRandomInt(1))
+        }
+        return gain
+    },
+    initialize(celestialite) {
+        celestialite.attackCooldown = 30
+        celestialite.targetingTimer = 0
+        celestialite.turnTimer = 600
+
+        celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.dvx = 0.975
+        celestialite.dvy = 0.975
+    },
+    tick(celestialite) {
+        // Decrease timers
+        celestialite.attackCooldown--;
+        celestialite.targetingTimer--;
+        celestialite.turnTimer--;
+
+        // Calculate distance to the player
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+
+        // Reset the targeting cooldown the player if they're close
+        if (celestialite.playerDist < 300) {
+            celestialite.targetingTimer = 60
+            celestialite.playerAng = Math.atan2(dy, dx);
+        };
+
+        // Attack the player
+        if (celestialite.attackCooldown <= 0 && celestialite.targetingTimer > 0) {
+            arena.bullets.push({
+                x: celestialite.x + Math.cos(celestialite.playerAng) * (celestialite.radius),
+                y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius),
+                vx: Math.cos(celestialite.playerAng) * 2,
+                vy: Math.sin(celestialite.playerAng) * 2,
+                life: 180,
+                damage: celestialite.damage,
+                pierce: 0,
+                piercedAsteroids: [],
+                fromEnemy: true,
+                radius: 4,
+            });
+            celestialite.attackCooldown = 30
+        }
+
+        // Handle celestialite movement changes
+        if (celestialite.targetingTimer > 0) {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.05
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.05
+        } else {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.1
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.1
+        }
+        if (celestialite.turnTimer <= 0) {
+            celestialite.moveAng = Math.random() * Math.PI * 2
+            celestialite.turnTimer = 600;
+        }
+    },
+    onAttacked(celestialite, damage, attacker) {
+        celestialite.targetingTimer = 60
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
+    },
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (wrapped && celestialite.playerDist < 300) {
+            ctx.save();
+            ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+            ctx.beginPath();
+            ctx.globalAlpha = 1 - celestialite.playerDist / 300
+            ctx.arc(wrapped[0], wrapped[1], celestialite.radius, 0, 2 * Math.PI);
+            ctx.fillStyle = celestialite.color;
+            ctx.shadowColor = celestialite.color;
+            if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+            ctx.fill();
+            ctx.font = "bold 32px monospace";
+            ctx.fillStyle = "#fff";
             ctx.textAlign = "center";
             ctx.fillText(celestialite.symbol, wrapped[0], wrapped[1] + 9);
             ctx.restore();

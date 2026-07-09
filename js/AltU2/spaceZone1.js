@@ -118,12 +118,12 @@ SB_zones.spaceZone1 = {
     nameLow: "zone i",
     levelLimit: 100,
     asteroidLimit: 16,
-    celestialiteLimit: 2,
+    celestialiteLimit: 4,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         
         let cel = ["alphaShip", "betaShip", "gammaShip"]
-        if (level >= 0) cel = cel.concat(["deltaShip", "epsilonShip"]);
+        if (level >= 20) cel = cel.concat(["deltaShip", "epsilonShip"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
@@ -186,6 +186,7 @@ SB_celestialites.alphaShip = {
                 pierce: 0,
                 piercedAsteroids: [],
                 fromEnemy: true,
+                radius: 4,
             });
             celestialite.attackCooldown = 150
         }
@@ -203,8 +204,11 @@ SB_celestialites.alphaShip = {
             celestialite.turnTimer = 600;
         }
     },
-    onAttacked(celestialite, attacker) {
+    onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 150
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
@@ -286,6 +290,7 @@ SB_celestialites.betaShip = {
                 pierce: 0,
                 piercedAsteroids: [],
                 fromEnemy: true,
+                radius: 4,
             });
             if (celestialite.attackCooldown <= 0) {
                 celestialite.burstsRemaining = 2
@@ -306,8 +311,11 @@ SB_celestialites.betaShip = {
             celestialite.turnTimer = 450;
         }
     },
-    onAttacked(celestialite, attacker) {
+    onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 150
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
@@ -391,6 +399,7 @@ SB_celestialites.gammaShip = {
                 pierce: 0,
                 piercedAsteroids: [],
                 fromEnemy: true,
+                radius: 4,
             });
             celestialite.moveAng = celestialite.playerAng
             celestialite.attackCooldown = 300
@@ -421,7 +430,7 @@ SB_celestialites.gammaShip = {
             celestialite.turnTimer = 600;
         }
     },
-    onAttacked(celestialite, attacker) {
+    onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 300
         
         if (celestialite.defenseCooldown < 0) {
@@ -451,8 +460,13 @@ SB_celestialites.gammaShip = {
             celestialite.moveAng = celestialite.playerAng + Math.PI
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.1
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.1
+            celestialite.vx /= 2
             celestialite.vx = celestialite.ax * 90
+            celestialite.vy /= 2
             celestialite.vy = celestialite.ay * 90
+
+            celestialite.vx -= Math.cos(celestialite.playerAng) / 4
+            celestialite.vy -= Math.sin(celestialite.playerAng) / 4
         }
     },
     draw: (ctx, celestialite) => {
@@ -544,8 +558,11 @@ SB_celestialites.deltaShip = {
             celestialite.turnTimer = 600;
         }
     },
-    onAttacked(celestialite, attacker) {
+    onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 300
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
@@ -626,6 +643,7 @@ SB_celestialites.epsilonShip = {
                 pierce: 0,
                 piercedAsteroids: [],
                 fromEnemy: true,
+                radius: 4,
             });
             celestialite.attackCooldown = 240
         }
@@ -643,8 +661,11 @@ SB_celestialites.epsilonShip = {
             celestialite.turnTimer = 600;
         }
     },
-    onAttacked(celestialite, attacker) {
+    onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 150
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;

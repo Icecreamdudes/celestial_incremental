@@ -7,6 +7,11 @@ var BHA = {}
 var BHP = {}
 var BHB = {}
 
+// Space battle variables
+var SB_celestialites = {}
+var SB_zones = {}
+var SB_ships = {}
+
 // Don't change this
 const TMT_VERSION = {
 	tmtNum: "2.7",

@@ -17,7 +17,7 @@
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
-		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js",
+		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js", "AltU2/shipBattleFunctions.js",
 		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/evolutionField.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",

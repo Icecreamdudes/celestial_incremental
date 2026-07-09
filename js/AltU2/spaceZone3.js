@@ -121,15 +121,20 @@ SB_zones.spaceZone3 = {
     nameLow: "zone iii",
     levelLimit: 100,
     asteroidLimit: 16,
+
+    celestialiteSpawnCooldown: 600,
     celestialiteLimit: 6,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         
         let cel = ["zetaShip", "thetaShip", "iotaShip", "kappaShip"]
-        if (level >= 20) cel = cel.concat(["lambdaShip", "muShip"]);
+        if (level >= 0) cel = cel.concat(["lambdaShip", "muShip"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
+    statMult: new Decimal(2.5),
+    rockMult: new Decimal(5),
+    gemMult: new Decimal(1.5),
 }
 
 SB_celestialites.iotaShip = {
@@ -137,18 +142,21 @@ SB_celestialites.iotaShip = {
     symbol: "ι",
     radius: 24,
     color: "#28819e",
-    health: new Decimal(500),
+    health: new Decimal(150),
     damage: new Decimal(7),
     regen: new Decimal(3),
     reward() {
         let gain = {}
         let random = Math.random()
         if (random < 0.9) {
-            gain.spaceRock = Decimal.add(20, getRandomInt(10))
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(15)
         } else {
-            gain.spaceGem = Decimal.add(1, getRandomInt(1))
+            gain.spaceGem = Decimal.add(1, Math.random()).mul(1.5)
         }
         return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(13)
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 240
@@ -249,18 +257,21 @@ SB_celestialites.kappaShip = {
     symbol: "κ",
     radius: 30,
     color: "#6fdede",
-    health: new Decimal(500),
+    health: new Decimal(175),
     damage: new Decimal(10),
     regen: new Decimal(3),
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(20, getRandomInt(10))
+        if (random < 0.85) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(20)
         } else {
-            gain.spaceGem = Decimal.add(1, getRandomInt(1))
+            gain.spaceGem = Decimal.add(1, Math.random())
         }
         return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(15)
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 300
@@ -378,18 +389,21 @@ SB_celestialites.lambdaShip = {
     symbol: "λ",
     radius: 24,
     color: "#004040",
-    health: new Decimal(400),
+    health: new Decimal(100),
     damage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(20, getRandomInt(10))
+        if (random < 0.8) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(20)
         } else {
-            gain.spaceGem = Decimal.add(1, getRandomInt(1))
+            gain.spaceGem = Decimal.add(1, Math.random())
         }
         return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(15)
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 150
@@ -478,18 +492,21 @@ SB_celestialites.muShip = {
     symbol: "μ",
     radius: 32,
     color: "#000",
-    health: new Decimal(250),
+    health: new Decimal(150),
     damage: new Decimal(12),
     regen: new Decimal(1),
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(10, getRandomInt(5))
+        if (random < 0.85) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(15)
         } else {
-            gain.spaceGem = Decimal.add(1, getRandomInt(1))
+            gain.spaceGem = Decimal.add(1, Math.random()).mul(2)
         }
         return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(18)
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 30

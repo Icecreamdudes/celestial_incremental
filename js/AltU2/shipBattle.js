@@ -1610,24 +1610,26 @@ class SpaceArena {
         // Helper to handle enemy death logic (drops, flags, etc.)
         const handleEnemyDeath = (enemy) => {
             if (!enemy) return;
-            enemy.alive = false;
-            let type = this.enemyTypes[enemy.type];
+            let celRef = SB_celestialites[enemy.type]
             // rock drop
-            if (type && type.rockDrop) {
-                let minR = type.rockDrop[0], maxR = type.rockDrop[1];
-                let amt = getRandomInt(maxR - minR + 1) + minR;
-                amt = Math.max(0, Math.floor(amt * this.upgradeEffects.lootGain));
-                amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1]));
-                amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1]));
-                player.ir.spaceRock = player.ir.spaceRock.add(amt);
-                lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "rock" });
+            if (celRef && celRef.reward) {
+                let reward = celRef.reward()
+
+                if (reward.spaceRock) {
+                    let rockAmt = reward.spaceRock.mul(player.ir.spaceRockMult).floor();
+                    player.ir.spaceRock = player.ir.spaceRock.add(rockAmt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: rockAmt, type: "rock" });
+                }
+                if (reward.spaceGem) {
+                    let gemAmt = reward.spaceGem.mul(player.ir.spaceGemMult).floor();
+                    player.ir.spaceGem = player.ir.spaceGem.add(gemAmt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: gemAmt, type: "gem" });
+                }
             }
             // xp drop -> spawn xp orb
-            if (type && type.xpDrop) {
-                let minX = type.xpDrop[0], maxX = type.xpDrop[1];
-                let xp = getRandomInt(maxX - minX + 1) + minX;
-                xp = Math.max(0, Math.floor(xp * this.upgradeEffects.xpGain));
-                xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: xp });
+            if (celRef && celRef.experienceReward) {
+                let amt = celRef.experienceReward()
+                xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
             }
 
             // guaranteed gem drop for UFO miniboss
@@ -2126,7 +2128,7 @@ class SpaceArena {
         }
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
-        if (player.ir.battleLevel.gte(0) && !this.bossActive) {
+        if ((player.ir.battleLevel.gte(5) || player.ir.battleStage == "iriditeZone") && !this.bossActive) {
             let aliveEnemies = this.enemies.filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
@@ -3287,7 +3289,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${pos.amount} space rock`,
+                    text: `+${formatWhole(pos.amount)} space rock`,
                     timer: 120,
                     color: "#ffe066",
                     style: "18px monospace"
@@ -3297,7 +3299,7 @@ class SpaceArena {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
-                    text: `+${pos.amount} space gem`,
+                    text: `+${formatWhole(pos.amount)} space gem`,
                     timer: 240,
                     color: "#66e8ffff",
                     style: "24px monospace"

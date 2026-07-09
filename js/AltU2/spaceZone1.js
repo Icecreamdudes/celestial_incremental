@@ -591,7 +591,7 @@ SB_celestialites.epsilonShip = {
     radius: 36,
     color: "#dea6de",
     health: new Decimal(400),
-    damage: new Decimal(2),
+    damage: new Decimal(4),
     regen: new Decimal(4),
     reward() {
         let gain = {}

@@ -151,7 +151,7 @@ SB_celestialites.zetaShip = {
         return gain
     },
     initialize(celestialite) {
-        celestialite.attackCooldown = 150
+        celestialite.attackCooldown = 300
         celestialite.burstsRemaining = 2
         celestialite.targetingTimer = 150
         celestialite.turnTimer = 450
@@ -357,7 +357,7 @@ SB_celestialites.thetaShip = {
     name: "Theta Ship",
     symbol: "θ",
     radius: 36,
-    color: "#5e0018",
+    color: "#800020",
     health: new Decimal(750),
     damage: new Decimal(8),
     regen: new Decimal(-1),

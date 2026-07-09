@@ -3790,6 +3790,7 @@ class SpaceArena {
             let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
             if (type && type.draw && wrapped) {
                 type.draw(this.ctx, enemy);
+                if (enemy.type == "muShip") this.ctx.globalAlpha = Math.max(1 - enemy.playerDist / 300, 0);
                 this.ctx.save();
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.fillStyle = "#151230";
@@ -3808,9 +3809,10 @@ class SpaceArena {
                 this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 - 1)
                 this.ctx.fillStyle = "white";
                 this.ctx.fillText(t, wrapped[0], wrapped[1] - enemy.radius - 9)
-
+                
                 this.ctx.restore();
             }
+            this.ctx.globalAlpha = 1;
 
             if (enemy.type === "iriditeBoss") {
                 // NEW: Laser visual when active or winding-up
@@ -4342,7 +4344,9 @@ class SpaceArena {
         }
         for (let enemy of this.enemies) {
             this.ctx.save();
-            this.drawMinimapIcon("red", 4, [enemy.x, enemy.y])
+            if (enemy.type == "muShip") {
+                if (enemy.playerDist < 300 || Math.random() < 0.00333 || enemy.targetingTimer > 0) this.drawMinimapIcon("red", 4, [enemy.x, enemy.y])
+            } else this.drawMinimapIcon("red", 4, [enemy.x, enemy.y]);
             this.ctx.restore();
         }
         for (let trail of this.gammaTrails) {

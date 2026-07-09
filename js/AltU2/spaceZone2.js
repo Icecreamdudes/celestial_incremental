@@ -153,7 +153,7 @@ SB_celestialites.zetaShip = {
     initialize(celestialite) {
         celestialite.attackCooldown = 300
         celestialite.burstsRemaining = 2
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 450
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -262,7 +262,7 @@ SB_celestialites.etaShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 150
-        celestialite.targetingTimer = 300
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2
@@ -373,7 +373,7 @@ SB_celestialites.thetaShip = {
     },
     initialize(celestialite) {
         celestialite.attackCooldown = 10
-        celestialite.targetingTimer = 150
+        celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
         celestialite.moveAng = Math.random() * Math.PI * 2

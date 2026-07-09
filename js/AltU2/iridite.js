@@ -68,7 +68,9 @@ addLayer("ir", {
         shipDamageMult: new Decimal(1),
 
         spaceRock: new Decimal(0),
+        spaceRockMult: new Decimal(1),
         spaceGem: new Decimal(0),
+        spaceGemMult: new Decimal(1),
 
         primaryColor: "#5e4ee6",
         secondaryColor: "#37078f",
@@ -271,6 +273,14 @@ addLayer("ir", {
     branches: ["pl", "se"],
     color: "#151230",
     update(delta) {
+
+        let zoneRef = SB_zones[player.ir.battleStage]
+
+        player.ir.spaceRockMult = new Decimal(1)
+        if (arena) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(arena.upgradeEffects.lootGain);
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
+        if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
 

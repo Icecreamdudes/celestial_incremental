@@ -121,6 +121,8 @@ SB_zones.spaceZone4 = {
     nameLow: "zone iv",
     levelLimit: 100,
     asteroidLimit: 16,
+
+    celestialiteSpawnCooldown: 450,
     celestialiteLimit: 4,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
@@ -130,4 +132,7 @@ SB_zones.spaceZone4 = {
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
+    statMult: new Decimal(5),
+    rockMult: new Decimal(12.5),
+    gemMult: new Decimal(2.5),
 }

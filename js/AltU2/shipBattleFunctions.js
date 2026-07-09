@@ -14,6 +14,7 @@ function SB_spawnCelestialite() {
         return
     };
 
+    arena.enemySpawnCooldown = zoneRef.celestialiteSpawnCooldown
     let spawnAngle = Math.random() * Math.PI * 2
     let celestialite = {
         type: celId,
@@ -21,10 +22,10 @@ function SB_spawnCelestialite() {
         color: celRef.color,
         radius: celRef.radius,
 
-        maxHealth: celRef.health,
-        health: celRef.health,
-        regen: celRef.regen,
-        damage: celRef.damage,
+        maxHealth: celRef.health.mul(zoneRef.statMult),
+        health: celRef.health.mul(zoneRef.statMult),
+        regen: celRef.regen.mul(zoneRef.statMult),
+        damage: celRef.damage.mul(zoneRef.statMult),
 
         vx: 0,
         vy: 0,

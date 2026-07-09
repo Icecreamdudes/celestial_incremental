@@ -1442,55 +1442,6 @@ class SpaceArena {
         });
     }
 
-    spawnEnemy(typeName) {
-        const type = this.enemyTypes[typeName];
-        if (!type) return;
-        let angle = Math.random() * Math.PI * 2;
-        let health = getRandomInt(type.healthMax - type.healthMin + 1) + type.healthMin;
-        let wanderAngle = angle;
-        let enemy = {
-            type: typeName,
-            symbol: type.symbol,
-            x: this.ship.x + Math.cos(angle) * 200,
-            y: this.ship.y + Math.sin(angle) * 200,
-            vx: Math.cos(angle) * (type.wanderSpeed || 1),
-            vy: Math.sin(angle) * (type.wanderSpeed || 1),
-            radius: type.radius,
-            color: type.color,
-            health: health,
-            maxHealth: health,
-            wanderAngle: wanderAngle,
-            wanderSpeed: type.wanderSpeed,
-            wanderChange: type.wanderChange,
-            burstTimer: 0,
-            burstCount: 0,
-            bulletCooldown: type.bulletCooldown,
-            alive: true,
-        };
-
-        // Hard-mode specific initial fields
-        if (typeName === "deltaShip") {
-            enemy.changeDirTimer = 60; // change every second (60fps)
-            enemy.dashSpeed = (type.wanderSpeed || 5) * 3.0;
-        }
-        if (typeName === "zetaShip") {
-            enemy.roundsRemaining = 0;
-            enemy.roundTimer = 0;
-            enemy.roundsTotal = this.enemyTypes.zetaShip.burstCount || 3;
-            enemy.perRoundBullets = this.enemyTypes.zetaShip.perRoundBullets || 3;
-        }
-        if (typeName === "etaShip") {
-            enemy.shootCooldown = type.bulletCooldown || 120;
-        }
-
-        if (player.ir.battleLevel.gte(20)) {
-            enemy.health = enemy.health * Decimal.pow(1.04, player.ir.battleLevel.sub(19)).toNumber()
-            enemy.maxHealth = enemy.health
-        }
-
-        this.enemies.push(enemy);
-    }
-
     // Call this to spawn the UFO miniboss. It will not spawn automatically.
     spawnUfoBoss() {
         // Prevent duplicate bosses
@@ -1651,7 +1602,7 @@ class SpaceArena {
         if (player.ir.shipHealth.lt(0)) this.onShipDeath();
         // Helper to handle enemy death logic (drops, flags, etc.)
         const handleEnemyDeath = (enemy) => {
-            if (!enemy || !enemy.alive) return;
+            if (!enemy) return;
             enemy.alive = false;
             let type = this.enemyTypes[enemy.type];
             // rock drop
@@ -1707,7 +1658,7 @@ class SpaceArena {
                 }
             }
             
-            if (!enemy.alive) {
+            if (enemy.health.lte(0)) {
                 let i = this.enemies.indexOf(enemy);
                 if (i > -1) {
                   this.enemies.splice(i, 1);
@@ -2012,8 +1963,7 @@ class SpaceArena {
 
                         if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                             let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                            let dmg = (this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul;
-                            let rawDmg = (typeof dmg === 'number') ? dmg : (dmg.toNumber ? dmg.toNumber() : Number(dmg));
+                            let dmg = new Decimal((this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul);
                             let ang = this.ship._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
                             let beamLen = Math.max(this.width, this.height) * 1.5;
@@ -2021,14 +1971,13 @@ class SpaceArena {
 
                             // Check enemies
                             for (let enemy of this.enemies) {
-                                if (!enemy.alive) continue;
                                 let ex = enemy.x - this.ship.x;
                                 let ey = enemy.y - this.ship.y;
                                 let proj = ex * ux + ey * uy;
                                 let perp = Math.abs(ex * (-uy) + ey * ux);
                                 if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
-                                    enemy.health -= rawDmg;
-                                    if (enemy.health <= 0) handleEnemyDeath(enemy);
+                                    enemy.health = enemy.health.sub(dmg);
+                                    if (enemy.health.lte(0)) handleEnemyDeath(enemy);
                                 }
                             }
                             // Check asteroids
@@ -2038,7 +1987,7 @@ class SpaceArena {
                                 let proj = ax * ux + ay * uy;
                                 let perp = Math.abs(ax * (-uy) + ay * ux);
                                 if (proj > -a.size && proj < beamLen && perp < thickness + a.size) {
-                                    a.health -= rawDmg;
+                                    a.health -= dmg;
                                 }
                             }
                             this.ship._laserHitCooldown = 6;
@@ -2176,40 +2125,27 @@ class SpaceArena {
         // Asteroid spawning (disabled in hard mode or while boss active)
         if (!this.bossActive) {
             this.asteroidSpawnTimer++;
-            if (this.asteroidSpawnTimer > 60) {
+            if (this.asteroidSpawnTimer > 30) {
                 this.asteroidSpawnTimer = 0;
-                if (Math.random() < 0.3) this.spawnAsteroid(true);
+                if (Math.random() < 0.25) this.spawnAsteroid(true);
                 else this.spawnAsteroid(false);
             }
         }
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
-        if (player.ir.battleLevel.gte(4) && !this.bossActive) {
+        if (player.ir.battleLevel.gte(0) && !this.bossActive) {
             let aliveEnemies = this.enemies.filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
             }
-
-            const maxEnemies = hardMode ? 6 : 4;
-            if (aliveEnemies < maxEnemies && this.enemySpawnCooldown <= 0) {
-                let possibleTypes = ["alphaShip", "betaShip", "gammaShip"];
-                if (hardMode) possibleTypes = possibleTypes.concat(["deltaShip", "epsilonShip", "zetaShip", "etaShip"]);
-                let typeToSpawn = possibleTypes[getRandomInt(possibleTypes.length)];
-                this.spawnEnemy(typeToSpawn);
-                this.enemySpawnCooldown = this.enemySpawnCooldownMax;
+            if (this.enemySpawnCooldown <= 0) {
+                SB_spawnCelestialite()
             }
         }
 
         // Update enemies
         for (let enemy of this.enemies) {
-            if (!enemy.alive) continue;
-            const type = this.enemyTypes[enemy.type];
-            let closest = this.getClosestCoords([enemy.x, enemy.y])
-            let dx = closest[0] - enemy.x;
-            let dy = closest[1] - enemy.y;
-            let dist = Math.hypot(dx, dy) || 1;
-            let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-
+            SB_celestialites[enemy.type].tick(enemy)
             if (enemy.type === "iriditeBoss") {
                 // If the asteroid minigame is paused, also pause Iridite boss actions
                 if (this._asteroidMinigamePaused) {
@@ -2910,407 +2846,120 @@ class SpaceArena {
                 continue;
             }
 
+            // ABCD
+
             // Generic wander updates
-            if (!enemy.wanderAngle) enemy.wanderAngle = Math.random() * Math.PI * 2;
-                // --- UFO Miniboss behavior ---
-                if (enemy.type === "ufoBoss") {
-                    // Hovering: maintain an orbit distance ~220 from player
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let dist = Math.hypot(dx, dy) || 1;
-                    let desiredDist = 220;
-                    // Move toward or away to keep distance
-                    let moveSpeed = 2.5;
-                    if (dist > desiredDist + 10) {
-                        enemy.vx = (dx / dist) * moveSpeed;
-                        enemy.vy = (dy / dist) * moveSpeed;
-                    } else if (dist < desiredDist - 10) {
-                        enemy.vx = -(dx / dist) * moveSpeed;
-                        enemy.vy = -(dy / dist) * moveSpeed;
-                    } else {
-                        // small orbit / wobble
-                        let wobble = 0.02;
-                        enemy.wanderAngle += (Math.random() - 0.5) * wobble;
-                        enemy.vx = Math.cos(enemy.wanderAngle) * 0.8;
-                        enemy.vy = Math.sin(enemy.wanderAngle) * 0.8;
-                    }
-                    // Apply movement unless dashing (dash overrides)
-                    if (!enemy.dashing) {
-                        enemy.x += enemy.vx;
-                        enemy.y += enemy.vy;
-                    }
+            SB_updateMovement(enemy)
 
-                    // Attack state machine
-                    enemy.attackTimer--;
-                    if (!enemy.dashing && enemy.attackTimer <= 0 && enemy.state === "idle") {
-                        // pick an attack
-                        let r = Math.random();
-                        if (r < 0.6) {
-                            enemy.state = "burst";
-                            enemy.burstShots = 6;
-                        }  else {
-                            enemy.state = "spin";
-                            enemy.spinTimer = 90;
-                            enemy.spinAngle = 0;
-                        }
+            // --- UFO Miniboss behavior ---
+            if (enemy.type === "ufoBoss") {
+                // Hovering: maintain an orbit distance ~220 from player
+                let dx = closest[0] - enemy.x;
+                let dy = closest[1] - enemy.y;
+                let dist = Math.hypot(dx, dy) || 1;
+                let desiredDist = 220;
+                // Move toward or away to keep distance
+                let moveSpeed = 2.5;
+                if (dist > desiredDist + 10) {
+                    enemy.vx = (dx / dist) * moveSpeed;
+                    enemy.vy = (dy / dist) * moveSpeed;
+                } else if (dist < desiredDist - 10) {
+                    enemy.vx = -(dx / dist) * moveSpeed;
+                    enemy.vy = -(dy / dist) * moveSpeed;
+                } else {
+                    // small orbit / wobble
+                    let wobble = 0.02;
+                    enemy.wanderAngle += (Math.random() - 0.5) * wobble;
+                    enemy.vx = Math.cos(enemy.wanderAngle) * 0.8;
+                    enemy.vy = Math.sin(enemy.wanderAngle) * 0.8;
+                }
+                // Apply movement unless dashing (dash overrides)
+                if (!enemy.dashing) {
+                    enemy.x += enemy.vx;
+                    enemy.y += enemy.vy;
+                }
+                // Attack state machine
+                enemy.attackTimer--;
+                if (!enemy.dashing && enemy.attackTimer <= 0 && enemy.state === "idle") {
+                    // pick an attack
+                    let r = Math.random();
+                    if (r < 0.6) {
+                        enemy.state = "burst";
+                        enemy.burstShots = 6;
+                    }  else {
+                        enemy.state = "spin";
+                        enemy.spinTimer = 90;
+                        enemy.spinAngle = 0;
                     }
-
-                    // Burst: shoot a short burst aimed at player
-                    if (enemy.state === "burst") {
-                        if (enemy.burstShots > 0 && (enemy.burstIntervalCounter === undefined || enemy.burstIntervalCounter <= 0)) {
-                            enemy.burstIntervalCounter = enemy.burstInterval;
-                            // shoot a spread toward player
-                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                            let spread = 0.24;
-                            let bulletsThisShot = 3;
-                            for (let i = 0; i < bulletsThisShot; i++) {
-                                let offset = (i / (bulletsThisShot - 1) - 0.5) * spread;
-                                let ang = base + offset;
-                                let spd = this.enemyTypes.ufoBoss.bulletSpeed;
-                                this.bullets.push({
-                                    x: enemy.x + Math.cos(ang) * enemy.radius,
-                                    y: enemy.y + Math.sin(ang) * enemy.radius,
-                                    vx: Math.cos(ang) * spd,
-                                    vy: Math.sin(ang) * spd,
-                                    life: 120,
-                                    damage: 5,
-                                    pierce: 0,
-                                    piercedAsteroids: [],
-                                    fromEnemy: true,
-                                });
-                            }
-                            enemy.burstShots--;
-                        }
-                        if (enemy.burstIntervalCounter !== undefined) enemy.burstIntervalCounter--;
-                        if (enemy.burstShots <= 0 && enemy.burstIntervalCounter <= 0) {
-                            enemy.state = "idle";
-                            enemy.attackTimer = 70;
-                        }
-                    }
-
-                    // Spin: rotate and spray bullets in 360 over time
-                    if (enemy.state === "spin") {
-                        // spawn a handful of bullets each frame at current spinAngle
-                        let bulletsPerFrame = 1;
-                        for (let i = 0; i < bulletsPerFrame; i++) {
-                            let ang = enemy.spinAngle + (i / bulletsPerFrame) * (Math.PI * 2);
-                            let spd = 6;
+                }
+                // Burst: shoot a short burst aimed at player
+                if (enemy.state === "burst") {
+                    if (enemy.burstShots > 0 && (enemy.burstIntervalCounter === undefined || enemy.burstIntervalCounter <= 0)) {
+                        enemy.burstIntervalCounter = enemy.burstInterval;
+                        // shoot a spread toward player
+                        let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
+                        let spread = 0.24;
+                        let bulletsThisShot = 3;
+                        for (let i = 0; i < bulletsThisShot; i++) {
+                            let offset = (i / (bulletsThisShot - 1) - 0.5) * spread;
+                            let ang = base + offset;
+                            let spd = this.enemyTypes.ufoBoss.bulletSpeed;
                             this.bullets.push({
-                                x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
-                                y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
+                                x: enemy.x + Math.cos(ang) * enemy.radius,
+                                y: enemy.y + Math.sin(ang) * enemy.radius,
                                 vx: Math.cos(ang) * spd,
                                 vy: Math.sin(ang) * spd,
                                 life: 120,
-                                damage: 6,
+                                damage: 5,
                                 pierce: 0,
                                 piercedAsteroids: [],
-                                fromEnemy: true
+                                fromEnemy: true,
                             });
                         }
-                        // advance spin angle to rotate spray
-                        enemy.spinAngle += 0.125;
-                        enemy.spinTimer--;
-                        if (enemy.spinTimer <= 0) {
-                            enemy.state = "idle";
-                            enemy.attackTimer = 100;
-                        }
+                        enemy.burstShots--;
                     }
-
-                    // Keep UFO inside arena bounds (simple clamp)
-                    if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                    if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                    if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                    if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-
-                    // continue to next enemy handling
-                    enemy.x = ((enemy.x % this.width) + this.width) % this.width
-                    enemy.y = ((enemy.y % this.height) + this.height) % this.height
-                    continue;
-            }
-            // --- Alpha Ship behavior ---
-
-            if (enemy.type === "alphaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(60) + 60;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
+                    if (enemy.burstIntervalCounter !== undefined) enemy.burstIntervalCounter--;
+                    if (enemy.burstShots <= 0 && enemy.burstIntervalCounter <= 0) {
+                        enemy.state = "idle";
+                        enemy.attackTimer = 70;
+                    }
                 }
-                enemy.wanderTimer--;
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena - bounce
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // Shooting burst logic
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.alphaShip.bulletCooldown;
-                    enemy.burstCount = this.enemyTypes.alphaShip.burstCount;
-                }
-                if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.alphaShip.burstInterval === 0) {
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let angle = Math.atan2(dy, dx);
-                    let speed = this.enemyTypes.alphaShip.bulletSpeed;
-                    this.bullets.push({
-                        x: enemy.x + Math.cos(angle) * enemy.radius,
-                        y: enemy.y + Math.sin(angle) * enemy.radius,
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed,
-                        life: 90,
-                        damage: this.enemyTypes.alphaShip.damage,
-                        pierce: 0,
-                        piercedAsteroids: [],
-                        fromEnemy: true,
-                    });
-                    enemy.burstCount--;
-                }
-            }
-
-            // --- Beta Ship behavior: machine-gun bursts ---
-            if (enemy.type === "betaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(40) + 40;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-
-                // Occasionally dash toward player
-                if (!enemy.dashCooldown || enemy.dashCooldown <= 0) {
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let angle = Math.atan2(dy, dx);
-                    enemy.vx = Math.cos(angle) * (enemy.wanderSpeed * 2.5);
-                    enemy.vy = Math.sin(angle) * (enemy.wanderSpeed * 2.5);
-                    enemy.dashCooldown = getRandomInt(120) + 60;
-                } else {
-                    enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                    enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                    enemy.dashCooldown--;
-                }
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // Machine-gun burst logic: rapid small bullets with slight spread
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.betaShip.bulletCooldown;
-                    enemy.burstCount = this.enemyTypes.betaShip.burstCount;
-                }
-                if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.betaShip.burstInterval === 0) {
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let baseAngle = Math.atan2(dy, dx);
-                    let spread = 0.14;
-                    let bulletsThisShot = 1;
-                    for (let i = 0; i < bulletsThisShot; i++) {
-                        let angle = baseAngle + (Math.random() - 0.5) * spread;
-                        let speed = this.enemyTypes.betaShip.bulletSpeed;
+                // Spin: rotate and spray bullets in 360 over time
+                if (enemy.state === "spin") {
+                    // spawn a handful of bullets each frame at current spinAngle
+                    let bulletsPerFrame = 1;
+                    for (let i = 0; i < bulletsPerFrame; i++) {
+                        let ang = enemy.spinAngle + (i / bulletsPerFrame) * (Math.PI * 2);
+                        let spd = 6;
                         this.bullets.push({
-                            x: enemy.x + Math.cos(angle) * enemy.radius,
-                            y: enemy.y + Math.sin(angle) * enemy.radius,
-                            vx: Math.cos(angle) * speed,
-                            vy: Math.sin(angle) * speed,
-                            life: 60,
-                            damage: this.enemyTypes.betaShip.damage * 0.6,
+                            x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
+                            y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
+                            vx: Math.cos(ang) * spd,
+                            vy: Math.sin(ang) * spd,
+                            life: 120,
+                            damage: 6,
                             pierce: 0,
                             piercedAsteroids: [],
-                            fromEnemy: true,
+                            fromEnemy: true
                         });
                     }
-                    enemy.burstCount--;
-                }
-            }
-
-            // --- Gamma Ship behavior ---
-            if (enemy.type === "gammaShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(90) + 90;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // Trail logic: leave a damaging area every few frames
-                if (!enemy.trailCooldown || enemy.trailCooldown <= 0) {
-                    this.gammaTrails.push({
-                        x: enemy.x,
-                        y: enemy.y,
-                        radius: 18,
-                        timer: 120,
-                        damage: 3
-                    });
-                    enemy.trailCooldown = 30;
-                } else {
-                    enemy.trailCooldown--;
-                }
-
-                // Shooting logic
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.gammaShip.bulletCooldown;
-                    enemy.burstCount = this.enemyTypes.gammaShip.burstCount;
-                }
-                if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.gammaShip.burstInterval === 0) {
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let angle = Math.atan2(dy, dx);
-                    let speed = this.enemyTypes.gammaShip.bulletSpeed;
-                    this.bullets.push({
-                        x: enemy.x + Math.cos(angle) * enemy.radius,
-                        y: enemy.y + Math.sin(angle) * enemy.radius,
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed,
-                        life: 120,
-                        damage: this.enemyTypes.gammaShip.damage * 1.5,
-                        pierce: 0,
-                        piercedAsteroids: [],
-                        fromEnemy: true,
-                    });
-                    enemy.burstCount--;
-                }
-            }
-
-            // --- Delta behavior (hard mode) ---
-            if (enemy.type === "deltaShip") {
-                // change direction every second, dash fast
-                if (!enemy.changeDirTimer || enemy.changeDirTimer <= 0) {
-                    enemy.changeDirTimer = 60;
-                    // choose a new random angle biased toward player occasionally
-                    if (Math.random() < 0.6) {
-                        let dx = closest[0] - enemy.x;
-                        let dy = closest[1] - enemy.y;
-                        enemy.wanderAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.6;
-                    } else {
-                        enemy.wanderAngle += (Math.random() - 0.5) * 2.0;
+                    // advance spin angle to rotate spray
+                    enemy.spinAngle += 0.125;
+                    enemy.spinTimer--;
+                    if (enemy.spinTimer <= 0) {
+                        enemy.state = "idle";
+                        enemy.attackTimer = 100;
                     }
                 }
-                enemy.changeDirTimer--;
-                // dash continuously at dashSpeed
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.dashSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.dashSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Phase-through borders (wrap similar to player)
-                if (enemy.x < 0) enemy.x = this.width;
-                if (enemy.x > this.width) enemy.x = 0;
-                if (enemy.y < 0) enemy.y = this.height;
-                if (enemy.y > this.height) enemy.y = 0;
-            }
-
-            // --- Epsilon behavior (radial burst) ---
-            if (enemy.type === "epsilonShip") {
-                if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                    enemy.wanderTimer = getRandomInt(80) + 60;
-                    enemy.wanderAngle += (Math.random() - 0.5) * enemy.wanderChange * Math.PI * 2;
-                }
-                enemy.wanderTimer--;
-                enemy.vx = Math.cos(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.vy = Math.sin(enemy.wanderAngle) * enemy.wanderSpeed;
-                enemy.x += enemy.vx;
-                enemy.y += enemy.vy;
-
-                // Keep inside arena - bounce
-                if (enemy.x < enemy.radius) {
-                    enemy.x = enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.x > this.width - enemy.radius) {
-                    enemy.x = this.width - enemy.radius;
-                    enemy.wanderAngle = Math.PI - enemy.wanderAngle;
-                }
-                if (enemy.y < enemy.radius) {
-                    enemy.y = enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-                if (enemy.y > this.height - enemy.radius) {
-                    enemy.y = this.height - enemy.radius;
-                    enemy.wanderAngle = -enemy.wanderAngle;
-                }
-
-                // shooting: radial burst
-                enemy.burstTimer--;
-                if (enemy.burstTimer <= 0) {
-                    enemy.burstTimer = this.enemyTypes.epsilonShip.bulletCooldown;
-                    enemy.burstCount = this.enemyTypes.epsilonShip.burstCount;
-                }
-                if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.epsilonShip.burstInterval === 0) {
-                    // radial burst: spawn N bullets around circle
-                    let pieces = 12;
-                    let speed = this.enemyTypes.epsilonShip.bulletSpeed;
-                    for (let i = 0; i < pieces; i++) {
-                        let angle = (i / pieces) * Math.PI * 2;
-                        this.bullets.push({
-                            x: enemy.x + Math.cos(angle) * enemy.radius,
-                            y: enemy.y + Math.sin(angle) * enemy.radius,
-                            vx: Math.cos(angle) * speed,
-                            vy: Math.sin(angle) * speed,
-                            life: 90,
-                            damage: this.enemyTypes.epsilonShip.damage,
-                            pierce: 0,
-                            piercedAsteroids: [],
-                            fromEnemy: true,
-                        });
-                    }
-                    enemy.burstCount--;
-                }
+                // Keep UFO inside arena bounds (simple clamp)
+                if (enemy.x < enemy.radius) enemy.x = enemy.radius;
+                if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
+                if (enemy.y < enemy.radius) enemy.y = enemy.radius;
+                if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
+                // continue to next enemy handling
+                enemy.x = ((enemy.x % this.width) + this.width) % this.width
+                enemy.y = ((enemy.y % this.height) + this.height) % this.height
+                continue;
             }
 
             // --- Zeta behavior: 3 rounds of 3 bullets at the player ---
@@ -3493,8 +3142,7 @@ class SpaceArena {
             // allow normal player bullets OR special vampire spear bullets to hit enemies
             if (bullet.fromEnemy && !bullet.vampireSpear) continue;
             for (let enemy of this.enemies) {
-                if (!enemy.alive) continue;
-                // Skip interactions with paused Iridite boss
+                    // Skip interactions with paused Iridite boss
                 if (enemy._pausedBoss) continue;
                 // avoid hitting same enemy multiple times per bullet
                 if (bullet.piercedEnemies && bullet.piercedEnemies.includes(enemy)) continue;
@@ -3503,7 +3151,8 @@ class SpaceArena {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < enemy.radius) {
                     let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
-                    enemy.health -= bDmg;
+                    enemy.health = enemy.health.sub(bDmg);
+                    SB_celestialites[enemy.type].onAttacked(enemy)
 
                     // Vampire spear knockback: push enemies away along bullet velocity
                     if (bullet.vampireSpear) {
@@ -3554,7 +3203,7 @@ class SpaceArena {
                         bullet.life = 0;
                     }
 
-                    if (enemy.health <= 0) {
+                    if (enemy.health.lte(0)) {
                         handleEnemyDeath(enemy);
                     }
 
@@ -3595,7 +3244,6 @@ class SpaceArena {
 
         // Ship-enemy collision
         for (let enemy of this.enemies) {
-            if (!enemy.alive) continue;
             // Skip collisions for a paused Iridite boss
             if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
@@ -3603,12 +3251,11 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
-                let enemyDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
-                let enemyDmg = (typeof enemyDmgRaw === 'number') ? enemyDmgRaw : (enemyDmgRaw.toNumber ? enemyDmgRaw.toNumber() : Number(enemyDmgRaw));
-                if (Number.isNaN(enemyDmg) || !isFinite(enemyDmg) || enemyDmg < 0) enemyDmg = 0;
-                if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health -= enemyDmg * 0.05;
-                if (player.ir.shipType == 3) enemy.health -= enemyDmg * 2.5;
-                if (player.ir.shipType == 7) enemy.health -= enemyDmg * 1.5;
+                let enemyDmg = new Decimal(this.ship.collisionDamage * this.upgradeEffects.attackDamage);
+                if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
+                if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health = enemy.health.sub(enemyDmg.mul(0.05));
+                if (player.ir.shipType == 3) enemy.health = enemy.health.sub(enemyDmg.mul(2.5));
+                if (player.ir.shipType == 7) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
 
                 let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
@@ -3632,15 +3279,12 @@ class SpaceArena {
                 } else {
                     this.ship.velocity = -2;
                 }
-
-                if (Number.isNaN(enemy.health) || !isFinite(enemy.health) || enemy.health < 0) enemy.health = 0;
-                if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNaN()) || !player.ir.shipHealth.isFinite() || player.ir.shipHealth.lt(0)) player.ir.shipHealth = new Decimal(0);
+                
+                if (enemy.health.lte(0) || enemy.health.isNan()) handleEnemyDeath(enemy);
+                if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNan()) || !player.ir.shipHealth.isFinite() || player.ir.shipHealth.lt(0)) player.ir.shipHealth = new Decimal(0);
 
                 if (player.ir.shipHealth.lte(0)) {
                     this.onShipDeath();
-                }
-                if (enemy.health <= 0) {
-                    handleEnemyDeath(enemy);
                 }
             }
         }
@@ -3828,7 +3472,7 @@ class SpaceArena {
 
         // clamp/validate health value
         try {
-            if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNaN()) || !player.ir.shipHealth.isFinite || player.ir.shipHealth < 0) player.ir.shipHealth = new Decimal(0);
+            if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNan()) || !player.ir.shipHealth.isFinite || player.ir.shipHealth < 0) player.ir.shipHealth = new Decimal(0);
         } catch (e) {
             if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth < 0) player.ir.shipHealth = 0;
         }
@@ -4241,8 +3885,7 @@ class SpaceArena {
         this.ctx.restore();
 
         for (let enemy of this.enemies) {
-            if (!enemy.alive) continue;
-            let type = this.enemyTypes[enemy.type];
+            let type = SB_celestialites[enemy.type];
             let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
             if (type && type.draw && wrapped) {
                 type.draw(this.ctx, enemy);
@@ -4250,11 +3893,11 @@ class SpaceArena {
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.fillStyle = "#151230";
                 this.ctx.fillRect(wrapped[0] - enemy.radius - 2, wrapped[1] - enemy.radius - 20, enemy.radius * 2 + 4, 13);
-                let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
+                let barWidth = enemy.radius * 2 * enemy.health.div(enemy.maxHealth).toNumber();
                 this.ctx.fillStyle = "#bf0000";
                 this.ctx.fillRect(wrapped[0] - enemy.radius, wrapped[1] - enemy.radius - 18, barWidth, 9);
 
-                let t = Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth)
+                let t = formatSimple(enemy.health.floor().max(0)) + "/" + formatSimple(enemy.maxHealth.floor())
                 this.ctx.font = "12px monospace";
                 this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
@@ -4444,14 +4087,17 @@ class SpaceArena {
         // Draw gamma trails
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
-                this.ctx.save();
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.globalAlpha = Math.max(0.2, trail.timer / 60);
-                this.ctx.beginPath();
-                this.ctx.arc(trail.x, trail.y, trail.radius, 0, 2 * Math.PI);
-                this.ctx.fillStyle = "#b44cff";
-                this.ctx.fill();
-                this.ctx.restore();
+                let wrapped = this.getVisibleWrappedCoords([trail.x, trail.y], [trail.radius * 2, trail.radius * 2])
+                if (wrapped != null) {
+                    this.ctx.save();
+                    this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                    this.ctx.globalAlpha = Math.max(0.2, trail.timer / 180);
+                    this.ctx.beginPath();
+                    this.ctx.arc(wrapped[0], wrapped[1], trail.radius, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = "#b44cff";
+                    this.ctx.fill();
+                    this.ctx.restore();
+                }
             }
         }
 
@@ -4801,6 +4447,11 @@ class SpaceArena {
             this.drawMinimapIcon("red", 4, [enemy.x, enemy.y])
             this.ctx.restore();
         }
+        for (let trail of this.gammaTrails) {
+            this.ctx.save();
+            this.drawMinimapIcon("red", 2, [trail.x, trail.y])
+            this.ctx.restore();
+        }
 
         this.ctx.restore();
 
@@ -4820,7 +4471,7 @@ class SpaceArena {
             this.ctx.font = "bold 48px monospace";
             this.ctx.fillStyle = "#fff";
             this.ctx.textAlign = "center";
-            this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 150);
+            this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 100);
 
             let spacing = 262.5;
             let boxWidth = 250;
@@ -4891,7 +4542,7 @@ class SpaceArena {
                 let confirmWidth = 250;
                 let confirmHeight = 50;
                 let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 40;
+                let confirmY = boxY + boxHeight + 25;
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
                 this.ctx.fillStyle = "#37078f";
@@ -4945,10 +4596,10 @@ class SpaceArena {
             }
 
             if (this.selectedUpgradeIndex !== null) {
-                let confirmWidth = 180;
+                let confirmWidth = 250;
                 let confirmHeight = 50;
                 let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 40;
+                let confirmY = boxY + boxHeight + 25;
                 if (
                     x > confirmX &&
                     x < confirmX + confirmWidth &&

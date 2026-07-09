@@ -59,6 +59,7 @@ addLayer("ir", {
         iriditeUnlocked: false,
 
         inBattle: false,
+        menu: 0,
         battleStage: "spaceZone1",
         levelScalingMult: new Decimal(1),
 
@@ -958,9 +959,9 @@ addLayer("ir", {
                 player.ir.iriditeFightActive = false
             },
             style() {
-                let look = {width: "391px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + "#bf0000", borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.background = player.ir.secondaryColor
+                    look.background = "#7f0000"
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -1025,7 +1026,28 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "391px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.background = player.ir.secondaryColor
+                } else {
+                    look.backgroundColor = "#361e1e"
+                }
+                return look
+            },
+        },
+        16: {
+            title() { return player.ir.menu == 1 ? "Return to Battle" : "View Stats" },
+            canClick() { return true },
+            unlocked() { return true},
+            onClick() {
+                if (player.ir.menu == 1) {
+                    player.ir.menu = 0
+                } else {
+                    player.ir.menu = 1
+                }
+            },
+            style() {
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
                 if (this.canClick()) {
                     look.background = player.ir.secondaryColor
                 } else {
@@ -2686,7 +2708,7 @@ addLayer("ir", {
                         ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["blank", "9px", {width: "6px"}],
                         ["row", [
-                            ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15],
+                            ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
                         ]],
                     ], {width: (player.ir.iriditeFightActive) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (player.ir.iriditeFightActive) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
                 ]}

@@ -1,4 +1,4 @@
-﻿let arena = null; // Global arena instance
+let arena = null; // Global arena instance
 
 // Restore arena on refresh if needed
 window.addEventListener('DOMContentLoaded', () => {
@@ -16,92 +16,136 @@ function getRandomInt(max) {
 const UPGRADE_POOL = [
     // Common
     {
-        name: "Attack Damage Up",
-        description: "+10% attack damage",
+        name() { return "Attack Damage Up"},
+        description() { return "+10% attack damage"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.1; }
     },
     {
-        name: "XP Gain Up",
-        description: "+10% XP gain",
+        name() { return "XP Gain Up"},
+        description() { return "+10% XP gain"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.xpGain *= 1.1; }
     },
     {
-        name: "Loot Gain Up",
-        description: "+10% loot gain",
+        name() { return "Loot Gain Up"},
+        description() { return "+10% loot gain"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgradeEffects.lootGain *= 1.1; }
     },
     // Uncommon
     {
-        name: "Health Regen",
-        description: "+0.5 HP/sec",
+        name() { return "Health Regen"},
+        description() {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return "+" + formatSimple(regen, 2) + " HP/sec"
+        },
         rarity: "uncommon",
         color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.hpRegen += 0.5 / 60; }
+        effect(arena) {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            arena.upgradeEffects.hpRegen += regen / 60;
+        }
     },
     {
-        name: "Loot Gain Up",
-        description: "+20% loot gain",
+        name() { return "XP Gain Up"},
+        description() { return "+20% XP gain"},
+        rarity: "uncommon",
+        color: "#4cff4c",
+        effect(arena) { arena.upgradeEffects.xpGain *= 1.2; }
+    },
+    {
+        name() { return "Loot Gain Up"},
+        description() { return "+20% loot gain"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.lootGain *= 1.2; }
     },
     {
-        name: "Attack Damage Up",
-        description: "+15% attack damage",
+        name() { return "Attack Damage Up"},
+        description() { return "+15% attack damage"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.15; }
     },
+    {
+        name() { return "Attack Speed Up"},
+        description() { return "8% faster attack speed"},
+        rarity: "uncommon",
+        color: "#4cff4c",
+        effect(arena) { arena.upgradeEffects.attackSpeed *= 0.92; }
+    },
     // Rare
     {
-        name: "Damage Reduction",
-        description: "Take 20% less damage",
+        name() { return "Damage Reduction"},
+        description() { return "Take 10% less damage"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.damageReduction *= 0.8; }
+        effect(arena) { arena.upgradeEffects.damageReduction *= 0.9; }
     },
     {
-        name: "Movement Speed Up",
-        description: "+1 max velocity",
+        name() { return "Movement Speed Up"},
+        description() { return "+1 max velocity"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgradeEffects.moveSpeed += 1; }
     },
     {
-        name: "Attack Speed Up",
-        description: "8% faster attack speed",
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.attackSpeed *= 0.92; }
-    },
-    {
-        name: "Loot Gain Up",
-        description: "+35% loot gain",
+        name() { return "Gem Gain Up"},
+        description() { return "+10% gem gain"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.35; }
+        effect(arena) { arena.upgradeEffects.gemGain *= 1.1; }
+    },
+    {
+        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size Up"} else {return "Max HP Up"}},
+        description() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "+10% bullet size"} else {return "+10% max HP"}},
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) { if (player.ir.shipType != 3 && player.ir.shipType != 7) {arena.upgradeEffects.bulletSize += 0.1} else {arena.upgradeEffects.maxHp *= 1.1;setTimeout(() => {player.ir.shipHealth = player.ir.shipHealth.mul(1.1)}, 100)}; }
     },
     // Epic
     {
-        name: "Epic Attack",
-        description: "+20% attack damage, +8% attack speed",
+        name() { return "Epic Attack"},
+        description() { return "+20% attack damage, +8% attack speed"},
         rarity: "epic",
         color: "#b44cff",
         effect(arena) { arena.upgradeEffects.attackDamage *= 1.2; arena.upgradeEffects.attackSpeed *= 0.92; }
     },
     {
-        name: "Epic XP",
-        description: "+50% XP gain",
+        name() { return "Epic XP"},
+        description() { return "+50% XP gain"},
         rarity: "epic",
         color: "#b44cff",
         effect(arena) { arena.upgradeEffects.xpGain *= 1.5; }
-    }
+    },
+    {
+        name() { return "Epic Reward"},
+        description() { return "+30% loot gain, +5% gem gain"},
+        rarity: "epic",
+        color: "#b44cff",
+        effect(arena) { arena.upgradeEffects.lootGain *= 1.3; arena.upgradeEffects.gemGain *= 1.05; }
+    },
+    {
+        name() { return "Epic Defense"},
+        description() {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return "Take 15% less damage, +" + formatSimple(regen, 2) + " HP/sec"
+        },
+        rarity: "epic",
+        color: "#b44cff",
+        effect(arena) {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            arena.upgradeEffects.damageReduction *= 0.85; arena.upgradeEffects.hpRegen += regen / 60;
+        }
+    },
 ];
 
 // Rarity weights
@@ -112,12 +156,27 @@ const UPGRADE_RARITY_WEIGHTS = {
     epic: 10
 };
 
-function pickUpgrades() {
+const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
+    common: 30,
+    uncommon: 25,
+    rare: 25,
+    epic: 20,
+};
+
+function pickUpgrades(enhanced = false) {
     // Weighted random selection
     let pool = [];
-    for (let upg of UPGRADE_POOL) {
-        for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
-            pool.push(upg);
+    if (!enhanced) {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
+                pool.push(upg);
+            }
+        }
+    } else {
+        for (let upg of UPGRADE_POOL) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[upg.rarity]; i++) {
+                pool.push(upg);
+            }
         }
     }
     let chosen = [];
@@ -128,1473 +187,75 @@ function pickUpgrades() {
     return chosen;
 }
 
-addLayer("ir", {
-    name: "Iridite",
-    symbol: "✦",
-    universe: "A2",
-    row: 1,
-    position: 0,
-    startData() { return {
-        unlocked: true,
-        iriditeUnlocked: false,
-        inBattle: false,
-
-        shipHealth: new Decimal(0),
-        shipHealthMax: new Decimal(100),
-
-        spaceRock: new Decimal(0),
-        spaceGem: new Decimal(0),
-
-        shipType: 0,
-        sendCooldownTimer: new Decimal(0),
-        send: {
-            0: {
-                max: new Decimal(0),
-                onClick(isRewarded) {},
-            },
-            1: {
-                max: new Decimal(600),
-                onClick(isRewarded) {
-                    let gain = new Decimal(200)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 1).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            2: {
-                max: new Decimal(900),
-                onClick(isRewarded) {
-                    let gain = new Decimal(1)
-                    if (hasUpgrade("ir", 104)) gain = gain.mul(2);
-                    gain = gain.mul(getLevelableAmount("ir", 2).mul(0.02).add(1))
-                    if (isRewarded) player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Gem"}
-            },
-            3: {
-                max: new Decimal(3600),
-                onClick(isRewarded) {
-                    let gain = new Decimal(1e3)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 3).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            4: {
-                max: new Decimal(5400),
-                onClick(isRewarded) {
-                    let gain = new Decimal(3)
-                    if (hasUpgrade("ir", 104)) gain = gain.mul(2);
-                    gain = gain.mul(getLevelableAmount("ir", 4).mul(0.02).add(1))
-                    if (isRewarded) player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Gem"}
-            },
-            5: {
-                max: new Decimal(21600),
-                onClick(isRewarded) {
-                    let gain = new Decimal(4e3)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 5).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            6: {
-                max: new Decimal(32400),
-                onClick(isRewarded) {
-                    let gain = new Decimal(8)
-                    if (hasUpgrade("ir", 104)) gain = gain.mul(2);
-                    gain = gain.mul(getLevelableAmount("ir", 6).mul(0.02).add(1))
-                    if (isRewarded) player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Gem"}
-            },
-            7: {
-                max: new Decimal(10),
-                onClick(isRewarded) {
-                    let gain = new Decimal(4)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 7).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            8: {
-                max: new Decimal(10),
-                onClick(isRewarded) {
-                    let gain = new Decimal(4)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 7).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            9: {
-                max: new Decimal(10),
-                onClick(isRewarded) {
-                    let gain = new Decimal(4)
-                    gain = gain.mul(levelableEffect("pet", 502)[2])
-                    gain = gain.mul(getLevelableAmount("ir", 7).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-            10: {
-                max: new Decimal(300),
-                onClick(isRewarded) {
-                    let gain = new Decimal(4)
-                    gain = gain.mul(getLevelableAmount("ir", 10).mul(0.1).add(1))
-                    if (isRewarded) player.ir.spaceRock = player.ir.spaceRock.add(gain);
-                    return gain
-                },
-                statDisplay() {return "Space Rock"}
-            },
-        },
-
-        timers: {
-            0: {
-                current: new Decimal(0),
-                max: new Decimal(0),
-            },
-            1: {
-                current: new Decimal(0),
-                max: new Decimal(600),
-            },
-            2: {
-                current: new Decimal(0),
-                max: new Decimal(900),
-            },
-            3: {
-                current: new Decimal(0),
-                max: new Decimal(1500),
-            },
-            4: {
-                current: new Decimal(0),
-                max: new Decimal(1200),
-            },
-            5: {
-                current: new Decimal(0),
-                max: new Decimal(1800),
-            },
-            6: {
-                current: new Decimal(0),
-                max: new Decimal(1200),
-            },
-            7: {
-                current: new Decimal(0),
-                max: new Decimal(600),
-            },
-            8: {
-                current: new Decimal(0),
-                max: new Decimal(2100),
-            },
-            9: {
-                current: new Decimal(0),
-                max: new Decimal(1800),
-            },
-            10: {
-                current: new Decimal(0),
-                max: new Decimal(1800),
-            },
-        },
-
-        battleLevel: new Decimal(0),
-        battleXP: new Decimal(0),
-        battleXPReq: new Decimal(0),
-        upgrades: [],
-
-        ufoFought: false,
-        ufoDefeated: false,
-
-        iriditeFought: false,
-        iriditeFightActive: false,
-        iriditeDefeated: false,
-        astralShipUnlocked: false,
-        tookDamageInIriditeFight: false,
-
-        iriditePhase: new Decimal(0),
-    }},
-    automate() {},
-    nodeStyle() {
-        return {
-            background: "#151230",
-            backgroundOrigin: "border-box",
-            borderColor: "#ffffffff",
-            color: "#eaf6f7",
-        };
-    },
-    tooltip: "Iridite, the Astral Celestial",
-    branches: ["pl", "se"],
-    color: "#151230",
-    update(delta) {
-        if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
-            player.subtabs["ir"]['stuff'] = "Refresh Page :(";
-        }
-
-        if (options.fullscreen && player.tab == "ir" && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
-
-        // Ship max health by type
-        if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 2) player.ir.shipHealthMax = new Decimal(150)
-        if (player.ir.shipType == 3) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 4) player.ir.shipHealthMax = new Decimal(100)
-        if (player.ir.shipType == 5) player.ir.shipHealthMax = new Decimal(50)
-        if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
-
-        if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
-        if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
-        if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
-
-        player.ir.timers[0].max = new Decimal(0)
-        player.ir.timers[1].max = new Decimal(600)
-        player.ir.timers[2].max = new Decimal(900)
-        player.ir.timers[3].max = new Decimal(1500)
-        player.ir.timers[4].max = new Decimal(1200)
-        player.ir.timers[5].max = new Decimal(1800)
-        player.ir.timers[6].max = new Decimal(1200)
-        player.ir.timers[7].max = new Decimal(600)
-        player.ir.timers[8].max = new Decimal(2100)
-        player.ir.timers[9].max = new Decimal(1500)
-        player.ir.timers[10].max = new Decimal(1800)
-        for (let i in player.ir.timers) {
-            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
-            player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
-            player.ir.timers[i].current = player.ir.timers[i].current.sub(delta)
-        }
-
-        player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
-
-        player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
-        if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
-        if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
-
-        if (player.ir.battleXP.gte(player.ir.battleXPReq)) {
-            player.ir.battleXP = new Decimal(0);
-            player.ir.battleLevel = player.ir.battleLevel.add(1);
-            if (arena) arena.showUpgradeChoice();
-        }
-
-        if (player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
-            spawnUfoBoss();
-            player.ir.ufoFought = true
-        }
-
-        if (player.ir.battleLevel.gte(16) && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
-            summonIridite();
-            player.ir.iriditeFought = true
-        }
-
-        if (cutsceneActive) {
-            pauseAsteroidMinigame()
-        } else {
-            resumeAsteroidMinigame()
-        }
-
-    },
-    bars: {
-        healthBar: {
-            unlocked() { return true },
-            direction: RIGHT,
-            width: 300,
-            height: 50,
-            progress() {
-                return player.ir.shipHealth.div(player.ir.shipHealthMax);
-            },
-            borderStyle: {border: "0", border: "2px solid white",},
-            baseStyle: {background: "rgba(0, 0, 0, 0.5)",},
-            fillStyle: { backgroundImage: "linear-gradient(15deg, #3011bdff 0%, #1640caff 50%, #155e80ff 100%)"},
-            display() {
-                return"<h5>" + formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + "<h5>HP" ;
-            },
-        },
-        xpBar: {
-            unlocked() { return true },
-            direction: RIGHT,
-            width: 300,
-            height: 50,
-            progress() {
-                return player.ir.battleXP.div(player.ir.battleXPReq);
-            },
-            borderStyle: {border: "0", border: "2px solid white",},
-            baseStyle: {background: "rgba(0, 0, 0, 0.5)",},
-            fillStyle: { backgroundImage: "linear-gradient(15deg, #3011bdff 0%, #1640caff 50%, #155e80ff 100%)"},
-            display() {
-                return"<h5>" + formatWhole(player.ir.battleXP) + "/" + formatWhole(player.ir.battleXPReq) + "<h5>XP" ;
-            },
-        },
-    },
-    levelables: {
-        0: {
-            image() { return "resources/secret.png"},
-            title() { return "No ship selected." },
-            lore() { return "" },
-            description() { return "" },
-            currency() { return getLevelableXP(this.layer, this.id) },
-            barStyle() { return {backgroundColor: "#0B6623"}},
-            style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
-        },
-        1: {
-            image() { return this.canClick() ? "resources/ships/cruiser.png" : "resources/secret.png"},
-            title() { return "Cruiser" },
-            description() {
-                return "x" + format(this.effect()[0]) + " to stars. <small>(Ignoring Softcap)</small><br>x" + format(this.effect()[1]) + " to singularity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Fast, slim, and rapid-firing bullets. Pretty average ship ngl."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.6).add(1), //Stars
-                    getLevelableAmount(this.layer, this.id).mul(5).pow(5).add(1), //Singularity Points
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return true },
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.25).mul(10).add(50).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        2: {
-            image() { return this.canClick() ? "resources/ships/impact.png" : "resources/secret.png"},
-            title() { return "Impact" },
-            description() {
-                return "^" + format(this.effect()[0], 3) + " to points.<br>x" + format(this.effect()[1]) + " to infinities.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Bigger, slower, but larger and more powerful bullets."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.07).add(1), //points
-                    getLevelableAmount(this.layer, this.id).mul(0.5).add(1), //infinities
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ir", 101)},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.275).mul(15).add(80).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        3: {
-            image() { return this.canClick() ? "resources/ships/unarmed.png" : "resources/secret.png"},
-            title() { return "Unarmed" },
-            description() {
-                return "^" + format(this.effect()[0], 3) + " to antimatter dimensions.<br>x" + format(this.effect()[1]) + " to core scraps.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Don't underestimate the goat."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.35).mul(0.06).add(1), //ad
-                    getLevelableAmount(this.layer, this.id).mul(2).pow(1.25).add(1), //core scraps
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.ir.levelables[1][0].gte(10) && player.ir.levelables[2][0].gte(10)) ? "" : "Unlocks at Cruiser and Impact level 10." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.ir.levelables[1][0].gte(10) && player.ir.levelables[2][0].gte(10))},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.3).mul(50).add(200).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        4: {
-            image() { return this.canClick() ? "resources/ships/sniper.png" : "resources/secret.png"},
-            title() { return "Sniper" },
-            description() {
-                return "x" + format(this.effect()[0]) + " to space energy.<br>^" + format(this.effect()[1], 3) + " to infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Shoots extremely fast piercing bullets with precision. Automatically aims at cosmic celestialites, might affect movement."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).mul(0.3).add(1), //space energy
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.08).add(1), // infinity points
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || buyableEffect("sb", 12).gte(3) ? "" : "Unlocks at 3 space building cap." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || buyableEffect("sb", 12).gte(3)},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.35).mul(25).add(100).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        5: {
-            image() { return this.canClick() ? "resources/ships/ufo.png" : "resources/secret.png"},
-            title() { return "Ufo" },
-            description() {
-                return "x" + format(this.effect()[0]) + " to xpboost.<br>x" + format(this.effect()[1]) + " to legendary gems.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Has omnidirectional movement and shoots shotgun-like bursts towards the mouse."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.7).mul(0.1).add(1), //xpboost
-                    getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.1).add(1), //legendary gems
-                    getLevelableAmount(this.layer, this.id).mul(0.06).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.pet.levelables[502][0].gte(1)) ? "" : "Unlocks with a legendary pet." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.pet.levelables[502][0].gte(1))},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.45).mul(50).add(300).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        6: {
-            image() { return this.canClick() ? "resources/ships/streamliner.png" : "resources/secret.png"},
-            title() { return "Streamliner" },
-            description() {
-                return "^" + format(this.effect()[0], 3) + " to mastery point effects.<br>^" + format(this.effect()[1], 3) + " to negative infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Shoots very fast streams of bullets, but with slow movement speed."
-            },
-            levelLimit() {return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.5).add(1), //mastery point effects
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.07).add(1), //neginf
-                    getLevelableAmount(this.layer, this.id).mul(0.06).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.st.buyables[206].gte(1)) ? "" : "Unlocks with a progression tree update (in stars)." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || (player.st.buyables[206].gte(1))},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.45).mul(100).add(500).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        7: {
-            image() { return this.canClick() ? "resources/ships/stinger.png" : "resources/secret.png"},
-            title() { return "Stinger" },
-            description() {
-                return "^" + format(this.effect()[0], 3) + " to pollinators.<br>x" + format(this.effect()[1]) + " to radiation.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Lacks a gun, but makes up for it with spikes."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.1).add(1), // pollinators
-                    getLevelableAmount(this.layer, this.id).pow(1.5).add(1), // radiation
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110) ? "" : "Progress through Aleph content." },
-            unlocked() { return player.al.show },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("fu", 110)},
-            onClick() {
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() }, 
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }
-        },
-        8: {
-            image() { return this.canClick() ? "resources/ships/astral.png" : "resources/secret.png"},
-            title() { return "Astral" },
-            description() {
-                return "x" + format(this.effect()[0]) + " to space rocks.<br>+" + formatWhole(this.effect()[1]) + " to max ship level.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "A simulated version of Iridite, the Astral Celestial. Moves omnidirectionally and fires Iridite's lasers."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() {
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.2).div(3).add(1), // space rocks
-                    getLevelableAmount(this.layer, this.id).div(5).floor(), // space gems
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || player.ir.astralShipUnlocked ? "" : "Defeat Iridite without taking damage to unlock." },
-            unlocked() { return player.ir.iriditeDefeated },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || player.ir.astralShipUnlocked },
-            onClick() {
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.6).mul(200).add(1500).floor() },
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }
-        },
-        9: {
-            image() { return this.canClick() ? "resources/ships/evolver.png" : "resources/secret.png"},
-            title() { return "Evolver" },
-            description() {
-                return "x" + format(this.effect()[0]) + " to ESC.<br>^" + format(this.effect()[1]) + " to paradox pylon energy.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-
-            },
-            lore() { return "An experimental vessel that fractures its projectiles into multiple seeking fragments." },
-            levelLimit() { return Decimal.add(25, levelableEffect("ir", 8)[1])},
-            effect() {
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.75).mul(0.03).add(1),
-                    getLevelableAmount(this.layer, this.id).pow(0.4).mul(0.04).add(1),
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), //Damage
-                    getLevelableAmount(this.layer, this.id).mul(0.03).add(1), //Health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25) ? "" : "Purchase a certain shard research." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ev8", 25)},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).mul(200).add(1000).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6ff" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-        10: {
-            image() { return this.canClick() ? "resources/ships/cruiser.png" : "resources/secret.png"},
-            title() { return "Railgun" },
-            description() {
-                return "^" + format(this.effect()[0], 3) + " to dark celestial points.<br>x" + format(this.effect()[1]) + " to light.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
-            },
-            lore() {
-                return "Slow and bulky, complete with a superphysical energy cannon of unmatched power."
-            },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
-            effect() { 
-                return [
-                    getLevelableAmount(this.layer, this.id).pow(0.3).mul(0.01).add(1), // dark celestial points
-                    getLevelableAmount(this.layer, this.id).pow(1.5).mul(0.25).add(1), // light
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // damage
-                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // health
-                ]
-            },
-            sacValue() { return new Decimal(1)},
-            // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || true ? "" : "Progress through Interspace content." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || true},
-            onClick() { 
-                player.ir.shipType = this.id
-                return layers[this.layer].levelables.index = this.id 
-            },
-            // BUY CODE
-            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
-            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.5).mul(150).add(1000).floor() },  
-            currency() { return getLevelableXP(this.layer, this.id) },
-            buy() {
-                this.pay(this.xpReq())
-                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
-            },
-            // STYLE
-            barStyle() { return {backgroundColor: "#37078f"}},
-            style() {
-                let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#5e4ee6" : look.backgroundColor = "#222222"
-                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
-                return look
-            }  
-        },
-    },
-    clickables: {
-        1: {
-            title() { return "<h2>Unlock Iridite, the Astral Celestial" },
-            canClick() { return player.au2.stars.gte(5e10) && player.stagnantSynestia.highestCombo.gte(25) },
-            unlocked() { return true },
-            onClick() {
-                player.ir.iriditeUnlocked = true
-                player.subtabs["ir"]['stuff'] = 'Space Battle'
-            },
-            style: { width: '300px', "min-height": '100px', color: "white" },
-        },
-        2: {
-            title() { return "Level Up" },
-            canClick() { return tmp.ir.levelables[layers.ir.levelables.index].canBuy },
-            unlocked() { return layers.ir.levelables.index != 0 },
-            tooltip() {
-                if (tmp.ir.levelables[layers.ir.levelables.index].levelTooltip == undefined) {
-                    return ""
-                } else {
-                    return tmp.ir.levelables[layers.ir.levelables.index].levelTooltip
-                }
-            },
-            onClick() {
-                buyLevelable("ir", layers.ir.levelables.index)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "425px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
-                !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.ir.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
-                return look
-            },
-        },
-        11: {
-            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Space Battle" : "<h2>Cooldown: " + formatTime(player.ir.timers[player.ir.shipType].current)},
-            canClick() { return player.ir.timers[player.ir.shipType].current.lte(0) },
-            unlocked() { return true },
-            tooltip() { return "Universes are paused to save performance." },
-            onClick() {
-                player.ir.inBattle = true
-                options.fullscreen = true
-                player.subtabs["ir"]['stuff'] = 'Battle'
-
-                arena = new SpaceArena(1200, 600);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-
-                pauseUniverseAll(["A2", "DS"], "pause", true)
-
-                player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
-
-                player.ir.ufoFought = false
-                player.ir.iriditeFought = false
-            },
-            style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #480e8a", borderRadius: "10px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#000"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                }
-                return look
-            },
-        },
-        12: {
-            title() { return "<h2>Leave Battle" },
-            canClick() { return true },
-            unlocked() { return !player.ir.iriditeFightActive || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
-            onClick() {
-                player.ir.inBattle = false
-                options.fullscreen = false
-                player.subtabs["ir"]['stuff'] = 'Space Battle'
-
-                if (arena) {
-                    arena.removeArena();
-                    arena = null;
-                }
-                localStorage.setItem('arenaActive', 'false');
-
-                pauseUniverseAll(["A2", "DS"], "unpause", true)
-
-                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
-
-                player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(0)
-                player.ir.iriditeFightActive = false
-            },
-            style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #480e8a", borderRadius: "10px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#000"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                }
-                return look
-            },
-        },
-        13: {
-            title() { return "<h2>Battle<br><span style='font-size:16px'>+"
-                + format(player.ir.send[player.ir.shipType].onClick(false))
-                + " " + (player.ir.send[player.ir.shipType].statDisplay()) + "<br>" + formatTime(player.ir.send[player.ir.shipType].max) + " Cooldown</span>"
-            },
-            canClick() { return player.ir.sendCooldownTimer.lte(0) },
-            unlocked() { return player.ev.evolutionsUnlocked[11] },
-            tooltip() { return "Based on ship level." },
-            onClick() {
-                player.ir.send[player.ir.shipType].onClick(true)
-
-                player.ir.sendCooldownTimer = player.ir.send[player.ir.shipType].max
-            },
-            style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #bF7Fff", borderRadius: "10px 0px 0px 10px", margin: "-3px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#000"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                }
-                return look
-            },
-        },
-        14: {
-            title() { return "<h2>Repair<br><span style='font-size:16px'>+"
-                + format(player.ir.send[player.ir.shipType].max.div(10).mul(new Decimal(1).add(new Decimal(0.15).mul(getLevelableAmount('pet', 1209).sub(1)))))
-                + " XP<br>" + formatTime(player.ir.send[player.ir.shipType].max) + " Cooldown</span>"
-            },
-            canClick() { return player.ir.sendCooldownTimer.lte(0) },
-            unlocked() { return player.ev.evolutionsUnlocked[11] },
-            tooltip() { return "Based on Captain evo pet level." },
-            onClick() {
-                setLevelableXP("ir", player.ir.shipType, getLevelableXP("ir", player.ir.shipType).add(player.ir.send[player.ir.shipType].max.div(10).mul(new Decimal(1).add(new Decimal(0.15).mul(getLevelableAmount('pet', 1209).sub(1))))))
-
-                player.ir.sendCooldownTimer = player.ir.send[player.ir.shipType].max
-            },
-            style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #bF7Fff", borderRadius: "0px 10px 10px 0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#000"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                }
-                return look
-            },
-        },
-        1001: {
-            title() {return "W"},
-            canClick: true,
-            unlocked: true,
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'w', code: 'KeyW', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1002: {
-            title() {return "A"},
-            canClick: true,
-            unlocked: true,
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'a', code: 'KeyA', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1003: {
-            title() {return "S"},
-            canClick: true,
-            unlocked: true,
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 's', code: 'KeyS', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1004: {
-            title() {return "D"},
-            canClick: true,
-            unlocked: true,
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'd', code: 'KeyD', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-    },
-    upgrades: {
-        11: {
-            title: "Rejuvenation",
-            unlocked() { return true },
-            description: "Boosts singularity point gain based on space rocks.",
-            cost: new Decimal(300),
-            currencyLocation() { return player.ir },
-            effect() {
-                return player.ir.spaceRock.pow(0.75).mul(1000).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        12: {
-            title: "Replenish",
-            unlocked() { return true },
-            description: "Boosts oil gain based on space rocks.",
-            cost: new Decimal(500),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            effect() {
-                return player.ir.spaceRock.pow(2.5).mul(5).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        13: {
-            title: "Servitude",
-            unlocked() { return true },
-            description: "Boosts check back XP gain based on space gems.",
-            cost: new Decimal(800),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            effect() {
-                return player.ir.spaceGem.pow(0.25).mul(0.3).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        14: {
-            title: "Healing",
-            unlocked() { return true },
-            description: "All ships start off with 0.5 hp/sec of health regeneration.",
-            cost: new Decimal(1200),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        15: {
-            title: "Civilization",
-            unlocked() { return true },
-            description: "Unlock Space Buildings.",
-            cost: new Decimal(2000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        16: {
-            title: "Miniboss",
-            unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description: "You are able to fight the UFO miniboss at level 8, and unlock a new legendary pet.",
-            cost: new Decimal(3000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        17: {
-            title: "Reinforcement II",
-            unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description: "All ships have 30% increased max hp.",
-            cost: new Decimal(5000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        18: {
-            title: "Timekeeper",
-            unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description: "Cut ship cooldown times based on space gems.",
-            effect() {
-                return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
-            },
-            effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            cost: new Decimal(8000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        19: {
-            title: "Iridite",
-            unlocked() { return player.ir.ufoDefeated },
-            description: "...",
-            cost: new Decimal(10000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-
-        //gems
-        101: {
-            title: "Impact",
-            unlocked() { return true },
-            description: "Unlocks the second ship: Impact.",
-            cost: new Decimal(2),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        102: {
-            title: "Reinforcement",
-            unlocked() { return true },
-            description: "All ships have 25% increased max hp.",
-            cost: new Decimal(3),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        103: {
-            title: "Alleviator",
-            unlocked() { return true },
-            description: "Battle XP requirements are cut by /1.25.",
-            cost: new Decimal(5),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        104: {
-            title: "Treasure",
-            unlocked() { return true },
-            description: "Double the probability of getting space gems from asteroids.",
-            cost: new Decimal(7),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        105: {
-            title: "Exploration",
-            unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description: "Unlock more star exploration nodes.",
-            cost: new Decimal(12),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        106: {
-            title: "Alleviator II",
-            unlocked() { return buyableEffect("sb", 12).gte(3) },
-            description: "Battle XP requirements are cut by /1.4",
-            cost: new Decimal(18),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Gems",
-            currencyInternalName: "spaceGem",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-
-        // Geroa BH Upgrades
-        201: {
-            title: "Medkit",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Unlock Geroa's \"Self Repair\" skill",
-            cost: new Decimal(2000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        202: {
-            title: "Spicy Energy",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Unlock Geroa's \"Cosmic Ray\" skill",
-            cost: new Decimal(10000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        203: {
-            title: "I'M A FIRIN' MY LASAR",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Unlock Geroa's \"Orbital Cannon\" skill",
-            cost: new Decimal(50000),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        204: {
-            title: "Probably should use these",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Unlock Geroa's \"Defense Satellites\" skill",
-            cost: new Decimal(4e5),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        205: {
-            title: "Version 2.0",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
-            description: "Increase Geroa's base stats by 20%",
-            cost: new Decimal(1e7),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        206: {
-            title: "Version 3.0",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("depth4", 4) },
-            description: "Increase Geroa's base damage by 50%",
-            cost: new Decimal(1e8),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-        207: {
-            title: "Advanced Medkit",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) && false },
-            description: "\"Self Repair\" now requires being under 50% health, and heals 20% more",
-            cost: new Decimal(1e9),
-            currencyLocation() { return player.ir },
-            currencyDisplayName: "Space Rocks",
-            currencyInternalName: "spaceRock",
-            style() {
-                let look = {borderRadius: "15px", color: "white", border: "3px solid #37078f", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#151230"
-                return look
-            },
-        },
-    },
-    microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return formatWhole(player.au2.stars) + "/5e10 stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.stagnantSynestia.highestCombo) + "/25 best stagnantion synestia combo." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Not a lot of requirements... I'm trying to be nice." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["clickable", 1],
-                ]
-            },
-            "stages": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "var(--layerBackground)", borderRadius: "27px 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "var(--regBorder)"}],
-                        ["category-button", ["Cosmic Pylon", "stuff", "pylon"], {width: "265px", height: "40px", background: "var(--layerBackground)", borderRadius: "0 27px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid var(--regBorder)", borderRadius: "30px 30px 0 0", marginBottom: "-3px"}],
-                    ["style-column", [
-                        ["style-row", [
-                            ["style-column", [
-                                ["clickable", "Stage-Black-Heart"],
-                                ["style-row", [], {width: "200px", height: "3px", background: "var(--regBorder)"}],
-                                ["clickable", "Stage-Temporal-Chasm"],
-                                ["style-row", [], {width: "200px", height: "3px", background: "var(--regBorder)"}],
-                                ["clickable", "Stage-???"],
-                            ], {width: "200px", height: "297px", borderRight: "3px solid var(--regBorder)"}],
-                            ["theme-scroll-row", [
-                                ["row-tree", universes.A2.tree2],
-                            ], () => {return true ? {width: "547px", height: "297px", padding: "0 25px", background: "linear-gradient(90deg, rgba(50, 50, 50, 0.5) 0%, rgba(0, 0, 0, 0.5) 150%)"} : {display: "none !important"}}],
-                        ], {width: "800px", height: "297px", borderBottom: "3px solid var(--regBorder)"}],
-                        ["style-column", [
-                            ["buttonless-microtabs", "stages", {borderWidth: "0"}],
-                        ], {width: "800px", height: "420px", borderRadius: "0 0 27px 27px"}],
-                    ], {width: "800px", height: "720px", border: "3px solid var(--regBorder)", borderRadius: "0 0 30px 30px"}],
-                ],
-            },
-            "Space Battle": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                    ["blank", "25px"],
-                    ["clickable", 11],
-                    ["blank", "25px"],
-                    ["raw-html", function () { if (getLevelableAmount('pet', 1209).lte(0)) return ""; else return player.ir.sendCooldownTimer.lte(0) ? "Captain (Ready)" : "Captain (Cooldown: "+formatTime(player.ir.sendCooldownTimer)+")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 13],["clickable", 14]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-column", [
-                            ["levelable-display", [
-                                ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                            ]],
-                    ], {width: "550px", height: "175px", backgroundColor: "#070024", border: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
-                    ["always-scroll-column", [
-                            ["style-column", [
-                                ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
-                            ["style-column", [
-                                ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                            ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                        ], {width: "556px", height: "230px", borderBottom: "3px solid #5e4ee6"}],
-                    ["blank", "25px"],
-                        ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                ]
-            },
-            "Upgrades": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gem." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", "Space Rocks", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                    ["row", [["upgrade", 17],["upgrade", 18],["upgrade", 19],]],
-                    ["blank", "25px"],
-                    ["raw-html", "Space Gems", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
-                    ["blank", "25px"],
-                    ["raw-html", () => {return getLevelableAmount("pet", 502).gt(0) ? "Geroa Skills" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205], ["upgrade", 206],
-                        ["upgrade", 207]]],
-                ]
-            },
-            "Perks": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"} },
-                unlocked() { return player.ir.iriditeDefeated && !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
-                    ["style-column", [
-                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                    ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
-                ]
-            },
-            "Battle": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return false },
-                content: [
-                    ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                    ["blank", "650px"],
-                    ["row", [["clickable", 12], ["clickable", 13], ["blank", "50px"],
-                                                            ["style-column", [
-                            ["clickable", 1001],
-                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                        ], {width: "150px", height: "100px"}],     
-                ]],     
-    
-                ]
-            },
-            "Refresh Page :(": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
-                unlocked() { return false },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You idiot. WHY DID YOU REFRESH THE PAGE???" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-                    ["blank", "25px"],
-                    ["clickable", 12],
-                ]
-            },
-            "Lose": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return false },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You lost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-                    ["blank", "25px"],
-                    ["clickable", 12],
-                ]
-            },
-        },
-    },
-    tabFormat: [
-        ["microtabs", "stuff", { 'border-width': '0px' }],
-    ],
-    layerShown() { return player.se.starsExploreCount[0][5].gte(1) }
-});
-
 class SpaceArena {
+    /*
+        Check if coordinates are visible on screen:
+            - If true, then return coords with no changes.
+            - If false, then screen-wrap the coords.
+            - If true, then return screen-wrapped coords.
+            - If false, then return null.
+    */
+    getVisibleWrappedCoords(xy, wh) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        let maxDistX = (this.canvasWidth + wh[0]) / 2
+        let maxDistY = (this.canvasHeight + wh[1]) / 2
+        if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
+        else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
+        if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
+        else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
+        if (Math.abs(coordX - shipX) - (wh[0] / 2) <= (this.canvasWidth / 2) && Math.abs(coordY - shipY) - (wh[1] / 2) <= (this.canvasHeight / 2)) return [coordX, coordY];
+        else return null;
+    }
+    getWrappedCoords(xy) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        let maxDistX = this.canvasWidth / 2
+        let maxDistY = this.canvasHeight / 2
+        if (shipX > this.width - maxDistX && coordX < shipX + maxDistX - this.width) coordX += this.width;
+        else if (coordX > this.width - maxDistX && shipX < coordX + maxDistX - this.width) coordX -= this.width;
+        if (shipY > this.height - maxDistY && coordY < shipY + maxDistY - this.height) coordY += this.height;
+        else if (coordY > this.height - maxDistY && shipY < coordY + maxDistY - this.height) coordY -= this.height;
+        return [coordX, coordY];
+    }
+    /*
+        Get the ship coords closest to the provided point:
+        - Don't make changes if distance to ship is less than half the arena dimension.
+        - ship - coord > 0 : ship, edge, coord -> coord, edge, ship.
+        - NOT ship - coord > 0 : coord, edge, ship -> ship, edge, coord.
+    */
+    getClosestCoords(xy) {
+        let coordX = xy[0]
+        let coordY = xy[1]
+        let shipX = this.ship.x
+        let shipY = this.ship.y
+        if (Math.abs(shipX - coordX) > this.width / 2) shipX += (shipX - coordX > 0 ? -this.width : this.width);
+        if (Math.abs(shipY - coordY) > this.height / 2) shipY += (shipY - coordY > 0 ? -this.height : this.height);
+        return [shipX, shipY];
+    }
+    drawMinimapIcon(color, diameter, xy) {
+        this.ctx.fillStyle = color
+        let aspectRatio = this.width / this.height
+        let wrapped = this.getWrappedCoords([xy[0], xy[1]])
+        if (aspectRatio < 1) {
+            this.ctx.fillRect(
+                (160 * aspectRatio * ((((xy[0] - this.ship.x + this.width / 2) % this.width + this.width) % this.width) / this.width)) + (80 * (1 - aspectRatio)) + (20 - (diameter / 2)),
+                (160 * ((((xy[1] - this.ship.y + this.height / 2) % this.height + this.height) % this.height) / this.height)) + (20 - (diameter / 2)),
+                diameter, diameter
+            );
+        } else {
+            this.ctx.fillRect(
+                (160 * ((((xy[0] - this.ship.x + this.width / 2) % this.width + this.width) % this.width) / this.width)) + (20 - (diameter / 2)),
+                (160 * (1 / aspectRatio) * ((((xy[1] - this.ship.y + this.height / 2) % this.height + this.height) % this.height) / this.height)) + (80 * (1 - (1 / aspectRatio))) + (20 - (diameter / 2)),
+                diameter, diameter
+            );
+        }
+    }
+
         // Expand the arena to cover the entire screen and make it transparent
     enterIriditeFullscreen() {
         if (!this.arenaDiv || this._iriditeFullscreen) return;
@@ -1605,12 +266,14 @@ class SpaceArena {
             left: this.arenaDiv.style.left,
             top: this.arenaDiv.style.top,
             transform: this.arenaDiv.style.transform,
-            width: this.arenaDiv.style.width,
-            height: this.arenaDiv.style.height,
-            background: this.arenaDiv.style.background,
+            width: this.width,
+            height: this.height,
+            backgroundImage: this.arenaDiv.style.backgroundImage,
             border: this.arenaDiv.style.border,
             overflow: this.arenaDiv.style.overflow,
-            zIndex: this.arenaDiv.style.zIndex
+            zIndex: this.arenaDiv.style.zIndex,
+            canvasWidth: this.canvasWidth,
+            canvasHeight: this.canvasHeight,
         };
         this._prevWidth = this.width;
         this._prevHeight = this.height;
@@ -1618,22 +281,24 @@ class SpaceArena {
         // Apply fullscreen & transparent styles
         Object.assign(this.arenaDiv.style, {
             left: '0px',
-            top: '0px',
+            top: '103px',
             transform: 'none',
-            width: '100vw',
-            height: '100vh',
-            background: 'transparent',
-            border: 'none',
+            width: 'calc(100vw - 6px)',
+            height: 'calc(100vh - 276px)',
+            backgroundImage: this._prevArenaStyle.backgroundImage,
+            border: '3px solid white',
             overflow: 'hidden',
             zIndex: 10000
         });
+        this.canvasWidth = window.innerWidth - 6
+        this.canvasHeight = window.innerHeight - 276
 
         // Resize canvas and internal dimensions to match window
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        this.width = 3200;
+        this.height = 3200;
         if (this.canvas) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
+            this.canvas.width = this.canvasWidth;
+            this.canvas.height = this.canvasHeight;
         }
 
         // Re-center player ship (keeps player visually centered)
@@ -1645,16 +310,11 @@ class SpaceArena {
         // Keep the canvas sized during window resize while in fullscreen boss mode
         this._onWindowResize = () => {
             if (!this._iriditeFullscreen) return;
-            this.width = window.innerWidth;
-            this.height = window.innerHeight;
+                this.canvasWidth = window.innerWidth
+                this.canvasHeight = window.innerHeight
             if (this.canvas) {
-                this.canvas.width = this.width;
-                this.canvas.height = this.height;
-            }
-            // keep ship centered
-            if (this.ship) {
-                this.ship.x = this.width / 2;
-                this.ship.y = this.height / 2;
+                this.canvas.width = this.canvasWidth;
+                this.canvas.height = this.canvasHeight;
             }
         };
 
@@ -1671,17 +331,17 @@ class SpaceArena {
             left: s.left || '50%',
             top: s.top || '50%',
             transform: s.transform || 'translate(-50%, -50%)',
-            width: s.width || (this._prevWidth ? (this._prevWidth + 'px') : '800px'),
-            height: s.height || (this._prevHeight ? (this._prevHeight + 'px') : '600px'),
-            background: s.background || '#181a2b',
+            backgroundImage: s.backgroundImage || 'url(resources/ui/spaceBattle/iriditeZone.png)',
             border: s.border || '3px solid #fff',
             overflow: s.overflow || 'hidden',
             zIndex: s.zIndex || 9999
         });
+        this.width = this._prevArenaStyle.width
+        this.height = this._prevArenaStyle.height
+        this.canvasWidth = this._prevArenaStyle.canvasWidth
+        this.canvasHeight = this._prevArenaStyle.canvasHeight
 
         // Restore canvas size and internal dimensions
-        this.width = this._prevWidth || this.width;
-        this.height = this._prevHeight || this.height;
         if (this.canvas) {
             this.canvas.width = this.width;
             this.canvas.height = this.height;
@@ -1698,9 +358,11 @@ class SpaceArena {
             this._onWindowResize = null;
         }
     }
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(canvasWidth, canvasHeight, arenaWidth, arenaHeight) {
+        this.width = arenaWidth;
+        this.height = arenaHeight;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         this.arenaDiv = null;
 
         // load wing GIF for Iridite (200x200). keep a loaded flag so draw can choose fallback.
@@ -1714,8 +376,8 @@ class SpaceArena {
         // Ship types
         if (player.ir.shipType == 1) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1733,8 +395,8 @@ class SpaceArena {
         this.shipHitInvuln = 0;
         if (player.ir.shipType == 2) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1750,8 +412,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 3) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 30,
@@ -1763,7 +425,7 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastBounceClick = 0;
+            this.lastBounceClick = Date.now() - 1500;
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
@@ -1778,8 +440,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 4) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1795,8 +457,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 5) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -1815,8 +477,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 6) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -1835,8 +497,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 7) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
                 radius: 20,
@@ -1849,23 +511,23 @@ class SpaceArena {
                 maxVelocity: 10,
                 collisionDamage: 10,
             };
-            this.lastDashClick = 0;
-            this.dashCooldown = 2000; // 2 seconds in ms
+            this.lastDashClick = Date.now() - 500;
+            this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
-                let mx = e.clientX - rect.left;
-                let my = e.clientY - rect.top;
+                let mx = e.clientX + this.ship.x - (canvasWidth / 2) - rect.left;
+                let my = e.clientY + this.ship.y - (canvasHeight / 2) - rect.top;
                 this.ship.dashTarget = { x: mx, y: my };
             };
         }
         if (player.ir.shipType == 8) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1887,8 +549,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 9) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1904,8 +566,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 10) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1923,8 +585,8 @@ class SpaceArena {
         }
         if (player.ir.shipType == 0) {
             this.ship = {
-                x: width / 2,
-                y: height / 2,
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -1947,20 +609,22 @@ class SpaceArena {
         this.running = false;
         this.loop = null;
         this.asteroidSpawnTimer = 0;
-        this.maxAsteroids = 6;
+        this.maxAsteroids = 16;
         this.lootFlashes = [];
         this.upgradeChoiceActive = false;
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgradeEffects = this.getDefaultUpgradeEffects();
+        this.resourceMult = 1;
 
         // Enemy system
         this.enemies = [];
         this.enemyTypes = {
             alphaShip: {
                 name: "Alpha Ship",
+                symbol: "α",
                 radius: 24,
-                color: "#4c8cff",
+                color: "#3054bf",
                 healthMin: 200,
                 healthMax: 300,
                 damage: 6,
@@ -1974,24 +638,29 @@ class SpaceArena {
                 rockDrop: [10, 20],
                 xpDrop: [10, 15],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("α", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             betaShip: {
                 // Machine-gun style: rapid burst (many small bullets)
                 name: "Beta Ship",
-                radius: 20,
+                symbol: "β",
+                radius: 24,
                 color: "#ffb84c",
                 healthMin: 150,
                 healthMax: 200,
@@ -2006,23 +675,28 @@ class SpaceArena {
                 rockDrop: [6, 14],
                 xpDrop: [6, 10],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("β", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             
             gammaShip: {
                 name: "Gamma Ship",
+                symbol: "γ",
                 radius: 28,
                 color: "#b44cff",
                 healthMin: 160,
@@ -2038,24 +712,29 @@ class SpaceArena {
                 rockDrop: [18, 30],
                 xpDrop: [18, 26],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 12} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 32px monospace";
-                    ctx.fillStyle = "#fff";
-                    ctx.textAlign = "center";
-                    ctx.fillText("γ", enemy.x, enemy.y + 12);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
 
             // Hard-mode enemies (activated at battleLevel >= 8)
             deltaShip: {
                 name: "Delta",
+                symbol: "δ",
                 radius: 28,
                 color: "#66ffe6",
                 healthMin: 320,
@@ -2071,23 +750,28 @@ class SpaceArena {
                 rockDrop: [8, 18],
                 xpDrop: [12, 18],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#bff";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 20px monospace";
-                    ctx.fillStyle = "#003";
-                    ctx.textAlign = "center";
-                    ctx.fillText("Δ", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             epsilonShip: {
                 name: "Epsilon",
-                radius: 26,
+                symbol: "ε",
+                radius: 28,
                 color: "#ff66d9",
                 healthMin: 400,
                 healthMax: 500,
@@ -2102,23 +786,28 @@ class SpaceArena {
                 rockDrop: [12, 22],
                 xpDrop: [14, 22],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#ffd";
-                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 20px monospace";
-                    ctx.fillStyle = "#111";
-                    ctx.textAlign = "center";
-                    ctx.fillText("ε", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             zetaShip: {
                 name: "Zeta",
-                radius: 22,
+                symbol: "ζ",
+                radius: 24,
                 color: "#ffe066",
                 healthMin: 300,
                 healthMax: 400,
@@ -2134,22 +823,27 @@ class SpaceArena {
                 rockDrop: [14, 26],
                 xpDrop: [16, 24],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#fff6";
-                    if (!options.performanceMode) {ctx.shadowBlur = 10} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 18px monospace";
-                    ctx.fillStyle = "#111";
-                    ctx.textAlign = "center";
-                    ctx.fillText("ζ", enemy.x, enemy.y + 6);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             etaShip: {
                 name: "Eta",
+                symbol: "η",
                 radius: 16,
                 color: "#9eff66",
                 healthMin: 250,
@@ -2165,18 +859,22 @@ class SpaceArena {
                 rockDrop: [5, 12],
                 xpDrop: [8, 14],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, 2 * Math.PI);
-                    ctx.fillStyle = enemy.color;
-                    ctx.shadowColor = "#cfc";
-                    if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                    ctx.fill();
-                    ctx.font = "bold 16px monospace";
-                    ctx.fillStyle = "#021";
-                    ctx.textAlign = "center";
-                    ctx.fillText("η", enemy.x, enemy.y + 5);
-                    ctx.restore();
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
+                        ctx.save();
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                        ctx.beginPath();
+                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = enemy.color;
+                        ctx.shadowColor = "#fff";
+                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
+                        ctx.fill();
+                        ctx.font = "bold 32px monospace";
+                        ctx.fillStyle = "#fff";
+                        ctx.textAlign = "center";
+                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
+                        ctx.restore();
+                    }
                 }
             },
             // Miniboss: UFO
@@ -2193,9 +891,9 @@ class SpaceArena {
                 bulletSpeed: 8,
                 bulletCooldown: 60,
                 rockDrop: [50, 80],
-                xpDrop: [200, 300],
                 draw: (ctx, enemy) => {
                     ctx.save();
+                    ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                     ctx.translate(enemy.x, enemy.y);
                     // UFO body
                     ctx.beginPath();
@@ -2233,140 +931,144 @@ class SpaceArena {
                 bulletSpeed: 10,
                 bulletCooldown: 40,
                 rockDrop: [250, 450],
-                xpDrop: [2000, 3000],
                 draw: (ctx, enemy) => {
-                    ctx.save();
-                    ctx.translate(enemy.x, enemy.y);
+                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+                    if (wrapped) {
 
-                    // wing flap drive
-                    const phase = (enemy.wingPhase || 0);
-                    // normalized flap t in [0,1], eased for realistic acceleration/deceleration
-                    let raw = Math.sin(phase);
-                    let t = (raw + 1) / 2;
-                    let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-                    const r = enemy.radius;
-                    // wider spread on upstroke, tighter on downstroke
-                    const spreadBase = 0.9 + ease * 0.6;
-                    const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
-
-                    // Glow for whole boss
-                    ctx.shadowColor = "rgba(240,230,255,0.9)";
-                    if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
-
-                    // wing drawing function; draws a richer, layered feather set (no back/filler blob)
-                    const drawWing = (mirror = false) => {
                         ctx.save();
-                        if (mirror) ctx.scale(-1, 1);
+                        ctx.translate(wrapped[0], wrapped[1]);
+                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
 
-                        // root transform (each wing attached slightly outward)
-                        ctx.translate(r * 0.56, r * 0.02);
-                        // base rotation: open/close with flap
-                        let baseAngle = -0.22 - tipBend * 0.14;
-                        ctx.rotate(baseAngle);
+                        // wing flap drive
+                        const phase = (enemy.wingPhase || 0);
+                        // normalized flap t in [0,1], eased for realistic acceleration/deceleration
+                        let raw = Math.sin(phase);
+                        let t = (raw + 1) / 2;
+                        let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-                        // three feather groups: primaries, secondaries, coverts — fuller counts and gradual taper
-                        const groups = [
-                            { count: 8, len: r * 1.08, width: r * 0.32, offset: 0.0, light: -8 },
-                            { count: 7, len: r * 0.82, width: r * 0.26, offset: 0.08, light: -2 },
-                            { count: 6, len: r * 0.56, width: r * 0.2, offset: 0.16, light: 6 },
-                            { count: 4, len: r * 0.36, width: r * 0.14, offset: 0.28, light: 10 } // extra small coverts for fullness
-                        ];
+                        const r = enemy.radius;
+                        // wider spread on upstroke, tighter on downstroke
+                        const spreadBase = 0.9 + ease * 0.6;
+                        const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
 
-                        for (let gi = 0; gi < groups.length; gi++) {
-                            const g = groups[gi];
-                            // angular spread for this group
-                            const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
-                            for (let i = 0; i < g.count; i++) {
-                                // normalized position along wing span - center is 0
-                                let norm = (i / (g.count - 1)) - 0.5;
-                                // base position along the wing
-                                let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
-                                let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
-                                // feather angle and variation
-                                let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
-                                // feather shape
-                                let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
-                                let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
+                        // Glow for whole boss
+                        ctx.shadowColor = "rgba(240,230,255,0.9)";
+                        if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
 
-                                ctx.save();
-                                ctx.translate(bx, by);
-                                ctx.rotate(featherAngle);
+                        // wing drawing function; draws a richer, layered feather set (no back/filler blob)
+                        const drawWing = (mirror = false) => {
+                            ctx.save();
+                            if (mirror) ctx.scale(-1, 1);
 
-                                // feather silhouette with slight concave edge for natural look
-                                ctx.beginPath();
-                                ctx.moveTo(0, 0);
-                                ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
-                                ctx.lineTo(len * 0.86, width * 0.14);
-                                ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
-                                ctx.closePath();
+                            // root transform (each wing attached slightly outward)
+                            ctx.translate(r * 0.56, r * 0.02);
+                            // base rotation: open/close with flap
+                            let baseAngle = -0.22 - tipBend * 0.14;
+                            ctx.rotate(baseAngle);
 
-                                // feather gradient for depth
-                                let fg = ctx.createLinearGradient(0, -width, len, width);
-                                fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.98)`);
-                                fg.addColorStop(0.5, `rgba(${232 + g.light},${226 + g.light},${246 - g.light},0.92)`);
-                                fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.86)`);
-                                ctx.fillStyle = fg;
-                                ctx.fill();
+                            // three feather groups: primaries, secondaries, coverts — fuller counts and gradual taper
+                            const groups = [
+                                { count: 8, len: r * 1.08, width: r * 0.32, offset: 0.0, light: -8 },
+                                { count: 7, len: r * 0.82, width: r * 0.26, offset: 0.08, light: -2 },
+                                { count: 6, len: r * 0.56, width: r * 0.2, offset: 0.16, light: 6 },
+                                { count: 4, len: r * 0.36, width: r * 0.14, offset: 0.28, light: 10 } // extra small coverts for fullness
+                            ];
 
-                                // central shaft highlight (subtle)
-                                ctx.beginPath();
-                                ctx.moveTo(len * 0.08, -width * 0.02);
-                                ctx.lineTo(len * 0.72, -width * 0.02);
-                                ctx.strokeStyle = "rgba(255,255,255,0.24)";
-                                ctx.lineWidth = Math.max(1, r * 0.01);
-                                ctx.stroke();
+                            for (let gi = 0; gi < groups.length; gi++) {
+                                const g = groups[gi];
+                                // angular spread for this group
+                                const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
+                                for (let i = 0; i < g.count; i++) {
+                                    // normalized position along wing span - center is 0
+                                    let norm = (i / (g.count - 1)) - 0.5;
+                                    // base position along the wing
+                                    let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
+                                    let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
+                                    // feather angle and variation
+                                    let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
+                                    // feather shape
+                                    let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
+                                    let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
 
-                                ctx.restore();
+                                    ctx.save();
+                                    ctx.translate(bx, by);
+                                    ctx.rotate(featherAngle);
+
+                                    // feather silhouette with slight concave edge for natural look
+                                    ctx.beginPath();
+                                    ctx.moveTo(0, 0);
+                                    ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
+                                    ctx.lineTo(len * 0.86, width * 0.14);
+                                    ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
+                                    ctx.closePath();
+
+                                    // feather gradient for depth
+                                    let fg = ctx.createLinearGradient(0, -width, len, width);
+                                    fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.98)`);
+                                    fg.addColorStop(0.5, `rgba(${232 + g.light},${226 + g.light},${246 - g.light},0.92)`);
+                                    fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.86)`);
+                                    ctx.fillStyle = fg;
+                                    ctx.fill();
+
+                                    // central shaft highlight (subtle)
+                                    ctx.beginPath();
+                                    ctx.moveTo(len * 0.08, -width * 0.02);
+                                    ctx.lineTo(len * 0.72, -width * 0.02);
+                                    ctx.strokeStyle = "rgba(255,255,255,0.24)";
+                                    ctx.lineWidth = Math.max(1, r * 0.01);
+                                    ctx.stroke();
+
+                                    ctx.restore();
+                                }
                             }
-                        }
 
-                        // Outer rim/fold to shape the wing edge (thin stroke)
+                            // Outer rim/fold to shape the wing edge (thin stroke)
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.moveTo(0, 0);
+                            ctx.bezierCurveTo(r * 0.18, -r * 0.5 * spreadBase, r * 0.95, -r * 0.28 * spreadBase, r * 1.04, -r * 0.04);
+                            ctx.lineTo(r * 0.92, r * 0.02);
+                            ctx.bezierCurveTo(r * 0.6, r * 0.42 * spreadBase, r * 0.18, r * 0.46 * spreadBase, 0, r * 0.28);
+                            ctx.closePath();
+                            ctx.strokeStyle = "rgba(255,255,255,0.12)";
+                            ctx.lineWidth = Math.max(1, r * 0.02);
+                            ctx.stroke();
+                            ctx.restore();
+
+                            ctx.restore();
+                        };
+
+                        // Draw left and right wings (right wing mirrored to avoid vertical inversion)
+                        drawWing(false); // left-looking (draws to right in local coords)
+                        drawWing(true);  // mirrored right wing
+
+                        // Thin white circle showing hitbox (centered)
                         ctx.save();
+                        ctx.shadowBlur = 0;
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = "rgba(255,255,255,0.95)";
                         ctx.beginPath();
-                        ctx.moveTo(0, 0);
-                        ctx.bezierCurveTo(r * 0.18, -r * 0.5 * spreadBase, r * 0.95, -r * 0.28 * spreadBase, r * 1.04, -r * 0.04);
-                        ctx.lineTo(r * 0.92, r * 0.02);
-                        ctx.bezierCurveTo(r * 0.6, r * 0.42 * spreadBase, r * 0.18, r * 0.46 * spreadBase, 0, r * 0.28);
-                        ctx.closePath();
-                        ctx.strokeStyle = "rgba(255,255,255,0.12)";
-                        ctx.lineWidth = Math.max(1, r * 0.02);
+                        ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
                         ctx.stroke();
                         ctx.restore();
 
+                        // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
+                        ctx.save();
+                        if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
+                        const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
+                        ctx.font = `${fontSize}px monospace`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle"; // ensure center vertically
+                        ctx.fillStyle = "#e0ccffff";
+                        ctx.fillText("✦", 0, 8); // exact center
+                        // subtle stroke for definition
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = "rgba(240,200,80,0.12)";
+                        ctx.strokeText("✦", 0, 8);
                         ctx.restore();
-                    };
 
-                    // Draw left and right wings (right wing mirrored to avoid vertical inversion)
-                    drawWing(false); // left-looking (draws to right in local coords)
-                    drawWing(true);  // mirrored right wing
-
-                    // Thin white circle showing hitbox (centered)
-                    ctx.save();
-                    ctx.shadowBlur = 0;
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = "rgba(255,255,255,0.95)";
-                    ctx.beginPath();
-                    ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.restore();
-
-                    // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
-                    ctx.save();
-                    if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
-                    const fontSize = Math.max(12, Math.floor(enemy.radius * 1.4));
-                    ctx.font = `${fontSize}px monospace`;
-                    ctx.textAlign = "center";
-                    ctx.textBaseline = "middle"; // ensure center vertically
-                    ctx.fillStyle = "#e0ccffff";
-                    ctx.fillText("✦", 0, 0); // exact center
-                    // subtle stroke for definition
-                    ctx.lineWidth = 4;
-                    ctx.strokeStyle = "rgba(240,200,80,0.12)";
-                    ctx.strokeText("✦", 0, 0);
-                    ctx.restore();
-
-                    ctx.restore();
+                        ctx.restore();
+                    }
                 }
             },
         };
@@ -2385,6 +1087,7 @@ class SpaceArena {
             maxHp: 0,
             moveSpeed: 0,
             lootGain: 1,
+            gemGain: 1,
             xpGain: 1,
         };
     }
@@ -2395,20 +1098,22 @@ class SpaceArena {
         Object.assign(this.arenaDiv.style, {
             position: 'fixed',
             left: '50%',
-            top: '50%',
-            width: this.width + 'px',
-            height: this.height + 'px',
+            top: '547px',
+            width: this.canvasWidth + 'px',
+            height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
-            background: '#181a2b',
-            border: '3px solid #fff',
+            backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
+            border: '3px solid ' + player.ir.primaryColor,
+            borderRadius: '0',
             zIndex: 9999,
             overflow: 'hidden',
+	        "transition-duration": "0s",
         });
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        this.canvas.width = this.canvasWidth;
+        this.canvas.height = this.canvasHeight;
         this.arenaDiv.appendChild(this.canvas);
         this.ctx = this.canvas.getContext('2d');
 
@@ -2472,7 +1177,7 @@ class SpaceArena {
         let angle = this.ship.angle || 0;
         // shipType 5 aims at the mouse and fires burst shots toward it
         if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            angle = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+            angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
@@ -2745,6 +1450,7 @@ class SpaceArena {
         let wanderAngle = angle;
         let enemy = {
             type: typeName,
+            symbol: type.symbol,
             x: this.ship.x + Math.cos(angle) * 200,
             y: this.ship.y + Math.sin(angle) * 200,
             vx: Math.cos(angle) * (type.wanderSpeed || 1),
@@ -2936,6 +1642,8 @@ class SpaceArena {
     }
 
     update() {
+        this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
+
         // Prepare collectors used by multiple death paths
         let newAsteroids = [];
         let lootFlashPositions = [];
@@ -2968,8 +1676,12 @@ class SpaceArena {
             if (enemy.type === "ufoBoss") {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
-                player.ir.spaceGem = player.ir.spaceGem.add(2);
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
+                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // Mark Iridite defeat when boss dies
@@ -2979,6 +1691,12 @@ class SpaceArena {
                 if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
+                player.ir.battleLevel = player.ir.battleLevel.add(1)
+                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                player.ir.spaceGem = player.ir.spaceGem.add(gain);
+                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                arena.showUpgradeChoice(true);
+                arena.upgradeChoiceActive = true
             }
 
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
@@ -2986,6 +1704,13 @@ class SpaceArena {
                 if (Math.random() < 0.03) {
                     player.ir.spaceGem = player.ir.spaceGem.add(1);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
+                }
+            }
+            
+            if (!enemy.alive) {
+                let i = this.enemies.indexOf(enemy);
+                if (i > -1) {
+                  this.enemies.splice(i, 1);
                 }
             }
         };
@@ -3020,6 +1745,20 @@ class SpaceArena {
         if (player.ir.shipType == 3) {
             // Gravity
             this.ship.vy += this.ship.gravity;
+
+            // Auto Bounce
+            if (player.ir.autoShoot) {
+                let now = Date.now();
+                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
+                if (now - this.lastBounceClick >= this.bounceCooldown) {
+                    this.lastBounceClick = now;
+                    let rect = this.canvas.getBoundingClientRect();
+                    this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.bounceTarget.x == undefined) {
+                        this.ship.bounceTarget = {x: this.width / 2, y: this.height / 2}
+                    }
+                }
+            }
 
             // Bounce click logic
             if (this.ship.bounceTarget) {
@@ -3069,6 +1808,20 @@ class SpaceArena {
                 this.ship.vx = -this.ship.vx * this.ship.bounce;
             }
         } else if (player.ir.shipType == 7) {
+            // Auto Dash
+            if (player.ir.autoShoot) {
+                let now = Date.now();
+                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
+                if (now - this.lastDashClick >= this.dashCooldown) {
+                    this.lastDashClick = now;
+                    let rect = this.canvas.getBoundingClientRect();
+                    this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
+                    if (this.ship.dashTarget.x == undefined) {
+                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
+                    }
+                }
+            }
+
             if (this.ship.dashTarget) {
                 let dx = this.ship.dashTarget.x - this.ship.x;
                 let dy = this.ship.dashTarget.y - this.ship.y;
@@ -3219,16 +1972,15 @@ class SpaceArena {
                 this.ship.x += this.ship.vx;
                 this.ship.y += this.ship.vy;
 
-                // Keep inside bounds (respect ship radius if set)
-                const r = this.ship.radius || 12;
-                if (this.ship.x < r) this.ship.x = r;
-                if (this.ship.x > this.width - r) this.ship.x = this.width - r;
-                if (this.ship.y < r) this.ship.y = r;
-                if (this.ship.y > this.height - r) this.ship.y = this.height - r;
+                // Wrap ship around arena edges
+                if (this.ship.x < 0) this.ship.x = this.width;
+                if (this.ship.x > this.width) this.ship.x = 0;
+                if (this.ship.y < 0) this.ship.y = this.height;
+                if (this.ship.y > this.height) this.ship.y = 0;
 
                 // Rotation purely visual: smoothly face the mouse (won't affect movement)
                 if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                    let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                    let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
                     let diff = desired - this.ship.angle;
                     while (diff > Math.PI) diff -= 2 * Math.PI;
                     while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -3301,12 +2053,13 @@ class SpaceArena {
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
         for (let bullet of this.bullets) {
+            let closest = this.getClosestCoords([bullet.x, bullet.y])
             // Homing behavior: enemy homing bullets should home to the player;
             // player-fired homing bullets should home to enemies.
             if (bullet.homing) {
                 if (bullet.fromEnemy) {
                     // Home to player: compute desired and rotate toward it with clamped turn.
-                    let desired = Math.atan2(this.ship.y - bullet.y, this.ship.x - bullet.x);
+                    let desired = Math.atan2(closest[1] - bullet.y, closest[0] - bullet.x);
                     let current = Math.atan2(bullet.vy, bullet.vx);
                     let diff = desired - current;
                     while (diff > Math.PI) diff -= 2 * Math.PI;
@@ -3354,6 +2107,10 @@ class SpaceArena {
 
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
+            if (bullet.x < 0) bullet.x = this.width;
+            if (bullet.x > this.width) bullet.x = 0;
+            if (bullet.y < 0) bullet.y = this.height;
+            if (bullet.y > this.height) bullet.y = 0;
             bullet.life--;
 
             // Giant bullets bounce off arena edges and dissipate after life expires
@@ -3447,6 +2204,11 @@ class SpaceArena {
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
             const type = this.enemyTypes[enemy.type];
+            let closest = this.getClosestCoords([enemy.x, enemy.y])
+            let dx = closest[0] - enemy.x;
+            let dy = closest[1] - enemy.y;
+            let dist = Math.hypot(dx, dy) || 1;
+            let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
 
             if (enemy.type === "iriditeBoss") {
                 // If the asteroid minigame is paused, also pause Iridite boss actions
@@ -3455,6 +2217,7 @@ class SpaceArena {
                     continue;
                 }
                 player.ir.iriditePhase = enemy.phase
+
 
                 // ensure wingPhase exists and animate it (controls flap)
                 if (typeof enemy.wingPhase !== "number") enemy.wingPhase = Math.random() * Math.PI * 2;
@@ -3483,40 +2246,38 @@ class SpaceArena {
                     enemy.attackTimer--;
                     if (enemy.attackTimer <= 0) {
                         let r = Math.random();
+                        let dr = ((dist - 400) / 1600);
                         // make dagger and shortBurst available in all phases;
                         // add laser possibility in phase 3+
                         if (enemy.phase === 1) {
-                            if (r < 0.28) enemy.state = "radial";
-                            else if (r < 0.36) enemy.state = "homing";
-                            else if (r < 0.60) enemy.state = "dagger";
-                            else if (r < 0.80) enemy.state = "shortBurst";
-                            else enemy.state = "lunge";
+                            if (Math.random() < dr) enemy.state = "lunge";
+                            else if (r < 0.3) enemy.state = "dagger"; // 30%
+                            else if (r < 0.5) enemy.state = "homing"; // 20%
+                            else if (r < 0.75) enemy.state = "radial"; // 25%
+                            else enemy.state = "shortBurst"; // 25%
                         } else if (enemy.phase === 2) {
-                            if (r < 0.20) enemy.state = "radial";
-                            else if (r < 0.42) enemy.state = "homing";
-                            else if (r < 0.64) enemy.state = "raining";
-                            else if (r < 0.82) enemy.state = "dagger";
-                            else if (r < 0.92) enemy.state = "shortBurst";
-                            else if (r < 0.96) enemy.state = "lunge";
-                            else enemy.state = "lunge";
+                            if (Math.random() < dr) enemy.state = "lunge";
+                            else if (r < 0.25) enemy.state = "dagger"; // 25%
+                            else if (r < 0.4) enemy.state = "homing"; // 15%
+                            else if (r < 0.6) enemy.state = "radial"; // 20%
+                            else if (r < 0.8) enemy.state = "shortBurst"; // 20%
+                            else enemy.state = "raining"; // 20%
                         } else if (enemy.phase === 3) {
-                            if (r < 0.16) enemy.state = "lunge";
-                            else if (r < 0.36) enemy.state = "homing";
-                            else if (r < 0.54) enemy.state = "raining";
-                            else if (r < 0.72) enemy.state = "dagger";
-                            else if (r < 0.82) enemy.state = "burst";
-                            else if (r < 0.90) enemy.state = "giant";
-                            else if (r < 0.98) enemy.state = "laser";
+                            if (r < 0.2) enemy.state = "homing";
+                            else if (r < 0.38) enemy.state = "raining";
+                            else if (r < 0.54) enemy.state = "dagger";
+                            else if (r < 0.64) enemy.state = "burst";
+                            else if (r < 0.72) enemy.state = "giant";
+                            else if (r < 0.8) enemy.state = "laser";
                             else enemy.state = "lunge";
                         } else {
                             // phase 4 (very aggressive)
-                            if (r < 0.10) enemy.state = "lunge";
-                            else if (r < 0.18) enemy.state = "homing";
-                            else if (r < 0.28) enemy.state = "raining";
-                            else if (r < 0.44) enemy.state = "dagger";
-                            else if (r < 0.64) enemy.state = "burst";
-                            else if (r < 0.76) enemy.state = "giant";
-                            else if (r < 0.98) enemy.state = "laser";
+                            if (r < 0.08) enemy.state = "homing";
+                            else if (r < 0.18) enemy.state = "raining";
+                            else if (r < 0.34) enemy.state = "dagger";
+                            else if (r < 0.54) enemy.state = "burst";
+                            else if (r < 0.66) enemy.state = "giant";
+                            else if (r < 0.88) enemy.state = "laser";
                             else enemy.state = "lunge";
                         }
 
@@ -3567,9 +2328,8 @@ class SpaceArena {
                             // plan 5 directions around player
                             let count = 5;
                             for (let i = 0; i < count; i++) {
-                                let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let ang = base + (i - (count - 1) / 2) * 0.28 + (Math.random() - 0.5) * 0.18;
-                                let cosA = Math.cos(ang), sinA = Math.sin(ang);
+                                let baseAng = ang + (i - (count - 1) / 2) * 0.28 + (Math.random() - 0.5) * 0.18;
+                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
                                 let cx = enemy.x, cy = enemy.y;
                                 let ts = [];
                                 if (Math.abs(cosA) > 1e-6) {
@@ -3597,7 +2357,7 @@ class SpaceArena {
                             // laser duration and rotation speed
                             enemy._laserTimer = 180 + enemy.phase * 40; // frames total (3s +)
                             enemy._laserActive = false;
-                            enemy._laserAngle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            enemy._laserAngle = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             enemy._laserSpin = (Math.random() < 0.5 ? 1 : -1) * (0.006 + enemy.phase * 0.004); // radians/frame
                             enemy._laserHitCooldown = 0;
                         }
@@ -3610,13 +2370,13 @@ class SpaceArena {
                         let pieces = 14 + enemy.phase * 2;
                         let baseSpread = (enemy.phase >= 3) ? 0.5 : 0;
                         for (let i = 0; i < pieces; i++) {
-                            let angle = (i / pieces) * Math.PI * 2 + (Math.random() - 0.5) * baseSpread;
+                            let baseAng = (i / pieces) * Math.PI * 2 + (Math.random() - 0.5) * baseSpread;
                             let spd = 6;
                             this.bullets.push({
-                                x: enemy.x + Math.cos(angle) * (enemy.radius - 6),
-                                y: enemy.y + Math.sin(angle) * (enemy.radius - 6),
-                                vx: Math.cos(angle) * spd,
-                                vy: Math.sin(angle) * spd,
+                                x: enemy.x + Math.cos(baseAng) * (enemy.radius - 6),
+                                y: enemy.y + Math.sin(baseAng) * (enemy.radius - 6),
+                                vx: Math.cos(baseAng) * spd,
+                                vy: Math.sin(baseAng) * spd,
                                 life: 240,
                                 damage: 5,
                                 pierce: 0,
@@ -3640,7 +2400,7 @@ class SpaceArena {
                 if (enemy.state === "homing") {
                     if (enemy._actionCooldown <= 0) {
                         // spawn homing projectile aimed at player (initial direction toward player)
-                        let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x) + (Math.random() - 0.5) * 0.12;
+                        let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x) + (Math.random() - 0.5) * 0.12;
                         let spd = 3.5; // stronger initial speed
                         // normalize (defensive) and set vx/vy
                         let vx = Math.cos(ang) * spd;
@@ -3672,12 +2432,15 @@ class SpaceArena {
                 }
                 // --- Lunge: single directed dash toward player (any phase) ---
                 if (enemy.state === "lunge") {
+                    // End lunge if close to the player
+                    if (dist < 150) {
+                        enemy.state = "idle";
+                        enemy.attackTimer = 60 - enemy.phase * 10;
+                        enemy._lungeHit = 0;
+                    }
                     if (enemy._lungeTimer > 0) {
                         // compute normalized direction to player
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
-                        let dist = Math.hypot(dx, dy) || 1;
-                        let strength = 6 + enemy.phase * 1.2; // per-frame movement
+                        let strength = 6 + enemy.phase * 1.5; // per-frame movement
                         let vx = (dx / dist) * strength;
                         let vy = (dy / dist) * strength;
                         enemy.x += vx;
@@ -3685,8 +2448,8 @@ class SpaceArena {
 
                         // light contact damage while lunging (once per hit cooldown)
                         let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-                        let sdx = this.ship.x - enemy.x;
-                        let sdy = this.ship.y - enemy.y;
+                        let sdx = closest[0] - enemy.x;
+                        let sdy = closest[1] - enemy.y;
                         let sdist = Math.hypot(sdx, sdy);
                         if (sdist < enemy.radius + shipRadius) {
                             if (!enemy._lungeHit) {
@@ -3713,18 +2476,20 @@ class SpaceArena {
                         if (enemy._rainingInterval <= 0) {
                             enemy._rainingInterval = Math.max(6, 18 - enemy.phase * 2);
                             // spawn a small cluster each tick
-                            let count = 1 + Math.floor(enemy.phase / 2);
+                            let count = 2 + Math.floor(enemy.phase / 2);
                             for (let i = 0; i < count; i++) {
-                                let sx = Math.random() * this.width;
-                                let sy = -20 - Math.random() * 80;
-                                let vx = (Math.random() - 0.5) * 0.8;
-                                let vy = 3 + Math.random() * (1 + enemy.phase * 0.5);
+                                let rPos = Math.random() - 0.5
+                                let rAng = Math.random() - 0.5
+                                let sx = enemy.x + (rPos * 1200 * Math.cos(ang + (Math.PI/2))) - (600 * Math.cos(ang));
+                                let sy = enemy.y + (rPos * 1200 * Math.sin(ang + (Math.PI/2))) - (600 * Math.sin(ang));
+                                let vx = Math.cos(ang + (rAng * 0.125 * Math.PI)) * 6;
+                                let vy = Math.sin(ang + (rAng * 0.125 * Math.PI)) * 6;
                                 this.bullets.push({
                                     x: sx,
                                     y: sy,
                                     vx: vx,
                                     vy: vy,
-                                    life: 400,
+                                    life: 600,
                                     damage: 4 + enemy.phase,
                                     pierce: 0,
                                     fromEnemy: true,
@@ -3746,8 +2511,8 @@ class SpaceArena {
                         if (!enemy._daggerConverge.point) {
                             // choose a random interior converge point (biased toward player)
                             const jitter = 80;
-                            const cx = Math.max(80, Math.min(this.width - 80, this.ship.x + (Math.random() - 0.5) * jitter));
-                            const cy = Math.max(80, Math.min(this.height - 80, this.ship.y + (Math.random() - 0.5) * jitter));
+                            const cx = Math.max(80, Math.min(this.width - 80, closest[0] + (Math.random() - 0.5) * jitter));
+                            const cy = Math.max(80, Math.min(this.height - 80, closest[1] + (Math.random() - 0.5) * jitter));
                             enemy._daggerConverge.point = { x: cx, y: cy };
                             // choose origins around the arena edge
                             const originCount = 8 + Math.floor(enemy.phase * 2);
@@ -3807,9 +2572,9 @@ class SpaceArena {
                             let lineCount = 2 + Math.min(5, Math.floor(enemy.phase) + 1);
                             enemy._daggerPrep = 48;
                             for (let i = 0; i < lineCount; i++) {
-                                let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let angle = base + (Math.random() - 0.5) * 1.2 + (i - (lineCount - 1) / 2) * 0.18;
-                                let cosA = Math.cos(angle), sinA = Math.sin(angle);
+                                let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
+                                let baseAng = base + (Math.random() - 0.5) * 1.2 + (i - (lineCount - 1) / 2) * 0.18;
+                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
                                 let cx = enemy.x, cy = enemy.y;
                                 let ts = [];
                                 if (Math.abs(cosA) > 1e-6) {
@@ -3917,7 +2682,7 @@ class SpaceArena {
                 if (enemy.state === "shortBurst") {
                     if (enemy._shortBurstShots > 0) {
                         if (enemy._actionCooldown <= 0) {
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let pellets = 6 + Math.floor(enemy.phase * 1.5);
                             let spread = 0.28 - enemy.phase * 0.02;
                             let speed = 10 + enemy.phase * 0.6;
@@ -3962,8 +2727,8 @@ class SpaceArena {
                         // check ship intersection with beam (in world space)
                         if (enemy._laserActive && enemy._laserHitCooldown <= 0) {
                             // compute perpendicular distance to beam line
-                            let bx = this.ship.x - enemy.x;
-                            let by = this.ship.y - enemy.y;
+                            let bx = closest[0] - enemy.x;
+                            let by = closest[1] - enemy.y;
                             let ang = enemy._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
                             // projection along beam
@@ -3994,7 +2759,7 @@ class SpaceArena {
                     if (enemy._burstShots > 0) {
                         if (enemy._actionCooldown <= 0) {
                             // spawn shotgun spread aimed at player
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let pellets = 7 + enemy.phase; // number of pellets
                             let spread = 0.36; // total spread radians
                             let speed = 9 + enemy.phase * 0.6;
@@ -4026,6 +2791,7 @@ class SpaceArena {
                 }
                 // Dash sequence using precomputed random targets
                 if (enemy.dashing) {
+
                     if (!enemy._dashState) enemy._dashState = "prepare";
 
                     // In dash 'prepare' select next target and compute direction
@@ -4042,11 +2808,8 @@ class SpaceArena {
                             if (enemy._dashTargets && enemy._dashTargets.length > 0) {
                                 targetPos = enemy._dashTargets.shift();
                             } else {
-                                targetPos = { x: this.ship.x, y: this.ship.y };
+                                targetPos = { x: closest[0], y: closest[1] };
                             }
-                            let dx = targetPos.x - enemy.x;
-                            let dy = targetPos.y - enemy.y;
-                            let dist = Math.hypot(dx, dy) || 1;
                             enemy._dashDir = { x: dx / dist, y: dy / dist };
                             // store target pos & remaining distance so we can know when to pick next
                             enemy._dashTargetPos = targetPos;
@@ -4073,8 +2836,8 @@ class SpaceArena {
                         enemy._dashRemainingDistance -= moved;
 
                         // contact damage (apply once per collision and immediately knockback & damage)
-                        let sx = this.ship.x - enemy.x;
-                        let sy = this.ship.y - enemy.y;
+                        let sx = closest[0] - enemy.x;
+                        let sy = closest[1] - enemy.y;
                         let sdist = Math.hypot(sx, sy);
                         let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                         if (sdist < enemy.radius + shipRadius) {
@@ -4085,13 +2848,13 @@ class SpaceArena {
                                 let impactDmg = (5) * this.upgradeEffects.damageReduction;
                                 this.applyShipDamage(impactDmg);
                                 // reduced knockback
-                                let kn = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                                let kn = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                                 if (player.ir.shipType == 3 || player.ir.shipType == 7) {
                                     this.ship.vx += Math.cos(kn) * 6;
                                     this.ship.vy += Math.sin(kn) * 6;
                                 } else {
-                                    this.ship.x += Math.cos(kn) * 4;
-                                    this.ship.y += Math.sin(kn) * 4;
+                                    closest[0] += Math.cos(kn) * 4;
+                                    closest[1] += Math.sin(kn) * 4;
                                 }
                                 if (player.ir.shipHealth.lte(0)) this.onShipDeath();
                             }
@@ -4125,17 +2888,12 @@ class SpaceArena {
                         }
                     }
 
-                    // ensure boss stays in bounds while dashing
-                    if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                    if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                    if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                    if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
                 }
 
                 // Follow player when idle (instead of drifting to center)
                 if (!enemy.dashing && enemy.state === "idle") {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     // follow speed small; slightly increase by phase so later phases close gap faster
                     let followSpeed = 0.5 + enemy.phase * 0.25;
@@ -4146,13 +2904,9 @@ class SpaceArena {
                     enemy.wanderAngle += (Math.random() - 0.5) * 0.01;
                 }
 
-                // Keep boss inside arena
-                if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-
                 // continue to next enemy after special boss handling
+                enemy.x = ((enemy.x % this.width) + this.width) % this.width
+                enemy.y = ((enemy.y % this.height) + this.height) % this.height
                 continue;
             }
 
@@ -4161,8 +2915,8 @@ class SpaceArena {
                 // --- UFO Miniboss behavior ---
                 if (enemy.type === "ufoBoss") {
                     // Hovering: maintain an orbit distance ~220 from player
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let dist = Math.hypot(dx, dy) || 1;
                     let desiredDist = 220;
                     // Move toward or away to keep distance
@@ -4206,7 +2960,7 @@ class SpaceArena {
                         if (enemy.burstShots > 0 && (enemy.burstIntervalCounter === undefined || enemy.burstIntervalCounter <= 0)) {
                             enemy.burstIntervalCounter = enemy.burstInterval;
                             // shoot a spread toward player
-                            let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                             let spread = 0.24;
                             let bulletsThisShot = 3;
                             for (let i = 0; i < bulletsThisShot; i++) {
@@ -4269,6 +3023,8 @@ class SpaceArena {
                     if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
 
                     // continue to next enemy handling
+                    enemy.x = ((enemy.x % this.width) + this.width) % this.width
+                    enemy.y = ((enemy.y % this.height) + this.height) % this.height
                     continue;
             }
             // --- Alpha Ship behavior ---
@@ -4309,8 +3065,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.alphaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.alphaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     let speed = this.enemyTypes.alphaShip.bulletSpeed;
                     this.bullets.push({
@@ -4338,8 +3094,8 @@ class SpaceArena {
 
                 // Occasionally dash toward player
                 if (!enemy.dashCooldown || enemy.dashCooldown <= 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     enemy.vx = Math.cos(angle) * (enemy.wanderSpeed * 2.5);
                     enemy.vy = Math.sin(angle) * (enemy.wanderSpeed * 2.5);
@@ -4377,8 +3133,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.betaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.betaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let baseAngle = Math.atan2(dy, dx);
                     let spread = 0.14;
                     let bulletsThisShot = 1;
@@ -4452,8 +3208,8 @@ class SpaceArena {
                     enemy.burstCount = this.enemyTypes.gammaShip.burstCount;
                 }
                 if (enemy.burstCount > 0 && enemy.burstTimer % this.enemyTypes.gammaShip.burstInterval === 0) {
-                    let dx = this.ship.x - enemy.x;
-                    let dy = this.ship.y - enemy.y;
+                    let dx = closest[0] - enemy.x;
+                    let dy = closest[1] - enemy.y;
                     let angle = Math.atan2(dy, dx);
                     let speed = this.enemyTypes.gammaShip.bulletSpeed;
                     this.bullets.push({
@@ -4478,8 +3234,8 @@ class SpaceArena {
                     enemy.changeDirTimer = 60;
                     // choose a new random angle biased toward player occasionally
                     if (Math.random() < 0.6) {
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
+                        let dx = closest[0] - enemy.x;
+                        let dy = closest[1] - enemy.y;
                         enemy.wanderAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.6;
                     } else {
                         enemy.wanderAngle += (Math.random() - 0.5) * 2.0;
@@ -4598,8 +3354,8 @@ class SpaceArena {
                     enemy.roundTimer--;
                     if (enemy.roundTimer <= 0) {
                         // Fire one round: perRoundBullets bullets aimed at player with spread
-                        let dx = this.ship.x - enemy.x;
-                        let dy = this.ship.y - enemy.y;
+                        let dx = closest[0] - enemy.x;
+                        let dy = closest[1] - enemy.y;
                         let baseAngle = Math.atan2(dy, dx);
                         let bullets = enemy.perRoundBullets || 3;
                         let spread = 0.25;
@@ -4628,8 +3384,8 @@ class SpaceArena {
             // --- Eta behavior: follows player and shoots every ~2s ---
             if (enemy.type === "etaShip") {
                 // follow
-                let dx = this.ship.x - enemy.x;
-                let dy = this.ship.y - enemy.y;
+                let dx = closest[0] - enemy.x;
+                let dy = closest[1] - enemy.y;
                 let dist = Math.sqrt(dx * dx + dy * dy) || 1;
                 let angleToPlayer = Math.atan2(dy, dx);
                 enemy.vx = Math.cos(angleToPlayer) * enemy.wanderSpeed;
@@ -4642,7 +3398,7 @@ class SpaceArena {
                 if (enemy.shootCooldown <= 0) {
                     enemy.shootCooldown = this.enemyTypes.etaShip.bulletCooldown;
                     let speed = this.enemyTypes.etaShip.bulletSpeed;
-                    let angle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                    let angle = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
                     this.bullets.push({
                         x: enemy.x + Math.cos(angle) * enemy.radius,
                         y: enemy.y + Math.sin(angle) * enemy.radius,
@@ -4656,14 +3412,17 @@ class SpaceArena {
                     });
                 }
             }
+            enemy.x = ((enemy.x % this.width) + this.width) % this.width
+            enemy.y = ((enemy.y % this.height) + this.height) % this.height
         }
 
         // Gamma Ship trail damage
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
+                let closest = this.getClosestCoords([trail.x, trail.y])
                 trail.timer--;
-                let dx = this.ship.x - trail.x;
-                let dy = this.ship.y - trail.y;
+                let dx = closest[0] - trail.x;
+                let dy = closest[1] - trail.y;
                 let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
@@ -4692,14 +3451,18 @@ class SpaceArena {
                 asteroid.phased = !asteroid.phased;
                 asteroid.phaseTimer = 60 + Math.floor(Math.random() * 120);
             }
-            let outLeft = asteroid.x + Math.min(...asteroid.shape.map(p => p.x)) < 0;
-            let outRight = asteroid.x + Math.max(...asteroid.shape.map(p => p.x)) > this.width;
-            let outTop = asteroid.y + Math.min(...asteroid.shape.map(p => p.y)) < 0;
-            let outBottom = asteroid.y + Math.max(...asteroid.shape.map(p => p.y)) > this.height;
-            if (outLeft) asteroid.x = this.width - Math.max(...asteroid.shape.map(p => p.x));
-            if (outRight) asteroid.x = -Math.min(...asteroid.shape.map(p => p.x));
-            if (outTop) asteroid.y = this.height - Math.max(...asteroid.shape.map(p => p.y));
-            if (outBottom) asteroid.y = -Math.min(...asteroid.shape.map(p => p.y));
+            if (asteroid.x < 0) {
+                asteroid.x = this.width;
+            }
+            if (asteroid.x > this.width) {
+                asteroid.x = 0;
+            }
+            if (asteroid.y < 0) {
+                asteroid.y = this.height;
+            }
+            if (asteroid.y > this.height) {
+                asteroid.y = 0;
+            }
         }
 
         // Bullet-asteroid collision
@@ -4927,7 +3690,8 @@ class SpaceArena {
                 player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
                 lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = Math.floor((asteroid.big ? 10 : 3) * this.upgradeEffects.xpGain);
+                let xp = asteroid.big ? new Decimal(9) : new Decimal(3);
+                xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
                 let random = Math.random();
@@ -5003,14 +3767,15 @@ class SpaceArena {
                 y: orb.y,
                 amount: orb.amount,
                 picked: false,
-                timer: 300
+                timer: 600
             });
         }
 
         // Update XP orbs (move toward ship, pick up if close)
         for (let orb of this.xpOrbs) {
-            let dx = this.ship.x - orb.x;
-            let dy = this.ship.y - orb.y;
+            let closest = this.getClosestCoords([orb.x, orb.y])
+            let dx = closest[0] - orb.x;
+            let dy = closest[1] - orb.y;
             let dist = Math.sqrt(dx * dx + dy * dy);
             let speed = 2;
             if (dist > 5) {
@@ -5021,6 +3786,8 @@ class SpaceArena {
                 player.ir.battleXP = player.ir.battleXP.add(orb.amount);
                 orb.picked = true;
             }
+            orb.x = ((orb.x % this.width) + this.width) % this.width
+            orb.y = ((orb.y % this.height) + this.height) % this.height
             orb.timer--;
         }
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
@@ -5106,19 +3873,19 @@ class SpaceArena {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
         // Draw ship
+        this.ctx.save();
+        this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
         if (player.ir.shipType == 3) {
-            this.ctx.save();
             this.ctx.beginPath();
             this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
             this.ctx.fillStyle = "#a7a7a7ff";
             this.ctx.shadowColor = "#ffffffff";
             if (!options.performanceMode) {this.ctx.shadowBlur = 16} else {this.ctx.shadowBlur = 0};
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 1) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5128,11 +3895,10 @@ class SpaceArena {
             this.ctx.closePath();
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 2) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
             this.ctx.beginPath();
             this.ctx.moveTo(20, 0);
@@ -5142,12 +3908,11 @@ class SpaceArena {
             this.ctx.closePath();
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
             // Body
             this.ctx.fillStyle = "#dbefff";
@@ -5169,12 +3934,11 @@ class SpaceArena {
             this.ctx.strokeStyle = "#89a6ff";
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
@@ -5207,11 +3971,10 @@ class SpaceArena {
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 6) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
  
             this.ctx.beginPath();
@@ -5232,11 +3995,10 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.stroke(); 
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 7) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
  
             // BODY
@@ -5256,11 +4018,10 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.stroke();
 
-            this.ctx.restore();
+            
         }
         if (player.ir.shipType == 8) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
+            
             this.ctx.rotate(this.ship.angle);
 
             // Miniature Iridite visuals
@@ -5316,7 +4077,6 @@ class SpaceArena {
                         this.ctx.restore();
                     }
                 }
-                this.ctx.restore();
             };
 
             drawWing(false);
@@ -5330,7 +4090,6 @@ class SpaceArena {
             this.ctx.textBaseline = "middle";
             this.ctx.fillStyle = "#e0ccffff";
             this.ctx.fillText("✦", 0, 0);
-            this.ctx.restore();
 
             this.ctx.restore();
         }
@@ -5346,8 +4105,6 @@ class SpaceArena {
             const maxThickness = r * 0.8;
             const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
 
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -5361,14 +4118,11 @@ class SpaceArena {
             this.ctx.fill();
             this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
             this.ctx.fillRect(0, -Math.max(1, thickness * 0.12), beamLen * 0.75, Math.max(1, thickness * 0.12) * 2);
-            this.ctx.restore();
             this.ctx.globalCompositeOperation = "source-over";
         }
 
         // Evolver ship (shipType 9) — triangle shape with blue-purple gradient and dividing line
         if (player.ir.shipType == 9) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
             this.ctx.rotate(this.ship.angle);
             let lenShip = Math.max(18, this.ship.radius || 20);
 
@@ -5400,11 +4154,8 @@ class SpaceArena {
             this.ctx.lineWidth = Math.max(1, lenShip * 0.05);
             this.ctx.stroke();
 
-            this.ctx.restore();
         }
         if (player.ir.shipType == 10) {
-            this.ctx.save();
-            this.ctx.translate(this.ship.x, this.ship.y);
             this.ctx.rotate(this.ship.angle);
             this.ctx.strokeStyle = "#30bf78";
             this.ctx.fillStyle = "#30bf78";
@@ -5486,27 +4237,34 @@ class SpaceArena {
             else this.ctx.fillStyle = "#800040"
             this.ctx.fill();
 
-            this.ctx.restore();
         }
+        this.ctx.restore();
 
         for (let enemy of this.enemies) {
             if (!enemy.alive) continue;
             let type = this.enemyTypes[enemy.type];
-            if (type && type.draw) {
+            let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+            if (type && type.draw && wrapped) {
                 type.draw(this.ctx, enemy);
                 this.ctx.save();
-                this.ctx.fillStyle = "#ff4444";
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(wrapped[0] - enemy.radius - 2, wrapped[1] - enemy.radius - 20, enemy.radius * 2 + 4, 13);
                 let barWidth = enemy.radius * 2 * (enemy.health / enemy.maxHealth);
-                this.ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 18, barWidth, 6);
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(wrapped[0] - enemy.radius, wrapped[1] - enemy.radius - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
+                let t = Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth)
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    Math.max(0, Math.floor(enemy.health)) + "/" + Math.floor(enemy.maxHealth),
-                    enemy.x,
-                    enemy.y - enemy.radius - 6
-                );
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, wrapped[0], wrapped[1] - enemy.radius - 9)
+
                 this.ctx.restore();
             }
 
@@ -5525,7 +4283,7 @@ class SpaceArena {
                     const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
                     // draw glow
                     this.ctx.save();
-                    this.ctx.translate(enemy.x, enemy.y);
+                    this.ctx.translate(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
                     this.ctx.rotate(angle);
                     // additive glow
                     this.ctx.globalCompositeOperation = "lighter";
@@ -5563,12 +4321,12 @@ class SpaceArena {
                         this.ctx.strokeStyle = `rgba(255,40,40,${alpha})`;
                         this.ctx.lineWidth = 2 + Math.max(0, 4 * alpha);
                         this.ctx.beginPath();
-                        this.ctx.moveTo(enemy.x, enemy.y);
-                        this.ctx.lineTo(warn.tx, warn.ty);
+                        this.ctx.moveTo(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         this.ctx.fillStyle = `rgba(255,50,50,${alpha})`;
                         this.ctx.beginPath();
-                        this.ctx.arc(warn.tx, warn.ty, 6 * alpha + 2, 0, Math.PI * 2);
+                        this.ctx.arc(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y, 6 * alpha + 2, 0, Math.PI * 2);
                         this.ctx.fill();
                         this.ctx.restore();
                         if (typeof warn.timer === "number") warn.timer--;
@@ -5584,15 +4342,15 @@ class SpaceArena {
                         this.ctx.strokeStyle = `rgba(255,60,60,${0.25 * alpha})`;
                         this.ctx.lineWidth = 14 * (0.3 + 0.7 * alpha);
                         this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         // sharp red core
                         this.ctx.strokeStyle = `rgba(255,20,20,${0.95 * alpha})`;
                         this.ctx.lineWidth = 2;
                         this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
                         this.ctx.stroke();
                         // little markers along the line
                         const markers = 6;
@@ -5602,7 +4360,7 @@ class SpaceArena {
                             let my = ln.y1 + (ln.y2 - ln.y1) * t;
                             this.ctx.fillStyle = `rgba(255,90,90,${0.6 * alpha})`;
                             this.ctx.beginPath();
-                            this.ctx.arc(mx, my, 2 + 2 * alpha, 0, Math.PI * 2);
+                            this.ctx.arc(mx + (this.canvasWidth / 2) - this.ship.x, my + (this.canvasHeight / 2) - this.ship.y, 2 + 2 * alpha, 0, Math.PI * 2);
                             this.ctx.fill();
                         }
                         this.ctx.restore();
@@ -5687,6 +4445,7 @@ class SpaceArena {
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
                 this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.globalAlpha = Math.max(0.2, trail.timer / 60);
                 this.ctx.beginPath();
                 this.ctx.arc(trail.x, trail.y, trail.radius, 0, 2 * Math.PI);
@@ -5698,13 +4457,17 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
+            let radius = bullet.radius || 20
+            let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [radius * 2, radius * 2])
+            if (!wrapped) continue;
             // Skip ritual projectiles - RitualArena handles these with custom visuals
             if (bullet.ritualOrb || bullet.ritualBlade) continue;
             
             if (bullet.massiveSword) {
                 // Draw a large, spinning metallic sword
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.rotate(bullet.rot || 0);
 
                 let r = bullet.radius || 80;
@@ -5756,7 +4519,8 @@ class SpaceArena {
             } else if (bullet.star) {
                 // draw mini-star glyph for thematic boss/projectiles
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 // determine font size; giant bullets are significantly larger
@@ -5778,25 +4542,28 @@ class SpaceArena {
                 this.ctx.font = `${fontSize}px monospace`;
                 this.ctx.textAlign = "center";
                 this.ctx.textBaseline = "middle";
-                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffec8b";
+                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffff00";//ffec8b
                 this.ctx.shadowColor = "#fff1";
                 if (!options.performanceMode) {this.ctx.shadowBlur = bullet.giant ? 18 : 6} else {this.ctx.shadowBlur = 0};
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
             } else {
-                this.ctx.beginPath();
+                this.ctx.save();
+
                 let r = bullet.fromEnemy ? 6 : ((player.ir.shipType == 2 || player.ir.shipType == 10) ? 10 : 4);
                 // larger radius for homing enemy projectiles
                 if (bullet.fromEnemy && bullet.homing) r = 10;
                 if (bullet.giant) r = bullet.radius || 18;
-                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
-                this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffec8b";
+                this.ctx.beginPath();
+                this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
+                this.ctx.fillStyle = bullet.fromEnemy ? "#ff4444" : "#ffff00";
                 this.ctx.fill();
+                this.ctx.restore();
             }
             // Evolver primary shard rendering (crystal shard with facets)
             if (bullet.evolverShard) {
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(56, (bullet.radius || 26) * 2);
@@ -5869,19 +4636,23 @@ class SpaceArena {
             }
             // Evolver mini shard rendering (small blue bullet)
             if (bullet.evolverMini) {
+                this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.beginPath();
                 let r = bullet.radius || 4;
-                this.ctx.arc(bullet.x, bullet.y, r, 0, 2 * Math.PI);
+                this.ctx.arc(wrapped[0], wrapped[1], r, 0, 2 * Math.PI);
                 this.ctx.fillStyle = '#5fb8ff';
                 this.ctx.fill();
                 this.ctx.strokeStyle = '#2c3e50';
                 this.ctx.lineWidth = 1;
                 this.ctx.stroke();
+                this.ctx.restore();
             }
             // Evolver mini shard rendering (smaller triangle)
             if (bullet.evolverMini) {
                 this.ctx.save();
-                this.ctx.translate(bullet.x, bullet.y);
+                this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(8, bullet.radius || 6);
@@ -5908,33 +4679,43 @@ class SpaceArena {
         for (let asteroid of this.asteroids) {
             this.ctx.save();
             this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
-            this.ctx.translate(asteroid.x, asteroid.y);
-            this.ctx.beginPath();
-            let shape = asteroid.shape;
-            if (shape && shape.length > 0) {
-                this.ctx.moveTo(shape[0].x, shape[0].y);
-                for (let i = 1; i < shape.length; i++) {
-                    this.ctx.lineTo(shape[i].x, shape[i].y);
+            
+            let wrapped = this.getVisibleWrappedCoords([asteroid.x, asteroid.y], [asteroid.size, asteroid.size])
+            if (wrapped != null) {
+                this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.beginPath();
+                let shape = asteroid.shape;
+                if (shape && shape.length > 0) {
+                    this.ctx.moveTo(shape[0].x, shape[0].y);
+                    for (let i = 1; i < shape.length; i++) {
+                        this.ctx.lineTo(shape[i].x, shape[i].y);
+                    }
+                    this.ctx.closePath();
                 }
-                this.ctx.closePath();
-            }
-            this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
-            this.ctx.fill();
+                this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
+                this.ctx.fill();
 
-            if (!asteroid.phased) {
-                this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-                this.ctx.fillStyle = "#ff4444";
-                let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
-                this.ctx.fillRect(asteroid.x - asteroid.size, asteroid.y - asteroid.size - 18, barWidth, 6);
+                if (!asteroid.phased) {
+                    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                    this.ctx.fillStyle = "#151230";
+                    this.ctx.fillRect(wrapped[0] - asteroid.size - 2, wrapped[1] - asteroid.size - 20, asteroid.size * 2 + 4, 13);
+                    let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
+                    this.ctx.fillStyle = "#bf0000";
+                    this.ctx.fillRect(wrapped[0] - asteroid.size, wrapped[1] - asteroid.size - 18, barWidth, 9);
 
-                this.ctx.font = "14px monospace";
-                this.ctx.fillStyle = "#fff";
-                this.ctx.textAlign = "center";
-                this.ctx.fillText(
-                    Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth),
-                    asteroid.x,
-                    asteroid.y - asteroid.size - 6
-                );
+                    let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
+                    this.ctx.font = "12px monospace";
+                    this.ctx.fillStyle = "#151230";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 + 1)
+                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 - 1)
+                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 + 1)
+                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 - 1)
+                    this.ctx.fillStyle = "white";
+                    this.ctx.fillText(t, wrapped[0], wrapped[1] - asteroid.size - 9)
+                }
             }
             this.ctx.restore();
         }
@@ -5942,53 +4723,111 @@ class SpaceArena {
         // Draw XP orbs
         for (let orb of this.xpOrbs) {
             this.ctx.save();
-            this.ctx.globalAlpha = 0.8;
-            this.ctx.beginPath();
-            this.ctx.arc(orb.x, orb.y, 6, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#fff";
-            this.ctx.fill();
+            //this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+            let wrapped = this.getVisibleWrappedCoords([orb.x, orb.y], [4, 4])
+            if (wrapped != null) {
+                this.ctx.globalAlpha = 0.8;
+                this.ctx.beginPath();
+                this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, 4, 0, 2 * Math.PI);
+                this.ctx.shadowBlur = 4;
+                this.ctx.shadowColor = "#0000ff";
+                this.ctx.fillStyle = "white";
+                this.ctx.fill();
+            }
             this.ctx.restore();
         }
 
         // Draw loot flashes
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
-            this.ctx.save();
-            this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
-            this.ctx.font = flash.style;
-            this.ctx.fillStyle = flash.color;
-            this.ctx.textAlign = "center";
-            this.ctx.fillText(
-                flash.text,
-                flash.x,
-                flash.y - 30 - (120 - flash.timer)
-            );
-            this.ctx.restore();
+            let wrapped = this.getVisibleWrappedCoords([flash.x, flash.y - 30 - (120 - flash.timer)], [400, 50])
+            if (wrapped != null) {
+                this.ctx.save();
+                this.ctx.globalAlpha = Math.max(0, flash.timer / 120);
+                this.ctx.font = flash.style;
+                this.ctx.fillStyle = flash.color;
+                this.ctx.textAlign = "center";
+                this.ctx.fillText(
+                    flash.text,
+                    wrapped[0] + (this.canvasWidth / 2) - this.ship.x,
+                    wrapped[1] + (this.canvasHeight / 2) - this.ship.y,
+                );
+                this.ctx.restore();
+            }            
             flash.timer--;
             if (flash.timer <= 0) this.lootFlashes.splice(i, 1);
         }
 
+
+        // Draw minimap
+
+        this.ctx.save();
+        this.ctx.globalAlpha = 1
+        this.ctx.fillStyle = "#0000007f";
+        this.ctx.strokeStyle = player.ir.primaryColor;
+        this.ctx.lineWidth = 3;
+        let aspectRatio = this.width / this.height
+        if (aspectRatio < 1) {
+            this.ctx.fillRect(20 + (80 * (1 - aspectRatio)), 20, 160 * aspectRatio, 160);
+            this.ctx.strokeRect(20 + (80 * (1 - aspectRatio)), 20, 160 * aspectRatio, 160);
+        } else {
+            this.ctx.fillRect(20, 20 + (80 * (1 - (1 / aspectRatio))), 160, 160 * (1 / aspectRatio));
+            this.ctx.strokeRect(20, 20 + (80 * (1 - (1 / aspectRatio))), 160, 160 * (1 / aspectRatio));
+        }
+        this.ctx.fillStyle = "yellow";
+        this.ctx.fillRect(98, 98, 4, 4);
+        
+        for (let asteroid of this.asteroids) {
+            this.ctx.save();
+            this.drawMinimapIcon("gray", 4, [asteroid.x, asteroid.y])
+            this.ctx.restore();
+        }
+        for (let orb of this.xpOrbs) {
+            this.ctx.save();
+            this.drawMinimapIcon("blue", 2, [orb.x, orb.y])
+            this.ctx.restore();
+        }
+        for (let bullet of this.bullets) {
+            this.ctx.save();
+            if (bullet.fromEnemy) {
+                this.drawMinimapIcon("red", 2, [bullet.x, bullet.y])
+            } else {
+                this.drawMinimapIcon("yellow", 2, [bullet.x, bullet.y])
+            }
+            this.ctx.restore();
+        }
+        for (let enemy of this.enemies) {
+            this.ctx.save();
+            this.drawMinimapIcon("red", 4, [enemy.x, enemy.y])
+            this.ctx.restore();
+        }
+
+        this.ctx.restore();
+
+
         // Draw upgrade choice overlay (unchanged)
         if (this.upgradeChoiceActive) {
             this.ctx.save();
-            this.ctx.globalAlpha = 0.85;
-            this.ctx.fillStyle = "#181a2b";
+            this.ctx.globalAlpha = 0.25;
+            this.ctx.fillStyle = "#5e4ee6";
             this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.restore();
-
+            
             this.ctx.save();
+            this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y + (this.canvasHeight / 2));
+            //(this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y
             this.ctx.globalAlpha = 1;
             this.ctx.font = "bold 48px monospace";
             this.ctx.fillStyle = "#fff";
             this.ctx.textAlign = "center";
-            this.ctx.fillText("Choose an Upgrade!", this.width / 2, 120);
+            this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 100);
 
-            let spacing = 340;
-            let boxWidth = 320;
-            let boxHeight = 220;
+            let spacing = 262.5;
+            let boxWidth = 250;
+            let boxHeight = 150;
             let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
-            let startX = (this.width - totalWidth) / 2;
-            let boxY = this.height / 2 - boxHeight / 2;
+            let startX = (this.canvasWidth - totalWidth) / 2;
+            let boxY = (this.canvasHeight - boxHeight) / 2;
 
             for (let i = 0; i < this.upgradeChoices.length; i++) {
                 let upg = this.upgradeChoices[i];
@@ -5998,35 +4837,35 @@ class SpaceArena {
                 this.ctx.globalAlpha = 1;
                 this.ctx.fillStyle = "#23233b";
                 this.ctx.strokeStyle = upg.color;
-                this.ctx.lineWidth = 7;
+                this.ctx.lineWidth = 3;
                 this.ctx.beginPath();
-                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 24);
+                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 12);
                 this.ctx.fill();
                 this.ctx.stroke();
 
                 if (this.selectedUpgradeIndex === i) {
                     this.ctx.save();
                     this.ctx.strokeStyle = "#ffe066";
-                    this.ctx.lineWidth = 10;
+                    this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(boxX + 4, boxY + 4, boxWidth - 8, boxHeight - 8, 18);
+                    this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 9);
                     this.ctx.stroke();
                     this.ctx.restore();
                 }
 
-                this.ctx.font = "bold 32px monospace";
+                this.ctx.font = "bold 24px monospace";
                 this.ctx.fillStyle = upg.color;
                 this.ctx.textAlign = "center";
-                this.ctx.fillText(upg.name, boxX + boxWidth / 2, boxY + 50);
+                this.ctx.fillText(upg.name(), boxX + boxWidth / 2, boxY + 30);
 
                 let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
-                this.ctx.font = "italic 24px monospace";
+                this.ctx.font = "italic 18px monospace";
                 this.ctx.fillStyle = upg.color;
-                this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 85);
+                this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 54);
 
-                this.ctx.font = "22px monospace";
+                this.ctx.font = "16px monospace";
                 this.ctx.fillStyle = "#fff";
-                let desc = upg.description;
+                let desc = upg.description();
                 let descLines = [];
                 let words = desc.split(" ");
                 let line = "";
@@ -6042,28 +4881,28 @@ class SpaceArena {
                 }
                 descLines.push(line.trim());
                 for (let l = 0; l < descLines.length; l++) {
-                    this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 120 + l * 28);
+                    this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 78 + l * 18);
                 }
 
                 this.ctx.restore();
             }
 
             if (this.selectedUpgradeIndex !== null) {
-                let confirmWidth = 180;
+                let confirmWidth = 250;
                 let confirmHeight = 50;
-                let confirmX = this.width / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 40;
+                let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
+                let confirmY = boxY + boxHeight + 25;
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#4e7cff";
-                this.ctx.strokeStyle = "#fff";
+                this.ctx.fillStyle = "#37078f";
+                this.ctx.strokeStyle = "#5e4ee6";
                 this.ctx.lineWidth = 4;
                 this.ctx.beginPath();
-                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 16);
+                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 12);
                 this.ctx.fill();
                 this.ctx.stroke();
 
-                this.ctx.font = "bold 28px monospace";
+                this.ctx.font = "bold 24px monospace";
                 this.ctx.fillStyle = "#fff";
                 this.ctx.textAlign = "center";
                 this.ctx.fillText("Confirm", confirmX + confirmWidth / 2, confirmY + confirmHeight / 2 + 10);
@@ -6074,9 +4913,9 @@ class SpaceArena {
         }
     }
 
-    showUpgradeChoice() {
+    showUpgradeChoice(enhanced = false) {
         this.upgradeChoiceActive = true;
-        this.upgradeChoices = pickUpgrades();
+        this.upgradeChoices = pickUpgrades(enhanced);
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
 
@@ -6084,12 +4923,12 @@ class SpaceArena {
             let rect = this.canvas.getBoundingClientRect();
             let x = e.clientX - rect.left;
             let y = e.clientY - rect.top;
-            let spacing = 340;
-            let boxWidth = 320;
-            let boxHeight = 220;
+            let spacing = 262.5;
+            let boxWidth = 250;
+            let boxHeight = 150;
             let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
-            let startX = (this.width - totalWidth) / 2;
-            let boxY = this.height / 2 - boxHeight / 2;
+            let startX = (this.canvasWidth - totalWidth) / 2;
+            let boxY = (this.canvasHeight - boxHeight) / 2;
 
             for (let i = 0; i < this.upgradeChoices.length; i++) {
                 let boxX = startX + i * spacing;
@@ -6106,10 +4945,10 @@ class SpaceArena {
             }
 
             if (this.selectedUpgradeIndex !== null) {
-                let confirmWidth = 180;
+                let confirmWidth = 250;
                 let confirmHeight = 50;
-                let confirmX = this.width / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 40;
+                let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
+                let confirmY = boxY + boxHeight + 25;
                 if (
                     x > confirmX &&
                     x < confirmX + confirmWidth &&
@@ -6118,7 +4957,7 @@ class SpaceArena {
                 ) {
                     let upg = this.upgradeChoices[this.selectedUpgradeIndex];
                     upg.effect(this);
-                    player.ir.upgrades.push(upg.name);
+                    //player.ir.upgrades.push(upg.name);
                     this.upgradeChoiceActive = false;
                     this.upgradeChoices = [];
                     this.selectedUpgradeIndex = null;

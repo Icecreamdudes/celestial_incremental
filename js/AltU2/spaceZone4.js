@@ -115,3 +115,19 @@ addLayer("spaceZone4", {
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
 })
+
+SB_zones.spaceZone4 = {
+    nameCap: "Zone IV",
+    nameLow: "zone iv",
+    levelLimit: 100,
+    asteroidLimit: 16,
+    celestialiteLimit: 4,
+    generateCelestialite(level) {
+        if (typeof level == "object") level = level.toNumber();
+        
+        let cel = ["alphaShip", "betaShip", "gammaShip"]
+        if (level >= 20) cel = cel.concat(["deltaShip", "epsilonShip"]);
+
+        return cel[Math.floor(Math.random()*cel.length)]
+    },
+}

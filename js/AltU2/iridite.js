@@ -873,7 +873,7 @@ addLayer("ir", {
             unlocked() { return true },
             onClick() {
                 player.ir.iriditeUnlocked = true
-                player.subtabs["ir"]['stuff'] = 'Space Battle'
+                player.subtabs["ir"]['stuff'] = 'stages'
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },

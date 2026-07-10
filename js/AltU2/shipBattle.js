@@ -2128,7 +2128,7 @@ class SpaceArena {
         }
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
-        if ((player.ir.battleLevel.gte(5) || player.ir.battleStage == "iriditeZone") && !this.bossActive) {
+        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
             let aliveEnemies = this.enemies.filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;

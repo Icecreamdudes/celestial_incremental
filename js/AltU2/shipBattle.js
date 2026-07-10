@@ -16,27 +16,41 @@ function getRandomInt(max) {
 const UPGRADE_POOL = [
     // Common
     {
-        name() { return "Attack Damage Up"},
+        name() { return "Attack Damage"},
         description() { return "+10% attack damage"},
         rarity: "common",
         color: "#fff",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.1; }
+        effect(arena) { arena.upgrades.attackDamageCommon++; }
     },
     {
-        name() { return "XP Gain Up"},
+        name() { return "Space Rock Gain"},
+        description() { return "+10% space rock gain"},
+        rarity: "common",
+        color: "#fff",
+        effect(arena) { arena.upgrades.rockGainCommon++; }
+    },
+    {
+        name() { return "XP Gain"},
         description() { return "+10% XP gain"},
         rarity: "common",
         color: "#fff",
-        effect(arena) { arena.upgradeEffects.xpGain *= 1.1; }
-    },
-    {
-        name() { return "Loot Gain Up"},
-        description() { return "+10% loot gain"},
-        rarity: "common",
-        color: "#fff",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.1; }
+        effect(arena) { arena.upgrades.xpGainCommon++; }
     },
     // Uncommon
+    {
+        name() { return "Attack Damage"},
+        description() { return "+15% attack damage"},
+        rarity: "uncommon",
+        color: "#4cff4c",
+        effect(arena) { arena.upgrades.attackDamageUncommon++; }
+    },
+    {
+        name() { return "Attack Speed"},
+        description() { return "+5% faster attack speed"},
+        rarity: "uncommon",
+        color: "#4cff4c",
+        effect(arena) { arena.upgrades.attackSpeedUncommon++; }
+    },
     {
         name() { return "Health Regen"},
         description() {
@@ -47,92 +61,117 @@ const UPGRADE_POOL = [
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) {
-            let regen = 0.5
-            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-            arena.upgradeEffects.hpRegen += regen / 60;
+            arena.upgrades.healthRegenUncommon++;
         }
     },
     {
-        name() { return "XP Gain Up"},
-        description() { return "+20% XP gain"},
+        name() { return "Space Rock Gain"},
+        description() { return "+15% space rock gain"},
         rarity: "uncommon",
         color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.xpGain *= 1.2; }
+        effect(arena) { arena.upgrades.rockGainUncommon++; }
     },
     {
-        name() { return "Loot Gain Up"},
-        description() { return "+20% loot gain"},
+        name() { return "XP Gain"},
+        description() { return "+15% XP gain"},
         rarity: "uncommon",
         color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.2; }
-    },
-    {
-        name() { return "Attack Damage Up"},
-        description() { return "+15% attack damage"},
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.15; }
-    },
-    {
-        name() { return "Attack Speed Up"},
-        description() { return "8% faster attack speed"},
-        rarity: "uncommon",
-        color: "#4cff4c",
-        effect(arena) { arena.upgradeEffects.attackSpeed *= 0.92; }
+        effect(arena) { arena.upgrades.xpGainUncommon++; }
     },
     // Rare
     {
-        name() { return "Damage Reduction"},
+        name() { return "Attack Damage"},
+        description() { return "+20% attack damage"},
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) { arena.upgrades.attackDamageRare++; }
+    },
+    {
+        name() { return "Attack Speed"},
+        description() { return "+7.5% faster attack speed"},
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) { arena.upgrades.attackSpeedRare++; }
+    },
+    {
+        name() { return "Health Regen"},
+        description() {
+            let regen = 0.75
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return "+" + formatSimple(regen, 2) + " HP/sec"
+        },
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) {
+            arena.upgrades.healthRegenUncommon += 1.5;
+        }
+    },
+    {
+        name() { return "Defense"},
         description() { return "Take 10% less damage"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.damageReduction *= 0.9; }
+        effect(arena) { arena.upgrades.damageReductionRare++; }
     },
     {
-        name() { return "Movement Speed Up"},
-        description() { return "+1 max velocity"},
+        name() { return "Movement Speed"},
+        description() { return "+10% max movement speed"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.moveSpeed += 1; }
+        effect(arena) { arena.upgrades.moveSpeedRare++; }
     },
     {
-        name() { return "Gem Gain Up"},
-        description() { return "+10% gem gain"},
+        name() { return "Space Rock Gain"},
+        description() { return "+20% space rock gain"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgradeEffects.gemGain *= 1.1; }
+        effect(arena) { arena.upgrades.rockGainRare++; }
     },
     {
-        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size Up"} else {return "Max HP Up"}},
+        name() { return "Space Gem Gain"},
+        description() { return "+5% space gem gain"},
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) { arena.upgrades.gemGainRare++; }
+    },
+    {
+        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size"} else {return "Max Health"}},
         description() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { if (player.ir.shipType != 3 && player.ir.shipType != 7) {arena.upgradeEffects.bulletSize += 0.1} else {arena.upgradeEffects.maxHp *= 1.1;setTimeout(() => {player.ir.shipHealth = player.ir.shipHealth.mul(1.1)}, 100)}; }
+        effect(arena) { if (player.ir.shipType != 3 && player.ir.shipType != 7) {arena.upgrades.bulletSizeRare++} else {arena.upgrades.maxHpRare++}; }
+    },
+    {
+        name() { return "XP Gain"},
+        description() { return "+20% XP gain"},
+        rarity: "rare",
+        color: "#4c8cff",
+        effect(arena) { arena.upgrades.xpGainRare++; }
     },
     // Epic
     {
-        name() { return "Epic Attack"},
-        description() { return "+20% attack damage, +8% attack speed"},
+        name() { return "Attack"},
+        description() { return "+20% attack damage, +7.5% faster attack speed"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.attackDamage *= 1.2; arena.upgradeEffects.attackSpeed *= 0.92; }
+        effect(arena) { arena.upgrades.attackDamageEpic++; arena.upgrades.attackSpeedEpic++; }
     },
     {
-        name() { return "Epic XP"},
-        description() { return "+50% XP gain"},
+        name() { return "XP Gain"},
+        description() { return "+30% XP gain"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.xpGain *= 1.5; }
+        effect(arena) { arena.upgrades.xpGain++; }
     },
     {
-        name() { return "Epic Reward"},
-        description() { return "+30% loot gain, +5% gem gain"},
+        name() { return "Loot Gain"},
+        description() { return "+20% rock gain, +5% space gem gain"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgradeEffects.lootGain *= 1.3; arena.upgradeEffects.gemGain *= 1.05; }
+        effect(arena) { arena.upgrades.rockGainEpic++; arena.upgrades.gemGainEpic++; }
     },
     {
-        name() { return "Epic Defense"},
+        name() { return "Defense"},
         description() {
             let regen = 0.5
             regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
@@ -141,10 +180,41 @@ const UPGRADE_POOL = [
         rarity: "epic",
         color: "#b44cff",
         effect(arena) {
+            arena.upgrades.damageReductionEpic++; arena.upgrades.healthRegenUncommon += 2;
+        }
+    },
+    // Legendary
+    {
+        name() { return "Offense"},
+        description() { return "+75% attack damage, but +25% slower attack speed"},
+        rarity: "legendary",
+        color: "#ffd34d",
+        effect(arena) { arena.upgrades.attackDamageEpic++; arena.upgrades.attackSpeedEpic++; }
+    },
+    {
+        name() { return "Defense"},
+        description() { return "Take 25% less damage, gain 25% more HP/sec" },
+        rarity: "legendary",
+        color: "#ffd34d",
+        effect(arena) {
             let regen = 0.5
             regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-            arena.upgradeEffects.damageReduction *= 0.85; arena.upgradeEffects.hpRegen += regen / 60;
+            arena.upgrades.damageReductionLegendary++; arena.upgrades.healthRegenLegendary++;
         }
+    },
+    {
+        name() { return "Drop Gain"},
+        description() { return "+40% space rock and XP gain, +20% space gem gain"},
+        rarity: "legendary",
+        color: "#ffd34d",
+        effect(arena) { arena.upgrades.rockGainLegendary++; arena.upgrades.xpGainLegendary++; arena.upgrades.gemGainLegendary++; }
+    },
+    {
+        name() { return "Movement Speed"},
+        description() { return "+25% max movement speed"},
+        rarity: "legendary",
+        color: "#ffd34d",
+        effect(arena) { arena.upgrades.moveSpeedLegendary++; }
     },
 ];
 
@@ -153,14 +223,16 @@ const UPGRADE_RARITY_WEIGHTS = {
     common: 50,
     uncommon: 25,
     rare: 15,
-    epic: 10
+    epic: 5,
+    legendary: 1,
 };
 
 const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
     common: 30,
     uncommon: 25,
     rare: 25,
-    epic: 20,
+    epic: 10,
+    legendary: 2,
 };
 
 function pickUpgrades(enhanced = false) {
@@ -614,6 +686,7 @@ class SpaceArena {
         this.upgradeChoiceActive = false;
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
+        this.upgrades = this.getDefaultUpgrades();
         this.upgradeEffects = this.getDefaultUpgradeEffects();
         this.resourceMult = 1;
 
@@ -1078,15 +1151,60 @@ class SpaceArena {
         this.gammaTrails = [];
     }
 
+    getDefaultUpgrades() {
+        return {
+            attackDamageCommon: 0,
+            attackDamageUncommon: 0,
+            attackDamageRare: 0,
+            attackDamageEpic: 0,
+            attackDamageLegendary: 0,
+
+            attackSpeedUncommon: 0,
+            attackSpeedRare: 0,
+            attackSpeedEpic: 0,
+            attackSpeedLegendary: 0,
+
+            bulletSizeRare: 0,
+
+            healthRegenUncommon: 0,
+            healthRegenLegendary: 0,
+
+            damageReductionRare: 0,
+            damageReductionEpic: 0,
+            damageReductionLegendary: 0,
+
+            maxHpRare: 0,
+
+            moveSpeedRare: 0,
+            moveSpeedLegendary: 0,
+
+            rockGainCommon: 0,
+            rockGainUncommon: 0,
+            rockGainRare: 0,
+            rockGainEpic: 0,
+            rockGainLegendary: 0,
+            
+            gemGainRare: 0,
+            gemGainEpic: 0,
+            gemGainLegendary: 0,
+            
+            xpGainCommon: 0,
+            xpGainUncommon: 0,
+            xpGainRare: 0,
+            xpGainEpic: 0,
+            xpGainLegendary: 0,
+        };
+    }
     getDefaultUpgradeEffects() {
         return {
             attackDamage: 1,
             attackSpeed: 1,
-            hpRegen: 0,
+            bulletSize: 1,
+            healthRegen: 0,
             damageReduction: 1,
-            maxHp: 0,
-            moveSpeed: 0,
-            lootGain: 1,
+            maxHp: 1,
+            moveSpeed: 1,
+            rockGain: 1,
             gemGain: 1,
             xpGain: 1,
         };
@@ -1692,8 +1810,8 @@ class SpaceArena {
         if (hardMode) this.enemySpawnCooldownMax = 700;
 
         // Health regen
-        if (this.upgradeEffects.hpRegen > 0) {
-            player.ir.shipHealth = player.ir.shipHealth.add(this.upgradeEffects.hpRegen);
+        if (this.upgradeEffects.healthRegen > 0) {
+            player.ir.shipHealth = player.ir.shipHealth.add(this.upgradeEffects.healthRegen);
             if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.upgradeEffects.maxHp))) {
                 player.ir.shipHealth = player.ir.shipHealthMax.add(this.upgradeEffects.maxHp);
             }
@@ -3229,54 +3347,37 @@ class SpaceArena {
         // Asteroid splitting and removal
         this.asteroids = this.asteroids.filter(asteroid => {
             if (asteroid.health <= 0) {
-                let loot = Math.floor(Math.random() * (asteroid.big ? 4 : 3)) + (asteroid.big ? 3 : 1);
-                loot = Math.floor(loot * this.upgradeEffects.lootGain);
-                loot = Math.max(0, Math.floor(loot * levelableEffect("pet", 502)[1]));
-                loot = Math.max(0, Math.floor(loot * levelableEffect("pu", 212)[1]));
-                player.ir.spaceRock = player.ir.spaceRock.add(loot);
-                player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(loot)
-                lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: loot, type: "rock" });
 
-                let xp = asteroid.big ? new Decimal(9) : new Decimal(3);
+                // Give rocks
+                let reward = asteroid.big ? new Decimal(6) : new Decimal(3)
+                let rockAmt = reward.mul(player.ir.spaceRockMult).floor();
+                player.ir.spaceRock = player.ir.spaceRock.add(rockAmt);
+                lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: rockAmt, type: "rock" });
+
+                // Gem gain chance; base is 0.5%
+                let threshold = 0.005;
+                if (hasUpgrade("ir", 104)) threshold *= 2;
+                if (asteroid.big) threshold *= 2;
+                
+                // Give gems
+                if (Math.random() < threshold) {
+                    let gemAmt = player.ir.spaceGemMult.floor();
+                    player.ir.spaceGem = player.ir.spaceGem.add(gemAmt);
+                    lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: gemAmt, type: "gem" });
+                }
+                
+                // Spawn an XP orb
+                let xp = asteroid.big ? new Decimal(6) : new Decimal(3);
                 xp = Math.floor(xp * this.upgradeEffects.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
-                let random = Math.random();
-                if (asteroid.big) {
-                    if (hasUpgrade("ir", 104))
-                    {
-                        if (random < 0.02) {
-                        player.ir.spaceGem = player.ir.spaceGem.add(1);
-                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
-                        }
-                    } else
-                    {
-                        if (random < 0.01) {
-                        player.ir.spaceGem = player.ir.spaceGem.add(1);
-                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
-                        }
-                    }
-                } else {
-                    if (hasUpgrade("ir", 104))
-                    {
-                        if (random < 0.01) {
-                        player.ir.spaceGem = player.ir.spaceGem.add(1);
-                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
-                        }
-                    } else
-                    {
-                        if (random < 0.005) {
-                        player.ir.spaceGem = player.ir.spaceGem.add(1);
-                        lootFlashPositions.push({ x: asteroid.x, y: asteroid.y + 15, amount: 1, type: "gem" });
-                        }
-                    }
-                }
-
+                // Split big asteroids into smaller ones
                 if (asteroid.big) {
                     for (let i = 0; i < asteroid.splitCount; i++) {
                         newAsteroids.push(this.createSmallAsteroid(asteroid.x, asteroid.y));
                     }
                 }
+
                 return false;
             }
             return true;
@@ -4546,7 +4647,7 @@ class SpaceArena {
         }
         player.ir.battleLevel = new Decimal(0);
         player.ir.battleXP = new Decimal(0);
-        if (arena) arena.upgradeEffects = arena.getDefaultUpgradeEffects();
+        if (arena) arena.upgradeEffects = arena.getDefaultShipStatMults();
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
         if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
         if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";

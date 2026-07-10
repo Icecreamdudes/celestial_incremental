@@ -52,9 +52,6 @@ addLayer("iriditeZone", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -148,7 +145,7 @@ SB_celestialites.iridianShip1 = {
         return Decimal.add(2, Math.random()).mul(15)
     },
     initialize(celestialite) {
-        celestialite.attackCooldown = 90
+        celestialite.attackCooldown = 60
         celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
 
@@ -190,7 +187,7 @@ SB_celestialites.iridianShip1 = {
                 star: true,
                 radius: 4,
             });
-            celestialite.attackCooldown = 90
+            celestialite.attackCooldown = 60
         }
 
         // Handle celestialite movement changes

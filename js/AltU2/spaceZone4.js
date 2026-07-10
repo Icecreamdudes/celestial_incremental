@@ -68,9 +68,6 @@ addLayer("spaceZone4", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -358,9 +355,9 @@ SB_celestialites.omicronShip = {
     symbol: "ο",
     radius: 20,
     color: "#008060",
-    health: new Decimal(50),
-    damage: new Decimal(2),
-    regen: new Decimal(0.25),
+    health: new Decimal(75),
+    damage: new Decimal(3),
+    regen: new Decimal(0.5),
     reward() {
         let gain = {}
         let random = Math.random()

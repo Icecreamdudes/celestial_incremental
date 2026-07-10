@@ -68,9 +68,6 @@ addLayer("spaceZone3", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -128,7 +125,7 @@ SB_zones.spaceZone3 = {
         if (typeof level == "object") level = level.toNumber();
         
         let cel = ["zetaShip", "thetaShip", "iotaShip", "kappaShip"]
-        if (level >= 0) cel = cel.concat(["lambdaShip", "muShip"]);
+        if (level >= 20) cel = cel.concat(["lambdaShip", "muShip"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
     },

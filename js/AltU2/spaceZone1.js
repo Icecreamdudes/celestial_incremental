@@ -68,9 +68,6 @@ addLayer("spaceZone1", {
                 pauseUniverseAll(["A2", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -426,7 +423,7 @@ SB_celestialites.gammaShip = {
                 y: celestialite.y,
                 radius: 24,
                 timer: 180,
-                damage: 3
+                damage: 1
             });
             celestialite.trailCooldown = 60
         }
@@ -466,7 +463,7 @@ SB_celestialites.gammaShip = {
                 y: celestialite.y,
                 radius: 48,
                 timer: 180,
-                damage: 3
+                damage: 1.5
             });
             celestialite.trailCooldown = 120
             celestialite.defenseCooldown = 450

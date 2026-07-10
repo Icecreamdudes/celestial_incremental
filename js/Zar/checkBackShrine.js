@@ -168,11 +168,9 @@ addLayer("cbs", {
                 let regen = 0
                 if (hasUpgrade("ir", 14)) regen += 0.5
                 regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+                if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
                 arena.upgradeEffects.moveSpeed += 4
-                arena.upgradeEffects.hpRegen += 2 / 60
+                arena.upgradeEffects.healthRegen += 2 / 60
                 summonSpirit();
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(player.cbs.ritualCosts[0])
@@ -2906,7 +2904,7 @@ class RitualArena extends SpaceArena {
         this.upgradeEffects.attackDamage = this.upgradeEffects.attackDamage || 1;
         this.upgradeEffects.damageReduction = this.upgradeEffects.damageReduction || 1;
         this.upgradeEffects.xpGain = this.upgradeEffects.xpGain || 1;
-        this.upgradeEffects.lootGain = this.upgradeEffects.lootGain || 1;
+        this.upgradeEffects.rockGain = this.upgradeEffects.rockGain || 1;
         
         // Initialize enhanced visual effects system
         this.effectsManager = new VisualEffectsManager(this);
@@ -4184,9 +4182,6 @@ class RitualArena extends SpaceArena {
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgradeEffects.hpRegen += 0.5 / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
                 pauseUniverseAll(["DS", "A2"], "pause", true)
 */
 

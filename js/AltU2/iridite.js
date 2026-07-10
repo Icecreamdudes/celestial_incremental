@@ -22,7 +22,7 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
     let regen = 0
     if (hasUpgrade("ir", 14)) regen += 0.5
     regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-    if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
+    if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
 
     arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
     arena.upgradeEffects = Object.assign(arena.upgradeEffects, upgEffect)
@@ -274,13 +274,73 @@ addLayer("ir", {
     color: "#151230",
     update(delta) {
 
+        if (arena && arena.upgrades && arena.upgradeEffects) {
+            arena.upgradeEffects.attackDamage = 1
+            arena.upgradeEffects.attackDamage *= 1 + 0.1 * arena.upgrades.attackDamageCommon
+            arena.upgradeEffects.attackDamage *= 1 + 0.15 * arena.upgrades.attackDamageUncommon
+            arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageRare
+            arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageEpic
+            arena.upgradeEffects.attackDamage *= 1 + 0.75 * arena.upgrades.attackDamageLegendary
+            arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+
+            arena.upgradeEffects.attackSpeed = 1
+            arena.upgradeEffects.attackSpeed *= 1 + 0.05 * arena.upgrades.attackSpeedUncommon
+            arena.upgradeEffects.attackSpeed *= 1 + 0.075 * arena.upgrades.attackSpeedRare
+            arena.upgradeEffects.attackSpeed *= 1 + 0.075 * arena.upgrades.attackSpeedEpic
+            arena.upgradeEffects.attackSpeed /= 1 + 0.25 * arena.upgrades.attackSpeedLegendary
+
+            arena.upgradeEffects.bulletSize = 1
+            arena.upgradeEffects.bulletSize *= 1 + 0.1 * arena.upgrades.bulletSizeRare
+
+            arena.upgradeEffects.healthRegen = arena.upgrades.healthRegenUncommon * 0.5 / 60
+            if (hasUpgrade("ir", 14)) arena.upgradeEffects.healthRegen += 0.5 / 60;
+            arena.upgradeEffects.healthRegen *= 1 + 0.25 * arena.upgrades.healthRegenLegendary
+            arena.upgradeEffects.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+
+            arena.upgradeEffects.damageReduction = 1
+            arena.upgradeEffects.damageReduction *= 1 + 0.1 * arena.upgrades.damageReductionRare
+            arena.upgradeEffects.damageReduction *= 1 + 0.15 * arena.upgrades.damageReductionEpic
+            arena.upgradeEffects.damageReduction *= 1 + 0.25 * arena.upgrades.attackDamageLegendary
+
+            arena.upgradeEffects.maxHp = 1
+            arena.upgradeEffects.maxHp *= 1 + 0.1 * arena.upgrades.maxHpRare
+
+            arena.upgradeEffects.moveSpeed = 1
+            arena.upgradeEffects.moveSpeed *= 1 + 0.1 * arena.upgrades.moveSpeedRare
+            arena.upgradeEffects.moveSpeed *= 1 + 0.25 * arena.upgrades.moveSpeedLegendary
+            
+            arena.upgradeEffects.rockGain = 1
+            arena.upgradeEffects.rockGain *= 1 + 0.1 * arena.upgrades.rockGainCommon
+            arena.upgradeEffects.rockGain *= 1 + 0.15 * arena.upgrades.rockGainUncommon
+            arena.upgradeEffects.rockGain *= 1 + 0.2 * arena.upgrades.rockGainRare
+            arena.upgradeEffects.rockGain *= 1 + 0.2 * arena.upgrades.rockGainEpic
+            arena.upgradeEffects.rockGain *= 1 + 0.4 * arena.upgrades.rockGainLegendary
+            
+            arena.upgradeEffects.gemGain = 1
+            arena.upgradeEffects.gemGain *= 1 + 0.05 * arena.upgrades.gemGainRare
+            arena.upgradeEffects.gemGain *= 1 + 0.05 * arena.upgrades.gemGainEpic
+            arena.upgradeEffects.gemGain *= 1 + 0.2 * arena.upgrades.gemGainLegendary
+            
+            arena.upgradeEffects.xpGain = 1
+            arena.upgradeEffects.xpGain *= 1 + 0.1 * arena.upgrades.xpGainCommon
+            arena.upgradeEffects.xpGain *= 1 + 0.15 * arena.upgrades.xpGainUncommon
+            arena.upgradeEffects.xpGain *= 1 + 0.2 * arena.upgrades.xpGainRare
+            arena.upgradeEffects.xpGain *= 1 + 0.2 * arena.upgrades.xpGainEpic
+            arena.upgradeEffects.xpGain *= 1 + 0.4 * arena.upgrades.xpGainLegendary
+        }
+
         let zoneRef = SB_zones[player.ir.battleStage]
 
         player.ir.spaceRockMult = new Decimal(1)
-        if (arena) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(arena.upgradeEffects.lootGain);
+        if (arena) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(arena.upgradeEffects.rockGain);
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
+
+        player.ir.spaceGemMult = new Decimal(1)
+        if (arena) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(arena.upgradeEffects.gemGain);
+        player.ir.spaceGemMult = player.ir.spaceGemMult.mul(levelableEffect("pu", 212)[1])
+        if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
 
@@ -928,9 +988,7 @@ addLayer("ir", {
                 let regen = 0
                 if (hasUpgrade("ir", 14)) regen += 0.5
                 regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+                if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -1410,7 +1468,7 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(25).add(1)
+                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -1456,9 +1514,9 @@ addLayer("ir", {
                 "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Full Speed",
+            title: "Armoured",
             unlocked() { return true },
-            description() { return "Increase max ship velocity by +1 and cut star dimension cooldown by /2."},
+            description() { return "All ships take /2 damage from collisions."},
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
@@ -1691,10 +1749,10 @@ addLayer("ir", {
                 "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Dedication",
+            title: "Perseverance",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts space rock gain based on stored time capsules. (x" + format(this.effect(), 3) + ")"},
-            cost: new Decimal(1e7),
+            cost: new Decimal(4e8),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1721,7 +1779,7 @@ addLayer("ir", {
             title: "Destruction II",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "All ships deal 20% more damage."},
-            cost: new Decimal(7e7),
+            cost: new Decimal(2e9),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1748,7 +1806,7 @@ addLayer("ir", {
             title: "Loyalty",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a second space building slot adder."},
-            cost: new Decimal(1e9),
+            cost: new Decimal(1.4e10),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1772,15 +1830,15 @@ addLayer("ir", {
                 "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Familiar",
+            title: "Familiarity",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts light gain based on starmetal alloy. (x" + format(this.effect(), 3) + ")"},
-            cost: new Decimal(4e7),
+            cost: new Decimal(1e9),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.sma.starmetalAlloy.add(1).log(10).add(1).pow(0.75).sub(1).pow_base(10).sub(1).pow(0.5).div(100).add(1)
+                return player.sma.starmetalAlloy.div(1e15).add(1).log(10).add(1).pow(0.75).sub(1).pow_base(10).sub(1).pow(0.5).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -1802,7 +1860,7 @@ addLayer("ir", {
             title: "Railgun",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a new ship: Railgun."},
-            cost: new Decimal(1.5e8),
+            cost: new Decimal(4e9),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1829,7 +1887,7 @@ addLayer("ir", {
             title: "Unity",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Project effects are 5% stronger."},
-            cost: new Decimal(2e9),
+            cost: new Decimal(4e10),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -2019,7 +2077,7 @@ addLayer("ir", {
             title: "Destruction",
             unlocked() { return true },
             description() { return "All ships deal 15% more damage."},
-            cost: new Decimal(50),
+            cost: new Decimal(100),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2041,8 +2099,8 @@ addLayer("ir", {
             },
             title: "Bloodshed",
             unlocked() { return true },
-            description() { return "Boosts blood gain by x1.25."},
-            cost: new Decimal(150),
+            description() { return "Boosts blood stone gain by x1.25."},
+            cost: new Decimal(250),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2062,10 +2120,10 @@ addLayer("ir", {
                 "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Focus",
+            title: "Dedication",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts project speed by x1.2."},
-            cost: new Decimal(300),
+            cost: new Decimal(1e3),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2088,7 +2146,7 @@ addLayer("ir", {
             title: "Momentum II",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Space battle celestialite stats scale another 2% slower."},
-            cost: new Decimal(600),
+            cost: new Decimal(3e3),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2111,7 +2169,7 @@ addLayer("ir", {
             title: "Empire",
             unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Automate the first six space buildings."},
-            cost: new Decimal(1500),
+            cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2705,7 +2763,7 @@ addLayer("ir", {
                 content() { return [
                     ["style-column", [], {height: (player.ir.iriditeFightActive) ? "10px" : "0"}],
                     ["style-column", [
-                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / 100</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
+                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                         ["style-row", [
                             ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                         ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]

@@ -122,9 +122,7 @@
                 let regen = 0
                 if (hasUpgrade("ir", 14)) regen += 0.5
                 regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+                if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
                 player.bl.noxFightActive = false
 
             },
@@ -839,7 +837,7 @@ class BloodArena extends SpaceArena {
         this.upgradeEffects.attackDamage = this.upgradeEffects.attackDamage || 1;
         this.upgradeEffects.damageReduction = this.upgradeEffects.damageReduction || 1;
         this.upgradeEffects.xpGain = this.upgradeEffects.xpGain || 1;
-        this.upgradeEffects.lootGain = this.upgradeEffects.lootGain || 1;
+        this.upgradeEffects.rockGain = this.upgradeEffects.rockGain || 1;
         this.upgradeEffects.gemGain = this.upgradeEffects.gemGain || 1;
         this.resourceMult = this.resourceMult || 1;
 
@@ -2056,7 +2054,7 @@ class BloodArena extends SpaceArena {
                             player.bl.noxDefeated = true;
                             player.ir.battleLevel = player.ir.battleLevel.add(1)
                             let noxStone = 75
-                            noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
+                            noxStone = noxStone * (this.upgradeEffects.rockGain || 1) * (this.resourceMult || 1)
                             noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                             noxStone = noxStone * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                             noxStone = Math.max(0, Math.floor(noxStone))
@@ -2132,7 +2130,7 @@ class BloodArena extends SpaceArena {
                     let amt = Math.floor(Math.random() * (maxR - minR + 1)) + minR;
                     // apply loot multipliers similar to SpaceArena logic
                     try {
-                        amt = amt * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
+                        amt = amt * (this.upgradeEffects.rockGain || 1) * (this.resourceMult || 1)
                         amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                         amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                         amt = Math.max(0, Math.floor(amt))

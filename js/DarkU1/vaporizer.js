@@ -24,7 +24,7 @@
         };
     },
     tooltip: "Vaporizer",
-    branches: ["dgr"],
+    branches: [["le", "#309"],["dgj", "#309"]],
     color: "rgba(193, 223, 0)",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -178,7 +178,7 @@
                 return "Vaporized Boosters"
             },
             display() {
-                return "which are raising booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
+                return "which are weakening booster requirements by ^" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Clouds"
             },
             buy(mult) {

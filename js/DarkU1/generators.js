@@ -53,7 +53,7 @@
 
         //post softcap multipliers
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("ds", 102))
-
+        if (getLevelableTier("pu", 403, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.dec.magnesium28Effect)
         player.dg.generatorEffect = player.dg.generators.pow(1.5)
 
         player.dg.generatorPower = player.dg.generatorPower.add(player.dg.generatorPowerPerSecond.mul(delta))

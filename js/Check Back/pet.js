@@ -744,6 +744,12 @@ addLayer("pet", {
         if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 11))
         if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 12))
         if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("tr", 13))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 31))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 32))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 33))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 34))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 35))
+        if (getLevelableTier("pu", 403, true)) abilityTimeDecrease = abilityTimeDecrease.mul(buyableEffect("dec", 36))
         if (getLevelableTier("pu", 403, true))
         {
             if (player.pet.legPetTimers[0].active) player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.add(abilityTimeDecrease.mul(delta))

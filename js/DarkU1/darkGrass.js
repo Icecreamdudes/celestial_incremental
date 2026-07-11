@@ -67,6 +67,7 @@
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgj", 14))
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("car", 406)[0])
         if (getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.hr.radiation.effect2)
+        if (getLevelableTier("pu", 403, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.dec.carbon14Effect)
         
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
@@ -91,6 +92,7 @@
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgj", 14))
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("car", 406)[0])
         if (getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active) player.dgr.grassValue = player.dgr.grassValue.mul(player.hr.radiation.effect2)
+        if (getLevelableTier("pu", 403, true)) player.dgr.grassValue = player.dgr.grassValue.mul(player.dec.carbon14Effect)
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)

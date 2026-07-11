@@ -17,7 +17,27 @@
             "As the voice fades away, you look at your own hands, and see ten points manifest as rings. One for each finger.",
         ],
         cutsceneIndex: 0,
+
+        //effects
+        zaWarudo: false,
     }},
+    update(delta) {
+        if (cutsceneIndex == 20 && cutsceneID == "AD1-Decay" && !player.c.zaWarudo)
+        {
+            launchZaWarudoDOMEffect(960, 540, 1e9);
+            player.c.zaWarudo = true
+        }
+        if (cutsceneIndex == 25 && cutsceneID == "AD1-Decay" && player.c.zaWarudo)
+        {
+            resumeZaWarudoTime();
+            player.c.zaWarudo = false
+        }
+        if (!cutsceneActive)
+        {
+            //reset all effects
+            player.c.zaWarudo = false
+        }
+    },
     cutscenes: {
         "U1-Start": {
             type: "normal",
@@ -4875,6 +4895,55 @@
                 { text: "Duducat was inspired by a webcomic that he had read, and decided to make a framework based on that comic.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "At the time, he wasn't sure what the framework was supposed to achieve, but now is a more important time than ever to retrive the framework.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
                 { text: "If we harness the power of METANESS, we can achieve great things. ", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+
+            ],
+        },
+        "AD1-Decay": {
+            type: "normal",
+            portrait: "resources/secret.png",
+            background: "linear-gradient(90deg, #19333a, #17302a)",
+            music: "music/fighting.mp3",
+            trigger() {return hasUpgrade("ani", 26)},
+            dialogue: [
+                { text: "As you, Nox and Marcel trek forward, the sky begins to become a little blue."  },
+                { text: "Out of nowhere, a slim green figure holding a sword lunges towards Marcel and slashes his mechanical body."  },
+                { text: "Never expected YOU to come back, Marcel...", portrait: "resources/aniciffo.png"  },
+                { text: "Marcel and this green figure exchange several punches and blows."  },
+                { text: "That must be the celestial. He's pretty strong.", portrait: "resources/nox.png"  },
+                { text: "The green figure's physical appearance reminded you Eclipse, but only green."  },
+                { text: "He wore a blue cape and armor which seems to be conjured from his superphysical values."  },
+                { text: "This celestial is definitely way more powerful than the previous celestials you have encountered..."  },
+                { text: "Didn't expect you to just come towards me randomly like that.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "You've certainly gotten a lot stronger since our last encounter.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "This is only proof as to why you should care for ALL of your frameworks!", portrait: "resources/aniciffo.png"  },
+                { text: "Aniciffo, you will hand over that framework this instant, or I will take it from you with force!", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "Aniciffo spawns a plethora of strange green blobs around Marcel, and they explode into a cloud of superphysical gas."  },
+                { text: "Those dirty tricks won't work on me, I'm a machine you know!", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "Damn...", portrait: "resources/aniciffo.png"  },
+                { text: "Aniciffo begins to dash around Marcel at a very fast speed, exchanging powerful kicks and sword strikes at him."  },
+                { text: "You see Marcel struggle and fail to return a strike back to Aniciffo."  },
+                { text: "I guess it comes down to this...", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "Marcel pulls out a large clockwork device that is linked to his superphysical power."  },
+                { text: "ZA WARUDOOO!!!", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  }, //Index = 20, make the world effect occur 
+                { text: "A strange energy begins to emit out of Marcel, and all of your surroundings become gray."  },
+                { text: "You are unable to move. It is as if time had stopped completely."  },
+                { text: "You see Nox and Aniciffo, and it seems like they are unable to move either."  },
+                { text: "Marcel hastily throws hundreds of knives at Aniciffo with great force, but they aren't moving."  },
+                { text: "Time will resume now.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  }, //25
+                { text: "All of the knives that Marcel had thrown at Aniciffo are now moving towards him at great speed."  },
+                { text: "He gets hit by all of the knives, but they don't seem to hurt him much."  },
+                { text: "Not the time stop again...", portrait: "resources/aniciffo.png"  },
+                { text: "You're such a lazy copycat!!!", portrait: "resources/aniciffo.png"  },
+                { text: "I have better things to do right now. You haven't seen the last of me clock boy!", portrait: "resources/aniciffo.png"  },
+                { text: "Aniciffo dashes off into the distance."  },
+                { text: "Lazy copycat? At least I'm not a thief!", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "Nox looks at you."  },
+                { text: "You notice something? The whole time, that celestial didn't even notice our existence.", portrait: "resources/nox.png"  },
+                { text: "Our superphysical power doesn't even compare to Marcel's power.", portrait: "resources/player.png"  },
+                { text: "Looks like both of us have a lot of training to do.", portrait: "resources/nox.png"  },
+                { text: "Yeah...", portrait: "resources/player.png"  },
+                { text: "That bastard will regret attacking me.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+                { text: "We must keep going.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
 
             ],
         },

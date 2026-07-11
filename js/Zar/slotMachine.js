@@ -109,6 +109,7 @@
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("sme", 184))
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("car", 42))
         if (player.zarDungeon.zarDefeated) player.sm.totalChipMult = player.sm.totalChipMult.mul(10)
+        if (hasAchievement("achievements", 1009)) player.sm.totalChipMult = player.sm.totalChipMult.mul(1.25)
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)
@@ -202,6 +203,7 @@
         {
             mult = new Decimal(4)
             if (player.tab == "sm")makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 550, y: 450, text: "Jackpot!<br><small>Quadruple Rewards!</small>"})
+            if (!hasAchievement("achievements", 1009)) completeAchievement("achievements", 1009)
         }
 
         for (let i = 0; i < player.sm.slotIndexes.length; i++) {
@@ -1141,7 +1143,16 @@
         ["raw-html", () => { return player.za.chancePoints.gte(player.za.chancePointsSoftcapStart) ? "After " + format(player.za.chancePointsSoftcapStart) + " chance points, gain is divided by /" + format(player.za.chancePointsSoftcapEffect) + "." : "Softcap start: " + format(player.za.chancePointsSoftcapStart) + "." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 16) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 16) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "s", 
+            description: "Spin Slot Machine",
+            onPress() {
+                clickClickable(this.layer, 21)
+            },
+        }
+	]
 })
 //makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 550, y: 450, text: "Lucky!<br><small>Double Rewards!</small>"})
 //makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 550, y: 450, text: "Jackpot!<br><small>Quadruple Rewards!</small>"})

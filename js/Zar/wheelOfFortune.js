@@ -88,6 +88,7 @@
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                         if (player.tab == "wof") makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 560, y: 550, text: "Evolution Shards Earned!"})
+                        if (!hasAchievement("achievements", 1012)) completeAchievement("achievements", 1012)
                     }
                     player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
 
@@ -122,6 +123,7 @@
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("sme", 183))
         player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(buyableEffect("car", 32))
         if (player.zarDungeon.zarDefeated) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(100)
+        if (hasAchievement("achievements", 1007)) player.wof.wheelPointsMult = player.wof.wheelPointsMult.mul(1.5)
 
         if (hasUpgrade("car", 12)) player.wof.wheelPoints = player.wof.wheelPoints.add(player.wof.wheelPointsMult.mul(Decimal.mul(delta, 0.25)))
 

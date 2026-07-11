@@ -78,6 +78,7 @@
         if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(upgradeEffect("mr", 14))
 
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(player.dec.electronsEffect)
 
 
         if (player.le.starmetalAlloyPause.gte(0)) layers.le.starmetalReset();
@@ -119,6 +120,8 @@
         if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.tr.radiation.effect)
         if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.sr.spaceDecayEffect)
         if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("mr", 14))
+            
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.pow(player.dec.electronsEffect)
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -723,6 +726,52 @@
             player.pu.selectedPunchcards[3] = 0
             player.pu.legendarySelectionActive = false
         }
+
+        //decay
+        player.dec.decay = new Decimal(0)
+        player.dec.stability = new Decimal(0)
+        player.dec.carbon14 = new Decimal(0)
+        player.dec.nitrogen14 = new Decimal(0)
+        player.dec.magnesium28 = new Decimal(0)
+        player.dec.aluminum28 = new Decimal(0)
+        player.dec.silicon28 = new Decimal(0)
+
+        player.dec.dysprosium154 = new Decimal(0)
+        player.dec.gadolinium150 = new Decimal(0)
+        player.dec.samarium146 = new Decimal(0)
+        player.dec.neodymium142 = new Decimal(0)
+
+        player.subtabs["dec"]["stuff"] = "Main"
+
+        player.dec.buyables[31] = new Decimal(0)
+        player.dec.buyables[32] = new Decimal(0)
+        player.dec.buyables[33] = new Decimal(0)
+        player.dec.buyables[34] = new Decimal(0)
+        player.dec.buyables[35] = new Decimal(0)
+        player.dec.buyables[36] = new Decimal(0)
+
+        player.dec.electrons = new Decimal(0)
+        player.dec.alphaParticles = new Decimal(0)
+
+        player.dec.buyables[41] = new Decimal(0)
+        player.dec.buyables[42] = new Decimal(0)
+        player.dec.buyables[43] = new Decimal(0)
+        player.dec.buyables[44] = new Decimal(0)
+        player.dec.buyables[45] = new Decimal(0)
+        player.dec.buyables[46] = new Decimal(0)
+        player.dec.buyables[47] = new Decimal(0)
+        player.dec.buyables[48] = new Decimal(0)
+        player.dec.buyables[49] = new Decimal(0)
+        player.dec.buyables[51] = new Decimal(0)
+        player.dec.buyables[52] = new Decimal(0)
+        player.dec.buyables[53] = new Decimal(0)
+        player.dec.buyables[54] = new Decimal(0)
+        player.dec.buyables[55] = new Decimal(0)
+        player.dec.buyables[56] = new Decimal(0)
+        player.dec.buyables[57] = new Decimal(0)
+        player.dec.buyables[58] = new Decimal(0)
+        player.dec.buyables[59] = new Decimal(0)
+
     },
     upgrades: {
         11: {

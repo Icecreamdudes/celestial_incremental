@@ -62,6 +62,7 @@
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.mr.radiation.effect)
         if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.hr.radiation.effect)
         if (getLevelableTier("pu", 403, true) && hasUpgrade("hr", 14)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("hr", 14))
+        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.dec.alphaParticlesEffect)
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
@@ -79,6 +80,7 @@
         player.du.secondSoftcapStart = new Decimal(1.79e308)
         player.du.secondSoftcapStart = player.du.secondSoftcapStart.pow(player.ds.spaceEnergyEffect)
         if (getLevelableTier("pu", 306, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(levelableEffect("pu", 306)[1])
+        if (getLevelableTier("pu", 403, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(buyableEffect("tr", 19))
 
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)

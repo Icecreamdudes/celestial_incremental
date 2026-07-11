@@ -35,6 +35,7 @@ addLayer("funify", {
 
         player.funify.funPointsGain = player.funify.funify.gt(0) ? Decimal.pow(10, player.funify.funify.pow(0.9).sub(1)) : new Decimal(0)
         player.funify.funPointsGain = player.funify.funPointsGain.mul(buyableEffect("funify", 11))
+        if (getLevelableTier("pu", 403, true)) player.funify.funPointsGain = player.funify.funPointsGain.mul(player.dec.gadolinium150Effect)
 
         if (getLevelableTier("pu", 300, true)) player.funify.funPoints = player.funify.funPoints.add(player.funify.funPointsGain.mul(delta))
     },

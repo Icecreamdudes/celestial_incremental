@@ -67,6 +67,7 @@
         if (getLevelableTier("pu", 209, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("pu", 209)[0])
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("car", 408)[0])
         player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(levelableEffect("st", 301)[0])
+        if (getLevelableTier("pu", 403, true)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.mul(player.dec.samarium146Effect)
 
         player.ds.spaceEnergyPause = player.ds.spaceEnergyPause.sub(1)
         if (player.ds.spaceEnergyPause.gte(1)) layers.ds.spaceEnergyReset();
@@ -76,6 +77,7 @@
         // SPACE ENERGY SOFTCAP
         if (player.ds.spaceEnergyToGet.gte(1000)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(1000).pow(0.3).mul(1000)
 
+        if (hasUpgrade("mr", 17) && !player.pet.legPetTimers[0].active) player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet.mul(Decimal.mul(delta, 0.1)))
         //space
         player.ds.space = player.ds.length.mul(player.ds.width).mul(player.ds.depth).mul(player.ds.spissitude)
         player.ds.spaceEffect = player.ds.space.plus(1).log(10).div(3).add(1)
@@ -88,6 +90,7 @@
         if (getLevelableTier("pu", 212, true)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("pu", 212)[0])
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(levelableEffect("st", 302)[0])
         player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(player.ani.darkRadiationEffect2)
+        if (getLevelableTier("pu", 403, true)) player.ds.lengthPerSecond = player.ds.lengthPerSecond.mul(player.dec.neodymium142Effect)
 
         player.ds.width = player.ds.width.add(player.ds.widthPerSecond.mul(delta))
         player.ds.widthPerSecond = buyableEffect("ds", 12)
@@ -96,6 +99,7 @@
         if (getLevelableTier("pu", 212, true)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("pu", 212)[0])
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(levelableEffect("st", 302)[0])
         player.ds.widthPerSecond = player.ds.widthPerSecond.mul(player.ani.darkRadiationEffect2)
+        if (getLevelableTier("pu", 403, true)) player.ds.widthPerSecond = player.ds.widthPerSecond.mul(player.dec.neodymium142Effect)
 
         player.ds.depth = player.ds.depth.add(player.ds.depthPerSecond.mul(delta))
         player.ds.depthPerSecond = buyableEffect("ds", 13)
@@ -104,10 +108,12 @@
         if (getLevelableTier("pu", 212, true)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("pu", 212)[0])
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(levelableEffect("st", 302)[0])
         player.ds.depthPerSecond = player.ds.depthPerSecond.mul(player.ani.darkRadiationEffect2)
+        if (getLevelableTier("pu", 403, true)) player.ds.depthPerSecond = player.ds.depthPerSecond.mul(player.dec.neodymium142Effect)
 
         player.ds.spissitude = player.ds.spissitude.add(player.ds.spissitudePerSecond.mul(delta))
         player.ds.spissitudePerSecond = buyableEffect("ds", 14)
         player.ds.spissitudePerSecond = player.ds.spissitudePerSecond.mul(levelableEffect("st", 302)[0])
+        if (getLevelableTier("pu", 403, true)) player.ds.spissitudePerSecond = player.ds.spissitudePerSecond.mul(player.dec.neodymium142Effect)
 
         //stored
         player.ds.storedSpaceEnergyToGet = player.ds.spaceEnergy.mul(0.05).pow(0.6)

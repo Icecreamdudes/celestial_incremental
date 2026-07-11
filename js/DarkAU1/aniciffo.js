@@ -108,7 +108,9 @@
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.sr.radiation.effect2)
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("ani", 21))
         if (hasUpgrade("hr", 12)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(upgradeEffect("hr", 12))
-        if (getLevelableTier("pu", 501, true)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 501)[1])
+        if (getLevelableAmount("pu", 501).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 501)[1])
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("dec", 11))
+        if (getLevelableAmount("pu", 502).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 502)[1])
 
         if (player.ani.darkRadiation.div(3).pow(0.65).add(1).lte(1e6))
         {
@@ -140,6 +142,8 @@
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("tr", 14))
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("ani", 31))
         if (hasUpgrade("mr", 12)) player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(upgradeEffect("mr", 12))
+        player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(levelableEffect("pu", 503)[2])
 
         player.ani.radiation.red.max = new Decimal(6)
         if (hasUpgrade("ani", 19)) player.ani.radiation.red.max = player.ani.radiation.red.max.div(3)
@@ -161,6 +165,8 @@
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("tr", 15))
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("ani", 31))
         if (hasUpgrade("mr", 12)) player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(upgradeEffect("mr", 12))
+        player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(levelableEffect("pu", 503)[2])
 
         player.ani.radiation.orange.max = new Decimal(9)
         if (hasUpgrade("ani", 19)) player.ani.radiation.orange.max = player.ani.radiation.orange.max.div(3)
@@ -182,6 +188,8 @@
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(player.ani.radiation.green.effect)
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("ani", 31))
         if (hasUpgrade("mr", 12)) player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(upgradeEffect("mr", 12))
+        player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(levelableEffect("pu", 503)[2])
 
         player.ani.radiation.yellow.max = new Decimal(12)
         if (hasUpgrade("ani", 19)) player.ani.radiation.yellow.max = player.ani.radiation.yellow.max.div(3)
@@ -199,6 +207,8 @@
         player.ani.radiation.green.toGet = new Decimal(1)
         player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(player.ani.radiation.blue.effect)
         if (hasUpgrade("mr", 12)) player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(upgradeEffect("mr", 12))
+        player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(levelableEffect("pu", 503)[2])
 
         player.ani.radiation.green.max = new Decimal(10)
 
@@ -214,6 +224,8 @@
 
         player.ani.radiation.blue.toGet = new Decimal(1)
         if (hasUpgrade("mr", 12)) player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(upgradeEffect("mr", 12))
+        player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(levelableEffect("pu", 503)[2])
 
         player.ani.radiation.blue.max = new Decimal(15)
 
@@ -232,13 +244,12 @@
         }
 
 
-
-
         // RADIATION STONES
 
         if (player.pet.legPetTimers[0].active && player.le.resetAmount.gte(9) && getLevelableTier("pu", 403, true))  {
             player.ani.stones.temporal.toGet = player.le.resetAmount.sub(8).pow(1.75).mul(3)
             player.ani.stones.temporal.toGet = player.ani.stones.temporal.toGet.mul(buyableEffect("ani", 34))
+            player.ani.stones.temporal.toGet = player.ani.stones.temporal.toGet.mul(buyableEffect("dec", 14))
         } else {
             player.ani.stones.temporal.toGet = new Decimal(0)
         }
@@ -247,6 +258,7 @@
         if (!player.pet.legPetTimers[0].active && player.le.resetAmount.gte(9) && getLevelableTier("pu", 403, true))  {
             player.ani.stones.cosmic.toGet = player.le.resetAmount.sub(10).pow(1.5)
             player.ani.stones.cosmic.toGet = player.ani.stones.cosmic.toGet.mul(buyableEffect("ani", 24))
+            player.ani.stones.cosmic.toGet = player.ani.stones.cosmic.toGet.mul(buyableEffect("dec", 14))
         } else {
             player.ani.stones.cosmic.toGet = new Decimal(0)
         }
@@ -337,7 +349,7 @@
         16: {
             title() { return player.tr.radiation.toggle ? "<h4>Time Radiation<br>On</h3>" : "<h4>Time Radiation<br>Off</h3>" },
             canClick() { return true },
-            unlocked() { return hasUpgrade("ani", 14) },
+            unlocked() { return hasUpgrade("ani", 15) },
             onClick() {
                 if (player.tr.radiation.toggle)
                 { 
@@ -353,7 +365,7 @@
         17: {
             title() { return player.sr.radiation.toggle ? "<h4>Space Radiation<br>On</h3>" : "<h4>Space Radiation<br>Off</h3>" },
             canClick() { return true },
-            unlocked() { return hasUpgrade("ani", 16) },
+            unlocked() { return hasUpgrade("ani", 17) },
             onClick() {
                 if (player.sr.radiation.toggle)
                 { 
@@ -617,6 +629,20 @@
             unlocked() { return hasUpgrade("ani", 25) },
             description: "Unlock radioactive punchcards.",
             cost: new Decimal(1e20),
+            currencyLocation() { return player.ani },
+            currencyDisplayName: "Dark Radiation",
+            currencyInternalName: "darkRadiation",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#74ff8f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#048500" : look.backgroundColor = "#adffaa"
+                return look
+            }
+        },
+        27: {
+            title: "Aniciffo Upgrade XVI",
+            unlocked() { return hasUpgrade("ani", 26) },
+            description: "Unlock the dysprosium-154 punchcard.",
+            cost: new Decimal(1e40),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -944,7 +970,7 @@
                 return "ROY Radiation Multiplier"
             },
             display() {
-                return "which are boosting ROY radiation gainby x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting ROY radiation gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Cosmic Radiation Stones"
             },
             buy(mult) {
@@ -1093,7 +1119,7 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17],]],
                     ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],]],
-                    ["row", [["upgrade", 25],["upgrade", 26],]],
+                    ["row", [["upgrade", 25], ["upgrade", 26], ["upgrade", 27],]],
                 ]
             },
             "Particle Toggle": {
@@ -1201,6 +1227,12 @@ const darkRadiation = {
 
         for (let i = 0; i < player.sr.generators.amount.length; i++) {
             player.sr.generators.amount[i] = player.sr.generators.amount[i].add(player.sr.generators.perClick[i])
+        }
+
+        if (hasUpgrade("hr", 17)) {
+            if (getLevelableTier("pu", 501, true)) player.dec.carbon14 = player.dec.carbon14.add(player.dec.carbon14ToGet.mul(0.1))
+            if (getLevelableTier("pu", 502, true)) player.dec.magnesium28 = player.dec.magnesium28.add(player.dec.magnesium28ToGet.mul(0.1))
+            if (getLevelableTier("pu", 504, true)) player.dec.dysprosium154 = player.dec.dysprosium154.add(player.dec.dysprosium154ToGet.mul(0.1))
         }
         
         Vue.delete(particles, this.id)

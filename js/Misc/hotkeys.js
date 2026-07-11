@@ -98,7 +98,18 @@ addLayer("hk", {
 function keyTable(uniID) {
     let table = []
     if(uniID == 'global') {
-        for(u in universes){ //sort global hotkeys by universe
+
+        //hotkeys in settings node come first
+        for(k in knownHotkeys.global) { 
+            hk = knownHotkeys.global[k]
+            if(hk.layer == "settings")
+                table.push(["row",[
+                    formatKey(hk.key,layers[hk.layer]),
+                            ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                    ],{'border-style':'solid'}
+                ])            
+        }
+        for(u in universes){ //sort other global hotkeys by universe
             for(k in knownHotkeys.global) { 
                 hk = knownHotkeys.global[k]
                 if(hk.uni == u)

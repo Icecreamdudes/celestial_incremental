@@ -891,7 +891,7 @@ addLayer("achievements", {
         916: {
             name: "Break ... what exactly?",
             image: "resources/achievements/10_00.png",
-            tooltip: "<h3>Break ... what exactly?</h3><hr style='margin-bottom:4px'>Expand your hives limits<br><br>Reward: +25% Pre-Aleph<br>Resources",
+            tooltip: "<h3>Break ... what exactly?</h3><hr style='margin-bottom:4px'>Expand your hive's limits<br><br>Reward: +25% Pre-Aleph<br>Resources",
             color: "#f9c901",
             complete() {return player.tad.hiveExpand},
             unlocked: true,
@@ -915,7 +915,7 @@ addLayer("achievements", {
         919: {
             name: "Fully Apathetic",
             image: "resources/achievements/10_00.png",
-            tooltip: "<h3>Fully Apathetic</h3><hr style='margin-bottom:4px'>Expand your hives<br>limits again<br><br>Reward: +25% Pre-Aleph<br>Resources",
+            tooltip: "<h3>Fully Apathetic</h3><hr style='margin-bottom:4px'>Expand your hive's<br>limits again<br><br>Reward: +25% Pre-Aleph<br>Resources",
             color: "#f9c901",
             complete() {return hasChallenge("fu", 12)},
             unlocked: true,

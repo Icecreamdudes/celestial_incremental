@@ -47,6 +47,9 @@
 
         player.sr.radiation.toGet = player.ds.space.pow(0.12).div(5000)
         if (hasUpgrade("mr", 13)) player.sr.radiation.toGet = player.sr.radiation.toGet.mul(upgradeEffect("mr", 13))
+        player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("dec", 22))
+        player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("tr", 17))
+        if (getLevelableAmount("pu", 506).gte(1)) player.sr.radiation.toGet = player.sr.radiation.toGet.mul(levelableEffect("pu", 506)[1])
 
         player.sr.radiation.max = new Decimal(45)
 
@@ -73,10 +76,13 @@
         }
 
         player.sr.spaceDecayEffect = player.sr.spaceDecay.pow(12).add(1)
-        player.sr.spaceDecayEffect2 = player.sr.spaceDecay.pow(0.25).div(9).add(1)
+        if (!hasUpgrade("mr", 16)) player.sr.spaceDecayEffect2 = player.sr.spaceDecay.pow(0.25).div(9).add(1)
+        if (hasUpgrade("mr", 16)) player.sr.spaceDecayEffect2 = player.sr.spaceDecay.pow(0.25).div(9).add(1).pow(2)
 
         player.sr.spaceDecayPerClick = player.sr.generators.amount[0].pow(0.5)
         player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(buyableEffect("sr", 1))
+        if (hasUpgrade("mr", 16)) player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(upgradeEffect("mr", 16))
+        if (getLevelableAmount("pu", 504).gte(1)) player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(levelableEffect("pu", 504)[1])
 
         for (let i = 0; i < player.sr.generators.amount.length-1; i++) {
 
@@ -85,8 +91,13 @@
 
         //to lazy to do this in the for loop
         player.sr.generators.perClick[0] = player.sr.generators.perClick[0].mul(buyableEffect("sr", 2))
+        if (hasUpgrade("mr", 16)) player.sr.generators.perClick[0] = player.sr.generators.perClick[0].mul(upgradeEffect("mr", 16))
+
         player.sr.generators.perClick[1] = player.sr.generators.perClick[1].mul(buyableEffect("sr", 3))
+        if (hasUpgrade("mr", 16)) player.sr.generators.perClick[1] = player.sr.generators.perClick[1].mul(upgradeEffect("mr", 16))
+
         player.sr.generators.perClick[2] = player.sr.generators.perClick[2].mul(buyableEffect("sr", 4))
+        if (hasUpgrade("mr", 16)) player.sr.generators.perClick[2] = player.sr.generators.perClick[2].mul(upgradeEffect("mr", 16))
     },
     spaceRadiationReset() {
         player.ani.darkRadiation = new Decimal(0)

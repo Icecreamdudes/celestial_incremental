@@ -35,11 +35,13 @@
     color: "black",
     update(delta) {
         player.tr.radiation.effect = player.tr.radiation.amount.pow(14).add(1) //divide eclipse req
-        player.tr.radiation.effect2 = player.tr.radiation.amount.pow(0.4).div(3).add(1) //dark radiation
+        player.tr.radiation.effect2 = player.tr.radiation.amount.pow(0.325).div(3).add(1) //dark radiation
 
         player.tr.radiation.toGet = player.pet.legPetTimers[0].current.pow(0.5).div(250)
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(player.sr.spaceDecayEffect2)
         if (hasUpgrade("hr", 13)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(upgradeEffect("hr", 13))
+        player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("dec", 12))
+        if (getLevelableAmount("pu", 505).gte(1)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(levelableEffect("pu", 505)[1])
 
         player.tr.radiation.max = new Decimal(30)
 
@@ -208,7 +210,7 @@
             currency() { return player.tr.radiation.amount},
             pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.4).mul(0.25).add(1)
                 return eff
             },
             unlocked() { return true },
@@ -245,7 +247,7 @@
             currency() { return player.tr.radiation.amount},
             pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.4).mul(0.25).add(1)
                 return eff
             },
             unlocked() { return true },
@@ -282,7 +284,7 @@
             currency() { return player.tr.radiation.amount},
             pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1)
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.4).mul(0.25).add(1)
                 return eff
             },
             unlocked() { return true },
@@ -293,6 +295,117 @@
             },
             display() {
                 return "which are boosting yellow radiation gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#740909", borderColor: "#b70d0e" }
+        },
+        17: {
+            costBase() { return new Decimal(1e15) },
+            costGrowth() { return new Decimal(6) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.tr.radiation.amount},
+            pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.3).mul(0.5).add(1)
+                return eff
+            },
+            unlocked() { return hasUpgrade("hr", 16) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Space Multiplier"
+            },
+            display() {
+                return "which are boosting space radiation gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#740909", borderColor: "#b70d0e" }
+        },
+        18: {
+            costBase() { return new Decimal(1e20) },
+            costGrowth() { return new Decimal(12) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.tr.radiation.amount},
+            pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.1).mul(0.25).add(1)
+                return eff
+            },
+            unlocked() { return hasUpgrade("hr", 16) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Mind and Heart Multiplier"
+            },
+            display() {
+                return "which are boosting mind and heart radiation gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#740909", borderColor: "#b70d0e" }
+        },
+        19: {
+            costBase() { return new Decimal(1e24) },
+            costGrowth() { return new Decimal(36) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.tr.radiation.amount},
+            pay(amt) { player.tr.radiation.amount = this.currency().sub(amt) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(20).add(1)
+                return eff
+            },
+            unlocked() { return hasUpgrade("hr", 16) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Softcap Extension Multiplier^20"
+            },
+            display() {
+                return "which are extending the second unavoidable softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
@@ -335,6 +448,7 @@
                     ["blank", "25px"],
                     ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],]],
                     ["row", [["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16],]],
+                    ["row", [["dark-buyable", 17], ["dark-buyable", 18], ["dark-buyable", 19],]],
                 ]
             },
         },

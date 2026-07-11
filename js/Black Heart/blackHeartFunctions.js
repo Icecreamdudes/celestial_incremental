@@ -1401,3 +1401,113 @@ function navHealEffect(x, y)
     }, 1, 'normal', {x: x, y: y});
 }
 
+const ZAWARUDOOO = new Audio('music/zaowlrd.mp3');
+const ZAWARUDOOOR = new Audio('music/zawarudoresume.mp3');
+
+let frozenElements = [];
+let activeEffectId = null;
+
+function launchZaWarudoDOMEffect(startX, startY, durationMs) {
+    // Dynamically sync volume right before playing
+    ZAWARUDOOO.volume = options.musicVolume / 10;
+    ZAWARUDOOOR.volume = options.musicVolume / 10;
+
+    // Play sound
+    if (options.musicToggle) ZAWARUDOOO.play();
+
+    // 1. Create a unique ID so we can clean up easily later
+    const effectId = 'za-warudo-' + Date.now();
+
+    // 2. Generate and inject the CSS animations dynamically
+    const style = document.createElement('style');
+    style.id = effectId + '-style';
+    style.textContent = `
+        @keyframes zw-ripple {
+            0% {
+                width: 0px;
+                height: 0px;
+                opacity: 1;
+                filter: invert(100%) contrast(200%);
+            }
+            100% {
+                width: 300vmax;
+                height: 300vmax;
+                opacity: 0.3;
+                filter: invert(100%) contrast(100%);
+            }
+        }
+        @keyframes zw-freeze {
+            0% { filter: none; }
+            100% { filter: grayscale(100%) contrast(130%) brightness(85%); } /* Settle into deep frozen gray */
+        }
+        .zw-overlay-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 999999;
+            overflow: hidden;
+        }
+        .zw-ripple-wave {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 0 50px 20px rgba(255, 255, 255, 0.6), inset 0 0 30px rgba(255,255,255,0.8);
+            backdrop-filter: invert(100%) grayscale(100%);
+            -webkit-backdrop-filter: invert(100%) grayscale(100%);
+            animation: zw-ripple 4000ms cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+        }
+        .zw-frozen-world {
+            animation: zw-freeze 3200ms ease-out forwards;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 3. Create the full-screen visual wrapper
+    const container = document.createElement('div');
+    container.id = effectId;
+    container.className = 'zw-overlay-container';
+
+    // 4. Create the expanding wave element centered at the starting point
+    const ripple = document.createElement('div');
+    ripple.className = 'zw-ripple-wave';
+    ripple.style.left = `${startX}px`;
+    ripple.style.top = `${startY}px`;
+    container.appendChild(ripple);
+    document.body.appendChild(container);
+
+    // 5. Freeze the rest of the web page behind the wave
+    const targetsToFreeze = Array.from(document.body.children).filter(el => el !== container && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE');
+    targetsToFreeze.forEach(el => el.classList.add('zw-frozen-world'));
+
+    // 6. Clean up everything once the duration ends so the world unfreezes
+    setTimeout(() => {
+        // Remove the freeze filter from the elements
+        targetsToFreeze.forEach(el => el.classList.remove('zw-frozen-world'));
+
+        //play resume sound
+        if (options.musicToggle) ZAWARUDOOOR.play();
+
+        // Wipe out the injected elements and styles entirely
+        container.remove();
+        style.remove();
+    }, durationMs);
+}
+function resumeZaWarudoTime() {
+    // Sync resume sound volume
+    ZAWARUDOOOR.volume = options.musicVolume / 10;
+
+    // Play resume sound
+    if (options.musicToggle) ZAWARUDOOOR.play();
+
+    // No global variables needed: query the DOM directly for any frozen element
+    const frozenElements = document.querySelectorAll('.zw-frozen-world');
+    frozenElements.forEach(el => el.classList.remove('zw-frozen-world'));
+
+    // Wipe out the remaining DOM overlay and injected styles entirely
+    const effectId = 'za-warudo-effect';
+    const container = document.getElementById(effectId);
+    const style = document.getElementById(effectId + '-style');
+    
+    if (container) container.remove();
+    if (style) style.remove();
+}

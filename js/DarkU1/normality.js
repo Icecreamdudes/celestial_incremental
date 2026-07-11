@@ -52,6 +52,7 @@
         if (getLevelableTier("pu", 110, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("pu", 110)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("car", 407)[0])
         if (getLevelableTier("pu", 403, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(player.sr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(player.dec.dysprosium154Effect)
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)

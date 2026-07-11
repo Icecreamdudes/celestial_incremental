@@ -29,27 +29,51 @@ addLayer("hk", {
             },
             'U2': {
                 content: [["column",() => keyTable('U2')]],
+                unlocked() {
+                    keyTable('U2').length > 0
+                }
             },
             'U3': {
                 content: [["column",() => keyTable('U3')]],
+                unlocked() {
+                    keyTable('U3').length > 0
+                }
             },
             'A1': {
                 content: [["column",() => keyTable('A1')]],
+                unlocked() {
+                    keyTable('A1').length > 0
+                }
             },
             'A2': {
                 content: [["column",() => keyTable('A2')]],
+                unlocked() {
+                    keyTable('A2').length > 0
+                }
             },
             'D1': {
                 content: [["column",() => keyTable('D1')]],
+                unlocked() {
+                    keyTable('D1').length > 0
+                }
             },
             'α': {
                 content: [["column",() => keyTable('UA')]],
+                unlocked() {
+                    keyTable('UA').length > 0
+                }
             },
             'β': {
                 content: [["column",() => keyTable('UB')]],
+                unlocked() {
+                    keyTable('UB').length > 0
+                }
             },
             'ε': {
                 content: [["column",() => keyTable('DS')]],
+                unlocked() {
+                    keyTable('DS').length > 0
+                }
             },
             // 'ζ': {
             //     content: [["column",() => keyTable('UZ')]],

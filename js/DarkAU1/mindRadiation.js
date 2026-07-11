@@ -33,9 +33,11 @@
     color: "#00923d",
     update(delta) {
         player.mr.radiation.effect = player.mr.radiation.amount.pow(6).add(1)  //DCP
-        player.mr.radiation.effect2 = player.mr.radiation.amount.pow(0.25).div(6.5).add(1) //Space buyable
+        player.mr.radiation.effect2 = player.mr.radiation.amount.plus(1).log10().pow(0.25).add(1) //Space buyable
 
-        player.mr.radiation.toGet = player.ani.darkRadiation.pow(0.3).div(1000)
+        player.mr.radiation.toGet = player.ani.darkRadiation.pow(0.2).div(100)
+        player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("dec", 23))
+        player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("tr", 18))
 
         player.mr.radiation.max = new Decimal(2)
 
@@ -90,6 +92,10 @@
             player.ds.width = new Decimal(1)
             player.ds.depth = new Decimal(1)
             player.ds.spissitude = new Decimal(1)
+            player.ds.buyables[11] = new Decimal(0)
+            player.ds.buyables[12] = new Decimal(0)
+            player.ds.buyables[13] = new Decimal(0)
+            player.ds.buyables[14] = new Decimal(0)
             }, 100)
         }
     },
@@ -179,6 +185,52 @@
                 return look
             }
         },
+        16: {
+            title: "Mind Upgrade VI",
+            unlocked() { return true },
+            description: "Space radiation boosts all decay generators, and square second space decay effect.",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            effect() {
+                return player.sr.radiation.amount.pow(0.25).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "15px", color: "black", width: '150px',  border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
+        17: {
+            title: "Mind Upgrade VII",
+            unlocked() { return true },
+            description: "Gain 10% of space energy on reset per second. (Only when Aniciffo is active)",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
+        18: {
+            title: "Mind Upgrade VIII",
+            unlocked() { return true },
+            description: "Unlock the beta decay punchcard.",
+            cost: new Decimal(1e11),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
     },
     buyables: {
     },
@@ -202,7 +254,8 @@
                     ["raw-html", () => { return "Boosts space buyable effects by ^<h3>" + format(player.mr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Performs a space radiation level reset" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ]],
                     ["blank", "25px"],
                 ]
             },

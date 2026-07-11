@@ -58,7 +58,8 @@
 
         //post softcap multipliers
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("ds", 101))
-
+        if (getLevelableTier("pu", 403, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.dec.aluminum28Effect)
+            
         if (player.dp.prestigePause.gte(0)) {
             layers.dp.prestigeReset();
         }

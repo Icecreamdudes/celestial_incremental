@@ -83,6 +83,7 @@
         if (player.pol.pollinatorEffects.fly.enabled) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorEffects.fly.effects[1])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.i.preOTFMult)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.co.cores.prestige.effect[0])
+        if (getLevelableTier("pu", 403, true)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.dec.aluminum28Effect)
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1021)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)

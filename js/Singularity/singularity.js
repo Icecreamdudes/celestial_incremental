@@ -368,7 +368,7 @@
         31: {
             title: "Singularity Upgrade XXI",
             unlocked() { return player.zarDungeon.zarDefeated && player.n.pylonTier.gte(2)},
-            description: "Unlock radioactive pylon.",  
+            description: "Unlock the radioactive pylon.",  
             cost: new Decimal("1e7500"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",

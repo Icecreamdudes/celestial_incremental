@@ -893,6 +893,7 @@ function loadVue() {
 		</div>
 	`
 	})
+	
 
 	// data = id of clickable
 	Vue.component('clickable', {
@@ -934,7 +935,7 @@ function loadVue() {
 			},
 		},
 	})
-
+	
 	// data = id of clickable
 	Vue.component('bt-clickable', {
 		props: ['layer', 'data'],

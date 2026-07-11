@@ -35,7 +35,9 @@
         player.hr.radiation.effect = player.hr.radiation.amount.pow(6).add(1)  //DCP
         player.hr.radiation.effect2 = player.hr.radiation.amount.pow(3.5).add(1) //Dark Grass
 
-        player.hr.radiation.toGet = player.ani.darkRadiation.pow(0.3).div(1000)
+        player.hr.radiation.toGet = player.ani.darkRadiation.pow(0.2).div(100)
+        player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("dec", 13))
+        player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("tr", 18))
 
         player.hr.radiation.max = new Decimal(2)
 
@@ -170,6 +172,48 @@
                 return look
             }
         },
+        16: {
+            title: "Heart Upgrade VI",
+            unlocked() { return true },
+            description: "Unlock more time buyables.",
+            cost: new Decimal(1e7),
+            currencyLocation() { return player.hr.radiation },
+            currencyDisplayName: "Heart Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", width: "125px", color: "black", border: "2px solid #55142a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#e20951" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#8b2648" : look.backgroundColor = "#ff6095"
+                return look
+            }
+        },
+        17: {
+            title: "Heart Upgrade VII",
+            unlocked() { return true },
+            description: "Gain 10% of each primary decay isotope per dark radiation click.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.hr.radiation },
+            currencyDisplayName: "Heart Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", width: "125px", color: "black", border: "2px solid #55142a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#e20951" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#8b2648" : look.backgroundColor = "#ff6095"
+                return look
+            }
+        },
+        18: {
+            title: "Heart Upgrade VIII",
+            unlocked() { return true },
+            description: "Unlock the alpha decay punchcard.",
+            cost: new Decimal(1e11),
+            currencyLocation() { return player.hr.radiation },
+            currencyDisplayName: "Heart Radiation",
+            currencyInternalName: "amount",
+            style() {
+                let look = {borderRadius: "15px", width: "125px", color: "black", border: "2px solid #55142a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#e20951" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#8b2648" : look.backgroundColor = "#ff6095"
+                return look
+            }
+        },
     },
     buyables: {
     },
@@ -193,7 +237,8 @@
                     ["raw-html", () => { return "Boosts dark grass gain by x<h3>" + format(player.hr.radiation.effect2) + "</h3>. (ONLY IN ECLIPSE)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Performs a space radiation level reset but resets vaporizer instead of space energy." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ]],
                     ["blank", "25px"],
                 ]
             },

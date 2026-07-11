@@ -1387,6 +1387,13 @@
             onPress() {
                 clickClickable(this.layer, 11)
             },
+        },
+        {
+            key: "b", 
+            description: "Roll Booster Die",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
         }
 	]
 })

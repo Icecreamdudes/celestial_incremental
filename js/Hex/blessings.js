@@ -646,4 +646,13 @@ addLayer("hbl", {
         ["blank", "25px"],
     ],
     layerShown() { return hasChallenge("ip", 13) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "b", 
+            description: "Bless",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        },
+    ],
 });

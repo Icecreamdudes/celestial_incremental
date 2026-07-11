@@ -55,7 +55,7 @@
         };
     },
     tooltip: "Light Extractor",
-    branches: ["in"],
+    branches: [["dg", "#309"],["dgr", "#309"],["db", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)

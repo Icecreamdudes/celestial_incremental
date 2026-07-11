@@ -262,13 +262,17 @@ addLayer("cbs", {
             },
         },
         22: {
-            title() { return "<h2>Blessings II" },
-            canClick() { return player.cbs.shrineTab != 1 },
+            title() { return true ? "<h2>???" : "<h2>Blessings II" },
+            canClick() { return false && player.cbs.shrineTab != 1 },
             unlocked() { return true },
             onClick() { player.cbs.shrineTab = 1 },
             style() {
                 let look = {width: "203px", minHeight: "50px", color: "#fff", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0px"}
-                if (this.canClick()) {
+                if (true) {
+                    look.color = "#ccc"
+                    look.border = "3px solid #000"
+                    look.background = "linear-gradient( #222, #000, #222)"
+                } else if (this.canClick()) {
                     look.background = "linear-gradient(180deg, #3466ac 0%, #203f6b 50%, #3466ac 100%)"
                 } else {
                     look.color = "#c6f7ff"

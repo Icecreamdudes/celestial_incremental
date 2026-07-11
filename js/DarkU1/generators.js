@@ -390,7 +390,10 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 17) },
+    layerShown() {
+        if(hasUpgrade("le", 17)) return true
+        else return "ghost"
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

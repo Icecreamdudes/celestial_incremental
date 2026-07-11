@@ -290,7 +290,6 @@
         player.cf.buyables[33] = new Decimal(0)
         player.cf.buyables[34] = new Decimal(0)
 
-        player.cf.autoFlip = false
 
         player.wof.wheelPoints = new Decimal(0)
         player.wof.wheelsSpinned = new Decimal(0)
@@ -1028,10 +1027,9 @@
                     ["raw-html", function () { return "Double repeating slots double all rewards." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Triple repeating slots quadruple all rewards." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h5>Mult: " + format(player.sm.totalChipMult) + "x. (also based on amount of slot spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h5>(Only boosts chip gains)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h5>Chip Multiplier: " + format(player.sm.totalChipMult) + "x. (also based on amount of slot spins)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h5>Slots spinned: " + formatWhole(player.sm.spinAmount) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h5>Slots spun: " + formatWhole(player.sm.spinAmount) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "625px", height: "700px", background: "rgba(69, 80, 5, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
 

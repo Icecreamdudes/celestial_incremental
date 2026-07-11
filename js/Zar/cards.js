@@ -152,7 +152,6 @@
         player.cf.buyables[33] = new Decimal(0)
         player.cf.buyables[34] = new Decimal(0)
 
-        player.cf.autoFlip = false
 
         player.wof.wheelPoints = new Decimal(0)
         player.wof.wheelsSpinned = new Decimal(0)
@@ -161,7 +160,6 @@
         player.wof.buyables[13] = new Decimal(0)
         player.wof.buyables[14] = new Decimal(0)
         player.wof.buyables[15] = new Decimal(0)
-        player.wof.autoSpin = false
 
         player.sm.spinAmount = new Decimal(0)
         player.sm.spinActive = false
@@ -178,7 +176,6 @@
         player.sm.buyables[108] = new Decimal(0)
         if (!hasUpgrade("car", 14)) player.sm.buyables[109] = new Decimal(0)
         if (!hasUpgrade("car", 14)) player.sm.buyables[111] = new Decimal(0)
-        player.sm.generateSpin = false
 
         player.car.cardDrawAmount = new Decimal(0)
 
@@ -217,6 +214,40 @@
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
                 return look
             }
+        },
+        2: {
+            title() {return "Level All"},
+            canClick() {
+                for (let suit = 1; suit <= 4; suit++) {
+	                for(let rank = 1; rank <= 13; rank++){
+                        let index = 100*suit+rank
+                        if(Decimal.lt(getLevelableAmount("car", index), layers.car.levelables[index].levelLimit()) && getLevelableXP("car", index).gte(tmp.car.levelables[index].xpReq))
+                        {
+                            return true
+                        }
+	                }
+                }
+                return false
+            },
+            unlocked() {return true},
+            onClick() {
+                for (let suit = 1; suit <= 4; suit++) {
+	                for(let rank = 1; rank <= 13; rank++){
+                        let index = 100*suit+rank
+                        while(Decimal.lt(getLevelableAmount("car", index), layers.car.levelables[index].levelLimit()) && getLevelableXP("car", index).gte(tmp.car.levelables[index].xpReq))
+                        {
+                            addLevelableXP("car", index, tmp.car.levelables[index].xpReq.neg())
+                            addLevelables("car", index, 1)
+                        }
+	                }
+                }
+            },
+            style() {
+                let look = {width: "100px", minHeight: "60px", color: "white", fontSize: "12px", borderRadius: "0px",marginLeft: "50px",marginRight: "50px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
+                return look
+            }
+
         },
         11: {
             title() { return "<h3>Reset all previous dice space content (except for check back shrine) for card generators." },
@@ -2972,11 +3003,15 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["style-column", [
-                            ["levelable-display", [
-                                ["clickable", 1],
-                            ]],
-                        ], {width: "550px", height: "175px", borderLeft: "3px solid white", borderRight: "3px solid white"}],
+                        ["row", [
+                            
+                            ["style-column", [
+                                ["levelable-display", [
+                                    ["clickable", 1],
+                                ]]                    
+                            ], {width: "550px", height: "175px", borderLeft: "3px solid white", borderRight: "3px solid white",marginLeft: "200px"}],
+                            ["clickable",2]
+                        ]],
                         ["always-scroll-column", [
                             ["style-column", [
                                 ["raw-html", () => {return "♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠ ♠"}, {color: "#1f1f1f", fontSize: "50px", fontFamily: "monospace"}],
@@ -3082,5 +3117,21 @@
         ["raw-html", () => { return player.za.chancePoints.gte(player.za.chancePointsSoftcapStart) ? "After " + format(player.za.chancePointsSoftcapStart) + " chance points, gain is divided by /" + format(player.za.chancePointsSoftcapEffect) + "." : "Softcap start: " + format(player.za.chancePointsSoftcapStart) + "." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 21) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 21) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "g", 
+            description: "Reset for Card Generators",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "d", 
+            description: "Draw Card",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        }
+	]
 })

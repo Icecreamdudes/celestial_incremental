@@ -39,7 +39,7 @@
         };
     },
     tooltip: "Normality",
-    branches: [["dgr", "#309"]],
+    branches: [["dg", "#309"],["dgr", "#309"]],
     color: "#c1df00",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -380,7 +380,10 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 23) },
+    layerShown() {
+        if(hasUpgrade("le", 23)) return true
+        else return "ghost"
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

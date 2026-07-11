@@ -659,7 +659,7 @@ addLayer("sp", {
                     ["style-column", [
                         ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.kresPoints, 2) + "/" + formatWhole(player.sp.kresPointsMax) + "</h3> kres points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.kresPointsPerSecond) + "</h3> kres points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.kresPointsPerSecond) + "</h3> kres points per second. (based on level & ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 11],
                         ["blank", "20px"],
@@ -678,7 +678,7 @@ addLayer("sp", {
                     ["style-column", [
                         ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.navPoints, 2) + "/" + formatWhole(player.sp.navPointsMax) + "</h3> nav points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.navPointsPerSecond) + "</h3> nav points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.navPointsPerSecond) + "</h3> nav points per second. (based on level & ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 21],
                         ["blank", "20px"],
@@ -697,7 +697,7 @@ addLayer("sp", {
                     ["style-column", [
                         ["blank", "20px"],
                         ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.selPoints, 2) + "/" + formatWhole(player.sp.selPointsMax) + "</h3> sel points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.selPointsPerSecond) + "</h3> sel points per second. (based on level/ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.selPointsPerSecond) + "</h3> sel points per second. (based on level & ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "20px"],
                         ["buyable", 31],
                         ["blank", "20px"],

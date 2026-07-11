@@ -576,7 +576,7 @@ BHA.sel_turret = {
 }
 BHA.sel_energyBoost = {
     name: "Energy Boost",
-    description() {return "Reduces a random characters cooldowns by " + formatTime(new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2)))},
+    description() {return "Reduces a random character's cooldowns by " + formatTime(new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2)))},
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_energyBoost"].maxLevel.div(2)) + " AGI"},
     char: "sel",
     spCost: new Decimal(8),
@@ -982,7 +982,7 @@ BHA.vespasian_overdrive = {
     description(char) {
         let effect = new Decimal(new Decimal(50).add(player.bh.skillData["vespasian_overdrive"].level.mul(10)))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Buff Vespasians damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
+        return "Buff Vespasian's damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2)) + " DEF"},
     char: "vespasian",

@@ -1,5 +1,5 @@
 addLayer("alephsChamber", {
-    name: "Alephs Chamber", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Aleph's Chamber", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "BH",
     row: 1,
@@ -37,7 +37,7 @@ addLayer("alephsChamber", {
         if (player.subtabs["bh"]["stages"] == "alephsChamber") str.outline = "3px solid #999"
         return str
     },
-    tooltip: "Alephs Chamber",
+    tooltip: "Aleph's Chamber",
     tooltipLocked: "Reach 25 combo in depth 4 to unlock.",
     branches: ["depth4"],
     color: "#b33793",
@@ -46,7 +46,7 @@ addLayer("alephsChamber", {
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Alephs Chamber",
+            title: "<h2>Enter Aleph's Chamber",
             canClick: true,
             unlocked: true,
             onClick() {
@@ -91,7 +91,7 @@ addLayer("alephsChamber", {
             ["style-column", [
                 ["style-column", [
                     ["style-column", [
-                        ["raw-html", "Alephs Chamber", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "Aleph's Chamber", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "200px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "10px"}],
                     ["clickable", "enter"],
                 ], {width: "250px", height: "147px", background: "var(--miscButtonDisable)", borderBottom: "3px solid var(--regBorder)"}],
@@ -133,8 +133,8 @@ addLayer("alephsChamber", {
 })
 
 BHS.alephsChamber = {
-    nameCap: "Alephs Chamber",
-    nameLow: "alephs chamber",
+    nameCap: "Aleph's Chamber",
+    nameLow: "aleph's chamber",
     music: "music/depth4.mp3",
     comboLimit: 25,
     generateCelestialite(combo) {

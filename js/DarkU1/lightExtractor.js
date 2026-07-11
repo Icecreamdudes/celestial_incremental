@@ -55,7 +55,7 @@
         };
     },
     tooltip: "Light Extractor",
-    branches: ["in"],
+    branches: [["dg", "#309"],["dgr", "#309"],["db", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -1260,6 +1260,9 @@
         {
             key: "x", 
             description: "Reset for Starmetal",
+            unlocked() {
+                return !player.pet.legPetTimers[0].active
+            },
             onPress() {
                 clickClickable(this.layer, 11)
             },
@@ -1267,6 +1270,9 @@
         {
             key: "e", 
             description: "Reset for Eclipse Shards",
+            unlocked() {
+                return player.pet.legPetTimers[0].active
+            },
             onPress() {
                 clickClickable(this.layer, 13)
             },

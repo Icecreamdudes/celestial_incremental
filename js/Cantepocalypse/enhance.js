@@ -608,5 +608,14 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.ev.evolutionsUnlocked[13] } //ascension pet requirement
+    layerShown() { return player.startedGame == true && player.ev.evolutionsUnlocked[13] }, //ascension pet requirement
+    hotkeys: [
+        {
+            key: "e", 
+            description: "Enhance",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+    ]
 })

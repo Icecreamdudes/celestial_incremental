@@ -57,7 +57,6 @@
         };
     },
     tooltip: "Ranks",
-    branches: [["le", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -493,7 +492,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 11) },
+    layerShown() { return hasUpgrade("le", 11) ? true : 'ghost'  },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

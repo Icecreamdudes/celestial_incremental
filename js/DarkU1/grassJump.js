@@ -31,7 +31,7 @@ addLayer("dgj", {
         };
     },
     tooltip: "Grass Jump",
-    branches: [["dgr", "#309"]],
+    branches: [["dgr", "#309"],["db", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -464,7 +464,10 @@ addLayer("dgj", {
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 202) },
+    layerShown() {
+        if(hasUpgrade("le", 202)) return true
+        else return "ghost"
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

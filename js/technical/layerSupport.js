@@ -57,14 +57,15 @@ function updateHotkeys()
                 hotkeys[uniCategory][keyString].layer = layer
                 hotkeys[uniCategory][keyString].id = id
                 hotkeys[uniCategory][keyString].uni = layers[layer].universe
+                
                 if (hks[id].unlocked === undefined)
                     hks[id].unlocked = true
 
-                if(layers[layer].layerShown() !== false && hks[id].unlocked) 
+                if((readData(layers[layer].layerShown) !== false && hks[id].unlocked) || layer == "settings") 
                     knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
                 
-                if(layer == 'settings') 
-                    knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
+                // if(layer == 'settings') 
+                //     knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
             }
         }
     }

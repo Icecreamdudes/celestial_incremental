@@ -29,7 +29,7 @@
         };
     },
     tooltip: "Boosters",
-    branches: [["dr", "#309"]],
+    branches: [["dp", "#309"]],
     color: "#6e64c4",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -241,7 +241,9 @@
         ["raw-html", () => { return player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return hasUpgrade("le", 101) },
+    layerShown() {
+        return hasUpgrade("le", 101) ? true : 'ghost' 
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

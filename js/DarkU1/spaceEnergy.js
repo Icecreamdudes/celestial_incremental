@@ -39,7 +39,7 @@
         };
     },
     tooltip: "Space",
-    branches: [["dn", "#309"]],
+    branches: [["dn", "#309"],["le", "#309"]],
     color: "#221473ff",
     update(delta) {
         let onepersec = new Decimal(1)

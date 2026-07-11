@@ -347,7 +347,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 13) },
+    layerShown() { return hasUpgrade("le", 13) ? true : 'ghost' },
     deactivated() { return !player.sma.inStarmetalChallenge},
     hotkeys: [
         {

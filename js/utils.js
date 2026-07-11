@@ -357,6 +357,9 @@ document.onkeydown = function (e) {
 	if (player === undefined) return;
 	if(e.target.tagName == "INPUT") return;
 	if(player.ir.inBattle) return; //no hotkeys in battle
+
+	
+
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey
 	if (tmp.gameEnded && !player.keepGoing) return;
@@ -373,8 +376,8 @@ document.onkeydown = function (e) {
 
 	if (k) {
 		if (
-			(readData(layers[k.layer].layerShown) || k.layer == "settings") // make hotkeys in settings always active
-			&& tmp[k.layer].hotkeys[k.id].unlocked && !tmp[k.layer].hotkeys[k.id].isAutomated
+			(readData(layers[k.layer].layerShown) == true || k.layer == "settings") // make hotkeys in settings always active
+			&& readData(k.unlocked !== false) && !tmp[k.layer].hotkeys[k.id].isAutomated
 		)
 			k.onPress()
 	}

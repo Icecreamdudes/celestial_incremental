@@ -358,7 +358,7 @@ class SpaceArena {
             width: 'calc(100vw - 6px)',
             height: 'calc(100vh - 276px)',
             backgroundImage: this._prevArenaStyle.backgroundImage,
-            border: '3px solid white',
+            border: '3px solid ' + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"),
             overflow: 'hidden',
             zIndex: 10000
         });
@@ -366,8 +366,8 @@ class SpaceArena {
         this.canvasHeight = window.innerHeight - 276
 
         // Resize canvas and internal dimensions to match window
-        this.width = 3200;
-        this.height = 3200;
+        //this.width = 3200;
+        //this.height = 3200;
         if (this.canvas) {
             this.canvas.width = this.canvasWidth;
             this.canvas.height = this.canvasHeight;
@@ -1792,7 +1792,7 @@ class SpaceArena {
         };
 
         // If we were in fullscreen iridite mode but the boss is gone, restore arena
-        if (this._iriditeFullscreen && !this.enemies.some(e => e.type === 'iriditeBoss' && e.alive)) {
+        if (this._iriditeFullscreen && !this.enemies.some(e => (e.type === 'iriditeBoss' || e.type === 'ritualSpirit') && e.health.gt(0))) {
             this.exitIriditeFullscreen();
         }
         if (this.upgradeChoiceActive) {

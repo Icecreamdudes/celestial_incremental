@@ -1,5 +1,5 @@
-function SB_spawnCelestialite() {
-    const zoneRef = SB_zones[player.ir.battleStage]
+function SB_spawnCelestialite(zone = player.ir.battleStage) {
+    const zoneRef = SB_zones[zone]
     if (!zoneRef) {
         console.warn("Cannot find zone \"" + player.ir.battleStage + "\".")
         return

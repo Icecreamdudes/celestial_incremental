@@ -4707,6 +4707,8 @@
                 { text: "It would be a risk, but a necessary risk in order to outsmart the celestials."},
             ],
         },
+
+        // START OF INTERSPACE
         "U3-Light-Rift": {
             type: "normal",
             background: "#260300",
@@ -4714,11 +4716,8 @@
             portrait: "resources/secret.png",
             trigger() {return player.tab == "lightRift" && false},
             dialogue: [
-                { text: "Marcel visits you."},
-                { text: "You have one more place to visit before.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
-                { text: "Okay...?", portrait: "resources/player.png"},
-                { text: "He doesn't elaborate. How strange."},
-                { text: "His universe is a bit remote, so I'm going to need you to collect a few things before we can get there.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
+                { text: "Your consciousness drifts back to the domain of singularity."},
+                //{ text: "Creation!", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"},
             ],
         },
         "UD-Start": {
@@ -4731,13 +4730,11 @@
                 { text: "pretend some wacky shit happens here." },
             ],
         },
-        "UD-LightWellAlpha": {
+        "UD-Light-Well-Alpha": {
             type: "normal",
             portrait: "resources/secret.png",
             trigger() {return hasUpgrade("wel", 11) && false },
-            dialogue: [/*
-                { text: "This city rests upon an enormous reservoir of liquid light rich in superphysical energy.", portrait: "resources/bumpy.png" },
-                { text: "It will remain full for an eternity.", portrait: "resources/bumpy.png" },*/
+            dialogue: [
                 { text: "Bumpy hands you a bucket." },
                 { text: "Use this to pull liquid light from the wells.", portrait: "resources/bumpy.png" },
                 { text: "Pour it into fountains to harness its energy.", portrait: "resources/bumpy.png" },
@@ -4746,7 +4743,7 @@
                 { text: "Take as many breaks as you need.", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-LightWellBeta": {
+        "UD-Light-Well-Beta": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4754,9 +4751,9 @@
             trigger() {return player.wel.modules[1].completions.gte(50) && false },
             dialogue: [
                 { text: "Another well lights up on the corner to your right. Meanwhile, Bumpy inspects the one to your left." },
-                { text: "I think this one's broken. Would you like to help me fix it?", portrait: "resources/bumpy.png" },
-                { text: "I'm not familiar with this kind of technology...", portrait: "resources/player.png" },
-                { text: "Neither am I. These are the work of one of my co-founders...", portrait: "resources/bumpy.png" },
+                { text: "Do you happen to have electric or lightning powers?", portrait: "resources/bumpy.png" },
+                { text: "I wouldn't be surprised if I did.", portrait: "resources/player.png" },
+                { text: "Ugh", portrait: "resources/bumpy.png" },
                 { text: "Her machines weren't usually that difficult to analyze, but I'm still unfamiliar with these ones.", portrait: "resources/bumpy.png" },
                 { text: "Then I suppose we could try. What do we need?", portrait: "resources/player.png" },
                 { text: "Hmmm... need light for that... blue mhmm... and projects...", portrait: "resources/bumpy.png" },
@@ -4764,7 +4761,7 @@
                 { text: "Okay then.", portrait: "resources/player.png" },
             ],
         },
-        "UD-ProjectsUnlocked": {
+        "UD-Projects-Unlocked": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4789,7 +4786,7 @@
                 { text: "There's a whole other world down here!", portrait: "resources/player.png" },
             ],
         },
-        "UD-LightWellGamma": {
+        "UD-Light-Well-Gamma": {
             type: "normal",
             portrait: "resources/secret.png",
             trigger() {return player.wel.modules[2].completions.gte(500) && false },
@@ -4800,7 +4797,7 @@
                 { text: ".", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-TimeCapsulesProjectStart": {
+        "UD-Time-Capsules-Project-Start": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4819,7 +4816,7 @@
                 { text: "I'm about to show you!", portrait: "resources/bumpy.png" },
             ],
         },
-        "D1-TimeCapsules": {
+        "D1-Time-Capsules": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4831,7 +4828,7 @@
                 { text: "The parallels are clear." },
             ],
         },//
-        "UD-StoredTimeCapsule": {
+        "UD-Stored-Time-Capsule": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4841,7 +4838,7 @@
                 { text: "six seven.", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-TimeCapsulesProjectLvl3": {
+        "UD-Time-Capsules-Project-Lvl-3": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4851,7 +4848,7 @@
                 { text: "Got it.", portrait: "resources/player.png" },
             ],
         },
-        "UD-PrismaticProjectStart": {
+        "UD-Prismatic-Project-Start": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4884,7 +4881,7 @@
                 { text: "I'm about to show you!", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-BlueshiftProjectLvl1": {
+        "UD-Blueshift-Project-Start": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4919,7 +4916,7 @@
                 { text: "Oh well." },
             ],
         },
-        "UD-LightWellDelta": {
+        "UD-Light-Well-Delta": {
             type: "normal",
             portrait: "resources/secret.png",
             trigger() {return false }, //hasMilestone("prj", 303) },
@@ -4934,7 +4931,7 @@
                 { text: "Thank her for it if you two ever meet.", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-LightWellDeltaBlueshift": {
+        "UD-Light-Well-Delta-Blueshift": {
             type: "normal",
             portrait: "resources/secret.png",
             trigger() {return false },
@@ -4943,7 +4940,7 @@
                 { text: "What's it going to take after this, an hour at least??", portrait: "resources/bumpy.png" },
             ],
         },
-        "UD-StarlightProjectLvl1": {
+        "UD-Starlight-Project-Start": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",
@@ -4972,7 +4969,7 @@
                 { text: ".", portrait: "resources/memoryBumpy.png" },
             ],
         },
-        "UD-CycleUnlock": {
+        "UD-Cycle-Unlock": {
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/bumpy.mp3",

@@ -281,7 +281,7 @@ addLayer("ir", {
             arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageRare
             arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageEpic
             arena.upgradeEffects.attackDamage *= 1 + 0.75 * arena.upgrades.attackDamageLegendary
-            arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+            arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
 
             arena.upgradeEffects.attackSpeed = 1
             arena.upgradeEffects.attackSpeed *= 1 + 0.05 * arena.upgrades.attackSpeedUncommon
@@ -430,12 +430,12 @@ addLayer("ir", {
         healthBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width() {return player.ir.iriditeFightActive ? "calc(100vw - 6px)" : "398.5px"},
+            width() {return (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "40px",
             progress() {
                 return player.ir.shipHealth.div(player.ir.shipHealthMax);
             },
-            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #808000 0%, #545400 100%)"},
             display() {
@@ -443,14 +443,14 @@ addLayer("ir", {
             },
         },
         xpBar: {
-            unlocked() { return !(player.ir.iriditeFightActive) },
+            unlocked() { return !(arena && arena._iriditeFullscreen) },
             direction: RIGHT,
             width: "398.5px",
             height: "40px",
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
-            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderLeft: "0", borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230",},
             fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #000080 100%)"},
             display() {
@@ -458,21 +458,21 @@ addLayer("ir", {
             },
         },
         bossHealthBar: {
-            unlocked() { return player.ir.iriditeFightActive },
+            unlocked() { return (arena && arena._iriditeFullscreen) },
             direction: RIGHT,
-            width() {return player.ir.iriditeFightActive ? "calc(100vw - 6px)" : "398.5px"},
+            width() {return (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "60px",
             progress() {
-                if (arena && player.ir.iriditeFightActive && arena.enemies.length > 0) {
+                if (arena && arena._iriditeFullscreen && arena.enemies.length > 0) {
                     return arena.enemies[0].health / arena.enemies[0].maxHealth
                 } else return 1;
             },
-            borderStyle() { return {border: "3px solid " + player.ir.primaryColor, borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {
-                if (arena && player.ir.iriditeFightActive && arena.enemies.length > 0) {
-                    return "<h3>IRIDITE</h3><br>" + formatSimple(arena.enemies[0].health) + "/" + formatSimple(arena.enemies[0].maxHealth) + " HP";
+                if (arena && arena._iriditeFullscreen && arena.enemies.length > 0) {
+                    return "<h3>" + SB_celestialites[arena.enemies[0].type].name + "</h3><br>" + formatSimple(arena.enemies[0].health) + "/" + formatSimple(arena.enemies[0].maxHealth) + " HP";
                 } else return "<h3>???</h3><br>???/??? HP";
                 
             },
@@ -1094,9 +1094,9 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.background = player.ir.secondaryColor
+                    look.background = (player.tab == "ir" ? player.ir.secondaryColor : "#00334d")
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -1115,9 +1115,9 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + player.ir.primaryColor, borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.background = player.ir.secondaryColor
+                    look.background = (player.tab == "ir" ? player.ir.secondaryColor : "#00334d")
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -2761,15 +2761,15 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
                 content() { return [
-                    ["style-column", [], {height: (player.ir.iriditeFightActive) ? "10px" : "0"}],
+                    ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "10px" : "0"}],
                     ["style-column", [
                         ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                         ["style-row", [
                             ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                         ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
-                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (player.ir.iriditeFightActive) ? "none !important" : ""}],
+                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._iriditeFullscreen) ? "none !important" : ""}],
                     ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
-                    ["style-column", [], {height: (player.ir.iriditeFightActive) ? "calc(100vh - 279px)" : "800px"}],
+                    ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "calc(100vh - 279px)" : "800px"}],
                     ["row", [["ex-bar", "bossHealthBar"],]],
                     ["style-column", [
                         ["blank", "9px", {width: "6px"}],
@@ -2778,7 +2778,7 @@ addLayer("ir", {
                         ["row", [
                             ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
                         ]],
-                    ], {width: (player.ir.iriditeFightActive) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (player.ir.iriditeFightActive) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
+                    ], {width: (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._iriditeFullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
                 ]}
             },
             "Refresh Page :(": {

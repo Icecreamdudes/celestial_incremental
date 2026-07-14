@@ -339,5 +339,14 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 14) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 14) },
+    hotkeys: [
+        {
+            key: "a", 
+            description: "Gain Anonymity",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

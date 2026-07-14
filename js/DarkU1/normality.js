@@ -1,6 +1,7 @@
 ﻿addLayer("dn", {
     name: "Normality", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     universe: "D1",
@@ -34,7 +35,7 @@
         };
     },
     tooltip: "Normality",
-    branches: [["dgr", "#309"]],
+    branches: [["dg", "#309"],["dgr", "#309"]],
     color: "#c1df00",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -339,7 +340,7 @@
                         }],
                     ]],
                     ["raw-html", () => { return "Divides starmetal alloy requirement by /" + format(player.dn.normalityEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "(Normality is kept on starmetal resets)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "(Normality is kept on starmetal storage resets, but not on exit)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -360,6 +361,18 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 23) },
+    layerShown() {
+        if(hasUpgrade("le", 23)) return true
+        else return "ghost"
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "n", 
+            description: "Reset for Normality",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },  
+    ],
 })

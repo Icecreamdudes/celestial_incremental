@@ -1024,5 +1024,32 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)},
+
+    hotkeys: [
+        {
+            key: "i", 
+            description: "Crunch",
+            unlocked() {
+                return player.in.breakInfinity
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        
+        {
+            key: "I", 
+            description: "Crunch",
+            unlocked() {
+                return player.in.breakInfinity
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+            global: true
+        },
+
+    ]
+
 })

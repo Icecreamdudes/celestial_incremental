@@ -1,6 +1,7 @@
 ﻿addLayer("db", {
     name: "Boosters", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "B", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     universe: "D1",
@@ -36,7 +37,7 @@
         };
     },
     tooltip: "Boosters",
-    branches: [["dr", "#309"]],
+    branches: [["dp", "#309"]],
     color: "#6e64c4",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -477,6 +478,17 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ['blank', '25px'],
     ],
-    layerShown() { return hasUpgrade("le", 101) },
+    layerShown() {
+        return hasUpgrade("le", 101) ? true : 'ghost' 
+     },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "b", 
+            description: "Reset for Boosters",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },  
+    ]
 })

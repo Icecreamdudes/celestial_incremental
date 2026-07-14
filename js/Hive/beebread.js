@@ -260,5 +260,21 @@ addLayer("bb", {
             ["color-text", [() => {return "Cell Effect Bases: x" + formatSimple(player.bb.breadEffects[9], 2) + " <small>[Cap x1.25]</small>"}, () => {return player.bb.breadMilestoneHighest >= 9 && hasUpgrade("al", 122)}, "white", () => {return player.bb.breadMilestone >= 10}, "gray"]],
         ], {height: "210px", border: "3px solid #1e160f", backgroundColor: "#3c2c1e"}],
     ],
-    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 1) || (hasChallenge("fu", 12) && player.bee.totalResearch.gte(170) && player.bee.path == 2))}
+    layerShown() { return player.startedGame && ((player.bee.totalResearch.gte(60) && player.bee.path == 1) || (hasChallenge("fu", 12) && player.bee.totalResearch.gte(170) && player.bee.path == 2))},
+    hotkeys: [
+        {
+            key: "b", 
+            description: "Increase Bee Bread",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "t", 
+            description: "Increase Bee Bread Tier",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        }
+	]
 })

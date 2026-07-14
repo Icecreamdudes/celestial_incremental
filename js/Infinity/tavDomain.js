@@ -2,16 +2,27 @@
 addNode("tac", {
     color: "#5b629a",
     symbol: "Ac",
+    universe: "U2",
     tooltip: "Accumulation",
     canClick: true,
     onClick() {
         player.subtabs["tad"]["Domain"] = "Accumulation"
     },
     layerShown() {return true},
+    hotkeys: [
+        {
+            key: "a", 
+            description: "Max Accumulators",
+            onPress() {
+                clickClickable("tad", 25)
+            },
+        }
+	]
 })
 addNode("tco", {
     color: "#094242",
     symbol: "Co",
+    universe: "U2",
     tooltip: "Compression",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -19,10 +30,20 @@ addNode("tco", {
         player.subtabs["tad"]["Domain"] = "Compression"
     },
     layerShown() {return hasUpgrade("tad", 125)},
+    hotkeys: [
+        {
+            key: "k", 
+            description: "Compress",
+            onPress() {
+                clickClickable("tad", 41)
+            },
+        }
+	]
 })
 addNode("tma", {
     color: "#6d228b",
     symbol: "Ma",
+    universe: "U2",
     tooltip: "Magnification",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -30,10 +51,20 @@ addNode("tma", {
         player.subtabs["tad"]["Domain"] = "Magnification"
     },
     layerShown() {return hasUpgrade("tad", 145)},
+    hotkeys: [
+        {
+            key: "q", 
+            description: "Magnify",
+            onPress() {
+                clickClickable(this.layer, 31)
+            },
+        }
+	]
 })
 addNode("tst", {
     color: "#b9bcd5",
     symbol: "St",
+    universe: "U2",
     tooltip: "Stabilization",
     canClick: true,
     onClick() {
@@ -44,6 +75,7 @@ addNode("tst", {
 addNode("tex", {
     color: "#ffd5b3",
     symbol: "Ex",
+    universe: "U2",
     tooltip: "Exponentiation",
     branches: [["tac", "#2d314d"]],
     canClick: true,
@@ -51,6 +83,15 @@ addNode("tex", {
         player.subtabs["tad"]["Domain"] = "Exponentiation"
     },
     layerShown() {return hasUpgrade("depth1", 103)},
+    hotkeys: [
+        {
+            key: "e", 
+            description: "Exponentiate",
+            onPress() {
+                clickClickable("tad", 41)
+            },
+        }
+	]
 })
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -583,7 +624,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(10).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -600,7 +640,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e5).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -617,7 +656,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e25).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -643,7 +681,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(10).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -669,7 +706,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e5).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -695,7 +731,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e25).floor()
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -711,7 +746,6 @@ addLayer("tad", {
             onClick() {
                 player.tad.domainCap = new Decimal(1e5)
                 layers.tad.domainReset(10)
-                player.subtabs["tad"]["Domain"] = "Tree"
             },
             style() {
                 let look = {width: "122px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -1091,7 +1125,7 @@ addLayer("tad", {
             },
         },
         203: {
-            title: "EXPAND YOUR HIVES LIMITS<br>Req: 5,000 of each T3 Alt-Infinity",
+            title: "EXPAND YOUR HIVE'S LIMITS<br>Req: 5,000 of each T3 Alt-Infinity",
             canClick() {
                 return !player.tad.hiveExpand && player.tad.altInfinities.infected.amount.gte(5000) && player.tad.altInfinities.infested.amount.gte(5000)
             },
@@ -3286,5 +3320,27 @@ addLayer("tad", {
         ["microtabs", "Tabs", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}
+    layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)},
+    hotkeys: [
+        {
+            key: "[", 
+            description: "Decrease Matter Cap",
+            unlocked() {
+                hasUpgrade(this.layer,15)
+            },
+            onPress() {
+                clickClickable(this.layer, 3)
+            },
+        },
+        {
+            key: "]", 
+            description: "Increase Matter Cap",
+            unlocked() {
+                hasUpgrade(this.layer,15)
+            },
+            onPress() {
+                clickClickable(this.layer, 6)
+            },
+        }
+	]
 })

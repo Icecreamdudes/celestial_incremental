@@ -471,7 +471,7 @@
                 return "Extending softcap eh?"
             },
             display() {
-                return 'which are extending the chance points softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are extending the chance point softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Chance Points'
             },
             buy(mult) {
@@ -876,5 +876,14 @@
 
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("za", 12) && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && hasUpgrade("za", 12) && !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "c", 
+            description: "Flip Coin",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

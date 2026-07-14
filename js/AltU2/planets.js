@@ -1,6 +1,6 @@
 ﻿addLayer("pl", {
     name: "Planets", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "♄", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "PL", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -293,5 +293,14 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.st.buyables[202].gte(1) }
+    layerShown() { return player.st.buyables[202].gte(1) },
+    hotkeys: [
+        {
+            key: "p", 
+            description: "Find Planets",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

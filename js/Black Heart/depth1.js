@@ -697,7 +697,7 @@ BHS.depth1 = {
                 if (combo >= 100) cel.push("lesserTheta")
                 if (combo >= 150) cel.push("lesserIota")
                 if (combo >= 200) cel.push("lesserKappa")
-                if (combo < 0) cel = ["lesserEnas", "lesserPente", "lesserDeka", "lesserHekaton", "lesserKhilioi", "lesserMyrioi", "lesserDyo", "lesserTria"]
+                if (combo < 0) cel = ["lesserEnas", "lesserPente", "lesserDeka", "lesserHekaton", "lesserKhilioi", "lesserMyrioi", "lesserDva", "lesserTri"]
                 if (combo <= -25) cel.push("lesserTessera")
                 if (combo <= -50) cel.push("lesserExi")
                 if (combo <= -100) cel.push("lesserEpta")
@@ -1449,9 +1449,9 @@ BHC.lesserMyrioi = {
     },
 }
 
-BHC.lesserDyo = {
-    name: "Celestialite Lesser Dyo",
-    symbol: "⇓δ",
+BHC.lesserDva = {
+    name: "Celestialite Lesser Dva",
+    symbol: "⇓д",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",
@@ -1492,9 +1492,9 @@ BHC.lesserDyo = {
     },
 }
 
-BHC.lesserTria = {
-    name: "Celestialite Lesser Tria",
-    symbol: "⇓τ",
+BHC.lesserTri = {
+    name: "Celestialite Lesser Tri",
+    symbol: "⇓т",
     style: {
         background: "linear-gradient(90deg, #830000, #DE0000)",
         color: "black",

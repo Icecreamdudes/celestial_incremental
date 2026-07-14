@@ -1,6 +1,7 @@
 ﻿addLayer("dgr", {
     name: "Dark Grass", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "DG", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     universe: "D1",
@@ -38,7 +39,6 @@
         };
     },
     tooltip: "Dark Grass",
-    branches: [["dg", "#309"], ["db", "#309"], ],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -520,6 +520,6 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 22) },
+    layerShown() { return hasUpgrade("le", 22) ? true : 'ghost' },
     deactivated() { return !player.sma.inStarmetalChallenge},
 })

@@ -4726,7 +4726,9 @@
                 { text: "Hey! Do you know why I look like this?", portrait: "resources/player.png"},
                 { text: "...", portrait: "resources/secret.png"},
                 { text: "The person looks to be asleep. You're unsure whether or not to wake them."},
-                { text: "Beside them is a map titled, \"THE DIMENSIONAL REALM\"."},
+                { text: "Beside them is a small screen, displaying a map titled, \"THE DIMENSIONAL REALM\"."},
+                { text: "It hosts thousands of small dots of varying colors. Only three of them are labelled:"},
+                { text: "\"Domain of Singularity\", \"Shadow Overworld\", and \"Interspace\"."},
             ],
         },
         "UD-Start": {

@@ -1,5 +1,5 @@
 addLayer("alephsChamber", {
-    name: "Alephs Chamber", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Aleph's Chamber", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "BH",
     row: 1,
@@ -133,8 +133,8 @@ addLayer("alephsChamber", {
 })
 
 BHS.alephsChamber = {
-    nameCap: "Alephs Chamber",
-    nameLow: "alephs chamber",
+    nameCap: "Aleph's Chamber",
+    nameLow: "aleph's chamber",
     music: "music/depth4.mp3",
     comboLimit: 25,
     generateCelestialite(combo) {

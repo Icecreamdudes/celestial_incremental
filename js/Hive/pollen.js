@@ -436,5 +436,44 @@ addLayer("bpl", {
             ], () => { return hasUpgrade("al", 120) ? {borderBottom: "4px solid white"} : {display: "none !important"} }],
         ], {userSelect: "none", backgroundColor: "#332a1f", borderLeft: "4px solid white", borderRight: "4px solid white", borderTop: "4px solid white"}],
     ],
-    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 2) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 2)}
+    layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 2) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 2)},
+    hotkeys: [
+        {
+            key: "[", 
+            description: "Choose Pollen Path",
+            onPress() {
+                if(player.bee.path == 0)
+                    player.bee.path = 1
+            },
+        },
+        {
+            key: "d", 
+            description: "Convert Pollen to Drones",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "w", 
+            description: "Convert Pollen to Workers",
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "q", 
+            description: "Convert Pollen to Queens",
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },
+        {
+            key: "e", 
+            description: "Convert Pollen to Empresses",
+            onPress() {
+                clickClickable(this.layer, 14)
+            },
+        }
+	]
+    
 })

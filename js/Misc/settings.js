@@ -179,13 +179,13 @@ addLayer("settings", {
         },
 
         27: {
-            title() { return "Toggle Hotkeys<hr style='border:1px solid #888;margin-top:1px'>" + options.toggleHotkey },
+            title() { return "View Hotkeys"},
             canClick: true,
             unlocked: true,
             onClick() {
-                toggleOpt('toggleHotkey')
+                player.tab = "hk"
             },
-            style: { width: '100px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "9px", lineHeight: "1.1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
+            style: { width: '306px', minHeight: '60px', color: "var(--textColor)", background: "var(--miscButton)", fontSize: "9px", lineHeight: "1.1", borderRadius: '0', border: "3px solid var(--miscButtonDisable)"},
         },
         28: {
             title() { return "Toggle Music<hr style='border:1px solid #888;margin-top:1px'>" + options.musicToggle },
@@ -676,11 +676,6 @@ addLayer("settings", {
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 27],
-                        ["style-column", [
-                            ["raw-html", "General Hotkeys", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                            ["raw-html", "Alt - Toggle Music Off", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                            ["raw-html", "[More in the future]", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
-                        ], {width: "203px", height: "60px", borderLeft: "3px solid var(--regBorder)"}],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 28],
@@ -717,5 +712,16 @@ addLayer("settings", {
         ], {width: "634px", background: "var(--miscButtonHover)", border: "3px solid var(--regBorder)", padding: "8px"}],
         ["blank", "25px"],
     ],
-    layerShown() { return false }
+    layerShown() { return false },
+    hotkeys: [
+        {
+            key: "M", 
+            description: "Toggle Music",
+            onPress() {
+                toggleOpt('musicToggle')
+            },
+            global: true
+        },
+    ]
+    
 })

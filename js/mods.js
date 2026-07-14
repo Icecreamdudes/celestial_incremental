@@ -653,7 +653,16 @@
         ], {maxWidth: "1200px"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("r", 14) }
+    layerShown() { return player.startedGame == true && hasMilestone("r", 14) },
+    hotkeys: [
+        {
+            key: "m", 
+            description: "Gain Code Experience",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })
 /*        codeExperience: new Decimal(0),
         codeExperienceToGet: new Decimal(0),

@@ -555,7 +555,7 @@ addLayer("jukebox", {
             description: "Akash",
             img: "resources/music/akash.png",
             file: "music/akashCutscene.mp3",
-            unlocked() {return player.ak.akashUnlocked},
+            unlocked() {return false},
         },
     },
     microtabs: {

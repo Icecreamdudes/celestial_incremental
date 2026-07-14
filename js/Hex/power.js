@@ -1418,4 +1418,13 @@ addLayer("hpw", {
         ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("i", 30) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "w", 
+            description: "Amplify Power",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        }
+	]
 });

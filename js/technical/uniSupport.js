@@ -44,6 +44,7 @@ function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     		for (row in tree) {
 	    		for (thing in tree[row]) {
                     if (tree[row][thing] == "bh" && universe == "U3") continue
+                    if(!layers[tree[row][thing]].update) continue
                     layers[tree[row][thing]].update(time)
                 }
             }
@@ -233,7 +234,8 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds", "dt"]],
+    // tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
+    tree: [["dr"],["dp"],["dg","dgr","db"],["dn","le","dgj"],["ds","funify","bl","rp","dv", "dt"],],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",

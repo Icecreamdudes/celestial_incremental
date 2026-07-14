@@ -648,5 +648,14 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 17) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 17) },
+    hotkeys: [
+        {
+            key: "s", 
+            description: "Grass-Skip",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        }
+	]
 })

@@ -165,6 +165,7 @@
         let pentDiv = new Decimal(1)
         if (hasAchievement("achievements", 17)) pentDiv = pentDiv.mul(8)
         if (hasAchievement("achievements", 112)) pentDiv = pentDiv.mul(10)
+        if (hasAchievement("achievements", 304)) pentDiv = pentDiv.mul(100)
         pentDiv = pentDiv.mul(buyableEffect("g", 19))
         if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
         
@@ -259,6 +260,9 @@
             player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(player.cs.scraps.point.effect)
             if (hasUpgrade("cs", 104)) player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(2)
         }
+
+        // Check for achs
+        // if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
     },
     getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {
@@ -890,5 +894,61 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 11) },
+
+    hotkeys: [
+        {
+            key: "2", 
+            description: "Rank Up",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 17)
+            },
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },
+        {
+            key: "3", 
+            description: "Tier Up",
+            unlocked() {
+                return hasUpgrade("i", 11)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 18)
+            },
+            onPress() {
+                clickClickable(this.layer, 12)
+            },
+        },
+        {
+            key: "4", 
+            description: "Tetr Up",
+            unlocked() {
+                return hasUpgrade("i", 13)
+            },
+            isAutomated() {
+                return hasUpgrade("p", 22)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        },
+        {
+            key: "5", 
+            description: "Pent Up",
+            unlocked() {
+                return hasUpgrade("i", 18)
+            },
+            isAutomated() {
+                return hasUpgrade("i", 27)
+            },
+            onPress() {
+                clickClickable(this.layer, 13)
+            },
+        }
+    ],
+
 })

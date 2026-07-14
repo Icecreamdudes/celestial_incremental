@@ -476,4 +476,13 @@ addLayer("hve", {
         ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("hpw", 42) }, // Decides if this node is shown or not.
+    hotkeys: [
+        {
+            key: "v", 
+            description: "Vex",
+            onPress() {
+                clickClickable(this.layer, 1)
+            },
+        }
+	]
 });

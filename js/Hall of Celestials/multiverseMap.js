@@ -168,8 +168,8 @@
                 let look = {position: "relative", top: this.yPos + "px", left: this.xPos + "px", color: universes[this.universeId()].nodeStyle().color, background: universes[this.universeId()].nodeStyle().background, backgroundColor: universes[this.universeId()].nodeStyle().backgroundColor, border: "3px solid " + universes[this.universeId()].nodeStyle().borderColor, width: "100px", minHeight: "100px", fontSize: "32px", borderRadius: "50%"}
                 return look
             },
-            xPos: -1000,
-            yPos: 600,
+            xPos: -500,
+            yPos: 700,
         },
         411: {
             universeId() { return "DS"},

@@ -649,7 +649,7 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
-                if (player.uni.CB.paused) {look.backgroundColor = "#06306b"} else {look.backgroundColor = "#2157a3"}
+                if (player.uni.CB.paused) {look.backgroundColor = "#06496b"} else {look.backgroundColor = "#2178a3"}
                 return look
             }
         },
@@ -688,7 +688,7 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
-                if (player.uni.DS.paused) {look.backgroundColor = "#666666ff"} else {look.backgroundColor = "rgb(161, 161, 161)"}
+                if (player.uni.DS.paused) {look.backgroundColor = "#545454"} else {look.backgroundColor = "rgb(161, 161, 161)"}
                 return look
             }
         },
@@ -776,7 +776,7 @@
             },
             style() {
                 let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
-                if (player.uni.UD.paused) {look.backgroundColor = "#994d73"} else {look.backgroundColor = "#ff7fbf"}
+                if (player.uni.UD.paused) {look.backgroundColor = "#bf78bf"} else {look.backgroundColor = "#ffa1ff"}
                 return look
             }
         },
@@ -861,9 +861,9 @@
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Check Back", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "200px", height: "47px", borderBottom: "3px solid #04224c"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #04334d"}],
                                 ["clickable", 201],
-                            ], () => {return uniShown("CB") ? {width: "200px", height: "100px", background: "#094599", border: "3px solid #04224c", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                            ], () => {return uniShown("CB") ? {width: "200px", height: "100px", background: "#096999", border: "3px solid #04334d", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Alt-Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
@@ -895,7 +895,7 @@
                                     ["raw-html", "Universe ε", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                                 ], {width: "200px", height: "47px", borderBottom: "3px solid #333"}],
                                 ["clickable", 204],
-                            ], () => {return uniShown("DS") ? {width: "200px", height: "100px", background: "#666", border: "3px solid #333", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                            ], () => {return uniShown("DS") ? {width: "200px", height: "100px", background: "#808080", border: "3px solid #333", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                         ]],
                         ["row", [
                             ["style-column", [
@@ -921,9 +921,9 @@
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Universe δ", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "200px", height: "47px", borderBottom: "3px solid #804060"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #9e649e"}],
                                 ["clickable", 501],
-                            ], () => {return uniShown("UD") ? {width: "200px", height: "100px", background: "#de6fa6", border: "3px solid #804060", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                            ], () => {return uniShown("UD") ? {width: "200px", height: "100px", background: "#de8cde", border: "3px solid #9e649e", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                         ]],
                     ], {background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px", padding: "10px"}],
                 ],

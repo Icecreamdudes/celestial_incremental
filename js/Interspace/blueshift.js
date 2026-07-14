@@ -276,9 +276,9 @@
     },
     branches: ["wel"],
     clickables: {
-        1001: {
+        "lightWell1_blueshift": {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
+            canClick() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
                 layers.blu.blueshiftReset(true, 1)
@@ -297,9 +297,9 @@
                 return look
             },
         },
-        1002: {
+        "lightWell2_blueshift": {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
+            canClick() { return player.wel.modules[2].maxTime.div(player.wel.modules[2].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
                 layers.blu.blueshiftReset(true, 2)
@@ -318,9 +318,9 @@
                 return look
             },
         },
-        1003: {
+        "lightWell3_blueshift": {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
+            canClick() { return player.wel.modules[3].maxTime.div(player.wel.modules[3].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
                 layers.blu.blueshiftReset(true, 3)
@@ -339,9 +339,9 @@
                 return look
             },
         },
-        1004: {
+        "lightWell4_blueshift": {
             title() { return "<h3>Reset</h3> →" },
-            canClick() { return player.wel.modules[this.id-1000].maxTime.div(player.wel.modules[this.id-1000].timeSpeed).lte(0.1)},
+            canClick() { return player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
                 layers.blu.blueshiftReset(true, 4)
@@ -465,7 +465,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1001],
+                                    ["clickable", "lightWell1_blueshift"],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -488,7 +488,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1002],
+                                    ["clickable", "lightWell2_blueshift"],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -511,7 +511,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1003],
+                                    ["clickable", "lightWell3_blueshift"],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -534,7 +534,7 @@
                                         ["raw-html", "+1 Blueshift", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ], {background: "#4d9973", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                                     ["blank", "3px"],
-                                    ["clickable", 1004],
+                                    ["clickable", "lightWell4_blueshift"],
                                 ]],
                                 ["blank", "3px"],
                                 ["style-column", [
@@ -555,5 +555,35 @@
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 301)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 301)},
+    hotkeys: [
+        {
+            key: "!", 
+            description: "Blueshift light well α",
+            onPress() {
+                clickClickable(this.layer, "lightWell1_blueshift")
+            },
+        },
+        {
+            key: "@", 
+            description: "Blueshift light well β",
+            onPress() {
+                clickClickable(this.layer, "lightWell2_blueshift")
+            },
+        },
+        {
+            key: "#", 
+            description: "Blueshift light well γ",
+            onPress() {
+                clickClickable(this.layer, "lightWell3_blueshift")
+            },
+        },
+        {
+            key: "$", 
+            description: "Blueshift light well δ",
+            onPress() {
+                clickClickable(this.layer, "lightWell4_blueshift")
+            },
+        },
+	]
 })

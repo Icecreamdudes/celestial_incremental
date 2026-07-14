@@ -161,7 +161,7 @@
     },
     branches: ["prj"],
     clickables: {
-        1: {
+        "starshineReset": {
             title() { return "<h2>Focus your light into starlight.</h2><br>Req: 1e75 Light" },
             canClick() { return player.wel.light.gte(1e75)},
             unlocked() { return true },
@@ -1407,11 +1407,20 @@
             }],
         ]],
         ["blank", "15px"],
-        ["clickable", 1],
+        ["clickable", "starshineReset"],
         ["blank", "15px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 401)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 401)},
+    hotkeys: [
+        {
+            key: "s", 
+            description: "Starshine",
+            onPress() {
+                clickClickable(this.layer, "starshineReset")
+            },
+        },
+	]
 })
 
 const makeStarlightFountain = function (id, effectIsWhole) {

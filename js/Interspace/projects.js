@@ -333,8 +333,8 @@
                 return look
             },
         },
-        101: {
-            title() { return "<h3>Respec Interspace Focus</h3><br><small>(you won't get your stored time capsules back!)</small>" },
+        "projects_respecFocus": {
+            title() { return "<h3>Respec Focus</h3><br><small>(you won't get your stored time capsules back!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
             onClick() {
@@ -1655,7 +1655,7 @@
                             hasUpgrade("wel", 44) ? makeProject(4) : null,
                         ]],
                         ["blank", "12px"],
-                        ["clickable", 101],
+                        ["clickable", "projects_respecFocus"],
                         ["blank", "25px"],
                     ]
                     return look
@@ -1695,7 +1695,42 @@
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("wel", 21)}
+    layerShown() { return player.startedGame == true && hasUpgrade("wel", 21)},
+    hotkeys: [
+        {
+            key: "f", 
+            description: "Respec focus in current tab",
+            onPress() {
+                switch (player.tab) {
+                    case "wel": {
+                        switch (player.subtabs.wel.stuff) {
+                            case "Fountains":
+                                clickClickable("wel", "lightFountains_respecFocus")
+                                break
+                            default: break
+                        }
+                    }
+                    case "prj": {
+                        switch (player.subtabs.prj.stuff) {
+                            case "Projects":
+                                clickClickable("prj", "projects_respecFocus")
+                                break
+                            default: break
+                        }
+                    }
+                    case "pri": {
+                        switch (player.subtabs.pri.stuff) {
+                            case "Pyramid":
+                                clickClickable("pri", "prismFountains_respecFocus")
+                                break
+                            default: break
+                        }
+                    }
+                    default: break
+                }
+            },
+        },
+    ]
 })
 
 const makeProject = function (id) {

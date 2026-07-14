@@ -69,6 +69,12 @@ addLayer("hk", {
                     keyTable('UB').length > 0
                 }
             },
+            'δ': {
+                content: [["column",() => keyTable('UD')]],
+                unlocked() {
+                    keyTable('UD').length > 0
+                }
+            },
             'ε': {
                 content: [["column",() => keyTable('DS')]],
                 unlocked() {
@@ -106,7 +112,7 @@ function keyTable(uniID) {
                 table.push(["row",[
                     formatKey(hk.key,layers[hk.layer]),
                             ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                    ],{'border-style':'solid'}
+                    ],{'border-style':'solid','border-top':''}
                 ])            
         }
         for(u in universes){ //sort other global hotkeys by universe
@@ -116,37 +122,40 @@ function keyTable(uniID) {
                     table.push(["row",[
                         formatKey(hk.key,layers[hk.layer]),
                                 ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                        ],{'border-style':'solid'}
+                        ],{'border-style':'solid','border-top':''}
                     ])            
             }
         }
     }
-    else for(r in universes[uniID].tree) { //sort hotkeys by row order in universe
-        for(node of universes[uniID].tree[r]) {
-            if(layers[node].hotkeys)
-                for(hk of layers[node].hotkeys) {
-                        if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                            formatKey(hk.key,layers[node]),
-                            ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                        ],{'border-style':'solid'}
-                    ])
-                }
-            if(layers[node].innerNodes) {
-               for(innerRow in layers[node].innerNodes){
-                    for(innerNodeIndex in layers[node].innerNodes[innerRow]){
-                        let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
-                        if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
-                                if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                                    formatKey(hk.key,layers[innerNode]),
-                                    ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                                ],{'border-style':'solid'}
-                            ])
-                        }
+    else {
+        for(r in universes[uniID].tree) { //sort hotkeys by row order in universe
+            for(node of universes[uniID].tree[r]) {
+                if(layers[node].hotkeys)
+                    for(hk of layers[node].hotkeys) {
+                            if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
+                                formatKey(hk.key,layers[node]),
+                                ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                            ],{'border-style':'solid','border-top':''}
+                        ])
                     }
-               }
+                if(layers[node].innerNodes) {
+                   for(innerRow in layers[node].innerNodes){
+                        for(innerNodeIndex in layers[node].innerNodes[innerRow]){
+                            let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
+                            if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
+                                    if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
+                                        formatKey(hk.key,layers[innerNode]),
+                                        ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                                    ],{'border-style':'solid','border-top':''}
+                                ])
+                            }
+                        }
+                   }
+                }
             }
         }
     }
+    if (table.length > 0) table.unshift(["row",[],{'border-top':'3px solid white'}])
     return table
 }
 

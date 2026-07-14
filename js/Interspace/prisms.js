@@ -791,7 +791,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return look
             },
         },
-        101: {
+        "prismaticReset": {
             title() { return "<h2>" + (hasMilestone("prj", 202) ? "Form your light into prisms." : "Form your light into a prism.") + "</h2><br>Req: 1e15 Light" },
             canClick() { return player.wel.light.gte(1e15)},
             unlocked() { return true },
@@ -812,7 +812,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 return look
             },
         },
-        102: {
+        "prismFountains_respecFocus": {
             title() { return "<h3>Respec Focus</h3><br><small>(you won't get your prisms back! don't be silly!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
@@ -2033,7 +2033,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                         ["style-row", [
                         ]],
                         ["blank", "25px", {width: "6px"}],
-                        ["clickable", 102],
+                        ["clickable", "prismFountains_respecFocus"],
                     ]
 
                     // Spiral
@@ -2314,7 +2314,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
         ]],
         ["blank", "15px"],
         ["style-row", [
-            ["clickable", 101],
+            ["clickable", "prismaticReset"],
             ["style-row", [
                 ["blank", "3px", {width: "6px"}],
                 ["style-row", [
@@ -2346,7 +2346,16 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
         }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 201)}
+    layerShown() { return player.startedGame == true && hasMilestone("prj", 201)},
+    hotkeys: [
+        {
+            key: "p", 
+            description: "Prismatic",
+            onPress() {
+                clickClickable(this.layer, "lightWell1_blueshift")
+            },
+        },
+    ]
 })
 const makePrismFountain = function (id, effectIsWhole) {
     let thisFountain =

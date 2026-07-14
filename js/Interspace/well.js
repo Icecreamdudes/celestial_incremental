@@ -1236,7 +1236,7 @@
                 return look
             },
         },
-        101: {
+        "lightFountains_respecFocus": {
             title() { return "<h3>Respec Focus</h3><br><small>(you won't get your light back!)</small>" },
             canClick() { return player.prj.focused.gt(0)},
             unlocked() { return true },
@@ -2232,7 +2232,7 @@
 
                         ]],
                         ["blank", "25px"],
-                        ["hoverless-clickable", 101],
+                        ["clickable", "lightFountains_respecFocus"],
                         ["blank", "25px"],
                     ]
                     if (hasUpgrade("wel", 12)) {
@@ -2294,7 +2294,37 @@
         ]
         return look
     },
-    layerShown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true},
+    hotkeys: [
+        {
+            key: "1", 
+            description: "Collect from light well α",
+            onPress() {
+                clickClickable(this.layer, "lightWell1_collect")
+            },
+        },
+        {
+            key: "2", 
+            description: "Collect from light well β",
+            onPress() {
+                clickClickable(this.layer, "lightWell2_collect")
+            },
+        },
+        {
+            key: "3", 
+            description: "Collect from light well γ",
+            onPress() {
+                clickClickable(this.layer, "lightWell3_collect")
+            },
+        },
+        {
+            key: "4", 
+            description: "Collect from light well δ",
+            onPress() {
+                clickClickable(this.layer, "lightWell4_collect")
+            },
+        },
+	]
 })
 
 const makeWellFountain = function (id, effectIsWhole) {

@@ -58,8 +58,8 @@ addLayer("spaceZone2", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
-                player.ir.primaryColor = "#904ee6"
-                player.ir.secondaryColor = "#64078f"
+                player.ir.primaryColor = SB_zones[this.layer].primaryColor
+                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
 
                 arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
@@ -116,9 +116,12 @@ addLayer("spaceZone2", {
 SB_zones.spaceZone2 = {
     nameCap: "Zone II",
     nameLow: "zone ii",
+
+    primaryColor: "#904ee6",
+    secondaryColor: "#64078f",
+
     levelLimit: 100,
     asteroidLimit: 16,
-
     celestialiteSpawnCooldown: 750,
     celestialiteLimit: 4,
     generateCelestialite(level) {
@@ -223,8 +226,8 @@ SB_celestialites.zetaShip = {
     onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 150
 
-        celestialite.vx -= Math.cos(celestialite.playerAng)
-        celestialite.vy -= Math.sin(celestialite.playerAng)
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 2
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 2
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;

@@ -125,6 +125,11 @@ SB_zones.iriditeZone = {
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
+    generateAsteroid(level) {
+        let random = Math.random()
+        if (random < 0.25) return "mediumAsteroid";
+        else return "smallAsteroid";
+    },
     statMult: new Decimal(2),
     rockMult: new Decimal(3),
     gemMult: new Decimal(1.75),
@@ -216,6 +221,7 @@ SB_celestialites.iridianShip1 = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -324,6 +330,7 @@ SB_celestialites.iridianShip2 = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -431,6 +438,7 @@ SB_celestialites.iridianShip3 = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -538,6 +546,7 @@ SB_celestialites.iridianShip4 = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 4
         celestialite.vy -= Math.sin(celestialite.playerAng) / 4
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])

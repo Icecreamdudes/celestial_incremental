@@ -132,6 +132,11 @@ SB_zones.spaceZone2 = {
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
+    generateAsteroid(level) {
+        let random = Math.random()
+        if (random < 0.25) return "mediumAsteroid";
+        else return "smallAsteroid";
+    },
     statMult: new Decimal(1.5),
     rockMult: new Decimal(2),
     gemMult: new Decimal(1.25),
@@ -229,6 +234,7 @@ SB_celestialites.zetaShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 2
         celestialite.vy -= Math.sin(celestialite.playerAng) / 2
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -343,6 +349,7 @@ SB_celestialites.etaShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -449,6 +456,7 @@ SB_celestialites.thetaShip = {
         celestialite.vx += Math.cos(celestialite.playerAng) * 0.75
         celestialite.vy += Math.sin(celestialite.playerAng) * 0.75
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])

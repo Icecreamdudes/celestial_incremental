@@ -1304,7 +1304,7 @@ class SpaceArena {
         shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
         shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainUncommon
         shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainRare
-        shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainEpic
+        shipStats.xpGain *= 1 + 0.3 * upgrades.xpGainEpic
         shipStats.xpGain *= 1 + 0.4 * upgrades.dropGainLegendary
 
         return shipStats
@@ -1440,7 +1440,7 @@ class SpaceArena {
         if (player.ir.shipType == null) { //not yet
             let closest = null;
             let closestDist = Infinity;
-            for (let e of this.enemies) {
+            for (let e of this.enemies.concat(this.asteroids)) {
                 if (!e.alive) continue;
                 let dx = e.x - this.ship.x;
                 let dy = e.y - this.ship.y;
@@ -1521,8 +1521,8 @@ class SpaceArena {
         this._savedAsteroidSpawnTimer = this.asteroidSpawnTimer;
 
         // If the Iridite boss exists, save and freeze its state so it cannot move/attack
-        for (let e of this.enemies) {
-            if (!e.alive) continue;
+        for (let e of this.enemies.concat(this.asteroids)) {
+            if (e.health.lte(0)) continue;
             if (e.type === "iriditeBoss") {
                 // Save key runtime fields so we can restore them later
                 e._savedBossState = {
@@ -1595,8 +1595,8 @@ class SpaceArena {
         }
 
         // Restore Iridite boss state if we saved it earlier
-        for (let e of this.enemies) {
-            if (!e.alive) continue;
+        for (let e of this.enemies.concat(this.asteroids)) {
+            if (e.health.lte(0)) continue;
             if (e.type === "iriditeBoss" && e._savedBossState) {
                 const s = e._savedBossState;
                 e.vx = (typeof s.vx !== 'undefined') ? s.vx : 0;
@@ -1670,7 +1670,7 @@ class SpaceArena {
     // Call this to spawn the UFO miniboss. It will not spawn automatically.
     spawnUfoBoss() {
         // Prevent duplicate bosses
-        if (this.enemies.some(e => e.type === "ufoBoss" && e.alive)) return;
+        if (this.enemies.some(e => e.type === "ufoBoss" && e.health.gt(0))) return;
 
         // Mark boss active to stop normal spawns/asteroids elsewhere
         this.bossActive = true;
@@ -1710,7 +1710,7 @@ class SpaceArena {
         player.ir.tookDamageInIriditeFight = false;
 
         // Clear arena of regular threats
-        for (let e of this.enemies) e.alive = false;
+        for (let e of this.enemies.concat(this.asteroids)) e.health = new Decimal(0);
         this.enemies = [];
         this.asteroids = [];
         // clear player bullets too so the fight starts clean
@@ -1794,12 +1794,12 @@ class SpaceArena {
     generateConvexPolygon(radius, vertexCount) {
         let angles = [];
         for (let i = 0; i < vertexCount; i++) {
-            angles.push(Math.random() * Math.PI * 2);
+            angles.push((i / vertexCount) * Math.PI * 2);
         }
         angles.sort((a, b) => a - b);
         let points = [];
         for (let i = 0; i < vertexCount; i++) {
-            let r = radius * (0.7 + Math.random() * 0.5);
+            let r = radius * (0.5 + Math.random());
             points.push({
                 x: Math.cos(angles[i]) * r,
                 y: Math.sin(angles[i]) * r
@@ -1885,9 +1885,14 @@ class SpaceArena {
                 }
             }
 
+            SB_celestialites[enemy.type].onDeath(enemy)
+
             let i = this.enemies.indexOf(enemy);
+            let j = this.asteroids.indexOf(enemy);
             if (i > -1) {
                 this.enemies.splice(i, 1);
+            } else if (j > -1) {
+                this.asteroids.splice(j, 1);
             }
         };
 
@@ -2034,7 +2039,7 @@ class SpaceArena {
             if (player.ir.shipType == 4) {
                 let closest = null;
                 let closestDist = Infinity;
-                for (let e of this.enemies) {
+                for (let e of this.enemies.concat(this.asteroids)) {
                     if (!e.alive) continue;
                     let dx = e.x - this.ship.x;
                     let dy = e.y - this.ship.y;
@@ -2195,7 +2200,7 @@ class SpaceArena {
                             let thickness = (this.ship.radius || 12) * 0.8;
 
                             // Check enemies
-                            for (let enemy of this.enemies) {
+                            for (let enemy of this.enemies.concat(this.asteroids)) {
                                 let ex = enemy.x - this.ship.x;
                                 let ey = enemy.y - this.ship.y;
                                 let proj = ex * ux + ey * uy;
@@ -2251,7 +2256,7 @@ class SpaceArena {
                         let closest = null;
                         let closestDist = Infinity;
                         for (let e of this.enemies) {
-                            if (!e.alive) continue;
+                            if (e.health.lte(0)) continue;
                             let dx = e.x - bullet.x;
                             let dy = e.y - bullet.y;
                             let d = Math.hypot(dx, dy);
@@ -2340,14 +2345,13 @@ class SpaceArena {
             this.asteroidSpawnTimer++;
             if (this.asteroidSpawnTimer > 30) {
                 this.asteroidSpawnTimer = 0;
-                if (Math.random() < 0.25) this.spawnAsteroid(true);
-                else this.spawnAsteroid(false);
+                SB_spawnNaturalAsteroid()
             }
         }
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
         if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
-            let aliveEnemies = this.enemies.filter(e => e.alive).length;
+            let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
             }
@@ -2357,7 +2361,7 @@ class SpaceArena {
         }
 
         // Update enemies
-        for (let enemy of this.enemies) {
+        for (let enemy of this.enemies.concat(this.asteroids)) {
             enemy.health = enemy.health.add(enemy.regen.div(60)).min(enemy.maxHealth)
             SB_celestialites[enemy.type].tick(enemy)
             if (enemy.type === "iriditeBoss") {
@@ -3209,59 +3213,11 @@ class SpaceArena {
             this.gammaTrails = this.gammaTrails.filter(trail => trail.timer > 0);
         }
 
-        // Update asteroids
-        for (let asteroid of this.asteroids) {
-            if (!asteroid.phased) {
-                asteroid.x += asteroid.vx;
-                asteroid.y += asteroid.vy;
-            }
-            asteroid.phaseTimer--;
-            if (asteroid.phaseTimer <= 0) {
-                asteroid.phased = !asteroid.phased;
-                asteroid.phaseTimer = 60 + Math.floor(Math.random() * 120);
-            }
-            if (asteroid.x < 0) {
-                asteroid.x = this.width;
-            }
-            if (asteroid.x > this.width) {
-                asteroid.x = 0;
-            }
-            if (asteroid.y < 0) {
-                asteroid.y = this.height;
-            }
-            if (asteroid.y > this.height) {
-                asteroid.y = 0;
-            }
-        }
-
-        // Bullet-asteroid collision
-        for (let bullet of this.bullets) {
-            for (let asteroid of this.asteroids) {
-                if (asteroid.phased) continue;
-                if (bullet.piercedAsteroids && bullet.piercedAsteroids.includes(asteroid)) continue;
-                let dx = bullet.x - asteroid.x;
-                let dy = bullet.y - asteroid.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < asteroid.size) {
-                    let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
-                    asteroid.health -= bDmg;
-                    if (player.ir.shipType == 2 || player.ir.shipType == 4) {
-                        bullet.pierce--;
-                        bullet.piercedAsteroids.push(asteroid);
-                        if (bullet.pierce < 0) bullet.life = 0;
-                    } else {
-                        bullet.life = 0;
-                    }
-                    break;
-                }
-            }
-        }
-
         // Bullet-enemy collision (player bullets only)
         for (let bullet of this.bullets) {
             // allow normal player bullets OR special vampire spear bullets to hit enemies
             if (bullet.fromEnemy && !bullet.vampireSpear) continue;
-            for (let enemy of this.enemies) {
+            for (let enemy of this.enemies.concat(this.asteroids)) {
                     // Skip interactions with paused Iridite boss
                 if (enemy._pausedBoss) continue;
                 // avoid hitting same enemy multiple times per bullet
@@ -3269,7 +3225,7 @@ class SpaceArena {
                 let dx = bullet.x - enemy.x;
                 let dy = bullet.y - enemy.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < enemy.radius) {
+                if (dist < enemy.radius + bullet.radius) {
                     let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
                     enemy.health = enemy.health.sub(bDmg);
                     SB_celestialites[enemy.type].onAttacked(enemy, bDmg, "ship")
@@ -3363,7 +3319,7 @@ class SpaceArena {
         this.bullets = this.bullets.filter(b => b.life > 0);
 
         // Ship-enemy collision
-        for (let enemy of this.enemies) {
+        for (let enemy of this.enemies.concat(this.asteroids)) {
             // Skip collisions for a paused Iridite boss
             if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
@@ -3409,80 +3365,6 @@ class SpaceArena {
                 }
             }
         }
-
-        // Ship-asteroid collision
-        for (let asteroid of this.asteroids) {
-            if (asteroid.phased) continue;
-            let dx = this.ship.x - asteroid.x;
-            let dy = this.ship.y - asteroid.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-            if (dist < asteroid.size + shipRadius) {
-                let aDmgRaw = this.ship.collisionDamage * this.shipStats.attackDamage;
-                let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
-                asteroid.health -= aDmg;
-                let dmg = (asteroid.big ? 3 : 2) / this.shipStats.damageReduction;
-                if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
-                if (!this._asteroidMinigamePaused) this.applyShipDamage(dmg);
-                if (player.ir.shipType == 3) {
-                    let angle = Math.atan2(dy, dx);
-                    let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
-                    this.ship.vy = Math.sin(angle) * bounceSpeed;
-                    this.ship.x += Math.cos(angle) * bounceSpeed;
-                } else if (player.ir.shipType == 7) {
-                    let angle = Math.atan2(dy, dx);
-                    let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)))
-                    if (speed < 0) speed = 0
-                    this.ship.vy += Math.sin(angle) * 6/(Math.sqrt(speed+1));
-                    this.ship.vx += Math.cos(angle) * 6/(Math.sqrt(speed+1));
-                } else {
-                    this.ship.velocity = -2;
-                }
-                if (player.ir.shipHealth.lte(0)) {
-                    this.onShipDeath();
-                }
-            }
-        }
-
-        // Asteroid splitting and removal
-        this.asteroids = this.asteroids.filter(asteroid => {
-            if (asteroid.health <= 0) {
-
-                // Give rocks
-                let reward = asteroid.big ? new Decimal(6) : new Decimal(3)
-                let rockAmt = reward.mul(player.ir.spaceRockMult).floor();
-                player.ir.spaceRock = player.ir.spaceRock.add(rockAmt);
-                lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: rockAmt, type: "rock" });
-
-                // Gem gain chance; base is 0.5%
-                let threshold = 0.005;
-                if (hasUpgrade("ir", 104)) threshold *= 2;
-                if (asteroid.big) threshold *= 2;
-                
-                // Give gems
-                if (Math.random() < threshold) {
-                    let gemAmt = player.ir.spaceGemMult.floor();
-                    player.ir.spaceGem = player.ir.spaceGem.add(gemAmt);
-                    lootFlashPositions.push({ x: asteroid.x, y: asteroid.y, amount: gemAmt, type: "gem" });
-                }
-                
-                // Spawn an XP orb
-                let xp = asteroid.big ? new Decimal(6) : new Decimal(3);
-                xp = Math.floor(xp * this.shipStats.xpGain)
-                xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
-
-                // Split big asteroids into smaller ones
-                if (asteroid.big) {
-                    for (let i = 0; i < asteroid.splitCount; i++) {
-                        newAsteroids.push(this.createSmallAsteroid(asteroid.x, asteroid.y));
-                    }
-                }
-
-                return false;
-            }
-            return true;
-        });
-        this.asteroids.push(...newAsteroids);
 
         // Add loot flashes
         for (let pos of lootFlashPositions) {
@@ -3552,7 +3434,7 @@ class SpaceArena {
         const INVULN_MS = 1000 / 3;
         if (this.shipHitInvuln && this.shipHitInvuln > 0) return false;
 
-        if (this.enemies.some(e => e.type === "iriditeBoss" && e.alive)) {
+        if (this.enemies.concat(this.asteroids).some(e => e.type === "iriditeBoss" && e.health.gt(0))) {
             player.ir.tookDamageInIriditeFight = true;
         }
 
@@ -3988,7 +3870,7 @@ class SpaceArena {
         }
         this.ctx.restore();
 
-        for (let enemy of this.enemies) {
+        for (let enemy of this.enemies.concat(this.asteroids)) {
             let type = SB_celestialites[enemy.type];
             let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
             if (type && type.draw && wrapped) {
@@ -4422,51 +4304,6 @@ class SpaceArena {
                 this.ctx.stroke();
                 this.ctx.restore();
             }
-        }
-
-        // Draw asteroids as polygons
-        for (let asteroid of this.asteroids) {
-            this.ctx.save();
-            this.ctx.globalAlpha = asteroid.phased ? 0.3 : 1;
-            
-            let wrapped = this.getVisibleWrappedCoords([asteroid.x, asteroid.y], [asteroid.size, asteroid.size])
-            if (wrapped != null) {
-                this.ctx.translate(wrapped[0], wrapped[1]);
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.beginPath();
-                let shape = asteroid.shape;
-                if (shape && shape.length > 0) {
-                    this.ctx.moveTo(shape[0].x, shape[0].y);
-                    for (let i = 1; i < shape.length; i++) {
-                        this.ctx.lineTo(shape[i].x, shape[i].y);
-                    }
-                    this.ctx.closePath();
-                }
-                this.ctx.fillStyle = asteroid.big ? "#a9a9a9" : "#888";
-                this.ctx.fill();
-
-                if (!asteroid.phased) {
-                    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-                    this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                    this.ctx.fillStyle = "#151230";
-                    this.ctx.fillRect(wrapped[0] - asteroid.size - 2, wrapped[1] - asteroid.size - 20, asteroid.size * 2 + 4, 13);
-                    let barWidth = asteroid.size * 2 * (asteroid.health / asteroid.maxHealth);
-                    this.ctx.fillStyle = "#bf0000";
-                    this.ctx.fillRect(wrapped[0] - asteroid.size, wrapped[1] - asteroid.size - 18, barWidth, 9);
-
-                    let t = Math.max(0, Math.floor(asteroid.health)) + "/" + Math.floor(asteroid.maxHealth)
-                    this.ctx.font = "12px monospace";
-                    this.ctx.fillStyle = "#151230";
-                    this.ctx.textAlign = "center";
-                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 + 1)
-                    this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - asteroid.size - 9 - 1)
-                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 + 1)
-                    this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - asteroid.size - 9 - 1)
-                    this.ctx.fillStyle = "white";
-                    this.ctx.fillText(t, wrapped[0], wrapped[1] - asteroid.size - 9)
-                }
-            }
-            this.ctx.restore();
         }
 
         // Draw XP orbs

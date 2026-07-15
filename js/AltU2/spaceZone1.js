@@ -129,9 +129,133 @@ SB_zones.spaceZone1 = {
 
         return cel[Math.floor(Math.random()*cel.length)]
     },
+    generateAsteroid(level) {
+        let random = Math.random()
+        if (random < 0.25) return "mediumAsteroid";
+        else return "smallAsteroid";
+    },
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
+}
+
+SB_celestialites.smallAsteroid = {
+    name: "Small Asteroid",
+    symbol: "1",
+    radius: 20,
+    color: "#afafaf",
+    health: new Decimal(20),
+    damage: new Decimal(5),
+    regen: new Decimal(0),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.99) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(2)
+        } else {
+            gain.spaceGem = Decimal.add(1, Math.random())
+        }
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(1, Math.random()).mul(2)
+    },
+    initialize(celestialite) {
+        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 5 + Math.floor(Math.random() * 3));
+
+        let moveAng = Math.random() * Math.PI * 2
+        let speed = (1 + Math.random()) * 1.5
+        celestialite.vx = Math.cos(moveAng) * speed
+        celestialite.vy = Math.sin(moveAng) * speed
+    },
+    tick(celestialite) {},
+    onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {},
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (wrapped != null) {
+            ctx.save();
+            ctx.translate(wrapped[0], wrapped[1]);
+            ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+            ctx.beginPath();
+            let shape = celestialite.shape;
+            if (shape && shape.length > 0) {
+                ctx.moveTo(shape[0].x, shape[0].y);
+                for (let i = 1; i < shape.length; i++) {
+                    ctx.lineTo(shape[i].x, shape[i].y);
+                }
+                ctx.closePath();
+            }
+            ctx.fillStyle = celestialite.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    },
+}
+
+SB_celestialites.mediumAsteroid = {
+    name: "Medium Asteroid",
+    symbol: "2",
+    radius: 40,
+    color: "#8f8f8f",
+    health: new Decimal(60),
+    damage: new Decimal(10),
+    regen: new Decimal(0),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.98) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(4)
+        } else {
+            gain.spaceGem = Decimal.add(1, Math.random())
+        }
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(1, Math.random()).mul(2)
+    },
+    initialize(celestialite) {
+        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 5 + Math.floor(Math.random() * 3));
+
+        let moveAng = Math.random() * Math.PI * 2
+        let speed = (1 + Math.random()) * 1.25
+        celestialite.vx = Math.cos(moveAng) * speed
+        celestialite.vy = Math.sin(moveAng) * speed
+    },
+    tick(celestialite) {},
+    onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {
+        let moveAng = Math.random() * Math.PI * 2
+        let speed = 1 + Math.random()
+        SB_spawnAsteroid("smallAsteroid", {
+            x: celestialite.x,
+            y: celestialite.y,
+            vx: Math.cos(moveAng) * speed,
+            vy: Math.sin(moveAng) * speed,
+        })
+    },
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (wrapped != null) {
+            ctx.save();
+            ctx.translate(wrapped[0], wrapped[1]);
+            ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+            ctx.beginPath();
+            let shape = celestialite.shape;
+            if (shape && shape.length > 0) {
+                ctx.moveTo(shape[0].x, shape[0].y);
+                for (let i = 1; i < shape.length; i++) {
+                    ctx.lineTo(shape[i].x, shape[i].y);
+                }
+                ctx.closePath();
+            }
+            ctx.fillStyle = celestialite.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    },
 }
 
 SB_celestialites.alphaShip = {
@@ -218,6 +342,7 @@ SB_celestialites.alphaShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -328,6 +453,7 @@ SB_celestialites.betaShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -483,6 +609,7 @@ SB_celestialites.gammaShip = {
             celestialite.vy -= Math.sin(celestialite.playerAng) / 4
         }
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -581,6 +708,7 @@ SB_celestialites.deltaShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
@@ -687,6 +815,7 @@ SB_celestialites.epsilonShip = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 8
         celestialite.vy -= Math.sin(celestialite.playerAng) / 8
     },
+    onDeath(celestialite) {},
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])

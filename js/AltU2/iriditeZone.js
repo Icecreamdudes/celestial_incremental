@@ -42,8 +42,8 @@ addLayer("iriditeZone", {
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
 
-                player.ir.primaryColor = "white"
-                player.ir.secondaryColor = "#151230"
+                player.ir.primaryColor = SB_zones[this.layer].primaryColor
+                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
 
                 arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
@@ -79,24 +79,28 @@ addLayer("iriditeZone", {
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],
             ["style-column", [
-                    ["style-column", [
-                        ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "500px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "5px"}],
-                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-            ], {background: "#151230", width: "800px", height: "357px"}],
+                ["style-column", [
+                    ["raw-html", "Perks for defeating Iridite", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                ], {width: "500px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "5px"}],
+                ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                ["raw-html", () => { return player.pol.unlockHive == 2 ? "The Hive" : "Larva (In Pollinators)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "New Punchcards", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "New Dark Universe 1 Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "New Singularity Upgrades", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "New Starmetal Studies", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["blank", "10px"],
+                ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                ["raw-html", "^2 to 2nd antimatter softcap start.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "Weakened 3rd replicanti point softcap.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "Keep hex progress on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "x50 dice sides.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "x1e12 post-OTF currencies.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "/1.5 starmetal essence generator cooldowns", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+            ], () => {
+                let look = {background: "#151230", width: "800px", height: "357px"}
+                if (!player.ir.iriditeDefeated) {look.filter = "brightness(25%) blur(10px)"; look.userSelect = "none"};
+                return look
+            }],
         ], {width: "800px", height: "720px"}],
     ],
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
@@ -105,9 +109,12 @@ addLayer("iriditeZone", {
 SB_zones.iriditeZone = {
     nameCap: "Iridite Zone",
     nameLow: "iridite zone",
+
+    primaryColor: "white",
+    secondaryColor: "#151230",
+
     levelLimit: 20,
     asteroidLimit: 16,
-
     celestialiteSpawnCooldown: 300,
     celestialiteLimit: 4,
     generateCelestialite(level) {

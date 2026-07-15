@@ -57,9 +57,9 @@ addLayer("spaceZone3", {
                 player.ir.battleStage = "spaceZone3"
                 options.fullscreen = true
                 player.subtabs["ir"]['stuff'] = 'Battle'
-                
-                player.ir.primaryColor = "#e64ebd"
-                player.ir.secondaryColor = "#8f0749"
+
+                player.ir.primaryColor = SB_zones[this.layer].primaryColor
+                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
 
                 arena = new SpaceArena(800, 800, 3200, 3200);
                 arena.spawnArena();
@@ -116,9 +116,12 @@ addLayer("spaceZone3", {
 SB_zones.spaceZone3 = {
     nameCap: "Zone III",
     nameLow: "zone iii",
+
+    primaryColor: "#e64ebd",
+    secondaryColor: "#8f0749",
+
     levelLimit: 100,
     asteroidLimit: 16,
-
     celestialiteSpawnCooldown: 600,
     celestialiteLimit: 6,
     generateCelestialite(level) {

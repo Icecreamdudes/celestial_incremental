@@ -13,23 +13,23 @@ function getRandomInt(max) {
 }
 
 // Upgrade definitions
-const UPGRADE_POOL = [
+const UPGRADE_POOL = {
     // Common
-    {
+    attackDamageCommon: {
         name() { return "Attack Damage"},
         description() { return "+10% attack damage"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgrades.attackDamageCommon++; }
     },
-    {
+    rockGainCommon: {
         name() { return "Space Rock Gain"},
         description() { return "+10% space rock gain"},
         rarity: "common",
         color: "#fff",
         effect(arena) { arena.upgrades.rockGainCommon++; }
     },
-    {
+    xpGainCommon: {
         name() { return "XP Gain"},
         description() { return "+10% XP gain"},
         rarity: "common",
@@ -37,21 +37,21 @@ const UPGRADE_POOL = [
         effect(arena) { arena.upgrades.xpGainCommon++; }
     },
     // Uncommon
-    {
+    attackDamageUncommon: {
         name() { return "Attack Damage"},
         description() { return "+15% attack damage"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgrades.attackDamageUncommon++; }
     },
-    {
+    attackSpeedUncommon: {
         name() { return "Attack Speed"},
         description() { return "+5% faster attack speed"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgrades.attackSpeedUncommon++; }
     },
-    {
+    healthRegenUncommon: {
         name() { return "Health Regen"},
         description() {
             let regen = 0.5
@@ -64,14 +64,14 @@ const UPGRADE_POOL = [
             arena.upgrades.healthRegenUncommon++;
         }
     },
-    {
+    rockGainUncommon: {
         name() { return "Space Rock Gain"},
         description() { return "+15% space rock gain"},
         rarity: "uncommon",
         color: "#4cff4c",
         effect(arena) { arena.upgrades.rockGainUncommon++; }
     },
-    {
+    xpGainUncommon: {
         name() { return "XP Gain"},
         description() { return "+15% XP gain"},
         rarity: "uncommon",
@@ -79,21 +79,21 @@ const UPGRADE_POOL = [
         effect(arena) { arena.upgrades.xpGainUncommon++; }
     },
     // Rare
-    {
+    attackDamageRare: {
         name() { return "Attack Damage"},
         description() { return "+20% attack damage"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.attackDamageRare++; }
     },
-    {
+    attackSpeedRare: {
         name() { return "Attack Speed"},
         description() { return "+7.5% faster attack speed"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.attackSpeedRare++; }
     },
-    {
+    healthRegenRare: {
         name() { return "Health Regen"},
         description() {
             let regen = 0.75
@@ -103,45 +103,45 @@ const UPGRADE_POOL = [
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) {
-            arena.upgrades.healthRegenUncommon += 1.5;
+            arena.upgrades.healthRegenRare++;
         }
     },
-    {
+    damageReductionRare: {
         name() { return "Defense"},
         description() { return "Take 10% less damage"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.damageReductionRare++; }
     },
-    {
+    moveSpeedRare: {
         name() { return "Movement Speed"},
         description() { return "+10% max movement speed"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.moveSpeedRare++; }
     },
-    {
+    rockGainRare: {
         name() { return "Space Rock Gain"},
         description() { return "+20% space rock gain"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.rockGainRare++; }
     },
-    {
+    gemGainRare: {
         name() { return "Space Gem Gain"},
         description() { return "+5% space gem gain"},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) { arena.upgrades.gemGainRare++; }
     },
-    {
+    bulletSizeRare: {
         name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size"} else {return "Max Health"}},
         description() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { if (player.ir.shipType != 3 && player.ir.shipType != 7) {arena.upgrades.bulletSizeRare++} else {arena.upgrades.maxHpRare++}; }
+        effect(arena) {arena.upgrades.bulletSizeRare++; }
     },
-    {
+    xpGainRare: {
         name() { return "XP Gain"},
         description() { return "+20% XP gain"},
         rarity: "rare",
@@ -149,28 +149,28 @@ const UPGRADE_POOL = [
         effect(arena) { arena.upgrades.xpGainRare++; }
     },
     // Epic
-    {
+    attackEpic: {
         name() { return "Attack"},
         description() { return "+20% attack damage, +7.5% faster attack speed"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgrades.attackDamageEpic++; arena.upgrades.attackSpeedEpic++; }
+        effect(arena) { arena.upgrades.attackEpic++; }
     },
-    {
+    xpGainEpic: {
         name() { return "XP Gain"},
         description() { return "+30% XP gain"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgrades.xpGain++; }
+        effect(arena) { arena.upgrades.xpGainEpic++; }
     },
-    {
+    lootGainEpic: {
         name() { return "Loot Gain"},
         description() { return "+20% rock gain, +5% space gem gain"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgrades.rockGainEpic++; arena.upgrades.gemGainEpic++; }
+        effect(arena) { arena.upgrades.rockGainEpic++; }
     },
-    {
+    defenseEpic: {
         name() { return "Defense"},
         description() {
             let regen = 0.5
@@ -180,18 +180,25 @@ const UPGRADE_POOL = [
         rarity: "epic",
         color: "#b44cff",
         effect(arena) {
-            arena.upgrades.damageReductionEpic++; arena.upgrades.healthRegenUncommon += 2;
+            arena.upgrades.defenseEpic++;
         }
     },
     // Legendary
-    {
-        name() { return "Offense"},
+    attackLegendary: {
+        name() { return "Attack"},
         description() { return "+75% attack damage, but +25% slower attack speed"},
         rarity: "legendary",
         color: "#ffd34d",
         effect(arena) { arena.upgrades.attackDamageEpic++; arena.upgrades.attackSpeedEpic++; }
     },
-    {
+    dropGainLegendary: {
+        name() { return "Drop Gain"},
+        description() { return "+40% space rock and XP gain, +20% space gem gain"},
+        rarity: "legendary",
+        color: "#ffd34d",
+        effect(arena) { arena.upgrades.rockGainLegendary++; arena.upgrades.xpGainLegendary++; arena.upgrades.gemGainLegendary++; }
+    },
+    defenseLegendary: {
         name() { return "Defense"},
         description() { return "Take 25% less damage, gain 25% more HP/sec" },
         rarity: "legendary",
@@ -202,21 +209,14 @@ const UPGRADE_POOL = [
             arena.upgrades.damageReductionLegendary++; arena.upgrades.healthRegenLegendary++;
         }
     },
-    {
-        name() { return "Drop Gain"},
-        description() { return "+40% space rock and XP gain, +20% space gem gain"},
-        rarity: "legendary",
-        color: "#ffd34d",
-        effect(arena) { arena.upgrades.rockGainLegendary++; arena.upgrades.xpGainLegendary++; arena.upgrades.gemGainLegendary++; }
-    },
-    {
+    moveSpeedLegendary: {
         name() { return "Movement Speed"},
         description() { return "+25% max movement speed"},
         rarity: "legendary",
         color: "#ffd34d",
         effect(arena) { arena.upgrades.moveSpeedLegendary++; }
     },
-];
+};
 
 // Rarity weights
 const UPGRADE_RARITY_WEIGHTS = {
@@ -235,19 +235,57 @@ const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
     legendary: 2,
 };
 
+const SHIP_STAT_NAMES = {
+    attackDamage: "Attack Damage",
+    attackSpeed: "Attack Speed",
+    bulletSize: "Bullet Size",
+    healthRegen: "Health Regen",
+    damageReduction: "Damage Reduction",
+    maxHp: "Max Health",
+    moveSpeed: "Movement Speed",
+    rockGain: "Space Rock Gain",
+    gemGain: "Space Gem Gain",
+    xpGain: "XP Gain",
+}
+
+const SHIP_STAT_UPGRADE_OPERATIONS = {
+    attackDamage: "x",
+    attackSpeed: "x",
+    bulletSize: "x",
+    healthRegen: "+",
+    damageReduction: "/",
+    maxHp: "x",
+    moveSpeed: "x",
+    rockGain: "x",
+    gemGain: "x",
+    xpGain: "x",
+}
+const SHIP_STAT_UPGRADE_SUFFIXES = {
+    attackDamage: "",
+    attackSpeed: "",
+    bulletSize: "",
+    healthRegen: "/s",
+    damageReduction: "",
+    maxHp: "",
+    moveSpeed: "",
+    rockGain: "",
+    gemGain: "",
+    xpGain: "",
+}
+
 function pickUpgrades(enhanced = false) {
     // Weighted random selection
     let pool = [];
     if (!enhanced) {
-        for (let upg of UPGRADE_POOL) {
-            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[upg.rarity]; i++) {
-                pool.push(upg);
+        for (let id of Object.keys(UPGRADE_POOL)) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[UPGRADE_POOL[id].rarity]; i++) {
+                pool.push(id);
             }
         }
     } else {
-        for (let upg of UPGRADE_POOL) {
-            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[upg.rarity]; i++) {
-                pool.push(upg);
+        for (let id of Object.keys(UPGRADE_POOL)) {
+            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[UPGRADE_POOL[id].rarity]; i++) {
+                pool.push(id);
             }
         }
     }
@@ -501,7 +539,7 @@ class SpaceArena {
             this.bounceCooldown = 2000; // 2 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 / this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 * this.shipStats.attackSpeed
                 if (now - this.lastBounceClick < this.bounceCooldown) return;
                 this.lastBounceClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -587,7 +625,7 @@ class SpaceArena {
             this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 1000 / this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 * this.shipStats.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
@@ -687,7 +725,7 @@ class SpaceArena {
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgrades = this.getDefaultUpgrades();
-        this.upgradeEffects = this.getDefaultUpgradeEffects();
+        this.shipStats = this.getDefaultShipStats();
         this.resourceMult = 1;
 
         // Enemy system
@@ -1152,28 +1190,20 @@ class SpaceArena {
     }
 
     getDefaultUpgrades() {
-        return {
+        let base = {
             attackDamageCommon: 0,
             attackDamageUncommon: 0,
             attackDamageRare: 0,
-            attackDamageEpic: 0,
-            attackDamageLegendary: 0,
 
             attackSpeedUncommon: 0,
             attackSpeedRare: 0,
-            attackSpeedEpic: 0,
-            attackSpeedLegendary: 0,
 
             bulletSizeRare: 0,
 
             healthRegenUncommon: 0,
-            healthRegenLegendary: 0,
+            healthRegenRare: 0,
 
             damageReductionRare: 0,
-            damageReductionEpic: 0,
-            damageReductionLegendary: 0,
-
-            maxHpRare: 0,
 
             moveSpeedRare: 0,
             moveSpeedLegendary: 0,
@@ -1181,22 +1211,28 @@ class SpaceArena {
             rockGainCommon: 0,
             rockGainUncommon: 0,
             rockGainRare: 0,
-            rockGainEpic: 0,
-            rockGainLegendary: 0,
             
             gemGainRare: 0,
-            gemGainEpic: 0,
-            gemGainLegendary: 0,
             
             xpGainCommon: 0,
             xpGainUncommon: 0,
             xpGainRare: 0,
             xpGainEpic: 0,
-            xpGainLegendary: 0,
+
+            attackEpic: 0,
+            attackLegendary: 0,
+
+            defenseEpic: 0,
+            defenseLegendary: 0,
+
+            lootGainEpic: 0,
+
+            dropGainLegendary: 0,
         };
+        return base
     }
-    getDefaultUpgradeEffects() {
-        return {
+    getDefaultShipStats() {
+        let base = {
             attackDamage: 1,
             attackSpeed: 1,
             bulletSize: 1,
@@ -1208,6 +1244,70 @@ class SpaceArena {
             gemGain: 1,
             xpGain: 1,
         };
+        return base
+    }
+
+    getUpgradedShipStats(upgrades = this.upgrades) {
+        let shipStats = this.getDefaultShipStats()
+
+        shipStats.attackDamage = 1
+        shipStats.attackDamage *= 1 + 0.1 * upgrades.attackDamageCommon
+        shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageUncommon
+        shipStats.attackDamage *= 1 + 0.2 * upgrades.attackDamageRare
+        shipStats.attackDamage *= 1 + 0.2 * upgrades.attackEpic
+        shipStats.attackDamage *= 1 + 0.75 * upgrades.attackLegendary
+        shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
+
+        shipStats.attackSpeed = 1
+        shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
+        shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackSpeedRare
+        shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
+        shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
+
+        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
+            shipStats.maxHp = 1
+            shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
+        } else {
+            shipStats.bulletSize = 1
+            shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
+        }
+        shipStats.healthRegen = upgrades.healthRegenUncommon * 0.5 / 60
+        shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
+        shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
+
+        if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
+        shipStats.healthRegen *= 1 + 0.25 * upgrades.defenseLegendary
+        shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+
+        shipStats.damageReduction = 1
+        shipStats.damageReduction *= 1 + 0.1 * upgrades.damageReductionRare
+        shipStats.damageReduction *= 1 + 0.15 * upgrades.defenseEpic
+        shipStats.damageReduction *= 1 + 0.25 * upgrades.defenseLegendary
+
+        shipStats.moveSpeed = 1
+        shipStats.moveSpeed *= 1 + 0.1 * upgrades.moveSpeedRare
+        shipStats.moveSpeed *= 1 + 0.25 * upgrades.moveSpeedLegendary
+        
+        shipStats.rockGain = player.ir.spaceRockMult.toNumber()
+        shipStats.rockGain *= 1 + 0.1 * upgrades.rockGainCommon
+        shipStats.rockGain *= 1 + 0.15 * upgrades.rockGainUncommon
+        shipStats.rockGain *= 1 + 0.2 * upgrades.rockGainRare
+        shipStats.rockGain *= 1 + 0.2 * upgrades.lootGainEpic
+        shipStats.rockGain *= 1 + 0.4 * upgrades.dropGainLegendary
+        
+        shipStats.gemGain = player.ir.spaceGemMult.toNumber()
+        shipStats.gemGain *= 1 + 0.05 * upgrades.gemGainRare
+        shipStats.gemGain *= 1 + 0.05 * upgrades.lootGainEpic
+        shipStats.gemGain *= 1 + 0.2 * upgrades.dropGainLegendary
+
+        shipStats.xpGain = 1
+        shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
+        shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainUncommon
+        shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainRare
+        shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainEpic
+        shipStats.xpGain *= 1 + 0.4 * upgrades.dropGainLegendary
+
+        return shipStats
     }
 
     spawnArena() {
@@ -1288,7 +1388,7 @@ class SpaceArena {
 
     shoot() {
         let now = Date.now();
-        let cooldown = this.ship.cooldown * this.upgradeEffects.attackSpeed;
+        let cooldown = this.ship.cooldown / this.shipStats.attackSpeed;
         if (now - this.ship.lastShot < cooldown) return;
         this.ship.lastShot = now
         let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
@@ -1302,7 +1402,7 @@ class SpaceArena {
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
-            let spd = 14 + this.upgradeEffects.moveSpeed;
+            let spd = 14 + this.shipStats.moveSpeed;
             for (let i = 0; i < pellets; i++) {
                 let offset = (i / (pellets - 1) - 0.5) * spread;
                 let ang = angle + offset;
@@ -1313,7 +1413,7 @@ class SpaceArena {
                     vy: Math.sin(ang) * spd,
                     life: 120,
                     radius: r,
-                    damage: (this.ship.damage || 6) * this.upgradeEffects.attackDamage * petMul,
+                    damage: (this.ship.damage || 6) * this.shipStats.attackDamage * petMul,
                     pierce: 0,
                     piercedAsteroids: [],
                     piercedEnemies: [],
@@ -1324,12 +1424,12 @@ class SpaceArena {
             return;
         }
 
-        let speed = 10 + this.upgradeEffects.moveSpeed;
+        let speed = 10 + this.shipStats.moveSpeed;
         // evolver shards
-        if (player.ir.shipType == 9) speed = 12 + this.upgradeEffects.moveSpeed;
-        if (player.ir.shipType == 4) speed = 25 + this.upgradeEffects.moveSpeed;
-        if (player.ir.shipType == 6) speed = 20 + this.upgradeEffects.moveSpeed;
-        if (player.ir.shipType == 10) speed = 20 + this.upgradeEffects.moveSpeed;
+        if (player.ir.shipType == 9) speed = 12 + this.shipStats.moveSpeed;
+        if (player.ir.shipType == 4) speed = 25 + this.shipStats.moveSpeed;
+        if (player.ir.shipType == 6) speed = 20 + this.shipStats.moveSpeed;
+        if (player.ir.shipType == 10) speed = 20 + this.shipStats.moveSpeed;
         let pierce = 0;
         if (player.ir.shipType == 2) pierce = 1;
         if (player.ir.shipType == 4) pierce = 10;
@@ -1368,7 +1468,7 @@ class SpaceArena {
                 vy: Math.sin(angle) * speed,
                 life: 240,
                 radius: r,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
                 pierce: 0,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1384,7 +1484,7 @@ class SpaceArena {
                 vy: Math.sin(angle) * speed,
                 life: 120,
                 radius: r,
-                damage: this.ship.damage * this.upgradeEffects.attackDamage * petMul,
+                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
                 pierce: pierce,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1711,7 +1811,7 @@ class SpaceArena {
     chargeShot() {
         if (this.awaitingShotCharge) return;
         let now = Date.now();
-        let cooldown = this.ship.cooldown * this.upgradeEffects.attackSpeed;
+        let cooldown = this.ship.cooldown / this.shipStats.attackSpeed;
         if (now - this.ship.lastShot < cooldown) return;
         this.awaitingShotCharge = true
         this.shotChargeTimer = 21
@@ -1755,7 +1855,7 @@ class SpaceArena {
                 this.bossActive = false;
                 player.ir.ufoDefeated = true;
                 player.ir.battleLevel = player.ir.battleLevel.add(1)
-                let gain = Math.floor(2 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                let gain = Math.floor(2 * this.shipStats.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
                 arena.showUpgradeChoice(true);
@@ -1770,7 +1870,7 @@ class SpaceArena {
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
                 player.ir.battleLevel = player.ir.battleLevel.add(1)
-                let gain = Math.floor(5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                let gain = Math.floor(5 * this.shipStats.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
                 arena.showUpgradeChoice(true);
@@ -1810,10 +1910,10 @@ class SpaceArena {
         if (hardMode) this.enemySpawnCooldownMax = 700;
 
         // Health regen
-        if (this.upgradeEffects.healthRegen > 0) {
-            player.ir.shipHealth = player.ir.shipHealth.add(this.upgradeEffects.healthRegen);
-            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.upgradeEffects.maxHp))) {
-                player.ir.shipHealth = player.ir.shipHealthMax.add(this.upgradeEffects.maxHp);
+        if (this.shipStats.healthRegen > 0) {
+            player.ir.shipHealth = player.ir.shipHealth.add(this.shipStats.healthRegen);
+            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.shipStats.maxHp))) {
+                player.ir.shipHealth = player.ir.shipHealthMax.add(this.shipStats.maxHp);
             }
         }
 
@@ -1825,7 +1925,7 @@ class SpaceArena {
             // Auto Bounce
             if (player.ir.autoShoot) {
                 let now = Date.now();
-                this.bounceCooldown = 2000 * this.upgradeEffects.attackSpeed
+                this.bounceCooldown = 2000 / this.shipStats.attackSpeed
                 if (now - this.lastBounceClick >= this.bounceCooldown) {
                     this.lastBounceClick = now;
                     let rect = this.canvas.getBoundingClientRect();
@@ -1887,7 +1987,7 @@ class SpaceArena {
             // Auto Dash
             if (player.ir.autoShoot) {
                 let now = Date.now();
-                this.dashCooldown = 1000 * this.upgradeEffects.attackSpeed
+                this.dashCooldown = 1000 / this.shipStats.attackSpeed
                 if (now - this.lastDashClick >= this.dashCooldown) {
                     this.lastDashClick = now;
                     let rect = this.canvas.getBoundingClientRect();
@@ -1986,9 +2086,9 @@ class SpaceArena {
             }
 
             if (this.keys['KeyW']) {
-                this.ship.velocity += this.ship.acceleration + this.upgradeEffects.moveSpeed * 0.1;
+                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
             } else if (this.keys['KeyS']) {
-                this.ship.velocity -= this.ship.acceleration + this.upgradeEffects.moveSpeed * 0.1;
+                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
             } else {
                 if (this.ship.velocity > 0) {
                     this.ship.velocity -= this.ship.deceleration;
@@ -1998,7 +2098,7 @@ class SpaceArena {
                     if (this.ship.velocity > 0) this.ship.velocity = 0;
                 }
             }
-            let maxVel = this.ship.maxVelocity + this.upgradeEffects.moveSpeed;
+            let maxVel = this.ship.maxVelocity + this.shipStats.moveSpeed;
             this.ship.velocity = Math.max(-maxVel, Math.min(maxVel, this.ship.velocity));
 
             // Move ship
@@ -2024,7 +2124,7 @@ class SpaceArena {
                 if (this.keys['KeyD']) ix += 1;
 
                 // Desired speed (account for moveSpeed upgrades)
-                const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.upgradeEffects.moveSpeed || 0);
+                const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
                 let desiredVx = 0, desiredVy = 0;
                 if (ix !== 0 || iy !== 0) {
                     let len = Math.hypot(ix, iy) || 1;
@@ -2088,7 +2188,7 @@ class SpaceArena {
 
                         if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                             let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                            let dmg = new Decimal((this.ship.damage || 7) * this.upgradeEffects.attackDamage * petMul);
+                            let dmg = new Decimal((this.ship.damage || 7) * this.shipStats.attackDamage * petMul);
                             let ang = this.ship._laserAngle;
                             let ux = Math.cos(ang), uy = Math.sin(ang);
                             let beamLen = Math.max(this.width, this.height) * 1.5;
@@ -2504,7 +2604,7 @@ class SpaceArena {
                         if (sdist < enemy.radius + shipRadius) {
                             if (!enemy._lungeHit) {
                                 enemy._lungeHit = 18; // few frames cooldown
-                                let impactDmg = (6 + enemy.phase * 3) * this.upgradeEffects.damageReduction;
+                                let impactDmg = (6 + enemy.phase * 3) / this.shipStats.damageReduction;
                                 this.applyShipDamage(impactDmg);
                             }
                         }
@@ -2790,7 +2890,7 @@ class SpaceArena {
                             let thickness = enemy.radius * 0.9;
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12)) {
                                 // apply damage once per short cooldown
-                                let dmg = (6 + enemy.phase * 1) * this.upgradeEffects.damageReduction;
+                                let dmg = (6 + enemy.phase * 1) / this.shipStats.damageReduction;
                                 this.applyShipDamage(dmg);
                                 enemy._laserHitCooldown = 8; // frames between hits
                             }
@@ -2895,7 +2995,7 @@ class SpaceArena {
                             if (!enemy._recentlyHit) {
                                 enemy._recentlyHit = 6; // frames of invuln for player from this contact
                                 // reduced dash damage to make attack less violent
-                                let impactDmg = (5) * this.upgradeEffects.damageReduction;
+                                let impactDmg = (5) / this.shipStats.damageReduction;
                                 this.applyShipDamage(impactDmg);
                                 // reduced knockback
                                 let kn = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
@@ -3095,7 +3195,7 @@ class SpaceArena {
                 let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < trail.radius + shipRadius && trail.timer > 0) {
-                    let dmg = trail.damage * this.upgradeEffects.damageReduction;
+                    let dmg = trail.damage / this.shipStats.damageReduction;
                     
                     if (!this._asteroidMinigamePaused) {
                         if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
@@ -3248,7 +3348,7 @@ class SpaceArena {
                  // ensure each enemy projectile only deals damage once
                 if (!bullet._hitPlayer) {
                     bullet._hitPlayer = true;
-                    let dmg = bullet.damage * this.upgradeEffects.damageReduction;
+                    let dmg = bullet.damage / this.shipStats.damageReduction;
                     if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
                     player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
  
@@ -3271,16 +3371,16 @@ class SpaceArena {
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < enemy.radius + shipRadius) {
-                let enemyDmg = new Decimal(this.ship.collisionDamage * this.upgradeEffects.attackDamage);
+                let enemyDmg = new Decimal(this.ship.collisionDamage * this.shipStats.attackDamage);
                 if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
                 if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health = enemy.health.sub(enemyDmg.mul(0.05));
                 if (player.ir.shipType == 3) enemy.health = enemy.health.sub(enemyDmg.mul(2.5));
                 if (player.ir.shipType == 7) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
                 SB_celestialites[enemy.type].onAttacked(enemy, enemyDmg, "ship")
 
-                let shipDmgRaw = enemy.damage * this.upgradeEffects.damageReduction * 6;
+                let shipDmgRaw = enemy.damage / this.shipStats.damageReduction * 6;
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
-                if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * (typeof this.upgradeEffects.damageReduction === 'number' ? this.upgradeEffects.damageReduction : (this.upgradeEffects.damageReduction.toNumber ? this.upgradeEffects.damageReduction.toNumber() : Number(this.upgradeEffects.damageReduction)));
+                if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * (typeof this.shipStats.damageReduction === 'number' ? this.shipStats.damageReduction : (this.shipStats.damageReduction.toNumber ? this.shipStats.damageReduction.toNumber() : Number(this.shipStats.damageReduction)));
                 if (player.ir.iriditeFightActive) shipDmg /= 12;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
@@ -3318,10 +3418,10 @@ class SpaceArena {
             let dist = Math.sqrt(dx * dx + dy * dy);
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             if (dist < asteroid.size + shipRadius) {
-                let aDmgRaw = this.ship.collisionDamage * this.upgradeEffects.attackDamage;
+                let aDmgRaw = this.ship.collisionDamage * this.shipStats.attackDamage;
                 let aDmg = (typeof aDmgRaw === 'number') ? aDmgRaw : (aDmgRaw.toNumber ? aDmgRaw.toNumber() : Number(aDmgRaw));
                 asteroid.health -= aDmg;
-                let dmg = (asteroid.big ? 3 : 2) * this.upgradeEffects.damageReduction;
+                let dmg = (asteroid.big ? 3 : 2) / this.shipStats.damageReduction;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 6;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(dmg);
                 if (player.ir.shipType == 3) {
@@ -3368,7 +3468,7 @@ class SpaceArena {
                 
                 // Spawn an XP orb
                 let xp = asteroid.big ? new Decimal(6) : new Decimal(3);
-                xp = Math.floor(xp * this.upgradeEffects.xpGain)
+                xp = Math.floor(xp * this.shipStats.xpGain)
                 xpOrbsToAdd.push({ x: asteroid.x, y: asteroid.y, amount: xp });
 
                 // Split big asteroids into smaller ones
@@ -4464,8 +4564,8 @@ class SpaceArena {
         // Draw upgrade choice overlay (unchanged)
         if (this.upgradeChoiceActive) {
             this.ctx.save();
-            this.ctx.globalAlpha = 0.25;
-            this.ctx.fillStyle = "#5e4ee6";
+            this.ctx.globalAlpha = 0.375;
+            this.ctx.fillStyle =player.ir.secondaryColor;
             this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.restore();
             
@@ -4486,16 +4586,16 @@ class SpaceArena {
             let boxY = (this.canvasHeight - boxHeight) / 2;
 
             for (let i = 0; i < this.upgradeChoices.length; i++) {
-                let upg = this.upgradeChoices[i];
+                let upg = UPGRADE_POOL[this.upgradeChoices[i]];
                 let boxX = startX + i * spacing;
 
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#23233b";
+                this.ctx.fillStyle = "#000080";
                 this.ctx.strokeStyle = upg.color;
                 this.ctx.lineWidth = 3;
                 this.ctx.beginPath();
-                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 12);
+                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
                 this.ctx.fill();
                 this.ctx.stroke();
 
@@ -4504,7 +4604,7 @@ class SpaceArena {
                     this.ctx.strokeStyle = "#ffe066";
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 9);
+                    this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 7);
                     this.ctx.stroke();
                     this.ctx.restore();
                 }
@@ -4547,14 +4647,14 @@ class SpaceArena {
                 let confirmWidth = 250;
                 let confirmHeight = 50;
                 let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 25;
+                let confirmY = boxY + boxHeight + 12;
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#37078f";
-                this.ctx.strokeStyle = "#5e4ee6";
-                this.ctx.lineWidth = 4;
+                this.ctx.fillStyle = "#000080";
+                this.ctx.strokeStyle = "#ffe066";
+                this.ctx.lineWidth = 3;
                 this.ctx.beginPath();
-                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 12);
+                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 10);
                 this.ctx.fill();
                 this.ctx.stroke();
 
@@ -4563,6 +4663,43 @@ class SpaceArena {
                 this.ctx.textAlign = "center";
                 this.ctx.fillText("Confirm", confirmX + confirmWidth / 2, confirmY + confirmHeight / 2 + 10);
                 this.ctx.restore();
+
+                let upgrades = structuredClone(this.upgrades)
+                upgrades[this.upgradeChoices[this.selectedUpgradeIndex]]++
+                let potentialShipStats = this.getUpgradedShipStats(upgrades)
+                let matches = []
+                for (const [i, v] of Object.entries(potentialShipStats)) {
+                    if (typeof(v) === "object") {
+                        if (!v.eq(this.shipStats[i])) matches.push(i);
+                    } else if (v != this.shipStats[i]) matches.push(i);
+                }
+                
+                for (let i = 0; i < matches.length; i++) {
+                    let key = matches[i]
+                    let statMul = 1
+                    if (key == "healthRegen") statMul *= 60;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.fillStyle = player.ir.secondaryColor;
+                    this.ctx.strokeStyle = player.ir.primaryColor;
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.roundRect(12.5, confirmY + 62 + i * 61, 775, 50, 10);
+                    this.ctx.fill();
+                    this.ctx.stroke();
+
+                    this.ctx.font = "bold 24px monospace";
+                    this.ctx.fillStyle = "#fff";
+                    this.ctx.textAlign = "left";
+                    this.ctx.fillText(SHIP_STAT_NAMES[key], 25, confirmY + 97 + i * 61, 775);
+
+                    this.ctx.font = "bold 24px monospace";
+                    this.ctx.fillStyle = "#fff";
+                    this.ctx.textAlign = "right";
+                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key] + " → " + SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, confirmY + 97 + i * 61, 750);
+
+                    this.ctx.restore();
+                }
             }
 
             this.ctx.restore();
@@ -4611,9 +4748,8 @@ class SpaceArena {
                     y > confirmY &&
                     y < confirmY + confirmHeight
                 ) {
-                    let upg = this.upgradeChoices[this.selectedUpgradeIndex];
+                    let upg = UPGRADE_POOL[this.upgradeChoices[this.selectedUpgradeIndex]];
                     upg.effect(this);
-                    //player.ir.upgrades.push(upg.name);
                     this.upgradeChoiceActive = false;
                     this.upgradeChoices = [];
                     this.selectedUpgradeIndex = null;
@@ -4647,7 +4783,7 @@ class SpaceArena {
         }
         player.ir.battleLevel = new Decimal(0);
         player.ir.battleXP = new Decimal(0);
-        if (arena) arena.upgradeEffects = arena.getDefaultShipStatMults();
+        if (arena) arena.shipStats = arena.getDefaultShipStatMults();
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
         if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
         if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";

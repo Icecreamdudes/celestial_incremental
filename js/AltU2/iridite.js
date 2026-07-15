@@ -22,10 +22,10 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
     let regen = 0
     if (hasUpgrade("ir", 14)) regen += 0.5
     regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-    if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
+    if (regen > 0) arena.shipStats.healthRegen = regen / 60
 
-    arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
-    arena.upgradeEffects = Object.assign(arena.upgradeEffects, upgEffect)
+    arena.shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+    arena.shipStats = Object.assign(arena.shipStats, upgEffect)
 
     if (player.tab == "ir") {
         if (level.lte(8)) player.ir.ufoFought = false
@@ -274,72 +274,20 @@ addLayer("ir", {
     color: "#151230",
     update(delta) {
 
-        if (arena && arena.upgrades && arena.upgradeEffects) {
-            arena.upgradeEffects.attackDamage = 1
-            arena.upgradeEffects.attackDamage *= 1 + 0.1 * arena.upgrades.attackDamageCommon
-            arena.upgradeEffects.attackDamage *= 1 + 0.15 * arena.upgrades.attackDamageUncommon
-            arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageRare
-            arena.upgradeEffects.attackDamage *= 1 + 0.2 * arena.upgrades.attackDamageEpic
-            arena.upgradeEffects.attackDamage *= 1 + 0.75 * arena.upgrades.attackDamageLegendary
-            arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
-
-            arena.upgradeEffects.attackSpeed = 1
-            arena.upgradeEffects.attackSpeed *= 1 + 0.05 * arena.upgrades.attackSpeedUncommon
-            arena.upgradeEffects.attackSpeed *= 1 + 0.075 * arena.upgrades.attackSpeedRare
-            arena.upgradeEffects.attackSpeed *= 1 + 0.075 * arena.upgrades.attackSpeedEpic
-            arena.upgradeEffects.attackSpeed /= 1 + 0.25 * arena.upgrades.attackSpeedLegendary
-
-            arena.upgradeEffects.bulletSize = 1
-            arena.upgradeEffects.bulletSize *= 1 + 0.1 * arena.upgrades.bulletSizeRare
-
-            arena.upgradeEffects.healthRegen = arena.upgrades.healthRegenUncommon * 0.5 / 60
-            if (hasUpgrade("ir", 14)) arena.upgradeEffects.healthRegen += 0.5 / 60;
-            arena.upgradeEffects.healthRegen *= 1 + 0.25 * arena.upgrades.healthRegenLegendary
-            arena.upgradeEffects.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-
-            arena.upgradeEffects.damageReduction = 1
-            arena.upgradeEffects.damageReduction *= 1 + 0.1 * arena.upgrades.damageReductionRare
-            arena.upgradeEffects.damageReduction *= 1 + 0.15 * arena.upgrades.damageReductionEpic
-            arena.upgradeEffects.damageReduction *= 1 + 0.25 * arena.upgrades.attackDamageLegendary
-
-            arena.upgradeEffects.maxHp = 1
-            arena.upgradeEffects.maxHp *= 1 + 0.1 * arena.upgrades.maxHpRare
-
-            arena.upgradeEffects.moveSpeed = 1
-            arena.upgradeEffects.moveSpeed *= 1 + 0.1 * arena.upgrades.moveSpeedRare
-            arena.upgradeEffects.moveSpeed *= 1 + 0.25 * arena.upgrades.moveSpeedLegendary
-            
-            arena.upgradeEffects.rockGain = 1
-            arena.upgradeEffects.rockGain *= 1 + 0.1 * arena.upgrades.rockGainCommon
-            arena.upgradeEffects.rockGain *= 1 + 0.15 * arena.upgrades.rockGainUncommon
-            arena.upgradeEffects.rockGain *= 1 + 0.2 * arena.upgrades.rockGainRare
-            arena.upgradeEffects.rockGain *= 1 + 0.2 * arena.upgrades.rockGainEpic
-            arena.upgradeEffects.rockGain *= 1 + 0.4 * arena.upgrades.rockGainLegendary
-            
-            arena.upgradeEffects.gemGain = 1
-            arena.upgradeEffects.gemGain *= 1 + 0.05 * arena.upgrades.gemGainRare
-            arena.upgradeEffects.gemGain *= 1 + 0.05 * arena.upgrades.gemGainEpic
-            arena.upgradeEffects.gemGain *= 1 + 0.2 * arena.upgrades.gemGainLegendary
-            
-            arena.upgradeEffects.xpGain = 1
-            arena.upgradeEffects.xpGain *= 1 + 0.1 * arena.upgrades.xpGainCommon
-            arena.upgradeEffects.xpGain *= 1 + 0.15 * arena.upgrades.xpGainUncommon
-            arena.upgradeEffects.xpGain *= 1 + 0.2 * arena.upgrades.xpGainRare
-            arena.upgradeEffects.xpGain *= 1 + 0.2 * arena.upgrades.xpGainEpic
-            arena.upgradeEffects.xpGain *= 1 + 0.4 * arena.upgrades.xpGainLegendary
+        if (arena && arena.upgrades && arena.shipStats) {
+            arena.shipStats = arena.getUpgradedShipStats()
         }
 
         let zoneRef = SB_zones[player.ir.battleStage]
 
         player.ir.spaceRockMult = new Decimal(1)
-        if (arena) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(arena.upgradeEffects.rockGain);
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 155))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
 
         player.ir.spaceGemMult = new Decimal(1)
-        if (arena) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(arena.upgradeEffects.gemGain);
-        player.ir.spaceGemMult = player.ir.spaceGemMult.mul(levelableEffect("pu", 212)[1])
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 156))
         if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
@@ -364,7 +312,7 @@ addLayer("ir", {
         if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
 
-        if (arena && arena.upgradeEffects && arena.upgradeEffects.maxHp) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(arena.upgradeEffects.maxHp)
+        if (arena && arena.shipStats && arena.shipStats.maxHp) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(arena.shipStats.maxHp)
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
@@ -988,7 +936,7 @@ addLayer("ir", {
                 let regen = 0
                 if (hasUpgrade("ir", 14)) regen += 0.5
                 regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
+                if (regen > 0) arena.shipStats.healthRegen = regen / 60
 
                 player.ir.ufoFought = false
                 player.ir.iriditeFought = false
@@ -1094,9 +1042,9 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid #808000", borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.background = (player.tab == "ir" ? player.ir.secondaryColor : "#00334d")
+                    look.backgroundColor = "#545400"
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -1115,9 +1063,9 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "10px"}
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid #0000bf", borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.background = (player.tab == "ir" ? player.ir.secondaryColor : "#00334d")
+                    look.background = "#000080"
                 } else {
                     look.backgroundColor = "#361e1e"
                 }
@@ -2564,6 +2512,7 @@ addLayer("ir", {
                             ["blank", "357px"],
                         ], {width: "403px", height: "720px"}],
                     ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
+                    ["blank", "25px"],
                 ],
             },
             "upgrades": {

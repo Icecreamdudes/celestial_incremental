@@ -165,7 +165,6 @@ addLayer("cbs", {
                 localStorage.setItem('arenaActive', 'true');
 
                 player.ir.shipHealth = player.ir.shipHealthMax
-                if (hasUpgrade("ir", 14)) arena.upgrades.healthRegenUncommon += 1
                 arena.upgrades.moveSpeedLegendary += 1
                 arena.upgrades.healthRegenUncommon += 2
                 summonSpirit();

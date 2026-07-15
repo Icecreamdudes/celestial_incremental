@@ -27,6 +27,7 @@ function SB_spawnCelestialite() {
         health: celRef.health.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
         regen: celRef.regen.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
         damage: celRef.damage.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
+        bodyDamage: celRef.bodyDamage.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
 
         vx: 0,
         vy: 0,
@@ -74,6 +75,7 @@ function SB_spawnAsteroid(celId, properties = {}) {
         health: celRef.health.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
         regen: celRef.regen.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
         damage: celRef.damage.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
+        bodyDamage: celRef.bodyDamage.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
 
         vx: 0,
         vy: 0,

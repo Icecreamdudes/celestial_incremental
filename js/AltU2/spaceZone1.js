@@ -146,6 +146,7 @@ SB_celestialites.smallAsteroid = {
     color: "#afafaf",
     health: new Decimal(20),
     damage: new Decimal(5),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(0),
     reward() {
         let gain = {}
@@ -197,10 +198,11 @@ SB_celestialites.smallAsteroid = {
 SB_celestialites.mediumAsteroid = {
     name: "Medium Asteroid",
     symbol: "2",
-    radius: 40,
+    radius: 35,
     color: "#8f8f8f",
     health: new Decimal(60),
     damage: new Decimal(10),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(0),
     reward() {
         let gain = {}
@@ -213,10 +215,10 @@ SB_celestialites.mediumAsteroid = {
         return gain
     },
     experienceReward() {
-        return Decimal.add(1, Math.random()).mul(2)
+        return Decimal.add(1, Math.random()).mul(4)
     },
     initialize(celestialite) {
-        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 5 + Math.floor(Math.random() * 3));
+        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 7 + Math.floor(Math.random() * 4));
 
         let moveAng = Math.random() * Math.PI * 2
         let speed = (1 + Math.random()) * 1.25
@@ -226,14 +228,16 @@ SB_celestialites.mediumAsteroid = {
     tick(celestialite) {},
     onAttacked(celestialite, damage, attacker) {},
     onDeath(celestialite) {
-        let moveAng = Math.random() * Math.PI * 2
-        let speed = 1 + Math.random()
-        SB_spawnAsteroid("smallAsteroid", {
-            x: celestialite.x,
-            y: celestialite.y,
-            vx: Math.cos(moveAng) * speed,
-            vy: Math.sin(moveAng) * speed,
-        })
+        for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) {
+            let moveAng = Math.random() * Math.PI * 2
+            let speed = (1 + Math.random()) * 1.5
+            SB_spawnAsteroid("smallAsteroid", {
+                x: celestialite.x,
+                y: celestialite.y,
+                vx: Math.cos(moveAng) * speed,
+                vy: Math.sin(moveAng) * speed,
+            })
+        }
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
@@ -265,6 +269,7 @@ SB_celestialites.alphaShip = {
     color: "#3054bf",
     health: new Decimal(150),
     damage: new Decimal(6),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -371,6 +376,7 @@ SB_celestialites.betaShip = {
     color: "#5430bf",
     health: new Decimal(125),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -482,6 +488,7 @@ SB_celestialites.gammaShip = {
     color: "#9b30bf",
     health: new Decimal(100),
     damage: new Decimal(2),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -638,6 +645,7 @@ SB_celestialites.deltaShip = {
     color: "#bf60bf",
     health: new Decimal(150),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(2),
     reward() {
         let gain = {}
@@ -737,6 +745,7 @@ SB_celestialites.epsilonShip = {
     color: "#dea6de",
     health: new Decimal(250),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(4),
     reward() {
         let gain = {}

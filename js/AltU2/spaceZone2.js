@@ -149,6 +149,7 @@ SB_celestialites.zetaShip = {
     color: "#9e2863",
     health: new Decimal(150),
     damage: new Decimal(7),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -263,6 +264,7 @@ SB_celestialites.etaShip = {
     color: "#bf6078",
     health: new Decimal(125),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(5),
     reward() {
         let gain = {}
@@ -378,6 +380,7 @@ SB_celestialites.thetaShip = {
     color: "#800020",
     health: new Decimal(300),
     damage: new Decimal(8),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(0),
     reward() {
         let gain = {}

@@ -149,6 +149,7 @@ SB_celestialites.iotaShip = {
     color: "#28819e",
     health: new Decimal(150),
     damage: new Decimal(7),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -265,6 +266,7 @@ SB_celestialites.kappaShip = {
     color: "#6fdede",
     health: new Decimal(175),
     damage: new Decimal(10),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -398,6 +400,7 @@ SB_celestialites.lambdaShip = {
     color: "#004040",
     health: new Decimal(100),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -502,6 +505,7 @@ SB_celestialites.muShip = {
     color: "#000",
     health: new Decimal(150),
     damage: new Decimal(12),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}

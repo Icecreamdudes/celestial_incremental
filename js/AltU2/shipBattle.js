@@ -687,7 +687,7 @@ class SpaceArena {
                 rotationSpeed: 0.02,
                 cooldown: 5000,
                 lastShot: 0,
-                damage: 300,
+                damage: 600,
                 collisionDamage: 15,
             };
             this.awaitingShotCharge = false
@@ -1411,7 +1411,7 @@ class SpaceArena {
                     y: this.ship.y + Math.sin(ang) * (this.ship.radius || 12),
                     vx: Math.cos(ang) * spd,
                     vy: Math.sin(ang) * spd,
-                    life: 120,
+                    life: 60,
                     radius: r,
                     damage: (this.ship.damage || 6) * this.shipStats.attackDamage * petMul,
                     pierce: 0,
@@ -1425,10 +1425,9 @@ class SpaceArena {
         }
 
         let speed = 10 + this.shipStats.moveSpeed;
-        // evolver shards
-        if (player.ir.shipType == 9) speed = 12 + this.shipStats.moveSpeed;
         if (player.ir.shipType == 4) speed = 25 + this.shipStats.moveSpeed;
         if (player.ir.shipType == 6) speed = 20 + this.shipStats.moveSpeed;
+        if (player.ir.shipType == 9) speed = 12 + this.shipStats.moveSpeed;
         if (player.ir.shipType == 10) speed = 20 + this.shipStats.moveSpeed;
         let pierce = 0;
         if (player.ir.shipType == 2) pierce = 1;
@@ -1466,7 +1465,7 @@ class SpaceArena {
                 y: this.ship.y + Math.sin(angle) * 20,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                life: 240,
+                life: 60,
                 radius: r,
                 damage: this.ship.damage * this.shipStats.attackDamage * petMul,
                 pierce: 0,
@@ -1474,7 +1473,21 @@ class SpaceArena {
                 piercedEnemies: [],
                 fromEnemy: false,
                 evolverShard: true,
+            });
+        } else if (player.ir.shipType == 10) {
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * 20,
+                y: this.ship.y + Math.sin(angle) * 20,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 60,
                 radius: r,
+                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
+                pierce: 0,
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                explosive: true,
             });
         } else {
             this.bullets.push({
@@ -1482,7 +1495,7 @@ class SpaceArena {
                 y: this.ship.y + Math.sin(angle) * 20,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                life: 120,
+                life: 60,
                 radius: r,
                 damage: this.ship.damage * this.shipStats.attackDamage * petMul,
                 pierce: pierce,
@@ -3217,6 +3230,7 @@ class SpaceArena {
         for (let bullet of this.bullets) {
             // allow normal player bullets OR special vampire spear bullets to hit enemies
             if (bullet.fromEnemy && !bullet.vampireSpear) continue;
+            if (bullet.noCollision) continue;
             for (let enemy of this.enemies.concat(this.asteroids)) {
                     // Skip interactions with paused Iridite boss
                 if (enemy._pausedBoss) continue;
@@ -3274,6 +3288,33 @@ class SpaceArena {
                                     evolverMini: true,
                                     radius: 4,
                                 });
+                            }
+                        }
+                        if (bullet.explosive) {
+                            arena.bullets.push({
+                                x: enemy.x,
+                                y: enemy.y,
+                                vx: 0,
+                                vy: 0,
+                                life: 3,
+                                damage: 0,
+                                pierce: 100,
+                                piercedAsteroids: [],
+                                piercedEnemies: [],
+                                fromEnemy: false,
+                                noCollision: true,
+                                radius: 64,
+                            });
+                            if (bullet.life > 0) {
+                                for (let enemy2 of this.enemies.concat(this.asteroids)) {
+                                    let dx = bullet.x - enemy2.x;
+                                    let dy = bullet.y - enemy2.y;
+                                    let dist = Math.sqrt(dx * dx + dy * dy);
+                                    if (dist < 256) console.log(dist);
+                                    if (dist < 256) {
+                                        enemy2.health = enemy2.health.sub(bDmg * (1 - dist / 128));
+                                    }
+                                }
                             }
                         }
                         bullet.life = 0;
@@ -4578,7 +4619,7 @@ class SpaceArena {
                 let confirmWidth = 250;
                 let confirmHeight = 50;
                 let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 25;
+                let confirmY = boxY + boxHeight + 12;
                 if (
                     x > confirmX &&
                     x < confirmX + confirmWidth &&

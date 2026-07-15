@@ -367,7 +367,7 @@ addLayer("ir", {
             player.ir.iriditeFought = true
         }
 
-        if (cutsceneActive) {
+        if (cutsceneActive || player.ir.menu > 0) {
             pauseAsteroidMinigame()
         } else {
             resumeAsteroidMinigame()
@@ -1308,7 +1308,7 @@ addLayer("ir", {
             unlocked() { return true },
             description() { return "Cut ship cooldown times based on space gems. (/" + format(this.effect()) + ")"},
             effect() {
-                return player.ir.spaceGem.pow(0.75).mul(0.02).add(1)
+                return player.ir.spaceGem.add(1).log(10).add(1).pow(1.5).sub(1).div(8).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             cost: new Decimal(8000),
@@ -1464,7 +1464,7 @@ addLayer("ir", {
             },
             title: "Armoured",
             unlocked() { return true },
-            description() { return "All ships take /2 damage from collisions."},
+            description() { return "All ships take 25% less damage from collisions."},
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",

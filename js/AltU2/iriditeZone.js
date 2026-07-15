@@ -127,12 +127,80 @@ SB_zones.iriditeZone = {
     },
     generateAsteroid(level) {
         let random = Math.random()
-        if (random < 0.25) return "mediumAsteroid";
+        if (random < 0.05) return "largeAsteroid";
+        if (random < 0.3) return "mediumAsteroid";
         else return "smallAsteroid";
     },
     statMult: new Decimal(2),
     rockMult: new Decimal(3),
     gemMult: new Decimal(1.75),
+}
+
+SB_celestialites.largeAsteroid = {
+    name: "Large Asteroid",
+    symbol: "3",
+    radius: 50,
+    color: "#6f6f6f",
+    health: new Decimal(180),
+    damage: new Decimal(20),
+    bodyDamage: new Decimal(3),
+    regen: new Decimal(0),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.96) {
+            gain.spaceRock = Decimal.add(1, Math.random()).mul(8)
+        } else {
+            gain.spaceGem = Decimal.add(1, Math.random())
+        }
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(1, Math.random()).mul(6)
+    },
+    initialize(celestialite) {
+        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 9 + Math.floor(Math.random() * 5));
+
+        let moveAng = Math.random() * Math.PI * 2
+        let speed = 1 + Math.random()
+        celestialite.vx = Math.cos(moveAng) * speed
+        celestialite.vy = Math.sin(moveAng) * speed
+    },
+    tick(celestialite) {},
+    onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {
+        for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) {
+            let moveAng = Math.random() * Math.PI * 2
+            let speed = (1 + Math.random()) * 1.25
+            SB_spawnAsteroid("mediumAsteroid", {
+                x: celestialite.x,
+                y: celestialite.y,
+                vx: Math.cos(moveAng) * speed,
+                vy: Math.sin(moveAng) * speed,
+            })
+        }
+    },
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (wrapped != null) {
+            ctx.save();
+            ctx.translate(wrapped[0], wrapped[1]);
+            ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+            ctx.beginPath();
+            let shape = celestialite.shape;
+            if (shape && shape.length > 0) {
+                ctx.moveTo(shape[0].x, shape[0].y);
+                for (let i = 1; i < shape.length; i++) {
+                    ctx.lineTo(shape[i].x, shape[i].y);
+                }
+                ctx.closePath();
+            }
+            ctx.fillStyle = celestialite.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    },
 }
 
 SB_celestialites.iridianShip1 = {
@@ -142,6 +210,7 @@ SB_celestialites.iridianShip1 = {
     color: "#e0e0ff",
     health: new Decimal(250),
     damage: new Decimal(2),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(5),
     reward() {
         let gain = {}
@@ -250,6 +319,7 @@ SB_celestialites.iridianShip2 = {
     color: "#ffffe0",
     health: new Decimal(200),
     damage: new Decimal(2),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -358,6 +428,7 @@ SB_celestialites.iridianShip3 = {
     color: "#ffe0ff",
     health: new Decimal(150),
     damage: new Decimal(2),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -467,6 +538,7 @@ SB_celestialites.iridianShip4 = {
     color: "#ffe0e0",
     health: new Decimal(150),
     damage: new Decimal(2),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(2),
     reward() {
         let gain = {}

@@ -149,6 +149,7 @@ SB_celestialites.nuShip = {
     color: "#289e63",
     health: new Decimal(50),
     damage: new Decimal(8),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -256,6 +257,7 @@ SB_celestialites.xiShip = {
     color: "#95ed95",
     health: new Decimal(200),
     damage: new Decimal(4),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -367,6 +369,7 @@ SB_celestialites.omicronShip = {
     color: "#008060",
     health: new Decimal(75),
     damage: new Decimal(3),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -518,6 +521,7 @@ SB_celestialites.piShip = {
     color: "#804080",
     health: new Decimal(300),
     damage: new Decimal(6),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(2),
     reward() {
         let gain = {}

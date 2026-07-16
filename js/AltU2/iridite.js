@@ -755,6 +755,23 @@ addLayer("ir", {
             },
             style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
+
+        21: { // geroa skill; copied from cb
+            title() { return player.pet.legPetTimers[1].cooldown.lte(0) ? "<h3>Activate Geroa</h3>" : player.pet.legPetTimers[1].current.gte(0) ? "Geroa Active: " + formatTime(player.pet.legPetTimers[1].current) + "." : "Check Back in " + formatTime(player.pet.legPetTimers[1].cooldown) + "."},
+            tooltip() { return "Boosts your damage in space battles by x1.5 for the next " + formatSimple(player.pet.legPetTimers[1].max.div(60)) + " minutes."},
+            canClick() { return player.pet.legPetTimers[1].cooldown.lte(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gte(1) || getLevelableTier("pet", 502).gte(1) },
+            onClick () {
+                player.pet.legPetTimers[1].cooldown = player.pet.legPetTimers[1].cooldownMax
+                player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].max
+                player.pet.legPetTimers[1].active = true
+            },
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#3725bd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
         1001: {
             title() {return "W"},
             canClick: true,
@@ -1158,6 +1175,7 @@ addLayer("ir", {
                         ["style-column", [
                             ["blank", "25px"],
                             ["clickable", 11],
+                            ["clickable", 21],
                             ["blank", "25px"],
                             ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                             ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

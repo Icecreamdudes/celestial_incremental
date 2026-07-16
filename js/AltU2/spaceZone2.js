@@ -11,22 +11,10 @@ addLayer("spaceZone2", {
         
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
-        levelScaling: new Decimal(1.1),
+        levelScaling: new Decimal(1.125),
         levelScalingStart: new Decimal(20),
 
-        milestone: {
-            10: 0,
-            20: 0,
-            30: 0,
-            40: 0,
-            50: 0,
-            60: 0,
-            70: 0,
-            80: 0,
-            90: 0,
-            100: 0,
-        },
-        milestoneEffect: new Decimal(0),
+        selectedStageStart: 0,
     }},
     automate() {},
     nodeStyle() {
@@ -74,10 +62,150 @@ addLayer("spaceZone2", {
             },
             style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#64078f, black)", border: "3px solid #904ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
+        "startStage0": {
+            title: "0",
+            canClick() {return true},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 0
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (player[this.layer].selectedStageStart == 0) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "startStage20": {
+            title: "20",
+            canClick() {return player.spaceZone1.highestLevel.gte(20)},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 20
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (player[this.layer].selectedStageStart == 20) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "startStage40": {
+            title: "40",
+            canClick() {return player.spaceZone1.highestLevel.gte(40)},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 40
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (player[this.layer].selectedStageStart == 40) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "startStage60": {
+            title: "60",
+            canClick() {return player.spaceZone1.highestLevel.gte(60)},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 60
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (player[this.layer].selectedStageStart == 60) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "startStage80": {
+            title: "80",
+            canClick() {return player.spaceZone1.highestLevel.gte(80)},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 80
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (player[this.layer].selectedStageStart == 80) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "switchSides": {
+            title: "?",
+            canClick() {return player.spaceZone1.highestLevel.gte(100)},
+            unlocked: true,
+            onClick() {
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid #904ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#64078f, black)"
+                if (false) look.outline = "3px solid white";
+                return look
+            },
+        },
     },
     upgrades: {
     },
     buyables: {
+    },
+    milestones: {
+        11: {
+            requirementDescription: "Level 20",
+            effectDescription() { return "All ships have 25% more health." },
+            description() {return ""},
+            done() { return player[this.layer].highestLevel.gte(20) },
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#904ee6", borderRadius: "10px"}
+                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        12: {
+            requirementDescription: "Level 40",
+            effectDescription() { return "Boost dark essence gain by x1.2." },
+            description() {return ""},
+            done() { return player[this.layer].highestLevel.gte(40) },
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#904ee6", borderRadius: "10px"}
+                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        13: {
+            requirementDescription: "Level 60",
+            effectDescription() { return "All ships have 15% more health." },
+            description() {return ""},
+            done() { return player[this.layer].highestLevel.gte(60) },
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#904ee6", borderRadius: "10px"}
+                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        14: {
+            requirementDescription: "Level 80",
+            effectDescription() { return "Boost star gain by x1,000 after the softcap." },
+            description() {return ""},
+            done() { return player[this.layer].highestLevel.gte(80) },
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#904ee6", borderRadius: "10px"}
+                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        15: {
+            requirementDescription: "Level 100",
+            effectDescription() { return "???" },
+            description() {return ""},
+            done() { return player[this.layer].highestLevel.gte(100) },
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#904ee6", borderRadius: "10px"}
+                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
     },
     tabFormat: [
         ["style-column", [
@@ -95,8 +223,8 @@ addLayer("spaceZone2", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.1, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 20" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(1.125, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(1.125, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.125, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 20" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Iridite", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Iridite will begin attacking at 10", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -105,8 +233,54 @@ addLayer("spaceZone2", {
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],
-            ["style-column", [
-                // STUFF
+            ["top-column", [
+                ["style-row", [
+                    ["raw-html", () => {return "Highest Level: " + formatWhole(player[player.ir.battleStage].highestLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>"}, {color: "white", textShadow: "0 0 10px white", fontSize: "24px", fontFamily: "monospace"}],
+                ], {borderBottom: "3px solid #5e4ee6", width: "800px", height: "50px"}],
+                ["style-column", [
+                    // TOP MILESTONES
+                    ["style-row", [
+                        ["titleless-milestone", 11],
+                        ["style-row", [], {width: "22px"}],
+                        ["titleless-milestone", 13],
+                    ]],
+                    // TOP CONNECTORS
+                    ["style-row", [
+                        ["style-row", [], {width: "144.4px"}],
+                        ["style-row", [], {background: "#904ee6", width: "3px", height: "22px"}],
+                        ["style-row", [], {width: "288.8px"}],
+                        ["style-row", [], {background: "#904ee6", width: "3px", height: "22px"}],
+                        ["style-row", [], {width: "288.8px"}],
+                    ]],
+                    // DISTANCE LINE
+                    ["style-row", [
+                        ["clickable", "startStage0"],
+                        ["style-row", [], {background: "#904ee6", width: "40px", height: "3px"}],
+                        ["clickable", "startStage20"],
+                        ["style-row", [], {background: "#904ee6", width: "40px", height: "3px"}],
+                        ["clickable", "startStage40"],
+                        ["style-row", [], {background: "#904ee6", width: "40px", height: "3px"}],
+                        ["clickable", "startStage60"],
+                        ["style-row", [], {background: "#904ee6", width: "40px", height: "3px"}],
+                        ["clickable", "startStage80"],
+                        ["style-row", [], {background: "#904ee6", width: "40px", height: "3px"}],
+                        ["clickable", "switchSides"],
+                    ]],
+                    // BOTTOM CONNECTORS
+                    ["style-row", [
+                        ["style-row", [], {width: "288.8px"}],
+                        ["style-row", [], {background: "#904ee6", width: "3px", height: "22px"}],
+                        ["style-row", [], {width: "288.8px"}],
+                        ["style-row", [], {background: "#904ee6", width: "3px", height: "22px"}],
+                        ["style-row", [], {width: "144.4px"}],
+                    ]],
+                    // BOTTOM MILESTONES
+                    ["style-row", [
+                        ["titleless-milestone", 12],
+                        ["style-row", [], {width: "22px"}],
+                        ["titleless-milestone", 14],
+                    ]],
+                ], {background: "#0000007f", width: "800px", height: "304px"}],
             ], {width: "800px", height: "357px"}],
         ], {width: "800px", height: "720px"}],
     ],

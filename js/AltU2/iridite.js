@@ -348,7 +348,7 @@ addLayer("ir", {
         //player.ir.battleXPReq = player.ir.battleXPReq.div(10) // TEMP
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
-        if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && !arena.upgradeChoiceActive) {
+        if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             player.ir.battleLevel = player.ir.battleLevel.add(1);
             if (arena) {
@@ -366,13 +366,16 @@ addLayer("ir", {
             summonIridite();
             player.ir.iriditeFought = true
         }
-
-        if (cutsceneActive || player.ir.menu > 0) {
-            pauseAsteroidMinigame()
-        } else {
-            resumeAsteroidMinigame()
+        
+        if (arena) {
+            if (player.ir.menu > 0) {
+                arena.pauseEvents();
+            } else {
+                arena.resumeEvents();
+            };
         }
-
+        if (cutsceneActive) pauseAsteroidMinigame();
+        else resumeAsteroidMinigame();
     },
     bars: {
         healthBar: {
@@ -1052,14 +1055,15 @@ addLayer("ir", {
             },
         },
         16: {
-            title() { return player.ir.menu == 1 ? "Return to Battle" : "View Stats" },
+            title() { return player.ir.menu == 2 ? "Return to Battle" : "View Stats" },
             canClick() { return true },
             unlocked() { return true},
             onClick() {
-                if (player.ir.menu == 1) {
-                    player.ir.menu = 0
+                if (player.ir.menu == 2) {
+                    if (arena.upgradeChoices.length == 0) player.ir.menu = 0;
+                    else player.ir.menu = 1;
                 } else {
-                    player.ir.menu = 1
+                    player.ir.menu = 2
                 }
             },
             style() {
@@ -1698,7 +1702,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Perseverance",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Boosts space rock gain based on stored time capsules. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(4e8),
             currencyLocation() { return player.ir },
@@ -1725,7 +1729,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Destruction II",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "All ships deal 20% more damage."},
             cost: new Decimal(2e9),
             currencyLocation() { return player.ir },
@@ -1752,7 +1756,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Loyalty",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Unlock a second space building slot adder."},
             cost: new Decimal(1.4e10),
             currencyLocation() { return player.ir },
@@ -1779,7 +1783,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Familiarity",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Boosts light gain based on starmetal alloy. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(1e9),
             currencyLocation() { return player.ir },
@@ -1806,7 +1810,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Railgun",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Unlock a new ship: Railgun."},
             cost: new Decimal(4e9),
             currencyLocation() { return player.ir },
@@ -1833,7 +1837,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Unity",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Project effects are 5% stronger."},
             cost: new Decimal(4e10),
             currencyLocation() { return player.ir },
@@ -2069,7 +2073,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Dedication",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Boosts project speed by x1.2."},
             cost: new Decimal(1e3),
             currencyLocation() { return player.ir },
@@ -2092,7 +2096,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Momentum II",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Space battle celestialite stats scale another 2% slower."},
             cost: new Decimal(3e3),
             currencyLocation() { return player.ir },
@@ -2115,7 +2119,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Empire",
-            unlocked() { return hasUpgrade("ir", 32) },
+            unlocked() { return true },
             description() { return "Automate the first six space buildings."},
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
@@ -2590,20 +2594,32 @@ addLayer("ir", {
                                                 ["upgrade", 106],
                                             ]],
                                         ], {width: "636px", background: "#904ee63f", border: "3px solid #904ee6", borderRadius: "19px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "548px", top: "0"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "548px", top: "0px"}
+                                        look.display = hasUpgrade("ir", 16) ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Zone II -> Iridite Zone Connection
 
                                     ["style-column", [
                                                 ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #904ee6, white) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "1193px", top: "0"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "1193px", top: "0px"}
+                                        look.display = hasUpgrade("ir", 16) ? "" : "none !important"
+                                        return look
+                                    }],
                                     ["style-column", [
                                         ["style-row", [
                                             ["style-row", [
                                                 ["upgrade", 19],
                                             ]],
                                         ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #ffffff3f)", borderRadius: "0"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "1193px", top: "0"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "1193px", top: "0px"}
+                                        look.display = hasUpgrade("ir", 16) ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Geroa Upgrades
 
@@ -2622,20 +2638,32 @@ addLayer("ir", {
                                                 ["upgrade", 206],
                                             ]],
                                         ], {width: "424px", background: "#536bdb3f", border: "3px solid #536bdb", borderRadius: "19px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "1414px", top: "0"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "1414px", top: "0px"}
+                                        look.display = hasUpgrade("ir", 19) ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Zone II -> Zone III Connection
 
                                     ["style-column", [
                                                 ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(0deg, #904ee6, #e64ebd) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}
+                                        look.display = player.ir.iriditeDefeated ? "" : "none !important"
+                                        return look
+                                    }],
                                     ["style-column", [
                                         ["style-row", [
                                             ["style-row", [
                                                 ["upgrade", 25],
                                             ]],
                                         ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #e64ebd3f)", borderRadius: "0"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "760px", top: "-333px"}
+                                        look.display = player.ir.iriditeDefeated ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Zone III Upgrades
 
@@ -2657,7 +2685,11 @@ addLayer("ir", {
                                                 ["upgrade", 109],
                                             ]],
                                         ], {width: "636px", background: "#e64ebd3f", border: "3px solid #e64ebd", borderRadius: "19px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "548px", top: "-666px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "548px", top: "-666px"}
+                                        look.display = hasUpgrade("ir", 25) ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Shard Mining Upgrades
 
@@ -2665,14 +2697,22 @@ addLayer("ir", {
 
                                     ["style-column", [
                                                 ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(180deg, #904ee6, #bf41bf) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}
+                                        look.display = hasUpgrade("bum", 23) ? "" : "none !important"
+                                        return look
+                                    }],
                                     ["style-column", [
                                         ["style-row", [
                                             ["style-row", [
                                                 ["upgrade", 32],
                                             ]],
                                         ], {width: "218px", background: "linear-gradient(90deg, #904ee63f, #bf41bf3f)", borderRadius: "0"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "760px", top: "333px"}
+                                        look.display = hasUpgrade("bum", 23) ? "" : "none !important"
+                                        return look
+                                    }],
 
                                     // Zone IV Upgrades
 
@@ -2694,9 +2734,13 @@ addLayer("ir", {
                                                 ["upgrade", 112],
                                             ]],
                                         ], {width: "636px", background: "#bf41bf3f", border: "3px solid #bf41bf", borderRadius: "19px"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "548px", top: "666px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "548px", top: "666px"}
+                                        look.display = hasUpgrade("ir", 32) ? "" : "none !important"
+                                        return look
+                                    }],
 
-                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/spaceZone1.png)"}],
+                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/iriditeZone.png)"}],
                             ], {width: "800px", height: "677px", flexFlow: "column"}]
                         ]],
                         /*["style-row", [
@@ -2712,7 +2756,7 @@ addLayer("ir", {
                 content() { return [
                     ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "10px" : "0"}],
                     ["style-column", [
-                        ["raw-html", "Level " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
+                        ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                         ["style-row", [
                             ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                         ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]

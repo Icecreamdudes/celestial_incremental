@@ -10,7 +10,7 @@ addLayer("iriditeZone", {
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
         levelScaling: new Decimal(1.1),
-        levelScalingStart: new Decimal(20),
+        levelScalingStart: new Decimal(10),
     }},
     automate() {},
     nodeStyle() {

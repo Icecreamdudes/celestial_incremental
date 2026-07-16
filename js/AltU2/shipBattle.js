@@ -721,7 +721,6 @@ class SpaceArena {
         this.asteroidSpawnTimer = 0;
         this.maxAsteroids = 16;
         this.lootFlashes = [];
-        this.upgradeChoiceActive = false;
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgrades = this.getDefaultUpgrades();
@@ -1371,14 +1370,17 @@ class SpaceArena {
         this.bossActive = false;
         player.ir.iriditeFightActive = false;
 
+        // Exit all menus
+        player.ir.menu = 0;
+
         // If we were in fullscreen for the Iridite fight, restore original arena
         this.exitIriditeFullscreen();
     }
 
-    handleKeyDown = (e) => { if (!this.upgradeChoiceActive) this.keys[e.code] = true; };
-    handleKeyUp = (e) => { if (!this.upgradeChoiceActive) this.keys[e.code] = false; };
-    handleMouseDown = (e) => { if (!this.upgradeChoiceActive) this.mouseDown = true; };
-    handleMouseUp = (e) => { if (!this.upgradeChoiceActive) this.mouseDown = false; };
+    handleKeyDown = (e) => { if (player.ir.menu == 0) this.keys[e.code] = true; };
+    handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
+    handleMouseDown = (e) => { if (player.ir.menu == 0) this.mouseDown = true; };
+    handleMouseUp = (e) => { if (player.ir.menu == 0) this.mouseDown = false; };
         handleMouseMove = (e) => {
         if (!this.canvas) return;
         let rect = this.canvas.getBoundingClientRect();
@@ -1831,6 +1833,7 @@ class SpaceArena {
     }
 
     update() {
+        
         this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
 
         // Prepare collectors used by multiple death paths
@@ -1847,12 +1850,12 @@ class SpaceArena {
                 let reward = celRef.reward()
 
                 if (reward.spaceRock) {
-                    let rockAmt = reward.spaceRock.mul(player.ir.spaceRockMult).floor();
+                    let rockAmt = reward.spaceRock.mul(this.shipStats.rockGain).floor();
                     player.ir.spaceRock = player.ir.spaceRock.add(rockAmt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: rockAmt, type: "rock" });
                 }
                 if (reward.spaceGem) {
-                    let gemAmt = reward.spaceGem.mul(player.ir.spaceGemMult).floor();
+                    let gemAmt = reward.spaceGem.mul(this.shipStats.gemGain).floor();
                     player.ir.spaceGem = player.ir.spaceGem.add(gemAmt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: gemAmt, type: "gem" });
                 }
@@ -1872,7 +1875,7 @@ class SpaceArena {
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
                 arena.showUpgradeChoice(true);
-                arena.upgradeChoiceActive = true
+                player.ir.menu = 1
             }
 
             // Mark Iridite defeat when boss dies
@@ -1887,7 +1890,7 @@ class SpaceArena {
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
                 arena.showUpgradeChoice(true);
-                arena.upgradeChoiceActive = true
+                player.ir.menu = 1
             }
 
             // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
@@ -1913,7 +1916,7 @@ class SpaceArena {
         if (this._iriditeFullscreen && !this.enemies.some(e => (e.type === 'iriditeBoss' || e.type === 'ritualSpirit') && e.health.gt(0))) {
             this.exitIriditeFullscreen();
         }
-        if (this.upgradeChoiceActive) {
+        if (player.ir.menu > 0) {
             this.draw();
             return;
         }
@@ -3076,8 +3079,6 @@ class SpaceArena {
                 enemy.y = ((enemy.y % this.height) + this.height) % this.height
                 continue;
             }
-
-            // ABCD
 
             // Generic wander updates
             SB_updateMovement(enemy)
@@ -4440,142 +4441,178 @@ class SpaceArena {
 
 
         // Draw upgrade choice overlay (unchanged)
-        if (this.upgradeChoiceActive) {
+        if (player.ir.menu > 0) {
             this.ctx.save();
             this.ctx.globalAlpha = 0.375;
             this.ctx.fillStyle =player.ir.secondaryColor;
             this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.restore();
             
-            this.ctx.save();
-            this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y + (this.canvasHeight / 2));
-            //(this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y
-            this.ctx.globalAlpha = 1;
-            this.ctx.font = "bold 48px monospace";
-            this.ctx.fillStyle = "#fff";
-            this.ctx.textAlign = "center";
-            this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 100);
-
-            let spacing = 262.5;
-            let boxWidth = 250;
-            let boxHeight = 150;
-            let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
-            let startX = (this.canvasWidth - totalWidth) / 2;
-            let boxY = (this.canvasHeight - boxHeight) / 2;
-
-            for (let i = 0; i < this.upgradeChoices.length; i++) {
-                let upg = UPGRADE_POOL[this.upgradeChoices[i]];
-                let boxX = startX + i * spacing;
-
+            if (player.ir.menu == 1) {
                 this.ctx.save();
+                this.ctx.moveTo(this.ship.x + (this.canvasWidth / 2), this.ship.y + (this.canvasHeight / 2));
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#000080";
-                this.ctx.strokeStyle = upg.color;
-                this.ctx.lineWidth = 3;
-                this.ctx.beginPath();
-                this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
-                this.ctx.fill();
-                this.ctx.stroke();
+                this.ctx.font = "bold 48px monospace";
+                this.ctx.fillStyle = "#fff";
+                this.ctx.textAlign = "center";
+                this.ctx.fillText("Choose an Upgrade!", this.canvasWidth / 2, this.canvasHeight / 2 - 100);
 
-                if (this.selectedUpgradeIndex === i) {
+                let spacing = 262.5;
+                let boxWidth = 250;
+                let boxHeight = 150;
+                let totalWidth = spacing * (this.upgradeChoices.length - 1) + boxWidth;
+                let startX = (this.canvasWidth - totalWidth) / 2;
+                let boxY = (this.canvasHeight - boxHeight) / 2;
+
+                for (let i = 0; i < this.upgradeChoices.length; i++) {
+                    let upg = UPGRADE_POOL[this.upgradeChoices[i]];
+                    let boxX = startX + i * spacing;
+
                     this.ctx.save();
-                    this.ctx.strokeStyle = "#ffe066";
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.fillStyle = "#000080";
+                    this.ctx.strokeStyle = upg.color;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 7);
+                    this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
+                    this.ctx.fill();
                     this.ctx.stroke();
+
+                    if (this.selectedUpgradeIndex === i) {
+                        this.ctx.save();
+                        this.ctx.strokeStyle = "#ffe066";
+                        this.ctx.lineWidth = 3;
+                        this.ctx.beginPath();
+                        this.ctx.roundRect(boxX + 3, boxY + 3, boxWidth - 6, boxHeight - 6, 7);
+                        this.ctx.stroke();
+                        this.ctx.restore();
+                    }
+
+                    this.ctx.font = "bold 24px monospace";
+                    this.ctx.fillStyle = upg.color;
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText(upg.name(), boxX + boxWidth / 2, boxY + 30);
+
+                    let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
+                    this.ctx.font = "italic 18px monospace";
+                    this.ctx.fillStyle = upg.color;
+                    this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 54);
+
+                    this.ctx.font = "16px monospace";
+                    this.ctx.fillStyle = "#fff";
+                    let desc = upg.description();
+                    let descLines = [];
+                    let words = desc.split(" ");
+                    let line = "";
+                    for (let w = 0; w < words.length; w++) {
+                        let testLine = line + words[w] + " ";
+                        let metrics = this.ctx.measureText(testLine);
+                        if (metrics.width > boxWidth - 40 && line.length > 0) {
+                            descLines.push(line.trim());
+                            line = words[w] + " ";
+                        } else {
+                            line = testLine;
+                        }
+                    }
+                    descLines.push(line.trim());
+                    for (let l = 0; l < descLines.length; l++) {
+                        this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 78 + l * 18);
+                    }
                     this.ctx.restore();
                 }
 
-                this.ctx.font = "bold 24px monospace";
-                this.ctx.fillStyle = upg.color;
-                this.ctx.textAlign = "center";
-                this.ctx.fillText(upg.name(), boxX + boxWidth / 2, boxY + 30);
+                if (this.selectedUpgradeIndex !== null) {
+                    let confirmWidth = 250;
+                    let confirmHeight = 50;
+                    let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
+                    let confirmY = boxY + boxHeight + 12;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = 1;
+                    this.ctx.fillStyle = "#000080";
+                    this.ctx.strokeStyle = "#ffe066";
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 10);
+                    this.ctx.fill();
+                    this.ctx.stroke();
 
-                let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
-                this.ctx.font = "italic 18px monospace";
-                this.ctx.fillStyle = upg.color;
-                this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 54);
+                    this.ctx.font = "bold 24px monospace";
+                    this.ctx.fillStyle = "#fff";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText("Confirm", confirmX + confirmWidth / 2, confirmY + confirmHeight / 2 + 10);
+                    this.ctx.restore();
 
-                this.ctx.font = "16px monospace";
-                this.ctx.fillStyle = "#fff";
-                let desc = upg.description();
-                let descLines = [];
-                let words = desc.split(" ");
-                let line = "";
-                for (let w = 0; w < words.length; w++) {
-                    let testLine = line + words[w] + " ";
-                    let metrics = this.ctx.measureText(testLine);
-                    if (metrics.width > boxWidth - 40 && line.length > 0) {
-                        descLines.push(line.trim());
-                        line = words[w] + " ";
-                    } else {
-                        line = testLine;
+                    let upgrades = structuredClone(this.upgrades)
+                    upgrades[this.upgradeChoices[this.selectedUpgradeIndex]]++
+                    let potentialShipStats = this.getUpgradedShipStats(upgrades)
+                    let matches = []
+                    for (const [i, v] of Object.entries(potentialShipStats)) {
+                        if (typeof(v) === "object") {
+                            if (!v.eq(this.shipStats[i])) matches.push(i);
+                        } else if (v != this.shipStats[i]) matches.push(i);
+                    }
+
+                    for (let i = 0; i < matches.length; i++) {
+                        let key = matches[i]
+                        let statMul = 1
+                        if (key == "healthRegen") statMul *= 60;
+                        this.ctx.save();
+                        this.ctx.globalAlpha = 1;
+                        this.ctx.fillStyle = player.ir.secondaryColor;
+                        this.ctx.strokeStyle = player.ir.primaryColor;
+                        this.ctx.lineWidth = 3;
+                        this.ctx.beginPath();
+                        this.ctx.roundRect(12.5, confirmY + 62 + i * 61, 775, 50, 10);
+                        this.ctx.fill();
+                        this.ctx.stroke();
+
+                        this.ctx.font = "bold 24px monospace";
+                        this.ctx.fillStyle = "#fff";
+                        this.ctx.textAlign = "left";
+                        this.ctx.fillText(SHIP_STAT_NAMES[key], 25, confirmY + 97 + i * 61, 775);
+
+                        this.ctx.font = "bold 24px monospace";
+                        this.ctx.fillStyle = "#fff";
+                        this.ctx.textAlign = "right";
+                        this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key] + " → " + SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, confirmY + 97 + i * 61, 750);
+
+                        this.ctx.restore();
                     }
                 }
-                descLines.push(line.trim());
-                for (let l = 0; l < descLines.length; l++) {
-                    this.ctx.fillText(descLines[l], boxX + boxWidth / 2, boxY + 78 + l * 18);
-                }
-
-                this.ctx.restore();
-            }
-
-            if (this.selectedUpgradeIndex !== null) {
-                let confirmWidth = 250;
-                let confirmHeight = 50;
-                let confirmX = this.canvasWidth / 2 - confirmWidth / 2;
-                let confirmY = boxY + boxHeight + 12;
+            } else if (player.ir.menu == 2) {
                 this.ctx.save();
                 this.ctx.globalAlpha = 1;
-                this.ctx.fillStyle = "#000080";
-                this.ctx.strokeStyle = "#ffe066";
-                this.ctx.lineWidth = 3;
-                this.ctx.beginPath();
-                this.ctx.roundRect(confirmX, confirmY, confirmWidth, confirmHeight, 10);
-                this.ctx.fill();
-                this.ctx.stroke();
-
-                this.ctx.font = "bold 24px monospace";
+                this.ctx.font = "bold 48px monospace";
                 this.ctx.fillStyle = "#fff";
                 this.ctx.textAlign = "center";
-                this.ctx.fillText("Confirm", confirmX + confirmWidth / 2, confirmY + confirmHeight / 2 + 10);
-                this.ctx.restore();
-
-                let upgrades = structuredClone(this.upgrades)
-                upgrades[this.upgradeChoices[this.selectedUpgradeIndex]]++
-                let potentialShipStats = this.getUpgradedShipStats(upgrades)
+                this.ctx.fillText("Stats", this.canvasWidth / 2, this.canvasHeight / 2 - 325);
                 let matches = []
-                for (const [i, v] of Object.entries(potentialShipStats)) {
-                    if (typeof(v) === "object") {
-                        if (!v.eq(this.shipStats[i])) matches.push(i);
-                    } else if (v != this.shipStats[i]) matches.push(i);
-                }
-                
+                for (const [i, v] of Object.entries(this.shipStats)) matches.push(i);
                 for (let i = 0; i < matches.length; i++) {
                     let key = matches[i]
-                    let statMul = 1
+                    let statMul = this.shipStats[key]
                     if (key == "healthRegen") statMul *= 60;
+                    
                     this.ctx.save();
                     this.ctx.globalAlpha = 1;
                     this.ctx.fillStyle = player.ir.secondaryColor;
                     this.ctx.strokeStyle = player.ir.primaryColor;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(12.5, confirmY + 62 + i * 61, 775, 50, 10);
+                    this.ctx.roundRect(12.5, 122 + i * 61, 775, 50, 10);
                     this.ctx.fill();
                     this.ctx.stroke();
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "left";
-                    this.ctx.fillText(SHIP_STAT_NAMES[key], 25, confirmY + 97 + i * 61, 775);
+                    this.ctx.fillText(SHIP_STAT_NAMES[key], 25, 157 + i * 61, 775);
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "right";
-                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key] + " → " + SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, confirmY + 97 + i * 61, 750);
-
+                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, 157 + i * 61, 750);
+                    
                     this.ctx.restore();
                 }
             }
@@ -4585,12 +4622,13 @@ class SpaceArena {
     }
 
     showUpgradeChoice(enhanced = false) {
-        this.upgradeChoiceActive = true;
+        player.ir.menu = 1;
         this.upgradeChoices = pickUpgrades(enhanced);
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
 
         this.canvas.onclick = (e) => {
+            if (player.ir.menu != 1) return;
             let rect = this.canvas.getBoundingClientRect();
             let x = e.clientX - rect.left;
             let y = e.clientY - rect.top;
@@ -4628,7 +4666,7 @@ class SpaceArena {
                 ) {
                     let upg = UPGRADE_POOL[this.upgradeChoices[this.selectedUpgradeIndex]];
                     upg.effect(this);
-                    this.upgradeChoiceActive = false;
+                    player.ir.menu = 0;
                     this.upgradeChoices = [];
                     this.selectedUpgradeIndex = null;
                     this.resumeEvents();

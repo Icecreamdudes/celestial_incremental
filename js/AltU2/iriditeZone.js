@@ -11,6 +11,8 @@ addLayer("iriditeZone", {
         LevelStart: new Decimal(0),
         levelScaling: new Decimal(1.1),
         levelScalingStart: new Decimal(10),
+
+        selectedStageStart: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -29,7 +31,7 @@ addLayer("iriditeZone", {
     branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
-        
+        player.iriditeZone.levelScaling = new Decimal(1.1)
     },
     clickables: {
         "enter": {
@@ -58,10 +60,50 @@ addLayer("iriditeZone", {
             },
             style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#151230)", border: "3px solid white", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
+        "startStage0": {
+            title: "0",
+            canClick() {return true},
+            unlocked: true,
+            onClick() {
+                player[this.layer].selectedStageStart = 0
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid white", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (this.canClick()) look.background = "radial-gradient(#151230)"
+                if (player[this.layer].selectedStageStart == 0) look.outline = "3px solid white";
+                return look
+            },
+        },
+        "switchSides": {
+            title: "X",
+            canClick() {return false},
+            unlocked: true,
+            onClick() {
+            },
+            style() {
+                let look = {background: "#361e1e", border: "3px solid white", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
+                if (player.ir.iriditeDefeated) look.background = "#1a3b0f"
+                if (false) look.outline = "3px solid white";
+                return look
+            },
+        },
     },
     upgrades: {
     },
     buyables: {
+    },
+    milestones: {
+        11: {
+            requirementDescription: "Iridite Defeated",
+            effectDescription() { return "Unlock Iridite's Perks." },
+            description() {return ""},
+            done() { return player.ir.iriditeDefeated },
+            style() {
+                let look = {width: "334px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
     },
     tabFormat: [
         ["style-column", [
@@ -72,8 +114,21 @@ addLayer("iriditeZone", {
                             ["raw-html", "Iridite Zone", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["clickable", "enter"],
-                    ], {width: "397px", height: "360px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
 
+                    ], {width: "397px", height: "147px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
+                    
+                    ["style-column", [
+                        ["titleless-milestone", 11],
+                        ["style-row", [
+                            ["style-row", [], {width: "144.4px"}],
+                            ["style-row", [], {background: "white", width: "3px", height: "22px"}],
+                        ]],
+                        ["style-row", [
+                            ["clickable", "startStage0"],
+                            ["style-row", [], {background: "white", width: "94px", height: "3px"}],
+                            ["clickable", "switchSides"],
+                        ]],
+                    ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
                    
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],

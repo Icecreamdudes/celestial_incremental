@@ -281,6 +281,7 @@ addLayer("ir", {
         let zoneRef = SB_zones[player.ir.battleStage]
 
         player.ir.spaceRockMult = new Decimal(1)
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(upgradeEffect("ir", 21))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 155))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
@@ -340,16 +341,34 @@ addLayer("ir", {
 
         player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
 
-        player.ir.battleXPReq = player.ir.battleLevel.pow(1.6).mul(5).add(40)
-        if (player.tab == "ir" && player.ir.battleLevel.gt(16)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(16)))
-        if (player.tab == "bl" && player.ir.battleLevel.gt(20)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.05, player.ir.battleLevel.sub(20)))
+        player.ir.battleXPReq = player.ir.battleLevel.pow(1.5).mul(5).add(40)
+        if (player.tab == "bl" && player.ir.battleLevel.gt(10)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.1, player.ir.battleLevel.sub(10)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
-        //player.ir.battleXPReq = player.ir.battleXPReq.div(10) // TEMP
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
+            if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
+            if (player.ir.battleLevel.gte(SB_zones[player.ir.battleStage].levelLimit)) {
+                player.ir.inBattle = false
+                options.fullscreen = false
+                player.subtabs["ir"]['stuff'] = 'stages'
+
+                if (arena) {
+                    arena.removeArena();
+                    arena = null;
+                }
+                localStorage.setItem('arenaActive', 'false');
+
+                pauseUniverseAll(["A2", "DS"], "unpause", true)
+
+                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
+
+                player.ir.battleXP = new Decimal(0)
+                player.ir.battleLevel = new Decimal(1)
+                player.ir.iriditeFightActive = false
+            }
             player.ir.battleLevel = player.ir.battleLevel.add(1);
             if (arena) {
                 arena.showUpgradeChoice();
@@ -974,7 +993,7 @@ addLayer("ir", {
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                 player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(0)
+                player.ir.battleLevel = new Decimal(1)
                 player.ir.iriditeFightActive = false
             },
             style() {
@@ -1366,7 +1385,9 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.ir.spaceRock.add(1).log10().add(1).pow(0.75).sub(1).pow_base("1e100")
+                let eff = player.ir.spaceRock.add(1).log10().add(1).pow(0.75).sub(1).pow_base("1e100")
+                if (hasMilestone("spaceZone3", 11)) eff = eff.pow(2);
+                return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -1420,7 +1441,9 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(20).add(1)
+                let eff = player.au2.stars.add(1).log(10).add(1).pow(0.5).sub(1).div(20).add(1)
+                if (hasMilestone("spaceZone3", 14)) eff = eff.pow(1.5);
+                return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -1551,7 +1574,9 @@ addLayer("ir", {
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
             effect() {
-                return player.ir.spaceGem.add(1).log(10).add(1).pow(0.75).sub(1).pow_base(10).sub(1).div(10).add(1)
+                let eff = player.ir.spaceGem.add(1).log(10).add(1).pow(0.75).sub(1).pow_base(10).sub(1).div(50).add(1)
+                if (hasMilestone("spaceZone3", 13)) eff = eff.pow(4);
+                return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -2005,7 +2030,7 @@ addLayer("ir", {
             },
             title: "Head Start",
             unlocked() { return true },
-            description() { return "Enable starting space battles at your best level milestone."},
+            description() { return "Gain an extra ship save slot."},
             cost: new Decimal(10),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
@@ -2346,22 +2371,23 @@ addLayer("ir", {
                             ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                             ["blank", "25px"],
                             ["style-column", [
-                                    ["levelable-display", [
-                                        ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                    ]],
+                                ["levelable-display", [
+                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
+                                ]],
                             ], {width: "550px", height: "175px", backgroundColor: "#070024", border: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
                             ["always-scroll-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
-                                    ["style-column", [
-                                        ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                        ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                                    ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                                ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
+                                ["style-column", [
+                                    ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
+                                ["style-column", [
+                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
+                                    ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
+                                ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
+                            ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
                             ["blank", "25px"],
                         ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0 0 16px 16px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
+                    ["blank", "25px"],
                 ],
             },
             "stages": {
@@ -2388,12 +2414,30 @@ addLayer("ir", {
                                     // Connections
                                     ["style-column", [
                                         createConnectionComponent(0, 0, 100, 0, "#5e4ee6"),
+                                    ], () => {
+                                        return {display: hasUpgrade("ir", 16) ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+                                    ["style-column", [
                                         createConnectionComponent(100, 0, 200, 0, "#5e4ee6"),
+                                    ], () => {
+                                        return {display: hasUpgrade("ir", 19) ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+                                    ["style-column", [
                                         createConnectionComponent(100, 0, 100, -100, "#5e4ee6"),
+                                    ], () => {
+                                        return {display: hasUpgrade("ir", 25) ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+                                    ["style-column", [
                                         //createConnectionComponent(100, -100, 0, -100, "#5e4ee6"),
+                                    ], () => {
+                                        return {display: false ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+                                    ["style-column", [
                                         createConnectionComponent(100, 0, 100, 100, "#5e4ee6"),
-                                    ], {width: "0", height: "0"}],
-
+                                    ], () => {
+                                        return {display: hasUpgrade("ir", 32) ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+//
                                     // Zone I
                                     ["tooltip-row", [
                                         ["category-button", ["I", "stages", "spaceZone1"], () => {
@@ -2425,10 +2469,11 @@ addLayer("ir", {
                                                 color: "white",
                                                 fontSize: "32px",
                                                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                                display: hasUpgrade("ir", 16) ? "" : "none !important",
                                             }
                                             if (player.subtabs["ir"]["stages"] == "spaceZone2") str.outline = "3px solid #fff"
                                             return str
-                                        }], 
+                                        },], 
                                         ["raw-html", () => {return "<div class='bottomTooltip'>Zone II</div>"}],
                                     ], {width: "0", height: "0", position: "relative", left: "100px", top: "0px"}],
 
@@ -2444,6 +2489,7 @@ addLayer("ir", {
                                                 color: "white",
                                                 fontSize: "32px",
                                                 textShadow: "0px 0px 5px #151230",
+                                                display: hasUpgrade("ir", 19) ? "" : "none !important",
                                             }
                                             if (player.subtabs["ir"]["stages"] == "iriditeZone") str.outline = "3px solid #fff"
                                             return str
@@ -2463,6 +2509,7 @@ addLayer("ir", {
                                                 color: "white",
                                                 fontSize: "32px",
                                                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                                display: hasUpgrade("ir", 25) ? "" : "none !important",
                                             }
                                             if (player.subtabs["ir"]["stages"] == "spaceZone3") str.outline = "3px solid #fff"
                                             return str
@@ -2482,6 +2529,7 @@ addLayer("ir", {
                                                 color: "white",
                                                 fontSize: "32px",
                                                 textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                                display: hasUpgrade("ir", 32) ? "" : "none !important",
                                             }
                                             if (player.subtabs["ir"]["stages"] == "spaceZone4") str.outline = "3px solid #fff"
                                             return str
@@ -2748,6 +2796,7 @@ addLayer("ir", {
                             
                         ], {background: "#37078f", borderTop: "3px solid #5e4ee6", width: "800px", height: "40px"}],*/
                     ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
+                    ["blank", "25px"],
                 ],
             },
             "Battle": {

@@ -147,7 +147,7 @@
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                 player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(0)
+                player.ir.battleLevel = new Decimal(1)
 
                 player.bl.foughtNox = false
                 player.bl.noxFightActive = false

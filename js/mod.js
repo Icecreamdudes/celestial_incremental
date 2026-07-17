@@ -1041,23 +1041,20 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.14 - The Interspace Update Part I: Wells of Light</h3><br>
+	<h3>v1.14 - The Interspace Update Part I: The Time in Your Eyes</h3><br>
 		Content:<br>
 			- Added universe δ.<span style="color:yellow"> [WIP]</span><br>
 			- Remade the dragon pet.<br>
 			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<span style="color:yellow"> [WIP]</span><br>
-			- Added a pet evolution that allows progressing through iridite content without entering space battles. (big for mobile players!)<span style="color:yellow"> [WIP]</span><br>
-			- Added space zone IV.<span style="color:yellow"> [WIP]</span><br>
-			- Added more iridite upgrades.<span style="color:yellow"> [WIP]</span><br>
+			- Added a pet evolution that allows progressing through iridite content without entering space battles.<span style="color:yellow"> [WIP]</span><br>
+			- Added more iridite upgrades.<br>
 			- Added the multiverse map.<br>
-			- Added a ship.<br>
 			- Added four punchcards.<br>
-			- Added an epic pet.<span style="color:yellow"> [WIP]</span><br>
-			- Added a new fighting character.<span style="color:yellow"> [WIP]</span><br>
-			- Added two themes.<br>
-			- Added more star tree upgrades.<span style="color:yellow"> [WIP]</span><br>
-			- Revamped the check back shrine.<span style="color:yellow"> [WIP]</span><br>
 			- Added two check back blessings.<br>
+			- Added new booster milestones.<br>
+			- Added new starmetal essence studies.<br>
+			- Added stage 13 achievements.<br>
+			- Added a theme.<br>
 		<br>QoL:<br>
 			- Remade a lot of check back UI.<br>
 			- Shifted the hue of check back's blue.<br>
@@ -1066,11 +1063,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Moved evo and para shard pity to below the checkback XP bar.<br>
 			- Redesigned the otherworldly features UI.<br>
 			- Added space exploration completion popups.<br>
-			- Redesigned coin flip, wheel of fortune, and slot machine UI.<br>
+			- Redesigned the coin flip, wheel of fortune, and slot machine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
+			- Remade the checkback shrine UI.<br>
 			- Changed some punchcard textures.<br>
-			- Space exploration now shows a popup when it completes.<br>
-			- Changed pylon UI.<br>
+			- Tweaked all pylon UI.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
@@ -1078,9 +1075,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
 			- Increased the scaling of both unavoidable softcaps during an eclipse.<br>
 			- Heavily weakened the negative effect of clouds.<br>
+			- Changed the formulas of some iridite upgrades.<br>
 			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
-			- Reduced the effect scaling of upgrade "Emotional Enhancer".<br>
-			- Deflated ancient and paradox pylon energies.<br>
+			- Reduced the effect scaling of enhance upgrade "Emotional Enhancer".<br>
+			- Slightly deflated ancient and paradox pylon energies, but increased paradox energy factor buyable caps.<br>
+			- Heavily reduced the effect SP has on singularity gain after defeating aleph.<br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
 			- Fixed dark universe reset cheese.<br>

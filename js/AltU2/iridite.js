@@ -768,7 +768,7 @@ addLayer("ir", {
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
-                this.canClick() ? look.backgroundColor = "#3725bd" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#5074db" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },

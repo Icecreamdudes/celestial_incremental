@@ -1041,7 +1041,7 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.14 - The Interspace Update Part I: The Time in Your Eyes</h3><br>
+	<h3>v1.14 - The Interspace Update Part I: e</h3><br>
 		Content:<br>
 			- Added universe δ.<span style="color:yellow"> [WIP]</span><br>
 			- Remade the dragon pet.<br>

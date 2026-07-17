@@ -72,6 +72,7 @@
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("stagnantSynestia", 3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
+        if (hasMilestone("spaceZone2", 14)) player.au2.starsToGet = player.au2.starsToGet.mul(1e3);
 
         player.au2.starsToGet = player.au2.starsToGet.pow(levelableEffect("car", 311)[0]).floor()
     },

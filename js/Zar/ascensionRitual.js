@@ -1902,7 +1902,7 @@ class RitualArena extends SpaceArena {
                         player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                         player.ir.battleXP = new Decimal(0)
-                        player.ir.battleLevel = new Decimal(0)
+                        player.ir.battleLevel = new Decimal(1)
 
                         player.cbs.inBattle = false
                         player.cbs.ritualSpiritActive = false

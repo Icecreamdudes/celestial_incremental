@@ -73,9 +73,13 @@ addLayer("st", {
 
         // Star Power Softcap
         let base = new Decimal(300)
-        if (player.st.starPowerPerSecond.gt(1e300)) player.st.starPowerPerSecond = player.st.starPowerPerSecond.div(1e300).pow(Decimal.div(base, player.st.starPowerPerSecond.plus(1).log(10))).mul(1e300)
+        if (player.st.starPowerPerSecond.gt(1e300)) player.st.starPowerPerSecond = player.st.starPowerPerSecond.div(1e300).pow(Decimal.div(base, player.st.starPowerPerSecond.plus(1).log(10))).mul(1e300);
 
-        player.st.starPowerEffect = player.st.starPower.plus(1).log10().div(100).add(1).min(1.3)
+        player.st.starPowerEffect = player.st.starPower.plus(1).log10().div(100).add(1)
+        if (player.st.starPowerEffect.gte(1.3)) {
+            if (hasMilestone("spaceZone1", 11)) player.st.starPowerEffect = player.st.starPowerEffect.div(1.3).pow(0.5).mul(1.3);
+            else player.st.starPowerEffect = player.st.starPowerEffect.min(1.3);
+        }
         player.st.starPowerEffect2 = player.st.starPower.pow(50).add(1)
         player.st.starPowerEffect3 = player.st.starPower.pow(0.4).add(1)
 
@@ -2652,7 +2656,11 @@ addLayer("st", {
                         }],
                         ["raw-html", () => {return player.st.starPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", () => { return "Boosts point gain by ^" + format(player.st.starPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {
+                        let str = "Boosts point gain by ^" + format(player.st.starPowerEffect)
+                        str += player.st.starPowerEffect.gte(1.3) ? hasMilestone("spaceZone1", 13) ? " <small style='color:red'>[SOFTCAPPED]</small>" : " <small style='color:red'>[HARDCAPPED]</small>" : ""
+                        return str
+                        }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts dice points and rocket fuel by x" + format(player.st.starPowerEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts singularity dimensions by x" + format(player.st.starPowerEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],

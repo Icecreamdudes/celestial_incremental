@@ -11,10 +11,10 @@ addLayer("spaceZone1", {
 
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
-        levelScaling: new Decimal(1.1),
-        levelScalingStart: new Decimal(20),
+        levelScaling: new Decimal(1.08),
+        levelScalingStart: new Decimal(10),
 
-        selectedStageStart: 0,
+        selectedStageStart: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -33,11 +33,15 @@ addLayer("spaceZone1", {
     branches: [],
     color: "#5e4ee6",
     update(delta) {
-        player.spaceZone1.levelScaling = new Decimal(1.1)
+        player.spaceZone1.levelScaling = new Decimal(1.08)
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Zone I",
+            title() {
+                let str = "<h2>Enter Zone I"
+                if (player[this.layer].selectedStageStart.gt(0)) str += "</h2><br>(Level " + formatWhole(player[this.layer].selectedStageStart) + ")";
+                return str
+            },
             canClick: true,
             unlocked: true,
             onClick() {
@@ -67,12 +71,12 @@ addLayer("spaceZone1", {
             canClick() {return true},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 0
+                player[this.layer].selectedStageStart = new Decimal(0)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
-                if (player[this.layer].selectedStageStart == 0) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(0)) look.outline = "3px solid white";
                 return look
             },
         },
@@ -81,7 +85,7 @@ addLayer("spaceZone1", {
             canClick() {return player.spaceZone1.highestLevel.gte(20)},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 20
+                player[this.layer].selectedStageStart = new Decimal(20)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
@@ -95,7 +99,7 @@ addLayer("spaceZone1", {
             canClick() {return player.spaceZone1.highestLevel.gte(40)},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 40
+                player[this.layer].selectedStageStart = new Decimal(40)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
@@ -109,7 +113,7 @@ addLayer("spaceZone1", {
             canClick() {return player.spaceZone1.highestLevel.gte(60)},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 60
+                player[this.layer].selectedStageStart = new Decimal(60)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
@@ -123,7 +127,7 @@ addLayer("spaceZone1", {
             canClick() {return player.spaceZone1.highestLevel.gte(80)},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 80
+                player[this.layer].selectedStageStart = new Decimal(80)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
@@ -133,14 +137,14 @@ addLayer("spaceZone1", {
             },
         },
         "switchSides": {
-            title: "?",
-            canClick() {return player.spaceZone1.highestLevel.gte(100)},
+            title: "X",
+            canClick() {return player[this.layer].highestLevel.gte(100)},
             unlocked: true,
             onClick() {
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
-                if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
+                if (player[this.layer].highestLevel.gte(100)) look.background = "#1a3b0f"
                 if (false) look.outline = "3px solid white";
                 return look
             },
@@ -154,7 +158,7 @@ addLayer("spaceZone1", {
             done() { return player[this.layer].highestLevel.gte(20) },
             style() {
                 let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", borderRadius: "10px"}
-                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
                 return look
             },
         },
@@ -165,7 +169,7 @@ addLayer("spaceZone1", {
             done() { return player[this.layer].highestLevel.gte(40) },
             style() {
                 let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", borderRadius: "10px"}
-                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
                 return look
             },
         },
@@ -176,7 +180,7 @@ addLayer("spaceZone1", {
             done() { return player[this.layer].highestLevel.gte(60) },
             style() {
                 let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", borderRadius: "10px"}
-                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
                 return look
             },
         },
@@ -187,7 +191,7 @@ addLayer("spaceZone1", {
             done() { return player[this.layer].highestLevel.gte(80) },
             style() {
                 let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", borderRadius: "10px"}
-                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
                 return look
             },
         },
@@ -198,7 +202,7 @@ addLayer("spaceZone1", {
             done() { return player[this.layer].highestLevel.gte(100) },
             style() {
                 let look = {width: "350px", minHeight: "75px", color: "white", borderWidth: "3px", borderColor: "#5e4ee6", borderRadius: "10px"}
-                if (hasMilestone("ir", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                if (hasMilestone(this.layer, this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
                 return look
             },
         },
@@ -219,9 +223,9 @@ addLayer("spaceZone1", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.1, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 20" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "397px", height: "211px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
+                        ["raw-html", () => {return Decimal.sub(1.08, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(1.08, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.08, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 10" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
 
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [
@@ -230,7 +234,7 @@ addLayer("spaceZone1", {
             ], {width: "800px", height: "363px"}],
             ["top-column", [
                 ["style-row", [
-                    ["raw-html", () => {return "Highest Level: " + formatWhole(player[player.ir.battleStage].highestLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>"}, {color: "white", textShadow: "0 0 10px white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Highest Level: " + formatWhole(player[player.subtabs["ir"]["stages"]].highestLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.subtabs["ir"]["stages"]].levelLimit) + "</span>"}, {color: "white", textShadow: "0 0 10px white", fontSize: "24px", fontFamily: "monospace"}],
                 ], {borderBottom: "3px solid #5e4ee6", width: "800px", height: "50px"}],
                 ["style-column", [
                     // TOP MILESTONES

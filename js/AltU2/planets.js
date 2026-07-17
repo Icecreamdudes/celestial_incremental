@@ -52,6 +52,7 @@
         }
 
         player.pl.spaceDustPerSecond = player.pl.planets.mul(0.01).mul(player.pl.planets.pow(0.5).mul(0.1))
+        if (hasMilestone("spaceZone1", 11)) player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.mul(3);
     },
     bars: {},
     clickables: {

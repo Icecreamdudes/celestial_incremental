@@ -249,15 +249,15 @@ const SHIP_STAT_NAMES = {
 }
 
 const SHIP_STAT_UPGRADE_OPERATIONS = {
-    attackDamage: "x",
+    attackDamage: "",
     attackSpeed: "x",
     bulletSize: "x",
     healthRegen: "+",
     damageReduction: "/",
-    maxHp: "x",
+    maxHp: "",
     moveSpeed: "x",
-    rockGain: "x",
-    gemGain: "x",
+    rockGain: "",
+    gemGain: "",
     xpGain: "x",
 }
 const SHIP_STAT_UPGRADE_SUFFIXES = {
@@ -1256,6 +1256,9 @@ class SpaceArena {
         shipStats.attackDamage *= 1 + 0.2 * upgrades.attackEpic
         shipStats.attackDamage *= 1 + 0.75 * upgrades.attackLegendary
         shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
+        if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
+        if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
+        if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
 
         shipStats.attackSpeed = 1
         shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
@@ -1263,18 +1266,24 @@ class SpaceArena {
         shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
         shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
 
+        shipStats.maxHp = 1
+        if (hasMilestone("spaceZone2", 11)) shipStats.maxHp *= 1.25;
+        if (hasMilestone("spaceZone2", 13)) shipStats.maxHp *= 1.15;
+        if (hasUpgrade("ir", 29)) shipStats.maxHp *= upgradeEffect("ir", 29).toNumber();
+
+        shipStats.bulletSize = 1
         if (player.ir.shipType == 3 || player.ir.shipType == 7) {
-            shipStats.maxHp = 1
             shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
         } else {
-            shipStats.bulletSize = 1
             shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
         }
-        shipStats.healthRegen = upgrades.healthRegenUncommon * 0.5 / 60
+
+        shipStats.healthRegen = 0
+        if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
+        if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
+        shipStats.healthRegen += upgrades.healthRegenUncommon * 0.5 / 60
         shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
         shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
-
-        if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
         shipStats.healthRegen *= 1 + 0.25 * upgrades.defenseLegendary
         shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
 
@@ -4697,7 +4706,7 @@ class SpaceArena {
             arena.removeArena();
             arena = null;
         }
-        player.ir.battleLevel = new Decimal(0);
+        player.ir.battleLevel = new Decimal(1);
         player.ir.battleXP = new Decimal(0);
         if (arena) arena.shipStats = arena.getDefaultShipStatMults();
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";

@@ -1188,11 +1188,11 @@ class SpaceArena {
         this.gammaTrails = [];
 
         this.mobileControlsScale = 1.5
-        this.mobileLeftStickActive = false
-        this.mobileLeftStickAngle = 0
+        this.pointerTouches = new Map()
+
+        this.mobileLeftStickAngle = null
         this.mobileLeftStickDist = 0
 
-        this.mobileRightButtonActive = false
         this.mobileRightButtonDist = 0
     }
 
@@ -1358,6 +1358,7 @@ class SpaceArena {
         window.addEventListener('keyup', this.handleKeyUp);
         window.addEventListener('pointerdown', this.handlePointerDown);
         window.addEventListener('pointerup', this.handlePointerUp);
+        window.addEventListener('pointercancel', this.handlePointerCancel);
         window.addEventListener('pointermove', this.handlePointerMove);
         
         this.running = true;
@@ -1375,6 +1376,7 @@ class SpaceArena {
         window.removeEventListener('keyup', this.handleKeyUp);
         window.removeEventListener('pointerdown', this.handlePointerDown);
         window.removeEventListener('pointerup', this.handlePointerUp);
+        window.removeEventListener('pointercancel', this.handlePointerCancel);
         window.removeEventListener('pointermove', this.handlePointerMove);
         if (this.arenaDiv) document.body.removeChild(this.arenaDiv);
 
@@ -1403,33 +1405,33 @@ class SpaceArena {
         if (player.ir.menu == 0) this.pointerDown = true;
         if (player.ir.mobileControls) {
             let rect = this.canvas.getBoundingClientRect();
+
             // LEFT STICK
             let originX = 100 * this.mobileControlsScale
             let originY = this.canvasHeight - (100 * this.mobileControlsScale)
             this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
-            if (this.mobileLeftStickDist < this.mobileControlsScale * 80) {
-                this.mobileLeftStickActive = true
-            }
+            if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
             // RIGHT BUTTON
             originX = this.canvasWidth - (100 * this.mobileControlsScale)
             this.mobileRightButtonDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
-            if (this.mobileRightButtonDist < this.mobileControlsScale * 80) {
-                this.mobileRightButtonActive = true
-            }
+            if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
+
+            this.pointerTouches.set(e.pointerId, e)
         }
     };
-    handlePointerUp = (e) => {
-        if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.mobileControls) {
-            this.mobileLeftStickActive = false
-            this.mobileRightButtonActive = false
-        }
-    };
-        handlePointerMove = (e) => {
+    handlePointerMove = (e) => {
         if (!this.canvas) return;
         let rect = this.canvas.getBoundingClientRect();
         this.mouseX = e.clientX - rect.left;
         this.mouseY = e.clientY - rect.top;
+    };
+    handlePointerUp = (e) => {
+        if (player.ir.menu == 0) this.pointerDown = false;
+        if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
+    };
+    handlePointerCancel = (e) => {
+        if (player.ir.menu == 0) this.pointerDown = false;
+        if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
     };
 
     shoot() {
@@ -2222,13 +2224,6 @@ class SpaceArena {
                 this.shoot()
                 this.awaitingShotCharge = false
             }
-            if (player.ir.mobileControls && this.mobileRightButtonActive) {
-                if (player.ir.shipType == 10) {
-                    this.chargeShot()
-                } else {
-                    this.shoot()
-                }
-            }
 
             let maxVel = this.ship.maxVelocity + this.shipStats.moveSpeed;
             this.ship.velocity = Math.max(-maxVel, Math.min(maxVel, this.ship.velocity));
@@ -2244,16 +2239,32 @@ class SpaceArena {
             if (this.ship.y > this.height) this.ship.y = 0;
         }
 
-        if (player.ir.mobileControls && this.mobileLeftStickActive) {
-            let rect = this.canvas.getBoundingClientRect();
-            let originX = 100 * this.mobileControlsScale
-            let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-            this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
-            if (this.mobileLeftStickDist < this.mobileControlsScale * 40) {
-                this.mobileLeftStickAngle = null
-            } else {
-                this.mobileLeftStickAngle = Math.round(Math.atan2(this.mouseY - originY, this.mouseX - originX) / Math.PI * 4) * Math.PI / 4
-            }
+        if (player.ir.mobileControls) {
+            this.pointerTouches.forEach((value, key, map) => {
+                if (!value.action) return;
+                switch (value.action) {
+                    case "leftStick": {
+                        let rect = this.canvas.getBoundingClientRect();
+                        let originX = 100 * this.mobileControlsScale
+                        let originY = this.canvasHeight - (100 * this.mobileControlsScale)
+                        this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+                        console.log(value)
+                        if (this.mobileLeftStickDist < this.mobileControlsScale * 40) {
+                            this.mobileLeftStickAngle = null
+                        } else {
+                            this.mobileLeftStickAngle = Math.round(Math.atan2(this.mouseY - originY, this.mouseX - originX) / Math.PI * 4) * Math.PI / 4
+                        }
+                    break;}
+                    case "rightButton": {
+                        if (player.ir.shipType == 10) {
+                            this.chargeShot()
+                        } else {
+                            this.shoot()
+                        }
+                    break;}
+                    default: break;
+                }
+            })
         } else {
             this.mobileLeftStickAngle = null
         }

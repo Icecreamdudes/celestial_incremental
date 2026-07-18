@@ -2109,7 +2109,7 @@ class SpaceArena {
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
             if (player.ir.mobileControls) {
-                if (this.pointerDown) {
+                if (this.pointerDown && this.mobileLeftStickAngle != null) {
                     // Desired Speed
                     const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
                     let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed

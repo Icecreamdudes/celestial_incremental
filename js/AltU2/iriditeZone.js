@@ -168,7 +168,7 @@ SB_zones.iriditeZone = {
     nameCap: "Iridite Zone",
     nameLow: "iridite zone",
 
-    primaryColor: "white",
+    primaryColor: "#ffffff",
     secondaryColor: "#151230",
 
     levelLimit: 20,

@@ -200,7 +200,7 @@ SB_celestialites.largeAsteroid = {
     radius: 50,
     color: "#6f6f6f",
     health: new Decimal(180),
-    damage: new Decimal(20),
+    damage: new Decimal(1),
     bodyDamage: new Decimal(3),
     regen: new Decimal(0),
     reward() {

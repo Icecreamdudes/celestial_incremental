@@ -315,7 +315,8 @@ SB_zones.spaceZone3 = {
     },
     generateAsteroid(level) {
         let random = Math.random()
-        if (random < 0.25) return "mediumAsteroid";
+        if (random < 0.05) return "largeAsteroid";
+        if (random < 0.3) return "mediumAsteroid";
         else return "smallAsteroid";
     },
     statMult: new Decimal(2.5),

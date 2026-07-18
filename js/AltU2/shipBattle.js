@@ -2122,8 +2122,9 @@ class SpaceArena {
                     } else {
 
                         let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4
+                        ang = Math.round(ang)
                         switch (ang) {
-                            case 0: {
+                            case 0, 8: {
                                 this.ship.angle -= this.ship.rotationSpeed;
                                 if (this.ship.velocity > 0) {
                                     this.ship.velocity -= this.ship.deceleration;
@@ -2165,7 +2166,16 @@ class SpaceArena {
                                 this.ship.angle -= this.ship.rotationSpeed;
                                 this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
                             break;}
-                            default: break;
+                            default: {
+                                this.ship.angle -= this.ship.rotationSpeed;
+                                if (this.ship.velocity > 0) {
+                                    this.ship.velocity -= this.ship.deceleration;
+                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
+                                } else if (this.ship.velocity < 0) {
+                                    this.ship.velocity += this.ship.deceleration;
+                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
+                                }
+                            break;};
                         }
 
                         // Wrap ship around arena edges

@@ -64,7 +64,6 @@ addLayer("ir", {
         battleStage: "spaceZone1",
         levelScalingMult: new Decimal(1),
 
-        debugThing: "",
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
@@ -2909,7 +2908,6 @@ addLayer("ir", {
     },
     tabFormat: [
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
-        ["raw-html", () => {return player.ir.debugThing}, { "color": "white", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
     ],
     layerShown() { return player.se.starsExploreCount[0][5].gte(1) }
 });

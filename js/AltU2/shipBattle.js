@@ -1410,11 +1410,11 @@ class SpaceArena {
             // LEFT STICK
             let originX = 100 * this.mobileControlsScale
             let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-            this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+            this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
             if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
             // RIGHT BUTTON
             originX = this.canvasWidth - (100 * this.mobileControlsScale)
-            this.mobileRightButtonDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+            this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
             if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
 
             this.pointerTouches.set(e.pointerId, {
@@ -1423,7 +1423,7 @@ class SpaceArena {
                 pointerId: e.pointerId,
                 action: e.action,
             })
-            player.ir.debugThing += "<br><span style='color:green'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
+            player.ir.debugThing += "<br><span style='color:cyan'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         }
     };
     handlePointerMove = (e) => {
@@ -1440,8 +1440,9 @@ class SpaceArena {
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        player.ir.debugThing += "<br><span style='color:orange'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
+        player.ir.debugThing += "<br><span style='color:yellow'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
+        console.log(e)
         e.target.releasePointerCapture(e.pointerId);
     };
     handlePointerCancel = (e) => {

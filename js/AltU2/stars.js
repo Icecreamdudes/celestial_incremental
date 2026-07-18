@@ -39,7 +39,6 @@ addLayer("st", {
         };
     },
     tooltip: "Stars",
-    branches: [[""]],
     color: "#37078f",
     update(delta) {
         let onepersec = new Decimal(1)

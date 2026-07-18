@@ -524,6 +524,7 @@ addLayer("ir", {
             sacValue() { return new Decimal(1)},
             // CLICK CODE
             unlocked() { return true },
+            tooltip() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ir", 101) ? "" : "Unlocks with an Iridite upgrade." },
             canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || hasUpgrade("ir", 101)},
             onClick() { 
                 player.ir.shipType = this.id
@@ -868,7 +869,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to dark celestial points.<br>x" + format(this.effect()[1]) + " to light.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
-                return "Slow and bulky, complete with a superphysical energy cannon of unmatched power."
+                return "A superphysical energy cannon powered by starlight."
             },
             levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
             effect() { 
@@ -881,9 +882,9 @@ addLayer("ir", {
             },
             sacValue() { return new Decimal(1)},
             // CLICK CODE
-            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || true ? "" : "Progress through Interspace content." },
-            unlocked() { return true },
-            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || true},
+            tooltip() { return  (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || false ? "" : "Unlocks with an Iridite upgrade." },
+            unlocked() { return false },
+            canClick() { return (getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)) || false},
             onClick() { 
                 player.ir.shipType = this.id
                 return layers[this.layer].levelables.index = this.id 

@@ -2157,13 +2157,6 @@ class SpaceArena {
                     }
                 }
             } else {
-                if (this.keys['Space'] || this.pointerDown) {
-                    if (player.ir.shipType == 10) {
-                        this.chargeShot()
-                    } else {
-                        this.shoot()
-                    }
-                }
                 if (this.keys['KeyW']) {
                     this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
                 } else if (this.keys['KeyS']) {
@@ -2179,6 +2172,13 @@ class SpaceArena {
                 }
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
+            }
+            if ((!player.ir.mobileControls && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
+                if (player.ir.shipType == 10) {
+                    this.chargeShot()
+                } else {
+                    this.shoot()
+                }
             }
             if (this.shotChargeTimer) this.shotChargeTimer--;
             if (this.awaitingShotCharge && this.shotChargeTimer <= 0) {

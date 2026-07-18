@@ -268,7 +268,7 @@ SB_celestialites.iridianShip1 = {
     color: "#e0e0ff",
     health: new Decimal(250),
     damage: new Decimal(2),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(5),
     reward() {
         let gain = {}
@@ -377,7 +377,7 @@ SB_celestialites.iridianShip2 = {
     color: "#ffffe0",
     health: new Decimal(200),
     damage: new Decimal(2),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -486,7 +486,7 @@ SB_celestialites.iridianShip3 = {
     color: "#ffe0ff",
     health: new Decimal(150),
     damage: new Decimal(2),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(3),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -596,7 +596,7 @@ SB_celestialites.iridianShip4 = {
     color: "#ffe0e0",
     health: new Decimal(150),
     damage: new Decimal(2),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(2),
     reward() {
         let gain = {}

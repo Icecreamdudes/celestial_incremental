@@ -1191,6 +1191,9 @@ class SpaceArena {
         this.mobileLeftStickActive = false
         this.mobileLeftStickAngle = 0
         this.mobileLeftStickDist = 0
+
+        this.mobileRightButtonActive = false
+        this.mobileRightButtonDist = 0
     }
 
     getDefaultUpgrades() {
@@ -1396,8 +1399,32 @@ class SpaceArena {
 
     handleKeyDown = (e) => { if (player.ir.menu == 0) this.keys[e.code] = true; };
     handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
-    handlePointerDown = (e) => { if (player.ir.menu == 0) this.pointerDown = true; };
-    handlePointerUp = (e) => { if (player.ir.menu == 0) this.pointerDown = false; };
+    handlePointerDown = (e) => {
+        if (player.ir.menu == 0) this.pointerDown = true;
+        if (player.ir.mobileControls) {
+            let rect = this.canvas.getBoundingClientRect();
+            // LEFT STICK
+            let originX = 100 * this.mobileControlsScale
+            let originY = this.canvasHeight - (100 * this.mobileControlsScale)
+            this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+            if (this.mobileLeftStickDist < this.mobileControlsScale * 80) {
+                this.mobileLeftStickActive = true
+            }
+            // RIGHT BUTTON
+            originX = this.canvasWidth - (100 * this.mobileControlsScale)
+            this.mobileRightButtonDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+            if (this.mobileRightButtonDist < this.mobileControlsScale * 80) {
+                this.mobileRightButtonActive = true
+            }
+        }
+    };
+    handlePointerUp = (e) => {
+        if (player.ir.menu == 0) this.pointerDown = false;
+        if (player.ir.mobileControls) {
+            this.mobileLeftStickActive = false
+            this.mobileRightButtonActive = false
+        }
+    };
         handlePointerMove = (e) => {
         if (!this.canvas) return;
         let rect = this.canvas.getBoundingClientRect();
@@ -2070,7 +2097,7 @@ class SpaceArena {
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
             if (player.ir.mobileControls) {
-                if (this.pointerDown && this.mobileLeftStickAngle != null) {
+                if (this.mobileLeftStickActive && this.mobileLeftStickAngle != null) {
                     if (player.ir.shipType == 5 || player.ir.shipType == 8) {
                         // Desired Speed
                         const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
@@ -2185,6 +2212,13 @@ class SpaceArena {
                 this.shoot()
                 this.awaitingShotCharge = false
             }
+            if (player.ir.mobileControls && this.mobileRightButtonActive) {
+                if (player.ir.shipType == 10) {
+                    this.chargeShot()
+                } else {
+                    this.shoot()
+                }
+            }
 
             let maxVel = this.ship.maxVelocity + this.shipStats.moveSpeed;
             this.ship.velocity = Math.max(-maxVel, Math.min(maxVel, this.ship.velocity));
@@ -2200,7 +2234,7 @@ class SpaceArena {
             if (this.ship.y > this.height) this.ship.y = 0;
         }
 
-        if (player.ir.mobileControls && this.pointerDown) {
+        if (player.ir.mobileControls && this.mobileLeftStickActive) {
             let rect = this.canvas.getBoundingClientRect();
             let originX = 100 * this.mobileControlsScale
             let originY = this.canvasHeight - (100 * this.mobileControlsScale)

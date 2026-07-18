@@ -4562,26 +4562,26 @@ class SpaceArena {
         if (player.ir.mobileControls) {
             this.ctx.save();
             this.ctx.globalAlpha = 1
-            this.ctx.fillStyle = player.ir.primaryColor + "3f";
-            this.ctx.strokeStyle = player.ir.primaryColor + "6e";
             this.ctx.lineWidth = 3;
 
             // LEFT STICK
 
             // OUTER CIRCLE
+            this.ctx.fillStyle = "#ffff003f";
             this.ctx.beginPath();
             this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
             this.ctx.closePath();
             this.ctx.fill();
 
             // INNER CIRCLE
+            this.ctx.fillStyle = "#0000003f";
             this.ctx.beginPath();
             this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
             this.ctx.closePath();
             this.ctx.fill();
 
             // STICK
-            this.ctx.fillStyle = player.ir.primaryColor;
+            this.ctx.fillStyle = "#ffff00bf";
             this.ctx.beginPath();
             if (this.mobileLeftStickAngle == null) {
                 this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
@@ -4592,6 +4592,7 @@ class SpaceArena {
             this.ctx.fill();
 
             // OUTLINE
+            this.ctx.strokeStyle = "#ffff006e";
             this.ctx.beginPath();
             this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
             this.ctx.stroke();
@@ -4600,27 +4601,29 @@ class SpaceArena {
             if (!player.ir.autoShoot) {
 
                 // OUTER CIRCLE
-                this.ctx.fillStyle = player.ir.primaryColor + "3f";
+                //this.ctx.fillStyle = player.ir.primaryColor + "3f";
+                this.ctx.fillStyle = "#ffff003f";
                 this.ctx.beginPath();
                 this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
                 this.ctx.closePath();
                 this.ctx.fill();
 
                 // INNER CIRCLE
-                this.ctx.beginPath();
                 this.ctx.fillStyle = "#0000003f";
+                this.ctx.beginPath();
                 this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
                 this.ctx.closePath();
                 this.ctx.fill();
 
                 // OUTLINE
+                this.ctx.strokeStyle = "#ffff006e";
                 this.ctx.beginPath();
                 this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
                 this.ctx.stroke();
 
                 // TEXT
+                this.ctx.fillStyle = "#ffff00bf";
                 this.ctx.font = "bold 48px monospace";
-                this.ctx.fillStyle = player.ir.primaryColor;
                 this.ctx.textAlign = "center";
                 this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
             }

@@ -138,7 +138,7 @@
             purchaseLimit() {return buyableEffect("sb", 12).add(buyableEffect("sb", 13))},
             currency() { return player.ir.spaceRock},
             pay(amt) { player.ir.spaceRock = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).add(1).mul(player.sb.sseEffect) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).mul(player.sb.sseEffect).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

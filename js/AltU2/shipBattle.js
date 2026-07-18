@@ -2064,79 +2064,94 @@ class SpaceArena {
             if (this.ship.y < 0) this.ship.y = this.height;
             if (this.ship.y > this.height) this.ship.y = 0;
         } else {
-            // Ship movement for other types
-            // Sniper (shipType == 4): automatically rotate to face closest enemy and expose currentTarget for drawing
-            if (player.ir.shipType == 4) {
-                let closest = null;
-                let closestDist = Infinity;
-                for (let e of this.enemies.concat(this.asteroids)) {
-                    if (!e.alive) continue;
-                    let dx = e.x - this.ship.x;
-                    let dy = e.y - this.ship.y;
-                    let d = Math.hypot(dx, dy);
-                    if (d < closestDist) {
-                        closestDist = d;
-                        closest = e;
-                    }
-                }
-
-                if (closest) {
-                    // compute desired angle and rotate along shortest arc using rotationSpeed
-                    const desired = Math.atan2(closest.y - this.ship.y, closest.x - this.ship.x);
-                    if (typeof this.ship.angle !== "number") this.ship.angle = 0;
-                    let diff = desired - this.ship.angle;
-                    while (diff > Math.PI) diff -= 2 * Math.PI;
-                    while (diff < -Math.PI) diff += 2 * Math.PI;
-
-                    const step = Math.abs(this.ship.rotationSpeed) || 0.125;
-                    if (Math.abs(diff) <= step) {
-                        this.ship.angle = desired;
-                    } else {
-                        this.ship.angle += Math.sign(diff) * step;
-                    }
-
-                    this.ship.currentTarget = closest;
-                } else {
-                    // no target: clear marker and allow manual rotation
-                    this.ship.currentTarget = null;
-                    if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
-                    if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
-                }
-            } else {
-                if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
-                if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
-            }
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
             if (player.ir.mobileControls) {
                 if (this.pointerDown && this.mobileLeftStickAngle != null) {
-                    // Desired Speed
-                    const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
-                    let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed
-                    let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed
+                    if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                        // Desired Speed
+                        const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
+                        let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed
+                        let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed
 
-                    // Smoothly approach desired velocity (lerp) for less "wonky" feel
-                    const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
-                    this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
-                    this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
+                        // Smoothly approach desired velocity (lerp) for less "wonky" feel
+                        const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
+                        this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
+                        this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
 
-                    // Small global damping to stabilize movement
-                    this.ship.vx *= 0.995;
-                    this.ship.vy *= 0.995;
+                        // Small global damping to stabilize movement
+                        this.ship.vx *= 0.995;
+                        this.ship.vy *= 0.995;
 
-                    // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
-                    if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
+                        // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
+                        if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
 
-                    // Move ship (movement completely independent of facing)
-                    this.ship.x += this.ship.vx;
-                    this.ship.y += this.ship.vy;
+                        // Move ship (movement completely independent of facing)
+                        this.ship.x += this.ship.vx;
+                        this.ship.y += this.ship.vy;
+                    } else {
 
-                    // Wrap ship around arena edges
-                    if (this.ship.x < 0) this.ship.x = this.width;
-                    if (this.ship.x > this.width) this.ship.x = 0;
-                    if (this.ship.y < 0) this.ship.y = this.height;
-                    if (this.ship.y > this.height) this.ship.y = 0;
+                        let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4
+                        switch (ang) {
+                            case 0: {
+                                this.ship.angle -= this.ship.rotationSpeed;
+                                if (this.ship.velocity > 0) {
+                                    this.ship.velocity -= this.ship.deceleration;
+                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
+                                } else if (this.ship.velocity < 0) {
+                                    this.ship.velocity += this.ship.deceleration;
+                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
+                                }
+                            break;}
+                            case 1: {
+                                this.ship.angle -= this.ship.rotationSpeed;
+                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            case 2: {
+                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            case 3: {
+                                this.ship.angle += this.ship.rotationSpeed;
+                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            case 4: {
+                                this.ship.angle += this.ship.rotationSpeed;
+                                if (this.ship.velocity > 0) {
+                                    this.ship.velocity -= this.ship.deceleration;
+                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
+                                } else if (this.ship.velocity < 0) {
+                                    this.ship.velocity += this.ship.deceleration;
+                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
+                                }
+                            break;}
+                            case 5: {
+                                this.ship.angle += this.ship.rotationSpeed;
+                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            case 6: {
+                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            case 7: {
+                                this.ship.angle -= this.ship.rotationSpeed;
+                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                            break;}
+                            default: break;
+                        }
 
+                        // Wrap ship around arena edges
+                        if (this.ship.x < 0) this.ship.x = this.width;
+                        if (this.ship.x > this.width) this.ship.x = 0;
+                        if (this.ship.y < 0) this.ship.y = this.height;
+                        if (this.ship.y > this.height) this.ship.y = 0;
+                    }
+                } else {
+                    if (this.ship.velocity > 0) {
+                        this.ship.velocity -= this.ship.deceleration;
+                        if (this.ship.velocity < 0) this.ship.velocity = 0;
+                    } else if (this.ship.velocity < 0) {
+                        this.ship.velocity += this.ship.deceleration;
+                        if (this.ship.velocity > 0) this.ship.velocity = 0;
+                    }
                 }
             } else {
                 if (this.keys['Space'] || this.pointerDown) {
@@ -2146,6 +2161,21 @@ class SpaceArena {
                         this.shoot()
                     }
                 }
+                if (this.keys['KeyW']) {
+                    this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                } else if (this.keys['KeyS']) {
+                    this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                } else {
+                    if (this.ship.velocity > 0) {
+                        this.ship.velocity -= this.ship.deceleration;
+                        if (this.ship.velocity < 0) this.ship.velocity = 0;
+                    } else if (this.ship.velocity < 0) {
+                        this.ship.velocity += this.ship.deceleration;
+                        if (this.ship.velocity > 0) this.ship.velocity = 0;
+                    }
+                }
+                if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
+                if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
             }
             if (this.shotChargeTimer) this.shotChargeTimer--;
             if (this.awaitingShotCharge && this.shotChargeTimer <= 0) {
@@ -2153,19 +2183,6 @@ class SpaceArena {
                 this.awaitingShotCharge = false
             }
 
-            if (this.keys['KeyW']) {
-                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-            } else if (this.keys['KeyS']) {
-                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-            } else {
-                if (this.ship.velocity > 0) {
-                    this.ship.velocity -= this.ship.deceleration;
-                    if (this.ship.velocity < 0) this.ship.velocity = 0;
-                } else if (this.ship.velocity < 0) {
-                    this.ship.velocity += this.ship.deceleration;
-                    if (this.ship.velocity > 0) this.ship.velocity = 0;
-                }
-            }
             let maxVel = this.ship.maxVelocity + this.shipStats.moveSpeed;
             this.ship.velocity = Math.max(-maxVel, Math.min(maxVel, this.ship.velocity));
 

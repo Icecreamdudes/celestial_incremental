@@ -1416,7 +1416,12 @@ class SpaceArena {
             this.mobileRightButtonDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
             if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
 
-            this.pointerTouches.set(e.pointerId, e)
+            this.pointerTouches.set(e.pointerId, {
+                clientX: e.clientX,
+                clientY: e.clientY,
+                pointerId: e.pointerId,
+                action: e.action,
+            })
         }
     };
     handlePointerMove = (e) => {
@@ -1424,6 +1429,12 @@ class SpaceArena {
         let rect = this.canvas.getBoundingClientRect();
         this.mouseX = e.clientX - rect.left;
         this.mouseY = e.clientY - rect.top;
+        this.pointerTouches.forEach((value, key, map) => {
+            if (value.pointerId === e.pointerId) {
+                value.clientX = e.clientX
+                value.clientY = e.clientY
+            };
+        })
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
@@ -2148,13 +2159,15 @@ class SpaceArena {
                 switch (value.action) {
                     case "leftStick": {
                         let rect = this.canvas.getBoundingClientRect();
+                        let mouseX = value.clientX - rect.left;
+                        let mouseY = value.clientY - rect.top;
                         let originX = 100 * this.mobileControlsScale
                         let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                        this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
+                        this.mobileLeftStickDist = Math.hypot(mouseY - originY, mouseX - originX)
                         if (this.mobileLeftStickDist < this.mobileControlsScale * 40) {
                             this.mobileLeftStickAngle = null
                         } else {
-                            this.mobileLeftStickAngle = Math.round(Math.atan2(this.mouseY - originY, this.mouseX - originX) / Math.PI * 4) * Math.PI / 4
+                            this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * Math.PI / 4
                         }
                         
                         if (this.mobileLeftStickAngle != null) {
@@ -3418,7 +3431,6 @@ class SpaceArena {
                                     let dx = bullet.x - enemy2.x;
                                     let dy = bullet.y - enemy2.y;
                                     let dist = Math.sqrt(dx * dx + dy * dy);
-                                    if (dist < 256) console.log(dist);
                                     if (dist < 256) {
                                         enemy2.health = enemy2.health.sub(bDmg * (1 - dist / 128));
                                     }

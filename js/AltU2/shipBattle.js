@@ -2098,104 +2098,7 @@ class SpaceArena {
         } else {
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
-            if (player.ir.mobileControls) {
-                if (this.mobileLeftStickActive && this.mobileLeftStickAngle != null) {
-                    if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-                        // Desired Speed
-                        const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
-                        let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed
-                        let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed
-
-                        // Smoothly approach desired velocity (lerp) for less "wonky" feel
-                        const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
-                        this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
-                        this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
-
-                        // Small global damping to stabilize movement
-                        this.ship.vx *= 0.995;
-                        this.ship.vy *= 0.995;
-
-                        // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
-                        if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
-
-                        // Move ship (movement completely independent of facing)
-                        this.ship.x += this.ship.vx;
-                        this.ship.y += this.ship.vy;
-                    } else {
-
-                        let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4
-                        ang = Math.round(ang)
-                        switch (ang) {
-                            case 0, 8: {
-                                this.ship.angle -= this.ship.rotationSpeed;
-                                if (this.ship.velocity > 0) {
-                                    this.ship.velocity -= this.ship.deceleration;
-                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
-                                } else if (this.ship.velocity < 0) {
-                                    this.ship.velocity += this.ship.deceleration;
-                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
-                                }
-                            break;}
-                            case 1: {
-                                this.ship.angle -= this.ship.rotationSpeed;
-                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            case 2: {
-                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            case 3: {
-                                this.ship.angle += this.ship.rotationSpeed;
-                                this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            case 4: {
-                                this.ship.angle += this.ship.rotationSpeed;
-                                if (this.ship.velocity > 0) {
-                                    this.ship.velocity -= this.ship.deceleration;
-                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
-                                } else if (this.ship.velocity < 0) {
-                                    this.ship.velocity += this.ship.deceleration;
-                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
-                                }
-                            break;}
-                            case 5: {
-                                this.ship.angle += this.ship.rotationSpeed;
-                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            case 6: {
-                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            case 7: {
-                                this.ship.angle -= this.ship.rotationSpeed;
-                                this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                            break;}
-                            default: {
-                                this.ship.angle -= this.ship.rotationSpeed;
-                                if (this.ship.velocity > 0) {
-                                    this.ship.velocity -= this.ship.deceleration;
-                                    if (this.ship.velocity < 0) this.ship.velocity = 0;
-                                } else if (this.ship.velocity < 0) {
-                                    this.ship.velocity += this.ship.deceleration;
-                                    if (this.ship.velocity > 0) this.ship.velocity = 0;
-                                }
-                            break;};
-                        }
-
-                        // Wrap ship around arena edges
-                        if (this.ship.x < 0) this.ship.x = this.width;
-                        if (this.ship.x > this.width) this.ship.x = 0;
-                        if (this.ship.y < 0) this.ship.y = this.height;
-                        if (this.ship.y > this.height) this.ship.y = 0;
-                    }
-                } else {
-                    if (this.ship.velocity > 0) {
-                        this.ship.velocity -= this.ship.deceleration;
-                        if (this.ship.velocity < 0) this.ship.velocity = 0;
-                    } else if (this.ship.velocity < 0) {
-                        this.ship.velocity += this.ship.deceleration;
-                        if (this.ship.velocity > 0) this.ship.velocity = 0;
-                    }
-                }
-            } else {
+            if (!player.ir.mobileControls) {
                 if (this.keys['KeyW']) {
                     this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
                 } else if (this.keys['KeyS']) {
@@ -2248,11 +2151,86 @@ class SpaceArena {
                         let originX = 100 * this.mobileControlsScale
                         let originY = this.canvasHeight - (100 * this.mobileControlsScale)
                         this.mobileLeftStickDist = Math.hypot(this.mouseY - originY, this.mouseX - originX)
-                        console.log(value)
                         if (this.mobileLeftStickDist < this.mobileControlsScale * 40) {
                             this.mobileLeftStickAngle = null
                         } else {
                             this.mobileLeftStickAngle = Math.round(Math.atan2(this.mouseY - originY, this.mouseX - originX) / Math.PI * 4) * Math.PI / 4
+                        }
+                        
+                        if (this.mobileLeftStickAngle != null) {
+                            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                                // Desired Speed
+                                const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
+                                let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed
+                                let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed
+                            
+                                // Smoothly approach desired velocity (lerp) for less "wonky" feel
+                                const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
+                                this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
+                                this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
+                            
+                                // Small global damping to stabilize movement
+                                this.ship.vx *= 0.995;
+                                this.ship.vy *= 0.995;
+                            
+                                // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
+                                if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
+                            
+                                // Move ship (movement completely independent of facing)
+                                this.ship.x += this.ship.vx;
+                                this.ship.y += this.ship.vy;
+                            } else {
+                            
+                                let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4
+                                ang = Math.round(ang)
+                                switch (ang) {
+                                    case 0, 8: {
+                                        this.ship.angle -= this.ship.rotationSpeed;
+                                    break;}
+                                    case 1: {
+                                        this.ship.angle -= this.ship.rotationSpeed;
+                                        this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    case 2: {
+                                        this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    case 3: {
+                                        this.ship.angle += this.ship.rotationSpeed;
+                                        this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    case 4: {
+                                        this.ship.angle += this.ship.rotationSpeed;
+                                    break;}
+                                    case 5: {
+                                        this.ship.angle += this.ship.rotationSpeed;
+                                        this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    case 6: {
+                                        this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    case 7: {
+                                        this.ship.angle -= this.ship.rotationSpeed;
+                                        this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
+                                    break;}
+                                    default: {
+                                        this.ship.angle -= this.ship.rotationSpeed;
+                                    break;};
+                                }
+                            
+                                // Wrap ship around arena edges
+                                if (this.ship.x < 0) this.ship.x = this.width;
+                                if (this.ship.x > this.width) this.ship.x = 0;
+                                if (this.ship.y < 0) this.ship.y = this.height;
+                                if (this.ship.y > this.height) this.ship.y = 0;
+                            }
+                        } else {
+                            if (this.ship.velocity > 0) {
+                                this.ship.velocity -= this.ship.deceleration;
+                                if (this.ship.velocity < 0) this.ship.velocity = 0;
+                            } else if (this.ship.velocity < 0) {
+                                this.ship.velocity += this.ship.deceleration;
+                                if (this.ship.velocity > 0) this.ship.velocity = 0;
+                            }
                         }
                     break;}
                     case "rightButton": {
@@ -2268,121 +2246,115 @@ class SpaceArena {
         } else {
             this.mobileLeftStickAngle = null
         }
+        if (this.ship.velocity > 0) {
+            this.ship.velocity -= this.ship.deceleration;
+            if (this.ship.velocity < 0) this.ship.velocity = 0;
+        } else if (this.ship.velocity < 0) {
+            this.ship.velocity += this.ship.deceleration;
+            if (this.ship.velocity > 0) this.ship.velocity = 0;
+        }
         
-            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-                // Omnidirectional movement: smooth thrust toward desired velocity (rotation is purely visual)
-                if (typeof this.ship.vx !== "number") this.ship.vx = 0;
-                if (typeof this.ship.vy !== "number") this.ship.vy = 0;
-
-                // Build input vector
-                let ix = 0, iy = 0;
-                if (this.keys['KeyW']) iy -= 1;
-                if (this.keys['KeyS']) iy += 1;
-                if (this.keys['KeyA']) ix -= 1;
-                if (this.keys['KeyD']) ix += 1;
-
-                // Desired speed (account for moveSpeed upgrades)
-                const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
-                let desiredVx = 0, desiredVy = 0;
-                if (ix !== 0 || iy !== 0) {
-                    let len = Math.hypot(ix, iy) || 1;
-                    desiredVx = (ix / len) * maxSpeed;
-                    desiredVy = (iy / len) * maxSpeed;
-                }
-
-                // Smoothly approach desired velocity (lerp) for less "wonky" feel
-                const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
-                this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
-                this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
-
-                // Small global damping to stabilize movement
-                this.ship.vx *= 0.995;
-                this.ship.vy *= 0.995;
-
-                // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
-                if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
-
-                // Move ship (movement completely independent of facing)
-                this.ship.x += this.ship.vx;
-                this.ship.y += this.ship.vy;
-
-                // Wrap ship around arena edges
-                if (this.ship.x < 0) this.ship.x = this.width;
-                if (this.ship.x > this.width) this.ship.x = 0;
-                if (this.ship.y < 0) this.ship.y = this.height;
-                if (this.ship.y > this.height) this.ship.y = 0;
-
-                // Rotation purely visual: smoothly face the mouse (won't affect movement)
-                if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                    let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
-                    let diff = desired - this.ship.angle;
-                    while (diff > Math.PI) diff -= 2 * Math.PI;
-                    while (diff < -Math.PI) diff += 2 * Math.PI;
-                    // smaller rotation step for smoothness
-                    this.ship.angle += Math.sign(diff) * Math.min(Math.abs(diff), Math.max(0.04, this.ship.rotationSpeed || 0.08));
-                }
-
-                if (player.ir.shipType == 8) {
-                    // animate wings
-                    if (typeof this.ship.wingPhase !== "number") this.ship.wingPhase = 0;
-                    this.ship.wingPhase += 0.12;
-
-                    // handle laser firing
-                    if (this.ship._laserTimer > 0) {
-                        if (!this.ship._laserActive && this.ship._laserTimer < 172) {
-                            this.ship._laserActive = true;
-                        }
-                        
-                        // Laser follows mouse direction
-                        if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                            let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
-                            let diff = desired - (this.ship._laserAngle || 0);
-                            while (diff > Math.PI) diff -= 2 * Math.PI;
-                            while (diff < -Math.PI) diff += 2 * Math.PI;
-                            this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
-                        }
-
-                        if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
-
-                        if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
-                            let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                            let dmg = new Decimal((this.ship.damage || 7) * this.shipStats.attackDamage * petMul);
-                            let ang = this.ship._laserAngle;
-                            let ux = Math.cos(ang), uy = Math.sin(ang);
-                            let beamLen = Math.max(this.width, this.height) * 1.5;
-                            let thickness = (this.ship.radius || 12) * 0.8;
-
-                            // Check enemies
-                            for (let enemy of this.enemies.concat(this.asteroids)) {
-                                let ex = enemy.x - this.ship.x;
-                                let ey = enemy.y - this.ship.y;
-                                let proj = ex * ux + ey * uy;
-                                let perp = Math.abs(ex * (-uy) + ey * ux);
-                                if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
-                                    enemy.health = enemy.health.sub(dmg);
-                                    SB_celestialites[enemy.type].onAttacked(enemy, dmg, "ship")
-                                    if (enemy.health.lte(0)) handleEnemyDeath(enemy);
-                                }
-                            }
-                            // Check asteroids
-                            for (let a of this.asteroids) {
-                                let ax = a.x - this.ship.x;
-                                let ay = a.y - this.ship.y;
-                                let proj = ax * ux + ay * uy;
-                                let perp = Math.abs(ax * (-uy) + ay * ux);
-                                if (proj > -a.size && proj < beamLen && perp < thickness + a.size) {
-                                    a.health -= dmg;
-                                }
-                            }
-                            this.ship._laserHitCooldown = 6;
-                        }
-                        this.ship._laserTimer--;
-                    } else {
-                        this.ship._laserActive = false;
-                    }
-                }
-            
+        if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+            // Omnidirectional movement: smooth thrust toward desired velocity (rotation is purely visual)
+            if (typeof this.ship.vx !== "number") this.ship.vx = 0;
+            if (typeof this.ship.vy !== "number") this.ship.vy = 0;
+            // Build input vector
+            let ix = 0, iy = 0;
+            if (this.keys['KeyW']) iy -= 1;
+            if (this.keys['KeyS']) iy += 1;
+            if (this.keys['KeyA']) ix -= 1;
+            if (this.keys['KeyD']) ix += 1;
+            // Desired speed (account for moveSpeed upgrades)
+            const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
+            let desiredVx = 0, desiredVy = 0;
+            if (ix !== 0 || iy !== 0) {
+                let len = Math.hypot(ix, iy) || 1;
+                desiredVx = (ix / len) * maxSpeed;
+                desiredVy = (iy / len) * maxSpeed;
             }
+            // Smoothly approach desired velocity (lerp) for less "wonky" feel
+            const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
+            this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
+            this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
+            // Small global damping to stabilize movement
+            this.ship.vx *= 0.995;
+            this.ship.vy *= 0.995;
+            // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
+            if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
+            // Move ship (movement completely independent of facing)
+            this.ship.x += this.ship.vx;
+            this.ship.y += this.ship.vy;
+            // Wrap ship around arena edges
+            if (this.ship.x < 0) this.ship.x = this.width;
+            if (this.ship.x > this.width) this.ship.x = 0;
+            if (this.ship.y < 0) this.ship.y = this.height;
+            if (this.ship.y > this.height) this.ship.y = 0;
+            // Rotation purely visual: smoothly face the mouse (won't affect movement)
+            if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+                let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
+                let diff = desired - this.ship.angle;
+                while (diff > Math.PI) diff -= 2 * Math.PI;
+                while (diff < -Math.PI) diff += 2 * Math.PI;
+                // smaller rotation step for smoothness
+                this.ship.angle += Math.sign(diff) * Math.min(Math.abs(diff), Math.max(0.04, this.ship.rotationSpeed || 0.08));
+            }
+            if (player.ir.shipType == 8) {
+                // animate wings
+                if (typeof this.ship.wingPhase !== "number") this.ship.wingPhase = 0;
+                this.ship.wingPhase += 0.12;
+                // handle laser firing
+                if (this.ship._laserTimer > 0) {
+                    if (!this.ship._laserActive && this.ship._laserTimer < 172) {
+                        this.ship._laserActive = true;
+                    }
+                    
+                    // Laser follows mouse direction
+                    if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+                        let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                        let diff = desired - (this.ship._laserAngle || 0);
+                        while (diff > Math.PI) diff -= 2 * Math.PI;
+                        while (diff < -Math.PI) diff += 2 * Math.PI;
+                        this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
+                    }
+                    if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
+                    if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
+                        let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
+                        let dmg = new Decimal((this.ship.damage || 7) * this.shipStats.attackDamage * petMul);
+                        let ang = this.ship._laserAngle;
+                        let ux = Math.cos(ang), uy = Math.sin(ang);
+                        let beamLen = Math.max(this.width, this.height) * 1.5;
+                        let thickness = (this.ship.radius || 12) * 0.8;
+                        // Check enemies
+                        for (let enemy of this.enemies.concat(this.asteroids)) {
+                            let ex = enemy.x - this.ship.x;
+                            let ey = enemy.y - this.ship.y;
+                            let proj = ex * ux + ey * uy;
+                            let perp = Math.abs(ex * (-uy) + ey * ux);
+                            if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
+                                enemy.health = enemy.health.sub(dmg);
+                                SB_celestialites[enemy.type].onAttacked(enemy, dmg, "ship")
+                                if (enemy.health.lte(0)) handleEnemyDeath(enemy);
+                            }
+                        }
+                        // Check asteroids
+                        for (let a of this.asteroids) {
+                            let ax = a.x - this.ship.x;
+                            let ay = a.y - this.ship.y;
+                            let proj = ax * ux + ay * uy;
+                            let perp = Math.abs(ax * (-uy) + ay * ux);
+                            if (proj > -a.size && proj < beamLen && perp < thickness + a.size) {
+                                a.health -= dmg;
+                            }
+                        }
+                        this.ship._laserHitCooldown = 6;
+                    }
+                    this.ship._laserTimer--;
+                } else {
+                    this.ship._laserActive = false;
+                }
+            }
+        
+        }
         for (let bullet of this.bullets) {
             let closest = this.getClosestCoords([bullet.x, bullet.y])
             // Homing behavior: enemy homing bullets should home to the player;

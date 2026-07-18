@@ -77,7 +77,7 @@ addLayer("ir", {
         primaryColor: "#5e4ee6",
         secondaryColor: "#37078f",
 
-        shipType: 0,
+        shipType: 1,
         sendCooldownTimer: new Decimal(0),
         send: {
             0: {
@@ -2390,6 +2390,7 @@ addLayer("ir", {
                             ], {background: "#0000007f", width: "247px", height: "300px"}],
                             ["style-column", [
                                 ["clickable", 17],
+                                ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up, sniper does not auto-turn, evolver shard textures are incomplete", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
                             ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", width: "300px", height: "300px"}],
                             ["style-column", [
 
@@ -2413,41 +2414,7 @@ addLayer("ir", {
                         ], {width: "800px", height: "417px"}],
                     ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
                     ["blank", "25px"],
-                ],/*
-                content: [
-                    ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "13px 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
-                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
-                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
-                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
-                    ["style-column", [
-                        ["style-column", [
-                            ["clickable", 11],
-                            ["blank", "25px"],
-                            ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceRock) + " space rocks." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["raw-html", function () { return "You have " + formatWhole(player.ir.spaceGem) + " space gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["blank", "25px"],
-                            ["style-column", [
-                                ["levelable-display", [
-                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                ]],
-                            ], {width: "550px", height: "175px", backgroundColor: "#070024", border: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
-                            ["always-scroll-column", [
-                                ["style-column", [
-                                    ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
-                                ["style-column", [
-                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                    ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                                ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
-                            ], {width: "556px", height: "216px", borderBottom: "3px solid #5e4ee6"}],
-                            ["blank", "25px"],
-                        ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
-                    ["blank", "25px"],
-                ],*/
+                ],
             },
             "stages": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},

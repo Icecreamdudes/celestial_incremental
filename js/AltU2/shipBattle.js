@@ -653,6 +653,7 @@ class SpaceArena {
                 _laserTimer: 0,
                 _laserActive: false,
                 _laserAngle: 0,
+                _laserLength: 0,
                 _laserSpin: 0.006,
                 _laserHitCooldown: 0,
             };
@@ -1193,6 +1194,9 @@ class SpaceArena {
         this.mobileLeftStickAngle = null
         this.mobileLeftStickDist = 0
 
+        this.mobileRightStickAngle = null
+        this.mobileRightStickDist = 0
+
         this.mobileRightButtonDist = 0
     }
 
@@ -1403,46 +1407,59 @@ class SpaceArena {
     handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
+        if (player.ir.shipType == 8 && player.ir.menu == 0) {
+            this.ship._laserActive = true
+            this.ship._laserTimer = -60;
+        }
         if (player.ir.mobileControls) {
             let rect = this.canvas.getBoundingClientRect();
 
-            // LEFT STICK
-            let originX = 100 * this.mobileControlsScale
-            let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-            this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
-            if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
-            // RIGHT BUTTON
-            originX = this.canvasWidth - (100 * this.mobileControlsScale)
-            this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
-            if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
+            if (player.ir.shipType != 3 && player.ir.shipType != 7) {
+                // LEFT STICK
+                let originX = 100 * this.mobileControlsScale
+                let originY = this.canvasHeight - (100 * this.mobileControlsScale)
+                this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
+                // RIGHT BUTTON
+                originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
 
-            this.pointerTouches.set(e.pointerId, {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                pointerId: e.pointerId,
-                action: e.action,
-            })
+                this.pointerTouches.set(e.pointerId, {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    pointerId: e.pointerId,
+                    action: e.action,
+                })
+
+            }
         }
     };
     handlePointerMove = (e) => {
         if (!this.canvas) return;
-        let rect = this.canvas.getBoundingClientRect();
-        this.mouseX = e.clientX - rect.left;
-        this.mouseY = e.clientY - rect.top;
-        this.pointerTouches.forEach((value, key, map) => {
-            if (value.pointerId === e.pointerId) {
-                value.clientX = e.clientX
-                value.clientY = e.clientY
-            };
-        })
+        if (!player.ir.mobileControls) {
+            let rect = this.canvas.getBoundingClientRect();
+            this.mouseX = e.clientX - rect.left;
+            this.mouseY = e.clientY - rect.top;
+        }
+        else if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
+            this.pointerTouches.forEach((value, key, map) => {
+                if (value.pointerId === e.pointerId) {
+                    value.clientX = e.clientX
+                    value.clientY = e.clientY
+                };
+            })
+        }
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive) this.ship._laserActive = false;
+        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
     };
     handlePointerCancel = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive) this.ship._laserActive = false;
+        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
     };
 
     shoot() {
@@ -1480,6 +1497,10 @@ class SpaceArena {
                 }
                 this.bullets.push(bullet);
             }
+            return;
+        }
+        
+        if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
             return;
         }
 
@@ -2102,10 +2123,10 @@ class SpaceArena {
             this.ship.vy *= this.ship.deceleration;
 
             // Wrap ship around arena edges
-            if (this.ship.x < 0) this.ship.x = this.width;
-            if (this.ship.x > this.width) this.ship.x = 0;
-            if (this.ship.y < 0) this.ship.y = this.height;
-            if (this.ship.y > this.height) this.ship.y = 0;
+            if (this.ship.x < 0) this.ship.x += this.width;
+            if (this.ship.x > this.width) this.ship.x -= this.width;
+            if (this.ship.y < 0) this.ship.y += this.height;
+            if (this.ship.y > this.height) this.ship.y -= this.height;
         } else {
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
@@ -2147,10 +2168,10 @@ class SpaceArena {
             this.ship.y += Math.sin(this.ship.angle) * this.ship.velocity;
 
             // Wrap ship around arena edges
-            if (this.ship.x < 0) this.ship.x = this.width;
-            if (this.ship.x > this.width) this.ship.x = 0;
-            if (this.ship.y < 0) this.ship.y = this.height;
-            if (this.ship.y > this.height) this.ship.y = 0;
+            if (this.ship.x < 0) this.ship.x += this.width;
+            if (this.ship.x > this.width) this.ship.x -= this.width;
+            if (this.ship.y < 0) this.ship.y += this.height;
+            if (this.ship.y > this.height) this.ship.y -= this.height;
         }
 
         if (player.ir.mobileControls) {
@@ -2231,10 +2252,10 @@ class SpaceArena {
                                 }
                             
                                 // Wrap ship around arena edges
-                                if (this.ship.x < 0) this.ship.x = this.width;
-                                if (this.ship.x > this.width) this.ship.x = 0;
-                                if (this.ship.y < 0) this.ship.y = this.height;
-                                if (this.ship.y > this.height) this.ship.y = 0;
+                                if (this.ship.x < 0) this.ship.x += this.width;
+                                if (this.ship.x > this.width) this.ship.x -= this.width;
+                                if (this.ship.y < 0) this.ship.y += this.height;
+                                if (this.ship.y > this.height) this.ship.y -= this.height;
                             }
                         } else {
                             if (this.ship.velocity > 0) {
@@ -2298,10 +2319,10 @@ class SpaceArena {
             this.ship.x += this.ship.vx;
             this.ship.y += this.ship.vy;
             // Wrap ship around arena edges
-            if (this.ship.x < 0) this.ship.x = this.width;
-            if (this.ship.x > this.width) this.ship.x = 0;
-            if (this.ship.y < 0) this.ship.y = this.height;
-            if (this.ship.y > this.height) this.ship.y = 0;
+            if (this.ship.x < 0) this.ship.x += this.width;
+            if (this.ship.x > this.width) this.ship.x -= this.width;
+            if (this.ship.y < 0) this.ship.y += this.height;
+            if (this.ship.y > this.height) this.ship.y -= this.height;
             // Rotation purely visual: smoothly face the mouse (won't affect movement)
             if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
                 let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
@@ -2316,31 +2337,30 @@ class SpaceArena {
                 if (typeof this.ship.wingPhase !== "number") this.ship.wingPhase = 0;
                 this.ship.wingPhase += 0.12;
                 // handle laser firing
-                if (this.ship._laserTimer > 0) {
-                    if (!this.ship._laserActive && this.ship._laserTimer < 172) {
-                        this.ship._laserActive = true;
-                    }
-                    
+                if (this.ship._laserActive) {
                     // Laser follows mouse direction
                     if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                        let desired = Math.atan2(this.mouseY - this.ship.y, this.mouseX - this.ship.x);
+                        let desired = -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
                         let diff = desired - (this.ship._laserAngle || 0);
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
                         this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
+                        this.ship._laserLength = 900 //Math.min(300, Math.hypot(this.mouseX - (this.canvasWidth / 2), this.mouseY - (this.canvasHeight / 2))) * 3
                     }
                     if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
                     if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
                         let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
                         let dmg = new Decimal((this.ship.damage || 7) * this.shipStats.attackDamage * petMul);
-                        let ang = this.ship._laserAngle;
+                        let ang = -this.ship._laserAngle;
                         let ux = Math.cos(ang), uy = Math.sin(ang);
                         let beamLen = Math.max(this.width, this.height) * 1.5;
                         let thickness = (this.ship.radius || 12) * 0.8;
                         // Check enemies
                         for (let enemy of this.enemies.concat(this.asteroids)) {
-                            let ex = enemy.x - this.ship.x;
-                            let ey = enemy.y - this.ship.y;
+                            let closest = this.getClosestCoords([enemy.x, enemy.y])
+                            let ex = enemy.x - closest[0];
+                            let ey = enemy.y - closest[1];
+                            if (Math.hypot(ex, ey) > this.ship._laserLength) continue;
                             let proj = ex * ux + ey * uy;
                             let perp = Math.abs(ex * (-uy) + ey * ux);
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
@@ -2361,7 +2381,7 @@ class SpaceArena {
                         }
                         this.ship._laserHitCooldown = 6;
                     }
-                    this.ship._laserTimer--;
+                    this.ship._laserTimer++;
                 } else {
                     this.ship._laserActive = false;
                 }
@@ -3813,10 +3833,10 @@ class SpaceArena {
         }
         if (player.ir.shipType == 8) {
             
-            this.ctx.rotate(this.ship.angle);
+            this.ctx.rotate(Math.PI);
 
             // Miniature Iridite visuals
-            const r = this.ship.radius || 12;
+            const r = this.ship.radius * 2 || 24;
             const phase = (this.ship.wingPhase || 0);
             let raw = Math.sin(phase);
             let t = (raw + 1) / 2;
@@ -3826,13 +3846,11 @@ class SpaceArena {
 
             this.ctx.shadowColor = "rgba(240,230,255,0.7)";
             if (!options.performanceMode) {this.ctx.shadowBlur = 15} else {this.ctx.shadowBlur = 0};
-
+                
             const drawWing = (mirror = false) => {
-                this.ctx.save();
                 if (mirror) this.ctx.scale(-1, 1);
-                this.ctx.translate(r * 0.56, r * 0.02);
                 let baseAngle = -0.22 - tipBend * 0.14;
-                this.ctx.rotate(baseAngle);
+                //this.ctx.rotate(baseAngle);
 
                 const groups = [
                     { count: 6, len: r * 1.2, width: r * 0.35, offset: 0.0, light: -8 },
@@ -3870,8 +3888,11 @@ class SpaceArena {
                 }
             };
 
+            this.ctx.translate(0.25*r, 0);
             drawWing(false);
+            this.ctx.translate(-0.5*r, 0);
             drawWing(true);
+            this.ctx.translate(-0.25*r, 0.25*r);
 
             this.ctx.save();
             if (!options.performanceMode) {this.ctx.shadowBlur = 20} else {this.ctx.shadowBlur = 0};
@@ -3879,23 +3900,23 @@ class SpaceArena {
             this.ctx.font = `${fontSize}px monospace`;
             this.ctx.textAlign = "center";
             this.ctx.textBaseline = "middle";
-            this.ctx.fillStyle = "#e0ccffff";
+            this.ctx.fillStyle = "#fff";
             this.ctx.fillText("✦", 0, 0);
 
             this.ctx.restore();
         }
 
-        if (player.ir.shipType == 8 && this.ship._laserTimer && this.ship._laserTimer > 0) {
-            const laserTotal = 180;
-            const elapsed = laserTotal - this.ship._laserTimer;
+        if (player.ir.shipType == 8 && this.ship._laserActive) {
+            const elapsed = Math.min(1, 1 + (this.ship._laserTimer / 60));
             const windup = 8;
-            const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
+            const progress = Math.max(0, elapsed);
             const angle = this.ship._laserAngle || this.ship.angle || 0;
-            const beamLen = Math.max(this.width, this.height) * 1.5;
+            const beamLen = this.ship._laserLength;
             const r = this.ship.radius || 12;
             const maxThickness = r * 0.8;
-            const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
+            const thickness = (progress * 0.5 + 0.5) * maxThickness;
 
+            this.ctx.translate(0, -4);
             this.ctx.rotate(angle);
             this.ctx.globalCompositeOperation = "lighter";
             let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
@@ -3908,7 +3929,7 @@ class SpaceArena {
             this.ctx.rect(0, -thickness, beamLen, thickness * 2);
             this.ctx.fill();
             this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
-            this.ctx.fillRect(0, -Math.max(1, thickness * 0.12), beamLen * 0.75, Math.max(1, thickness * 0.12) * 2);
+            this.ctx.fillRect(0, -Math.max(1, thickness * 0.12), beamLen, Math.max(1, thickness * 0.12) * 2);
             this.ctx.globalCompositeOperation = "source-over";
         }
 
@@ -4543,6 +4564,14 @@ class SpaceArena {
             }
             this.ctx.restore();
         }
+        if (player.ir.shipType == 8 && this.ship._laserActive) {
+            this.ctx.save();
+            this.ctx.fillStyle = "yellow"
+            this.ctx.translate(100, 100)
+            this.ctx.rotate(-this.ship._laserAngle)
+            this.ctx.fillRect(0, -1, this.ship._laserLength / this.width * 160, 2)
+            this.ctx.restore();
+        }
         for (let enemy of this.enemies) {
             this.ctx.save();
             if (enemy.type == "muShip") {
@@ -4556,10 +4585,8 @@ class SpaceArena {
             this.ctx.restore();
         }
 
-        this.ctx.restore();
-
         // Draw mobile controls
-        if (player.ir.mobileControls) {
+        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
             this.ctx.save();
             this.ctx.globalAlpha = 1
             this.ctx.lineWidth = 3;
@@ -4813,6 +4840,7 @@ class SpaceArena {
     }
 
     showUpgradeChoice(enhanced = false) {
+        this.ship._laserActive = false
         player.ir.menu = 1;
         this.upgradeChoices = pickUpgrades(enhanced);
         this.selectedUpgradeIndex = null;

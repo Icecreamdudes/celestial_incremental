@@ -1442,14 +1442,11 @@ class SpaceArena {
         if (player.ir.menu == 0) this.pointerDown = false;
         player.ir.debugThing += "<br><span style='color:yellow'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
-        console.log(e)
-        e.target.releasePointerCapture(e.pointerId);
     };
     handlePointerCancel = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
         player.ir.debugThing += "<br><span style='color:red'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
-        e.target.releasePointerCapture(e.pointerId);
     };
 
     shoot() {

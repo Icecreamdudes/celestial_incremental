@@ -33,7 +33,10 @@ addLayer("spaceZone2", {
     branches: ["spaceZone1"],
     color: "#904ee6",
     update(delta) {
-        player.spaceZone2.levelScaling = new Decimal(1.1)
+        player[this.layer].levelScaling = new Decimal(1.1)
+        if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
+        player[this.layer].levelScalingStart = new Decimal(10)
     },
     clickables: {
         "enter": {
@@ -227,8 +230,8 @@ addLayer("spaceZone2", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.1, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.1, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 10" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Iridite", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Iridite will begin attacking at 10", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -327,7 +330,7 @@ SB_celestialites.zetaShip = {
     color: "#9e2863",
     health: new Decimal(150),
     damage: new Decimal(7),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -442,7 +445,7 @@ SB_celestialites.etaShip = {
     color: "#bf6078",
     health: new Decimal(125),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(3),
     regen: new Decimal(5),
     reward() {
         let gain = {}
@@ -558,7 +561,7 @@ SB_celestialites.thetaShip = {
     color: "#800020",
     health: new Decimal(300),
     damage: new Decimal(8),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(0),
     reward() {
         let gain = {}

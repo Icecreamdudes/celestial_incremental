@@ -224,6 +224,7 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
+        if (hasUpgrade("ir", 20)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("ir", 20))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
 
         // POWER MODIFIERS

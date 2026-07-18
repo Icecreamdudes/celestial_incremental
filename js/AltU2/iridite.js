@@ -60,6 +60,7 @@ addLayer("ir", {
 
         inBattle: false,
         menu: 0,
+        mobileControls: false,
         battleStage: "spaceZone1",
         levelScalingMult: new Decimal(1),
 
@@ -1095,6 +1096,23 @@ addLayer("ir", {
                 return look
             },
         },
+        17: {
+            title() { return player.ir.mobileControls ? "Mobile Controls [ON]" : "Mobile Controls [OFF]" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ir.mobileControls = !player.ir.mobileControls
+            },
+            style() {
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid #00bf00", borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.background = "#008000"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                }
+                return look
+            },
+        },
         1001: {
             title() {return "W"},
             canClick: true,
@@ -1284,7 +1302,7 @@ addLayer("ir", {
             title: "Expansion",
             unlocked() { return true },
             description() { return "Unlocks Space Zone II and a legendary pet."},
-            cost: new Decimal(3000),
+            canAfford() {return player.spaceZone1.highestLevel.gte(20)},
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1357,7 +1375,7 @@ addLayer("ir", {
             title: "Iridite",
             unlocked() { return player.ir.ufoDefeated },
             description() { return "Unlocks Iridite Zone and Geroa's fighting upgrades."},
-            cost: new Decimal(10000),
+            canAfford() {return player.spaceZone2.highestLevel.gte(20)},
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
             currencyInternalName: "spaceRock",
@@ -1513,16 +1531,16 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
                 this.description() + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>100,000 Stored Space Energy</span>" // BOTTOM
                 "</div></div>"
             },
             title: "Boundless",
             unlocked() { return true },
             description() { return "Unlocks Space Zone III."},
-            cost: new Decimal(1e5),
-            currencyLocation() { return player.sb },
-            currencyDisplayName: "Stored Space Energy",
-            currencyInternalName: "storedSpaceEnergy",
+            canAfford() {return player.sb.storedSpaceEnergy.gte(1e5)},
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
             style() {
                 let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#e64ebd", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
@@ -1700,16 +1718,16 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
                 this.description() + // MIDDLE
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>100,000 Project Speed</span>" // BOTTOM
                 "</div></div>"
             },
             title: "Warped",
             unlocked() { return true },
             description() { return "Unlocks Space Zone IV."},
-            cost: new Decimal(1e5),
-            currencyLocation() { return player.prj },
-            currencyDisplayName: "Project Speed",
-            currencyInternalName: "projectSpeed",
+            canAfford() {return player.prj.projectSpeed.gte(1e5)},
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
             style() {
                 let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#bf41bf", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
@@ -2364,6 +2382,45 @@ addLayer("ir", {
                         ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
                     ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
                     ["style-column", [
+                        ["style-row", [
+                            ["style-column", [
+
+                            ], {background: "#0000007f", width: "247px", height: "300px"}],
+                            ["style-column", [
+                                ["clickable", 17],
+                            ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", width: "300px", height: "300px"}],
+                            ["style-column", [
+
+                            ], {background: "#0000007f", width: "247px", height: "300px"}],
+                        ], {borderBottom: "3px solid #5e4ee6", width: "800px", height: "300px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["levelable-display", [
+                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
+                                ]],
+                            ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #5e4ee6", borderRadius: "2px 2px 0 0"}],
+                            ["always-scroll-column", [
+                                ["style-column", [
+                                    ["raw-html", "Ships", {color: "#5e4ee6", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "541px", height: "40px", backgroundColor: "#241d66ff", borderBottom: "3px solid #5e4ee6",  borderLeft: "3px solid #5e4ee6",  userSelect: "none"}],
+                                ["style-column", [
+                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
+                                    ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
+                                ], {width: "531px", height: "260px", backgroundColor: "#151230", borderLeft: "3px solid #5e4ee6", padding: "5px"}],
+                            ], {width: "556px", height: "240px"}],
+                        ], {width: "800px", height: "417px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],/*
+                content: [
+                    ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#37078f", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#5e4ee6"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#37078f", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #5e4ee6", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["style-column", [
                         ["style-column", [
                             ["clickable", 11],
                             ["blank", "25px"],
@@ -2388,7 +2445,7 @@ addLayer("ir", {
                         ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
                     ], {width: "800px", height: "720px", background: "radial-gradient(circle, #151230 0%, #37078f 200%)", border: "3px solid #5e4ee6", borderRadius: "0"}],
                     ["blank", "25px"],
-                ],
+                ],*/
             },
             "stages": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},

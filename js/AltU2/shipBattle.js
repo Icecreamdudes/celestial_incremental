@@ -1339,6 +1339,9 @@ class SpaceArena {
             zIndex: 9999,
             overflow: 'hidden',
 	        "transition-duration": "0s",
+  	        touchAction: "none",
+  	        userSelect: "none",
+  	        "-webkit-user-select": "none",
         });
         document.body.appendChild(this.arenaDiv);
 
@@ -2323,9 +2326,7 @@ class SpaceArena {
                         this.ship._laserActive = false;
                     }
                 }
-            } else {
-                if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
-                if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
+            
             }
         for (let bullet of this.bullets) {
             let closest = this.getClosestCoords([bullet.x, bullet.y])

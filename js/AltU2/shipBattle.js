@@ -4579,10 +4579,12 @@ class SpaceArena {
             this.ctx.stroke();
 
             // TEXT
-            this.ctx.font = "bold 48px monospace";
-            this.ctx.fillStyle = player.ir.primaryColor;
-            this.ctx.textAlign = "center";
-            this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+            if (!player.ir.autoShoot) {
+                this.ctx.font = "bold 48px monospace";
+                this.ctx.fillStyle = player.ir.primaryColor;
+                this.ctx.textAlign = "center";
+                this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+            }
 
             this.ctx.restore();
         }

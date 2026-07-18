@@ -1327,7 +1327,6 @@ class SpaceArena {
     }
 
     spawnArena() {
-        player.ir.debugThing = ""
         this.arenaDiv = document.createElement('div');
         this.arenaDiv.id = 'space-arena';
         Object.assign(this.arenaDiv.style, {
@@ -1423,7 +1422,6 @@ class SpaceArena {
                 pointerId: e.pointerId,
                 action: e.action,
             })
-            player.ir.debugThing += "<br><span style='color:cyan'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         }
     };
     handlePointerMove = (e) => {
@@ -1440,12 +1438,10 @@ class SpaceArena {
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        player.ir.debugThing += "<br><span style='color:yellow'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
     };
     handlePointerCancel = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        player.ir.debugThing += "<br><span style='color:red'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
     };
 

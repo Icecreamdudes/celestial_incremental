@@ -33,7 +33,10 @@ addLayer("spaceZone1", {
     branches: [],
     color: "#5e4ee6",
     update(delta) {
-        player.spaceZone1.levelScaling = new Decimal(1.08)
+        player[this.layer].levelScaling = new Decimal(1.08)
+        if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
+        player[this.layer].levelScalingStart = new Decimal(10)
     },
     clickables: {
         "enter": {
@@ -223,8 +226,8 @@ addLayer("spaceZone1", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.08, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.08, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.08, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 10" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
 
                 ], {width: "397px", height: "363px"}],
@@ -321,7 +324,7 @@ SB_celestialites.smallAsteroid = {
     radius: 20,
     color: "#afafaf",
     health: new Decimal(20),
-    damage: new Decimal(5),
+    damage: new Decimal(1),
     bodyDamage: new Decimal(1),
     regen: new Decimal(0),
     reward() {
@@ -377,7 +380,7 @@ SB_celestialites.mediumAsteroid = {
     radius: 35,
     color: "#8f8f8f",
     health: new Decimal(60),
-    damage: new Decimal(10),
+    damage: new Decimal(1),
     bodyDamage: new Decimal(2),
     regen: new Decimal(0),
     reward() {
@@ -445,7 +448,7 @@ SB_celestialites.alphaShip = {
     color: "#3054bf",
     health: new Decimal(150),
     damage: new Decimal(6),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -552,7 +555,7 @@ SB_celestialites.betaShip = {
     color: "#5430bf",
     health: new Decimal(125),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -664,7 +667,7 @@ SB_celestialites.gammaShip = {
     color: "#9b30bf",
     health: new Decimal(100),
     damage: new Decimal(2),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(1),
     reward() {
         let gain = {}
@@ -821,7 +824,7 @@ SB_celestialites.deltaShip = {
     color: "#bf60bf",
     health: new Decimal(150),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(3),
     regen: new Decimal(2),
     reward() {
         let gain = {}
@@ -921,7 +924,7 @@ SB_celestialites.epsilonShip = {
     color: "#dea6de",
     health: new Decimal(250),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(4),
     reward() {
         let gain = {}

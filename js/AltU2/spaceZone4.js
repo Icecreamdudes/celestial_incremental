@@ -36,7 +36,10 @@ addLayer("spaceZone4", {
     branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
-        player.spaceZone4.levelScaling = new Decimal(1.15)
+        player[this.layer].levelScaling = new Decimal(1.15)
+        if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
+        player[this.layer].levelScalingStart = new Decimal(10)
 
         player.spaceZone4.milestone11Effect = player.au2.stars.add(1).log(10).pow(10).div(1e15).add(1)
         player.spaceZone4.milestone12Effect = player.bum.starlight.add(1).log(10).pow(1.5).div(10).add(1)
@@ -234,8 +237,8 @@ addLayer("spaceZone4", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.15, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.15, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.15, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 10" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Time Attack", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "A deadly timer counts down to your doom", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -334,7 +337,7 @@ SB_celestialites.nuShip = {
     color: "#289e63",
     health: new Decimal(50),
     damage: new Decimal(8),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -442,7 +445,7 @@ SB_celestialites.xiShip = {
     color: "#95ed95",
     health: new Decimal(200),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -554,7 +557,7 @@ SB_celestialites.omicronShip = {
     color: "#008060",
     health: new Decimal(75),
     damage: new Decimal(3),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(0.5),
     reward() {
         let gain = {}
@@ -706,7 +709,7 @@ SB_celestialites.piShip = {
     color: "#804080",
     health: new Decimal(300),
     damage: new Decimal(6),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(2),
     reward() {
         let gain = {}

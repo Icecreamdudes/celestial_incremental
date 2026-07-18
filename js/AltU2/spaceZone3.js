@@ -33,7 +33,10 @@ addLayer("spaceZone3", {
     branches: ["spaceZone2"],
     color: "#e64ebd",
     update(delta) {
-        player.spaceZone3.levelScaling = new Decimal(1.12)
+        player[this.layer].levelScaling = new Decimal(1.12)
+        if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
+        player[this.layer].levelScalingStart = new Decimal(10)
     },
     clickables: {
         "enter": {
@@ -227,8 +230,8 @@ addLayer("spaceZone3", {
                         ["style-column", [
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
-                        ["raw-html", () => {return Decimal.sub(1.12, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(1.12, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(1.12, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at 10" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Deadly Decisions", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Choose an enemy or debuff every level", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -327,7 +330,7 @@ SB_celestialites.iotaShip = {
     color: "#28819e",
     health: new Decimal(150),
     damage: new Decimal(7),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -444,7 +447,7 @@ SB_celestialites.kappaShip = {
     color: "#6fdede",
     health: new Decimal(175),
     damage: new Decimal(10),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -578,7 +581,7 @@ SB_celestialites.lambdaShip = {
     color: "#004040",
     health: new Decimal(100),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(3),
     reward() {
         let gain = {}
@@ -683,7 +686,7 @@ SB_celestialites.muShip = {
     color: "#000",
     health: new Decimal(150),
     damage: new Decimal(12),
-    bodyDamage: new Decimal(4),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(1),
     reward() {
         let gain = {}

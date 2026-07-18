@@ -31,7 +31,10 @@ addLayer("iriditeZone", {
     branches: ["spaceZone2"],
     color: "#904ee6",
     update(delta) {
-        player.iriditeZone.levelScaling = new Decimal(1.1)
+        player[this.layer].levelScaling = new Decimal(1.1)
+        if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
+        player[this.layer].levelScalingStart = new Decimal(10)
     },
     clickables: {
         "enter": {

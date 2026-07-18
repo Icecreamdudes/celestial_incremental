@@ -1423,8 +1423,7 @@ class SpaceArena {
                 pointerId: e.pointerId,
                 action: e.action,
             })
-            player.ir.debugThing += "<br><span style='color:yellow'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
-            e.target.releasePointerCapture(e.pointerId);
+            player.ir.debugThing += "<br><span style='color:green'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         }
     };
     handlePointerMove = (e) => {
@@ -1443,13 +1442,13 @@ class SpaceArena {
         if (player.ir.menu == 0) this.pointerDown = false;
         player.ir.debugThing += "<br><span style='color:orange'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
-        //e.target.releasePointerCapture(e.pointerId);
+        e.target.releasePointerCapture(e.pointerId);
     };
     handlePointerCancel = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
         player.ir.debugThing += "<br><span style='color:red'>"+JSON.stringify(this.pointerTouches.get(e.pointerId))
         if (player.ir.mobileControls) this.pointerTouches.delete(e.pointerId);
-        //e.target.releasePointerCapture(e.pointerId);
+        e.target.releasePointerCapture(e.pointerId);
     };
 
     shoot() {

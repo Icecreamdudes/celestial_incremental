@@ -52,7 +52,7 @@
             backgroundOrigin: "border-box",
             borderColor: "#8ca3ff",
             color: "#f5f7ff",
-            borderRadius: "0px"
+            // borderRadius: "0px"
         };
     },
     tooltip: "Light Extractor",

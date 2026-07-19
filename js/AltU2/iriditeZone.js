@@ -189,6 +189,9 @@ SB_zones.iriditeZone = {
         if (random < 0.3) return "mediumAsteroid";
         else return "smallAsteroid";
     },
+    levelUp(level) {
+        // ADD IRIDITE HERE
+    },
     statMult: new Decimal(2),
     rockMult: new Decimal(3),
     gemMult: new Decimal(1.75),

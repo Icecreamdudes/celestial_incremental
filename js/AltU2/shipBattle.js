@@ -1501,42 +1501,6 @@ class SpaceArena {
         });
     }
 
-    // Call this to spawn the UFO miniboss. It will not spawn automatically.
-    spawnUfoBoss() {
-        // Prevent duplicate bosses
-        if (this.enemies.some(e => e.type === "ufoBoss" && e.health.gt(0))) return;
-
-        // Mark boss active to stop normal spawns/asteroids elsewhere
-        this.bossActive = true;
-        // reset spawn cooldown so no other enemies immediately spawn
-        this.enemySpawnCooldown = this.enemySpawnCooldownMax;
-
-        let angle = Math.random() * Math.PI * 2;
-        let enemy = {
-            type: "ufoBoss",
-            x: this.ship.x + Math.cos(angle) * 420,
-            y: this.ship.y + Math.sin(angle) * 420,
-            vx: 0,
-            vy: 0,
-            radius: this.enemyTypes.ufoBoss.radius,
-            color: this.enemyTypes.ufoBoss.color,
-            health: this.enemyTypes.ufoBoss.healthMax,
-            maxHealth: this.enemyTypes.ufoBoss.healthMax,
-            alive: true,
-            state: "idle",         // idle | burst | dash | spin
-            attackTimer: 90,       // time until next attack decision
-            burstShots: 0,
-            burstInterval: 6,
-            dashTimer: 0,
-            dashing: false,
-            dashSpeed: 16,
-            dashTrailTimer: 0,
-            spinTimer: 0,
-            spinAngle: 0,
-        };
-        this.enemies.push(enemy);
-    }
-
     spawnIridite() {
         // Prevent duplicate bosses
         if (this.enemies.some(e => e.type === "iriditeBoss" && e.alive)) return;
@@ -2248,7 +2212,7 @@ class SpaceArena {
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
         // TEMP
-        if ((player.ir.battleLevel.gte(0) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
+        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
             let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
@@ -3337,6 +3301,7 @@ class SpaceArena {
             }
             if (dist < 30 && !orb.picked) {
                 player.ir.battleXP = player.ir.battleXP.add(orb.amount);
+                addLevelableXP("ir", player.ir.shipType, orb.amount)
                 orb.picked = true;
             }
             orb.x = ((orb.x % this.width) + this.width) % this.width
@@ -4667,35 +4632,6 @@ class SpaceArena {
         localStorage.setItem('arenaActive', 'false');
     }
 }
-function spawnUfoBoss() {
-    if (!arena) {
-        console.warn("spawnUfoBoss: no active arena instance");
-        return;
-    }
-    if (arena.bossActive) {
-        console.warn("spawnUfoBoss: boss already active");
-        return;
-    }
-
-    // Remove existing regular threats so the boss fight is isolated
-    for (let e of arena.enemies) {
-        e.alive = false;
-    }
-    arena.enemies = [];
-
-    // clear asteroids and non-enemy bullets for a clean arena
-    arena.asteroids = [];
-    arena.bullets = arena.bullets.filter(b => b.fromEnemy); // keep enemy bullets if you want, or set to [] to clear all
-
-    // set boss active flag and call class method (spawnUfoBoss also sets bossActive)
-    arena.bossActive = true;
-    if (typeof arena.spawnUfoBoss === "function") {
-        arena.spawnUfoBoss();
-    } else {
-        console.warn("spawnUfoBoss: arena.spawnUfoBoss is not available on the current arena instance");
-    }
-}
-window.spawnUfoBoss = spawnUfoBoss;
 
 function summonIridite() {
     if (!arena) {

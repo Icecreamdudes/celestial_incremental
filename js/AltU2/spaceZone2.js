@@ -318,6 +318,17 @@ SB_zones.spaceZone2 = {
         if (random < 0.25) return "mediumAsteroid";
         else return "smallAsteroid";
     },
+    levelUp(level) {
+        if (level.modulo(20).eq(0)) {
+            arena.enemies = []
+            arena.asteroids = []
+            arena.xpOrbs = []
+            arena.gammaTrails = []
+            arena.bossActive = true;
+            arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
+            SB_spawnCelestialite("ufo")
+        }
+    },
     statMult: new Decimal(1.5),
     rockMult: new Decimal(2),
     gemMult: new Decimal(1.25),

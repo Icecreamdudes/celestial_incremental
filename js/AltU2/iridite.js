@@ -372,18 +372,14 @@ addLayer("ir", {
                 player.ir.iriditeFightActive = false
             }
             player.ir.battleLevel = player.ir.battleLevel.add(1);
+            SB_zones[player.ir.battleStage].levelUp(player.ir.battleLevel)
             if (arena) {
                 arena.showUpgradeChoice();
                 arena.upgradeChoiceActive = true
             }
         }
 
-        if (player.ir.battleLevel.gte(10) && player.ir.battleStage == "spaceZone2" && hasUpgrade("ir", 16) && !player.ir.ufoFought && player.tab == "ir") {
-            spawnUfoBoss();
-            player.ir.ufoFought = true
-        }
-
-        if (player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && hasUpgrade("ir", 19) && !player.ir.iriditeFought && player.tab == "ir") {
+        if (player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && !player.ir.iriditeFought && player.tab == "ir") {
             summonIridite();
             player.ir.iriditeFought = true
         }

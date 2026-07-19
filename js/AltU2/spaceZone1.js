@@ -297,29 +297,6 @@ SB_zones.spaceZone1 = {
     secondaryColor: "#37078f",
 
     levelLimit: 100,
-    asteroidLimit: 0,
-    celestialiteSpawnCooldown: 10,
-    celestialiteLimit: 1,
-    generateCelestialite(level) {
-        if (typeof level == "object") level = level.toNumber();
-        return "ufo"
-    },
-    generateAsteroid(level) {
-        return "smallAsteroid";
-    },
-    statMult: new Decimal(1),
-    rockMult: new Decimal(1),
-    gemMult: new Decimal(1),
-}
-/*
-SB_zones.spaceZone1 = {
-    nameCap: "Zone I",
-    nameLow: "zone i",
-
-    primaryColor: "#5e4ee6",
-    secondaryColor: "#37078f",
-
-    levelLimit: 100,
     asteroidLimit: 16,
     celestialiteSpawnCooldown: 750,
     celestialiteLimit: 4,
@@ -336,10 +313,21 @@ SB_zones.spaceZone1 = {
         if (random < 0.25) return "mediumAsteroid";
         else return "smallAsteroid";
     },
+    levelUp(level) {
+        if (level.modulo(20).eq(0)) {
+            arena.enemies = []
+            arena.asteroids = []
+            arena.xpOrbs = []
+            arena.gammaTrails = []
+            arena.bossActive = true;
+            arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
+            SB_spawnCelestialite("ufo")
+        }
+    },
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
-}*/
+}
 
 SB_celestialites.smallAsteroid = {
     name: "Small Asteroid",
@@ -1067,6 +1055,8 @@ SB_celestialites.ufo = {
         return Decimal.add(2, Math.random()).mul(6)
     },
     initialize(celestialite) {
+        player.ir.ufoFought = true
+
         // LIGHTS
         celestialite.lightColors = []
         celestialite.possibleLightColors = [
@@ -1078,15 +1068,33 @@ SB_celestialites.ufo = {
 
         // TIMERS
         celestialite.lightTimer = 30
-        celestialite.attackCooldown = 300
-        celestialite.burstsRemaining = 16
-        celestialite.attackSetsRemaining = 2
-        celestialite.attackType = "spiral"
+        let random = Math.random()
+        if (random < 0.333) {
+            celestialite.attackType = "burst"
+            celestialite.attackCooldown = 180
+            celestialite.burstsRemaining = 4
+            celestialite.attackSetsRemaining = 2
+        } else if (random < 0.666) {
+            celestialite.attackType = "spiral"
+            celestialite.attackCooldown = 300
+            celestialite.burstsRemaining = 32
+            celestialite.attackSetsRemaining = 2
+            celestialite.targetAngle = Math.random() * Math.PI * 2
+        } else {
+            celestialite.attackType = "sweep"
+            celestialite.attackCooldown = 240
+            celestialite.burstsRemaining = 6
+            celestialite.attackSetsRemaining = 2
+        }
         celestialite.targetAngle = celestialite.playerAng
 
         celestialite.moveAng = celestialite.playerAng
         celestialite.dvx = 0.95
         celestialite.dvy = 0.95
+
+        let ang = Math.random() * Math.PI * 2
+        celestialite.x = arena.ship.x + Math.cos(ang) * 350
+        celestialite.y = arena.ship.y + Math.sin(ang) * 350
     },
     tick(celestialite) {
         // Decrease timers
@@ -1141,9 +1149,9 @@ SB_celestialites.ufo = {
                                 celestialite.attackSetsRemaining = 2
                                 celestialite.targetAngle = Math.random() * Math.PI * 2
                             } else {
-                                celestialite.attackType = "circle"
+                                celestialite.attackType = "sweep"
                                 celestialite.attackCooldown = 180
-                                celestialite.burstsRemaining = 2
+                                celestialite.burstsRemaining = 6
                                 celestialite.attackSetsRemaining = 2
                             }
                         }
@@ -1152,7 +1160,7 @@ SB_celestialites.ufo = {
                 }
             break;}
             case "spiral" : {
-                if (celestialite.attackCooldown < celestialite.burstsRemaining * 5) {
+                if (celestialite.attackCooldown < celestialite.burstsRemaining * 4) {
                     celestialite.burstsRemaining--
                     for (let i = 0; i < 2; i++) {
                         arena.bullets.push({
@@ -1183,25 +1191,25 @@ SB_celestialites.ufo = {
                                 celestialite.burstsRemaining = 4
                                 celestialite.attackSetsRemaining = 2
                             } else {
-                                celestialite.attackType = "circle"
+                                celestialite.attackType = "sweep"
                                 celestialite.attackCooldown = 180
-                                celestialite.burstsRemaining = 2
+                                celestialite.burstsRemaining = 6
                                 celestialite.attackSetsRemaining = 2
                             }
                         }
                     }
                 }
             break;}
-            case "circle" : {
-                if (celestialite.attackCooldown < celestialite.burstsRemaining * 15) {
+            case "sweep" : {
+                if (celestialite.attackCooldown < celestialite.burstsRemaining * 10) {
                     celestialite.burstsRemaining--
-                    for (let i = 0; i < 16; i++) {
+                    for (let i = 0; i < 5; i++) {
                         arena.bullets.push({
-                            x: celestialite.x + Math.cos((Math.PI / 8 * (i - 2))) * (celestialite.radius),
-                            y: celestialite.y + Math.sin((Math.PI / 8 * (i - 2))) * (celestialite.radius),
-                            vx: Math.cos((Math.PI / 8 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1),
-                            vy: Math.sin((Math.PI / 8 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1),
-                            life: 240,
+                            x: celestialite.x + Math.cos(celestialite.playerAng + (Math.PI / 8 * (i - 2 + 0.5 * (celestialite.burstsRemaining - 3)))) * (celestialite.radius),
+                            y: celestialite.y + Math.sin(celestialite.playerAng + (Math.PI / 8 * (i - 2 + 0.5 * (celestialite.burstsRemaining - 3)))) * (celestialite.radius),
+                            vx: Math.cos(celestialite.playerAng + (Math.PI / 8 * (i - 2 + 0.5 * (celestialite.burstsRemaining - 3)))) * (2 + 2 * (celestialite.burstsRemaining/4)) * (celestialite.playerDist / 400 + 1) * 0.5,
+                            vy: Math.sin(celestialite.playerAng + (Math.PI / 8 * (i - 2 + 0.5 * (celestialite.burstsRemaining - 3)))) * (2 + 2 * (celestialite.burstsRemaining/4)) * (celestialite.playerDist / 400 + 1) * 0.5,
+                            life: 360,
                             damage: celestialite.damage,
                             pierce: 0,
                             piercedAsteroids: [],
@@ -1213,7 +1221,7 @@ SB_celestialites.ufo = {
                     if (celestialite.attackCooldown <= 0) {
                         if (celestialite.attackSetsRemaining > 0) {
                             celestialite.attackSetsRemaining--
-                            celestialite.burstsRemaining = 2
+                            celestialite.burstsRemaining = 6
                             celestialite.attackCooldown = 180
                         } else {
                             let random = Math.random()
@@ -1236,19 +1244,19 @@ SB_celestialites.ufo = {
             case "sniper" : {
                 if (celestialite.attackCooldown <= celestialite.burstsRemaining * 20) {
                     celestialite.burstsRemaining--
-                    let ang = Math.random() * Math.PI / 8
-                    for (let i = 0; i < 3; i++) {
+                    let ang = (Math.random() - 0.5) * Math.PI / 8
+                    for (let i = 0; i < 5; i++) {
                         arena.bullets.push({
-                            x: celestialite.x + Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (celestialite.radius),
-                            y: celestialite.y + Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (celestialite.radius),
-                            vx: Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
-                            vy: Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
+                            x: celestialite.x + Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 2))) * (celestialite.radius),
+                            y: celestialite.y + Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 2))) * (celestialite.radius),
+                            vx: Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
+                            vy: Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
                             life: 120,
                             damage: celestialite.damage.mul(1.5),
                             pierce: 0,
                             piercedAsteroids: [],
                             fromEnemy: true,
-                            radius: 4,
+                            radius: 8,
                             star: true,
                         });
                     }
@@ -1270,7 +1278,7 @@ SB_celestialites.ufo = {
                             celestialite.attackSetsRemaining = 2
                             celestialite.targetAngle = Math.random() * Math.PI * 2
                         } else {
-                            celestialite.attackType = "circle"
+                            celestialite.attackType = "sweep"
                             celestialite.attackCooldown = 240
                             celestialite.burstsRemaining = 2
                             celestialite.attackSetsRemaining = 2
@@ -1302,7 +1310,12 @@ SB_celestialites.ufo = {
         celestialite.vx -= Math.cos(celestialite.playerAng) / 16
         celestialite.vy -= Math.sin(celestialite.playerAng) / 16
     },
-    onDeath(celestialite) {},
+    onDeath(celestialite) {
+        arena.xpOrbs = []
+        player.ir.ufoDefeated = true
+        player.ir.battleXP = player.ir.battleXPReq
+        arena.bossActive = false
+    },
     draw: (ctx, celestialite) => {
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
         if (!wrapped) return;

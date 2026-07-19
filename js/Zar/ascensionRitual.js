@@ -2008,7 +2008,7 @@ function summonSpirit() {
         ex = Math.max(80, Math.min(arena.width - 80, ex));
         ey = Math.max(80, Math.min(arena.height - 80, ey));
 
-        SB_spawnCelestialite("ascensionRitual")
+        SB_spawnNaturalCelestialite("ascensionRitual")
         arena.bossActive = true;
         try { if (player && player.cbs) player.cbs.ritualSpiritActive = true; } catch (e) {}
         // expand arena to full-screen for boss

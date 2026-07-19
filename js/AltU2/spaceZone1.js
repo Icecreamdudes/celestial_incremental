@@ -297,6 +297,29 @@ SB_zones.spaceZone1 = {
     secondaryColor: "#37078f",
 
     levelLimit: 100,
+    asteroidLimit: 0,
+    celestialiteSpawnCooldown: 10,
+    celestialiteLimit: 1,
+    generateCelestialite(level) {
+        if (typeof level == "object") level = level.toNumber();
+        return "ufo"
+    },
+    generateAsteroid(level) {
+        return "smallAsteroid";
+    },
+    statMult: new Decimal(1),
+    rockMult: new Decimal(1),
+    gemMult: new Decimal(1),
+}
+/*
+SB_zones.spaceZone1 = {
+    nameCap: "Zone I",
+    nameLow: "zone i",
+
+    primaryColor: "#5e4ee6",
+    secondaryColor: "#37078f",
+
+    levelLimit: 100,
     asteroidLimit: 16,
     celestialiteSpawnCooldown: 750,
     celestialiteLimit: 4,
@@ -316,7 +339,7 @@ SB_zones.spaceZone1 = {
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
-}
+}*/
 
 SB_celestialites.smallAsteroid = {
     name: "Small Asteroid",
@@ -1022,5 +1045,292 @@ SB_celestialites.epsilonShip = {
             ctx.fillText(celestialite.symbol, wrapped[0], wrapped[1] + 9);
             ctx.restore();
         }
+    },
+}
+
+SB_celestialites.ufo = {
+    name: "UFO",
+    symbol: "ufo",
+    radius: 48,
+    color: "#7f7f7f",
+    health: new Decimal(2500),
+    damage: new Decimal(8),
+    bodyDamage: new Decimal(3),
+    regen: new Decimal(0),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        gain.spaceGem = new Decimal(5)
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(6)
+    },
+    initialize(celestialite) {
+        // LIGHTS
+        celestialite.lightColors = []
+        celestialite.possibleLightColors = [
+            "#FFFF00", "#BFFF40", "#80FF80", "40FFBF", "#00FFFF",
+        ]
+        for (i = 0; i < 7; i++) {
+            celestialite.lightColors.push(celestialite.possibleLightColors[Math.floor(Math.random() * celestialite.possibleLightColors)])
+        }
+
+        // TIMERS
+        celestialite.lightTimer = 30
+        celestialite.attackCooldown = 300
+        celestialite.burstsRemaining = 16
+        celestialite.attackSetsRemaining = 2
+        celestialite.attackType = "spiral"
+        celestialite.targetAngle = celestialite.playerAng
+
+        celestialite.moveAng = celestialite.playerAng
+        celestialite.dvx = 0.95
+        celestialite.dvy = 0.95
+    },
+    tick(celestialite) {
+        // Decrease timers
+        celestialite.lightTimer--;
+        celestialite.attackCooldown--;
+
+        // Calculate distance to the player
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+
+        // Always target the player
+        celestialite.playerAng = Math.atan2(dy, dx);
+
+        // Attack the player
+        if (celestialite.attackType != "sniper" && celestialite.playerDist > 600) {
+            celestialite.attackType = "sniper"
+            celestialite.attackCooldown = 60
+            celestialite.burstsRemaining = 2
+        } else 
+        switch (celestialite.attackType) {
+            case "burst" : {
+                if (celestialite.attackCooldown < celestialite.burstsRemaining * 15) {
+                    celestialite.burstsRemaining--
+                    for (let i = 0; i < 5; i++) {
+                        arena.bullets.push({
+                            x: celestialite.x + Math.cos(celestialite.playerAng + (Math.PI / 16 * (i - 2))) * (celestialite.radius),
+                            y: celestialite.y + Math.sin(celestialite.playerAng + (Math.PI / 16 * (i - 2))) * (celestialite.radius),
+                            vx: Math.cos(celestialite.playerAng + (Math.PI / 16 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/4)) * (celestialite.playerDist / 400 + 1),
+                            vy: Math.sin(celestialite.playerAng + (Math.PI / 16 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/4)) * (celestialite.playerDist / 400 + 1),
+                            life: 240,
+                            damage: celestialite.damage,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            fromEnemy: true,
+                            radius: 4,
+                            star: true,
+                        });
+                    }
+                    if (celestialite.attackCooldown <= 0) {
+                        if (celestialite.attackSetsRemaining > 0) {
+                            celestialite.attackSetsRemaining--
+                            celestialite.burstsRemaining = 4
+                            celestialite.attackCooldown = 180
+                        } else {
+                            let random = Math.random()
+                            if (random < 0.5) {
+                                celestialite.attackType = "spiral"
+                                celestialite.attackCooldown = 240
+                                celestialite.burstsRemaining = 32
+                                celestialite.attackSetsRemaining = 2
+                                celestialite.targetAngle = Math.random() * Math.PI * 2
+                            } else {
+                                celestialite.attackType = "circle"
+                                celestialite.attackCooldown = 180
+                                celestialite.burstsRemaining = 2
+                                celestialite.attackSetsRemaining = 2
+                            }
+                        }
+                    
+                    }
+                }
+            break;}
+            case "spiral" : {
+                if (celestialite.attackCooldown < celestialite.burstsRemaining * 5) {
+                    celestialite.burstsRemaining--
+                    for (let i = 0; i < 2; i++) {
+                        arena.bullets.push({
+                            x: celestialite.x + Math.cos(celestialite.targetAngle + (celestialite.burstsRemaining * Math.PI * 2 / 16) + (Math.PI * i)) * (celestialite.radius),
+                            y: celestialite.y + Math.sin(celestialite.targetAngle + (celestialite.burstsRemaining * Math.PI * 2 / 16) + (Math.PI * i)) * (celestialite.radius),
+                            vx: Math.cos(celestialite.targetAngle + (celestialite.burstsRemaining * Math.PI * 2 / 16) + (Math.PI * i)) * (celestialite.playerDist / 400 + 1) * 2,
+                            vy: Math.sin(celestialite.targetAngle + (celestialite.burstsRemaining * Math.PI * 2 / 16) + (Math.PI * i)) * (celestialite.playerDist / 400 + 1) * 2,
+                            life: 240,
+                            damage: celestialite.damage,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            fromEnemy: true,
+                            radius: 4,
+                            star: true,
+                        });
+                    }
+                    if (celestialite.attackCooldown <= 0) {
+                        if (celestialite.attackSetsRemaining > 0) {
+                            celestialite.attackSetsRemaining--
+                            celestialite.burstsRemaining = 32
+                            celestialite.attackCooldown = 240
+                            celestialite.targetAngle = Math.random() * Math.PI * 2
+                        } else {
+                            let random = Math.random()
+                            if (random < 0.5) {
+                                celestialite.attackType = "burst"
+                                celestialite.attackCooldown = 180
+                                celestialite.burstsRemaining = 4
+                                celestialite.attackSetsRemaining = 2
+                            } else {
+                                celestialite.attackType = "circle"
+                                celestialite.attackCooldown = 180
+                                celestialite.burstsRemaining = 2
+                                celestialite.attackSetsRemaining = 2
+                            }
+                        }
+                    }
+                }
+            break;}
+            case "circle" : {
+                if (celestialite.attackCooldown < celestialite.burstsRemaining * 15) {
+                    celestialite.burstsRemaining--
+                    for (let i = 0; i < 16; i++) {
+                        arena.bullets.push({
+                            x: celestialite.x + Math.cos((Math.PI / 8 * (i - 2))) * (celestialite.radius),
+                            y: celestialite.y + Math.sin((Math.PI / 8 * (i - 2))) * (celestialite.radius),
+                            vx: Math.cos((Math.PI / 8 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1),
+                            vy: Math.sin((Math.PI / 8 * (i - 2))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1),
+                            life: 240,
+                            damage: celestialite.damage,
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            fromEnemy: true,
+                            radius: 4,
+                            star: true,
+                        });
+                    }
+                    if (celestialite.attackCooldown <= 0) {
+                        if (celestialite.attackSetsRemaining > 0) {
+                            celestialite.attackSetsRemaining--
+                            celestialite.burstsRemaining = 2
+                            celestialite.attackCooldown = 180
+                        } else {
+                            let random = Math.random()
+                            if (random < 0.5) {
+                                celestialite.attackType = "burst"
+                                celestialite.attackCooldown = 180
+                                celestialite.burstsRemaining = 4
+                                celestialite.attackSetsRemaining = 2
+                            } else {
+                                celestialite.attackType = "spiral"
+                                celestialite.attackCooldown = 240
+                                celestialite.burstsRemaining = 32
+                                celestialite.attackSetsRemaining = 2
+                                celestialite.targetAngle = Math.random() * Math.PI * 2
+                            }
+                        }
+                    }
+                }
+            break;}
+            case "sniper" : {
+                if (celestialite.attackCooldown <= celestialite.burstsRemaining * 20) {
+                    celestialite.burstsRemaining--
+                    let ang = Math.random() * Math.PI / 8
+                    for (let i = 0; i < 3; i++) {
+                        arena.bullets.push({
+                            x: celestialite.x + Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (celestialite.radius),
+                            y: celestialite.y + Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (celestialite.radius),
+                            vx: Math.cos(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
+                            vy: Math.sin(celestialite.playerAng + ang + (Math.PI / 64 * (i - 1))) * (2 + 2 * (celestialite.burstsRemaining/16)) * (celestialite.playerDist / 400 + 1) * 3,
+                            life: 120,
+                            damage: celestialite.damage.mul(1.5),
+                            pierce: 0,
+                            piercedAsteroids: [],
+                            fromEnemy: true,
+                            radius: 4,
+                            star: true,
+                        });
+                    }
+                    if (celestialite.playerDist > 600) {
+                        celestialite.attackType = "sniper"
+                        celestialite.attackCooldown = 60
+                        celestialite.burstsRemaining = 2
+                    } else {
+                        let random = Math.random()
+                        if (random < 0.333) {
+                            celestialite.attackType = "burst"
+                            celestialite.attackCooldown = 180
+                            celestialite.burstsRemaining = 4
+                            celestialite.attackSetsRemaining = 2
+                        } else if (random < 0.666) {
+                            celestialite.attackType = "spiral"
+                            celestialite.attackCooldown = 300
+                            celestialite.burstsRemaining = 32
+                            celestialite.attackSetsRemaining = 2
+                            celestialite.targetAngle = Math.random() * Math.PI * 2
+                        } else {
+                            celestialite.attackType = "circle"
+                            celestialite.attackCooldown = 240
+                            celestialite.burstsRemaining = 2
+                            celestialite.attackSetsRemaining = 2
+                        }
+                    }
+                }
+            break;}
+            default: break;
+        }
+
+        // Handle celestialite movement changes
+        celestialite.moveAng = celestialite.playerAng
+        celestialite.ax = Math.cos(celestialite.moveAng) * 2 * Math.min(1, (celestialite.playerDist - 200) / 3200)
+        celestialite.ay = Math.sin(celestialite.moveAng) * 2 * Math.min(1, (celestialite.playerDist - 200) / 3200)
+        if (celestialite.attackType == "sniper") {
+            celestialite.ax *= 2
+            celestialite.ay *= 2
+        }
+        // Change UFO light colors
+        if (celestialite.lightTimer <= 0) {
+            celestialite.lightColors = []
+            for (i = 0; i < 7; i++) {
+                celestialite.lightColors.push(celestialite.possibleLightColors[Math.floor(Math.random() * celestialite.possibleLightColors.length)])
+            }
+            celestialite.lightTimer = 30
+        }
+    },
+    onAttacked(celestialite, damage, attacker) {
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 16
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 16
+    },
+    onDeath(celestialite) {},
+    draw: (ctx, celestialite) => {
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (!wrapped) return;
+        ctx.save();
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        ctx.translate(wrapped[0], wrapped[1]);
+        if (celestialite.invulnerable) ctx.globalAlpha = 0.25;
+        // UFO body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, celestialite.radius, celestialite.radius * 0.5, 0, 0, Math.PI * 2);
+        ctx.fillStyle = player.ir.primaryColor;
+        ctx.shadowColor = player.ir.primaryColor;
+        if (!options.performanceMode) {ctx.shadowBlur = 18} else {ctx.shadowBlur = 0};
+        ctx.fill();
+        // Dome
+        ctx.beginPath();
+        ctx.ellipse(0, -10, celestialite.radius * 0.6, celestialite.radius * 0.35, 0, Math.PI, 2 * Math.PI);
+        ctx.ellipse(0, -10, celestialite.radius * 0.6, celestialite.radius * 0.175, 0, 0, Math.PI);
+        ctx.fillStyle = "#d7ffff";
+        ctx.fill();
+        // Lights
+        for (let i = -3; i <= 3; i++) {
+            ctx.beginPath();
+            let lx = (i / 3) * (celestialite.radius * 0.9);
+            ctx.arc(lx, 12 * Math.sin(Math.PI * (i + 3) / 6), 4, 0, Math.PI * 2);
+            ctx.fillStyle = celestialite.lightColors[i + 3];
+            ctx.fill();
+        }
+        ctx.restore();
     },
 }

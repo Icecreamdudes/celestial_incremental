@@ -135,8 +135,8 @@ const UPGRADE_POOL = {
         effect(arena) { arena.upgrades.gemGainRare++; }
     },
     bulletSizeRare: {
-        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "Bullet Size"} else {return "Max Health"}},
-        description() {if (player.ir.shipType != 3 && player.ir.shipType != 7) {return "+10% bullet size"} else {return "+10% max HP"}},
+        name() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "Bullet Size"} else {return "Max Health"}},
+        description() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
         color: "#4c8cff",
         effect(arena) {arena.upgrades.bulletSizeRare++; }
@@ -168,7 +168,7 @@ const UPGRADE_POOL = {
         description() { return "+20% rock gain, +5% space gem gain"},
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) { arena.upgrades.rockGainEpic++; }
+        effect(arena) { arena.upgrades.lootGainEpic++; }
     },
     defenseEpic: {
         name() { return "Defense"},
@@ -179,9 +179,7 @@ const UPGRADE_POOL = {
         },
         rarity: "epic",
         color: "#b44cff",
-        effect(arena) {
-            arena.upgrades.defenseEpic++;
-        }
+        effect(arena) { arena.upgrades.defenseEpic++; }
     },
     // Legendary
     attackLegendary: {
@@ -189,25 +187,21 @@ const UPGRADE_POOL = {
         description() { return "+75% attack damage, but +25% slower attack speed"},
         rarity: "legendary",
         color: "#ffd34d",
-        effect(arena) { arena.upgrades.attackDamageEpic++; arena.upgrades.attackSpeedEpic++; }
+        effect(arena) { arena.upgrades.attackLegendary++; }
     },
     dropGainLegendary: {
         name() { return "Drop Gain"},
         description() { return "+40% space rock and XP gain, +20% space gem gain"},
         rarity: "legendary",
         color: "#ffd34d",
-        effect(arena) { arena.upgrades.rockGainLegendary++; arena.upgrades.xpGainLegendary++; arena.upgrades.gemGainLegendary++; }
+        effect(arena) { arena.upgrades.dropGainLegendary++; }
     },
     defenseLegendary: {
         name() { return "Defense"},
         description() { return "Take 25% less damage, gain 25% more HP/sec" },
         rarity: "legendary",
         color: "#ffd34d",
-        effect(arena) {
-            let regen = 0.5
-            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-            arena.upgrades.damageReductionLegendary++; arena.upgrades.healthRegenLegendary++;
-        }
+        effect(arena) { arena.upgrades.defenseLegendary++; }
     },
     moveSpeedLegendary: {
         name() { return "Movement Speed"},
@@ -731,263 +725,6 @@ class SpaceArena {
         // Enemy system
         this.enemies = [];
         this.enemyTypes = {
-            alphaShip: {
-                name: "Alpha Ship",
-                symbol: "α",
-                radius: 24,
-                color: "#3054bf",
-                healthMin: 200,
-                healthMax: 300,
-                damage: 6,
-                speed: 2.2,
-                wanderSpeed: 1.6,
-                wanderChange: 0.04,
-                bulletSpeed: 9,
-                bulletCooldown: 200,
-                burstCount: 3,
-                burstInterval: 50,
-                rockDrop: [10, 20],
-                xpDrop: [10, 15],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-            betaShip: {
-                // Machine-gun style: rapid burst (many small bullets)
-                name: "Beta Ship",
-                symbol: "β",
-                radius: 24,
-                color: "#ffb84c",
-                healthMin: 150,
-                healthMax: 200,
-                damage: 4,
-                speed: 3.5,
-                wanderSpeed: 2.8,
-                wanderChange: 0.08,
-                bulletSpeed: 10,
-                bulletCooldown: 60,     // time between burst sequences
-                burstCount: 3,          // bullets per burst
-                burstInterval: 5,       // frames between bullets inside burst
-                rockDrop: [6, 14],
-                xpDrop: [6, 10],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-            
-            gammaShip: {
-                name: "Gamma Ship",
-                symbol: "γ",
-                radius: 28,
-                color: "#b44cff",
-                healthMin: 160,
-                healthMax: 240,
-                damage: 10,
-                speed: 1.2,
-                wanderSpeed: 7.2,
-                wanderChange: 0.22,
-                bulletSpeed: 1,
-                bulletCooldown: 999999999999,
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [18, 30],
-                xpDrop: [18, 26],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-
-            // Hard-mode enemies (activated at battleLevel >= 8)
-            deltaShip: {
-                name: "Delta",
-                symbol: "δ",
-                radius: 28,
-                color: "#66ffe6",
-                healthMin: 320,
-                healthMax: 360,
-                damage: 8,
-                speed: 2.5,
-                wanderSpeed: 3.0,
-                wanderChange: 0.6,
-                bulletSpeed: 0, // Delta mainly dashes, doesn't shoot
-                bulletCooldown: 999999,
-                burstCount: 0,
-                burstInterval: 1,
-                rockDrop: [8, 18],
-                xpDrop: [12, 18],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-            epsilonShip: {
-                name: "Epsilon",
-                symbol: "ε",
-                radius: 28,
-                color: "#ff66d9",
-                healthMin: 400,
-                healthMax: 500,
-                damage: 6,
-                speed: 1.0,
-                wanderSpeed: 1.2,
-                wanderChange: 0.08,
-                bulletSpeed: 5,
-                bulletCooldown: 220,
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [12, 22],
-                xpDrop: [14, 22],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-            zetaShip: {
-                name: "Zeta",
-                symbol: "ζ",
-                radius: 24,
-                color: "#ffe066",
-                healthMin: 300,
-                healthMax: 400,
-                damage: 7,
-                speed: 1.6,
-                wanderSpeed: 3.4,
-                wanderChange: 0.06,
-                bulletSpeed: 7,
-                bulletCooldown: 260,
-                burstCount: 3,        // rounds
-                burstInterval: 18,    // frames between rounds
-                perRoundBullets: 3,   // bullets per round
-                rockDrop: [14, 26],
-                xpDrop: [16, 24],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
-            etaShip: {
-                name: "Eta",
-                symbol: "η",
-                radius: 16,
-                color: "#9eff66",
-                healthMin: 250,
-                healthMax: 350,
-                damage: 4,
-                speed: 3.2,
-                wanderSpeed: 3.2,
-                wanderChange: 0.04,
-                bulletSpeed: 11,
-                bulletCooldown: 120, // shoots every 2 seconds (at 60fps)
-                burstCount: 1,
-                burstInterval: 1,
-                rockDrop: [5, 12],
-                xpDrop: [8, 14],
-                draw: (ctx, enemy) => {
-                    let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-                    if (wrapped) {
-                        ctx.save();
-                        ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                        ctx.beginPath();
-                        ctx.arc(wrapped[0], wrapped[1], enemy.radius, 0, 2 * Math.PI);
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = "#fff";
-                        if (!options.performanceMode) {ctx.shadowBlur = 8} else {ctx.shadowBlur = 0};
-                        ctx.fill();
-                        ctx.font = "bold 32px monospace";
-                        ctx.fillStyle = "#fff";
-                        ctx.textAlign = "center";
-                        ctx.fillText(enemy.symbol, wrapped[0], wrapped[1] + 12);
-                        ctx.restore();
-                    }
-                }
-            },
             // Miniboss: UFO
             ufoBoss: {
                 name: "UFO Miniboss",
@@ -1407,7 +1144,7 @@ class SpaceArena {
     handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
-        if (player.ir.shipType == 8 && player.ir.menu == 0) {
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && !player.ir.autoShoot) {
             this.ship._laserActive = true
             this.ship._laserTimer = -60;
         }
@@ -1453,12 +1190,12 @@ class SpaceArena {
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive) this.ship._laserActive = false;
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot) this.ship._laserActive = false;
         if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
     };
     handlePointerCancel = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive) this.ship._laserActive = false;
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot) this.ship._laserActive = false;
         if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
     };
 
@@ -1501,8 +1238,12 @@ class SpaceArena {
         }
         
         if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+            if (player.ir.autoShoot && !this.ship._laserActive) {
+                this.ship._laserActive = true
+                this.ship._laserTimer = -60
+            }
             return;
-        }
+        } else if (player.ir.shipType == 8) return;
 
         let speed = 10 + this.shipStats.moveSpeed;
         if (player.ir.shipType == 4) speed = 25 + this.shipStats.moveSpeed;
@@ -2345,7 +2086,7 @@ class SpaceArena {
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
                         this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
-                        this.ship._laserLength = 900 //Math.min(300, Math.hypot(this.mouseX - (this.canvasWidth / 2), this.mouseY - (this.canvasHeight / 2))) * 3
+                        this.ship._laserLength = 750 //Math.min(300, Math.hypot(this.mouseX - (this.canvasWidth / 2), this.mouseY - (this.canvasHeight / 2))) * 3
                     }
                     if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
                     if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
@@ -2364,7 +2105,7 @@ class SpaceArena {
                             let proj = ex * ux + ey * uy;
                             let perp = Math.abs(ex * (-uy) + ey * ux);
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
-                                enemy.health = enemy.health.sub(dmg);
+                                if (!enemy.invulnerable) enemy.health = enemy.health.sub(dmg);
                                 SB_celestialites[enemy.type].onAttacked(enemy, dmg, "ship")
                                 if (enemy.health.lte(0)) handleEnemyDeath(enemy);
                             }
@@ -2506,13 +2247,14 @@ class SpaceArena {
         }
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
-        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
+        // TEMP
+        if ((player.ir.battleLevel.gte(0) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
             let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
             }
             if (this.enemySpawnCooldown <= 0) {
-                SB_spawnCelestialite()
+                SB_spawnNaturalCelestialite()
             }
         }
 
@@ -3382,7 +3124,7 @@ class SpaceArena {
                 let dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < enemy.radius + bullet.radius) {
                     let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
-                    enemy.health = enemy.health.sub(bDmg);
+                    if (!enemy.invulnerable) enemy.health = enemy.health.sub(bDmg);
                     SB_celestialites[enemy.type].onAttacked(enemy, bDmg, "ship")
 
                     // Vampire spear knockback: push enemies away along bullet velocity
@@ -3510,9 +3252,9 @@ class SpaceArena {
             if (dist < enemy.radius + shipRadius) {
                 let enemyDmg = new Decimal(this.ship.collisionDamage * this.shipStats.attackDamage);
                 if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
-                if (player.ir.shipType != 3 && player.ir.shipType != 7) enemy.health = enemy.health.sub(enemyDmg.mul(0.5));
-                if (player.ir.shipType == 3) enemy.health = enemy.health.sub(enemyDmg.mul(2.5));
-                if (player.ir.shipType == 7) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
+                if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(0.5));
+                if (player.ir.shipType == 3 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(2.5));
+                if (player.ir.shipType == 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
                 SB_celestialites[enemy.type].onAttacked(enemy, enemyDmg, "ship")
 
                 let shipDmgRaw = enemy.bodyDamage.toNumber() / this.shipStats.damageReduction * enemy.damage.toNumber();

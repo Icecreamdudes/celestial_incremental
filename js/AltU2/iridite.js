@@ -1062,6 +1062,10 @@ addLayer("ir", {
             onClick() {
                 if (player.ir.autoShoot) {
                     player.ir.autoShoot = false
+                    if (arena && player.ir.shipType == 8) {
+                        arena.ship._laserActive = false
+                        arena.ship._laserTimer = -60
+                    }
                 } else {
                     player.ir.autoShoot = true
                 }
@@ -1617,7 +1621,7 @@ addLayer("ir", {
             },
             title: "Sustain",
             unlocked() { return true },
-            description() { return "x1.1 check back tickspeed."},
+            description() { return "x1.05 check back tickspeed."},
             cost: new Decimal(1.5e6),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
@@ -1671,7 +1675,7 @@ addLayer("ir", {
             },
             title: "Prosper",
             unlocked() { return true },
-            description() { return "Square the ingredient multipliers toward activated fuel."},
+            description() { return "Square base steel gain."},
             cost: new Decimal(1e6),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",
@@ -1698,7 +1702,7 @@ addLayer("ir", {
             },
             title: "Decay",
             unlocked() { return true },
-            description() { return "Boosts star dimension production by x3."},
+            description() { return "Boosts all star dimension power gain by x3."},
             cost: new Decimal(1e7),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Rocks",

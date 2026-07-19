@@ -1,13 +1,9 @@
-function SB_spawnCelestialite() {
+function SB_spawnCelestialite(celId, properties = {}) {
     const zoneRef = SB_zones[player.ir.battleStage]
     if (!zoneRef) {
         console.warn("Cannot find zone \"" + player.ir.battleStage + "\".")
         return
     };
-
-    if (arena.enemies.length >= zoneRef.celestialiteLimit) return;
-
-    const celId = zoneRef.generateCelestialite(player.ir.battleLevel)
     const celRef = SB_celestialites[celId]
     if (!celRef) {
         console.warn("Cannot find celestialite \"" + celId + "\".")
@@ -22,6 +18,7 @@ function SB_spawnCelestialite() {
         symbol: celRef.symbol,
         color: celRef.color,
         radius: celRef.radius,
+        invulnerable: false,
 
         maxHealth: celRef.health.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
         health: celRef.health.mul(zoneRef.statMult).mul(player.ir.levelScalingMult),
@@ -48,6 +45,7 @@ function SB_spawnCelestialite() {
     celestialite.playerAng = Math.atan2(dy, dx) || 0
 
     celRef.initialize(celestialite)
+    for (const [i, v] of Object.entries(properties)) celestialite[i] = v;
     arena.enemies.push(celestialite)
 }
 
@@ -89,9 +87,26 @@ function SB_spawnAsteroid(celId, properties = {}) {
         x: arena.ship.x + (Math.cos(spawnAngle) * spawnDistance),
         y: arena.ship.y + (Math.sin(spawnAngle) * spawnDistance),
     }
-    for (const [i, v] of Object.entries(properties)) celestialite[i] = v;
+
     celRef.initialize(celestialite)
+    for (const [i, v] of Object.entries(properties)) celestialite[i] = v;
     arena.asteroids.push(celestialite)
+}
+
+function SB_spawnNaturalCelestialite() {
+    const zoneRef = SB_zones[player.ir.battleStage]
+    if (!zoneRef) {
+        console.warn("Cannot find zone \"" + player.ir.battleStage + "\".")
+        return
+    };
+    if (arena.enemies.length >= zoneRef.celestialiteLimit) return;
+    const celId = zoneRef.generateCelestialite(player.ir.battleLevel)
+    const celRef = SB_celestialites[celId]
+    if (!celRef) {
+        console.warn("Cannot find celestialite \"" + celId + "\".")
+        return
+    };
+    SB_spawnCelestialite(celId)
 }
 
 function SB_spawnNaturalAsteroid() {

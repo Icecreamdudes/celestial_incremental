@@ -209,6 +209,7 @@
         if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
         if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
         if (hasUpgrade("cs", 604)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
+        if (hasUpgrade("ir", 30)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))

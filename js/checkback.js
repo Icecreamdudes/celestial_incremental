@@ -200,6 +200,7 @@ addLayer("cb", {
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("cbs", 19))
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.cbs.pylonEnergyEffect)
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.stagnantSynestia.negComboEffect)
+        if (hasUpgrade("ir", 28)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(1.05)
 
         if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)

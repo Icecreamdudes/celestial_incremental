@@ -178,8 +178,7 @@ SB_zones.iriditeZone = {
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         
-        //let cel = ["betaShip", "gammaShip", "zetaShip", "iridianShip1", "iridianShip2"]
-        let cel = ["iridianShip4"]
+        let cel = ["betaShip", "gammaShip", "zetaShip", "iridianShip1", "iridianShip2"]
         if (level >= 10) cel = cel.concat(["deltaShip", "etaShip", "iridianShip3", "iridianShip4"]);
 
         return cel[Math.floor(Math.random()*cel.length)]

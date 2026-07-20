@@ -178,7 +178,8 @@ SB_zones.iriditeZone = {
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         
-        let cel = ["betaShip", "gammaShip", "zetaShip", "iridianShip1", "iridianShip2"]
+        //let cel = ["betaShip", "gammaShip", "zetaShip", "iridianShip1", "iridianShip2"]
+        let cel = ["iridianShip4"]
         if (level >= 10) cel = cel.concat(["deltaShip", "etaShip", "iridianShip3", "iridianShip4"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
@@ -270,7 +271,7 @@ SB_celestialites.iridianShip1 = {
     radius: 32,
     color: "#e0e0ff",
     health: new Decimal(250),
-    damage: new Decimal(2),
+    damage: new Decimal(3),
     bodyDamage: new Decimal(1),
     regen: new Decimal(5),
     reward() {
@@ -321,7 +322,7 @@ SB_celestialites.iridianShip1 = {
                 y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius),
                 vx: Math.cos(celestialite.playerAng) * 4,
                 vy: Math.sin(celestialite.playerAng) * 4,
-                life: 600,
+                life: 300,
                 damage: celestialite.damage,
                 pierce: 0,
                 piercedAsteroids: [],
@@ -379,7 +380,7 @@ SB_celestialites.iridianShip2 = {
     radius: 28,
     color: "#ffffe0",
     health: new Decimal(200),
-    damage: new Decimal(2),
+    damage: new Decimal(3),
     bodyDamage: new Decimal(1),
     regen: new Decimal(3),
     reward() {
@@ -428,8 +429,8 @@ SB_celestialites.iridianShip2 = {
             arena.bullets.push({
                 x: celestialite.x + Math.cos(celestialite.playerAng) * (celestialite.radius),
                 y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius),
-                vx: Math.cos(celestialite.playerAng) * (1 + Math.random()),
-                vy: Math.sin(celestialite.playerAng) * (1 + Math.random()),
+                vx: Math.cos(celestialite.playerAng) * (1 + Math.random()) * 1.25,
+                vy: Math.sin(celestialite.playerAng) * (1 + Math.random()) * 1.25,
                 life: 300,
                 damage: celestialite.damage,
                 pierce: 0,
@@ -437,6 +438,7 @@ SB_celestialites.iridianShip2 = {
                 fromEnemy: true,
                 star: true,
                 homing: true,
+                homingStrength: 0.025,
                 radius: 4,
             });
             celestialite.attackCooldown = 90
@@ -488,7 +490,7 @@ SB_celestialites.iridianShip3 = {
     radius: 20,
     color: "#ffe0ff",
     health: new Decimal(150),
-    damage: new Decimal(2),
+    damage: new Decimal(3),
     bodyDamage: new Decimal(3),
     regen: new Decimal(1),
     reward() {
@@ -595,10 +597,10 @@ SB_celestialites.iridianShip3 = {
 SB_celestialites.iridianShip4 = {
     name: "Iridian Ship 4",
     symbol: "4",
-    radius: 32,
+    radius: 24,
     color: "#ffe0e0",
-    health: new Decimal(150),
-    damage: new Decimal(2),
+    health: new Decimal(200),
+    damage: new Decimal(5),
     bodyDamage: new Decimal(1),
     regen: new Decimal(2),
     reward() {
@@ -649,7 +651,7 @@ SB_celestialites.iridianShip4 = {
                 y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius),
                 vx: Math.cos(celestialite.playerAng) * 6,
                 vy: Math.sin(celestialite.playerAng) * 6,
-                life: 600,
+                life: 240,
                 damage: celestialite.damage,
                 pierce: 0,
                 piercedAsteroids: [],

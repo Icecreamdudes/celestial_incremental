@@ -1222,8 +1222,8 @@ class SpaceArena {
         if (player.ir.shipType == 10) r = 12;
         r *= this.shipStats.bulletSize;
         // shipType 5 aims at the mouse and fires burst shots toward it
-        if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || typeof this.mobileRightStickAngle === "number")) {
-            if (player.ir.mobileControls) angle = this.mobileRightStickAngle;
+        if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || player.ir.mobileControls)) {
+            if (player.ir.mobileControls) angle = this.mobileRightStickAngle || this.ship.angle;
             else angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
@@ -1250,8 +1250,8 @@ class SpaceArena {
             return;
         }
         
-        if (player.ir.shipType == 8 && (typeof this.mouseX === "number" && typeof this.mouseY === "number")) {
-            if (player.ir.autoShoot && !this.ship._laserActive && !(player.ir.mobileControls && typeof this.mobileRightStickAngle != "number")) {
+        if (player.ir.shipType == 8 && (typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls && player.ir.autoShoot)) {
+            if (player.ir.autoShoot && !this.ship._laserActive) {
                 this.ship._laserActive = true
                 this.ship._laserTimer = -60
             }
@@ -2017,8 +2017,6 @@ class SpaceArena {
         } else {
             this.mobileLeftStickAngle = null
             this.mobileRightStickAngle = null
-
-            
         }
         if (this.ship.velocity > 0) {
             this.ship.velocity -= this.ship.deceleration;
@@ -2082,8 +2080,8 @@ class SpaceArena {
                 // handle laser firing
                 if (this.ship._laserActive) {
                     // Laser follows mouse direction
-                    if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null) {
-                        let desired = (player.ir.mobileControls) ? -this.mobileRightStickAngle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+                    if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null || (player.ir.mobileControls && player.ir.autoShoot)) {
+                        let desired = (player.ir.mobileControls) ? -this.mobileRightStickAngle || -this.ship.angle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
                         let diff = desired - (this.ship._laserAngle || 0);
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -4367,74 +4365,60 @@ class SpaceArena {
             this.ctx.beginPath();
             this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
             this.ctx.stroke();
-
-            if (!player.ir.autoShoot) {
-                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-
-                    // RIGHT STICK
-
-                    // OUTER CIRCLE
-                    this.ctx.fillStyle = "#ffff003f";
-                    this.ctx.beginPath();
-                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
-                    this.ctx.closePath();
-                    this.ctx.fill();
-
-                    // INNER CIRCLE
-                    this.ctx.fillStyle = "#0000003f";
-                    this.ctx.beginPath();
-                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
-                    this.ctx.closePath();
-                    this.ctx.fill();
-
-                    // STICK
-                    this.ctx.fillStyle = "#ffff00bf";
-                    this.ctx.beginPath();
-                    if (this.mobileRightStickAngle == null) {
-                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
-                    } else {
-                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale) + Math.cos(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
-                    }
-                    this.ctx.closePath();
-                    this.ctx.fill();
-                
-                    // OUTLINE
-                    this.ctx.strokeStyle = "#ffff006e";
-                    this.ctx.beginPath();
-                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
-                    this.ctx.stroke();
-
+            
+            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                // RIGHT STICK
+                // OUTER CIRCLE
+                this.ctx.fillStyle = "#ffff003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+                // INNER CIRCLE
+                this.ctx.fillStyle = "#0000003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+                // STICK
+                this.ctx.fillStyle = "#ffff00bf";
+                this.ctx.beginPath();
+                if (this.mobileRightStickAngle == null) {
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
                 } else {
-
-                    // RIGHT BUTTON
-
-                    // OUTER CIRCLE
-                    this.ctx.fillStyle = "#ffff003f";
-                    this.ctx.beginPath();
-                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
-                    this.ctx.closePath();
-                    this.ctx.fill();
-
-                    // INNER CIRCLE
-                    this.ctx.fillStyle = "#0000003f";
-                    this.ctx.beginPath();
-                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
-                    this.ctx.closePath();
-                    this.ctx.fill();
-
-                    // OUTLINE
-                    this.ctx.strokeStyle = "#ffff006e";
-                    this.ctx.beginPath();
-                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
-                    this.ctx.stroke();
-
-                    // TEXT
-                    this.ctx.fillStyle = "#ffff00bf";
-                    this.ctx.font = "bold 48px monospace";
-                    this.ctx.textAlign = "center";
-                    this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale) + Math.cos(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
                 }
-
+                this.ctx.closePath();
+                this.ctx.fill();
+                // OUTLINE
+                this.ctx.strokeStyle = "#ffff006e";
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                this.ctx.stroke();
+            } else if (!player.ir.autoShoot) {
+                // RIGHT BUTTON
+                // OUTER CIRCLE
+                this.ctx.fillStyle = "#ffff003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+                // INNER CIRCLE
+                this.ctx.fillStyle = "#0000003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+                // OUTLINE
+                this.ctx.strokeStyle = "#ffff006e";
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                this.ctx.stroke();
+                // TEXT
+                this.ctx.fillStyle = "#ffff00bf";
+                this.ctx.font = "bold 48px monospace";
+                this.ctx.textAlign = "center";
+                this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
             }
 
             this.ctx.restore();

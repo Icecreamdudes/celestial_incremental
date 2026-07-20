@@ -408,7 +408,7 @@ SB_celestialites.mediumAsteroid = {
         return Decimal.add(1, Math.random()).mul(4)
     },
     initialize(celestialite) {
-        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 7 + Math.floor(Math.random() * 4));
+        celestialite.shape = arena.generateConvexPolygon(celestialite.radius, 5 + Math.floor(Math.random() * 3));
 
         let moveAng = Math.random() * Math.PI * 2
         let speed = (1 + Math.random()) * 1.25

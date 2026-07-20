@@ -67,6 +67,7 @@ addLayer("ir", {
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
+        shipHealthMaxTrue: new Decimal(100),
         shipDamageMult: new Decimal(1),
 
         spaceRock: new Decimal(0),
@@ -313,13 +314,17 @@ addLayer("ir", {
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
+        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(100)
 
-        if (arena && arena.shipStats && arena.shipStats.maxHp) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(arena.shipStats.maxHp)
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
         player.ir.shipHealthMax = player.ir.shipHealthMax.mul(getBuyableAmount("bl", 33).div(100).add(1))
+        if (hasMilestone("spaceZone2", 11)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25);
+        if (hasMilestone("spaceZone2", 13)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.15);
+        if (hasUpgrade("ir", 29)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(upgradeEffect("ir", 29).toNumber());
+
+        if (arena && arena.shipStats) player.ir.shipHealthMaxTrue = arena.shipStats.maxHp;
 
         player.ir.shipDamageMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 14)) player.ir.shipDamageMult = player.ir.shipDamageMult.mul(upgradeEffect("darkTemple", 14))
@@ -401,13 +406,13 @@ addLayer("ir", {
             width() {return (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "40px",
             progress() {
-                return player.ir.shipHealth.div(player.ir.shipHealthMax);
+                return player.ir.shipHealth.div(player.ir.shipHealthMaxTrue);
             },
             borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #808000 0%, #545400 100%)"},
             display() {
-                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMax) + " HP";
+                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMaxTrue) + " HP";
             },
         },
         xpBar: {

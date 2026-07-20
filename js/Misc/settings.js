@@ -539,7 +539,7 @@ addLayer("settings", {
             title() {return true ? "Teal Theme" : "[LOCKED]"},
             canClick() {return options.theme != "teal" && player.lightRift.interspaceUnlocked},
             unlocked: "true",
-            tooltip() {return !player.lightRift.interspaceUnlocked ? "Obtained from a broken developer." : ""},
+            tooltip() {return !player.lightRift.interspaceUnlocked ? "Meet a second developer." : ""},
             onClick() {
                 options.theme = "teal"
 	            changeTheme();
@@ -566,8 +566,8 @@ addLayer("settings", {
         111: {
             title: "Blossom Theme",
             canClick() {return options.theme != "blossom" && false},
-            unlocked: "true",
-            tooltip() {return !false ? "Obtained from a broken celestial." : ""},
+            unlocked: false,
+            tooltip() {return !false ? "Begin again. And again. And again." : ""},
             onClick() {
                 options.theme = "blossom"
 	            changeTheme();
@@ -643,7 +643,7 @@ addLayer("settings", {
                     ["style-row", [
                         ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                         ["clickable", 110], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
-                        ["clickable", 111], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 111], //["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                     ], {width: "306px", borderBottom: "3px solid var(--regBorder)"}],
                     ["style-row", [
                         ["clickable", 100]

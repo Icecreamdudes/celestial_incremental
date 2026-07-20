@@ -998,7 +998,7 @@ class SpaceArena {
     getUpgradedShipStats(upgrades = this.upgrades) {
         let shipStats = this.getDefaultShipStats()
 
-        shipStats.attackDamage = 1
+        shipStats.attackDamage = this.ship.damage
         shipStats.attackDamage *= 1 + 0.1 * upgrades.attackDamageCommon
         shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageUncommon
         shipStats.attackDamage *= 1 + 0.2 * upgrades.attackDamageRare
@@ -1008,6 +1008,7 @@ class SpaceArena {
         if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
         if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
         if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
+        if ((player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0))) shipStats.attackDamage = shipStats.attackDamage.mul(1.5);
 
         shipStats.attackSpeed = 1
         shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
@@ -1015,10 +1016,7 @@ class SpaceArena {
         shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
         shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
 
-        shipStats.maxHp = 1
-        if (hasMilestone("spaceZone2", 11)) shipStats.maxHp *= 1.25;
-        if (hasMilestone("spaceZone2", 13)) shipStats.maxHp *= 1.15;
-        if (hasUpgrade("ir", 29)) shipStats.maxHp *= upgradeEffect("ir", 29).toNumber();
+        shipStats.maxHp = player.ir.shipHealthMax.toNumber()
 
         shipStats.bulletSize = 1
         if (player.ir.shipType == 3 || player.ir.shipType == 7) {
@@ -1144,10 +1142,6 @@ class SpaceArena {
     handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && !player.ir.autoShoot) {
-            this.ship._laserActive = true
-            this.ship._laserTimer = -60;
-        }
         if (player.ir.mobileControls) {
             let rect = this.canvas.getBoundingClientRect();
 
@@ -1157,11 +1151,17 @@ class SpaceArena {
                 let originY = this.canvasHeight - (100 * this.mobileControlsScale)
                 this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
                 if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
-                // RIGHT BUTTON
-                originX = this.canvasWidth - (100 * this.mobileControlsScale)
-                this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
-                if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
-
+                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                    // RIGHT STICK
+                    originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                    this.mobileRightStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                    if (this.mobileRightStickDist < this.mobileControlsScale * 80) e.action = "rightStick";
+                } else {
+                    // RIGHT BUTTON
+                    originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                    this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                    if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
+                }
                 this.pointerTouches.set(e.pointerId, {
                     clientX: e.clientX,
                     clientY: e.clientY,
@@ -1169,6 +1169,12 @@ class SpaceArena {
                     action: e.action,
                 })
 
+            }
+        }
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && !player.ir.autoShoot) {
+            if (!(player.ir.mobileControls && e.action != "rightStick")) {
+                this.ship._laserActive = true
+                this.ship._laserTimer = -60;
             }
         }
     };
@@ -1191,12 +1197,18 @@ class SpaceArena {
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
         if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot) this.ship._laserActive = false;
-        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
+        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
+            let p = this.pointerTouches.get(e.pointerId);
+            switch (p.action) {
+                case "leftStick": this.mobileLeftStickAngle = null; break;
+                case "rightStick": this.mobileRightStickAngle = null; break;
+                default: break;
+            }
+            this.pointerTouches.delete(e.pointerId);
+        }
     };
     handlePointerCancel = (e) => {
-        if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot) this.ship._laserActive = false;
-        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) this.pointerTouches.delete(e.pointerId);
+        this.handlePointerUp(e)
     };
 
     shoot() {
@@ -1204,14 +1216,15 @@ class SpaceArena {
         let cooldown = this.ship.cooldown / this.shipStats.attackSpeed;
         if (now - this.ship.lastShot < cooldown) return;
         this.ship.lastShot = now
-        let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
         let angle = this.ship.angle || 0;
         let r = 3;
         if (player.ir.shipType == 2) r = 9;
         if (player.ir.shipType == 10) r = 12;
+        r *= this.shipStats.bulletSize;
         // shipType 5 aims at the mouse and fires burst shots toward it
-        if (player.ir.shipType == 5 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+        if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || typeof this.mobileRightStickAngle === "number")) {
+            if (player.ir.mobileControls) angle = this.mobileRightStickAngle;
+            else angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
             let spread = 0.22;
@@ -1226,7 +1239,7 @@ class SpaceArena {
                     vy: Math.sin(ang) * spd,
                     life: 60,
                     radius: r,
-                    damage: (this.ship.damage || 6) * this.shipStats.attackDamage * petMul,
+                    damage: this.shipStats.attackDamage,
                     pierce: 0,
                     piercedAsteroids: [],
                     piercedEnemies: [],
@@ -1237,19 +1250,20 @@ class SpaceArena {
             return;
         }
         
-        if (player.ir.shipType == 8 && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-            if (player.ir.autoShoot && !this.ship._laserActive) {
+        if (player.ir.shipType == 8 && (typeof this.mouseX === "number" && typeof this.mouseY === "number")) {
+            if (player.ir.autoShoot && !this.ship._laserActive && !(player.ir.mobileControls && typeof this.mobileRightStickAngle != "number")) {
                 this.ship._laserActive = true
                 this.ship._laserTimer = -60
             }
             return;
         } else if (player.ir.shipType == 8) return;
 
-        let speed = 10 + this.shipStats.moveSpeed;
-        if (player.ir.shipType == 4) speed = 25 + this.shipStats.moveSpeed;
-        if (player.ir.shipType == 6) speed = 20 + this.shipStats.moveSpeed;
-        if (player.ir.shipType == 9) speed = 12 + this.shipStats.moveSpeed;
-        if (player.ir.shipType == 10) speed = 20 + this.shipStats.moveSpeed;
+        let speed = 10;
+        if (player.ir.shipType == 4) speed = 25;
+        if (player.ir.shipType == 6) speed = 20;
+        if (player.ir.shipType == 9) speed = 12;
+        if (player.ir.shipType == 10) speed = 20;
+        speed *= this.shipStats.moveSpeed
         let pierce = 0;
         if (player.ir.shipType == 2) pierce = 1;
         if (player.ir.shipType == 4) pierce = 10;
@@ -1288,7 +1302,7 @@ class SpaceArena {
                 vy: Math.sin(angle) * speed,
                 life: 60,
                 radius: r,
-                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
+                damage: this.shipStats.attackDamage,
                 pierce: 0,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1303,7 +1317,7 @@ class SpaceArena {
                 vy: Math.sin(angle) * speed,
                 life: 60,
                 radius: r,
-                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
+                damage: this.shipStats.attackDamage,
                 pierce: 0,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1318,7 +1332,7 @@ class SpaceArena {
                 vy: Math.sin(angle) * speed,
                 life: 60,
                 radius: r,
-                damage: this.ship.damage * this.shipStats.attackDamage * petMul,
+                damage: this.shipStats.attackDamage,
                 pierce: pierce,
                 piercedAsteroids: [],
                 piercedEnemies: [],
@@ -1716,8 +1730,8 @@ class SpaceArena {
         // Health regen
         if (this.shipStats.healthRegen > 0) {
             player.ir.shipHealth = player.ir.shipHealth.add(this.shipStats.healthRegen);
-            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.add(this.shipStats.maxHp))) {
-                player.ir.shipHealth = player.ir.shipHealthMax.add(this.shipStats.maxHp);
+            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.mul(this.shipStats.maxHp))) {
+                player.ir.shipHealth = player.ir.shipHealthMax.mul(this.shipStats.maxHp);
             }
         }
 
@@ -1890,7 +1904,7 @@ class SpaceArena {
                         let originX = 100 * this.mobileControlsScale
                         let originY = this.canvasHeight - (100 * this.mobileControlsScale)
                         this.mobileLeftStickDist = Math.hypot(mouseY - originY, mouseX - originX)
-                        if (this.mobileLeftStickDist < this.mobileControlsScale * 40) {
+                        if (this.mobileLeftStickDist < this.mobileControlsScale * 20) {
                             this.mobileLeftStickAngle = null
                         } else {
                             this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * Math.PI / 4
@@ -1972,6 +1986,24 @@ class SpaceArena {
                             }
                         }
                     break;}
+                    case "rightStick": {
+                        let rect = this.canvas.getBoundingClientRect();
+                        let mouseX = value.clientX - rect.left;
+                        let mouseY = value.clientY - rect.top;
+                        let originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                        let originY = this.canvasHeight - (100 * this.mobileControlsScale)
+                        this.mobileRightStickDist = Math.hypot(mouseY - originY, mouseX - originX)
+                        if (this.mobileRightStickDist < this.mobileControlsScale * 20) {
+                            this.mobileRightStickAngle = null
+                        } else {
+                            this.mobileRightStickAngle = Math.atan2(mouseY - originY, mouseX - originX)
+                        }
+                        
+                        if (this.mobileRightStickAngle != null) {
+                            this.ship.angle = this.mobileRightStickAngle
+                            this.shoot()
+                        }
+                    break;}
                     case "rightButton": {
                         if (player.ir.shipType == 10) {
                             this.chargeShot()
@@ -1984,6 +2016,9 @@ class SpaceArena {
             })
         } else {
             this.mobileLeftStickAngle = null
+            this.mobileRightStickAngle = null
+
+            
         }
         if (this.ship.velocity > 0) {
             this.ship.velocity -= this.ship.deceleration;
@@ -1997,12 +2032,15 @@ class SpaceArena {
             // Omnidirectional movement: smooth thrust toward desired velocity (rotation is purely visual)
             if (typeof this.ship.vx !== "number") this.ship.vx = 0;
             if (typeof this.ship.vy !== "number") this.ship.vy = 0;
+
             // Build input vector
             let ix = 0, iy = 0;
-            if (this.keys['KeyW']) iy -= 1;
-            if (this.keys['KeyS']) iy += 1;
-            if (this.keys['KeyA']) ix -= 1;
-            if (this.keys['KeyD']) ix += 1;
+            if (!player.ir.mobileControls) {
+                if (this.keys['KeyW']) iy -= 1;
+                if (this.keys['KeyS']) iy += 1;
+                if (this.keys['KeyA']) ix -= 1;
+                if (this.keys['KeyD']) ix += 1;
+            }
             // Desired speed (account for moveSpeed upgrades)
             const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
             let desiredVx = 0, desiredVy = 0;
@@ -2044,8 +2082,8 @@ class SpaceArena {
                 // handle laser firing
                 if (this.ship._laserActive) {
                     // Laser follows mouse direction
-                    if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                        let desired = -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+                    if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null) {
+                        let desired = (player.ir.mobileControls) ? -this.mobileRightStickAngle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
                         let diff = desired - (this.ship._laserAngle || 0);
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -2054,8 +2092,7 @@ class SpaceArena {
                     }
                     if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
                     if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
-                        let petMul = (player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0)) ? 1.5 : 1;
-                        let dmg = new Decimal((this.ship.damage || 7) * this.shipStats.attackDamage * petMul);
+                        let dmg = this.shipStats.attackDamage;
                         let ang = -this.ship._laserAngle;
                         let ux = Math.cos(ang), uy = Math.sin(ang);
                         let beamLen = Math.max(this.width, this.height) * 1.5;
@@ -3300,8 +3337,8 @@ class SpaceArena {
                 orb.y += dy / dist * speed;
             }
             if (dist < 30 && !orb.picked) {
-                player.ir.battleXP = player.ir.battleXP.add(orb.amount);
-                addLevelableXP("ir", player.ir.shipType, orb.amount)
+                player.ir.battleXP = player.ir.battleXP.add(orb.amount * this.shipStats.xpGain);
+                addLevelableXP("ir", player.ir.shipType, orb.amount * this.shipStats.xpGain)
                 orb.picked = true;
             }
             orb.x = ((orb.x % this.width) + this.width) % this.width
@@ -3457,7 +3494,7 @@ class SpaceArena {
         if (player.ir.shipType == 5) {
             // Small UFO (player ship) — visual match to miniboss but smaller & different color
             
-            this.ctx.rotate(this.ship.angle || 0);
+            //this.ctx.rotate(this.ship.angle || 0);
             const r = this.ship.radius || 12;
             const bodyR = r * 1.4;
 
@@ -4276,7 +4313,7 @@ class SpaceArena {
             this.ctx.fillStyle = "yellow"
             this.ctx.translate(100, 100)
             this.ctx.rotate(-this.ship._laserAngle)
-            this.ctx.fillRect(0, -1, this.ship._laserLength / this.width * 160, 2)
+            this.ctx.fillRect(0, -1, this.ship._laserLength / Math.min(this.width, this.height) * 160, 2)
             this.ctx.restore();
         }
         for (let enemy of this.enemies) {
@@ -4331,35 +4368,73 @@ class SpaceArena {
             this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
             this.ctx.stroke();
 
-            // RIGHT BUTTON
             if (!player.ir.autoShoot) {
+                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
 
-                // OUTER CIRCLE
-                //this.ctx.fillStyle = player.ir.primaryColor + "3f";
-                this.ctx.fillStyle = "#ffff003f";
-                this.ctx.beginPath();
-                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
-                this.ctx.closePath();
-                this.ctx.fill();
+                    // RIGHT STICK
 
-                // INNER CIRCLE
-                this.ctx.fillStyle = "#0000003f";
-                this.ctx.beginPath();
-                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
-                this.ctx.closePath();
-                this.ctx.fill();
+                    // OUTER CIRCLE
+                    this.ctx.fillStyle = "#ffff003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
 
-                // OUTLINE
-                this.ctx.strokeStyle = "#ffff006e";
-                this.ctx.beginPath();
-                this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
-                this.ctx.stroke();
+                    // INNER CIRCLE
+                    this.ctx.fillStyle = "#0000003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
 
-                // TEXT
-                this.ctx.fillStyle = "#ffff00bf";
-                this.ctx.font = "bold 48px monospace";
-                this.ctx.textAlign = "center";
-                this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+                    // STICK
+                    this.ctx.fillStyle = "#ffff00bf";
+                    this.ctx.beginPath();
+                    if (this.mobileRightStickAngle == null) {
+                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                    } else {
+                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale) + Math.cos(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                    }
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                
+                    // OUTLINE
+                    this.ctx.strokeStyle = "#ffff006e";
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                    this.ctx.stroke();
+
+                } else {
+
+                    // RIGHT BUTTON
+
+                    // OUTER CIRCLE
+                    this.ctx.fillStyle = "#ffff003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // INNER CIRCLE
+                    this.ctx.fillStyle = "#0000003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // OUTLINE
+                    this.ctx.strokeStyle = "#ffff006e";
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                    this.ctx.stroke();
+
+                    // TEXT
+                    this.ctx.fillStyle = "#ffff00bf";
+                    this.ctx.font = "bold 48px monospace";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+                }
+
             }
 
             this.ctx.restore();

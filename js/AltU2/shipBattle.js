@@ -1196,7 +1196,7 @@ class SpaceArena {
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot) this.ship._laserActive = false;
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot && !(player.ir.mobileControls && this.pointerTouches.get(e.pointerId).action != "rightStick")) this.ship._laserActive = false;
         if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
             let p = this.pointerTouches.get(e.pointerId);
             switch (p.action) {
@@ -1207,9 +1207,7 @@ class SpaceArena {
             this.pointerTouches.delete(e.pointerId);
         }
     };
-    handlePointerCancel = (e) => {
-        this.handlePointerUp(e)
-    };
+    handlePointerCancel = (e) => this.handlePointerUp(e);
 
     shoot() {
         let now = Date.now();
@@ -1730,8 +1728,8 @@ class SpaceArena {
         // Health regen
         if (this.shipStats.healthRegen > 0) {
             player.ir.shipHealth = player.ir.shipHealth.add(this.shipStats.healthRegen);
-            if (player.ir.shipHealth.gt(player.ir.shipHealthMax.mul(this.shipStats.maxHp))) {
-                player.ir.shipHealth = player.ir.shipHealthMax.mul(this.shipStats.maxHp);
+            if (player.ir.shipHealth.gt(arena.shipStats.maxHp)) {
+                player.ir.shipHealth = new Decimal(arena.shipStats.maxHp);
             }
         }
 
@@ -3251,9 +3249,9 @@ class SpaceArena {
             if (dist < enemy.radius + shipRadius) {
                 let enemyDmg = new Decimal(this.ship.collisionDamage * this.shipStats.attackDamage);
                 if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
-                if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(0.5));
-                if (player.ir.shipType == 3 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(2.5));
-                if (player.ir.shipType == 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
+                if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(0.1));
+                if (player.ir.shipType == 3 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
+                if (player.ir.shipType == 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg);
                 SB_celestialites[enemy.type].onAttacked(enemy, enemyDmg, "ship")
 
                 let shipDmgRaw = enemy.bodyDamage.toNumber() / this.shipStats.damageReduction * enemy.damage.toNumber();

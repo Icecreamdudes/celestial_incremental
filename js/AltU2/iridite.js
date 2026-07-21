@@ -288,10 +288,13 @@ addLayer("ir", {
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 155))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("pl", 15))
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("pl", 16))
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
 
         player.ir.spaceGemMult = new Decimal(1)
-        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 156))
+        player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("sme", 156))
+        player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("pl", 16))
         if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
@@ -779,12 +782,12 @@ addLayer("ir", {
             image() { return this.canClick() ? "resources/ships/astral.png" : "resources/secret.png"},
             title() { return "Astral" },
             description() {
-                return "x" + format(this.effect()[0]) + " to space rocks.<br>+" + formatWhole(this.effect()[1]) + " to max ship level.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
+                return "x" + format(this.effect()[0]) + " to space rocks.<br>+" + formatWhole(this.effect()[1]) + " to max ship level (excluding itself).<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             lore() {
                 return "A simulated version of Iridite, the Astral Celestial. Moves omnidirectionally and fires Iridite's lasers."
             },
-            levelLimit() { return Decimal.add(50, levelableEffect("ir", 8)[1])},
+            levelLimit() { return new Decimal(50)},
             effect() {
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.2).div(3).add(1), // space rocks
@@ -1918,7 +1921,7 @@ addLayer("ir", {
             title: "Impact",
             unlocked() { return true },
             description() { return "Unlocks the second ship: Impact."},
-            cost: new Decimal(2),
+            cost: new Decimal(4),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -1941,7 +1944,7 @@ addLayer("ir", {
             title: "Reinforcement",
             unlocked() { return true },
             description() { return "All ships have 25% increased max hp."},
-            cost: new Decimal(3),
+            cost: new Decimal(8),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -1964,7 +1967,7 @@ addLayer("ir", {
             title: "Alleviator",
             unlocked() { return true },
             description() { return "Battle XP requirements are cut by /1.25."},
-            cost: new Decimal(5),
+            cost: new Decimal(12),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -1987,7 +1990,7 @@ addLayer("ir", {
             title: "Treasure",
             unlocked() { return true },
             description() { return "Double the probability of getting space gems from asteroids."},
-            cost: new Decimal(7),
+            cost: new Decimal(15),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2010,7 +2013,7 @@ addLayer("ir", {
             title: "Exploration",
             unlocked() { return true },
             description() { return "Unlock more star exploration nodes."},
-            cost: new Decimal(12),
+            cost: new Decimal(20),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2033,7 +2036,7 @@ addLayer("ir", {
             title: "Alleviator II",
             unlocked() { return true },
             description() { return "Battle XP requirements are cut by /1.4"},
-            cost: new Decimal(18),
+            cost: new Decimal(30),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",

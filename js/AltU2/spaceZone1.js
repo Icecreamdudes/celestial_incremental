@@ -35,6 +35,7 @@ addLayer("spaceZone1", {
     update(delta) {
         player[this.layer].levelScaling = new Decimal(1.08)
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
         player[this.layer].levelScalingStart = new Decimal(10)
     },
@@ -156,7 +157,7 @@ addLayer("spaceZone1", {
     milestones: {
         11: {
             requirementDescription: "Level 20",
-            effectDescription() { return "Boost space dust gain by x3." },
+            effectDescription() { return "Boost space dust gain by x3. Unlock more space dust buyables." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(20) },
             style() {

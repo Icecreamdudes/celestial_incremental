@@ -38,6 +38,7 @@ addLayer("spaceZone4", {
     update(delta) {
         player[this.layer].levelScaling = new Decimal(1.15)
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
+        player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
         player[this.layer].levelScalingStart = new Decimal(10)
 

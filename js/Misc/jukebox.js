@@ -280,7 +280,8 @@ addLayer("jukebox", {
             img: "resources/music/zar-fight.png",
             file: "music/zar.mp3",
             unlocked() {return player.zarDungeon.zarDefeated},
-        },        "interspace": {
+        },
+        "interspace": {
             artist: "Icecreamdude",
             name: "N/A",
             description: "Interspace",
@@ -541,12 +542,12 @@ addLayer("jukebox", {
             file: "music/bumpy.mp3",
             unlocked() {return player.lightRift.interspaceUnlocked},
         },
-        "cere": {
+        "dev-flashback": {
             artist: "Icecreamdude",
             name: "N/A", // ???
-            description: "Cere",
-            img: "resources/music/cere.png",
-            file: "music/bumpy.mp3",
+            description: "Developer Flashback",
+            img: "resources/music/dev-flashback.png",
+            file: "music/devFlashback.mp3",
             unlocked() {return player.lightRift.interspaceUnlocked},
         },
         "akash": {
@@ -588,7 +589,7 @@ addLayer("jukebox", {
                         ["jukebox", "singularity-waltz"], ["jukebox", "jocus"], ["jukebox", "matos-box"], ["jukebox", "matos"],
                         ["jukebox", "nova"], ["jukebox", "iridite"], ["jukebox", "aleph"], ["jukebox", "zar"], 
                         ["jukebox", "novasent-flashback"], ["jukebox", "mystery"], ["jukebox", "lament"], ["jukebox", "nav"],
-                        ["jukebox", "zar-death"], ["jukebox", "akash"],["jukebox", "bumpy"], ["jukebox", "cere"],
+                        ["jukebox", "zar-death"], ["jukebox", "akash"],["jukebox", "bumpy"], ["jukebox", "dev-flashback"],
                     ]],
                     ["blank", "2px"],
                 ],

@@ -2190,8 +2190,8 @@ class SpaceArena {
             // Evolver shard edge collision: primary shard breaks into 3 mini shards when hitting arena edge
             if (bullet.evolverShard) {
                 if (bullet.x < 0 || bullet.x > this.width || bullet.y < 0 || bullet.y > this.height) {
-                    // spawn 3 mini shards
-                        for (let k = 0; k < 3; k++) {
+                    // spawn 4 mini shards
+                        for (let k = 0; k < 4; k++) {
                         const ang = Math.random() * Math.PI * 2;
                         const spd = 6 + Math.random() * 4;
                         this.bullets.push({
@@ -2245,7 +2245,7 @@ class SpaceArena {
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
         // TEMP
-        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4") && !this.bossActive) {
+        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4" || player.ir.battleStage == "bloodZone1") && !this.bossActive) {
             let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;
@@ -3151,7 +3151,7 @@ class SpaceArena {
                         // non-piercing: destroy bullet on hit
                         // If this is an evolver primary shard, spawn 3 mini shards on impact
                         if (bullet.evolverShard) {
-                            for (let k = 0; k < 3; k++) {
+                            for (let k = 0; k < 4; k++) {
                                 const ang = Math.random() * Math.PI * 2;
                                 const spd = 6 + Math.random() * 4;
                                 this.bullets.push({
@@ -3217,9 +3217,8 @@ class SpaceArena {
             let dy = bullet.y - this.ship.y;
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < shipRadius) {
-            // account for projectile radius (giant bullets are larger)
             let bulletRadius = (typeof bullet.radius === "number") ? bullet.radius : (bullet.fromEnemy && bullet.homing ? 10 : 6);
+            // account for projectile radius (giant bullets are larger)
             if (dist < shipRadius + bulletRadius) {
                  // ensure each enemy projectile only deals damage once
                 if (!bullet._hitPlayer) {
@@ -3227,13 +3226,12 @@ class SpaceArena {
                     let dmg = bullet.damage / this.shipStats.damageReduction;
                     if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
                     player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
- 
+                
                     // remove the projectile immediately so it can't deal damage again
                     bullet.life = 0;
                 }
             }
         }
-    }
 
         // remove dead/consumed bullets so homing projectiles vanish on hit
         this.bullets = this.bullets.filter(b => b.life > 0);
@@ -3246,7 +3244,7 @@ class SpaceArena {
             let dy = this.ship.y - enemy.y;
             let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
             let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < enemy.radius + shipRadius) {
+            if (dist < enemy.radius + shipRadius && !enemy.attached) {
                 let enemyDmg = new Decimal(this.ship.collisionDamage * this.shipStats.attackDamage);
                 if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
                 if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(0.1));
@@ -4117,6 +4115,7 @@ class SpaceArena {
             if (bullet.evolverShard) {
                 this.ctx.save();
                 this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(56, (bullet.radius || 26) * 2);

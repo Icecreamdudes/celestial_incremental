@@ -94,7 +94,7 @@ addLayer("spaceZone1", {
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
-                if (player[this.layer].selectedStageStart == 20) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(20)) look.outline = "3px solid white";
                 return look
             },
         },
@@ -108,7 +108,7 @@ addLayer("spaceZone1", {
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
-                if (player[this.layer].selectedStageStart == 40) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(40)) look.outline = "3px solid white";
                 return look
             },
         },
@@ -122,7 +122,7 @@ addLayer("spaceZone1", {
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
-                if (player[this.layer].selectedStageStart == 60) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(60)) look.outline = "3px solid white";
                 return look
             },
         },
@@ -136,7 +136,7 @@ addLayer("spaceZone1", {
             style() {
                 let look = {background: "#361e1e", border: "3px solid #5e4ee6", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "106px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#37078f, black)"
-                if (player[this.layer].selectedStageStart == 80) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(80)) look.outline = "3px solid white";
                 return look
             },
         },

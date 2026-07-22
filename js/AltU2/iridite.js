@@ -322,7 +322,7 @@ addLayer("ir", {
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
         if (hasUpgrade("ir", 17)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.3)
-        player.ir.shipHealthMax = player.ir.shipHealthMax.mul(getBuyableAmount("bl", 33).div(100).add(1))
+        player.ir.shipHealthMax = player.ir.shipHealthMax.mul(getBuyableAmount("bl", 103).div(100).add(1))
         if (hasMilestone("spaceZone2", 11)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25);
         if (hasMilestone("spaceZone2", 13)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.15);
         if (hasUpgrade("ir", 29)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(upgradeEffect("ir", 29).toNumber());
@@ -411,7 +411,7 @@ addLayer("ir", {
             progress() {
                 return player.ir.shipHealth.div(player.ir.shipHealthMaxTrue);
             },
-            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #808000 0%, #545400 100%)"},
             display() {
@@ -426,7 +426,7 @@ addLayer("ir", {
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
-            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderLeft: "0", borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230",},
             fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #000080 100%)"},
             display() {
@@ -443,7 +443,7 @@ addLayer("ir", {
                     return arena.enemies[0].health / arena.enemies[0].maxHealth
                 } else return 1;
             },
-            borderStyle() { return {border: "3px solid " + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"), borderRadius: "0", color: "white"}},
+            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {
@@ -959,7 +959,7 @@ addLayer("ir", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverseAll(["A2", "DS"], "pause", true)
+                pauseUniverseAll(["A2", "DS", "D1"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
                 let regen = 0
@@ -987,7 +987,8 @@ addLayer("ir", {
             onClick() {
                 player.ir.inBattle = false
                 options.fullscreen = false
-                player.subtabs["ir"]['stuff'] = 'stages'
+                if (player.tab == "ir") player.subtabs["ir"]['stuff'] = 'stages'
+                if (player.tab == "bl") player.subtabs["bl"]['stuff'] = 'stages'
 
                 if (arena) {
                     arena.removeArena();
@@ -995,7 +996,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverseAll(["A2", "DS"], "unpause", true)
+                pauseUniverseAll(["A2", "DS", "D1"], "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
@@ -2398,7 +2399,7 @@ addLayer("ir", {
                             ], {background: "#0000007f", width: "247px", height: "300px"}],
                             ["style-column", [
                                 ["clickable", 17],
-                                ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up, sniper does not auto-turn, evolver shard textures are incomplete", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up, sniper does not auto-turn.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
                             ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", width: "300px", height: "300px"}],
                             ["style-column", [
 

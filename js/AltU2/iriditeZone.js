@@ -69,12 +69,12 @@ addLayer("iriditeZone", {
             canClick() {return true},
             unlocked: true,
             onClick() {
-                player[this.layer].selectedStageStart = 0
+                player[this.layer].selectedStageStart = new Decimal(0)
             },
             style() {
                 let look = {background: "#361e1e", border: "3px solid white", borderRadius: "42px", color: "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black", fontSize: "16px", fontFamily: "monospace", width: "48px", minHeight: "48px", maxHeight: "48px", margin: "0"}
                 if (this.canClick()) look.background = "radial-gradient(#151230)"
-                if (player[this.layer].selectedStageStart == 0) look.outline = "3px solid white";
+                if (player[this.layer].selectedStageStart.eq(0)) look.outline = "3px solid white";
                 return look
             },
         },

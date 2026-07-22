@@ -108,7 +108,7 @@
         },
         104: {
             title() { return "<h3>" + (player.lightRift.interspaceConditions[3] ? "<h3>END" : "<h3>DEPOSIT CORE FRAGMENTS") },
-            canClick() { return player.cof.coreFragments[2].gte(1e8) && !player.lightRift.interspaceConditions[3] },
+            canClick() { return player.cof.coreFragments[2].gte(1e10) && !player.lightRift.interspaceConditions[3] },
             unlocked() { return true },
             onClick() {
                 player.lightRift.interspaceConditions[3] = true
@@ -207,7 +207,7 @@
                             ["style-column", [
                                 ["raw-html", "δ", {color: "#1a6641", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.cof.coreFragments[2]) + " / 100,000,000<br>Technological Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.cof.coreFragments[2]) + " / 1e10<br>Technological Core Fragments"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#1a6641", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 104],

@@ -838,7 +838,7 @@
                 ]
             },
         },
-        stuff: {
+        stuff: {/*
             "Main": {
                 buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return !player.ir.inBattle },
@@ -904,7 +904,7 @@
                         ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
-            },
+            },*/
             "ships": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },

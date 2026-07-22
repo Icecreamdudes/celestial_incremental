@@ -140,6 +140,7 @@
         });
     },
     starlightReset(isRewarded) {
+        return;
         if (isRewarded) {
             player.bum.starlight = player.bum.starlight.add(player.bum.starlightToGet)
             player.bum.starshines = player.bum.starshines.add(player.bum.starshinesToGet)
@@ -1397,6 +1398,10 @@
         }
     },
     tabFormat: [
+        ["raw-html", 
+        "COMING SOON..."
+        , {color: "#dfffdf", fontSize: "32px", fontFamily: "monospace"}],
+        /*
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.bum.starlight) + "</h3> starlight." }, {color: "#dfffdf", fontSize: "24px", fontFamily: "monospace"}],
@@ -1409,7 +1414,7 @@
         ["blank", "15px"],
         ["clickable", "starshineReset"],
         ["blank", "15px"],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],*/
     ],
     layerShown() { return player.startedGame == true && hasMilestone("prj", 401)},
     hotkeys: [

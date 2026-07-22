@@ -28,15 +28,15 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(15deg, #410f2aff 0%, #4f1818ff 50%, #290303ff 100%)",
+            background: "linear-gradient(15deg, #410f2aff 0%, #4f1818 50%, #290303ff 100%)",
             "background-origin": "border-box",
-            "border-color": "#f57171ff",
+            "border-color": "#f57171",
             "color": "#eaf6f7",
         };
     },
     tooltip: "Blood",
-    branches: [["le", "#f57171ff"]],
-    color: "#4f1818ff",
+    branches: [["le", "#f57171"]],
+    color: "#4f1818",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -48,7 +48,7 @@
         
         player.bl.bloodToGet = player.bl.blood.pow(2).add(bloodGain).root(2).sub(player.bl.blood)
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
-        player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 102))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
@@ -61,7 +61,7 @@
         if (player.bl.bloodDrain && player.bl.blood.gte(0))
         {
             player.bl.bloodDrainPerSecond = Decimal.mul(0.1, player.bl.blood.pow(0.2))
-            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 31)[1])
+            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 101)[1])
             player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.div(buyableEffect("bl", 12))
         } else
         {
@@ -75,7 +75,7 @@
         player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta))
 
         player.bl.xpGainPercentage = new Decimal(0.003)
-        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 31)[0])
+        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 101)[0])
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11))
 
         if (!player.pet.legPetTimers[0].active)
@@ -136,7 +136,7 @@
             onClick() {
                 player.ir.inBattle = false
                 options.fullscreen = false
-                player.subtabs["bl"]['stuff'] = 'Blood Battle'
+                player.subtabs["bl"]['stuff'] = 'stages'
 
                 if (arena) {
                     arena.removeArena();
@@ -181,7 +181,7 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -194,7 +194,7 @@
                 player.bl.bloodDrain = true
             },
             style() {
-                let look = {width: "200px", minHeight: "100px", borderRadius: "15px 0px 0px 15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "200px", minHeight: "100px", borderRadius: "15px 0px 0px 15px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -207,7 +207,7 @@
                 player.bl.bloodDrain = false
             },
             style() {
-                let look = {width: "200px", minHeight: "100px", borderRadius: "0px 15px 15px 0px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "200px", minHeight: "100px", borderRadius: "0px 15px 15px 0px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -263,23 +263,57 @@
     },
     bloodReset() {
     },
-    upgrades: {},
+    upgrades: {
+        11: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Rejuvenation",
+            unlocked() { return true },
+            description() {return "Boosts singularity point gain based on space rocks. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(300),
+            currencyLocation() { return player.bl },
+            effect() {
+                return player.ir.spaceRock.pow(0.75).mul(1000).add(1)
+            },
+            currencyDisplayName: "blood stones",
+            currencyInternalName: "bloodStones",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
+        },
+    },
     buyables: {
         11: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(8).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Pure Drainage"
+            description() {
+                return "Boosts punchcard XP gained by draining blood by +x0.1.<br>(x" + formatSimple(this.effect()) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Pure Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -296,23 +330,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         12: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() { return new Decimal(15) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Preservation"
+            description() {
+                return "Reduces blood draining speed by +/0.1.<br>(/" + formatSimple(this.effect()) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are dividing blood drain rate by /" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Efficient Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -329,24 +374,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         13: {
             costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Rejuvenation"
+            description() {
+                return "Boosts ship regen by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are boosting base ship regen AND perks by x" + formatShortSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Rejuvenating Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -363,24 +418,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         14: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Alleviator"
+            description() {
+                return "Reduces the ship battle XP requirement by +/0.02.<br>(/" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are reducing ship battle xp req by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Allieviating Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -397,7 +462,99 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
+        },
+        15: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Boosts ship battle loot gain by +x0.01.<br>(x" + formatSimple(this.effect(), 2) + ")"
+            },
+            currencyDisplayName: "Blood Stones",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Drill-Tip" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
+        },
+        16: {
+            costBase() { return new Decimal(30) },
+            costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.001) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Reduces blood battle level softcap scaling by -0.1%.<br>(-" + formatSimple(this.effect().mul(100), 2) + "%)"
+            },
+            currencyDisplayName: "Blood Stones",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Decay" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
 
         //regular blood
@@ -432,7 +589,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
         22: {
             costBase() { return new Decimal(4) },
@@ -465,7 +622,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
         23: {
             costBase() { return new Decimal(15) },
@@ -498,27 +655,32 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
 
         // Blood Gems
-        31: {
+        101: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.05) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return [getBuyableAmount(this.layer, this.id).pow(0.6).div(4).add(1), getBuyableAmount(this.layer, this.id).pow(0.5).div(6).add(1)] },
+            effect(x) { return [getBuyableAmount(this.layer, this.id).mul(0.1).add(1), getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(0.5)] },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Enhanced Drainage"
+            description() {
+                return "Boosts punchcard XP gained by draining blood by +x0.1, but blood draining speed at a square-rooted rate.<br>(x" + formatSimple(this.effect()[0], 2) + ", x" + formatSimple(this.effect()[1], 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect[0]) + ".\n\
-                    also multiplying drain rate by x" + format(tmp[this.layer].buyables[this.id].effect[1]) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Enhanced Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -535,24 +697,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
-        32: {
+        102: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.05) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(25).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Glistening Blood"
+            description() {
+                return "Boosts blood gain by +x0.1.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting blood gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Glistening Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -569,24 +741,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
-        33: {
+        103: {
             costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(25) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Fuel"
+            description() {
+                return "Boosts ship health by +x0.01.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting ship health by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Fuel" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -603,50 +785,61 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
-        },
-        34: {
-            costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(25) },
-            currency() { return player.bl.bloodGems},
-            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Drill-tip"
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
             },
-            display() {
-                return "which are boosting ship battle loot gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
         },
     },
     milestones: {},
     challenges: {},
     infoboxes: {},
     microtabs: {
+        stages: {
+            "bloodZone1": {
+                unlocked: true,
+                embedLayer: 'bloodZone1',
+            },
+        },
+        stuff2: {
+            "Blood": {
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
+                unlocked() { return !player.ir.inBattle },
+                content: [
+                    ["blank", "25px"],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.bl.blood) + "</h3> blood."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.bl.bloodToGet) + ")" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.bl.bloodToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+
+                    ]],
+                    ["row", [
+                        ["raw-html", () => {return "Boosts punchcard efficiency by ^" + formatSimple(player.bl.bloodEffect, 3) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.bl.blood.gte(6713) ? "<small style='margin-left: 10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 101]]],
+                    ["blank", "25px"],
+                    ["row", [["dark-buyable", 21], ["dark-buyable", 22], ["dark-buyable", 23],]], 
+                    ["blank", "25px"]
+
+                ]
+            },
+            "Blood Battle": {
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
+                unlocked() { return !player.ir.inBattle },
+                content: [
+                    ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+                ]
+            },
+        },
         stuff: {
             "Main": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -672,7 +865,7 @@
                 ]
             },
             "Blood Draining": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -683,7 +876,6 @@
                             player.bl.bloodToGet.gte(1) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                //        ["raw-html", () => {return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : player.du.points.div(1000).pow(0.25).gte(1e7) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["raw-html", () => {return "You are draining " + format(player.bl.bloodDrainPerSecond) + " blood per second."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.pet.legPetTimers[0].current.lte(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -695,16 +887,16 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171ff"}],
+                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171"}],
                             ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
                         ], {width: "408px"}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171ff"}],
+                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171"}],
                             ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
                         ], {width: "408px"}],
-                    ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
+                    ], {background: "#1f0000ff", border: "2px solid #f57171", padding: "-2px"}],
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -712,63 +904,229 @@
                     ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
             },
-            "Blood Battle": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
-                unlocked() { return !player.ir.inBattle },
+            "ships": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content: [
-                ["layer-proxy", ["ir", [
                     ["blank", "25px"],
                     ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["layer-proxy", ["ir", [
                         ["style-column", [
-                            ["blank", "25px"],
-                            ["layer-proxy", ["bl", [
-                                ["clickable", 11],
-                            ]]],
-                            ["blank", "25px"],
-                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["blank", "25px"],
+                            ["style-row", [
+                                ["style-column", [
+
+                                ], {background: "#0000007f", width: "247px", height: "300px"}],
+                                ["style-column", [
+                                    ["clickable", 17],
+                                    ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up, sniper does not auto-turn.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #f57171", borderRight: "3px solid #f57171", width: "300px", height: "300px"}],
+                                ["style-column", [
+
+                                ], {background: "#0000007f", width: "247px", height: "300px"}],
+                            ], {borderBottom: "3px solid #f57171", width: "800px", height: "300px"}],
+                            ["style-row", [
+                                ["style-column", [
+                                    ["levelable-display", [
+                                        ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
+                                    ]],
+                                ], {width: "550px", height: "175px", backgroundColor: "#1a0808", borderBottom: "3px solid #f57171", borderRadius: "2px 2px 0 0"}],
+                                ["always-scroll-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Ships", {color: "#f57171", fontSize: "20px", fontFamily: "monospace"}],
+                                    ], {width: "541px", height: "40px", backgroundColor: "#401313", borderBottom: "3px solid #f57171",  borderLeft: "3px solid #f57171",  userSelect: "none"}],
+                                    ["style-column", [
+                                        ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
+                                        ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
+                                    ], {width: "531px", height: "260px", backgroundColor: "#290c0c", borderLeft: "3px solid #f57171", padding: "5px"}],
+                                ], {width: "556px", height: "240px"}],
+                            ], {width: "800px", height: "417px"}],
+                        ], {width: "800px", height: "720px", background: "radial-gradient(circle, #290c0c 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}]
+                    ]]],
+                    ["blank", "25px"],
+                ],
+            },
+            "stages": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["style-row", [
+                        ["style-column", [
                             ["style-column", [
-                                ["levelable-display", [
-                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                ]],
-                            ], {width: "550px", height: "175px", backgroundColor: "#2b0a12", border: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff", borderRadius: "2px 2px 0 0"}],
-                            ["top-column", [
-                                ["style-column", [
-                                    ["raw-html", "Ships", {color: "#ff8989ff", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "550px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff", userSelect: "none"}],
-                                ["style-column", [
-                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
-                                ], {width: "540px", height: "270px", backgroundColor: "#2b0a12", padding: "5px"}],
-                            ], {width: "550px", height: "323px", borderBottom: "3px solid #ff8989ff", borderLeft: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff"}],
-                            ["blank", "25px"],
-                        ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", border: "3px solid #ff8989ff", backgroundColor: "#290303ff", borderRadius: "15px 15px 15px 15px"}],
-                ]]]
-            ]
+                                ["buttonless-microtabs", "stages", {borderWidth: "0"}],
+                            ], {width: "800px", height: "720px", borderRadius: "0"}],
+                        ], {width: "397px", height: "720px", borderRadius: "0"}],
+                        ["style-column", [
+                            ["centered-draggable-scroll-row", [
+                                ["style-row", [
+
+                                    // Connections
+                                    /*
+                                    ["style-column", [
+                                        createConnectionComponent(0, 0, 100, 0, "#f57171"),
+                                    ], () => {
+                                        return {display: true ? "" : "none !important", width: "0", height: "0"}
+                                    }],*/
+                                    //
+                                    // Blood Zone I
+                                    ["tooltip-row", [
+                                        ["category-button", ["I", "stages", "bloodZone1"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#4f1818, black)",
+                                                border: "4px solid #f57171",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["bl"]["stages"] == "bloodZone1") str.outline = "3px solid #fff"
+                                            return str
+                                        }],
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Blood Zone I</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0px"}],
+
+                                ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/bloodMap.png)"}],
+                            ], {width: "400px", height: "360px", borderLeft: "3px solid #f57171", borderBottom: "3px solid #f57171", flexFlow: "column"}],
+                            ["blank", "357px"],
+                        ], {width: "403px", height: "720px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #290c0c 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],
+            },
+            "upgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["top-column", [
+                        ["style-row", [
+                            ["raw-html", function () { return "You have <span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(player.bl.bloodStones) + " blood stones</span> and <span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(player.bl.bloodGems) + " blood gems</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            
+                        ], {background: "#4f1818", borderBottom: "3px solid #f57171", width: "800px", height: "40px"}],
+                        ["style-row", [
+                            ["centered-draggable-scroll-row", [
+                                
+                                ["style-row", [
+
+                                    // Zone I Upgrades
+                                    ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["buyable", 11],
+                                                ["buyable", 13],
+                                                ["buyable", 15],
+                                            ]],
+                                            ["style-row", [
+                                                ["buyable", 12],
+                                                ["buyable", 14],
+                                                ["buyable", 16],
+                                            ]],
+                                            ["style-row", [
+                                                ["buyable", 101],
+                                                ["buyable", 102],
+                                                ["buyable", 103],
+                                            ]],
+                                        ], {width: "636px", background: "#f571713f", border: "3px solid #f57171", borderRadius: "19px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "-318px", top: "0"}],
+                                    
+                                    // Zone I -> Zone II Connection
+
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #f57171, #bfa8ae) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "327px", top: "0", display: "none !important"}],
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 16],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #f571713f, #bfa8ae3f)", borderRadius: "0"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "327px", top: "0", display: "none !important"}],
+
+                                    // Zone II Upgrades
+
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 21],
+                                                ["upgrade", 23],
+                                                ["upgrade", 25],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 22],
+                                                ["upgrade", 24],
+                                                ["upgrade", 26],
+                                            ]],
+                                            ["style-row", [
+                                                ["upgrade", 104],
+                                                ["upgrade", 105],
+                                                ["upgrade", 106],
+                                            ]],
+                                        ], {width: "636px", background: "#bfa8ae3f", border: "3px solid #bfa8ae", borderRadius: "19px", display: "none !important"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "548px", top: "0px", display: "none !important"}
+                                        look.display = hasUpgrade("ir", 16) ? "" : "none !important"
+                                        return look
+                                    }],
+
+
+                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/bloodZone1.png)"}],
+                            ], {width: "800px", height: "677px", flexFlow: "column"}]
+                        ]],
+                        /*["style-row", [
+                            ["raw-html", function () { return "You have <span style='color:#bfbfbf;text-shadow:0 0 8px #bfbfbf'>" + formatWhole(player.cb.evolutionShards) + " ES</span> and <span style='color:#796d85;text-shadow:0 0 8px #796d85'>" + formatWhole(player.cb.paragonShards) + " PS</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            
+                        ], {background: "#4f1818", borderTop: "3px solid #f57171", width: "800px", height: "40px"}],*/
+                    ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #f57171", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],
             },
             "Battle": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
                 unlocked() { return false },
-                content: [
+                content() { return [
                     ["layer-proxy", ["ir", [
-                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                        ["blank", "650px"],
-                        ["style-row", [
-                            ["layer-proxy", ["bl", [["clickable", 12]]]],
-                            ["blank", ["100px", "50px"]],
-                            ["style-column", [
-                                ["clickable", 1001],
-                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                            ], {width: "150px", height: "100px", zIndex: 15000}],
-                            ["blank", ["100px", "50px"]],
-                            ["layer-proxy", ["bl", [["clickable", 13]]]],
-                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate"}],
-                    ]]],
-                ]
+                        ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "10px" : "0"}],
+                        ["style-column", [
+                            ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
+                            ["style-row", [
+                                ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
+                            ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
+                        ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._iriditeFullscreen) ? "none !important" : ""}],
+                        ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
+                        ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "calc(100vh - 279px)" : "800px"}],
+                        ["row", [["ex-bar", "bossHealthBar"],]],
+                        ["style-column", [
+                            ["blank", "9px", {width: "6px"}],
+                            ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "9px", {width: "6px"}],
+                            ["row", [
+                                ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
+                            ]],
+                        ], {width: (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._iriditeFullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}]
+                    ]],
+                ]]}
             },
             "Refresh Page :(": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -791,13 +1149,13 @@
                 ]
             },
             "Nox, The Vampire Knight": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", "Perks for beating Nox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171ff", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "800px", border: "3px solid #f57171", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
                         ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
@@ -805,19 +1163,22 @@
                         ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                    ], {width: "800px", border: "3px solid #f57171", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
         },
     },
     tabFormat: [
-        ["raw-html", () => { return !player.ir.inBattle ? "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ["blank", "25px"],
+        ["style-column", [
+            ["raw-html", () => { return !player.ir.inBattle ? "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ], () => {
+            return {display: arena ? "none !important" : ""}
+        }],
+        ["microtabs", "stuff2", { 'border-width': '0px' }],
     ],
     layerShown() { return getLevelableTier("pu", 401, true) },
     deactivated() { return !player.sma.inStarmetalChallenge},
@@ -2065,7 +2426,6 @@ class BloodArena extends SpaceArena {
                             player.ir.battleLevel = player.ir.battleLevel.add(1)
                             let noxStone = 75
                             noxStone = noxStone * (this.upgradeEffects.rockGain || 1) * (this.resourceMult || 1)
-                            noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                             noxStone = noxStone * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                             noxStone = Math.max(0, Math.floor(noxStone))
                             try {
@@ -2141,7 +2501,6 @@ class BloodArena extends SpaceArena {
                     // apply loot multipliers similar to SpaceArena logic
                     try {
                         amt = amt * (this.upgradeEffects.rockGain || 1) * (this.resourceMult || 1)
-                        amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
                         amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
                         amt = Math.max(0, Math.floor(amt))
                     } catch (e) {}

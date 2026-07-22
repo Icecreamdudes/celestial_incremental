@@ -158,7 +158,7 @@ addLayer("bloodZone1", {
     milestones: {
         11: {
             requirementDescription: "Level 20",
-            effectDescription() { return "Unlock Nox's perks." },
+            effectDescription() { return "The humanity punchcard selection requirement is reduced by 2. Keep blood battle buyables on D1 exit." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(20) },
             style() {
@@ -169,7 +169,7 @@ addLayer("bloodZone1", {
         },
         12: {
             requirementDescription: "Level 40",
-            effectDescription() { return "The first blood buyable also reduces the eclipse shard requirement." },
+            effectDescription() { return "Passively generate 10% of blood gain per second when blood is not being drained." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(40) },
             style() {
@@ -180,7 +180,7 @@ addLayer("bloodZone1", {
         },
         13: {
             requirementDescription: "Level 60",
-            effectDescription() { return "The second blood buyable also boosts eclipse shard gain." },
+            effectDescription() { return "???" },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(60) },
             style() {
@@ -191,7 +191,7 @@ addLayer("bloodZone1", {
         },
         14: {
             requirementDescription: "Level 80",
-            effectDescription() { return "The second and third blood buyables use better formulas." },
+            effectDescription() { return "???" },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(80) },
             style() {

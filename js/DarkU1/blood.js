@@ -67,6 +67,7 @@
         {
             player.bl.bloodDrain = false
             player.bl.bloodDrainPerSecond = new Decimal(0)
+            if (hasMilestone("bloodZone1", 12) && player.bl.bloodToGet.gte(1)) player.bl.blood = player.bl.blood.add(player.bl.bloodToGet.mul(delta).mul(0.1).div(player.uni.D1.tickspeed));
         }
         if (player.bl.blood.lte(0))
         {

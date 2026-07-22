@@ -4857,7 +4857,7 @@
             portrait: "resources/secret.png",
             music: "music/devFlashback.mp3",
             background: "linear-gradient(135deg, #bf8fbf 0%, #b4bfb4 100%)",
-            trigger() {return player.prj.modules[2].focused == true || true },
+            trigger() {return player.prj.modules[2].focused == true && false },
             dialogue: [
                 { text: "Your vision flashes a brilliant white." },
                 { text: "Two people appear in front of you. One looks just like Bumpy." },

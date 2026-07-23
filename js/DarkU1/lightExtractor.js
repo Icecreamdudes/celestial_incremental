@@ -684,7 +684,7 @@
         player.bl.buyables[22] = new Decimal(0)
         player.bl.buyables[23] = new Decimal(0)
 
-        if (!player.bl.noxDefeated) {
+        if (!hasMilestone("bl", 11)) {
             player.bl.buyables[11] = new Decimal(0)
             player.bl.buyables[12] = new Decimal(0)
             player.bl.buyables[13] = new Decimal(0)

@@ -12,7 +12,9 @@
         bloodToGet: new Decimal(1),
 
         bloodStones: new Decimal(0),
+        bloodStonesMult: new Decimal(1),
         bloodGems: new Decimal(0),
+        bloodGemsMult: new Decimal(1),
 
         bloodDrain: false,
         bloodDrainPerSecond: new Decimal(0.1),
@@ -73,7 +75,7 @@
         {
             player.bl.blood = new Decimal(0)
         }
-        player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta))
+        player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta).div(player.uni.D1.tickspeed))
 
         player.bl.xpGainPercentage = new Decimal(0.003)
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 101)[0])
@@ -83,21 +85,34 @@
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage.mul(delta).div(player.uni.D1.tickspeed)).floor())
                 }
             }
         } else
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta).div(player.uni.D1.tickspeed)).floor())
                 }
             }
         }
 
+        // BLOOD STONES
         player.bl.bloodStones = player.bl.bloodStones.floor()
+
+        player.bl.bloodStonesMult = new Decimal(1)
+        player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(buyableEffect("sme", 155))
+        player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(buyableEffect("bl", 15))
+        if (player.bl.noxDefeated) player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(0.5)
+
+        // BLOOD GEMS
         player.bl.bloodGems = player.bl.bloodGems.floor()
 
+        player.bl.bloodGemsMult = new Decimal(1)
+        player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("sme", 155))
+        player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("bl", 15))
+
+        // SPAWN NOX
         if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
         {
             spawnNox();
@@ -662,8 +677,8 @@
         // Blood Gems
         101: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.05) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
             effect(x) { return [getBuyableAmount(this.layer, this.id).mul(0.1).add(1), getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(0.5)] },
@@ -671,7 +686,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             description() {
-                return "Boosts punchcard XP gained by draining blood by +x0.1, but blood draining speed at a square-rooted rate.<br>(x" + formatSimple(this.effect()[0], 2) + ", x" + formatSimple(this.effect()[1], 2) + ")"
+                return "Boosts punchcard XP gained by draining blood by +x0.1. Affects blood draining speed at a square-rooted rate.<br>(x" + formatSimple(this.effect()[0], 2) + ", x" + formatSimple(this.effect()[1], 2) + ")"
             },
             currencyDisplayName: "Blood Gems",
             display() {
@@ -706,16 +721,16 @@
         },
         102: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.075) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             description() {
-                return "Boosts blood gain by +x0.1.<br>(x" + formatSimple(this.effect(), 2) + ")"
+                return "Boosts blood gain by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
             currencyDisplayName: "Blood Gems",
             display() {
@@ -751,7 +766,7 @@
         103: {
             costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
@@ -802,6 +817,10 @@
                 unlocked: true,
                 embedLayer: 'bloodZone1',
             },
+            "noxZone": {
+                unlocked: true,
+                embedLayer: 'noxZone',
+            },
         },
         stuff2: {
             "Blood": {
@@ -826,8 +845,13 @@
                     ["row", [["clickable", 101]]],
                     ["blank", "25px"],
                     ["row", [["dark-buyable", 21], ["dark-buyable", 22], ["dark-buyable", 23],]], 
-                    ["blank", "25px"]
-
+                    ["blank", "25px"],
+                    ["raw-html", () => {return "You are draining " + format(player.bl.bloodDrainPerSecond) + " blood per second."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.pet.legPetTimers[0].current.lte(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.pet.legPetTimers[0].current.gt(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 102], ["clickable", 103]]],
+                    ["blank", "25px"],
                 ]
             },
             "Blood Battle": {
@@ -839,72 +863,6 @@
             },
         },
         stuff: {
-            "Main": {
-                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
-                unlocked() { return !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.bl.blood) + "</h3> blood."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.bl.bloodToGet) + ")" }, () => {
-                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            player.bl.bloodToGet.gte(1) ? look.color = "white" : look.color = "gray"
-                            return look
-                        }],
-
-                    ]],
-                    ["row", [
-                        ["raw-html", () => {return "Boosts punchcard efficiency by ^" + formatSimple(player.bl.bloodEffect, 3) + ". (Only active effects)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.bl.blood.gte(6713) ? "<small style='margin-left: 10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
-                    ]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 101]]],
-                    ["blank", "25px"],
-                    ["row", [["dark-buyable", 21], ["dark-buyable", 22], ["dark-buyable", 23],]], 
-                    ["blank", "25px"]
-
-                ]
-            },
-            "Blood Draining": {
-                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
-                unlocked() { return !player.ir.inBattle },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.bl.blood) + "</h3> blood."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.bl.bloodToGet) + ")" }, () => {
-                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            player.bl.bloodToGet.gte(1) ? look.color = "white" : look.color = "gray"
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", () => {return "You are draining " + format(player.bl.bloodDrainPerSecond) + " blood per second."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.pet.legPetTimers[0].current.lte(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.pet.legPetTimers[0].current.gt(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 102], ["clickable", 103]]],
-                    ["blank", "25px"],
-                    ["style-row", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171"}],
-                            ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
-                        ], {width: "408px"}],
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171"}],
-                            ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
-                        ], {width: "408px"}],
-                    ], {background: "#1f0000ff", border: "2px solid #f57171", padding: "-2px"}],
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
-                ]
-            },
             "ships": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
                 unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
@@ -975,13 +933,13 @@
                                 ["style-row", [
 
                                     // Connections
-                                    /*
+                                    
                                     ["style-column", [
                                         createConnectionComponent(0, 0, 100, 0, "#f57171"),
                                     ], () => {
                                         return {display: true ? "" : "none !important", width: "0", height: "0"}
-                                    }],*/
-                                    //
+                                    }],
+
                                     // Blood Zone I
                                     ["tooltip-row", [
                                         ["category-button", ["I", "stages", "bloodZone1"], () => {
@@ -999,7 +957,26 @@
                                             return str
                                         }],
                                         ["raw-html", () => {return "<div class='bottomTooltip'>Blood Zone I</div>"}],
-                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0"}],
+
+                                    // Nox Zone
+                                    ["tooltip-row", [
+                                        ["category-button", ["🌢", "stages", "noxZone"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#5e1818, black)",
+                                                border: "4px solid #f5b8b8",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["bl"]["stages"] == "noxZone") str.outline = "3px solid #fff"
+                                            return str
+                                        }],
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Nox Zone</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "100px", top: "0"}],
 
                                 ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/bloodMap.png)"}],
                             ], {width: "400px", height: "360px", borderLeft: "3px solid #f57171", borderBottom: "3px solid #f57171", flexFlow: "column"}],
@@ -1147,24 +1124,6 @@
                     ["raw-html", function () { return "You lost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["clickable", 12],
-                ]
-            },
-            "Nox, The Vampire Knight": {
-                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
-                unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", "Perks for beating Nox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
-                    ["style-column", [
-                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
         },

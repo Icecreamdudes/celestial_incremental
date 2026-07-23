@@ -11,7 +11,7 @@ addLayer("bloodZone1", {
 
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
-        levelScaling: new Decimal(1.2),
+        levelScaling: new Decimal(1.15),
         levelScalingStart: new Decimal(10),
 
         selectedStageStart: new Decimal(0),
@@ -26,14 +26,14 @@ addLayer("bloodZone1", {
             textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
             marginRight: "50px !important",
         }
-        if (player.subtabs["bl"]["spaceStages"] == "bloodZone1") str.outline = "3px solid #fff"
+        if (player.subtabs["bl"]["stages"] == "bloodZone1") str.outline = "3px solid #fff"
         return str
     },
     tooltip: "Blood Zone I",
     branches: [],
     color: "#f57171",
     update(delta) {
-        player[this.layer].levelScaling = new Decimal(1.2)
+        player[this.layer].levelScaling = new Decimal(1.15)
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("bl", 16));
@@ -158,7 +158,7 @@ addLayer("bloodZone1", {
     milestones: {
         11: {
             requirementDescription: "Level 20",
-            effectDescription() { return "The humanity punchcard selection requirement is reduced by 2. Keep blood battle buyables on D1 exit." },
+            effectDescription() { return "Keep blood battle buyables on D1 exit." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(20) },
             style() {
@@ -315,20 +315,9 @@ SB_zones.bloodZone1 = {
         }
     },
     generateAsteroid(level) {
-        let random = Math.random()
-        if (random < 0.25) return "mediumAsteroid";
-        else return "smallAsteroid";
+        return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0)) {
-            arena.enemies = []
-            arena.asteroids = []
-            arena.xpOrbs = []
-            arena.gammaTrails = []
-            arena.bossActive = true;
-            arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
-            SB_spawnCelestialite("ufo")
-        }
     },
     statMult: new Decimal(1),
     rockMult: new Decimal(1),

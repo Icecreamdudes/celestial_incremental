@@ -290,11 +290,13 @@ addLayer("ir", {
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("pl", 15))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("pl", 16))
+        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("bl", 15))
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
 
         player.ir.spaceGemMult = new Decimal(1)
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("sme", 156))
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("pl", 16))
+        player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("bl", 15))
         if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";

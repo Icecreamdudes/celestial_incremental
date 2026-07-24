@@ -142,7 +142,7 @@ SB_zones.noxZone = {
         if (typeof level == "object") level = level.toNumber();
         
         let cel = ["leech", "whiteLeech", "bloodBat", "whiteBloodBat"]
-        let cel2 = ["bloodEye", "largeLeech", "largeBloodBat"]
+        let cel2 = ["bloodEye", "redBloodEye", "largeLeech", "largeBloodBat"]
 
         if (Math.random() < player.ir.battleLevel.toNumber() / 40 ) {
             return cel2[Math.floor(Math.random()*cel2.length)]
@@ -181,15 +181,15 @@ SB_celestialites.whiteLeech = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.99) {
+            gain.bloodStones = Decimal.add(1, Math.random())
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(4)
+        return Decimal.add(2, Math.random()).mul(3)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -317,19 +317,19 @@ SB_celestialites.whiteBloodBat = {
     health: new Decimal(50),
     damage: new Decimal(2),
     bodyDamage: new Decimal(1),
-    regen: new Decimal(2),
+    regen: new Decimal(4),
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.99) {
+            gain.bloodStones = Decimal.add(1, Math.random())
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(5)
+        return Decimal.add(2, Math.random()).mul(3)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -446,6 +446,151 @@ SB_celestialites.whiteBloodBat = {
         ctx.beginPath();
         ctx.fillStyle = '#222222';
         ctx.ellipse(0, -4, 4, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    },
+}
+
+SB_celestialites.redBloodEye = {
+    name: "Red Blood Eye",
+    symbol: "redBloodEye",
+    radius: 24,
+    color: "#7a0000",
+    health: new Decimal(500),
+    damage: new Decimal(10),
+    bodyDamage: new Decimal(1),
+    regen: new Decimal(4),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        if (random < 0.97) {
+            gain.bloodStones = Decimal.add(1, Math.random()).mul(3)
+        } else {
+            gain.bloodGems = Decimal.add(1, Math.random())
+        }
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(9)
+    },
+    initialize(celestialite) {
+        celestialite.wrigglePhase = 0
+
+        celestialite.targetingTimer = 0
+        celestialite.attackCooldown = 210
+        celestialite.turnTimer = 600
+
+        celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.dvx = 0.875
+        celestialite.dvy = 0.875
+    },
+    tick(celestialite) {
+        // Decrease timers
+        celestialite.wrigglePhase += 0.1;
+        celestialite.attackCooldown--;
+        celestialite.targetingTimer--;
+        if (celestialite.targetingTimer > 0) celestialite.turnTimer--;
+
+        // Calculate distance to the player
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+
+        // Reset the targeting cooldown the player if they're close
+        if (celestialite.playerDist < 600) {
+            celestialite.targetingTimer = 450
+            celestialite.playerAng = Math.atan2(dy, dx);
+            celestialite.moveAng = celestialite.playerAng
+        };
+        
+        // Attack the player
+        if (celestialite.attackCooldown <= 0 && celestialite.targetingTimer > 0) {
+            for (i = 0; i < 9; i++) {
+                let ang = celestialite.playerAng + Math.PI / 16 * (i - 4)
+                let speed = 3 + Math.random() * 3
+                arena.bullets.push({
+                    x: celestialite.x + Math.cos(ang) * (celestialite.radius),
+                    y: celestialite.y + Math.sin(ang) * (celestialite.radius),
+                    vx: Math.cos(ang) * speed,
+                    vy: Math.sin(ang) * speed,
+                    life: 180,
+                    damage: celestialite.damage,
+                    pierce: 0,
+                    piercedAsteroids: [],
+                    fromEnemy: true,
+                    homing: true,
+                    homingStrength: 0.025,
+                    radius: 4,
+                });
+            }
+            celestialite.attackCooldown = 240
+        }
+
+        // Handle celestialite movement changes
+        if (celestialite.targetingTimer > 0) {
+            if (celestialite.attackCooldown > 30 && celestialite.attackCooldown < 210 ) {
+                if (celestialite.playerDist > 300) {
+                    celestialite.ax = Math.cos(celestialite.moveAng) * 0.5
+                    celestialite.ay = Math.sin(celestialite.moveAng) * 0.5
+                } else {
+                    celestialite.ax = 0
+                    celestialite.ay = 0
+                }
+            }
+        } else {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.5
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.5
+            celestialite.attackCooldown = 240
+        }
+        if (celestialite.turnTimer <= 0) {
+            celestialite.moveAng = Math.random() * Math.PI * 2
+            celestialite.turnTimer = 450;
+        }
+    },
+    onAttacked(celestialite, damage, attacker) {
+        celestialite.targetingTimer = 450
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
+    },
+    onDeath(celestialite) {},
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        // eye always looks at ship
+        let ang = celestialite.playerAng;
+        ctx.rotate(ang);
+        let r = celestialite.radius;
+        // sclera
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffbfbf';
+        ctx.fill();
+        // iris
+        ctx.beginPath();
+        ctx.arc(r * 0.25, 0, r * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#bf0000';
+        ctx.fill();
+        // pupil
+        ctx.beginPath();
+        ctx.arc(r * 0.25, 0, r * 0.25, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+        ctx.restore();
+        ctx.save();
+
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        // glossy highlight
+        ctx.beginPath();
+        ctx.arc(-r * 0.1875 + 0.25 * r * Math.cos(ang), -r * 0.1875 + 0.25 * r * Math.sin(ang), r * 0.08, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
         ctx.fill();
         ctx.restore();
     },

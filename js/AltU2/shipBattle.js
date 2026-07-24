@@ -22,12 +22,12 @@ const UPGRADE_POOL = {
         color: "#fff",
         effect(arena) { arena.upgrades.attackDamageCommon++; }
     },
-    rockGainCommon: {
+    spaceRockGainCommon: {
         name() { return "Space Rock Gain"},
         description() { return "+10% space rock gain"},
         rarity: "common",
         color: "#fff",
-        effect(arena) { arena.upgrades.rockGainCommon++; }
+        effect(arena) { arena.upgrades.spaceRockGainCommon++; }
     },
     xpGainCommon: {
         name() { return "XP Gain"},
@@ -64,12 +64,12 @@ const UPGRADE_POOL = {
             arena.upgrades.healthRegenUncommon++;
         }
     },
-    rockGainUncommon: {
+    spaceRockGainUncommon: {
         name() { return "Space Rock Gain"},
         description() { return "+15% space rock gain"},
         rarity: "uncommon",
         color: "#4cff4c",
-        effect(arena) { arena.upgrades.rockGainUncommon++; }
+        effect(arena) { arena.upgrades.spaceRockGainUncommon++; }
     },
     xpGainUncommon: {
         name() { return "XP Gain"},
@@ -120,19 +120,19 @@ const UPGRADE_POOL = {
         color: "#4c8cff",
         effect(arena) { arena.upgrades.moveSpeedRare++; }
     },
-    rockGainRare: {
+    spaceRockGainRare: {
         name() { return "Space Rock Gain"},
         description() { return "+20% space rock gain"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgrades.rockGainRare++; }
+        effect(arena) { arena.upgrades.spaceRockGainRare++; }
     },
-    gemGainRare: {
+    spaceGemGainRare: {
         name() { return "Space Gem Gain"},
         description() { return "+5% space gem gain"},
         rarity: "rare",
         color: "#4c8cff",
-        effect(arena) { arena.upgrades.gemGainRare++; }
+        effect(arena) { arena.upgrades.spaceGemGainRare++; }
     },
     bulletSizeRare: {
         name() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "Bullet Size"} else {return "Max Health"}},
@@ -237,8 +237,8 @@ const SHIP_STAT_NAMES = {
     damageReduction: "Damage Reduction",
     maxHp: "Max Health",
     moveSpeed: "Movement Speed",
-    rockGain: "Space Rock Gain",
-    gemGain: "Space Gem Gain",
+    spaceRockGain: "Space Rock Gain",
+    spaceGemGain: "Space Gem Gain",
     xpGain: "XP Gain",
 }
 
@@ -250,8 +250,8 @@ const SHIP_STAT_UPGRADE_OPERATIONS = {
     damageReduction: "/",
     maxHp: "",
     moveSpeed: "x",
-    rockGain: "",
-    gemGain: "",
+    spaceRockGain: "",
+    spaceGemGain: "",
     xpGain: "x",
 }
 const SHIP_STAT_UPGRADE_SUFFIXES = {
@@ -262,8 +262,8 @@ const SHIP_STAT_UPGRADE_SUFFIXES = {
     damageReduction: "",
     maxHp: "",
     moveSpeed: "",
-    rockGain: "",
-    gemGain: "",
+    spaceRockGain: "",
+    spaceGemGain: "",
     xpGain: "",
 }
 
@@ -956,11 +956,11 @@ class SpaceArena {
             moveSpeedRare: 0,
             moveSpeedLegendary: 0,
 
-            rockGainCommon: 0,
-            rockGainUncommon: 0,
-            rockGainRare: 0,
+            spaceRockGainCommon: 0,
+            spaceRockGainUncommon: 0,
+            spaceRockGainRare: 0,
             
-            gemGainRare: 0,
+            spaceGemGainRare: 0,
             
             xpGainCommon: 0,
             xpGainUncommon: 0,
@@ -988,8 +988,8 @@ class SpaceArena {
             damageReduction: 1,
             maxHp: 1,
             moveSpeed: 1,
-            rockGain: 1,
-            gemGain: 1,
+            spaceRockGain: 1,
+            spaceGemGain: 1,
             xpGain: 1,
         };
         return base
@@ -1043,17 +1043,17 @@ class SpaceArena {
         shipStats.moveSpeed *= 1 + 0.1 * upgrades.moveSpeedRare
         shipStats.moveSpeed *= 1 + 0.25 * upgrades.moveSpeedLegendary
         
-        shipStats.rockGain = player.ir.spaceRockMult.toNumber()
-        shipStats.rockGain *= 1 + 0.1 * upgrades.rockGainCommon
-        shipStats.rockGain *= 1 + 0.15 * upgrades.rockGainUncommon
-        shipStats.rockGain *= 1 + 0.2 * upgrades.rockGainRare
-        shipStats.rockGain *= 1 + 0.2 * upgrades.lootGainEpic
-        shipStats.rockGain *= 1 + 0.4 * upgrades.dropGainLegendary
+        shipStats.spaceRockGain = player.ir.spaceRockMult.toNumber()
+        shipStats.spaceRockGain *= 1 + 0.1 * upgrades.spaceRockGainCommon
+        shipStats.spaceRockGain *= 1 + 0.15 * upgrades.spaceRockGainUncommon
+        shipStats.spaceRockGain *= 1 + 0.2 * upgrades.spaceRockGainRare
+        shipStats.spaceRockGain *= 1 + 0.2 * upgrades.lootGainEpic
+        shipStats.spaceRockGain *= 1 + 0.4 * upgrades.dropGainLegendary
         
-        shipStats.gemGain = player.ir.spaceGemMult.toNumber()
-        shipStats.gemGain *= 1 + 0.05 * upgrades.gemGainRare
-        shipStats.gemGain *= 1 + 0.05 * upgrades.lootGainEpic
-        shipStats.gemGain *= 1 + 0.2 * upgrades.dropGainLegendary
+        shipStats.spaceGemGain = player.ir.spaceGemMult.toNumber()
+        shipStats.spaceGemGain *= 1 + 0.05 * upgrades.spaceGemGainRare
+        shipStats.spaceGemGain *= 1 + 0.05 * upgrades.lootGainEpic
+        shipStats.spaceGemGain *= 1 + 0.2 * upgrades.dropGainLegendary
 
         shipStats.xpGain = 1
         shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
@@ -1645,32 +1645,30 @@ class SpaceArena {
                 let reward = celRef.reward()
 
                 if (reward.spaceRock) {
-                    let rockAmt = reward.spaceRock.mul(this.shipStats.rockGain).floor();
-                    player.ir.spaceRock = player.ir.spaceRock.add(rockAmt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: rockAmt, type: "rock" });
+                    let amt = reward.spaceRock.mul(this.shipStats.spaceRockGain).floor();
+                    player.ir.spaceRock = player.ir.spaceRock.add(amt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceRock" });
                 }
                 if (reward.spaceGem) {
-                    let gemAmt = reward.spaceGem.mul(this.shipStats.gemGain).floor();
-                    player.ir.spaceGem = player.ir.spaceGem.add(gemAmt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: gemAmt, type: "gem" });
+                    let amt = reward.spaceGem.mul(this.shipStats.spaceGemGain).floor();
+                    player.ir.spaceGem = player.ir.spaceGem.add(amt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceGem" });
+                }
+                if (reward.bloodStones) {
+                    let amt = reward.bloodStones.mul(1).floor();
+                    player.bl.bloodStones = player.bl.bloodStones.add(amt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodStones" });
+                }
+                if (reward.bloodGems) {
+                    let amt = reward.bloodGems.mul(1).floor();
+                    player.bl.bloodGems = player.bl.bloodGems.add(amt);
+                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
                 }
             }
             // xp drop -> spawn xp orb
             if (celRef && celRef.experienceReward) {
                 let amt = celRef.experienceReward()
                 xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
-            }
-
-            // guaranteed gem drop for UFO miniboss
-            if (enemy.type === "ufoBoss") {
-                this.bossActive = false;
-                player.ir.ufoDefeated = true;
-                player.ir.battleLevel = player.ir.battleLevel.add(1)
-                let gain = Math.floor(2 * this.shipStats.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
-                player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
-                arena.showUpgradeChoice(true);
-                player.ir.menu = 1
             }
 
             // Mark Iridite defeat when boss dies
@@ -1681,19 +1679,11 @@ class SpaceArena {
                 player.ir.iriditeFightActive = false;
                 localStorage.setItem('arenaActive', 'false');
                 player.ir.battleLevel = player.ir.battleLevel.add(1)
-                let gain = Math.floor(5 * this.shipStats.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
+                let gain = Math.floor(5 * this.shipStats.spaceGemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "gem" });
+                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "spaceGem" });
                 arena.showUpgradeChoice(true);
                 player.ir.menu = 1
-            }
-
-            // gem chance for hard-mode enemies Delta/Epsilon/Zeta/Eta (3%)
-            if (["deltaShip", "epsilonShip", "zetaShip", "etaShip"].includes(enemy.type)) {
-                if (Math.random() < 0.03) {
-                    player.ir.spaceGem = player.ir.spaceGem.add(1);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 1, type: "gem" });
-                }
             }
 
             SB_celestialites[enemy.type].onDeath(enemy)
@@ -3286,7 +3276,7 @@ class SpaceArena {
 
         // Add loot flashes
         for (let pos of lootFlashPositions) {
-            if (pos.type == "rock") {
+            if (pos.type == "spaceRock") {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
@@ -3296,13 +3286,33 @@ class SpaceArena {
                     style: "18px monospace"
                 });
             }
-            if (pos.type == "gem") {
+            if (pos.type == "spaceGem") {
                 this.lootFlashes.push({
                     x: pos.x,
                     y: pos.y,
                     text: `+${formatWhole(pos.amount)} space gem`,
                     timer: 240,
-                    color: "#66e8ffff",
+                    color: "#66e8fff",
+                    style: "24px monospace"
+                });
+            }
+            if (pos.type == "bloodStones") {
+                this.lootFlashes.push({
+                    x: pos.x,
+                    y: pos.y,
+                    text: `+${formatWhole(pos.amount)} blood stone`,
+                    timer: 120,
+                    color: "#bf0000",
+                    style: "18px monospace"
+                });
+            }
+            if (pos.type == "bloodGems") {
+                this.lootFlashes.push({
+                    x: pos.x,
+                    y: pos.y,
+                    text: `+${formatWhole(pos.amount)} blood gem`,
+                    timer: 240,
+                    color: "#f5b8d7",
                     style: "24px monospace"
                 });
             }

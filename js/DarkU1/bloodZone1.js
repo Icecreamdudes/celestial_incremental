@@ -337,15 +337,15 @@ SB_celestialites.leech = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.99) {
+            gain.bloodStones = Decimal.add(1, Math.random())
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(4)
+        return Decimal.add(2, Math.random()).mul(3)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -477,15 +477,15 @@ SB_celestialites.bloodBat = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.99) {
+            gain.bloodStones = Decimal.add(1, Math.random())
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(5)
+        return Decimal.add(2, Math.random()).mul(3)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -619,15 +619,15 @@ SB_celestialites.bloodEye = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.97) {
+            gain.bloodStones = Decimal.add(1, Math.random()).mul(3)
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(5)
+        return Decimal.add(2, Math.random()).mul(9)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -761,15 +761,15 @@ SB_celestialites.largeLeech = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.97) {
+            gain.bloodStones = Decimal.add(1, Math.random()).mul(3)
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(8)
+        return Decimal.add(2, Math.random()).mul(9)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
@@ -904,15 +904,15 @@ SB_celestialites.largeBloodBat = {
     reward() {
         let gain = {}
         let random = Math.random()
-        if (random < 0.9) {
-            gain.spaceRock = Decimal.add(1, Math.random()).mul(5)
+        if (random < 0.97) {
+            gain.bloodStones = Decimal.add(1, Math.random()).mul(3)
         } else {
-            gain.spaceGem = Decimal.add(1, Math.random())
+            gain.bloodGems = Decimal.add(1, Math.random())
         }
         return gain
     },
     experienceReward() {
-        return Decimal.add(2, Math.random()).mul(5)
+        return Decimal.add(2, Math.random()).mul(9)
     },
     initialize(celestialite) {
         celestialite.wrigglePhase = 0

@@ -35,7 +35,13 @@ addLayer("ne", {
             amount: new Decimal(0),
             gain: new Decimal(0),
             effect: new Decimal(1),
-        }
+        },
+        zeta: {
+            amount: new Decimal(0),
+            gain: new Decimal(0),
+            effect: new Decimal(1),
+            effect2: new Decimal(1),
+        },
     }},
     automate() {
         if ((hasUpgrade("al", 215) && player.bee.path == 2) || (hasUpgrade("al", 127) && player.bee.path == 1)) {
@@ -78,6 +84,7 @@ addLayer("ne", {
         if (player.bb.breadMilestone >= 9) allGain = allGain.mul(player.bb.breadEffects[8])
         allGain = allGain.mul(player.bee.preAlephMult.pow(0.5))
         allGain = allGain.mul(buyableEffect("tw", 34))
+        if (hasUpgrade("ne", 602)) allGain = allGain.pow(upgradeEffect("ne", 602))
 
         let allRaise = new Decimal(0)
         if (buyableEffect("bee", 43).lt(1)) allRaise = allRaise.add(buyableEffect("bee", 43))
@@ -137,6 +144,14 @@ addLayer("ne", {
 
         if (hasUpgrade("al", 221) && hasUpgrade("ne", 403)) player.ne.epsilon.amount = player.ne.epsilon.amount.add(player.ne.epsilon.gain.div(20).mul(delta))
 
+        //ZETA
+        player.ne.zeta.gain = player.ne.epsilon.amount.div(1e100).pow(Decimal.add(0.05, allRaise)).div(1e6)
+        if (player.bee.path != 2) player.ne.zeta.gain = player.ne.epsilon.amount.div(1e250).pow(Decimal.add(0.05, allRaise)).div(3e18).pow(0.7)
+        player.ne.zeta.gain = player.ne.zeta.gain.mul(allGain.pow(0.05))
+        if (hasUpgrade("ne", 601)) player.ne.zeta.gain = player.ne.zeta.gain.mul(upgradeEffect("ne", 601))
+
+        if (hasUpgrade("n", 92)) player.ne.zeta.amount = player.ne.zeta.amount.add(player.ne.zeta.gain.mul(delta))
+
         if (player.ne.alpha.amount.lt(1e80)) {
             if (!hasUpgrade("ne", 302)) {
                 player.ne.alpha.effect = player.ne.alpha.amount.pow(0.7).add(1)
@@ -160,12 +175,16 @@ addLayer("ne", {
         if (hasUpgrade("al", 204) && player.ne.delta.amount.gte(1)) player.ne.delta.effect = player.ne.delta.effect.add(player.ne.delta.amount.pow(0.08).sub(1))
         player.ne.epsilon.effect = player.ne.epsilon.amount.pow(0.3).add(1)
 
+        player.ne.zeta.effect = player.ne.zeta.amount.mul(10).pow(1.75).add(1)
+        player.ne.zeta.effect2 = player.ne.zeta.amount.pow(0.5).add(1)
+
         if (player.bee.path != 2) {
             player.ne.alpha.effect = player.ne.alpha.effect.pow(0.6)
             player.ne.beta.effect = player.ne.beta.effect.pow(0.7)
             player.ne.gamma.effect = player.ne.gamma.effect.pow(0.7)
             player.ne.delta.effect = player.ne.delta.effect.pow(0.7)
             player.ne.epsilon.effect = player.ne.epsilon.effect.pow(0.7)
+            player.ne.zeta.effect = player.ne.zeta.effect.pow(0.75)
         }
 
         if (player.tab == "ne" && player.bee.path == 0 && !player.bee.extremePath) player.bee.path = 2
@@ -256,6 +275,26 @@ addLayer("ne", {
                 player.ne.delta.amount = new Decimal(0)
             },
             style: {width: '300px', minHeight: '80px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
+        },
+        6: {
+            title() {
+                if (player.bee.path != 2) return "Gain Nectar ζ, but reset bees and previous nectar content.<br><small>Req: 1e200 Nectar ε</small>"
+                return "Gain Nectar ζ, but reset bees and previous nectar content.<br><small>Req: 1e100 Nectar ε</small>"
+            },
+            canClick() { return (player.bee.path == 2 && player.ne.epsilon.amount.gte(1e100)) || (player.bee.path != 2 && player.ne.epsilon.amount.gte(1e200)) },
+            unlocked() {return hasMilestone("rar", 11)},
+            onClick() {
+                player.ne.zeta.amount = player.ne.zeta.amount.add(player.ne.zeta.gain)
+                
+                player.bee.bees = new Decimal(1)
+                player.bee.bps = new Decimal(0)
+                player.ne.alpha.amount = new Decimal(0)
+                player.ne.beta.amount = new Decimal(0)
+                player.ne.gamma.amount = new Decimal(0)
+                player.ne.delta.amount = new Decimal(0)
+                player.ne.epsilon.amount = new Decimal(0)
+            },
+            style: {width: '300px', minHeight: '60px', fontSize: "11px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: '15px'},
         },
     },
     upgrades: {
@@ -473,12 +512,62 @@ addLayer("ne", {
             effectDisplay() { return "/" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
+
+        601: {
+            title: "Nectar ζ-1",
+            unlocked() {return hasMilestone("rar", 11)},
+            description: "Rage radiation boosts nectar ζ and mutated bee gain.",
+            cost() {
+                return new Decimal(10000)
+            },
+            currencyLocation() { return player.ne.zeta },
+            currencyDisplayName: "Nectar ζ",
+            currencyInternalName: "amount",
+            effect() {
+                return player.rar.radiation.amount.pow(0.25).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        602: {
+            title: "Nectar ζ-2",
+            unlocked() {return hasMilestone("rar", 11)},
+            description: "Dark radiation raises all previous nectar gain.",
+            cost() {
+                return new Decimal(1e6)
+            },
+            currencyLocation() { return player.ne.zeta },
+            currencyDisplayName: "Nectar ζ",
+            currencyInternalName: "amount",
+            effect() {
+                return player.ani.darkRadiation.log10().pow(0.5).div(150).add(1)
+            },
+            effectDisplay() { return "^" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        603: {
+            title: "Nectar ζ-3",
+            unlocked() {return hasMilestone("rar", 11)},
+            description: "Nests boosts pollen gain.",
+            cost() {
+                return new Decimal(1e9)
+            },
+            currencyLocation() { return player.ne.zeta },
+            currencyDisplayName: "Nectar ζ",
+            currencyInternalName: "amount",
+            effect() {
+                return player.n.nest.mul(500).pow(5.5).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
     },
     tabFormat: [
         ["row", [
             ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return hasMilestone("rar", 11) ? "Divides point doom softcap's scaling divider by /" + format(player.bee.beeEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["row", [
             ["style-column", [
@@ -565,6 +654,21 @@ addLayer("ne", {
                     return {display: "none !important"}
                 }
             }],
+            ["style-column", [
+                ["style-column", [
+                    ["row", [
+                        ["raw-html", () => {return "You have " + format(player.ne.zeta.amount) + " Nectar ζ"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.ne.zeta.gain) + ")"}, {color: "#161616", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return "(Kept on pre-nest resets)"}, {color: "#161616", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts honey cell gain by x" + formatSimple(player.ne.zeta.effect, 2)}, {color: "#161616", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts dark radiation gain by x" + formatSimple(player.ne.zeta.effect2, 2)}, {color: "#161616", fontSize: "14px", fontFamily: "monospace"}],
+                    ["clickable", 6],
+                ], {width: "400px", height: "147px", borderBottom: "3px solid #6d3701"}],
+                ["style-row", [
+                    ["upgrade", 601], ["upgrade", 602], ["upgrade", 603]
+                ], {width: "400px", height: "150px", background: "#b46f29", borderRadius: "0 0 17px 17px"}],
+            ], () => {return hasMilestone("rar", 11) ? {width: "400px", height: "300px", background: "#e28b34", border: "3px solid #6d3701", margin: "3px 0 3px 3px", borderRadius: "20px"} : {display: "none !important"}}],
         ], {width: "820px"}],
     ],
     layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 1) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 1)},
@@ -622,6 +726,16 @@ addLayer("ne", {
             },
             onPress() {
                 clickClickable(this.layer, 5)
+            },
+        },
+        {
+            key: "6", 
+            description: "Gain Nectar ζ",
+            unlocked() {
+                return hasMilestone("rar", 11)
+            },
+            onPress() {
+                clickClickable(this.layer, 6)
             },
         }
 	]

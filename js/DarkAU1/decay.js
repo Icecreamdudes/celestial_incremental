@@ -86,8 +86,8 @@
             background: "linear-gradient(180deg, #74e3ff 0%, #74ffd1 100%)",
             backgroundOrigin: "border-box",
             color: "#112429",
-            transform: "translate(0px, 0px)",
-        };
+            transform: "translate(0px, 0px)"
+        } 
     },
     tooltip: "Decay",
     branches: [["ani", "#74e3ff"], ["sr", "#74e3ff"], ["tr", "#74e3ff"]],
@@ -110,6 +110,7 @@
         if (player.dec.samarium146.gt(0)) player.dec.decayPerSecond = player.dec.decayPerSecond.mul(player.dec.samarium146Effect2)
         if (getLevelableTier("pu", 503, true)) player.dec.decayPerSecond = player.dec.decayPerSecond.mul(levelableEffect("pu", 503)[0])
         if (getLevelableTier("pu", 501, true)) player.dec.decayPerSecond = player.dec.decayPerSecond.mul(levelableEffect("pu", 501)[0])
+        player.dec.decayPerSecond = player.dec.decayPerSecond.mul(player.hor.radiation.effect2)
 
         player.dec.decay = player.dec.decay.add(player.dec.decayPerSecond.mul(delta))
 
@@ -130,6 +131,7 @@
         if (player.dec.neodymium142.gt(0)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(player.dec.neodymium142Effect2)
         if (getLevelableTier("pu", 502, true)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(levelableEffect("pu", 502)[0])
         if (getLevelableTier("pu", 503, true)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(levelableEffect("pu", 503)[1])
+        player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(player.rar.radiation.effect2)
             
         player.dec.stability = player.dec.stability.add(player.dec.stabilityPerSecond.mul(delta))
 
@@ -149,7 +151,7 @@
         if (player.dec.aluminum28.gt(0)) player.dec.electronsPerSecond = player.dec.electronsPerSecond.mul(player.dec.aluminum28Effect2.cbrt())
 
         player.dec.electrons = player.dec.electrons.add(player.dec.electronsPerSecond.mul(delta))
-        player.dec.electronsEffect = Decimal.div(1, player.dec.electrons.pow(0.35).div(30).add(1))
+        player.dec.electronsEffect = Decimal.div(1, player.dec.electrons.pow(0.25).div(30).add(1))
 
         //alpha particles
         if (player.dec.dysprosium154.gt(0) || player.dec.gadolinium150.gt(0) || player.dec.samarium146.gt(0)) 
@@ -165,7 +167,7 @@
         if (player.dec.samarium146.gt(0)) player.dec.alphaParticlesPerSecond = player.dec.alphaParticlesPerSecond.mul(player.dec.samarium146Effect2.cbrt())
 
         player.dec.alphaParticles = player.dec.alphaParticles.add(player.dec.alphaParticlesPerSecond.mul(delta))
-        player.dec.alphaParticlesEffect = player.dec.alphaParticles.pow(35).add(1)
+        player.dec.alphaParticlesEffect = player.dec.alphaParticles.pow(25).add(1)
 
 
         //carbon chain
@@ -192,7 +194,7 @@
         player.dec.nitrogen14Effect2 = player.dec.nitrogen14.pow(0.5)
 
         //magnesium chain
-        player.dec.magnesium28ToGet = player.dp.prestigePoints.pow(0.02)
+        player.dec.magnesium28ToGet = player.dp.prestigePoints.plus(1).log10().pow(2.5)
         player.dec.magnesium28ToGet = player.dec.magnesium28ToGet.mul(buyableEffect("dec", 43))
         player.dec.magnesium28DecayPerSecond = player.dec.magnesium28.mul(player.dec.decayPower)
 
@@ -232,7 +234,7 @@
 
 
         //Dysprosium-154
-        player.dec.dysprosium154ToGet = player.du.points.pow(0.005).div(3)
+        player.dec.dysprosium154ToGet = player.du.points.plus(1).log10().pow(1.25).div(10)
         player.dec.dysprosium154ToGet = player.dec.dysprosium154ToGet.mul(buyableEffect("dec", 51))
         player.dec.dysprosium154DecayPerSecond = player.dec.dysprosium154.mul(player.dec.decayPower)
 
@@ -252,7 +254,7 @@
         player.dec.gadolinium150 = player.dec.gadolinium150.add(player.dec.gadolinium150PerSecond.mul(delta))
         player.dec.gadolinium150DecayPerSecond = player.dec.gadolinium150.mul(player.dec.decayPower)
 
-        player.dec.gadolinium150Effect = player.dec.gadolinium150.pow(2).add(1)
+        player.dec.gadolinium150Effect = player.dec.gadolinium150.pow(1.25).add(1)
         player.dec.gadolinium150Effect2 = player.dec.gadolinium150.pow(0.25)
 
         if (player.dec.gadolinium150.gt(0))
@@ -286,6 +288,9 @@
         player.dec.neodymium142Effect = player.dec.neodymium142.pow(2).add(1)
         player.dec.neodymium142Effect2 = player.dec.neodymium142.pow(0.75)
 
+    },
+    milestones: {
+        
     },
     bars: {},
     clickables: {

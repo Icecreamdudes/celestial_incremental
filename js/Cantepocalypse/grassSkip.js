@@ -29,7 +29,7 @@
     automate() {
     },
     nodeStyle() {
-        if (hasMilestone("s", 16) && (!inChallenge("fu", 11) && !hasUpgrade("en", 12)) && !inChallenge("fu", 12))
+        if (hasMilestone("s", 16) && (!inChallenge("fu", 11)) && (!inChallenge("fu", 12) || hasUpgrade("en", 18)))
         {
             buyBuyable('gs', 11)
             buyBuyable('gs', 12)
@@ -106,6 +106,11 @@
             player.gs.milestone10Effect = new Decimal(1)
         } else {
             player.gs.milestone10Effect = Decimal.pow(1.25, player.gs.grassSkip.sub(39))
+        }
+
+        if (hasUpgrade("en", 16) && player.gs.grassSkipToGet.gte(1))
+        {
+            player.gs.grassSkip = player.gs.grassSkip.add(player.gs.grassSkipToGet)
         }
     },
     grassSkipReset()
@@ -643,6 +648,7 @@
 
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return hasMilestone("hor", 11) ? "Raises point doom softcap's starting point by ^" + format(player.cp.replicantiPointEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

@@ -9,6 +9,7 @@ addLayer("bee", {
         milestonePopups: false,
 
         bees: new Decimal(1),
+        beeEffect: new Decimal(1),
         bps: new Decimal(0),
         totalResearch: new Decimal(0),
 
@@ -75,6 +76,7 @@ addLayer("bee", {
         player.bee.bps = player.bee.bps.mul(player.bee.preAlephMult)
         if (hasUpgrade("n", 21)) player.bee.bps = player.bee.bps.mul(player.al.honeycombEffect)
         player.bee.bps = player.bee.bps.mul(buyableEffect("tw", 23))
+        player.bee.bps = player.bee.bps.mul(buyableEffect("fu", 104))
 
         // POWER MODIFIERS
         player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))
@@ -94,6 +96,9 @@ addLayer("bee", {
         // TICKSPEED
         player.uni["UB"].tickspeed = new Decimal(1)
         player.uni["UB"].tickspeed = player.uni["UB"].tickspeed.mul(player.n.pylonEnergyEffect)
+
+        // Effect
+        player.bee.beeEffect = player.bee.bees.plus(1).log10().pow(0.7).div(500).add(1)
     },
     clickables: {
         1: {
@@ -1271,6 +1276,7 @@ addLayer("bee", {
             ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return hasMilestone("rar", 11) ? "Divides point doom softcap's scaling divider by /" + format(player.bee.beeEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["row", [["clickable", 1], ["clickable", 2]]],
         ["blank", "10px"],

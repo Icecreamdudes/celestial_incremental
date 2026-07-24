@@ -400,7 +400,8 @@ addLayer("fl", {
         player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("bee", 14))
         player.fl.glossaryBase = player.fl.glossaryBase.mul(player.n.pylonEnergyEffect2)
         player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("tw", 32))
-
+        player.fl.glossaryBase = player.fl.glossaryBase.mul(player.rar.essence.effect2)
+        
         player.fl.glossaryEffects.bee = new Decimal(1)
         for (let i = 101; i < 126; ) {
             if (player.fl.glossary[i].gt(0)) {
@@ -3099,6 +3100,7 @@ addLayer("fl", {
             ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return hasMilestone("rar", 11) ? "Divides point doom softcap's scaling divider by /" + format(player.bee.beeEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-row", [
             ["raw-html", () => {

@@ -21,13 +21,19 @@
     automate() {
     },
     nodeStyle() {
-        return {
+        return hasUpgrade("ani", 28) ? {
             background: "#00923d",
             backgroundOrigin: "border-box",
-            color: "#f6fff5",
-            transform: "translate(-50px, 25px)",
+            color: "#112429",
+            transform: "translate(-20px, 25px)"
+        } : 
+        {
+            background: "#00923d",
+            backgroundOrigin: "border-box",
+            color: "#112429",
+            transform: "translate(-50px, 25px)"
         };
-    },
+    }, //translate(-50px, 25px)
     tooltip: "Mind Radiation",
     branches: [["tr", "#74ff8f"]],
     color: "#00923d",
@@ -38,10 +44,14 @@
         player.mr.radiation.toGet = player.ani.darkRadiation.pow(0.2).div(100)
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("dec", 23))
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("tr", 18))
+        player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("n", 83))
+
+        if (hasMilestone("rar", 15)) player.mr.radiation.amount = player.mr.radiation.amount.add(player.mr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
         player.mr.radiation.max = new Decimal(2)
 
         player.mr.particleClickReq = new Decimal(25)
+        if (hasMilestone("rar", 12)) player.mr.particleClickReq = player.mr.particleClickReq.div(2.5)
 
         if (player.mr.particleClick.eq(player.mr.particleClickReq))
         {
@@ -64,6 +74,7 @@
         player.ani.radiation.orange.amount = new Decimal(0)
         player.ani.radiation.yellow.amount = new Decimal(0)
         player.ani.radiation.green.amount = new Decimal(0)
+        player.ani.radiation.blue.amount = new Decimal(0)
 
         player.ani.buyables[11] = new Decimal(0)
         player.ani.buyables[12] = new Decimal(0)
@@ -231,6 +242,24 @@
                 return look
             }
         },
+        19: {
+            title: "Mind Upgrade IX",
+            unlocked() { return true },
+            description: "Decay extends unavoidable softcap^2.",
+            cost: new Decimal(1e13),
+            currencyLocation() { return player.mr.radiation },
+            currencyDisplayName: "Mind Radiation",
+            currencyInternalName: "amount",
+            effect() {
+                return player.dec.decay.pow(5).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "15px", color: "black",  border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#4cad60" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#237e20" : look.backgroundColor = "#74ac72"
+                return look
+            }
+        },
     },
     buyables: {
     },
@@ -255,7 +284,7 @@
                     ["raw-html", () => { return "Performs a space radiation level reset" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19],]],
                     ["blank", "25px"],
                 ]
             },

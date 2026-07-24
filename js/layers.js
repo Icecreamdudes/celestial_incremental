@@ -188,11 +188,13 @@
         player.i.doomSoftcapStart = new Decimal("1e2000000")
         player.i.doomSoftcapStart = player.i.doomSoftcapStart.mul(levelableEffect("car", 313)[0])
         player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(buyableEffect("fa", 405))
+        if (hasMilestone("hor", 11)) player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(player.cp.replicantiPointEffect)
 
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)
         doomWeaken = doomWeaken.mul(buyableEffect("fa", 401))
         if (player.zarDungeon.zarDefeated) doomWeaken = doomWeaken.mul(1.5)
+        if (hasMilestone("rar", 11)) doomWeaken = doomWeaken.mul(player.bee.beeEffect)
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.points
@@ -227,7 +229,7 @@
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(player.in.pylonEnergyEffect3)
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("sme", 143))
 
-            player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
+            player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect).pow(buyableEffect("fu", 106))
         } else
         {
             player.i.pylonEnergyPerSecond = new Decimal(0)

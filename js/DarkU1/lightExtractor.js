@@ -149,7 +149,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -202,7 +202,7 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
@@ -261,7 +261,7 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "unpause", true)
 
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
 

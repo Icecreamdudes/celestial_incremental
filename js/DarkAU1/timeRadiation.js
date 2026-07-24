@@ -19,7 +19,18 @@
         }
     }},
     automate() {
-
+        if (hasMilestone("rar", 13))
+        {
+            buyBuyable("tr", 11)
+            buyBuyable("tr", 12)
+            buyBuyable("tr", 13)
+            buyBuyable("tr", 14)
+            buyBuyable("tr", 15)
+            buyBuyable("tr", 16)
+            buyBuyable("tr", 17)
+            buyBuyable("tr", 18)
+            buyBuyable("tr", 19)
+        }
     },
     nodeStyle() {
         return {
@@ -42,8 +53,14 @@
         if (hasUpgrade("hr", 13)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(upgradeEffect("hr", 13))
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("dec", 12))
         if (getLevelableAmount("pu", 505).gte(1)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(levelableEffect("pu", 505)[1])
+        player.tr.radiation.toGet = player.tr.radiation.toGet.mul(player.rar.essence.effect)
+
+        if (hasMilestone("rar", 14)) player.tr.radiation.amount = player.tr.radiation.amount.add(player.tr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+
+        if (!player.pet.legPetTimers[0].active) player.tr.radiation.toGet = new Decimal(0)
 
         player.tr.radiation.max = new Decimal(30)
+        if (hasMilestone("hor", 12)) player.tr.radiation.max = player.tr.radiation.max.div(2)
 
         if (player.tr.particleClick.eq(3) && player.tr.particleClickTime.gt(0))
         {
@@ -77,6 +94,7 @@
         player.ani.radiation.orange.amount = new Decimal(0)
         player.ani.radiation.yellow.amount = new Decimal(0)
         player.ani.radiation.green.amount = new Decimal(0)
+        player.ani.radiation.blue.amount = new Decimal(0)
 
         player.ani.buyables[11] = new Decimal(0)
         player.ani.buyables[12] = new Decimal(0)
@@ -113,7 +131,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -122,7 +140,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -150,7 +168,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -159,7 +177,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -187,7 +205,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -196,7 +214,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -224,7 +242,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -233,7 +251,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -261,7 +279,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -270,7 +288,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -298,7 +316,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -307,7 +325,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -335,7 +353,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -344,7 +362,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -372,7 +390,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -381,7 +399,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13))this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -409,7 +427,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Radiation"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasMilestone("rar", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -418,7 +436,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("rar", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

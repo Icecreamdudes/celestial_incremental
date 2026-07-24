@@ -170,7 +170,7 @@ addUniverse("U2", {
 addUniverse("A1", {
     name: "Alt-Universe 1<br>Cantepocalypse",
     symbol: "A1",
-    tree: [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs", "en"], ["fu"]],
+    tree: [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"], ["en", "hor"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
@@ -256,7 +256,7 @@ addUniverse("D1", {
 addUniverse("AD1", {
     name: "Alt-Dark Universe 1<br>The Decay Horizon",
     symbol: "AD1",
-    tree: [["dec"], ["mr"], ["sr", "ani", "tr"], ["hr"]],
+    tree: [["dec"],["mr", "hor"], ["sr", "ani", "tr"], ["rar", "hr"], ["rl"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)",
@@ -315,7 +315,7 @@ addUniverse("UB", {
         return "Universe β<br>Hive"
     },
     symbol: "β",
-    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"], ["n", "tw"]],
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "ho"], ["al", "wa"], ["rar", "n", "tw"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",

@@ -2427,7 +2427,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && hasUpgrade("le", 201)) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && hasUpgrade("le", 201)},
+            canSelect() {return player.ir.iriditeDefeated && hasUpgrade("le", 201) && !getLevelableTier("pu", 403, true)},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -2528,7 +2528,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.pet.legPetTimers[0].current.pow(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.pet.legPetTimers[0].current.pow(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect).abs()
                 eff[1] = getLevelableAmount(this.layer, this.id).pow(1.5).add(1)
                 return eff
             },
@@ -2698,7 +2698,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return (hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)) || this.canClick()},
-            canSelect() {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active && player.dec.decay.gt(0)},
+            canSelect() {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -2746,7 +2746,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.mul(2).pow(0.6).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[0] = player.le.resetAmount.pow(0.4).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
                 eff[1] = player.ra.radiation.pow(0.0625).div(1000).add(1).pow(this.effectScale())
                 return eff
             },
@@ -2956,8 +2956,8 @@ addLayer("pu", {
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
 
                             ["style-column", [
-                                ["raw-html", () => { return "Radioactive (30%)<h6>[Takes priority over other card rarities]"}, {color: "#1d8e19", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "535px", height: "40px", backgroundColor: "#146111", borderTop: "3px solid #1d8e19", borderBottom: "3px solid #1d8e19", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", () => { return "Radioactive (30%)<h6>[Takes priority over other card rarities]<br>(Some radioactive punchcards require other radioactive punchcards)"}, {color: "#1d8e19", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "535px", height: "70px", backgroundColor: "#146111", borderTop: "3px solid #1d8e19", borderBottom: "3px solid #1d8e19", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 501], ["levelable", 502], ["levelable", 503], ["levelable", 504], ["levelable", 505], ["levelable", 506],
                             ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "525px", backgroundColor: "#082407", padding: "5px"} : {display: "none !important"}}],

@@ -29,9 +29,14 @@
 
         replicantiSoftcap4Effect: new Decimal(1),
         replicantiSoftcap4Start: new Decimal(1e308),
+
+        replicantiSoftcap5Effect: new Decimal(1),
+        replicantiSoftcap5Start: new Decimal("1e2000000"),
+
+        replicantiPointEffect: new Decimal(1),
     }},
     automate() {
-        if (hasMilestone("s", 17) && !inChallenge("fu", 11) && !inChallenge("fu", 12)) {
+        if (hasMilestone("s", 17) && !inChallenge("fu", 11) && (!inChallenge("fu", 12) || hasUpgrade("en", 18))) {
             buyUpgrade("cp", 11)
             buyUpgrade("cp", 12)
             buyUpgrade("cp", 13)
@@ -87,6 +92,7 @@
         if (hasUpgrade("fu", 103)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(upgradeEffect("fu", 103))
         if (hasUpgrade("fu", 111)) player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(2)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(player.en.enhancePointsEffect)
+        player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("fu", 105))
 
         player.cp.replicantiSoftcapStart = new Decimal(1000)
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("pr", 15))
@@ -155,9 +161,15 @@
         }
 
         player.cp.replicantiSoftcap4Start = new Decimal(1e308)
-        player.cp.replicantiSoftcap4Effect = Decimal.div(1, player.cp.replicantiPoints.plus(1).log(10).pow(0.7)).min(1)
+        player.cp.replicantiSoftcap4Effect = Decimal.div(1, player.cp.replicantiPoints.plus(1).log(10).pow(0.7).pow(player.hor.essence.effect2)).min(1)
         if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) && multAdd.gte(1)) {
             multAdd = multAdd.pow(player.cp.replicantiSoftcap4Effect)
+        }
+
+        player.cp.replicantiSoftcap5Start = new Decimal("1e2000000")
+        player.cp.replicantiSoftcap5Effect = player.cp.replicantiPoints.plus(1).log(10).pow(0.4)
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap5Start) && multAdd.gte(1)) {
+            player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.mul(player.cp.replicantiSoftcap5Effect)
         }
 
         multAdd = multAdd.mul(buyableEffect("fu", 36))
@@ -180,6 +192,9 @@
         if (!inChallenge("fu", 12)) player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(buyableEffect("cof", 11))
         player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(player.en.enhancersEffect[1])
         player.cp.replicantiPointCap = player.cp.replicantiPointCap.pow(levelableEffect("car", 308)[0])
+
+        //effect
+        player.cp.replicantiPointEffect = player.cp.replicantiPoints.plus(1).log10().pow(0.25).div(100).add(1)
     },
     replicantiPointMultiply() {
         if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {
@@ -341,10 +356,13 @@
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap starts at <h3>" + format(player.cp.replicantiSoftcap3Start) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
-            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap multiplies replicanti time requirement by <h3>x" + format(player.cp.replicantiSoftcap3Effect) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap multiplies replicanti cooldown by <h3>x" + format(player.cp.replicantiSoftcap3Effect) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap starts at <h3>" + format(player.cp.replicantiSoftcap4Start) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap raises replicanti mult by <h3>^" + format(player.cp.replicantiSoftcap4Effect) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap5Start) ? "Fifth softcap starts at <h3>" + format(player.cp.replicantiSoftcap5Start) + "</h3>." : ""}, { "color": "#751515", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap5Start) ? "Fifth softcap multiplies replicanti cooldown by <h3>x" + format(player.cp.replicantiSoftcap5Effect) + "</h3>." : ""}, { "color": "#751515", "font-size": "20px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(1e308) ? "Hardcap: <h3>" + format(player.cp.replicantiPointCap) + "</h3>." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                 ]
@@ -353,6 +371,7 @@
     },
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return hasMilestone("hor", 11) ? "Raises point doom softcap's starting point by ^" + format(player.cp.replicantiPointEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

@@ -1194,7 +1194,7 @@ addLayer("achievements", {
                 ],
             },
             11: { //Dice Space
-                unlocked() {return true},
+                unlocked() {return hasAchievement("achievements", 1001) || player.d.diceSpaceUnlocked},
                 content: [
                     ["top-column", [
                         ["row", [

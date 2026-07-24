@@ -75,6 +75,7 @@
         // SOFTCAP START
         player.m.doomSoftcapStart = new Decimal("1e2000000")
         player.m.doomSoftcapStart = player.m.doomSoftcapStart.pow(buyableEffect("fa", 408))
+        if (hasUpgrade("s", 33)) player.m.doomSoftcapStart = player.m.doomSoftcapStart.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)
@@ -173,6 +174,7 @@
         // SOFTCAP START
         player.m.doomSoftcap2Start = new Decimal("1e2000000")
         player.m.doomSoftcap2Start = player.m.doomSoftcap2Start.pow(buyableEffect("fa", 408))
+        if (hasUpgrade("s", 33)) player.m.doomSoftcap2Start = player.m.doomSoftcap2Start.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken2 = new Decimal(1)

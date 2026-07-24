@@ -55,6 +55,7 @@ addLayer("n", {
         player.n.nestGain = player.n.nestGain.mul(buyableEffect("tw", 14))
         player.n.nestGain = player.n.nestGain.mul(buyableEffect("tw", 74))
         if (hasMilestone("n", 30)) player.n.nestGain = player.n.nestGain.mul(player.n.milestone30Effect)
+        player.n.nestGain = player.n.nestGain.mul(buyableEffect("n", 81))
 
         player.n.nestGain = player.n.nestGain.mul(10).floor().div(10) // KEEP AT END
 
@@ -316,7 +317,69 @@ addLayer("n", {
                 return look
             },
         },
-
+        82: {
+            unlocked() { return hasMilestone("rar", 15) },
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 9:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Raise pollen gain by ^1.2" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "250,000 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(250000),
+            canAfford() { return hasUpgrade("n", 71) },
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        91: {
+            unlocked() { return hasMilestone("rar", 15) },
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 10:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Square honeycomb and royal jelly effects" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "1,500,000 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(1500000),
+            canAfford() { return hasUpgrade("n", 82) && player.n.buyables[81].gt(0) && player.n.buyables[83].gt(0)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        92: {
+            unlocked() { return hasMilestone("rar", 15) },
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 10:2</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Gain 100% of mutated bees and nectar ζ per second" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "4,000,000 Nests" + // BOTTOM
+                "</div></div>"
+            },
+            cost: new Decimal(4000000),
+            canAfford() { return hasUpgrade("n", 82) && player.n.buyables[81].gt(0) && player.n.buyables[83].gt(0)},
+            currencyLocation() { return player.n },
+            currencyInternalName: "nest",
+            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
         // ==--- LATER ON STUFF ---==
         // Unlock wax layer
     },
@@ -580,6 +643,66 @@ addLayer("n", {
                 return look
             },
         },
+        81: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).add(1)},
+            canAfford() { return hasMilestone("rar", 15) },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
+            canAfford() { return this.currency().gte(this.cost()) && (hasUpgrade("n", 71)) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 9:1</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Boost nest gain<br>" + // MIDDLE
+                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).pow(0.5).add(1)) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
+        83: {
+            costBase() { return new Decimal(100000) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.n.nest },
+            pay(amt) { player.n.nest = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(50).pow(1.65).add(1)},
+            canAfford() { return hasMilestone("rar", 15) },
+            cost(x) { return this.costGrowth().pow(x.pow(2) || getBuyableAmount(this.layer, this.id).pow(2)).mul(this.costBase()).mul(10).floor().div(10) },
+            canAfford() { return this.currency().gte(this.cost()) && (hasUpgrade("n", 71)) },
+            display() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>Nest Upgrade 9:3</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
+                "Boost mind radiation gain<br>" + // MIDDLE
+                "Currently: x" + formatSimple(tmp[this.layer].buyables[this.id].effect) +
+                "<br>Next: x" + formatSimple(getBuyableAmount(this.layer, this.id).add(1).mul(50).pow(1.65).add(1)) +
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                formatSimple(tmp[this.layer].buyables[this.id].cost) + " Nests" + // BOTTOM
+                "</div></div>"
+            },
+            buy() {
+                this.pay(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {color: "#000000bf", borderColor: "#0000007f", fontSize: "14px", borderWidth: "2px", borderRadius: "10px", padding: "0px", width: "250px", height: "125px"}
+                return look
+            },
+        },
     },
     milestones: {
         11: {
@@ -811,6 +934,8 @@ addLayer("n", {
                     ["row", [["buyable", 51], ["buyable", 52], ["buyable", 53]]],
                     ["row", [["upgrade", 61], ["upgrade", 62]]],
                     ["upgrade", 71],
+                    ["row", [["buyable", 81], ["upgrade", 82], ["buyable", 83]]],
+                    ["row", [["upgrade", 91],["upgrade", 92],]],
                 ],
             },
             "Milestones": {

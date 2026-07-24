@@ -108,6 +108,7 @@
         if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(10).pow(1.1)
         if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).div(2).pow(1.3)
         if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log(10).pow(1.5)
+
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.depth1.negComboEffect)
 
@@ -211,7 +212,7 @@
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(levelableEffect("ir", 9)[1])
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(player.cbs.pylonEnergyEffect4)
 
-            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
+            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect).pow(buyableEffect("fu", 106))
         } else
         {
             player.in.pylonEnergyPerSecond = new Decimal(0)

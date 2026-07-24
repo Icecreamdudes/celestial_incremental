@@ -21,11 +21,17 @@
     automate() {
     },
     nodeStyle() {
-        return {
+        return hasUpgrade("ani", 28) ? {
             background: "#55142a",
             backgroundOrigin: "border-box",
-            color: "#f6fff5",
-            transform: "translate(50px, -5px)",
+            color: "#112429",
+            transform: "translate(20px, -5px)"
+        } : 
+        {
+            background: "#55142a",
+            backgroundOrigin: "border-box",
+            color: "#112429",
+            transform: "translate(50px, -5px)"
         };
     },
     tooltip: "Heart Radiation",
@@ -38,10 +44,14 @@
         player.hr.radiation.toGet = player.ani.darkRadiation.pow(0.2).div(100)
         player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("dec", 13))
         player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("tr", 18))
+        player.hr.radiation.toGet = player.hr.radiation.toGet.mul(player.en.enhancersEffect[5])
+
+        if (hasMilestone("hor", 15)) player.hr.radiation.amount = player.hr.radiation.amount.add(player.hr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
         player.hr.radiation.max = new Decimal(2)
 
         player.hr.particleClickReq = new Decimal(25)
+        if (hasMilestone("rar", 12)) player.hr.particleClickReq = player.hr.particleClickReq.div(2.5)
 
         if (player.hr.particleClick.eq(player.hr.particleClickReq))
         {
@@ -64,6 +74,7 @@
         player.ani.radiation.orange.amount = new Decimal(0)
         player.ani.radiation.yellow.amount = new Decimal(0)
         player.ani.radiation.green.amount = new Decimal(0)
+        player.ani.radiation.blue.amount = new Decimal(0)
 
         player.ani.buyables[11] = new Decimal(0)
         player.ani.buyables[12] = new Decimal(0)
@@ -213,6 +224,24 @@
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#e20951" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#8b2648" : look.backgroundColor = "#ff6095"
                 return look
             }
+        },        
+        19: {
+            title: "Heart Upgrade IX",
+            unlocked() { return true },
+            description: "Stability boosts dark celestial point gain.",
+            cost: new Decimal(1e13),
+            currencyLocation() { return player.hr.radiation },
+            currencyDisplayName: "Heart Radiation",
+            currencyInternalName: "amount",
+            effect() {
+                return player.dec.stability.pow(4).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #55142a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#e20951" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#8b2648" : look.backgroundColor = "#ff6095"
+                return look
+            }
         },
     },
     buyables: {
@@ -238,7 +267,7 @@
                     ["raw-html", () => { return "Performs a space radiation level reset but resets vaporizer instead of space energy." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19],]],
                     ["blank", "25px"],
                 ]
             },

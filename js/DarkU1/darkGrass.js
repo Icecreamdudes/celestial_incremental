@@ -19,7 +19,7 @@
         lastPickedText: "Last grown plot: ()",
     }},
     automate() {
-        if (hasUpgrade("dn", 13)) {
+        if (hasUpgrade("dn", 13) || hasMilestone("rar", 14)) {
             buyBuyable("dgr", 11)
             buyBuyable("dgr", 12)
             buyBuyable("dgr", 13)
@@ -218,7 +218,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -227,7 +227,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -263,7 +263,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -272,7 +272,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -306,7 +306,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -315,7 +315,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -349,7 +349,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -358,7 +358,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -392,7 +392,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -401,7 +401,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -435,7 +435,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("dn", 13)) {
+                if (mult != true && (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14))) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -444,7 +444,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("dn", 13)) this.pay(cost)
+                    if (!hasUpgrade("dn", 13) && !hasMilestone("rar", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

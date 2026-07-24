@@ -63,6 +63,15 @@
                 effect: new Decimal(1),
                 toggle: true,
             },
+            violet: {
+                current: new Decimal(0),
+                max: new Decimal(20),
+                amount: new Decimal(0),
+                toGet: new Decimal(0),
+                cost: new Decimal(100000),
+                effect: new Decimal(1),
+                toggle: true,
+            },
         },
 
         stones: {
@@ -111,6 +120,9 @@
         if (getLevelableAmount("pu", 501).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 501)[1])
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("dec", 11))
         if (getLevelableAmount("pu", 502).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 502)[1])
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.fu.hopeEffect2)
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.ne.zeta.effect2)
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.bpl.roles.mutated.effect2)
 
         if (player.ani.darkRadiation.div(3).pow(0.65).add(1).lte(1e6))
         {
@@ -144,6 +156,7 @@
         if (hasUpgrade("mr", 12)) player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(upgradeEffect("mr", 12))
         player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.red.toGet = player.ani.radiation.red.toGet.mul(buyableEffect("fu", 103))
 
         player.ani.radiation.red.max = new Decimal(6)
         if (hasUpgrade("ani", 19)) player.ani.radiation.red.max = player.ani.radiation.red.max.div(3)
@@ -167,6 +180,7 @@
         if (hasUpgrade("mr", 12)) player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(upgradeEffect("mr", 12))
         player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.orange.toGet = player.ani.radiation.orange.toGet.mul(buyableEffect("fu", 103))
 
         player.ani.radiation.orange.max = new Decimal(9)
         if (hasUpgrade("ani", 19)) player.ani.radiation.orange.max = player.ani.radiation.orange.max.div(3)
@@ -190,6 +204,7 @@
         if (hasUpgrade("mr", 12)) player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(upgradeEffect("mr", 12))
         player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.yellow.toGet = player.ani.radiation.yellow.toGet.mul(buyableEffect("fu", 103))
 
         player.ani.radiation.yellow.max = new Decimal(12)
         if (hasUpgrade("ani", 19)) player.ani.radiation.yellow.max = player.ani.radiation.yellow.max.div(3)
@@ -209,6 +224,7 @@
         if (hasUpgrade("mr", 12)) player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(upgradeEffect("mr", 12))
         player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.green.toGet = player.ani.radiation.green.toGet.mul(buyableEffect("fu", 103))
 
         player.ani.radiation.green.max = new Decimal(10)
 
@@ -226,12 +242,31 @@
         if (hasUpgrade("mr", 12)) player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(upgradeEffect("mr", 12))
         player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(buyableEffect("fu", 103))
+        player.ani.radiation.blue.toGet = player.ani.radiation.blue.toGet.mul(player.ani.radiation.violet.effect)
 
         player.ani.radiation.blue.max = new Decimal(15)
 
         if (player.ani.radiation.blue.current.lt(0)) {
             makeShinies(blueRadiation, new Decimal(1))
             player.ani.radiation.blue.current = player.ani.radiation.blue.max
+        }
+
+        //violet
+        player.ani.radiation.violet.effect = player.ani.radiation.violet.amount.pow(0.75).add(1)
+
+        player.ani.radiation.violet.cost = player.ani.radiation.violet.amount.pow(1.275).add(1).mul(100)
+
+        player.ani.radiation.violet.toGet = new Decimal(1)
+        player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(buyableEffect("dec", 21))
+        if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(levelableEffect("pu", 503)[2])
+        player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(buyableEffect("fu", 103))
+
+        player.ani.radiation.violet.max = new Decimal(20)
+
+        if (player.ani.radiation.violet.current.lt(0)) {
+            makeShinies(violetRadiation, new Decimal(1))
+            player.ani.radiation.violet.current = player.ani.radiation.violet.max
         }
 
         if (player.musuniverse == "AD1") {
@@ -241,6 +276,16 @@
             if (hasUpgrade("ani", 14) && player.ani.radiation.yellow.toggle) player.ani.radiation.yellow.current = player.ani.radiation.yellow.current.sub(delta)
             if (hasUpgrade("ani", 21) && player.ani.radiation.green.toggle) player.ani.radiation.green.current = player.ani.radiation.green.current.sub(delta)
             if (hasUpgrade("mr", 11) && player.ani.radiation.blue.toggle) player.ani.radiation.blue.current = player.ani.radiation.blue.current.sub(delta)
+            if (hasMilestone("rar", 13) && player.ani.radiation.violet.toggle) player.ani.radiation.violet.current = player.ani.radiation.violet.current.sub(delta)
+        }
+
+        if (hasMilestone("rar", 12) && player.musuniverse == "AD1") {
+            player.ani.radiation.red.amount = player.ani.radiation.red.amount.add(player.ani.radiation.red.toGet.mul(Decimal.mul(0.1, delta)))
+            player.ani.radiation.orange.amount = player.ani.radiation.orange.amount.add(player.ani.radiation.orange.toGet.mul(Decimal.mul(0.1, delta)))
+            player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.add(player.ani.radiation.yellow.toGet.mul(Decimal.mul(0.1, delta)))
+            player.ani.radiation.green.amount = player.ani.radiation.green.amount.add(player.ani.radiation.green.toGet.mul(Decimal.mul(0.1, delta)))
+            player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.add(player.ani.radiation.blue.toGet.mul(Decimal.mul(0.1, delta)))
+            if (hasMilestone("rar", 13)) player.ani.radiation.violet.amount = player.ani.radiation.violet.amount.add(player.ani.radiation.violet.toGet.mul(Decimal.mul(0.1, delta)))
         }
 
 
@@ -263,6 +308,19 @@
             player.ani.stones.cosmic.toGet = new Decimal(0)
         }
         player.ani.stones.cosmic.effect = player.ani.stones.cosmic.amount.pow(0.5).div(2).add(1) //SMA
+
+
+        //passive generation
+        if (hasMilestone("hor", 12))
+        {
+            player.ani.darkRadiation = player.ani.darkRadiation.add(player.ani.darkRadiationToGet.mul(Decimal.mul(0.1, delta)))
+
+            player.sr.spaceDecay = player.sr.spaceDecay.add(player.sr.spaceDecayPerClick.mul(Decimal.mul(0.1, delta)))
+
+            for (let i = 0; i < player.sr.generators.amount.length; i++) {
+                player.sr.generators.amount[i] = player.sr.generators.amount[i].add(player.sr.generators.perClick[i].mul(Decimal.mul(0.1, delta)))
+            }
+        }
     },
     bars: {},
     clickables: {
@@ -422,6 +480,54 @@
                 else 
                 {
                     player.ani.radiation.blue.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        22: {
+            title() { return player.hor.radiation.toggle ? "<h4>Hope Radiation<br>On</h3>" : "<h4>Hope Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 28) },
+            onClick() {
+                if (player.hor.radiation.toggle)
+                { 
+                    player.hor.radiation.toggle = false
+                }
+                else 
+                {
+                    player.hor.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        23: {
+            title() { return player.rar.radiation.toggle ? "<h4>Rage Radiation<br>On</h3>" : "<h4>Rage Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ani", 28) },
+            onClick() {
+                if (player.rar.radiation.toggle)
+                { 
+                    player.rar.radiation.toggle = false
+                }
+                else 
+                {
+                    player.rar.radiation.toggle = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
+        24: {
+            title() { return player.ani.radiation.violet.toggle ? "<h4>Violet Radiation<br>On</h3>" : "<h4>Violet Radiation<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return hasMilestone("rar", 13) },
+            onClick() {
+                if (player.ani.radiation.violet.toggle)
+                { 
+                    player.ani.radiation.violet.toggle = false
+                }
+                else 
+                {
+                    player.ani.radiation.violet.toggle = true
                 }
             },
             style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
@@ -643,6 +749,20 @@
             unlocked() { return hasUpgrade("ani", 26) },
             description: "Unlock the dysprosium-154 punchcard.",
             cost: new Decimal(1e40),
+            currencyLocation() { return player.ani },
+            currencyDisplayName: "Dark Radiation",
+            currencyInternalName: "darkRadiation",
+            style() {
+                let look = {borderRadius: "15px", color: "black", border: "2px solid #1d901a", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#74ff8f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#048500" : look.backgroundColor = "#adffaa"
+                return look
+            }
+        },
+        28: {
+            title: "Aniciffo Upgrade XVII",
+            unlocked() { return hasUpgrade("ani", 27) },
+            description: "Unlock hope and rage radiation.",
+            cost: new Decimal(1e60),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -1102,7 +1222,6 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
         },
     },
-    milestones: {},
     challenges: {},
     infoboxes: {
   
@@ -1119,7 +1238,7 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17],]],
                     ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],]],
-                    ["row", [["upgrade", 25], ["upgrade", 26], ["upgrade", 27],]],
+                    ["row", [["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28],]],
                 ]
             },
             "Particle Toggle": {
@@ -1127,8 +1246,8 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 21], ]],
-                    ["row", [ ["clickable", 16], ["clickable", 17],["clickable", 18], ["clickable", 19],]],
+                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 21],["clickable", 24], ]],
+                    ["row", [ ["clickable", 16], ["clickable", 17],["clickable", 18], ["clickable", 19],["clickable", 22], ["clickable", 23],]],
                 ]
             },
             "Buyables": {
@@ -1169,6 +1288,11 @@
                     ["raw-html", () => { return hasUpgrade("mr", 11) ? "Boosts green radiation gain by x<h3>" + format(player.ani.radiation.blue.effect) + "</h3>." : "" }, {color: "#1e74fd", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return hasUpgrade("mr", 11) ? "Costs <h3>" + format(player.ani.radiation.blue.cost) + "</h3> green radiation." : "" }, {color: "#1e74fd", fontSize: "16px", fontFamily: "monospace"}],
                     ], () => {return hasUpgrade("mr", 11) ?  {width: "1510px", height: "100px", border: "2px solid, #061c3f73", backgroundColor: "#0c3d8b50",}: {display: "none !important"}}],
+                    ["style-column", [
+                    ["raw-html", () => { return hasMilestone("rar", 13) ? "You have <h3>" + format(player.ani.radiation.violet.amount) + "</h3> violet radiation. (+" + format(player.ani.radiation.violet.toGet) + "/" + formatTime(player.ani.radiation.violet.max) + ")" : "" }, {color: "#7f00ff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasMilestone("rar", 13) ? "Boosts blue radiation gain by x<h3>" + format(player.ani.radiation.violet.effect) + "</h3>." : "" }, {color: "#7f00ff", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return hasMilestone("rar", 13) ? "Costs <h3>" + format(player.ani.radiation.violet.cost) + "</h3> blue radiation." : "" }, {color: "#7f00ff", fontSize: "16px", fontFamily: "monospace"}],
+                    ], () => {return hasMilestone("rar", 13) ?  {width: "1510px", height: "100px", border: "2px solid, #22093b73", backgroundColor: "#7f00ff50",}: {display: "none !important"}}],
                 ]
             },
             "Radiation Stones": {
@@ -1342,6 +1466,28 @@ const blueRadiation = {
             player.ani.radiation.green.amount = player.ani.radiation.green.amount.sub(player.ani.radiation.blue.cost)
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.blue.toGet) + " Blue Radiation<br>-" + format(player.ani.radiation.blue.cost) + " Green Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+    },
+}
+const violetRadiation = {
+    image: "resources/radiation/violetRadiation.png",
+    time() {
+        let time = new Decimal(5) //subject to change
+        return time
+    },
+    fadeInTime: 2,
+    fadeOutTime: 1,
+    class: "goldenCookie",
+    onClick(index, slot) {
+        if (player.ani.radiation.blue.amount.gte(player.ani.radiation.violet.cost)) {
+            player.ani.radiation.violet.amount = player.ani.radiation.violet.amount.add(player.ani.radiation.violet.toGet)
+            player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.sub(player.ani.radiation.violet.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.violet.toGet) + " Violet Radiation<br>-" + format(player.ani.radiation.violet.cost) + " Blue Radiation</small>"})
         } else
         {
             Vue.delete(particles, this.id)

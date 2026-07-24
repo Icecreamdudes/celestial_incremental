@@ -33,7 +33,7 @@
     }
     },
     automate() {
-        if (hasMilestone("s", 16) && !inChallenge("fu", 11) && !inChallenge("fu", 12))
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11) && (!inChallenge("fu", 12) || hasUpgrade("en", 18)))
         {
             buyBuyable('oi', 11)
             buyBuyable('oi', 12)
@@ -76,7 +76,7 @@
         // SOFTCAP
         if (player.oi.oilToGet.gte("1e10000")) player.oi.oilToGet = player.oi.oilToGet.div("1e10000").pow(0.2).mul("1e10000")
 
-        if (!inChallenge("fu", 11) && !inChallenge("fu", 12)) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
+        if (!inChallenge("fu", 11) && (!inChallenge("fu", 12) || hasUpgrade("en", 18))) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
 
         player.oi.oilEffect = player.oi.oil.pow(0.65).div(1.5).add(1)
 
@@ -102,12 +102,12 @@
             player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
         }
 
-        player.oi.linkingPowerEffect[0] = player.oi.linkingPower[0].pow(0.4).add(1)
-        player.oi.linkingPowerEffect[1] = player.oi.linkingPower[1].pow(0.175).add(1)
-        player.oi.linkingPowerEffect[2] = player.oi.linkingPower[2].pow(0.3).add(1)
-        player.oi.linkingPowerEffect[3] = player.oi.linkingPower[3].pow(0.225).add(1)
-        player.oi.linkingPowerEffect[4] = player.oi.linkingPower[4].pow(0.2).add(1)
-        player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1)
+        player.oi.linkingPowerEffect[0] = player.oi.linkingPower[0].pow(0.4).add(1).pow(player.en.enhancersEffect[3])
+        player.oi.linkingPowerEffect[1] = player.oi.linkingPower[1].pow(0.175).add(1).pow(player.en.enhancersEffect[3])
+        player.oi.linkingPowerEffect[2] = player.oi.linkingPower[2].pow(0.3).add(1).pow(player.en.enhancersEffect[3])
+        player.oi.linkingPowerEffect[3] = player.oi.linkingPower[3].pow(0.225).add(1).pow(player.en.enhancersEffect[3])
+        player.oi.linkingPowerEffect[4] = player.oi.linkingPower[4].pow(0.2).add(1).pow(player.en.enhancersEffect[3])
+        player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1).pow(player.en.enhancersEffect[3])
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
         if (!hasUpgrade("depth2", 203)) player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(buyableEffect("oi", 24))
@@ -129,6 +129,11 @@
 
         if (!player.oi.linkerBought) {
             if (getBuyableAmount("oi", 11).gt(0) && getBuyableAmount("oi", 12).gt(0) && getBuyableAmount("oi", 13).gt(0) && getBuyableAmount("oi", 14).gt(0) && getBuyableAmount("oi", 15).gt(0) && getBuyableAmount("oi", 16).gt(0)) player.oi.linkerBought = true
+        }
+
+        if (hasUpgrade("en", 16))
+        {
+            player.oi.protoMemorySeconds = player.oi.protoMemorySeconds.add(player.oi.protoMemorySecondsToGet.mul(delta))
         }
     },
     oilReset() {
@@ -877,6 +882,7 @@
     },
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return hasMilestone("hor", 11) ? "Raises point doom softcap's starting point by ^" + format(player.cp.replicantiPointEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

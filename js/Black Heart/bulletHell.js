@@ -214,6 +214,17 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         info.vy = 0;
         info.onGround = true;
     }
+    // Green-mode (shield/locked) settings
+    info.greenMode = info.values.greenMode || false;
+    if (info.greenMode) {
+        // shieldDir: 0=E 1=SE 2=S 3=SW 4=W 5=NW 6=N 7=NE
+        info.shieldDir    = 6; // start pointing North
+        info.shieldRadius = 18 + 14; // pr + gap
+        info.shieldArc    = Math.PI * 0.35;
+        // Lock player to center
+        info.px = info.subArena ? info.subWidth / 2 : info.width / 2;
+        info.py = info.subArena ? info.subHeight / 2 : info.height / 2;
+    }
     info.pr = 18;
     info.speed = 5.5;
     info.pos = {x: 0, y: 0}
@@ -253,6 +264,18 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (["ArrowDown", "s", "S"].includes(e.key)) info.keys.down = isDown;
         if (["ArrowLeft", "a", "A"].includes(e.key)) info.keys.left = isDown;
         if (["ArrowRight", "d", "D"].includes(e.key)) info.keys.right = isDown;
+        // Green-mode: derive shield direction from held keys
+        if (info.greenMode && isDown) {
+            const u = info.keys.up, d = info.keys.down, l = info.keys.left, r = info.keys.right;
+            if      ( u && !d && !l && !r) info.shieldDir = 6; // N
+            else if ( u && !d &&  r && !l) info.shieldDir = 7; // NE
+            else if (!u && !d &&  r && !l) info.shieldDir = 0; // E
+            else if (!u &&  d &&  r && !l) info.shieldDir = 1; // SE
+            else if (!u &&  d && !l && !r) info.shieldDir = 2; // S
+            else if (!u &&  d &&  l && !r) info.shieldDir = 3; // SW
+            else if (!u && !d &&  l && !r) info.shieldDir = 4; // W
+            else if ( u && !d &&  l && !r) info.shieldDir = 5; // NW
+        }
     }
     
     // Function to spawn a bullet that goes towards the player
@@ -676,6 +699,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 window.removeEventListener("keydown", keydownHandler);
                 window.removeEventListener("keyup", keyupHandler);
             }
+            if (info.greenMode && !options.bhKeyboard) {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+            }
             if (overlay.parentNode) overlay.remove();
             bhState.active = false;
             info.active = false;
@@ -696,6 +723,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 window.removeEventListener("keydown", keydownHandler);
                 window.removeEventListener("keyup", keyupHandler);
                 window.removeEventListener("click", clickHandler);
+            }
+            if (info.greenMode && !options.bhKeyboard) {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
             }
             if (overlay.parentNode) overlay.remove();
             bhState.active = false;
@@ -719,9 +750,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (info.suby >= info.height - info.subHeight) { info.suby = info.height - info.subHeight; info.subvy = -Math.abs(info.subvy); }
         }
 
-        // Move Player (normal or blue-mode platformer)
+        // Move Player (normal or blue-mode platformer; skipped in greenMode — player is locked)
         // If blueMode: compute jump height from vertical distance between mouse and diamond (gravity stays constant)
-        if (info.blueMode) {
+        if (info.greenMode) {
+            // Green mode: player stays locked at center, no movement
+        } else if (info.blueMode) {
             // compute based on vertical distance (only consider mouse above the diamond for jump height)
             const dy = (info.py - (info.pos.y || info.py)); // positive if mouse is above
             const absdy = Math.max(0, Math.min(dy, info.height));
@@ -835,6 +868,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                     window.removeEventListener("keyup", keyupHandler);
                     window.removeEventListener("click", clickHandler);
                 }
+                if (info.greenMode && !options.bhKeyboard) {
+                    window.removeEventListener("keydown", keydownHandler);
+                    window.removeEventListener("keyup", keyupHandler);
+                }
                 if (overlay.parentNode) overlay.remove();
                 bhState.active = false;
                 info.active = false;
@@ -861,10 +898,16 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Remove bullets that go off screen
         info.bullets = info.bullets.filter(b => {
+            if (b._hitPlayer) return false  // green-mode: spear hit the player, remove it
             if (b.offScreen) {
                 return b.x > info.boxLeft && b.x < info.boxLeft + info.width && b.y > info.boxTop && b.y < info.boxTop + info.height
             }
             if (b.name && (b.name == "bomb" || b.name == "minibomb") && b.exploded) return false
+            if (b.name && b.name == "greenSpear") {
+                // Arena-space coords; cull once fully past the opposite side (generous margin)
+                const m = (b.r ?? 80) * 2 + info.width;
+                return b.x > -m && b.x < info.width + m && b.y > -m && b.y < info.height + m;
+            }
             if (b.name && (b.name == "knife" || b.name == "bigKnife")) {
                 return b.x > -b.r && b.x < info.width + b.r && b.y > -b.r && b.y < info.height + b.r
             }
@@ -944,6 +987,108 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (info.platformHit) {
             playerHit = true;
             info.platformHit = false;
+        }
+
+        // Green-mode: deflect spears that physically touch the shield arc.
+        // The shield is a circular arc at radius `info.shieldRadius` from the player center,
+        // spanning `info.shieldArc` radians centered on `DIR_ANGLES[shieldDir]`.
+        // A spear (line segment with half-width b.width/2) hits the shield when:
+        //   1. Its closest point to the player is within shieldRadius ± (halfLineWidth + spearHalfWidth)
+        //   2. The angle from the player to that closest point falls within the shield arc.
+        if (info.greenMode) {
+            const GREEN_DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+            const shieldCenterAngle = GREEN_DIR_ANGLES[info.shieldDir];
+            const halfArc    = info.shieldArc / 2;
+            const shieldR    = info.shieldRadius;
+            const shieldHalf = 5; // half of the drawn lineWidth (7px) for physical thickness
+
+            // Helper: signed angular difference, result in -π…π
+            function angDiff(a, b) {
+                let d = ((a - b) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+                if (d > Math.PI) d -= 2*Math.PI;
+                return d;
+            }
+
+            let redShieldHit = false;
+
+            for (let b of info.bullets) {
+                if (b._greenDeflected) continue;
+
+                // Build spear segment endpoints in arena coords.
+                const halfLen = (b.r ?? 40) * 0.45;
+                const spearHalf = (b.width ?? 12) / 2;
+                const cos_a = Math.cos(b.angle ?? 0);
+                const sin_a = Math.sin(b.angle ?? 0);
+                const x1 = b.x - cos_a * halfLen;
+                const y1 = b.y - sin_a * halfLen;
+                const x2 = b.x + cos_a * halfLen;
+                const y2 = b.y + sin_a * halfLen;
+
+                // Find the closest point on the segment to the player
+                const segDx = x2 - x1, segDy = y2 - y1;
+                const segLen2 = segDx*segDx + segDy*segDy;
+                let t = 0;
+                if (segLen2 > 0) {
+                    t = ((info.px - x1)*segDx + (info.py - y1)*segDy) / segLen2;
+                    t = Math.max(0, Math.min(1, t));
+                }
+                const closestX = x1 + t*segDx;
+                const closestY = y1 + t*segDy;
+
+                const dx = closestX - info.px;
+                const dy = closestY - info.py;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+
+                // Distance must be within the shield ring
+                const tolerance = spearHalf + shieldHalf;
+                if (dist < shieldR - tolerance || dist > shieldR + tolerance) continue;
+
+                // Angle from player to closest point on spear
+                const pointAngle = Math.atan2(dy, dx);
+
+                // Check if this angle is within the shield arc
+                if (Math.abs(angDiff(pointAngle, shieldCenterAngle)) <= halfArc) {
+                    b._greenDeflected = true;
+                    if (b.red) {
+                        // Red spear hits shield → deal damage and disappear
+                        b._hitPlayer = true;
+                        redShieldHit = true;
+                    } else {
+                        // Green spear hits shield → deflect back
+                        b.vx *= -1;
+                        b.vy *= -1;
+                        if (b.angle != null) b.angle = Math.atan2(b.vy, b.vx);
+                    }
+                }
+            }
+
+            // Strip playerHit for spears deflected before reaching the diamond.
+            // Red spears that reach the player body bounce back with no damage.
+            if (playerHit) {
+                playerHit = false;
+                for (let b of info.bullets) {
+                    if (b._greenDeflected) continue;
+                    const dx = info.px - b.x;
+                    const dy = info.py - b.y;
+                    if (Math.sqrt(dx*dx + dy*dy) <= info.pr + (b.width ?? b.r ?? 8) / 2) {
+                        b._greenDeflected = true;
+                        if (b.red) {
+                            // Red spear hits player body → bounce back, no damage
+                            b.vx *= -1;
+                            b.vy *= -1;
+                            if (b.angle != null) b.angle = Math.atan2(b.vy, b.vx);
+                        } else {
+                            // Green spear hits player body → deal damage and disappear
+                            playerHit = true;
+                            b._hitPlayer = true;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // Red shield hit deals damage regardless of the strip above
+            if (redShieldHit) playerHit = true;
         }
 
         // Take damage (only when in a BH stage)
@@ -1111,6 +1256,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (info.blueMode) {
             info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#22a" : "#116";
             if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#22a" : "#116";
+        } else if (info.greenMode) {
+            info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#2e2" : "#1a4";
+            if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#2e2" : "#1a4";
         } else {
             info.ctx.fillStyle = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
             if (!options.performanceMode) info.ctx.shadowColor = Date.now() - window.lastDamageTime > 200 ? "#e22" : "#811";
@@ -1118,6 +1266,59 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (!options.performanceMode) info.ctx.shadowBlur = 8;
         info.ctx.fill();
         info.ctx.restore();
+
+        // Green-mode: draw shield arc and 8 direction buttons over the diamond
+        if (info.greenMode) {
+            const GREEN_DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+            const shieldCenterAngle = GREEN_DIR_ANGLES[info.shieldDir];
+            const halfArc = info.shieldArc / 2;
+            const sR = info.shieldRadius;
+            const drawX = (info.subArena && info.moveWithSub) ? info.subx + info.px : info.px;
+            const drawY = (info.subArena && info.moveWithSub) ? info.suby + info.py : info.py;
+
+            // Shield arc
+            info.ctx.save();
+            info.ctx.beginPath();
+            info.ctx.arc(drawX, drawY, sR, shieldCenterAngle - halfArc, shieldCenterAngle + halfArc);
+            info.ctx.lineWidth = 7;
+            info.ctx.strokeStyle = "#0f0";
+            if (!options.performanceMode) { info.ctx.shadowColor = "#0f0"; info.ctx.shadowBlur = 20; }
+            info.ctx.stroke();
+            info.ctx.beginPath();
+            info.ctx.arc(drawX, drawY, sR, shieldCenterAngle - halfArc, shieldCenterAngle + halfArc);
+            info.ctx.lineWidth = 3;
+            info.ctx.strokeStyle = "#aff";
+            if (!options.performanceMode) info.ctx.shadowBlur = 0;
+            info.ctx.stroke();
+            info.ctx.restore();
+
+            /* 8 direction buttons
+            const BTN_R = 52;
+            const BTN_SIZE = 14;
+            const dirLabels = ["→","↘","↓","↙","←","↖","↑","↗"];
+            info.ctx.save();
+            for (let i = 0; i < 8; i++) {
+                const a   = GREEN_DIR_ANGLES[i];
+                const bx  = drawX + Math.cos(a) * BTN_R;
+                const by  = drawY + Math.sin(a) * BTN_R;
+                const sel = (i === info.shieldDir);
+                info.ctx.beginPath();
+                info.ctx.arc(bx, by, BTN_SIZE, 0, 2 * Math.PI);
+                info.ctx.fillStyle   = sel ? "rgba(0,255,80,0.55)" : "rgba(0,180,60,0.20)";
+                info.ctx.strokeStyle = sel ? "#0f0" : "#0a0";
+                info.ctx.lineWidth   = sel ? 2.5 : 1.5;
+                if (!options.performanceMode && sel) { info.ctx.shadowColor = "#0f0"; info.ctx.shadowBlur = 12; }
+                info.ctx.fill();
+                info.ctx.stroke();
+                info.ctx.shadowBlur  = 0;
+                info.ctx.font         = "bold " + (BTN_SIZE + 2) + "px sans-serif";
+                info.ctx.textAlign    = "center";
+                info.ctx.textBaseline = "middle";
+                info.ctx.fillStyle    = sel ? "#fff" : "#0a0";
+                info.ctx.fillText(dirLabels[i], bx, by); 
+            }*/
+            info.ctx.restore();
+        }
 
         requestAnimationFrame(animate);
     }
@@ -1152,6 +1353,21 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         e.preventDefault();
     }
     function clickHandler(e) {
+        // Green-mode: clicking sets the shield direction to whichever of the 8 sectors was clicked
+        if (info.greenMode) {
+            const cr = gameCanvas.getBoundingClientRect();
+            const drawX = (info.subArena && info.moveWithSub) ? info.subx + info.px : info.px;
+            const drawY = (info.subArena && info.moveWithSub) ? info.suby + info.py : info.py;
+            const cx = e.clientX - cr.left - drawX;
+            const cy = e.clientY - cr.top  - drawY;
+            if (Math.sqrt(cx*cx + cy*cy) >= info.pr) {
+                let angle = Math.atan2(cy, cx);
+                if (angle < 0) angle += 2 * Math.PI;
+                info.shieldDir = Math.round(angle / (Math.PI / 4)) % 8;
+            }
+            e.preventDefault();
+            return;
+        }
         // Clicking jumps toward clicked horizontal position when in blueMode
         if (info.blueMode) {
             const clickX = e.clientX - info.boxLeft;
@@ -1188,6 +1404,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         window.addEventListener("keyup", keyupHandler);
         window.addEventListener("click", clickHandler);
     }
+    // Green-mode always needs keyboard for shield direction, regardless of bhKeyboard setting
+    if (info.greenMode && !options.bhKeyboard) {
+        window.addEventListener("keydown", keydownHandler);
+        window.addEventListener("keyup", keyupHandler);
+    }
 
     // Save handlers and overlay for cleanup on reload
     bhState.overlay = overlay;
@@ -1207,7 +1428,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             window.removeEventListener("keydown", keydownHandler);
             window.removeEventListener("keyup", keyupHandler);
             window.removeEventListener("click", clickHandler);
-
+        }
+        if (info.greenMode && !options.bhKeyboard) {
+            window.removeEventListener("keydown", keydownHandler);
+            window.removeEventListener("keyup", keyupHandler);
         }
         if (overlay.parentNode) overlay.remove();
         bhState.active = false;
@@ -1270,7 +1494,7 @@ if (storedInfo && storedInfo != "") {
                 player.subtabs["bh"]["stuff"] = "battle";
                 pauseUniverseAll(["BH"], "unpause", true)
                 player.universe = "U3"
-                if (bhStage) {
+                if (player.bh && player.bh.currentStage && player.bh.currentStage !== "none") {
                     bhState.active = false;
                     options.fullscreen = bhState.full;
                     if (bhState.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
@@ -3569,3 +3793,242 @@ BHB.zarUltimateAttack = {
         return info;
     },
 }
+
+
+// Wrapper for a green-diamond, shield-deflection bulletHell (Undertale green soul)
+function bulletHellGreen(actions, values = {}, exitAction = () => {}) {
+    values = values || {};
+    values.greenMode = true;
+    return bulletHell(actions, values, exitAction);
+}
+try { window.bulletHellGreen = bulletHellGreen; } catch (e) { /* ignore in non-browser env */ }
+
+// ── BHB action: green spear rain ──────────────────────────────────────────────
+// Spears are spawned from one of the 8 cardinal/diagonal directions and travel
+// straight toward the player center.
+// Usage: bulletHellGreen({"greenSpearRain": {spearPerSec: 2, spearSpeed: 5, spearLength: 80, spearWidth: 12}}, {width:500, height:500, duration:15})
+BHB.greenSpearRain = {
+    moveFunc(info, ticks, id) {
+        const act      = info.actions[id];
+        const len      = act.spearLength ?? 80;
+        const wid      = act.spearWidth  ?? 12;
+        const speed    = act.spearSpeed  ?? 5;
+        const perSec   = act.spearPerSec ?? act.bulletPerSec ?? 2;
+        const redChance = act.redChance  ?? 0; // 0–1 probability of a spear being red
+        const fourDir = act.fourDir ?? false;
+
+        if (!act.lastTime) act.lastTime = ticks;
+        const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * perSec);
+
+        const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+
+        for (let i = 0; i < toSpawn; i++) {
+            const isRed = Math.random() < redChance;
+            var dirIdx = Math.floor(Math.random() * 8);
+            if (fourDir) dirIdx = Math.floor(Math.random() * 4) * 2;
+            const inboundAngle = DIR_ANGLES[dirIdx] + Math.PI;
+            const vx = Math.cos(inboundAngle) * speed;
+            const vy = Math.sin(inboundAngle) * speed;
+            const margin = len + 16;
+            const cx = info.subArena && info.moveWithSub ? info.subx + info.px : info.px;
+            const cy = info.subArena && info.moveWithSub ? info.suby + info.py : info.py;
+            const bx = cx + Math.cos(DIR_ANGLES[dirIdx]) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const by = cy + Math.sin(DIR_ANGLES[dirIdx]) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const angle = Math.atan2(vy, vx);
+            info.bullets.push({
+                name: "greenSpear",
+                boxRender: true,
+                x: bx, y: by,
+                vx, vy,
+                r: len,
+                width: wid,
+                angle,
+                red: isRed,
+                _greenDeflected: false,
+                draw(b, ctx) {
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    const shaftColor  = b.red ? "#f44" : "#0f0";
+                    const shaftFade   = b.red ? "rgba(255,40,40,0)" : "rgba(0,255,80,0)";
+                    const tipColor    = b.red ? "#f88" : "#4f4";
+                    const glowColor   = b.red ? "#f44" : "#0f0";
+                    const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
+                    grad.addColorStop(0,   shaftFade);
+                    grad.addColorStop(0.3, shaftColor);
+                    grad.addColorStop(1,   "#fff");
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.5, 0);
+                    ctx.lineTo( b.r * 0.4, 0);
+                    ctx.lineWidth   = b.width;
+                    ctx.strokeStyle = grad;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 10; }
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(b.r * 0.65, 0);
+                    ctx.lineTo(b.r * 0.3, -b.width * 0.7);
+                    ctx.lineTo(b.r * 0.3,  b.width * 0.7);
+                    ctx.closePath();
+                    ctx.fillStyle = tipColor;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 16; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawn > 0) act.lastTime = ticks;
+        return info;
+    },
+}
+
+// ── BHB action: green spear choreography ─────────────────────────────────────
+// Fires a scripted sequence of spears, each with its own timing and properties.
+//
+// Each entry in `sequence` is an object:
+//   {
+//     delay:   number   – milliseconds after the action starts to fire this spear
+//     dir:     number   – direction index 0–7 (0=E 1=SE 2=S 3=SW 4=W 5=NW 6=N 7=NE)
+//                         OR an angle in radians if >= 0 and < 2π (dir treated as raw angle when > 7)
+//     speed:   number   – pixels per frame (default 5)
+//     length:  number   – half-length of spear in px (default 80)
+//     width:   number   – thickness of spear in px (default 12)
+//     loop:    boolean  – if true, the whole sequence repeats once all entries have fired
+//   }
+//
+// Usage:
+//   bulletHellGreen({
+//     "greenSpearChoreography": {
+//       sequence: [
+//         { delay: 0,    dir: 6, speed: 6, length: 80, width: 12 },   // N
+//         { delay: 500,  dir: 2, speed: 6, length: 80, width: 12 },   // S
+//         { delay: 1000, dir: 0, speed: 5, length: 60, width: 10 },   // E
+//         { delay: 1000, dir: 4, speed: 5, length: 60, width: 10 },   // W
+//       ],
+//       loop: true   // repeat the sequence after all spears have fired
+//     }
+//   }, { width: 500, height: 500, duration: 20 })
+
+BHB.greenSpearChoreography = {
+    codeFunc(info, id) {
+        const act = info.actions[id];
+        // Timestamp when this action started (used to compute relative delays)
+        act._seqStart  = Date.now();
+        // Index of the next spear in the sequence yet to be fired
+        act._seqIndex  = 0;
+        return info;
+    },
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        if (!act.sequence || act.sequence.length === 0) return info;
+
+        // Initialise start time lazily (in case codeFunc wasn't called)
+        if (!act._seqStart) act._seqStart = Date.now();
+        if (act._seqIndex == null) act._seqIndex = 0;
+
+        const elapsed = Date.now() - act._seqStart;
+
+        // Fire all spears whose delay has been reached
+        while (act._seqIndex < act.sequence.length) {
+            const entry = act.sequence[act._seqIndex];
+            if (elapsed < (entry.delay ?? 0)) break; // not yet time
+
+            // Resolve direction
+            const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4,
+                                 Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+            const dirIdx = entry.dir ?? 6;
+            // If dir is an integer 0-7 use the lookup, otherwise treat as raw radian angle
+            const outAngle = (Number.isInteger(dirIdx) && dirIdx >= 0 && dirIdx <= 7)
+                ? DIR_ANGLES[dirIdx]
+                : dirIdx;
+
+            const speed  = entry.speed  ?? 5;
+            const len    = entry.length ?? 80;
+            const wid    = entry.width  ?? 12;
+            // red: true/false directly, OR redChance: 0–1 probability
+            const isRed  = entry.red ?? (Math.random() < (entry.redChance ?? 0));
+
+            // Spear travels inward (opposite of outAngle)
+            const inboundAngle = outAngle + Math.PI;
+            const vx = Math.cos(inboundAngle) * speed;
+            const vy = Math.sin(inboundAngle) * speed;
+            const angle = Math.atan2(vy, vx);
+
+            const margin = len + 16;
+            const cx = info.subArena && info.moveWithSub ? info.subx + info.px : info.px;
+            const cy = info.subArena && info.moveWithSub ? info.suby + info.py : info.py;
+            const bx = cx + Math.cos(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const by = cy + Math.sin(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+
+            info.bullets.push({
+                name: "greenSpear",
+                boxRender: true,
+                x: bx, y: by,
+                vx, vy,
+                r: len,
+                width: wid,
+                angle,
+                red: isRed,
+                _greenDeflected: false,
+                draw(b, ctx) {
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    const shaftColor = b.red ? "#f44" : "#0f0";
+                    const shaftFade  = b.red ? "rgba(255,40,40,0)" : "rgba(0,255,80,0)";
+                    const tipColor   = b.red ? "#f88" : "#4f4";
+                    const glowColor  = b.red ? "#f44" : "#0f0";
+                    const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
+                    grad.addColorStop(0,   shaftFade);
+                    grad.addColorStop(0.3, shaftColor);
+                    grad.addColorStop(1,   "#fff");
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.5, 0);
+                    ctx.lineTo( b.r * 0.4, 0);
+                    ctx.lineWidth   = b.width;
+                    ctx.strokeStyle = grad;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 10; }
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(b.r * 0.65, 0);
+                    ctx.lineTo(b.r * 0.3, -b.width * 0.7);
+                    ctx.lineTo(b.r * 0.3,  b.width * 0.7);
+                    ctx.closePath();
+                    ctx.fillStyle = tipColor;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 16; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+
+            act._seqIndex++;
+        }
+
+        // Loop: restart the sequence when all entries have fired
+        const loop = act.loop ?? act.sequence[act.sequence.length - 1]?.loop ?? false;
+        if (loop && act._seqIndex >= act.sequence.length) {
+            act._seqStart = Date.now();
+            act._seqIndex = 0;
+        }
+
+        return info;
+    },
+}
+
+//	direction index (0=E, 1=SE, 2=S, 3=SW, 4=W, 5=NW, 6=N, 7=NE
+/*
+bulletHellGreen({
+    "greenSpearChoreography": {
+        loop: true,
+        sequence: [
+            { delay: 500, dir: 6, speed: 4, loop: true, red: false },                                                                                                                                              
+            { delay: 600, dir: 5, speed: 4, loop: true, red: false },             
+            { delay: 900, dir: 4, speed: 4, loop: true, red: false },             
+            { delay: 1000, dir: 2, speed: 4, loop: true, red: false },                                                                                                                                              
+            { delay: 1100, dir: 1, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
+            { delay: 1400, dir: 0, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
+        ]
+    }
+}, { width: 500, height: 500, duration: 18 })
+
+
+*/

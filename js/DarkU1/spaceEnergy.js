@@ -76,6 +76,7 @@
 
         // SPACE ENERGY SOFTCAP
         if (player.ds.spaceEnergyToGet.gte(1000)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(1000).pow(0.3).mul(1000)
+        if (player.ds.spaceEnergyToGet.gte(1e35)) player.ds.spaceEnergyToGet = player.ds.spaceEnergyToGet.div(1e35).pow(0.15).mul(1e35)
 
         if (hasUpgrade("mr", 17) && !player.pet.legPetTimers[0].active) player.ds.spaceEnergy = player.ds.spaceEnergy.add(player.ds.spaceEnergyToGet.mul(Decimal.mul(delta, 0.1)))
         //space
@@ -680,7 +681,8 @@
                             return look
                         }],
                     ]],
-                    ["raw-html", () => { return player.ds.spaceEnergyToGet.gte(1000) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.ds.spaceEnergyToGet.gte(1000) && player.ds.spaceEnergyToGet.lt(1e35) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.ds.spaceEnergyToGet.gte(1e35) ? "[SOFTCAPPED^2]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Extends unavoidable point softcap<sup>2</sup> by ^" + format(player.ds.spaceEnergyEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "You will store " + format(player.ds.storedSpaceEnergyToGet) + " space energy when you leave D1."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "25px"],

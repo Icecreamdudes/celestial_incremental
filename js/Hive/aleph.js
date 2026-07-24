@@ -57,8 +57,11 @@ addLayer("al", {
         // FLOOR HONEYCOMBS
         player.al.honeycombGain = player.al.honeycombGain.floor()
 
+        if (hasMilestone("rar", 11)) player.al.honeycomb = player.al.honeycomb.add(player.al.honeycombGain.mul(Decimal.mul(0.01, delta)))
+
         // HONEYCOMB EFFECT
         player.al.honeycombEffect = hasUpgrade("n", 21) ? Decimal.pow(1.5, player.al.honeycomb.add(1).log(10)) : new Decimal(1)
+        if (hasUpgrade("n", 91)) player.al.honeycombEffect = player.al.honeycombEffect.pow(2)
 
         // START OF ROYAL JELLY
         player.al.royalJellyGain = player.ho.honey.div(1e10).pow(0.25)
@@ -73,8 +76,11 @@ addLayer("al", {
         // FLOOR ROYAL JELLY
         player.al.royalJellyGain = player.al.royalJellyGain.floor()
 
+        if (hasMilestone("rar", 11)) player.al.royalJelly = player.al.royalJelly.add(player.al.royalJellyGain.mul(Decimal.mul(0.01, delta)))
+
         // ROYAL JELLY EFFECT
         player.al.royalJellyEffect = hasUpgrade("n", 22) ? Decimal.pow(1.1, player.al.royalJelly.add(1).log(10)) : new Decimal(1)
+        if (hasUpgrade("n", 91)) player.al.royalJellyEffect = player.al.royalJellyEffect.pow(2)
 
         if (player.al.honeycomb.gt(player.al.highestHoneycomb)) player.al.highestHoneycomb = player.al.honeycomb
         if (player.al.royalJelly.gt(player.al.highestRoyalJelly)) player.al.highestRoyalJelly = player.al.royalJelly
@@ -183,7 +189,7 @@ addLayer("al", {
         player.ne.epsilon.amount = new Decimal(0)
         player.ne.epsilon.gain = new Decimal(0)
         player.ne.epsilon.effect = new Decimal(1)
-        player.ne.upgrades.splice(0, player.ne.upgrades.length)
+        if (!hasMilestone("rar", 11)) player.ne.upgrades.splice(0, player.ne.upgrades.length)
 
         // BEE BREAD
         player.bb.beeBreadPerSecond = new Decimal(0)
@@ -237,6 +243,9 @@ addLayer("al", {
                     }
                 }
             }
+            player.ne.zeta.amount = new Decimal(0)
+            player.bpl.roles.mutated.amount = new Decimal(0)
+            player.ne.upgrades.splice(0, player.ne.upgrades.length)
         }
     },
     clickables: {

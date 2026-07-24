@@ -180,7 +180,7 @@ addLayer("bloodZone1", {
         },
         13: {
             requirementDescription: "Level 60",
-            effectDescription() { return "???" },
+            effectDescription() { return "Unlock a new ship.<br>[COMING SOON]" },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(60) },
             style() {
@@ -191,7 +191,7 @@ addLayer("bloodZone1", {
         },
         14: {
             requirementDescription: "Level 80",
-            effectDescription() { return "???" },
+            effectDescription() { return "Automate blood buyables." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(80) },
             style() {
@@ -301,7 +301,7 @@ SB_zones.bloodZone1 = {
     levelLimit: 100,
     asteroidLimit: 0,
     celestialiteSpawnCooldown: 60,
-    celestialiteLimit: 16,
+    celestialiteLimit: 12,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         

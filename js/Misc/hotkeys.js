@@ -104,7 +104,7 @@ function keyTable(uniID) {
             hk = knownHotkeys.global[k]
             if(hk.layer == "settings")
                 table.push(["row",[
-                    formatKey(hk.key,layers[hk.layer]),
+                    formatKey(hk,layers[hk.layer]),
                             ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                     ],{'border-style':'solid'}
                 ])            
@@ -114,7 +114,7 @@ function keyTable(uniID) {
                 hk = knownHotkeys.global[k]
                 if(hk.uni == u)
                     table.push(["row",[
-                        formatKey(hk.key,layers[hk.layer]),
+                        formatKey(hk,layers[hk.layer]),
                                 ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                         ],{'border-style':'solid'}
                     ])            
@@ -126,7 +126,7 @@ function keyTable(uniID) {
             if(layers[node].hotkeys)
                 for(hk of layers[node].hotkeys) {
                         if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                            formatKey(hk.key,layers[node]),
+                            formatKey(hk,layers[node]),
                             ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                         ],{'border-style':'solid'}
                     ])
@@ -137,7 +137,7 @@ function keyTable(uniID) {
                         let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
                         if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
                                 if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                                    formatKey(hk.key,layers[innerNode]),
+                                    formatKey(hk,layers[innerNode]),
                                     ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                                 ],{'border-style':'solid'}
                             ])
@@ -151,26 +151,31 @@ function keyTable(uniID) {
 }
 
 
-function formatKey(keyStr, layer) {
-
+function formatKey(hk, layer) {
     let basicKeyStyle = {'font-family':'monospace','font-size':'16px','display':'block','width':'24px','height':'24px','color':'black','align-content':'center','border-style':'solid','margin':'4px','border-color':'rgba(0, 0, 0, 0.3)'}
     let keyStyle = layer.nodeStyle ? 
         {...basicKeyStyle,'background-color': layer.color,...readData(layer.nodeStyle)} :
         {...basicKeyStyle,'background-color': layer.color}
-    let keyIcons = []
-
+    if(hk.color) keyStyle = {...keyStyle, 'background-color': hk.color}
+    if(hk.style) keyStyle = {...keyStyle, ...hk.style}
+    keyStyle['border-radius'] = '0px'
     keyStyle.transform = ''
 
+
+    
+    let keyIcons = []
+    let keyStr = hk.key
     if(keyStr.startsWith('ctrl+'))
     {
-        keyIcons.push(["display-text","Ctrl", keyStyle])
+        keyIcons.push(["display-text","Ctrl", {...keyStyle, 'width': '48px'}])
+        keyStr = keyStr.slice(5)
     }
 
     if(keyStr.toLowerCase() !== keyStr)
     {
         keyIcons.push(["display-text","⇧", keyStyle])   
     }
-    keyIcons.push(["display-text",hk.key.toUpperCase(), keyStyle])
+    keyIcons.push(["display-text",keyStr.toUpperCase(), keyStyle])
     return ["row",keyIcons]
 }
 

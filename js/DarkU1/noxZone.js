@@ -137,7 +137,7 @@ SB_zones.noxZone = {
     levelLimit: 20,
     asteroidLimit: 0,
     celestialiteSpawnCooldown: 60,
-    celestialiteLimit: 16,
+    celestialiteLimit: 12,
     generateCelestialite(level) {
         if (typeof level == "object") level = level.toNumber();
         

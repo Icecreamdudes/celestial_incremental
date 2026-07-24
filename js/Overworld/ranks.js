@@ -948,6 +948,24 @@
             onPress() {
                 clickClickable(this.layer, 13)
             },
+        },
+        {
+            key: "t", 
+            description: "Reverse Time",
+            unlocked() {
+                return hasUpgrade("i", 26)
+            },
+            onPress() {
+                if(!player.r.timeReversed){
+                    clickClickable(this.layer, 16)
+                    doPopup("none", "Time Reversal turned on!", "Toggle", 5, "#d82cd4", false)
+                }
+                else {
+                    clickClickable(this.layer, 12)
+                    doPopup("none", "Time Reversal turned off!", "Toggle", 5, "#d82cd4", false)
+                }
+            },
+            style: {color: "white", borderColor: "grey", backgroundColor: "#d82cd4"},
         }
     ],
 

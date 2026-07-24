@@ -35,7 +35,7 @@
         };
     },
     tooltip: "Blood",
-    branches: [["le", "#f57171ff"]],
+    branches: [["le", "#309"]],
     color: "#4f1818ff",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -722,6 +722,9 @@
                             ["blank", "25px"],
                             ["layer-proxy", ["bl", [
                                 ["clickable", 11],
+                            ]]],
+                            ["layer-proxy", ["ir", [
+                                ["clickable", 21], //geroa
                             ]]],
                             ["blank", "25px"],
                             ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

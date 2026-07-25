@@ -716,6 +716,7 @@ class SpaceArena {
         this.asteroidSpawnTimer = 0;
         this.maxAsteroids = 16;
         this.lootFlashes = [];
+        this.warnings = [];
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgrades = this.getDefaultUpgrades();
@@ -4275,6 +4276,101 @@ class SpaceArena {
             if (flash.timer <= 0) this.lootFlashes.splice(i, 1);
         }
 
+        // Draw warns
+        for (let i = this.warnings.length - 1; i >= 0; i--) {
+            let warning = this.warnings[i];
+            let remainingDistance = warning.dist
+            let currentPos = [warning.x, warning.y]
+            let nextPos = [warning.x, warning.y]
+
+            let down = warning.ang < 0
+            let right = Math.abs(warning.ang) < Math.PI / 2
+            let j = 0
+            while (remainingDistance > 0) {
+                j++
+                this.ctx.save()
+                this.ctx.lineWidth = 4;
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.beginPath()
+                this.ctx.moveTo(currentPos[0], currentPos[1])
+
+                // Get distance to next point of screen looping
+                // Vertical Wall
+                let hx = Math.abs((right ? this.width - currentPos[0] : currentPos[0]) / Math.cos(warning.ang)) || 0
+                // Horizontal Wall
+                let hy = Math.abs((!down ? this.height - currentPos[1] : currentPos[1]) / Math.sin(warning.ang)) || 0
+                let currentDistance = Math.min(hx, hy)
+
+                if (remainingDistance < currentDistance) {
+                    // ^ This needs to account for screen wrapping
+
+                    // Finish
+                    
+                    nextPos[0] = currentPos[0] + Math.cos(warning.ang) * remainingDistance
+                    nextPos[1] = currentPos[1] + Math.sin(warning.ang) * remainingDistance
+
+                    let g = this.ctx.createLinearGradient(
+                        currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                        currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                        nextPos[0],
+                        nextPos[1]
+                    );
+                    g.addColorStop(0, 'rgba(255, 128, 0, 0.5)');
+                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+                    this.ctx.strokeStyle = g;
+                    
+                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+
+                    remainingDistance = 0
+                } else {
+                    // Keep going
+
+                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    
+                    let g
+                    if (hx < hy) {
+                        nextPos[0] = right ? this.width : 0
+                        nextPos[1] = currentPos[1] + currentDistance * Math.sin(warning.ang)
+                        g = this.ctx.createLinearGradient(
+                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang), 
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                        );
+                        currentPos[0] = !right ? this.width : 0
+                        currentPos[1] = nextPos[1]
+                    } else {
+                        nextPos[0] = currentPos[0] + currentDistance * Math.cos(warning.ang)
+                        nextPos[1] = !down ? this.height : 0
+                        g = this.ctx.createLinearGradient(
+                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                        );
+                        currentPos[0] = nextPos[0]
+                        currentPos[1] = down ? this.height : 0
+                    }
+
+                    remainingDistance -= currentDistance
+
+                    g.addColorStop(0, 'rgba(255, 128, 0, 0.5)');
+                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+                    this.ctx.strokeStyle = g;
+
+                    this.ctx.lineTo(nextPos[0] + remainingDistance * Math.cos(warning.ang), nextPos[1] + remainingDistance * Math.sin(warning.ang))
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+                }
+                this.ctx.restore()
+                if (remainingDistance > 100000) {console.warn("uh oh"); break; }
+                if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
+            }
+        }
+        this.warnings = []
 
         // Draw minimap
 

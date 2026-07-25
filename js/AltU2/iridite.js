@@ -359,6 +359,9 @@ addLayer("ir", {
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
+        // TEMP
+        if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(Decimal.mul(10, delta))
+
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;

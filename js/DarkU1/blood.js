@@ -280,32 +280,7 @@
     bloodReset() {
     },
     upgrades: {
-        11: {
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
-                this.description() + // MIDDLE
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
-                "</div></div>"
-            },
-            title: "Rejuvenation",
-            unlocked() { return true },
-            description() {return "Boosts singularity point gain based on space rocks. (x" + format(this.effect()) + ")"},
-            cost: new Decimal(300),
-            currencyLocation() { return player.bl },
-            effect() {
-                return player.ir.spaceRock.pow(0.75).mul(1000).add(1)
-            },
-            currencyDisplayName: "blood stones",
-            currencyInternalName: "bloodStones",
-            style() {
-                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
-                return look
-            },
-        },
+        
     },
     buyables: {
         11: {
@@ -490,7 +465,7 @@
             purchaseLimit() { return new Decimal(40) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

@@ -154,19 +154,338 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0)) {/*
+        if (level.modulo(20).eq(0) || level.eq(2)) {
             arena.enemies = []
             arena.asteroids = []
             arena.xpOrbs = []
             arena.gammaTrails = []
             arena.bossActive = true;
             arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
-            SB_spawnCelestialite("ufo")*/
+            SB_spawnCelestialite("nox")
         }
     },
     statMult: new Decimal(1.5),
     rockMult: new Decimal(1.5),
     gemMult: new Decimal(1.5),
+}
+
+SB_celestialites.nox = {
+    name: "Nox",
+    symbol: "nox",
+    radius: 64,
+    color: "#7a0000",
+    health: new Decimal(1e5),
+    damage: new Decimal(16),
+    bodyDamage: new Decimal(2),
+    regen: new Decimal(16),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        gain.bloodGems = Decimal.add(1, Math.random()).mul(5)
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(9)
+    },
+    initialize(celestialite) {
+        // Stat changes
+        celestialite.maxHealth = new Decimal(1e5)
+        celestialite.health = new Decimal(1e5)
+        celestialite.damage = new Decimal(16)
+        celestialite.regen = new Decimal(16)
+
+        celestialite.phase = 1
+        celestialite.currentAttack = ['barrage', 'charge', 'fireball'][Math.floor(Math.random() * 3)];
+        celestialite.attackInitialized = true
+
+        celestialite.attackTimer = 60
+
+        celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.dvx = 0.875
+        celestialite.dvy = 0.875
+    },
+    decideAttack(celestialite) {
+        // Decide on an attack
+        let options = ['barrage', 'charge', 'fireball'];
+        if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'spinSword', 'batCircle']);
+        options.splice(options.indexOf(celestialite.currentAttack), 1)
+        celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        celestialite.attackInitialized = false
+    },
+    attacks: {
+        barrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            
+            // Attack
+            arena.warnings.push({
+                x: celestialite.x,
+                y: celestialite.y,
+                ang: celestialite.playerAng,
+                dist: 3600,
+                timer: 60,
+                damage: celestialite.damage,
+                onReady(warning) {
+                    arena.bullets.push({
+                        x: warning.x,
+                        y: warning.y,
+                        vx: Math.cos(warning.ang) * 12,
+                        vy: Math.sin(warning.ang) * 12,
+                        life: 60,
+                        initialLife: 60,
+                        damage: celestialite.damage,
+                        pierce: 3,
+                        radius: 10,
+                        fromEnemy: true,
+                        vampireSpear: true,
+                        spear: true,
+                        rot: warning.ang,
+                        // visual tuning for a more realistic spear (no spin)
+                        shaftLen: 56,
+                        shaftW: 6,
+                        tipLen: 18,
+                        // knockback strength applied to enemies on hit
+                        knockback: 12,
+                        originX: warning.x,
+                        originY: warning.y,
+                    })
+                }
+            });
+        },
+        charge(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            
+            // Attack
+            arena.warnings.push({
+                x: celestialite.x,
+                y: celestialite.y,
+                ang: celestialite.playerAng,
+                dist: 3600,
+                timer: 60,
+                damage: celestialite.damage,
+                onReady(warning) {
+                    arena.bullets.push({
+                        x: warning.x,
+                        y: warning.y,
+                        vx: Math.cos(warning.ang) * 12,
+                        vy: Math.sin(warning.ang) * 12,
+                        life: 60,
+                        initialLife: 60,
+                        damage: celestialite.damage,
+                        pierce: 3,
+                        radius: 10,
+                        fromEnemy: true,
+                        vampireSpear: true,
+                        spear: true,
+                        rot: warning.ang,
+                        // visual tuning for a more realistic spear (no spin)
+                        shaftLen: 56,
+                        shaftW: 6,
+                        tipLen: 18,
+                        // knockback strength applied to enemies on hit
+                        knockback: 12,
+                        originX: warning.x,
+                        originY: warning.y,
+                    })
+                }
+            });
+        },
+        fireball(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            
+            // Attack
+            arena.warnings.push({
+                x: celestialite.x,
+                y: celestialite.y,
+                ang: celestialite.playerAng,
+                dist: 3600,
+                timer: 60,
+                damage: celestialite.damage,
+                onReady(warning) {
+                    arena.bullets.push({
+                        x: warning.x,
+                        y: warning.y,
+                        vx: Math.cos(warning.ang) * 12,
+                        vy: Math.sin(warning.ang) * 12,
+                        life: 60,
+                        initialLife: 60,
+                        damage: celestialite.damage,
+                        pierce: 3,
+                        radius: 10,
+                        fromEnemy: true,
+                        vampireSpear: true,
+                        spear: true,
+                        rot: warning.ang,
+                        // visual tuning for a more realistic spear (no spin)
+                        shaftLen: 56,
+                        shaftW: 6,
+                        tipLen: 18,
+                        // knockback strength applied to enemies on hit
+                        knockback: 12,
+                        originX: warning.x,
+                        originY: warning.y,
+                    })
+                }
+            });
+        },
+    },
+    tick(celestialite) {
+        // Get distance/angle to the player
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+        celestialite.playerAng = Math.atan2(dy, dx);
+        celestialite.moveAng = celestialite.playerAng
+
+        // Decide on an attack
+        celestialite.attackTimer--
+        if (celestialite.attackTimer <= 0) SB_celestialites[celestialite.type].decideAttack(celestialite);
+
+        // Attack
+        SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
+
+        // Move
+        if (celestialite.targetingTimer > 0) {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2
+        } else {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.4
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.4
+        }
+    },
+    onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {
+        arena.xpOrbs = []
+        player.bl.noxDefeated = true
+        player.ir.battleXP = player.ir.battleXPReq
+        arena.bossActive = false
+    },
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (!wrapped) return;
+        
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        let t = (celestialite._pulseTimer || 0);
+        let r = celestialite.radius || 64;
+        // Check for bat transformation during batCircle attack
+        if (false) {
+            // Draw Bat
+            let flap = Math.sin(t * 0.2) * 0.5;
+            ctx.fillStyle = "#330000";
+            // Wings
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(-r * 0.8, -r * (0.5 + flap), -r * 1.5, 0);
+            ctx.quadraticCurveTo(-r * 0.8, r * 0.2, 0, 0);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(r * 0.8, -r * (0.5 + flap), r * 1.5, 0);
+            ctx.quadraticCurveTo(r * 0.8, r * 0.2, 0, 0);
+            ctx.fill();
+            // Body
+            ctx.beginPath();
+            ctx.ellipse(0, 0, r * 0.4, r * 0.25, 0, 0, Math.PI * 2);
+            ctx.fill();
+            // Eyes
+            ctx.fillStyle = "#ff0000";
+            ctx.beginPath(); ctx.arc(-r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
+        } else {
+            // Draw Vampire Knight
+            let bob = Math.sin(t * 0.05) * 10;
+            ctx.translate(0, bob);
+            // Cape (animated flap)
+            let flap = Math.sin(t * 0.1) * 5;
+            ctx.fillStyle = "#6a0000"; // Deeper vampire red
+            ctx.beginPath();
+            ctx.moveTo(-r * 0.5, -r * 0.2);
+            ctx.lineTo(-r * 1.3 - flap, r * 1.3);
+            ctx.lineTo(0, r * 0.9);
+            ctx.lineTo(r * 1.3 + flap, r * 1.3);
+            ctx.lineTo(r * 0.5, -r * 0.2);
+            ctx.closePath();
+            ctx.fill();
+            // Shield (as seen in image)
+            ctx.save();
+            ctx.translate(r * 0.6, r * 0.2);
+            ctx.rotate(0.1);
+            ctx.fillStyle = "#ffffff";
+            ctx.strokeStyle = "#ff0000";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, -r * 0.5);
+            ctx.lineTo(r * 0.4, -r * 0.3);
+            ctx.lineTo(r * 0.4, r * 0.4);
+            ctx.lineTo(0, r * 0.7);
+            ctx.lineTo(-r * 0.4, r * 0.4);
+            ctx.lineTo(-r * 0.4, -r * 0.3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            // Shield detail
+            ctx.strokeStyle = "#ff0000";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(0, -r * 0.3); ctx.lineTo(0, r * 0.5); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-r * 0.2, 0); ctx.lineTo(r * 0.2, 0); ctx.stroke();
+            ctx.restore();
+            // Body/Armor (Red/White/Black armor as in image)
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.moveTo(-r * 0.4, -r * 0.2);
+            ctx.lineTo(r * 0.4, -r * 0.2);
+            ctx.lineTo(r * 0.3, r * 0.6);
+            ctx.lineTo(-r * 0.3, r * 0.6);
+            ctx.closePath();
+            ctx.fill();
+            // Red armor trim
+            ctx.fillStyle = "#ff0000";
+            ctx.fillRect(-r * 0.4, -r * 0.2, r * 0.8, r * 0.1);
+            ctx.fillRect(-r * 0.3, r * 0.4, r * 0.6, r * 0.1);
+            // Red Hair (as seen in image)
+            ctx.fillStyle = "#d40000";
+            ctx.beginPath();
+            ctx.arc(0, -r * 0.55, r * 0.32, Math.PI, 2 * Math.PI);
+            ctx.fill();
+            // Hair spikes
+            ctx.beginPath();
+            ctx.moveTo(-r * 0.3, -r * 0.6); ctx.lineTo(-r * 0.4, -r * 0.4); ctx.lineTo(-r * 0.2, -r * 0.5);
+            ctx.moveTo(r * 0.3, -r * 0.6); ctx.lineTo(r * 0.4, -r * 0.4); ctx.lineTo(r * 0.2, -r * 0.5);
+            ctx.fill();
+            // Head (Pale skin)
+            ctx.fillStyle = "#fff0f0";
+            ctx.beginPath();
+            ctx.arc(0, -r * 0.5, r * 0.25, 0, Math.PI * 2);
+            ctx.fill();
+            // Eyes (glowing)
+            let glow = 0.5 + 0.5 * Math.abs(Math.sin(t * 0.1));
+            ctx.fillStyle = `rgba(255, 0, 0, ${glow})`;
+            ctx.beginPath(); ctx.arc(-r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
+            // Pulsing Aura
+            ctx.beginPath();
+            let auraR = r * (1.2 + 0.1 * Math.sin(t * 0.1));
+            let grad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, auraR);
+            grad.addColorStop(0, "rgba(255, 0, 0, 0.2)");
+            grad.addColorStop(1, "rgba(255, 0, 0, 0)");
+            ctx.fillStyle = grad;
+            ctx.arc(0, 0, auraR, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    },
 }
 
 SB_celestialites.whiteLeech = {

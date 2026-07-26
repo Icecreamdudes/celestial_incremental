@@ -257,9 +257,9 @@ class SpaceArena {
     }
 
         // Expand the arena to cover the entire screen and make it transparent
-    enterIriditeFullscreen() {
-        if (!this.arenaDiv || this._iriditeFullscreen) return;
-        this._iriditeFullscreen = true;
+    enterFullscreen() {
+        if (!this.arenaDiv || this._fullscreen) return;
+        this._fullscreen = true;
 
         // Save previous styles and sizes so we can restore later
         this._prevArenaStyle = {
@@ -309,7 +309,7 @@ class SpaceArena {
 
         // Keep the canvas sized during window resize while in fullscreen boss mode
         this._onWindowResize = () => {
-            if (!this._iriditeFullscreen) return;
+            if (!this._fullscreen) return;
                 this.canvasWidth = window.innerWidth
                 this.canvasHeight = window.innerHeight
             if (this.canvas) {
@@ -322,9 +322,9 @@ class SpaceArena {
     }
 
     // Restore the arena to its previous size/style
-    exitIriditeFullscreen() {
-        if (!this.arenaDiv || !this._iriditeFullscreen) return;
-        this._iriditeFullscreen = false;
+    exitFullscreen() {
+        if (!this.arenaDiv || !this._fullscreen) return;
+        this._fullscreen = false;
 
         const s = this._prevArenaStyle || {};
         Object.assign(this.arenaDiv.style, {
@@ -1154,7 +1154,7 @@ class SpaceArena {
         player.ir.iriditeFightActive = false;
 
         // If we were in fullscreen for the Iridite fight, restore original arena
-        this.exitIriditeFullscreen();
+        this.exitFullscreen();
     }
 
     handleKeyDown = (e) => { if (!this.upgradeChoiceActive) this.keys[e.code] = true; };
@@ -1546,8 +1546,8 @@ class SpaceArena {
         player.ir.iriditeFightActive = true;
 
         // Make the arena fullscreen & transparent for the Iridite encounter
-        if (typeof this.enterIriditeFullscreen === "function") {
-            this.enterIriditeFullscreen();
+        if (typeof this.enterFullscreen === "function") {
+            this.enterFullscreen();
         }
 
         let amt = 1
@@ -1716,8 +1716,8 @@ class SpaceArena {
         };
 
         // If we were in fullscreen iridite mode but the boss is gone, restore arena
-        if (this._iriditeFullscreen && !this.enemies.some(e => e.type === 'iriditeBoss' && e.alive)) {
-            this.exitIriditeFullscreen();
+        if (this._fullscreen && !this.enemies.some(e => e.type === 'iriditeBoss' && e.alive)) {
+            this.exitFullscreen();
         }
         if (this.upgradeChoiceActive) {
             this.draw();

@@ -128,6 +128,8 @@ addLayer("noxZone", {
     layerShown() {return player.startedGame && tmp.pu.levelables[302].canClick},
 })
 
+// ZONE
+
 SB_zones.noxZone = {
     nameCap: "Nox Zone",
     nameLow: "nox zone",
@@ -155,12 +157,6 @@ SB_zones.noxZone = {
     },
     levelUp(level) {
         if (level.modulo(20).eq(0) || level.eq(2)) {
-            arena.enemies = []
-            arena.asteroids = []
-            arena.xpOrbs = []
-            arena.gammaTrails = []
-            arena.bossActive = true;
-            arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
             SB_spawnCelestialite("nox")
         }
     },
@@ -168,6 +164,8 @@ SB_zones.noxZone = {
     rockMult: new Decimal(1.5),
     gemMult: new Decimal(1.5),
 }
+
+// CELESTIALITES
 
 SB_celestialites.nox = {
     name: "Nox",
@@ -188,6 +186,16 @@ SB_celestialites.nox = {
         return Decimal.add(2, Math.random()).mul(9)
     },
     initialize(celestialite) {
+        screenFlash("— Nox, the Vampire Knight —", 1200)
+        arena.enterFullscreen()
+        arena.enemies = []
+        arena.bullets = []
+        arena.asteroids = []
+        arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
+        arena.bossActive = true
+
         // Stat changes
         celestialite.maxHealth = new Decimal(1e5)
         celestialite.health = new Decimal(1e5)
@@ -198,7 +206,7 @@ SB_celestialites.nox = {
         celestialite.currentAttack = ['barrage', 'charge', 'fireball'][Math.floor(Math.random() * 3)];
         celestialite.attackInitialized = true
 
-        celestialite.attackTimer = 60
+        celestialite.attackTimer = 150
 
         celestialite.moveAng = Math.random() * Math.PI * 2
         celestialite.dvx = 0.875
@@ -216,125 +224,52 @@ SB_celestialites.nox = {
         barrage(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 60
+                celestialite.attackTimer = 150
             }
-            
             // Attack
-            arena.warnings.push({
-                x: celestialite.x,
-                y: celestialite.y,
-                ang: celestialite.playerAng,
-                dist: 3600,
-                timer: 60,
-                damage: celestialite.damage,
-                onReady(warning) {
-                    arena.bullets.push({
-                        x: warning.x,
-                        y: warning.y,
-                        vx: Math.cos(warning.ang) * 12,
-                        vy: Math.sin(warning.ang) * 12,
-                        life: 60,
-                        initialLife: 60,
-                        damage: celestialite.damage,
-                        pierce: 3,
-                        radius: 10,
-                        fromEnemy: true,
-                        vampireSpear: true,
-                        spear: true,
-                        rot: warning.ang,
-                        // visual tuning for a more realistic spear (no spin)
-                        shaftLen: 56,
-                        shaftW: 6,
-                        tipLen: 18,
-                        // knockback strength applied to enemies on hit
-                        knockback: 12,
-                        originX: warning.x,
-                        originY: warning.y,
+            if (Math.min(celestialite.attackTimer / 30) % 1 == 0) {
+                let random = Math.random() * Math.PI * 2
+                for (i = 0; i < 4; i++) {
+                    SB_spawnWarning("noxSpear", celestialite, {
+                        dvx: 0.875,
+                        dvy: 0.875,
+                        ax: Math.cos(random) * 2,
+                        ay: Math.sin(random) * 2,
                     })
                 }
-            });
+                celestialite.ax = Math.cos(random) * 2
+                celestialite.ay = Math.sin(random) * 2
+            }
         },
         charge(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 60
+                celestialite.attackTimer = 150
             }
-            
             // Attack
-            arena.warnings.push({
-                x: celestialite.x,
-                y: celestialite.y,
-                ang: celestialite.playerAng,
-                dist: 3600,
-                timer: 60,
-                damage: celestialite.damage,
-                onReady(warning) {
-                    arena.bullets.push({
-                        x: warning.x,
-                        y: warning.y,
-                        vx: Math.cos(warning.ang) * 12,
-                        vy: Math.sin(warning.ang) * 12,
-                        life: 60,
-                        initialLife: 60,
-                        damage: celestialite.damage,
-                        pierce: 3,
-                        radius: 10,
-                        fromEnemy: true,
-                        vampireSpear: true,
-                        spear: true,
-                        rot: warning.ang,
-                        // visual tuning for a more realistic spear (no spin)
-                        shaftLen: 56,
-                        shaftW: 6,
-                        tipLen: 18,
-                        // knockback strength applied to enemies on hit
-                        knockback: 12,
-                        originX: warning.x,
-                        originY: warning.y,
-                    })
-                }
+            let random = Math.random() * Math.PI * 2
+            arena.bullets.push({
+                x: celestialite.x + Math.cos(random) * (celestialite.radius),
+                y: celestialite.y + Math.sin(random) * (celestialite.radius),
+                vx: Math.cos(random) * 8,
+                vy: Math.sin(random) * 8,
+                life: 30,
+                damage: celestialite.damage / 4,
+                pierce: 0,
+                piercedAsteroids: [],
+                fromEnemy: true,
+                radius: 6,
             });
         },
         fireball(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 60
+                celestialite.attackTimer = 150
             }
-            
             // Attack
-            arena.warnings.push({
-                x: celestialite.x,
-                y: celestialite.y,
-                ang: celestialite.playerAng,
-                dist: 3600,
-                timer: 60,
-                damage: celestialite.damage,
-                onReady(warning) {
-                    arena.bullets.push({
-                        x: warning.x,
-                        y: warning.y,
-                        vx: Math.cos(warning.ang) * 12,
-                        vy: Math.sin(warning.ang) * 12,
-                        life: 60,
-                        initialLife: 60,
-                        damage: celestialite.damage,
-                        pierce: 3,
-                        radius: 10,
-                        fromEnemy: true,
-                        vampireSpear: true,
-                        spear: true,
-                        rot: warning.ang,
-                        // visual tuning for a more realistic spear (no spin)
-                        shaftLen: 56,
-                        shaftW: 6,
-                        tipLen: 18,
-                        // knockback strength applied to enemies on hit
-                        knockback: 12,
-                        originX: warning.x,
-                        originY: warning.y,
-                    })
-                }
-            });
+            if (Math.min(celestialite.attackTimer / 15) % 1 == 0) {
+                SB_spawnProjectile("noxFireball", celestialite)
+            }
         },
     },
     tick(celestialite) {
@@ -353,21 +288,23 @@ SB_celestialites.nox = {
         // Attack
         SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
 
-        // Move
-        if (celestialite.targetingTimer > 0) {
-            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
-            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2
+        if (celestialite.currentAttack == "barrage") {
         } else {
-            celestialite.ax = Math.cos(celestialite.moveAng) * 0.4
-            celestialite.ay = Math.sin(celestialite.moveAng) * 0.4
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
         }
     },
     onAttacked(celestialite, damage, attacker) {},
     onDeath(celestialite) {
+        arena.exitFullscreen()
+        arena.bullets = []
+        arena.asteroids = []
         arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.bossActive = false
+
         player.bl.noxDefeated = true
         player.ir.battleXP = player.ir.battleXPReq
-        arena.bossActive = false
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
@@ -913,4 +850,195 @@ SB_celestialites.redBloodEye = {
         ctx.fill();
         ctx.restore();
     },
+}
+
+// PROJECTILES
+
+SB_projectiles.noxSpear = {
+    template(celestialite, warning = {}) {
+        return {
+            x: warning.x || celestialite.x,
+            y: warning.y || celestialite.y,
+            vx: Math.cos(warning.ang || celestialite.ang) * 12,
+            vy: Math.sin(warning.ang || celestialite.ang) * 12,
+            life: 120,
+            initialLife: 120,
+            damage: celestialite.damage,
+            pierce: 3,
+            radius: 10,
+            fromEnemy: true,
+            vampireSpear: true,
+            spear: true,
+            ang: warning.ang || celestialite.ang,
+            shaftLen: 56,
+            shaftW: 6,
+            tipLen: 18,
+            knockback: 12,
+            originX: warning.x || celestialite.x,
+            originY: warning.y || celestialite.y,
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+    },
+    onHit(projectile, attacker) {
+        projectile.warning.timer = 0
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        // compute angle; allow ang to be animated by spin
+        let ang = projectile.ang !== undefined ? projectile.ang : Math.atan2(projectile.vy || 0, projectile.vx || 1);
+        // keep the spear rotation fixed (no spin)
+        ang = projectile.ang !== undefined ? projectile.ang : Math.atan2(projectile.vy || 0, projectile.vx || 1);
+        ctx.rotate(ang);
+        // spear geometry
+        let shaftLen = projectile.shaftLen || 56;
+        let shaftW = projectile.shaftW || 6;
+        let tipLen = projectile.tipLen || 18;
+        // shaft: subtle wood/blood gradient
+        try {
+            let g = ctx.createLinearGradient(-12, 0, shaftLen, 0);
+            g.addColorStop(0, '#3a1f1f');
+            g.addColorStop(0.5, '#8b3b3b');
+            g.addColorStop(1, '#2b0d0d');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.rect(-12, -shaftW / 2, shaftLen + 12, shaftW);
+            ctx.fill();
+            // light highlight along the shaft
+            ctx.strokeStyle = 'rgba(255,180,180,0.18)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(-8, -shaftW / 4);
+            ctx.lineTo(shaftLen, -shaftW / 4);
+            ctx.stroke();
+            // fletching / small vanes near the butt of the spear
+            for (let f = 0; f < 3; f++) {
+                let fx = -6 - f * 6;
+                ctx.beginPath();
+                ctx.fillStyle = f % 2 ? '#331515' : '#4a1a1a';
+                ctx.moveTo(fx, 0);
+                ctx.lineTo(fx - 8, -4 - f * 0.5);
+                ctx.lineTo(fx - 8, 4 + f * 0.5);
+                ctx.closePath();
+                ctx.fill();
+            }
+            // spear head: metallic gradient, polygon with a small tang
+            let gh = ctx.createLinearGradient(shaftLen - tipLen, 0, shaftLen + tipLen, 0);
+            gh.addColorStop(0, '#e8e8e8');
+            gh.addColorStop(0.5, '#cccccc');
+            gh.addColorStop(1, '#666666');
+            ctx.fillStyle = gh;
+            ctx.beginPath();
+            ctx.moveTo(shaftLen, 0);
+            ctx.lineTo(shaftLen - tipLen, -tipLen * 0.6);
+            ctx.lineTo(shaftLen - tipLen * 0.6, 0);
+            ctx.lineTo(shaftLen - tipLen, tipLen * 0.6);
+            ctx.closePath();
+            ctx.fill();
+            // subtle edge highlight on head
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+            // small blood smear near the tip for visual feedback
+            ctx.fillStyle = 'rgba(180,30,30,0.85)';
+            ctx.beginPath();
+            ctx.ellipse(shaftLen - tipLen * 0.15, 0, Math.max(2, shaftW / 2), Math.max(2, shaftW / 3), 0, 0, Math.PI * 2);
+            ctx.fill();
+        } catch (err) {
+            // fallback simple spear if gradient calls fail
+            ctx.strokeStyle = '#ff3b3b';
+            ctx.lineWidth = shaftW;
+            ctx.beginPath();
+            ctx.moveTo(-12, 0);
+            ctx.lineTo(shaftLen, 0);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.fillStyle = '#ff0000';
+            ctx.moveTo(shaftLen, 0);
+            ctx.lineTo(shaftLen - tipLen, -tipLen * 0.5);
+            ctx.lineTo(shaftLen - tipLen, tipLen * 0.5);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+    },
+}
+
+SB_projectiles.noxFireball = {
+    template(celestialite, warning = {}) {
+        return {
+            x: celestialite.x + Math.cos(celestialite.playerAng) * (celestialite.radius || 64),
+            y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius || 64),
+            vx: Math.cos(celestialite.playerAng) * 9,
+            vy: Math.sin(celestialite.playerAng) * 9,
+            life: 180,
+            damage: 14,
+            pierce: 0,
+            fromEnemy: true,
+            fireball: true,
+            radius: 14 + Math.floor(Math.random() * 6),
+            flamePulse: Math.random() * Math.PI * 2
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+    },
+    onHit(projectile, attacker) {
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        
+        // flame pulse for flicker
+        let pulse = 0.8 + 0.2 * Math.sin((projectile.flamePulse || 0) + (projectile.life || 0) * 0.12);
+        let g = ctx.createRadialGradient(0, 0, 0, 0, 0, projectile.radius * 2);
+        g.addColorStop(0, `rgba(255,255,200,${0.95 * pulse})`);
+        g.addColorStop(0.3, `rgba(255,140,40,${0.9 * pulse})`);
+        g.addColorStop(0.6, `rgba(200,40,20,${0.7 * pulse})`);
+        g.addColorStop(1, `rgba(60,10,10,0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, projectile.radius * (1 + 0.18 * Math.sin((projectile.flamePulse || 0) + (projectile.life || 0) * 0.08)), 0, Math.PI * 2);
+        ctx.fill();
+        // small core
+        ctx.fillStyle = 'rgba(255,240,200,0.85)';
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(3, projectile.radius * 0.28), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    },
+}
+
+// WARNINGS
+
+SB_warnings.noxSpear = {
+    readyTimer: 30,
+    postReadyTimer: 120,
+    dist: 1440,
+    width: 2,
+    initialize(warning) {
+        warning.targetAng = warning.celestialite.playerAng + (Math.random() - 0.5) * Math.PI / 2
+    },
+    tick(warning) {
+        let angDist = ( warning.targetAng - warning.ang + 180 ) % 360 - 180;
+        warning.ang += (angDist < -180 ? angDist + 360 : angDist) * 0.125;
+    },
+    onReady(warning) {
+        warning.targetAng = warning.ang
+        SB_spawnProjectile("noxSpear", warning.celestialite, warning);
+    }
 }

@@ -1,3 +1,5 @@
+// CELESTIALITES AND ASTEROIDS
+
 function SB_spawnCelestialite(celId, properties = {}) {
     const zoneRef = SB_zones[player.ir.battleStage]
     if (!zoneRef) {
@@ -134,4 +136,59 @@ function SB_updateMovement(obj) {
     obj.vy *= obj.dvy
     obj.x += obj.vx
     obj.y += obj.vy
+}
+
+// PROJECTILES
+
+function SB_spawnProjectile(projId, celestialite, warning = {}, properties = {}) {
+    const projRef = SB_projectiles[projId]
+    if (!projRef) {
+        console.warn("Cannot find projectile \"" + projId + "\".")
+        return
+    };
+
+    let projectile = projRef.template(celestialite, warning)
+    projectile.type = projId
+    projectile.celestialite = celestialite
+    projectile.warning = warning
+
+    projRef.initialize(projectile)
+    for (const [i, v] of Object.entries(properties)) projectile[i] = v;
+    arena.bullets.push(projectile)
+}
+
+// WARNINGS
+
+function SB_spawnWarning(warnId, celestialite, properties = {}) {
+    const warnRef = SB_warnings[warnId]
+    if (!warnRef) {
+        console.warn("Cannot find warning \"" + warnId + "\".")
+        return
+    }; 
+
+    let warning = {
+        type: warnId,
+        celestialite: celestialite,
+        timer: warnRef.readyTimer + warnRef.postReadyTimer,
+        ready: false,
+        dist: warnRef.dist,
+
+        vx: 0,
+        vy: 0,
+        dvx: 1,
+        dvy: 1,
+        ax: 0,
+        ay: 0,
+        dax: 0.875,
+        day: 0.875,
+
+        ang: celestialite.playerAng,
+
+        x: celestialite.x,
+        y: celestialite.y,
+    }
+
+    warnRef.initialize(warning)
+    for (const [i, v] of Object.entries(properties)) warning[i] = v;
+    arena.warnings.push(warning)
 }

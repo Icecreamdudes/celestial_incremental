@@ -359,36 +359,18 @@ addLayer("ir", {
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
-        // TEMP
-        if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(Decimal.mul(10, delta))
-
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
-            if (player.ir.battleLevel.gte(SB_zones[player.ir.battleStage].levelLimit)) {
-                player.ir.inBattle = false
-                options.fullscreen = false
-                player.subtabs["ir"]['stuff'] = 'stages'
-
-                if (arena) {
-                    arena.removeArena();
-                    arena = null;
-                }
-                localStorage.setItem('arenaActive', 'false');
-
-                pauseUniverseAll(["A2", "DS"], "unpause", true)
-
-                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
-
-                player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(1)
-                player.ir.iriditeFightActive = false
-            }
             player.ir.battleLevel = player.ir.battleLevel.add(1);
-            SB_zones[player.ir.battleStage].levelUp(player.ir.battleLevel)
-            if (arena) {
-                arena.showUpgradeChoice();
-                arena.upgradeChoiceActive = true
+            if (player.ir.battleLevel.gt(SB_zones[player.ir.battleStage].levelLimit)) {
+                clickClickable("ir", 12)
+            } else {
+                SB_zones[player.ir.battleStage].levelUp(player.ir.battleLevel)
+                if (arena) {
+                    arena.showUpgradeChoice();
+                    arena.upgradeChoiceActive = true
+                }
             }
         }
 

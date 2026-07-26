@@ -156,7 +156,7 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0) || level.eq(2)) {
+        if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("nox")
         }
     },
@@ -173,8 +173,8 @@ SB_celestialites.nox = {
     radius: 64,
     color: "#7a0000",
     health: new Decimal(1e5),
-    damage: new Decimal(16),
-    bodyDamage: new Decimal(2),
+    damage: new Decimal(24),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(16),
     reward() {
         let gain = {}
@@ -195,6 +195,7 @@ SB_celestialites.nox = {
         arena.gammaTrails = []
         arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
         arena.bossActive = true
+        player.bl.foughtNox = true
 
         // Stat changes
         celestialite.maxHealth = new Decimal(1e5)
@@ -205,6 +206,8 @@ SB_celestialites.nox = {
         celestialite.phase = 1
         celestialite.currentAttack = ['barrage', 'charge', 'fireball'][Math.floor(Math.random() * 3)];
         celestialite.attackInitialized = true
+        celestialite.isBat = false
+        celestialite.orbitDirection = false
 
         celestialite.attackTimer = 150
 
@@ -213,11 +216,22 @@ SB_celestialites.nox = {
         celestialite.dvy = 0.875
     },
     decideAttack(celestialite) {
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+        celestialite.playerAng = Math.atan2(dy, dx);
         // Decide on an attack
-        let options = ['barrage', 'charge', 'fireball'];
-        if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'spinSword', 'batCircle']);
+        let options = ['barrage', 'fireball'];
+        if (!celestialite.isBat) options = options.concat(['charge', 'orbit']);
+        if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'toggleBat']);
+        //if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'spinSword', 'batCircle']);
         options.splice(options.indexOf(celestialite.currentAttack), 1)
-        celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        if (celestialite.playerDist < 800) {
+            celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        } else {
+            celestialite.currentAttack = "charge";
+        }
         celestialite.attackInitialized = false
     },
     attacks: {
@@ -227,9 +241,9 @@ SB_celestialites.nox = {
                 celestialite.attackTimer = 150
             }
             // Attack
-            if (Math.min(celestialite.attackTimer / 30) % 1 == 0) {
+            if ((celestialite.attackTimer / 30) % 1 == 0) {
                 let random = Math.random() * Math.PI * 2
-                for (i = 0; i < 4; i++) {
+                for (i = 0; i < 5; i++) {
                     SB_spawnWarning("noxSpear", celestialite, {
                         dvx: 0.875,
                         dvy: 0.875,
@@ -244,7 +258,42 @@ SB_celestialites.nox = {
         charge(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 150
+                celestialite.attackTimer = 180
+            }
+            // Attack
+            if (celestialite.attackTimer > 30) {
+                let random = Math.random() * Math.PI * 2
+                arena.bullets.push({
+                    x: celestialite.x + Math.cos(random) * (celestialite.radius),
+                    y: celestialite.y + Math.sin(random) * (celestialite.radius),
+                    vx: Math.cos(random) * 8,
+                    vy: Math.sin(random) * 8,
+                    life: 30,
+                    damage: celestialite.damage / 4,
+                    pierce: 0,
+                    piercedAsteroids: [],
+                    fromEnemy: true,
+                    radius: 6,
+                });
+            } else if (celestialite.attackTimer == 30) {
+                let random = Math.random() * Math.PI * 2
+                for (i = 0; i < 5; i++) {
+                    SB_spawnWarning("noxSpear", celestialite, {
+                        dvx: 0.875,
+                        dvy: 0.875,
+                        ax: celestialite.ax,
+                        ay: celestialite.ay,
+                        vx: celestialite.vx,
+                        vy: celestialite.vy,
+                    })
+                }
+            }
+        },
+        orbit(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 180
+                celestialite.orbitDirection = Math.random() < 0.5
             }
             // Attack
             let random = Math.random() * Math.PI * 2
@@ -260,6 +309,11 @@ SB_celestialites.nox = {
                 fromEnemy: true,
                 radius: 6,
             });
+            if (celestialite.attackTimer / 10 % 1 == 0) {
+                for (i = 0; i < 2; i++) {
+                    SB_spawnWarning("noxSpear", celestialite)
+                }
+            }
         },
         fireball(celestialite) {
             // Initialize attack
@@ -267,32 +321,97 @@ SB_celestialites.nox = {
                 celestialite.attackTimer = 150
             }
             // Attack
-            if (Math.min(celestialite.attackTimer / 15) % 1 == 0) {
+            if (celestialite.attackTimer / 15 % 1 == 0) {
                 SB_spawnProjectile("noxFireball", celestialite)
+                let random = Math.random() * Math.PI * 2
+                SB_spawnProjectile("noxFireball", celestialite, {
+                    ang: celestialite.playerAng + Math.random() * Math.PI / 4
+                })
             }
+        },
+        burstSpears(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            // Attack
+            if ((celestialite.attackTimer / 5) % 1 == 0) {
+                SB_spawnWarning("noxSpear", celestialite, {
+                    targetAng: celestialite.playerAng + ((celestialite.attackTimer / 5) - 5.5) * Math.PI / 16,
+                })
+            }
+        },
+        toggleBat(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 30
+                celestialite.isBat = !celestialite.isBat
+                celestialite.orbitDirection = Math.random() < 0.5
+            }
+            // Attack
         },
     },
     tick(celestialite) {
+        celestialite.phase = 2
+
         // Get distance/angle to the player
         let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
         let dx = closest[0] - celestialite.x;
         let dy = closest[1] - celestialite.y;
         celestialite.playerDist = Math.hypot(dx, dy) || 1;
         celestialite.playerAng = Math.atan2(dy, dx);
-        celestialite.moveAng = celestialite.playerAng
+
+        // Decide on a move angle
+        if (celestialite.isBat) {
+            celestialite.moveAng = celestialite.playerAng + (celestialite.orbitDirection ? Math.PI / 2 : -Math.PI / 2)
+        }
+        else if (celestialite.currentAttack == "charge") {
+            let angDist = ( (celestialite.playerAng-Math.PI/2) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.03125;
+        }
+        else if (celestialite.currentAttack == "orbit") {
+            let angDist = ( (celestialite.playerAng-(celestialite.orbitDirection ? Math.PI/8 : 7*Math.PI/8)) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.0625;
+        } else {
+            celestialite.moveAng = celestialite.playerAng;
+        }
 
         // Decide on an attack
         celestialite.attackTimer--
         if (celestialite.attackTimer <= 0) SB_celestialites[celestialite.type].decideAttack(celestialite);
+        if (celestialite.isBat && celestialite.attackTimer % 10 == 5) {
+            for (let i = 0; i < 3; i++) {
+                arena.bullets.push({
+                    x: celestialite.x + Math.cos(celestialite.playerAng + (i - 1) * Math.PI / 32) * celestialite.radius,
+                    y: celestialite.y + Math.sin(celestialite.playerAng + (i - 1) * Math.PI / 32) * celestialite.radius,
+                    vx: Math.cos(celestialite.playerAng + (i - 1) * Math.PI / 32) * 6,
+                    vy: Math.sin(celestialite.playerAng + (i - 1) * Math.PI / 32) * 6,
+                    life: 180,
+                    damage: celestialite.damage / 4,
+                    pierce: 0,
+                    piercedAsteroids: [],
+                    fromEnemy: true,
+                    radius: 4,
+                });
+            }
+        }
 
-        // Attack
-        SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
-
-        if (celestialite.currentAttack == "barrage") {
-        } else {
+        // Move
+        if (celestialite.isBat) {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 3 + (Math.cos(celestialite.playerAng) * (celestialite.playerDist / 300 - 1) * 2)
+            celestialite.ay = Math.sin(celestialite.moveAng) * 3 + (Math.sin(celestialite.playerAng) * (celestialite.playerDist / 300 - 1) * 2)
+        } else if (celestialite.currentAttack == "barrage") {
+            // Freeze
+        } else if (celestialite.currentAttack == "orbit" || (celestialite.currentAttack == "charge" && celestialite.attackTimer > 30)) {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 2
+            celestialite.ay = Math.sin(celestialite.moveAng) * 2
+        } else if (celestialite.currentAttack != "burstSpears") {
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
         }
+
+        // Attack
+        SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
     },
     onAttacked(celestialite, damage, attacker) {},
     onDeath(celestialite) {
@@ -317,7 +436,7 @@ SB_celestialites.nox = {
         let t = (celestialite._pulseTimer || 0);
         let r = celestialite.radius || 64;
         // Check for bat transformation during batCircle attack
-        if (false) {
+        if (celestialite.isBat) {
             // Draw Bat
             let flap = Math.sin(t * 0.2) * 0.5;
             ctx.fillStyle = "#330000";
@@ -977,8 +1096,8 @@ SB_projectiles.noxFireball = {
         return {
             x: celestialite.x + Math.cos(celestialite.playerAng) * (celestialite.radius || 64),
             y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius || 64),
-            vx: Math.cos(celestialite.playerAng) * 9,
-            vy: Math.sin(celestialite.playerAng) * 9,
+            vx: Math.cos(celestialite.playerAng) * 14,
+            vy: Math.sin(celestialite.playerAng) * 14,
             life: 180,
             damage: 14,
             pierce: 0,
@@ -1031,7 +1150,7 @@ SB_warnings.noxSpear = {
     dist: 1440,
     width: 2,
     initialize(warning) {
-        warning.targetAng = warning.celestialite.playerAng + (Math.random() - 0.5) * Math.PI / 2
+        warning.targetAng = warning.celestialite.playerAng + (Math.random() - 0.5) * Math.PI
     },
     tick(warning) {
         let angDist = ( warning.targetAng - warning.ang + 180 ) % 360 - 180;

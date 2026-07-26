@@ -1048,11 +1048,13 @@ class SpaceArena {
         shipStats.spaceRockGain *= 1 + 0.2 * upgrades.spaceRockGainRare
         shipStats.spaceRockGain *= 1 + 0.2 * upgrades.lootGainEpic
         shipStats.spaceRockGain *= 1 + 0.4 * upgrades.dropGainLegendary
+        if (player.bl.noxDefeated) shipStats.spaceRockGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
         
         shipStats.spaceGemGain = player.ir.spaceGemMult.toNumber()
         shipStats.spaceGemGain *= 1 + 0.05 * upgrades.spaceGemGainRare
         shipStats.spaceGemGain *= 1 + 0.05 * upgrades.lootGainEpic
         shipStats.spaceGemGain *= 1 + 0.2 * upgrades.dropGainLegendary
+        if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
 
         shipStats.xpGain = 1
         shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
@@ -3103,6 +3105,10 @@ class SpaceArena {
             SB_updateMovement(warning)
             warnRef.tick(warning)
             warning.timer--
+            if (warning.x < 0) warning.x = 0;
+            if (warning.x > this.width) warning.x = this.width;
+            if (warning.y < 0) warning.y = 0;
+            if (warning.y > this.height) warning.y = this.height;
         }
         this.warnings = this.warnings.filter(warning => warning.timer >= 0);
 
@@ -3822,13 +3828,23 @@ class SpaceArena {
             let down = warning.ang < 0
             let right = Math.abs(warning.ang) < Math.PI / 2
             let j = 0
+            
             while (remainingDistance > 0) {
                 j++
                 this.ctx.save()
+                this.ctx.fillStyle = "#ff7f00";
                 this.ctx.lineWidth = warnRef.width;
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.beginPath()
                 this.ctx.moveTo(currentPos[0], currentPos[1])
+                if (warning.timer > warnRef.postReadyTimer) {
+                    let wrapped = this.getVisibleWrappedCoords([warning.x, warning.y], [8, 8])
+                    if (wrapped) {
+                        this.ctx.beginPath()
+                        this.ctx.arc(wrapped[0], wrapped[1], 4, 0, 360)
+                        this.ctx.fill()
+                    }
+                }
+                this.ctx.beginPath()
 
                 // Get distance to next point of screen looping
                 // Vertical Wall
@@ -3854,7 +3870,7 @@ class SpaceArena {
                     
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.25)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.5)');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
                     this.ctx.strokeStyle = g;
                     
@@ -3898,7 +3914,7 @@ class SpaceArena {
 
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.25)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.5)');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
                     this.ctx.strokeStyle = g;
 
@@ -4708,19 +4724,19 @@ class SpaceArena {
                     this.ctx.strokeStyle = player.ir.primaryColor;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(12.5, 122 + i * 61, 775, 50, 10);
+                    this.ctx.roundRect(this.canvasWidth / 2 - 387.5, 122 + i * 61, 775, 50, 10);
                     this.ctx.fill();
                     this.ctx.stroke();
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "left";
-                    this.ctx.fillText(SHIP_STAT_NAMES[key], 25, 157 + i * 61, 775);
+                    this.ctx.fillText(SHIP_STAT_NAMES[key], this.canvasWidth / 2 - 375, 157 + i * 61, 775);
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "right";
-                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, 157 + i * 61, 750);
+                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], this.canvasWidth / 2 + 375, 157 + i * 61, 750);
                     
                     this.ctx.restore();
                 }

@@ -352,7 +352,7 @@ SB_celestialites.nox = {
         },
     },
     tick(celestialite) {
-        celestialite.phase = 2
+        celestialite.phase = celestialite.health.lte(5e4) ? 2 : 1
 
         // Get distance/angle to the player
         let closest = arena.getClosestCoords([celestialite.x, celestialite.y])

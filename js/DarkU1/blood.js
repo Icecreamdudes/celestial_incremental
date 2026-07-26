@@ -1060,15 +1060,15 @@
                 unlocked() { return false },
                 content() { return [
                     ["layer-proxy", ["ir", [
-                        ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "10px" : "0"}],
+                        ["style-column", [], {height: (arena && arena._fullscreen) ? "10px" : "0"}],
                         ["style-column", [
                             ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                             ["style-row", [
                                 ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                             ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
-                        ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._iriditeFullscreen) ? "none !important" : ""}],
+                        ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._fullscreen) ? "none !important" : ""}],
                         ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
-                        ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "calc(100vh - 279px)" : "800px"}],
+                        ["style-column", [], {height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px"}],
                         ["row", [["ex-bar", "bossHealthBar"],]],
                         ["style-column", [
                             ["blank", "9px", {width: "6px"}],
@@ -1077,7 +1077,7 @@
                             ["row", [
                                 ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
                             ]],
-                        ], {width: (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._iriditeFullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}]
+                        ], {width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._fullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}]
                     ]],
                 ]]}
             },
@@ -1696,7 +1696,7 @@ class BloodArena extends SpaceArena {
         } catch (e) {}
 
         // expand arena to fullscreen if available
-        if (typeof this.enterIriditeFullscreen === 'function') this.enterIriditeFullscreen();
+        if (typeof this.enterFullscreen === 'function') this.enterFullscreen();
 
         // spawn boss at perimeter (prefer a safe distance)
         let angle = Math.random() * Math.PI * 2;

@@ -411,7 +411,7 @@ addLayer("ir", {
         healthBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width() {return (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "398.5px"},
+            width() {return (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "40px",
             progress() {
                 return player.ir.shipHealth.div(player.ir.shipHealthMaxTrue);
@@ -424,7 +424,7 @@ addLayer("ir", {
             },
         },
         xpBar: {
-            unlocked() { return !(arena && arena._iriditeFullscreen) },
+            unlocked() { return !(arena && arena._fullscreen) },
             direction: RIGHT,
             width: "398.5px",
             height: "40px",
@@ -439,12 +439,12 @@ addLayer("ir", {
             },
         },
         bossHealthBar: {
-            unlocked() { return (arena && arena._iriditeFullscreen) },
+            unlocked() { return (arena && arena._fullscreen) },
             direction: RIGHT,
-            width() {return (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "398.5px"},
+            width() {return (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "60px",
             progress() {
-                if (arena && arena._iriditeFullscreen && arena.enemies.length > 0) {
+                if (arena && arena._fullscreen && arena.enemies.length > 0) {
                     return arena.enemies[0].health / arena.enemies[0].maxHealth
                 } else return 1;
             },
@@ -452,7 +452,7 @@ addLayer("ir", {
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {
-                if (arena && arena._iriditeFullscreen && arena.enemies.length > 0) {
+                if (arena && arena._fullscreen && arena.enemies.length > 0) {
                     return "<h3>" + SB_celestialites[arena.enemies[0].type].name + "</h3><br>" + formatSimple(arena.enemies[0].health) + "/" + formatSimple(arena.enemies[0].maxHealth) + " HP";
                 } else return "<h3>???</h3><br>???/??? HP";
                 
@@ -2843,15 +2843,15 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
                 content() { return [
-                    ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "10px" : "0"}],
+                    ["style-column", [], {height: (arena && arena._fullscreen) ? "10px" : "0"}],
                     ["style-column", [
                         ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                         ["style-row", [
                             ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
                         ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
-                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._iriditeFullscreen) ? "none !important" : ""}],
+                    ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._fullscreen) ? "none !important" : ""}],
                     ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
-                    ["style-column", [], {height: (arena && arena._iriditeFullscreen) ? "calc(100vh - 279px)" : "800px"}],
+                    ["style-column", [], {height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px"}],
                     ["row", [["ex-bar", "bossHealthBar"],]],
                     ["style-column", [
                         ["blank", "9px", {width: "6px"}],
@@ -2860,7 +2860,7 @@ addLayer("ir", {
                         ["row", [
                             ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
                         ]],
-                    ], {width: (arena && arena._iriditeFullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._iriditeFullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
+                    ], {width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._fullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],
                 ]}
             },
             "Refresh Page :(": {

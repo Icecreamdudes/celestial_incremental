@@ -2012,7 +2012,7 @@ function summonSpirit() {
         arena.bossActive = true;
         try { if (player && player.cbs) player.cbs.ritualSpiritActive = true; } catch (e) {}
         // expand arena to full-screen for boss
-        try { if (typeof arena.enterIriditeFullscreen() === 'function') arena.enterIriditeFullscreen(); } catch (e) {}
+        try { if (typeof arena.enterFullscreen() === 'function') arena.enterFullscreen(); } catch (e) {}
         try { if (player && player.cbs) player.cbs.inBattle = true; } catch (e) {}
     } catch (e) { console.warn('summonSpirit global failed', e); }
 }

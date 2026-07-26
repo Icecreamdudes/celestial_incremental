@@ -361,9 +361,9 @@ class SpaceArena {
     }
 
     // Expand the arena to cover the entire screen and make it transparent
-    enterIriditeFullscreen() {
-        if (!this.arenaDiv || this._iriditeFullscreen) return;
-        this._iriditeFullscreen = true;
+    enterFullscreen() {
+        if (!this.arenaDiv || this._fullscreen) return;
+        this._fullscreen = true;
 
         // Save previous styles and sizes so we can restore later
         this._prevArenaStyle = {
@@ -390,16 +390,14 @@ class SpaceArena {
             width: 'calc(100vw - 6px)',
             height: 'calc(100vh - 276px)',
             backgroundImage: this._prevArenaStyle.backgroundImage,
-            border: '3px solid ' + (player.tab == "ir" ? player.ir.primaryColor : "#004c72"),
+            border: '3px solid ' + SB_zones[player.ir.battleStage].primaryColor,
             overflow: 'hidden',
             zIndex: 10000
         });
-        this.canvasWidth = window.innerWidth - 6
-        this.canvasHeight = window.innerHeight - 276
+        this.canvasWidth = Math.min(3200, window.innerWidth) - 6
+        this.canvasHeight = Math.min(3200, window.innerHeight) - 276
 
         // Resize canvas and internal dimensions to match window
-        //this.width = 3200;
-        //this.height = 3200;
         if (this.canvas) {
             this.canvas.width = this.canvasWidth;
             this.canvas.height = this.canvasHeight;
@@ -413,9 +411,9 @@ class SpaceArena {
 
         // Keep the canvas sized during window resize while in fullscreen boss mode
         this._onWindowResize = () => {
-            if (!this._iriditeFullscreen) return;
-                this.canvasWidth = window.innerWidth
-                this.canvasHeight = window.innerHeight
+            if (!this._fullscreen) return;
+            this.canvasWidth = Math.min(3200, window.innerWidth) - 6
+            this.canvasHeight = Math.min(3200, window.innerHeight) - 276
             if (this.canvas) {
                 this.canvas.width = this.canvasWidth;
                 this.canvas.height = this.canvasHeight;
@@ -426,9 +424,9 @@ class SpaceArena {
     }
 
     // Restore the arena to its previous size/style
-    exitIriditeFullscreen() {
-        if (!this.arenaDiv || !this._iriditeFullscreen) return;
-        this._iriditeFullscreen = false;
+    exitFullscreen() {
+        if (!this.arenaDiv || !this._fullscreen) return;
+        this._fullscreen = false;
 
         const s = this._prevArenaStyle || {};
         Object.assign(this.arenaDiv.style, {
@@ -1136,7 +1134,7 @@ class SpaceArena {
         player.ir.menu = 0;
 
         // If we were in fullscreen for the Iridite fight, restore original arena
-        this.exitIriditeFullscreen();
+        this.exitFullscreen();
     }
 
     handleKeyDown = (e) => { if (player.ir.menu == 0) this.keys[e.code] = true; };
@@ -1533,8 +1531,8 @@ class SpaceArena {
         player.ir.iriditeFightActive = true;
 
         // Make the arena fullscreen & transparent for the Iridite encounter
-        if (typeof this.enterIriditeFullscreen === "function") {
-            this.enterIriditeFullscreen();
+        if (typeof this.enterFullscreen === "function") {
+            this.enterFullscreen();
         }
 
         let amt = 1
@@ -1699,9 +1697,7 @@ class SpaceArena {
         };
 
         // If we were in fullscreen iridite mode but the boss is gone, restore arena
-        if (this._iriditeFullscreen && !this.enemies.some(e => (e.type === 'iriditeBoss' || e.type === 'ritualSpirit') && e.health.gt(0))) {
-            this.exitIriditeFullscreen();
-        }
+        
         if (player.ir.menu > 0) {
             this.draw();
             return;
@@ -3097,6 +3093,19 @@ class SpaceArena {
             this.gammaTrails = this.gammaTrails.filter(trail => trail.timer > 0);
         }
 
+        for (let i in this.warnings) {
+            let warning = this.warnings[i]
+            let warnRef = SB_warnings[warning.type]
+            if (!warning.ready && warning.timer <= warnRef.postReadyTimer) {
+                warnRef.onReady(warning);
+                warning.ready = true;
+            }
+            SB_updateMovement(warning)
+            warnRef.tick(warning)
+            warning.timer--
+        }
+        this.warnings = this.warnings.filter(warning => warning.timer >= 0);
+
         // Bullet-enemy collision (player bullets only)
         for (let bullet of this.bullets) {
             // allow normal player bullets OR special vampire spear bullets to hit enemies
@@ -3217,6 +3226,7 @@ class SpaceArena {
                     let dmg = bullet.damage / this.shipStats.damageReduction;
                     if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
                     player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                    if (bullet.type) SB_projectiles[bullet.type].onHit(bullet, "player");
                 
                     // remove the projectile immediately so it can't deal damage again
                     bullet.life = 0;
@@ -3801,187 +3811,107 @@ class SpaceArena {
         }
         this.ctx.restore();
 
-        for (let enemy of this.enemies.concat(this.asteroids)) {
-            let type = SB_celestialites[enemy.type];
-            let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-            if (type && type.draw && wrapped) {
-                type.draw(this.ctx, enemy);
-                if (enemy.type == "muShip") this.ctx.globalAlpha = Math.max(1 - enemy.playerDist / 300, 0);
-                this.ctx.save();
+        // Draw warns
+        for (let i = this.warnings.length - 1; i >= 0; i--) {
+            let warning = this.warnings[i];
+            let remainingDistance = warning.dist
+            let currentPos = [warning.x, warning.y]
+            let nextPos = [warning.x, warning.y]
+            let warnRef = SB_warnings[warning.type]
+
+            let down = warning.ang < 0
+            let right = Math.abs(warning.ang) < Math.PI / 2
+            let j = 0
+            while (remainingDistance > 0) {
+                j++
+                this.ctx.save()
+                this.ctx.lineWidth = warnRef.width;
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.fillStyle = "#151230";
-                this.ctx.fillRect(wrapped[0] - enemy.radius - 2, wrapped[1] - enemy.radius - 20, enemy.radius * 2 + 4, 13);
-                let barWidth = enemy.radius * 2 * enemy.health.div(enemy.maxHealth).toNumber();
-                this.ctx.fillStyle = "#bf0000";
-                this.ctx.fillRect(wrapped[0] - enemy.radius, wrapped[1] - enemy.radius - 18, barWidth, 9);
+                this.ctx.beginPath()
+                this.ctx.moveTo(currentPos[0], currentPos[1])
 
-                let t = formatSimple(enemy.health.floor().max(0)) + "/" + formatSimple(enemy.maxHealth.floor())
-                this.ctx.font = "12px monospace";
-                this.ctx.fillStyle = "#151230";
-                this.ctx.textAlign = "center";
-                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 + 1)
-                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 - 1)
-                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 + 1)
-                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 - 1)
-                this.ctx.fillStyle = "white";
-                this.ctx.fillText(t, wrapped[0], wrapped[1] - enemy.radius - 9)
-                
-                this.ctx.restore();
-            }
-            this.ctx.globalAlpha = 1;
+                // Get distance to next point of screen looping
+                // Vertical Wall
+                let hx = Math.abs((right ? this.width - currentPos[0] : currentPos[0]) / Math.cos(warning.ang)) || 0
+                // Horizontal Wall
+                let hy = Math.abs((!down ? this.height - currentPos[1] : currentPos[1]) / Math.sin(warning.ang)) || 0
+                let currentDistance = Math.min(hx, hy)
 
-            if (enemy.type === "iriditeBoss") {
-                // NEW: Laser visual when active or winding-up
-                if (enemy._laserTimer && enemy._laserTimer > 0) {
-                    // show winding glow for first frames, then full beam
-                    const laserTotal = 180 + enemy.phase * 40;
-                    const elapsed = laserTotal - enemy._laserTimer;
-                    const windup = 8;
-                    const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
-                    const angle = enemy._laserAngle || Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                    // beam parameters
-                    const beamLen = Math.max(this.width, this.height) * 1.5;
-                    const maxThickness = Math.max(16, enemy.radius * 1.0 + enemy.phase * 2);
-                    const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
-                    // draw glow
-                    this.ctx.save();
-                    this.ctx.translate(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
-                    this.ctx.rotate(angle);
-                    // additive glow
-                    this.ctx.globalCompositeOperation = "lighter";
-                    // long soft gradient
-                    let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
-                    g.addColorStop(0, `rgba(200,120,255,${0.12 + 0.28 * progress})`);
-                    g.addColorStop(0.1, `rgba(255,120,180,${0.18 + 0.32 * progress})`);
-                    g.addColorStop(0.6, `rgba(180,255,255,${0.06 + 0.18 * progress})`);
-                    g.addColorStop(1, `rgba(200,120,255,${0.02 + 0.06 * progress})`);
-                    this.ctx.fillStyle = g;
-                    this.ctx.beginPath();
-                    this.ctx.rect(0, -thickness, beamLen, thickness * 2);
-                    this.ctx.fill();
-                    // core bright stripe
-                    this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
-                    this.ctx.fillRect(0, -Math.max(2, thickness * 0.12), beamLen * 0.75, Math.max(2, thickness * 0.12) * 2);
-                    // sparks along beam
-                    for (let i = 0; i < 12; i++) {
-                        let t = Math.random() * (0.85);
-                        let x = t * beamLen;
-                        let y = (Math.random() - 0.5) * thickness * 1.6;
-                        this.ctx.fillStyle = `rgba(255,${200 + Math.floor(Math.random()*55)},${180},${0.12 + Math.random()*0.3})`;
-                        this.ctx.fillRect(x, y, 2 + Math.random() * 4, 1 + Math.random() * 3);
-                    }
-                    this.ctx.restore();
-                    this.ctx.globalCompositeOperation = "source-over";
-                }
-            }
-            if (enemy.type === "iriditeBoss") {
-                // support both legacy _daggerWarnings and new _daggerLines shape to be safe
-                if (enemy._daggerWarnings && enemy._daggerWarnings.length > 0) {
-                    for (let warn of enemy._daggerWarnings) {
-                        let alpha = Math.max(0.12, Math.min(0.95, warn.timer / 60));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,40,40,${alpha})`;
-                        this.ctx.lineWidth = 2 + Math.max(0, 4 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        this.ctx.fillStyle = `rgba(255,50,50,${alpha})`;
-                        this.ctx.beginPath();
-                        this.ctx.arc(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y, 6 * alpha + 2, 0, Math.PI * 2);
-                        this.ctx.fill();
-                        this.ctx.restore();
-                        if (typeof warn.timer === "number") warn.timer--;
-                    }
-                    enemy._daggerWarnings = enemy._daggerWarnings.filter(w => w.timer > 0);
-                }
-                // NEW: draw arena-spanning dagger warning lines
-                if (enemy._daggerLines && enemy._daggerLines.length > 0) {
-                    for (let ln of enemy._daggerLines) {
-                        let prepMax = 48; // should match prep chosen in update
-                        let alpha = Math.max(0.08, Math.min(0.95, (ln.timer || 0) / prepMax));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,60,60,${0.25 * alpha})`;
-                        this.ctx.lineWidth = 14 * (0.3 + 0.7 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        // sharp red core
-                        this.ctx.strokeStyle = `rgba(255,20,20,${0.95 * alpha})`;
-                        this.ctx.lineWidth = 2;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        // little markers along the line
-                        const markers = 6;
-                        for (let m = 0; m < markers; m++) {
-                            let t = m / (markers - 1);
-                            let mx = ln.x1 + (ln.x2 - ln.x1) * t;
-                            let my = ln.y1 + (ln.y2 - ln.y1) * t;
-                            this.ctx.fillStyle = `rgba(255,90,90,${0.6 * alpha})`;
-                            this.ctx.beginPath();
-                            this.ctx.arc(mx + (this.canvasWidth / 2) - this.ship.x, my + (this.canvasHeight / 2) - this.ship.y, 2 + 2 * alpha, 0, Math.PI * 2);
-                            this.ctx.fill();
-                        }
-                        this.ctx.restore();
-                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
-                    }
-                    enemy._daggerLines = enemy._daggerLines.filter(l => (l.timer === undefined) || l.timer >= 0);
-                }
+                if (remainingDistance < currentDistance) {
+                    // ^ This needs to account for screen wrapping
 
-                // Draw converge dagger warnings (origins->point)
-                if (enemy._daggerConverge && enemy._daggerConverge.point) {
-                    const tgt = enemy._daggerConverge.point;
-                    for (let o of enemy._daggerConverge.origins) {
-                        let alpha = Math.max(0.08, Math.min(0.95, (o.timer || enemy._daggerPrep) / (enemy._daggerPrep || 48)));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,60,60,${0.18 * alpha})`;
-                        this.ctx.lineWidth = 6 * (0.4 + 0.6 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(o.x, o.y);
-                        this.ctx.lineTo(tgt.x, tgt.y);
-                        this.ctx.stroke();
-                        this.ctx.fillStyle = `rgba(255,40,40,${0.95 * alpha})`;
-                        this.ctx.beginPath();
-                        this.ctx.arc(o.x, o.y, 4 + 4 * alpha, 0, Math.PI * 2);
-                        this.ctx.fill();
-                        this.ctx.restore();
-                        if (typeof o.timer === "number") o.timer = Math.max(0, o.timer - 1);
-                    }
-                    this.ctx.save();
-                    this.ctx.fillStyle = "rgba(255,90,90,0.95)";
-                    this.ctx.beginPath();
-                    this.ctx.arc(enemy._daggerConverge.point.x, enemy._daggerConverge.point.y, 8, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    this.ctx.restore();
-                }
+                    // Finish
+                    
+                    nextPos[0] = currentPos[0] + Math.cos(warning.ang) * remainingDistance
+                    nextPos[1] = currentPos[1] + Math.sin(warning.ang) * remainingDistance
 
-                // Draw giant attack warning lines if present
-                if (enemy._giantLines && enemy._giantLines.length > 0) {
-                    for (let ln of enemy._giantLines) {
-                        let prepMax = enemy._giantPrep || 54;
-                        let alpha = Math.max(0.06, Math.min(0.95, (ln.timer || prepMax) / prepMax));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,200,80,${0.14 * alpha})`;
-                        this.ctx.lineWidth = 10 * (0.3 + 0.7 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
-                        this.ctx.stroke();
-                        this.ctx.strokeStyle = `rgba(255,90,40,${0.95 * alpha})`;
-                        this.ctx.lineWidth = 2;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
-                        this.ctx.stroke();
-                        this.ctx.restore();
-                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
+                    let g = this.ctx.createLinearGradient(
+                        currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                        currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                        nextPos[0],
+                        nextPos[1]
+                    );
+                    
+                    let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.25)');
+                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+                    this.ctx.strokeStyle = g;
+                    
+                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+
+                    remainingDistance = 0
+                } else {
+                    // Keep going
+
+                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    
+                    let g
+                    if (hx < hy) {
+                        nextPos[0] = right ? this.width : 0
+                        nextPos[1] = currentPos[1] + currentDistance * Math.sin(warning.ang)
+                        g = this.ctx.createLinearGradient(
+                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang), 
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                        );
+                        currentPos[0] = !right ? this.width : 0
+                        currentPos[1] = nextPos[1]
+                    } else {
+                        nextPos[0] = currentPos[0] + currentDistance * Math.cos(warning.ang)
+                        nextPos[1] = !down ? this.height : 0
+                        g = this.ctx.createLinearGradient(
+                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                        );
+                        currentPos[0] = nextPos[0]
+                        currentPos[1] = down ? this.height : 0
                     }
+
+                    remainingDistance -= currentDistance
+
+                    let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.25)');
+                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+                    this.ctx.strokeStyle = g;
+
+                    this.ctx.lineTo(nextPos[0] + remainingDistance * Math.cos(warning.ang), nextPos[1] + remainingDistance * Math.sin(warning.ang))
+                    this.ctx.closePath()
+                    this.ctx.stroke();
                 }
+                this.ctx.restore()
+                if (remainingDistance > 100000) {console.warn("uh oh"); break; }
+                if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
             }
         }
+
 
         // Draw sniper auto-aim target cross if present
         if (player.ir.shipType == 4 && this.ship.currentTarget && this.ship.currentTarget.alive) {
@@ -4022,6 +3952,11 @@ class SpaceArena {
 
         // Draw bullets
         for (let bullet of this.bullets) {
+            if (bullet.type && SB_projectiles[bullet.type]) {
+                SB_projectiles[bullet.type].draw(this.ctx, bullet);
+                continue;
+            }
+
             let radius = bullet.radius || 20
             let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [radius * 2, radius * 2])
             if (!wrapped) continue;
@@ -4255,6 +4190,189 @@ class SpaceArena {
             this.ctx.restore();
         }
 
+        // Draw Enemies
+        for (let enemy of this.enemies.concat(this.asteroids)) {
+            let type = SB_celestialites[enemy.type];
+            let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
+            if (type && type.draw && wrapped) {
+                type.draw(this.ctx, enemy);
+                if (enemy.type == "muShip") this.ctx.globalAlpha = Math.max(1 - enemy.playerDist / 300, 0);
+                this.ctx.save();
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.fillStyle = "#151230";
+                this.ctx.fillRect(wrapped[0] - enemy.radius - 2, wrapped[1] - enemy.radius - 20, enemy.radius * 2 + 4, 13);
+                let barWidth = enemy.radius * 2 * enemy.health.div(enemy.maxHealth).toNumber();
+                this.ctx.fillStyle = "#bf0000";
+                this.ctx.fillRect(wrapped[0] - enemy.radius, wrapped[1] - enemy.radius - 18, barWidth, 9);
+
+                let t = formatSimple(enemy.health.floor().max(0)) + "/" + formatSimple(enemy.maxHealth.floor())
+                this.ctx.font = "12px monospace";
+                this.ctx.fillStyle = "#151230";
+                this.ctx.textAlign = "center";
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] + 1, wrapped[1] - enemy.radius - 9 - 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 + 1)
+                this.ctx.fillText(t, wrapped[0] - 1, wrapped[1] - enemy.radius - 9 - 1)
+                this.ctx.fillStyle = "white";
+                this.ctx.fillText(t, wrapped[0], wrapped[1] - enemy.radius - 9)
+                
+                this.ctx.restore();
+            }
+            this.ctx.globalAlpha = 1;
+
+            if (enemy.type === "iriditeBoss") {
+                // NEW: Laser visual when active or winding-up
+                if (enemy._laserTimer && enemy._laserTimer > 0) {
+                    // show winding glow for first frames, then full beam
+                    const laserTotal = 180 + enemy.phase * 40;
+                    const elapsed = laserTotal - enemy._laserTimer;
+                    const windup = 8;
+                    const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
+                    const angle = enemy._laserAngle || Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
+                    // beam parameters
+                    const beamLen = Math.max(this.width, this.height) * 1.5;
+                    const maxThickness = Math.max(16, enemy.radius * 1.0 + enemy.phase * 2);
+                    const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
+                    // draw glow
+                    this.ctx.save();
+                    this.ctx.translate(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
+                    this.ctx.rotate(angle);
+                    // additive glow
+                    this.ctx.globalCompositeOperation = "lighter";
+                    // long soft gradient
+                    let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
+                    g.addColorStop(0, `rgba(200,120,255,${0.12 + 0.28 * progress})`);
+                    g.addColorStop(0.1, `rgba(255,120,180,${0.18 + 0.32 * progress})`);
+                    g.addColorStop(0.6, `rgba(180,255,255,${0.06 + 0.18 * progress})`);
+                    g.addColorStop(1, `rgba(200,120,255,${0.02 + 0.06 * progress})`);
+                    this.ctx.fillStyle = g;
+                    this.ctx.beginPath();
+                    this.ctx.rect(0, -thickness, beamLen, thickness * 2);
+                    this.ctx.fill();
+                    // core bright stripe
+                    this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
+                    this.ctx.fillRect(0, -Math.max(2, thickness * 0.12), beamLen * 0.75, Math.max(2, thickness * 0.12) * 2);
+                    // sparks along beam
+                    for (let i = 0; i < 12; i++) {
+                        let t = Math.random() * (0.85);
+                        let x = t * beamLen;
+                        let y = (Math.random() - 0.5) * thickness * 1.6;
+                        this.ctx.fillStyle = `rgba(255,${200 + Math.floor(Math.random()*55)},${180},${0.12 + Math.random()*0.3})`;
+                        this.ctx.fillRect(x, y, 2 + Math.random() * 4, 1 + Math.random() * 3);
+                    }
+                    this.ctx.restore();
+                    this.ctx.globalCompositeOperation = "source-over";
+                }
+            }
+            if (enemy.type === "iriditeBoss") {
+                // support both legacy _daggerWarnings and new _daggerLines shape to be safe
+                if (enemy._daggerWarnings && enemy._daggerWarnings.length > 0) {
+                    for (let warn of enemy._daggerWarnings) {
+                        let alpha = Math.max(0.12, Math.min(0.95, warn.timer / 60));
+                        this.ctx.save();
+                        this.ctx.strokeStyle = `rgba(255,40,40,${alpha})`;
+                        this.ctx.lineWidth = 2 + Math.max(0, 4 * alpha);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.stroke();
+                        this.ctx.fillStyle = `rgba(255,50,50,${alpha})`;
+                        this.ctx.beginPath();
+                        this.ctx.arc(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y, 6 * alpha + 2, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.restore();
+                        if (typeof warn.timer === "number") warn.timer--;
+                    }
+                    enemy._daggerWarnings = enemy._daggerWarnings.filter(w => w.timer > 0);
+                }
+                // NEW: draw arena-spanning dagger warning lines
+                if (enemy._daggerLines && enemy._daggerLines.length > 0) {
+                    for (let ln of enemy._daggerLines) {
+                        let prepMax = 48; // should match prep chosen in update
+                        let alpha = Math.max(0.08, Math.min(0.95, (ln.timer || 0) / prepMax));
+                        this.ctx.save();
+                        this.ctx.strokeStyle = `rgba(255,60,60,${0.25 * alpha})`;
+                        this.ctx.lineWidth = 14 * (0.3 + 0.7 * alpha);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.stroke();
+                        // sharp red core
+                        this.ctx.strokeStyle = `rgba(255,20,20,${0.95 * alpha})`;
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
+                        this.ctx.stroke();
+                        // little markers along the line
+                        const markers = 6;
+                        for (let m = 0; m < markers; m++) {
+                            let t = m / (markers - 1);
+                            let mx = ln.x1 + (ln.x2 - ln.x1) * t;
+                            let my = ln.y1 + (ln.y2 - ln.y1) * t;
+                            this.ctx.fillStyle = `rgba(255,90,90,${0.6 * alpha})`;
+                            this.ctx.beginPath();
+                            this.ctx.arc(mx + (this.canvasWidth / 2) - this.ship.x, my + (this.canvasHeight / 2) - this.ship.y, 2 + 2 * alpha, 0, Math.PI * 2);
+                            this.ctx.fill();
+                        }
+                        this.ctx.restore();
+                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
+                    }
+                    enemy._daggerLines = enemy._daggerLines.filter(l => (l.timer === undefined) || l.timer >= 0);
+                }
+
+                // Draw converge dagger warnings (origins->point)
+                if (enemy._daggerConverge && enemy._daggerConverge.point) {
+                    const tgt = enemy._daggerConverge.point;
+                    for (let o of enemy._daggerConverge.origins) {
+                        let alpha = Math.max(0.08, Math.min(0.95, (o.timer || enemy._daggerPrep) / (enemy._daggerPrep || 48)));
+                        this.ctx.save();
+                        this.ctx.strokeStyle = `rgba(255,60,60,${0.18 * alpha})`;
+                        this.ctx.lineWidth = 6 * (0.4 + 0.6 * alpha);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(o.x, o.y);
+                        this.ctx.lineTo(tgt.x, tgt.y);
+                        this.ctx.stroke();
+                        this.ctx.fillStyle = `rgba(255,40,40,${0.95 * alpha})`;
+                        this.ctx.beginPath();
+                        this.ctx.arc(o.x, o.y, 4 + 4 * alpha, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.restore();
+                        if (typeof o.timer === "number") o.timer = Math.max(0, o.timer - 1);
+                    }
+                    this.ctx.save();
+                    this.ctx.fillStyle = "rgba(255,90,90,0.95)";
+                    this.ctx.beginPath();
+                    this.ctx.arc(enemy._daggerConverge.point.x, enemy._daggerConverge.point.y, 8, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                }
+
+                // Draw giant attack warning lines if present
+                if (enemy._giantLines && enemy._giantLines.length > 0) {
+                    for (let ln of enemy._giantLines) {
+                        let prepMax = enemy._giantPrep || 54;
+                        let alpha = Math.max(0.06, Math.min(0.95, (ln.timer || prepMax) / prepMax));
+                        this.ctx.save();
+                        this.ctx.strokeStyle = `rgba(255,200,80,${0.14 * alpha})`;
+                        this.ctx.lineWidth = 10 * (0.3 + 0.7 * alpha);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(ln.x1, ln.y1);
+                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.stroke();
+                        this.ctx.strokeStyle = `rgba(255,90,40,${0.95 * alpha})`;
+                        this.ctx.lineWidth = 2;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(ln.x1, ln.y1);
+                        this.ctx.lineTo(ln.x2, ln.y2);
+                        this.ctx.stroke();
+                        this.ctx.restore();
+                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
+                    }
+                }
+            }
+        }
+
         // Draw loot flashes
         for (let i = this.lootFlashes.length - 1; i >= 0; i--) {
             let flash = this.lootFlashes[i];
@@ -4275,102 +4393,6 @@ class SpaceArena {
             flash.timer--;
             if (flash.timer <= 0) this.lootFlashes.splice(i, 1);
         }
-
-        // Draw warns
-        for (let i = this.warnings.length - 1; i >= 0; i--) {
-            let warning = this.warnings[i];
-            let remainingDistance = warning.dist
-            let currentPos = [warning.x, warning.y]
-            let nextPos = [warning.x, warning.y]
-
-            let down = warning.ang < 0
-            let right = Math.abs(warning.ang) < Math.PI / 2
-            let j = 0
-            while (remainingDistance > 0) {
-                j++
-                this.ctx.save()
-                this.ctx.lineWidth = 4;
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.beginPath()
-                this.ctx.moveTo(currentPos[0], currentPos[1])
-
-                // Get distance to next point of screen looping
-                // Vertical Wall
-                let hx = Math.abs((right ? this.width - currentPos[0] : currentPos[0]) / Math.cos(warning.ang)) || 0
-                // Horizontal Wall
-                let hy = Math.abs((!down ? this.height - currentPos[1] : currentPos[1]) / Math.sin(warning.ang)) || 0
-                let currentDistance = Math.min(hx, hy)
-
-                if (remainingDistance < currentDistance) {
-                    // ^ This needs to account for screen wrapping
-
-                    // Finish
-                    
-                    nextPos[0] = currentPos[0] + Math.cos(warning.ang) * remainingDistance
-                    nextPos[1] = currentPos[1] + Math.sin(warning.ang) * remainingDistance
-
-                    let g = this.ctx.createLinearGradient(
-                        currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                        currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                        nextPos[0],
-                        nextPos[1]
-                    );
-                    g.addColorStop(0, 'rgba(255, 128, 0, 0.5)');
-                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
-                    this.ctx.strokeStyle = g;
-                    
-                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
-                    this.ctx.lineTo(nextPos[0], nextPos[1])
-                    this.ctx.closePath()
-                    this.ctx.stroke();
-
-                    remainingDistance = 0
-                } else {
-                    // Keep going
-
-                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
-                    
-                    let g
-                    if (hx < hy) {
-                        nextPos[0] = right ? this.width : 0
-                        nextPos[1] = currentPos[1] + currentDistance * Math.sin(warning.ang)
-                        g = this.ctx.createLinearGradient(
-                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang), 
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
-                        );
-                        currentPos[0] = !right ? this.width : 0
-                        currentPos[1] = nextPos[1]
-                    } else {
-                        nextPos[0] = currentPos[0] + currentDistance * Math.cos(warning.ang)
-                        nextPos[1] = !down ? this.height : 0
-                        g = this.ctx.createLinearGradient(
-                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
-                        );
-                        currentPos[0] = nextPos[0]
-                        currentPos[1] = down ? this.height : 0
-                    }
-
-                    remainingDistance -= currentDistance
-
-                    g.addColorStop(0, 'rgba(255, 128, 0, 0.5)');
-                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
-                    this.ctx.strokeStyle = g;
-
-                    this.ctx.lineTo(nextPos[0] + remainingDistance * Math.cos(warning.ang), nextPos[1] + remainingDistance * Math.sin(warning.ang))
-                    this.ctx.closePath()
-                    this.ctx.stroke();
-                }
-                this.ctx.restore()
-                if (remainingDistance > 100000) {console.warn("uh oh"); break; }
-                if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
-            }
-        }
-        this.warnings = []
 
         // Draw minimap
 

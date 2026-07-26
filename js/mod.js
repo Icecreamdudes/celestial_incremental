@@ -976,8 +976,8 @@ function updateStyles() {
 					case "D1":
 						if (!player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
 						if (player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && !player.bl.noxFightActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
-			    		if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
+						if (player.ir.inBattle && arena && !arena.bossActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    		if (player.ir.inBattle && arena && arena.bossActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
 					case "CH":
 						if (player.tab == "ch" || player.tab == "mm") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)

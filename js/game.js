@@ -8,9 +8,11 @@ var BHP = {}
 var BHB = {}
 
 // Space battle variables
-var SB_celestialites = {}
-var SB_zones = {}
 var SB_ships = {}
+var SB_zones = {}
+var SB_celestialites = {}
+var SB_projectiles = {}
+var SB_warnings = {}
 
 // Don't change this
 const TMT_VERSION = {

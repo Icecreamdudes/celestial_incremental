@@ -795,7 +795,7 @@ SB_celestialites.largeLeech = {
         celestialite.playerDist = Math.hypot(dx, dy) || 1;
 
         // Latch onto the player at close range
-        if (celestialite.playerDist < 40) celestialite.attached = true;
+        if (celestialite.playerDist < 54) celestialite.attached = true;
 
         // Reset the targeting cooldown the player if they're close
         if (celestialite.playerDist < 600 && !celestialite.attached) {
@@ -828,6 +828,10 @@ SB_celestialites.largeLeech = {
 
             player.ir.shipHealth = player.ir.shipHealth.sub(celestialite.damage.div(60))
         }
+        if (celestialite.playerDist < 114) {
+            celestialite.ax *= 3
+            celestialite.ay *= 3
+        }
     },
     onAttacked(celestialite, damage, attacker) {
         celestialite.targetingTimer = 300
@@ -853,6 +857,7 @@ SB_celestialites.largeLeech = {
         ctx.save();
         ctx.translate(wrapped[0], wrapped[1]);
         ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        
         let ang = celestialite.playerAng || 0;
         ctx.rotate(ang);
         let r = celestialite.radius;
@@ -877,16 +882,16 @@ SB_celestialites.largeLeech = {
         }
         // head with mouth detail
         ctx.beginPath();
-        ctx.ellipse(len / 2, Math.sin(celestialite.wrigglePhase + Math.PI * 1.1) * amp * 0.25, r * 0.95, r * 1.05, 0, 0, Math.PI * 2);
+        ctx.ellipse(len / 2, Math.sin(celestialite.wrigglePhase + Math.PI * 1.1) * amp * 0.125, r * 0.475, r * 0.525, 0, 0, Math.PI * 2);
         ctx.fillStyle = celestialite.attached ? '#ff8b8b' : '#8b0000';
         ctx.fill();
         // tiny teeth
         ctx.strokeStyle = '#ffdddd';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(len / 2 - r * 0.2, -r * 0.05);
-        ctx.lineTo(len / 2 + r * 0.1, 0);
-        ctx.lineTo(len / 2 - r * 0.2, r * 0.05);
+        ctx.moveTo(len / 2 - r * 0.1, -r * 0.025);
+        ctx.lineTo(len / 2 + r * 0.05, 0);
+        ctx.lineTo(len / 2 - r * 0.1, r * 0.025);
         ctx.stroke();
         ctx.restore();
     },

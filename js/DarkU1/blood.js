@@ -172,7 +172,15 @@
                 player.bl.foughtNox = false
                 player.bl.noxFightActive = false
             },
-            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+            style() {
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + "#bf0000", borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.background = "#7f0000"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                }
+                return look
+            },
         },
         13: {
             title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },

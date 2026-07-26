@@ -62,8 +62,6 @@ addLayer("bloodZone1", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverseAll(["A2", "DS", "D1"], "pause", true)
-
                 player.ir.shipHealth = player.ir.shipHealthMax
 
                 player.ir.ufoFought = false

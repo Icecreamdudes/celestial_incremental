@@ -9,7 +9,7 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
         arena.spawnArena();
         localStorage.setItem('arenaActive', 'true');
 
-        pauseUniverseAll(["A2", "DS"], "pause", true)
+        pauseUniverseAll(["A2", "DS", "D1"], "pause", true)
     } else {
         player.subtabs["bl"]['stuff'] = 'Battle'
 
@@ -983,7 +983,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverseAll(["A2", "DS", "D1"], "unpause", true)
+                pauseUniverseAll(["A2", "DS", "D1", "U3"], "unpause", true)
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 

@@ -121,19 +121,15 @@ addLayer("iriditeZone", {
 
                     ], {width: "397px", height: "147px", background: "#0000003f", borderBottom: "3px solid #5e4ee6"}],
                     
-                    ["style-column", [
-                        ["titleless-milestone", 11],
-                        ["style-row", [
-                            ["style-row", [], {width: "144.4px"}],
-                            ["style-row", [], {background: "white", width: "3px", height: "22px"}],
-                        ]],
-                        ["style-row", [
-                            ["clickable", "startStage0"],
-                            ["style-row", [], {background: "white", width: "94px", height: "3px"}],
-                            ["clickable", "switchSides"],
-                        ]],
+                    ["top-column", [
+                        ["blank", "10px"],
+                        ["style-column", [
+                            ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
-                   
+
                 ], {width: "397px", height: "363px"}],
                 ["style-column", [], {width: "403px", height: "363px"}],
             ], {width: "800px", height: "363px"}],

@@ -3328,7 +3328,7 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", "Perks for killing Jocus", {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "Perks for defeating Jocus", {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "800px", border: "3px solid #5e8503", backgroundImage: "linear-gradient(120deg, #fcff04 0%, #befa32 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
                         ["raw-html", "<u>Unlocks</u>", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],

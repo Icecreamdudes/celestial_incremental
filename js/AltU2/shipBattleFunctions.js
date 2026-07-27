@@ -168,7 +168,7 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
 
     let warning = {
         type: warnId,
-        celestialite: celestialite,
+        celestialite: celestialite || null,
         timer: warnRef.readyTimer + warnRef.postReadyTimer,
         ready: false,
         dist: warnRef.dist,
@@ -181,11 +181,20 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
         ay: 0,
         dax: 0.875,
         day: 0.875,
+    }
 
-        ang: celestialite.playerAng,
-
-        x: celestialite.x,
-        y: celestialite.y,
+    if (celestialite != null) {
+        warning.celestialite = celestialite
+        warning.ang = celestialite.playerAng
+        warning.x = celestialite.x
+        warning.y = celestialite.y
+    } else {
+        let spawnAngle = (Math.random() - 0.5) * Math.PI * 2
+        let spawnDistance = 200 + Math.random() * 200
+        warning.celestialite = null
+        warning.ang = spawnAngle 
+        warning.x = arena.ship.x + (Math.cos(spawnAngle) * spawnDistance)
+        warning.y = arena.ship.y + (Math.sin(spawnAngle) * spawnDistance)
     }
 
     warnRef.initialize(warning)

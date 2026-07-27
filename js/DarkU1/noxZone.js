@@ -171,9 +171,9 @@ SB_celestialites.nox = {
     radius: 64,
     color: "#7a0000",
     health: new Decimal(1e5),
-    damage: new Decimal(24),
+    damage: new Decimal(20),
     bodyDamage: new Decimal(1),
-    regen: new Decimal(16),
+    regen: new Decimal(20),
     reward() {
         let gain = {}
         let random = Math.random()
@@ -974,25 +974,25 @@ SB_celestialites.redBloodEye = {
 SB_projectiles.noxSpear = {
     template(celestialite, warning = {}) {
         return {
-            x: warning.x || celestialite.x,
-            y: warning.y || celestialite.y,
-            vx: Math.cos(warning.ang || celestialite.ang) * 12,
-            vy: Math.sin(warning.ang || celestialite.ang) * 12,
+            x: warning ? warning.x : celestialite.x,
+            y: warning ? warning.y : celestialite.y,
+            vx: Math.cos(warning ? warning.ang : celestialite.ang) * 12,
+            vy: Math.sin(warning ? warning.ang : celestialite.ang) * 12,
             life: 120,
             initialLife: 120,
-            damage: celestialite.damage,
+            damage: celestialite ? celestialite.damage : new Decimal(16),
             pierce: 3,
             radius: 10,
             fromEnemy: true,
             vampireSpear: true,
             spear: true,
-            ang: warning.ang || celestialite.ang,
+            ang: warning ? warning.ang : celestialite.ang,
             shaftLen: 56,
             shaftW: 6,
             tipLen: 18,
             knockback: 12,
-            originX: warning.x || celestialite.x,
-            originY: warning.y || celestialite.y,
+            originX: warning ? warning.x : celestialite.x,
+            originY: warning ? warning.y : celestialite.y,
         }
     },
     initialize(projectile) {
@@ -1157,5 +1157,44 @@ SB_warnings.noxSpear = {
     onReady(warning) {
         warning.targetAng = warning.ang
         SB_spawnProjectile("noxSpear", warning.celestialite, warning);
+    }
+}
+SB_warnings.allyNoxSpear = {
+    readyTimer: 0,
+    postReadyTimer: 120,
+    dist: 1440,
+    width: 2,
+    initialize(warning) {
+        if (arena.enemies.length > 0) {
+            let targetDist = 1000000
+            let target = 0
+            for (let i = 0; i < arena.enemies.length; i++) {
+                let celestialite = arena.enemies[0]
+                let closest = arena.getClosestCoordsDouble([warning.x, warning.y], [celestialite.x, celestialite.y])
+                let dist = Math.hypot(closest[0] - celestialite.x, closest[1] - celestialite.y)
+                if (targetDist > dist) {
+                    targetDist = dist
+                    target = i
+                }
+            }
+            let targetCel = arena.enemies[target]
+            warning.ang = Math.atan2(warning.y - targetCel.y, warning.x - targetCel.x)
+            warning.x = targetCel.x - Math.cos(warning.ang) * 600
+            warning.y = targetCel.y - Math.sin(warning.ang) * 600
+        } else {
+            warning.ang = (Math.random() - 0.5) * Math.PI * 2
+            warning.x = Math.random() * arena.width
+            warning.y = Math.random() * arena.height
+        }
+    },
+    tick(warning) {
+    },
+    onReady(warning) {
+        warning.targetAng = warning.ang
+        SB_spawnProjectile("noxSpear", null, warning, {
+            fromEnemy: false,
+            damage: new Decimal(48),
+            //damage: Decimal.div(arena.shipStats.attackDamage, levelableEffect("ir", player.ir.shipType)[2].toNumber()).div(arena.ship.damage).mul(48),
+        });
     }
 }

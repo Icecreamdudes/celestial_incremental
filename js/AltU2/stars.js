@@ -232,7 +232,7 @@ addLayer("st", {
                 }
             },
             style() {
-                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                let look = {width: "262.5px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
                 return look
             },
@@ -253,7 +253,7 @@ addLayer("st", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                let look = {width: "262.5px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 if (!player.ev.evolutionsUnlocked[3]) look.width = "425px"
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
                 return look
@@ -2606,34 +2606,35 @@ addLayer("st", {
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
-                                ["style-row", [["clickable", 2], ["style-row", [], {width: "3px", height: "40px", background: "white"}], ["clickable", 1]], {width: '425px', height: '40px' }],
-                            ]],
-                        ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #9badff", borderRadius: "2px 2px 0 0"}],
+                                ["style-row", [["clickable", 2], ["clickable", 1]], {width: '650px', height: '40px' }],
+                            ], {width: "650px"}],
+                        ], {width: "650px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #37078f", borderRadius: "2px 2px 0 0"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Common", {color: "#9badff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#293b54", borderBottom: "3px solid #9badff", userSelect: "none"}],
+                                ["raw-html", "Common", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#9badff", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105]]],
-                                ["row", [["levelable", 106],["levelable", 107],["levelable", 108],["levelable", 109],["levelable", 110]]],
-                            ], {width: "525px", backgroundColor: "#1f2133", padding: "5px"}],
+                                ["row", [["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104], ["levelable", 105], ["levelable", 106]]],
+                                ["row", [["levelable", 107], ["levelable", 108], ["levelable", 109], ["levelable", 110]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #4e5780 0 15px, #606c9e 0 30px)", padding: "2px"}],
             
                             ["style-column", [
-                                ["raw-html", "Uncommon", {color: "#6ddea9", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#1b2e1b", borderTop: "3px solid #6ddea9", borderBottom: "3px solid #6ddea9", userSelect: "none"}],
+                                ["raw-html", "Uncommon", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#6ddea9", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
-                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
-                            ], {width: "525px", backgroundColor: "#0f1c18", padding: "5px"}],
+                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205], ["levelable", 206]]],
+                                ["row", [["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #377055 0 15px, #458c6b 0 30px)", padding: "2px"}],
+                            
                             ["style-column", [
-                                ["raw-html", () => {return "Rare"}, {color: "#866dde", fontSize: "24px", fontFamily: "monospace"}],
-                            ], () => { return player.zarDungeon.zarDefeated ? {width: "535px", height: "40px", backgroundColor: "#2c224d", borderTop: "3px solid #866dde", borderBottom: "3px solid #866dde", userSelect: "none"}: {display: "none !important"}}],
+                                ["raw-html", "Rare", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.zarDungeon.zarDefeated ? {width: "631px", height: "40px", backgroundColor: "#866dde", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
-                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
-                            ], {width: "525px", backgroundColor: "#151024", padding: "5px"}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", borderRadius: "5px 5px 5px 5px"}],
+                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305], ["levelable", 306]]],
+                                ["row", [["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #433770 0 15px, #54458c 0 30px)", padding: "2px"}],
+                        ], {width: "650px", height: "522px"}],
+                    ], {width: "650px", height: "700px", backgroundColor: "#161616", border: "3px solid #37078f", borderRadius: "0"}],
                 ]
             },
             "Upgrade Trees": {

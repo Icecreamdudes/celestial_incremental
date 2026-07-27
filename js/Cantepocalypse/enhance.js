@@ -309,7 +309,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.01)
             },
-            style: { width: "93.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 9px", border: "3px solid #5c185e"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 9px", border: "3px solid #5c185e"},
         },
         13: {
             title() { return "<h2>10%" },
@@ -318,7 +318,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.1)
             },
-            style: { width: "93.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
         },
         14: {
             title() { return "<h2>50%" },
@@ -327,7 +327,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.5)
             },
-            style: { width: "93.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
         },
         15: {
             title() { return "<h2>100%" },
@@ -336,7 +336,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints
             },
-            style: { width: "93.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 9px 0px", border: "3px solid #5c185e"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 9px 0px", border: "3px solid #5c185e"},
         },
 
         //allocation buttons
@@ -604,10 +604,7 @@
                         ["clickable", 14],
                         ["blank", "0", {width: "6px"}],
                         ["clickable", 15],
-                    ], {width: "400px", height: "57px", backgroundColor: "#b82fbd", borderRadius: "0 0 15px 15px", border: "3px solid #5c185e", borderTop: "0px"}],
-                    ["row", [
-                    
-                    ]],
+                    ], {width: "400px", padding: "6px 0", backgroundColor: "#b82fbd", borderRadius: "0 0 15px 15px", border: "3px solid #5c185e", borderTop: "0px"}],
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [

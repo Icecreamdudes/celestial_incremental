@@ -222,10 +222,12 @@ function updateStyles() {
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
-			layerBG = "linear-gradient(0deg, #204387)"
+			if (inChallenge("fu", 11)) layerBG = "linear-gradient(0deg, #152a54 0%, white 800%)";
+			else if (inChallenge("fu", 12)) layerBG = "linear-gradient(0deg, #2f2f5e 0%, white 800%)";
+			else layerBG = "linear-gradient(0deg, #204080 0%, white 800%)";
 			break;
 		case "en":
-			layerBG = "linear-gradient(0deg, #400c42)"
+			layerBG = "linear-gradient(0deg, #400c42 0%, white 800%)"
 			break;
 		case "en":
 			layerBG = "#400c42"
@@ -426,6 +428,67 @@ function updateStyles() {
 	    const galaxyBackground = document.getElementById("galaxy-background");
 	    if (galaxyBackground) {
 	        galaxyBackground.remove();
+	    }
+	}
+	if (!options.performanceMode && (player.tab === "cp" || player.tab === "ar" || player.tab === "an" || player.tab === "pr" || player.tab === "rt" || player.tab === "rg" || player.tab === "gs" || player.tab === "fu" || player.tab === "oi" || player.tab === "en")) {
+	    // Add the galaxy background if it doesn't already exist
+    	if (!document.getElementById("rain-background")) {
+	        const rainBackground = document.createElement("canvas");
+        	rainBackground.id = "rain-background";
+        	rainBackground.transitionDuration = "0s";
+    	    rainBackground.style.position = "fixed";
+	        rainBackground.style.top = "0";
+        	rainBackground.style.left = "0";
+    	    rainBackground.style.width = "100%";
+	        rainBackground.style.height = "100%";
+        	rainBackground.style.overflow = "hidden";
+    	    rainBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+			rainBackground.droplets = []
+			rainBackground.initialized = false
+        	document.body.appendChild(rainBackground);
+	    } else {
+			const rainBackground = document.getElementById("rain-background");
+			const rect = rainBackground.getBoundingClientRect()
+			const ctx = rainBackground.getContext('2d')
+    	    rainBackground.width = window.innerWidth;
+	        rainBackground.height = window.innerHeight;
+
+			ctx.clearRect(0, 0, 800, 800)
+			ctx.strokeStyle = "#ffffff0f"
+			ctx.lineWidth = 4
+			ctx.lineJoin = "round"
+			ctx.save()
+    	    // Add droplets
+			while (rainBackground.droplets.length < 256) {
+				let randomSize = Math.random() * 4 + 2
+				let randomX = Math.random()
+				let randomY = rainBackground.initialized ? (randomSize * -64) / rainBackground.height : Math.random()
+				rainBackground.droplets.push({
+					x: randomX,
+					y: randomY,
+					size: randomSize,
+				})
+			}
+			rainBackground.initialized = true
+	        for (let i = Math.min(window.innerWidth * window.innerHeight / 100, 256) - 1; i >= 0; i--) {
+				let droplet = rainBackground.droplets[i]
+				ctx.lineWidth = droplet.size
+				ctx.strokeStyle = "rgb(255,255,255," + (droplet.size/96) + ")"
+				ctx.beginPath()
+            	ctx.moveTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height)
+            	ctx.lineTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height + 64 * droplet.size)
+				ctx.closePath()
+				ctx.stroke()
+				ctx.restore()
+				droplet.y += (droplet.size * 16) / rainBackground.height
+				if (droplet.y > 1) rainBackground.droplets.splice(rainBackground.droplets.indexOf(droplet), 1);
+	        }
+		}
+	} else {
+	    // Remove the rain background if the tab is not "au1"
+	    const rainBackground = document.getElementById("rain-background");
+	    if (rainBackground) {
+	        rainBackground.remove();
 	    }
 	}
 

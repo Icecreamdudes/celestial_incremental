@@ -461,8 +461,15 @@ function updateStyles() {
     	    // Add droplets
 			while (rainBackground.droplets.length < 256) {
 				let randomSize = Math.random() * 4 + 2
-				let randomX = Math.random()
-				let randomY = rainBackground.initialized ? (randomSize * -64) / rainBackground.height : Math.random()
+				let pos = Math.random()
+				let randomX, randomY
+				if (pos < 0.2) {
+					randomX = rainBackground.initialized ? (randomSize * -16) / rainBackground.width : Math.random()
+					randomY = Math.random()
+				} else {
+					randomX = Math.random()
+					randomY = rainBackground.initialized ? (randomSize * -64) / rainBackground.height : Math.random()
+				}
 				rainBackground.droplets.push({
 					x: randomX,
 					y: randomY,
@@ -476,12 +483,13 @@ function updateStyles() {
 				ctx.strokeStyle = "rgb(255,255,255," + (droplet.size/96) + ")"
 				ctx.beginPath()
             	ctx.moveTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height)
-            	ctx.lineTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height + 64 * droplet.size)
+            	ctx.lineTo(droplet.x * rainBackground.width + (16 * droplet.size), droplet.y * rainBackground.height + 64 * droplet.size)
 				ctx.closePath()
 				ctx.stroke()
 				ctx.restore()
+				droplet.x += (droplet.size * 4) / rainBackground.width
 				droplet.y += (droplet.size * 16) / rainBackground.height
-				if (droplet.y > 1) rainBackground.droplets.splice(rainBackground.droplets.indexOf(droplet), 1);
+				if (droplet.x > 1 || droplet.y > 1) rainBackground.droplets.splice(rainBackground.droplets.indexOf(droplet), 1);
 	        }
 		}
 	} else {

@@ -628,8 +628,7 @@
                                 ["clickable", 22],
                             ]],
                             ["blank", "6px"],
-                        ], {width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px"}],
-                        ["blank", "0", {width: "6px"}],
+                        ], {width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}],
                         ["style-column", [
                             ["blank", "10px"],
                             ["raw-html", "Replicanti Point Cap", {color: "white", fontSize: "24px"}],
@@ -651,10 +650,9 @@
                                 ["clickable", 24],
                             ]],
                             ["blank", "6px"],
-                        ], {width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px"}],
-                    ]],
-                    ["blank", "6px"],
-                    ["style-row", [
+                        ], () => {
+                            return {display: hasUpgrade("en", 13) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
                         ["style-column", [
                             ["blank", "10px"],
                             ["raw-html", "Emotions", {color: "white", fontSize: "24px"}],
@@ -676,8 +674,10 @@
                                 ["clickable", 26],
                             ]],
                             ["blank", "6px"],
-                        ], {width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px"}],
-                    ]],
+                        ], () => {
+                            return {display: hasUpgrade("en", 15) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                    ], {maxWidth: "850px"}],
                     ["blank", "25px"],
                 ]
             },

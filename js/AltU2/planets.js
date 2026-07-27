@@ -216,7 +216,7 @@
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
-            unlocked() { return hasMilestone("spaceZone1", 11) },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -321,7 +321,7 @@
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.001) },
-            unlocked() { return true },
+            unlocked() { return hasMilestone("spaceZone1", 11) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

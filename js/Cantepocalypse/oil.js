@@ -47,7 +47,12 @@
             buyBuyable('oi', 24)
         }
     },
-    nodeStyle() {},
+    nodeStyle() {
+        return {
+            color: "rgba(255,255,255,0.8)",
+            borderColor: "#0000007f",
+        }
+    },
     tooltip: "Oil",
     branches: ["an", "cb"],
     color: "#3c3642",

@@ -381,7 +381,7 @@ addLayer("ep1", {
                 }
             },
             canClick() { return player.ep1.platinumTimers[0].current.lte(0) },
-            unlocked() { return getLevelableTier("pet", 402).gte(1) },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 && getLevelableTier("pet", 402).gte(1) },
             onClick() {
                 player.ep1.platinumTimers[0].current = player.ep1.platinumTimers[0].max
 
@@ -407,7 +407,7 @@ addLayer("ep1", {
                 }
             },
             canClick() { return player.ep1.platinumTimers[1].current.lte(0) },
-            unlocked() { return (getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(4)) || getLevelableTier("pet", 402).gte(2) },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 && ((getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(4)) || getLevelableTier("pet", 402).gte(2)) },
             onClick() {
                 player.ep1.platinumTimers[1].current = player.ep1.platinumTimers[1].max
 
@@ -433,7 +433,7 @@ addLayer("ep1", {
                 }
             },
             canClick() { return player.ep1.platinumTimers[2].current.lte(0) },
-            unlocked() { return (getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(9)) || getLevelableTier("pet", 402).gte(2) },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 && ((getLevelableTier("pet", 402).gte(1) && getLevelableAmount("pet", 402).gte(9)) || getLevelableTier("pet", 402).gte(2)) },
             onClick() {
                 player.ep1.platinumTimers[2].current = player.ep1.platinumTimers[2].max
                 

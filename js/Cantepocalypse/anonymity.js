@@ -28,7 +28,12 @@
             buyUpgrade("an", 23)
         }
     },
-    nodeStyle() {},
+    nodeStyle() {
+        return {
+            color: "#fff",
+            borderColor: "#0000007f",
+        }
+    },
     tooltip: "Anonymity",
     branches: ["ar"],
     color: "#0c04c1",

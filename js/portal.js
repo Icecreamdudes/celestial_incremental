@@ -300,9 +300,8 @@
             },
         },
         15: {
-            title() { return "<h1>Gwa Temple" },
             display() {
-                return player.po.gwaTemple ? "<h1>Gwarship the cat of limitless potential.<br>On<br><h2>(Progress is kept between resets)</h2>" : "<h1>Worship the cat of limitless potential.<br>Off<br><h2>(Progress is kept between resets)</h2>";
+                return player.po.gwaTemple ? "ON" : ("OFF<br><h6>Req: None</h6>");
             },
             canClick() { return player.po.featureSlots.gte(1)},
             unlocked() { return player.gwaTemple.gwaWorshipTime.gt(0)},
@@ -310,13 +309,14 @@
                 player.po.gwaTemple = true
             },
             style: {
-                width: '200px',
-                minHeight: '200px',
-                background: "linear-gradient(45deg, #ffb 0%, #bb9 100%)",
-                backgroundOrigin: "border-box",
-                color: "#221",
-                border: "2px solid #996",
-                borderRadius: "20px",
+                width: '300px',
+                minHeight: '75px',
+                maxHeight: '75px',
+                backgroundColor: "#fff",
+                "background-origin": "border-box",
+                border: "3px solid #0000003f",
+                fontSize: '24px',
+                borderRadius: "0px 0px 10px 10px",
             },
         },
 

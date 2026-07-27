@@ -129,13 +129,19 @@
         }
 
         //Todo: Apply the effects of the core fragments
-        player.cof.coreFragmentEffects[0] = player.cof.coreFragments[0].pow(0.125).div(40).add(1).min(1.25)
-        player.cof.coreFragmentEffects[1] = player.cof.coreFragments[1].pow(10).add(1)
-        player.cof.coreFragmentEffects[2] = player.cof.coreFragments[2].pow(0.1).div(30).add(1).min(1.2)
-        player.cof.coreFragmentEffects[3] = player.cof.coreFragments[3].pow(0.1).div(30).add(1).min(1.2)
-        player.cof.coreFragmentEffects[4] = player.cof.coreFragments[4].mul(5).pow(3.5).add(1)
-        player.cof.coreFragmentEffects[5] = player.cof.coreFragments[5].pow(1.5).add(1)
-        player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].pow(0.25).div(5).add(1)
+        player.cof.coreFragmentEffects[0] = player.cof.coreFragments[0].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[1] = player.cof.coreFragments[1].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(10)
+        player.cof.coreFragmentEffects[2] = player.cof.coreFragments[2].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[3] = player.cof.coreFragments[3].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[4] = player.cof.coreFragments[4].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(3.5)
+        player.cof.coreFragmentEffects[5] = player.cof.coreFragments[5].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(0.5)
+        player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(0.075)
+
+        if (!hasUpgrade("ir", 109)) {
+            player.cof.coreFragmentEffects[0] = player.cof.coreFragmentEffects[0].min(1.25)
+            player.cof.coreFragmentEffects[2] = player.cof.coreFragmentEffects[2].min(1.25)
+            player.cof.coreFragmentEffects[3] = player.cof.coreFragmentEffects[3].min(1.25)
+        }
 
         player.subtabs["cof"]["buyables"] = player.cof.fragmentIndex
 

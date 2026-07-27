@@ -119,10 +119,11 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+            background: "linear-gradient(0deg, #0061ff -100%, white 100%)",
             "background-origin": "border-box",
             "border-color": "#0061ff",
-        };
+            "color": "black",
+        }
     },
     color: "white",
     tooltip: "Dice",

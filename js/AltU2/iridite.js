@@ -9,7 +9,7 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
         arena.spawnArena();
         localStorage.setItem('arenaActive', 'true');
 
-        pauseUniverseAll(["A2", "DS", "D1"], "pause", true)
+        pauseUniverseAll(["U3", "A2", "DS", "D1"], "pause", true)
     } else {
         player.subtabs["bl"]['stuff'] = 'Battle'
 
@@ -368,6 +368,7 @@ addLayer("ir", {
             } else {
                 SB_zones[player.ir.battleStage].levelUp(player.ir.battleLevel)
                 if (arena) {
+                    arena.enhanced = false;
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
                 }
@@ -983,7 +984,7 @@ addLayer("ir", {
                 }
                 localStorage.setItem('arenaActive', 'false');
 
-                pauseUniverseAll(["A2", "DS", "D1", "U3"], "unpause", true)
+                if (player.tab == "ir") pauseUniverseAll(["A2", "DS", "D1"], "unpause", true);
 
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 

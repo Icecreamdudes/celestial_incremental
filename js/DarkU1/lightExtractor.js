@@ -684,15 +684,16 @@
         player.bl.buyables[22] = new Decimal(0)
         player.bl.buyables[23] = new Decimal(0)
 
-        if (!hasMilestone("bl", 11)) {
+        if (!hasMilestone("bloodZone1", 11)) {
             player.bl.buyables[11] = new Decimal(0)
             player.bl.buyables[12] = new Decimal(0)
             player.bl.buyables[13] = new Decimal(0)
             player.bl.buyables[14] = new Decimal(0)
-            player.bl.buyables[31] = new Decimal(0)
-            player.bl.buyables[32] = new Decimal(0)
-            player.bl.buyables[33] = new Decimal(0)
-            player.bl.buyables[34] = new Decimal(0)
+            player.bl.buyables[15] = new Decimal(0)
+            player.bl.buyables[16] = new Decimal(0)
+            player.bl.buyables[101] = new Decimal(0)
+            player.bl.buyables[102] = new Decimal(0)
+            player.bl.buyables[103] = new Decimal(0)
         }
 
         player.bl.bloodDrain = false

@@ -234,7 +234,6 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    // tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
     tree: [["dr"],["dp"],["dg","dgr","db"],["dn","le","dgj"],["ds","funify","bl","rp","dv", "dt"],],
     nodeStyle() {
         let style = {

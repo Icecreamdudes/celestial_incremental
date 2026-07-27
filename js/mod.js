@@ -239,7 +239,7 @@ function updateStyles() {
 			}
 			break;
 		case "co": case "ra": case "sd": case "cs":
-		case "cof": case "lightRift":
+		case "cof": case "nvs": case "lightRift":
 			if (player.matosLair.milestone[25] == 0) layerBG = "linear-gradient(0deg, #260300)"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
@@ -1043,16 +1043,18 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<h3>v1.14 - The Interspace Update Part I: e</h3><br>
 		Content:<br>
-			- Added universe δ.<span style="color:yellow"> [WIP]</span><br>
+			- Added universe δ.<br>
 			- Remade the dragon pet.<br>
-			- Added space battle zones. Prior content has been separated into space zone I, space zone II, iridite zone, and space zone III.<span style="color:yellow"> [WIP]</span><br>
-			- Added a pet evolution that allows progressing through iridite content without entering space battles.<span style="color:yellow"> [WIP]</span><br>
+			- Added space battle zones. Prior space battle content has been divided into space zone I, space zone II, iridite zone, and space zone III.<br>
+			- Added a pet evolution that allows progressing through iridite content without entering space battles.<br>
 			- Added more iridite upgrades.<br>
 			- Added the multiverse map.<br>
+			- Added time capsules.<br>
 			- Added four punchcards.<br>
 			- Added two check back blessings.<br>
 			- Added new booster milestones.<br>
 			- Added new starmetal essence studies.<br>
+			- Added new space dust buyables.<br>
 			- Added stage 13 achievements.<br>
 			- Added a theme.<br>
 		<br>QoL:<br>
@@ -1068,18 +1070,21 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Remade the checkback shrine UI.<br>
 			- Changed some punchcard textures.<br>
 			- Tweaked all pylon UI.<br>
+			- Changed the SP upgrade styles.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
 			- The evolution fragment pet's pet point button now has a chance to grant fragments.<br>
 			- Reduced the scaling of several effects in D1 eclipse.<br>
-			- Increased the scaling of both unavoidable softcaps during an eclipse.<br>
+			- Increased the scaling of both unavoidable softcaps in D1 eclipse.<br>
 			- Heavily weakened the negative effect of clouds.<br>
 			- Changed the formulas of some iridite upgrades.<br>
-			- Changed the scaling and costs of check back factors.<span style="color:yellow"> [WIP]</span><br>
+			- Changed the effect and cost scaling of check back factors.<br>
 			- Reduced the effect scaling of enhance upgrade "Emotional Enhancer".<br>
-			- Slightly deflated ancient and paradox pylon energies, but increased paradox energy factor buyable caps.<br>
+			- Mildly deflated ancient and paradox pylon energies, but increased paradox energy factor buyable caps.<br>
 			- Heavily reduced the effect SP has on singularity gain after defeating aleph.<br>
+			- Reduced the second infected infinity effect.<br>
+			- Reduced space building 3 through 6 effects.<br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
 			- Fixed dark universe reset cheese.<br>

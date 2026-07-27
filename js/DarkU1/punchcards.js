@@ -131,8 +131,8 @@ addLayer("pu", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "425px", minHeight: "40px", color: "white", fontSize: "12px", borderRadius: "0px"}
-                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
+                let look = {width: "495px", border: "3px solid #0000003f", minHeight: "40px", color: "black", fontSize: "12px", borderRadius: "0px"}
+                look.backgroundColor = this.canClick() ? "#8ca3ff" : "#465280"
                 return look
             }
         },
@@ -144,8 +144,8 @@ addLayer("pu", {
                 player.subtabs.pu["stuff"] = "Selection"
             },
             style() {
-                let look = {width: "273px", minHeight: "40px", fontSize: "12px", color: "white", borderRadius: "0px"}
-                if (this.canClick()) {look.backgroundColor = "#384166"} else {look.backgroundColor = "#0e1019"}
+                let look = {width: "308.5px", border: "3px solid #0000003f", minHeight: "40px", fontSize: "12px", color: "black", borderRadius: "20px 0 0 0"}
+                look.backgroundColor = this.canClick() ? "#8ca3ff" : "#465280"
                 return look
             },
         },
@@ -157,9 +157,12 @@ addLayer("pu", {
                 player.subtabs.pu["stuff"] = "Collection"
             },
             style() {
-                let look = {width: "274px", minHeight: "40px", fontSize: "12px", color: "white", borderRadius: "0px"}
-                if (!player.sma.inStarmetalChallenge) look.width = "550px"
-                if (this.canClick()) {look.backgroundColor = "#384166"} else {look.backgroundColor = "#0e1019"}
+                let look = {width: "308.5px", border: "3px solid #0000003f", minHeight: "40px", fontSize: "12px", color: "black", borderRadius: "0 20px 0 0"}
+                if (!player.sma.inStarmetalChallenge) {
+                    look.width = "620px"
+                    look.borderRadius = "20px 20px 0 0"
+                }
+                look.backgroundColor = this.canClick() ? "#8ca3ff" : "#465280"
                 return look
             },
         },
@@ -175,8 +178,8 @@ addLayer("pu", {
                 layers.pu.generateSelection();
             },
             style() {
-                let look = {width: "200px", minHeight: "50px", color: "white", border: "2px solid #384166", borderRadius: "10px", fontSize: "8px"}
-                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                let look = {width: "200px", minHeight: "50px", color: "white", border: "3px solid #465280", borderRadius: "10px", fontSize: "8px"}
+                look.backgroundColor = this.canClick() ? "black" : "#361e1e"
                 return look
             },
         },
@@ -191,8 +194,8 @@ addLayer("pu", {
                 layers.pu.generateSelection();
             },
             style() {
-                let look = {width: "200px", minHeight: "50px", color: "white", border: "2px solid #384166", borderRadius: "10px"}
-                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                let look = {width: "200px", minHeight: "50px", color: "white", border: "3px solid #465280", borderRadius: "10px"}
+                look.backgroundColor = this.canClick() ? "black" : "#361e1e"
                 return look
             },
         },
@@ -221,7 +224,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 0 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 0 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#465280"}
                 return look
             },
         },
@@ -250,7 +253,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 1 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 1 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#465280"}
                 return look
             },
         },
@@ -279,7 +282,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 2 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 2 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#465280"}
                 return look
             },
         },
@@ -308,7 +311,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 3 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 3 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#465280"}
                 return look
             },
         },
@@ -333,7 +336,7 @@ addLayer("pu", {
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}
-                if (player.pu.selectionIndex == 4 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#444"}
+                if (player.pu.selectionIndex == 4 && player.pu.storedSelections.gte(1)) {look.borderColor = "white"} else {look.borderColor = "#AB2042"}
                 return look
             },
         },
@@ -2650,7 +2653,7 @@ addLayer("pu", {
                     !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "Unlock Reroll Points<br>",
-                    "x" + format(this.effect()[0]) + " to reroll point gain (based on universe resets)<br>",
+                    "<small>x" + format(this.effect()[0]) + " to reroll point gain (based on universe resets)</small><br>",
                     !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to Zar chips",
@@ -2698,15 +2701,18 @@ addLayer("pu", {
                 buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return true },
                 content: [
-                    ["style-column", [
+                    ["top-column", [
                         ["style-column", [
+                            ["blank", "10px"],
                             ["style-column", [
                                 ["raw-html", () => {
                                     if (player.pu.storedSelections.lte(0)) return "No Punchcard Selected."
                                     let str = run(layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].title, layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]])
                                     return str.substring(0, str.indexOf("<small style='color:gray'>"))
                                 }, {color: "white", fontSize: "24px !important", fontFamily: "monospace"}],
-                            ], {width: "500px", height: "47px", borderBottom: "3px solid white"}],
+                                ["blank", "10px"],
+                            ], {width: "500px", borderBottom: "3px solid white"}],
+                            ["blank", "10px"],
                             ["style-column", [
                                 ["raw-html", () => {
                                     if (player.pu.storedSelections.lte(0)) return ""
@@ -2714,29 +2720,38 @@ addLayer("pu", {
                                     str = str.substring(str.indexOf("<u>Active</u><br>")+17)
                                     return str.substring(0, str.indexOf("</span>"))
                                 }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {width: "525px", height: "60px"}],
-                            ["row", [["clickable", 10], ["blank", "25px"], ["clickable", 9],]],
+                            ], {width: "525px"}],
                             ["blank", "10px"],
-                        ], {width: "550px", height: "170px"}],
+                            ["style-row", [
+                                ["clickable", 10],
+                                ["blank", "6px"],
+                                ["clickable", 9],
+                            ]],
+                            ["blank", "10px"],
+                        ], {width: "620px", height: "200px"}],
                         ["style-column", [
                             ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14],]],
-                        ], {width: "550px", height: "150px", backgroundColor: "#0e1019"}],
-                        ["style-column", [
+                        ], {width: "620px", height: "150px", borderTop: "3px solid #11141f", borderBottom: "3px solid #11141f", background: "repeating-linear-gradient(-45deg, #11141f 0 15px, #191e2e 0 30px)"}],
+                        ["top-column", [
+                            ["blank", "15px"],
                             ["raw-html", () => {return "Punchcard Selections: " + formatWhole(player.pu.storedSelections)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", () => { return "Gain punchcard selections on universe resets."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "70px"}],
-                    ], () => {return {returnwidth: "550px", height: "390px", border: "3px solid white", backgroundColor: "#1c2033"}}],
-                                        ["style-column", [
+                            ["blank", "15px"],
+                        ], {width: "620px"}],
+                    ], () => {return {returnwidth: "620px", border: "3px solid #8ca3ff", backgroundColor: "#232940"}}],
                     ["style-column", [
+                        ["style-column", [
+                            ["blank", "15px"],
+                            ["raw-html", "Legendary Punchcards", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", () => {
-                                return "Legendary Punchcards<br><small>(Costs " + formatWhole(player.pu.selectionCost) + " Punchcard Selections)"
+                                return player.pu.selectionIndex == 4 ? "(Costs " + formatWhole(player.pu.selectionCost) + " Punchcard Selections)" : "(Select a legendary punchcard to view its cost)"
                             }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "50px"}],
+                            ["blank", "15px"],
+                        ], {width: "616px", background: "#AB2042", border: "2px solid #0000007f"}],
                         ["style-column", [
                             ["row", [["clickable", 101],]],
-                        ], {width: "550px", height: "150px", backgroundColor: "#33011bff"}],
-                    ], () => {return player.pu.legendarySelectionActive ? {returnwidth: "550px", height: "200px", border: "3px solid white", backgroundColor: "#330d22ff"} : {display: "none !important"}}],
-                
+                        ], {width: "620px", height: "150px", background: "repeating-linear-gradient(-45deg, #541021 0 15px, #661328 0 30px)"}],
+                    ], () => {return player.pu.legendarySelectionActive ? {returnwidth: "620px", border: "3px solid #8ca3ff", borderTop: "0", backgroundColor: "#330d22ff"} : {display: "none !important"}}],
                 ]
             },
             "Collection": {
@@ -2747,45 +2762,45 @@ addLayer("pu", {
                         ["style-column", [
                             ["levelable-display", [
                                 ["clickable", 1],
-                            ]],
-                        ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
+                            ], {width: "620px", background: "#232940"}],
+                        ], {width: "620px", height: "175px", borderBottom: "3px solid #8ca3ff"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", () => {return hasUpgrade("sma", 17) ? "Common (65%)" : "Common (75%)"}, {color: "#7f7f7f", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#323232", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
+                                ["raw-html", () => {return hasUpgrade("sma", 17) ? "Common (65%)" : "Common (75%)"}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "601px", height: "40px", backgroundColor: "#ccc", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-row", [
                                 ["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104],
                                 ["levelable", 105], ["levelable", 106], ["levelable", 107], ["levelable", 108],
                                 ["levelable", 109], ["levelable", 100], ["levelable", 110], ["levelable", 111], ["levelable", 112],
                                 ["levelable", 113], ["levelable", 114],
-                            ], {width: "525px", backgroundColor: "#191919", padding: "5px"}],
+                            ], {width: "600px", background: "repeating-linear-gradient(-45deg, #666666 0 15px, #808080 0 30px)", padding: "2px"}],
 
                             ["style-column", [
-                                ["raw-html", "Rare (25%)", {color: "#7f5f00", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#322600", borderTop: "3px solid #7f5f00", borderBottom: "3px solid #7f5f00", userSelect: "none"}],
+                                ["raw-html", "Rare (25%)", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "601px", height: "40px", backgroundColor: "#deb437", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-row", [
                                 ["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204],
                                 ["levelable", 205], ["levelable", 206], ["levelable", 207], ["levelable", 208],
                                 ["levelable", 200], ["levelable", 209], ["levelable", 210], ["levelable", 211], ["levelable", 212],
                                 ["levelable", 213], ["levelable", 214], ["levelable", 215],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
+                            ], () => {return hasUpgrade("sma", 17) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #705b1c 0 15px, #8c7223 0 30px)", padding: "2px"} : {width: "600px", background: "repeating-linear-gradient(-45deg, #666666 0 15px, #808080 0 30px)", padding: "2px", borderBottom: "3px solid #7f5f00"}}],
 
                             ["style-column", [
-                                ["raw-html", "Epic (10%)", {color: "#003f7f", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "535px", height: "40px", backgroundColor: "#001932", borderTop: "3px solid #003f7f", borderBottom: "3px solid #003f7f", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Epic (10%)", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("sma", 17) ? {width: "601px", height: "40px", backgroundColor: "#3078bf", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304],  
                                 ["levelable", 300], ["levelable", 305], ["levelable", 306], ["levelable", 307], ["levelable", 308],
                                 ["levelable", 309],
-                            ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#000c19", padding: "5px"} : {display: "none !important"}}],
+                            ], () => {return hasUpgrade("sma", 17) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #183b5e 0 15px, #1e4a75 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "#AB2042", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "535px", height: "60px", backgroundColor: "#5C173D", borderTop: "3px solid #AB2042", borderBottom: "3px solid #AB2042", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("le", 201) ? {width: "601px", height: "64px", backgroundColor: "#AB2042", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 401], ["levelable", 402],
-                            ], () => {return hasUpgrade("le", 201) ? {width: "525px", backgroundColor: "#200815ff", padding: "5px"} : {display: "none !important"}}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],
+                            ], () => {return hasUpgrade("le", 201) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #541021 0 15px, #661328 0 30px)", padding: "2px"} : {display: "none !important"}}],
+                        ], {width: "620px", height: "522px"}],
+                    ], {width: "620px", height: "700px", border: "3px solid #8ca3ff", backgroundColor: "#1c2033"}],
                 ]
             },
         }
@@ -2794,10 +2809,15 @@ addLayer("pu", {
         ["blank", "25px"],
         ["style-row", [
             ["hoverless-clickable", 2],
-            ["style-row", [], () => {return player.sma.inStarmetalChallenge ? {width: "3px", height: "40px", backgroundColor: "white"} : {display: "none !important"}}],
+            ["style-row", [], () => {return player.sma.inStarmetalChallenge ? {width: "3px", height: "40px", backgroundColor: "#8ca3ff"} : {display: "none !important"}}],
             ["hoverless-clickable", 3],
-        ], {width: "550px", height: "40px", borderTop: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white"}],
+        ], {width: "620px", height: "40px", border: "3px solid #8ca3ff", borderBottom: "0", borderRight: "3px solid #8ca3ff", borderRadius: "23px 23px 0 0"}],
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+        ["style-row", [
+            ["raw-html", () => {return "Gain +" + formatSimple(player.pet.legPetTimers[0].active ? player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).floor() : player.le.starmetalAlloyToGetTrue.mul(player.le.starmetalAlloyValue).floor()) + " XP on universe exit."}, () => {
+                return {color: "black", fontSize: "20px", fontFamily: "monospace", display: player.sma.inStarmetalChallenge ? "" : "none !important"}
+            }],
+        ], {background: "#697abf", width: "620px", height: "40px", border: "3px solid #8ca3ff", borderTop: "0", borderRadius: "0 0 23px 23px"}],
         ["blank", "25px"],
     ],
     deactivated() {return player.pu.paused},

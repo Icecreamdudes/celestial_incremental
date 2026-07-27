@@ -35,6 +35,7 @@
             background: "linear-gradient(45deg, #8a00a9, #0061ff)",
             backgroundOrigin: "border-box",
             borderColor: "purple",
+            color: "white",
         };
     },
     tooltip: "Otherworldy Feature Mastery",

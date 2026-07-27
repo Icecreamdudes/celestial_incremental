@@ -240,7 +240,7 @@ addLayer("tad", {
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+            background: "linear-gradient(150deg, #b2d8d8 -25%, #094242 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#b2d8d8",
             color: "#b2d8d8",

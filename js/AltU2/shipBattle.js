@@ -19,21 +19,18 @@ const UPGRADE_POOL = {
         name() { return "Attack Damage"},
         description() { return "+10% attack damage"},
         rarity: "common",
-        color: "#fff",
         effect(arena) { arena.upgrades.attackDamageCommon++; }
     },
     spaceRockGainCommon: {
         name() { return "Space Rock Gain"},
         description() { return "+10% space rock gain"},
         rarity: "common",
-        color: "#fff",
         effect(arena) { arena.upgrades.spaceRockGainCommon++; }
     },
     xpGainCommon: {
         name() { return "XP Gain"},
         description() { return "+10% XP gain"},
         rarity: "common",
-        color: "#fff",
         effect(arena) { arena.upgrades.xpGainCommon++; }
     },
     // Uncommon
@@ -41,14 +38,12 @@ const UPGRADE_POOL = {
         name() { return "Attack Damage"},
         description() { return "+15% attack damage"},
         rarity: "uncommon",
-        color: "#4cff4c",
         effect(arena) { arena.upgrades.attackDamageUncommon++; }
     },
     attackSpeedUncommon: {
         name() { return "Attack Speed"},
         description() { return "+5% faster attack speed"},
         rarity: "uncommon",
-        color: "#4cff4c",
         effect(arena) { arena.upgrades.attackSpeedUncommon++; }
     },
     healthRegenUncommon: {
@@ -59,7 +54,6 @@ const UPGRADE_POOL = {
             return "+" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "uncommon",
-        color: "#4cff4c",
         effect(arena) {
             arena.upgrades.healthRegenUncommon++;
         }
@@ -68,29 +62,24 @@ const UPGRADE_POOL = {
         name() { return "Space Rock Gain"},
         description() { return "+15% space rock gain"},
         rarity: "uncommon",
-        color: "#4cff4c",
         effect(arena) { arena.upgrades.spaceRockGainUncommon++; }
     },
     xpGainUncommon: {
         name() { return "XP Gain"},
         description() { return "+15% XP gain"},
         rarity: "uncommon",
-        color: "#4cff4c",
         effect(arena) { arena.upgrades.xpGainUncommon++; }
     },
-    // Rare
     attackDamageRare: {
         name() { return "Attack Damage"},
         description() { return "+20% attack damage"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.attackDamageRare++; }
     },
     attackSpeedRare: {
         name() { return "Attack Speed"},
         description() { return "+7.5% faster attack speed"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.attackSpeedRare++; }
     },
     healthRegenRare: {
@@ -101,7 +90,6 @@ const UPGRADE_POOL = {
             return "+" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) {
             arena.upgrades.healthRegenRare++;
         }
@@ -110,64 +98,54 @@ const UPGRADE_POOL = {
         name() { return "Defense"},
         description() { return "Take 10% less damage"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.damageReductionRare++; }
     },
     moveSpeedRare: {
         name() { return "Movement Speed"},
         description() { return "+10% max movement speed"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.moveSpeedRare++; }
     },
     spaceRockGainRare: {
         name() { return "Space Rock Gain"},
         description() { return "+20% space rock gain"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.spaceRockGainRare++; }
     },
     spaceGemGainRare: {
         name() { return "Space Gem Gain"},
         description() { return "+5% space gem gain"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.spaceGemGainRare++; }
     },
     bulletSizeRare: {
         name() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "Bullet Size"} else {return "Max Health"}},
         description() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) {arena.upgrades.bulletSizeRare++; }
     },
     xpGainRare: {
         name() { return "XP Gain"},
         description() { return "+20% XP gain"},
         rarity: "rare",
-        color: "#4c8cff",
         effect(arena) { arena.upgrades.xpGainRare++; }
     },
-    // Epic
     attackEpic: {
         name() { return "Attack"},
         description() { return "+20% attack damage, +7.5% faster attack speed"},
         rarity: "epic",
-        color: "#b44cff",
         effect(arena) { arena.upgrades.attackEpic++; }
     },
     xpGainEpic: {
         name() { return "XP Gain"},
         description() { return "+30% XP gain"},
         rarity: "epic",
-        color: "#b44cff",
         effect(arena) { arena.upgrades.xpGainEpic++; }
     },
     lootGainEpic: {
         name() { return "Loot Gain"},
         description() { return "+20% rock gain, +5% space gem gain"},
         rarity: "epic",
-        color: "#b44cff",
         effect(arena) { arena.upgrades.lootGainEpic++; }
     },
     defenseEpic: {
@@ -178,115 +156,273 @@ const UPGRADE_POOL = {
             return "Take 15% less damage, +" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "epic",
-        color: "#b44cff",
         effect(arena) { arena.upgrades.defenseEpic++; }
     },
-    // Legendary
     attackLegendary: {
         name() { return "Attack"},
         description() { return "+75% attack damage, but +25% slower attack speed"},
         rarity: "legendary",
-        color: "#ffd34d",
         effect(arena) { arena.upgrades.attackLegendary++; }
     },
     dropGainLegendary: {
         name() { return "Drop Gain"},
         description() { return "+40% space rock and XP gain, +20% space gem gain"},
         rarity: "legendary",
-        color: "#ffd34d",
         effect(arena) { arena.upgrades.dropGainLegendary++; }
     },
     defenseLegendary: {
         name() { return "Defense"},
         description() { return "Take 25% less damage, gain 25% more HP/sec" },
         rarity: "legendary",
-        color: "#ffd34d",
         effect(arena) { arena.upgrades.defenseLegendary++; }
     },
     moveSpeedLegendary: {
         name() { return "Movement Speed"},
         description() { return "+25% max movement speed"},
         rarity: "legendary",
-        color: "#ffd34d",
         effect(arena) { arena.upgrades.moveSpeedLegendary++; }
+    },
+
+    // SPACE
+
+    spaceRockGainCommon: {
+        name() { return "Space Rock Gain"},
+        description() { return "+10% space rock gain"},
+        rarity: "common",
+        pool: "space",
+        effect(arena) { arena.upgrades.spaceRockGainCommon++; }
+    },
+    spaceRockGainUncommon: {
+        name() { return "Space Rock Gain"},
+        description() { return "+15% space rock gain"},
+        rarity: "uncommon",
+        pool: "space",
+        effect(arena) { arena.upgrades.spaceRockGainUncommon++; }
+    },
+    spaceRockGainRare: {
+        name() { return "Space Rock Gain"},
+        description() { return "+20% space rock gain"},
+        rarity: "rare",
+        pool: "space",
+        effect(arena) { arena.upgrades.spaceRockGainRare++; }
+    },
+    spaceGemGainRare: {
+        name() { return "Space Gem Gain"},
+        description() { return "+5% space gem gain"},
+        rarity: "rare",
+        pool: "space",
+        effect(arena) { arena.upgrades.spaceGemGainRare++; }
+    },
+    lootGainEpic: {
+        name() { return "Loot Gain"},
+        description() { return "+20% rock gain, +5% space gem gain"},
+        rarity: "epic",
+        pool: "space",
+        effect(arena) { arena.upgrades.lootGainEpic++; }
+    },
+    dropGainLegendary: {
+        name() { return "Drop Gain"},
+        description() { return "+40% space rock and XP gain, +20% space gem gain"},
+        rarity: "legendary",
+        pool: "space",
+        effect(arena) { arena.upgrades.dropGainLegendary++; }
+    },
+
+    // BLOOD
+
+    bloodStoneGainCommon: {
+        name() { return "Blood Stone Gain"},
+        description() { return "+10% blood stone gain"},
+        rarity: "common",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodStoneGainCommon++; }
+    },
+    bloodStoneGainUncommon: {
+        name() { return "Blood Stone Gain"},
+        description() { return "+15% blood stone gain"},
+        rarity: "uncommon",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodStoneGainUncommon++; }
+    },
+    bloodStoneGainRare: {
+        name() { return "Blood Stone Gain"},
+        description() { return "+20% blood stone gain"},
+        rarity: "rare",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodStoneGainRare++; }
+    },
+    bloodGemGainRare: {
+        name() { return "Blood Gem Gain"},
+        description() { return "+5% blood gem gain"},
+        rarity: "rare",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodGemGainRare++; }
+    },
+    bloodLootGainEpic: {
+        name() { return "Blood Loot Gain"},
+        description() { return "+20% blood stone gain, +5% blood gem gain"},
+        rarity: "epic",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodLootGainEpic++; }
+    },
+    bloodLootGainLegendary: {
+        name() { return "Blood Loot Gain"},
+        description() { return "+40% blood stone gain, +20% blood gem gain"},
+        rarity: "legendary",
+        pool: "blood",
+        effect(arena) { arena.upgrades.bloodLootGainLegendary++; }
     },
 };
 
-// Rarity weights
-const UPGRADE_RARITY_WEIGHTS = {
-    common: 50,
-    uncommon: 25,
-    rare: 15,
-    epic: 5,
-    legendary: 1,
+const UPGRADE_RARITIES = {
+    common: {
+        weight() {
+            let base = 80
+            return base
+        },
+        color: "#fff",
+    },
+    uncommon: {
+        weight() {
+            let base = this.enhanced ? 60 : 40;
+            return base
+        },
+        color: "#4cff4c",
+    },
+    rare: {
+        weight() {
+            let base = this.enhanced ? 40 : 20;
+            return base
+        },
+        color: "#4c8cff",
+    },
+    epic: {
+        weight() {
+            let base = this.enhanced ? 20 : 10;
+            return base
+        },
+        color: "#b44cff",
+    },
+    legendary: {
+        weight() {
+            let base = this.enhanced ? 4 : 1;
+            return base
+        },
+        color: "#ffd34d",
+    },
 };
 
-const UPGRADE_RARITY_WEIGHTS_ENHANCED = {
-    common: 30,
-    uncommon: 25,
-    rare: 25,
-    epic: 10,
-    legendary: 2,
-};
-
-const SHIP_STAT_NAMES = {
-    attackDamage: "Attack Damage",
-    attackSpeed: "Attack Speed",
-    bulletSize: "Bullet Size",
-    healthRegen: "Health Regen",
-    damageReduction: "Damage Reduction",
-    maxHp: "Max Health",
-    moveSpeed: "Movement Speed",
-    spaceRockGain: "Space Rock Gain",
-    spaceGemGain: "Space Gem Gain",
-    xpGain: "XP Gain",
-}
-
-const SHIP_STAT_UPGRADE_OPERATIONS = {
-    attackDamage: "",
-    attackSpeed: "x",
-    bulletSize: "x",
-    healthRegen: "+",
-    damageReduction: "/",
-    maxHp: "",
-    moveSpeed: "x",
-    spaceRockGain: "",
-    spaceGemGain: "",
-    xpGain: "x",
-}
-const SHIP_STAT_UPGRADE_SUFFIXES = {
-    attackDamage: "",
-    attackSpeed: "",
-    bulletSize: "",
-    healthRegen: "/s",
-    damageReduction: "",
-    maxHp: "",
-    moveSpeed: "",
-    spaceRockGain: "",
-    spaceGemGain: "",
-    xpGain: "",
+const SHIP_STAT_FORMATTING = {
+    attackDamage: {
+        name: "Attack Damage",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    attackSpeed: {
+        name: "Attack Speed",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    bulletSize: {
+        name: "Bullet Size",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    healthRegen: {
+        name: "Health Regen",
+        valuePrefix: "+",
+        valueSuffix: "/s",
+        showCondition() {return true},
+    },
+    damageReduction: {
+        name: "Damage Reduction",
+        valuePrefix: "/",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    maxHp: {
+        name: "Max Health",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    moveSpeed: {
+        name: "Movement Speed",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
+    spaceRockGain: {
+        name: "Space Rock Gain",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return player.tab == "ir"},
+    },
+    spaceGemGain: {
+        name: "Space Gem Gain",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return player.tab == "ir"},
+    },
+    bloodStoneGain: {
+        name: "Blood Stone Gain",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return player.tab == "bl"},
+    },
+    bloodGemGain: {
+        name: "Blood Gem Gain",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return player.tab == "bl"},
+    },
+    xpGain: {
+        name: "XP Gain",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return true},
+    },
 }
 
 function pickUpgrades(enhanced = false) {
-    // Weighted random selection
-    let pool = [];
-    if (!enhanced) {
-        for (let id of Object.keys(UPGRADE_POOL)) {
-            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS[UPGRADE_POOL[id].rarity]; i++) {
-                pool.push(id);
-            }
-        }
-    } else {
-        for (let id of Object.keys(UPGRADE_POOL)) {
-            for (let i = 0; i < UPGRADE_RARITY_WEIGHTS_ENHANCED[UPGRADE_POOL[id].rarity]; i++) {
-                pool.push(id);
-            }
-        }
+    let possibleUpgrades = {}
+    let totalChance = 0;
+    // Build Rarity Table
+    for (let id of Object.keys(UPGRADE_RARITIES)) {
+        possibleUpgrades[id] = []
+        totalChance += UPGRADE_RARITIES[id].weight()
     }
+    // Build Upgrade Table
+    for (let id of Object.keys(UPGRADE_POOL)) {
+        let upg = UPGRADE_POOL[id]
+        if (possibleUpgrades[upg.rarity]) {
+            switch (upg.pool) {
+                case "space": {
+                    if (player.tab == "ir") possibleUpgrades[upg.rarity].push(id);
+                break; }
+                case "blood": {
+                    if (player.tab == "bl") possibleUpgrades[upg.rarity].push(id);
+                break; }
+                default : {
+                    possibleUpgrades[upg.rarity].push(id);
+                break; }
+            }
+        };
+    }
+    // Select Upgrades
     let chosen = [];
     while (chosen.length < 3) {
-        let upg = pool[getRandomInt(pool.length)];
-        if (!chosen.includes(upg)) chosen.push(upg);
+        for (let id of Object.keys(UPGRADE_RARITIES)) {
+            if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
+                let index = Math.floor(possibleUpgrades[id].length * Math.random())
+                chosen.push(possibleUpgrades[id][index])
+                possibleUpgrades[id].splice(index, 1)
+                break;
+            } else totalChance -= UPGRADE_RARITIES[id].weight();
+        }
     }
     return chosen;
 }
@@ -340,6 +476,15 @@ class SpaceArena {
         if (Math.abs(shipX - coordX) > this.width / 2) shipX += (shipX - coordX > 0 ? -this.width : this.width);
         if (Math.abs(shipY - coordY) > this.height / 2) shipY += (shipY - coordY > 0 ? -this.height : this.height);
         return [shipX, shipY];
+    }
+    getClosestCoordsDouble(xy2, xy1) {
+        let coordX2 = xy2[0]
+        let coordY2 = xy2[1]
+        let coordX1 = xy1[0]
+        let coordY1 = xy1[1]
+        if (Math.abs(coordX1 - coordX2) > this.width / 2) coordX1 += (coordX1 - coordX2 > 0 ? -this.width : this.width);
+        if (Math.abs(coordY1 - coordY2) > this.height / 2) coordY1 += (coordY1 - coordY2 > 0 ? -this.height : this.height);
+        return [coordX1, coordY1];
     }
     drawMinimapIcon(color, diameter, xy) {
         this.ctx.fillStyle = color
@@ -721,6 +866,8 @@ class SpaceArena {
         this.shipStats = this.getDefaultShipStats();
         this.resourceMult = 1;
 
+        this.noxSpearCooldown = 90;
+
         // Enemy system
         this.enemies = [];
         this.enemyTypes = {
@@ -937,45 +1084,8 @@ class SpaceArena {
     }
 
     getDefaultUpgrades() {
-        let base = {
-            attackDamageCommon: 0,
-            attackDamageUncommon: 0,
-            attackDamageRare: 0,
-
-            attackSpeedUncommon: 0,
-            attackSpeedRare: 0,
-
-            bulletSizeRare: 0,
-
-            healthRegenUncommon: 0,
-            healthRegenRare: 0,
-
-            damageReductionRare: 0,
-
-            moveSpeedRare: 0,
-            moveSpeedLegendary: 0,
-
-            spaceRockGainCommon: 0,
-            spaceRockGainUncommon: 0,
-            spaceRockGainRare: 0,
-            
-            spaceGemGainRare: 0,
-            
-            xpGainCommon: 0,
-            xpGainUncommon: 0,
-            xpGainRare: 0,
-            xpGainEpic: 0,
-
-            attackEpic: 0,
-            attackLegendary: 0,
-
-            defenseEpic: 0,
-            defenseLegendary: 0,
-
-            lootGainEpic: 0,
-
-            dropGainLegendary: 0,
-        };
+        let base = {}
+        for (const [i, v] of Object.entries(UPGRADE_POOL)) {base[i] = 0;}
         return base
     }
     getDefaultShipStats() {
@@ -1055,6 +1165,20 @@ class SpaceArena {
         shipStats.spaceGemGain *= 1 + 0.05 * upgrades.lootGainEpic
         shipStats.spaceGemGain *= 1 + 0.2 * upgrades.dropGainLegendary
         if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+
+        shipStats.bloodStoneGain = player.bl.bloodStonesMult.toNumber()
+        shipStats.bloodStoneGain *= 1 + 0.1 * upgrades.bloodStoneGainCommon
+        shipStats.bloodStoneGain *= 1 + 0.15 * upgrades.bloodStoneGainUncommon
+        shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodStoneGainRare
+        shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodLootGainEpic
+        shipStats.bloodStoneGain *= 1 + 0.4 * upgrades.bloodLootGainLegendary
+        if (player.bl.noxDefeated) shipStats.bloodStoneGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+        
+        shipStats.bloodGemGain = player.bl.bloodGemsMult.toNumber()
+        shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodGemGainRare
+        shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodLootGainEpic
+        shipStats.bloodGemGain *= 1 + 0.2 * upgrades.bloodLootGainLegendary
+        if (player.bl.noxDefeated) shipStats.bloodGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
 
         shipStats.xpGain = 1
         shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
@@ -1632,6 +1756,14 @@ class SpaceArena {
         
         this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
 
+        if (player.ir.menu == 0 && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
+            this.noxSpearCooldown--
+            if (this.noxSpearCooldown <= 0) {
+                this.noxSpearCooldown = 90
+                SB_spawnWarning("allyNoxSpear", null)
+            }
+        }
+
         // Prepare collectors used by multiple death paths
         let newAsteroids = [];
         let lootFlashPositions = [];
@@ -1647,21 +1779,25 @@ class SpaceArena {
 
                 if (reward.spaceRock) {
                     let amt = reward.spaceRock.mul(this.shipStats.spaceRockGain).floor();
+                    amt = amt.max(1)
                     player.ir.spaceRock = player.ir.spaceRock.add(amt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceRock" });
                 }
                 if (reward.spaceGem) {
                     let amt = reward.spaceGem.mul(this.shipStats.spaceGemGain).floor();
+                    amt = amt.max(1)
                     player.ir.spaceGem = player.ir.spaceGem.add(amt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceGem" });
                 }
                 if (reward.bloodStones) {
-                    let amt = reward.bloodStones.mul(1).floor();
+                    let amt = reward.bloodStones.mul(this.shipStats.bloodStoneGain).floor();
+                    amt = amt.max(1)
                     player.bl.bloodStones = player.bl.bloodStones.add(amt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodStones" });
                 }
                 if (reward.bloodGems) {
-                    let amt = reward.bloodGems.mul(1).floor();
+                    let amt = reward.bloodGems.mul(this.shipStats.bloodGemGain).floor();
+                    amt = amt.max(1)
                     player.bl.bloodGems = player.bl.bloodGems.add(amt);
                     lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
                 }
@@ -1683,7 +1819,8 @@ class SpaceArena {
                 let gain = Math.floor(5 * this.shipStats.spaceGemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
                 player.ir.spaceGem = player.ir.spaceGem.add(gain);
                 lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "spaceGem" });
-                arena.showUpgradeChoice(true);
+                arena.enhanced = true;
+                arena.showUpgradeChoice();
                 player.ir.menu = 1
             }
 
@@ -4596,7 +4733,7 @@ class SpaceArena {
                     this.ctx.save();
                     this.ctx.globalAlpha = 1;
                     this.ctx.fillStyle = "#000080";
-                    this.ctx.strokeStyle = upg.color;
+                    this.ctx.strokeStyle = UPGRADE_RARITIES[upg.rarity].color;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
                     this.ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 10);
@@ -4614,13 +4751,13 @@ class SpaceArena {
                     }
 
                     this.ctx.font = "bold 24px monospace";
-                    this.ctx.fillStyle = upg.color;
+                    this.ctx.fillStyle = UPGRADE_RARITIES[upg.rarity].color;
                     this.ctx.textAlign = "center";
                     this.ctx.fillText(upg.name(), boxX + boxWidth / 2, boxY + 30);
 
                     let rarityText = upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1);
                     this.ctx.font = "italic 18px monospace";
-                    this.ctx.fillStyle = upg.color;
+                    this.ctx.fillStyle = UPGRADE_RARITIES[upg.rarity].color;
                     this.ctx.fillText(rarityText, boxX + boxWidth / 2, boxY + 54);
 
                     this.ctx.font = "16px monospace";
@@ -4694,12 +4831,12 @@ class SpaceArena {
                         this.ctx.font = "bold 24px monospace";
                         this.ctx.fillStyle = "#fff";
                         this.ctx.textAlign = "left";
-                        this.ctx.fillText(SHIP_STAT_NAMES[key], 25, confirmY + 97 + i * 61, 775);
+                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, 25, confirmY + 97 + i * 61, 775);
 
                         this.ctx.font = "bold 24px monospace";
                         this.ctx.fillStyle = "#fff";
                         this.ctx.textAlign = "right";
-                        this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key] + " → " + SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], 775, confirmY + 97 + i * 61, 750);
+                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix + " → " + SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, 775, confirmY + 97 + i * 61, 750);
 
                         this.ctx.restore();
                     }
@@ -4712,7 +4849,9 @@ class SpaceArena {
                 this.ctx.textAlign = "center";
                 this.ctx.fillText("Stats", this.canvasWidth / 2, this.canvasHeight / 2 - 325);
                 let matches = []
-                for (const [i, v] of Object.entries(this.shipStats)) matches.push(i);
+                for (const [i, v] of Object.entries(this.shipStats)) {
+                    if (SHIP_STAT_FORMATTING[i].showCondition()) matches.push(i);
+                };
                 for (let i = 0; i < matches.length; i++) {
                     let key = matches[i]
                     let statMul = this.shipStats[key]
@@ -4731,12 +4870,12 @@ class SpaceArena {
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "left";
-                    this.ctx.fillText(SHIP_STAT_NAMES[key], this.canvasWidth / 2 - 375, 157 + i * 61, 775);
+                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, this.canvasWidth / 2 - 375, 157 + i * 61, 775);
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "right";
-                    this.ctx.fillText(SHIP_STAT_UPGRADE_OPERATIONS[key] + formatSimple(statMul, 2) + SHIP_STAT_UPGRADE_SUFFIXES[key], this.canvasWidth / 2 + 375, 157 + i * 61, 750);
+                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, this.canvasWidth / 2 + 375, 157 + i * 61, 750);
                     
                     this.ctx.restore();
                 }
@@ -4746,10 +4885,10 @@ class SpaceArena {
         }
     }
 
-    showUpgradeChoice(enhanced = false) {
+    showUpgradeChoice() {
         this.ship._laserActive = false
         player.ir.menu = 1;
-        this.upgradeChoices = pickUpgrades(enhanced);
+        this.upgradeChoices = pickUpgrades();
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
 

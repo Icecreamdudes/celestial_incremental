@@ -2632,7 +2632,7 @@
             background: "radial-gradient(circle, #151230, #000000)",
             portrait: "resources/secret.png",
             music: "music/iriditeCutscene.mp3",
-            trigger() {return player.ir.battleLevel.gte(4)},
+            trigger() {return player.ir.battleLevel.gte(5)},
             dialogue: [
                 { text: "Iridite watches as your ship rips and tears through the asteroids." }, 
                 { text: "I'm impressed. You've managed to create a powerful weapon out of superphysical values.", portrait: "resources/iridite.png"  },
@@ -2692,7 +2692,7 @@
             background: "radial-gradient(circle, #151230, #000000)",
             portrait: "resources/secret.png",
             music: "music/iriditeCutscene.mp3",
-            trigger() {return player.ir.battleLevel.gte(8) && hasUpgrade("ir", 16)},
+            trigger() {return player.ir.battleLevel.gte(20)},
             dialogue: [
                 { text: "Let's see if you can handle this creation!", portrait: "resources/iridite.png"  },
                 { text: "A UFO that runs on the energy of celestialites.", portrait: "resources/iridite.png"  },
@@ -2742,7 +2742,7 @@
             background: "radial-gradient(circle, #151230, #000000)",
             portrait: "resources/secret.png",
             music: "music/iriditeCutscene.mp3",
-            trigger() {return player.ir.iriditeFightActive},
+            trigger() {return player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone"},
             dialogue: [
                 { text: "Iridite starts glowing more, and gains an angry look on her face.", },
                 { text: "How are you guys still alive? Is the power of your foresight really that strong???", portrait: "resources/iridite.png"  },
@@ -2760,7 +2760,7 @@
             background: "radial-gradient(circle, #151230, #000000)",
             portrait: "resources/secret.png",
             music: "music/iriditeCutscene.mp3",
-            trigger() {return player.ir.iriditePhase > 2 && player.ir.iriditeFightActive},
+            trigger() {return player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && arena && arena.enemies.length > 0 && arena.enemies[0].health.lte(25000)},
             dialogue: [
                 { text: "God damn it... You guys just won't stop no matter what. I don't understand.", portrait: "resources/iridite.png"  },
                 { text: "It's too late to quit. I must prove myself the strongest out of all the Novasent!", portrait: "resources/iridite.png"  },
@@ -3554,7 +3554,7 @@
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/aniciffoCutscene.mp3",
-            trigger() {return player.ir.battleLevel.gte(12) && player.subtabs["bl"]['stuff'] == 'Battle'},
+            trigger() {return player.ir.battleLevel.gte(20) && player.subtabs["bl"]['stuff'] == 'Battle'},
             dialogue: [
                 { text: "You become tired of fighting these blood creatures.", },
                 { text: "All of a sudden, you see a spear fly towards one of the creatures.", },
@@ -3574,7 +3574,7 @@
             type: "normal",
             portrait: "resources/secret.png",
             music: "music/aniciffoCutscene.mp3",
-            trigger() {return player.bl.noxFightActive},
+            trigger() {return player.ir.battleLevel.gte(20) && player.ir.battleStage == "noxZone"},
             dialogue: [
                 { text: "Where is it?", portrait: "resources/nox.png"  },
                 { text: "Where is what?", portrait: "resources/player.png"  },

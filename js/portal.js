@@ -963,8 +963,6 @@
                             ], {background: "linear-gradient(0deg, #119B35 -100%, #2a65a8 100%)", borderBottom: "3px solid #119B35", borderTop: "3px solid #119B35", width: "300px", height: "169px"}],
                             ["clickable", 12],
                         ], () => {return layers.po.clickables[12].unlocked() ? {backgroundColor: "#119B35", border: "3px solid #119B35", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
-                    ]],
-                    ["style-row", [
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Hex", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -987,19 +985,19 @@
                             ], {background: "linear-gradient(0deg, #7c5423 -100%, #ffbf00 100%)", borderBottom: "3px solid #7c5423", borderTop: "3px solid #7c5423", width: "300px", height: "169px"}],
                             ["clickable", 14],
                         ], () => {return layers.po.clickables[14].unlocked() ? {backgroundColor: "#7c5423", border: "3px solid #7c5423", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
-                    ]],
-                    ["style-row", [
-                        ["style-column", [
+                        ["style-row", [
                             ["style-column", [
-                                ["raw-html", "Gwa Temple", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
-                            ], {backgroundColor: "#ffbf00", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
-                            ["style-column", [
-                                ["raw-html", ":3", {color: "black", fontSize: "128px", fontWeight: "100", lineHeight: "1", fontFamily: "monospace"}],
-                                ["raw-html", "Worship the cat of limitless potential.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {background: "linear-gradient(0deg, #7c5423 -100%, #ffbf00 100%)", borderBottom: "3px solid #7c5423", borderTop: "3px solid #7c5423", width: "300px", height: "169px"}],
-                            ["clickable", 14],
-                        ], () => {return layers.po.clickables[15].unlocked() ? {backgroundColor: "#7c5423", border: "3px solid #7c5423", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
-                    ]],
+                                ["style-column", [
+                                    ["raw-html", "Gwa Temple", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                                ], {backgroundColor: "#ffb", borderRadius: "10px 10px 0px 0px", width: "300px", height: "50px"}],
+                                ["style-column", [
+                                    ["raw-html", "<img src='resources/gwa.png' width='128px' height='128px' style='margin:-32px'></img>", {color: "black", fontSize: "128px", fontWeight: "100", lineHeight: "1", fontFamily: "monospace"}],
+                                    ["raw-html", "Worship the cat of limitless potential.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {background: "linear-gradient(0deg, #996 -100%, #ffb 100%)", borderBottom: "3px solid #996", borderTop: "3px solid #996", width: "300px", height: "169px"}],
+                                ["clickable", 15],
+                            ], () => {return layers.po.clickables[15].unlocked() ? {backgroundColor: "#996", border: "3px solid #996", borderRadius: "13px", width: "300px", height: "300px", margin: "4px"} : {display: "none !important"}}],
+                        ]],
+                    ], {maxWidth: "800px"}],
                 ]
             },
             "Halter": {

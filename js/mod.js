@@ -465,9 +465,9 @@ function updateStyles() {
 				let randomX, randomY
 				if (pos < 0.2) {
 					randomX = rainBackground.initialized ? (randomSize * -16) / rainBackground.width : Math.random()
-					randomY = Math.random()
+					randomY = Math.random() + (randomSize * -64) / rainBackground.height
 				} else {
-					randomX = Math.random()
+					randomX = Math.random() + (randomSize * -16) / rainBackground.width
 					randomY = rainBackground.initialized ? (randomSize * -64) / rainBackground.height : Math.random()
 				}
 				rainBackground.droplets.push({

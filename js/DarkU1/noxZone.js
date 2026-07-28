@@ -154,7 +154,7 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0) || level.eq(2)) {
+        if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("nox")
         }
     },
@@ -1148,11 +1148,12 @@ SB_warnings.noxSpear = {
     dist: 1440,
     width: 2,
     initialize(warning) {
-        warning.targetAng = warning.celestialite.playerAng + (Math.random() - 0.5) * Math.PI
+        warning.targetAng = warning.celestialite.playerAng + ((Math.random() - 0.5) * Math.PI)
+        console.log(warning.targetAng)
     },
     tick(warning) {
-        let angDist = ( warning.targetAng - warning.ang + 180 ) % 360 - 180;
-        warning.ang += (angDist < -180 ? angDist + 360 : angDist) * 0.125;
+        let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
+        warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
     },
     onReady(warning) {
         warning.targetAng = warning.ang

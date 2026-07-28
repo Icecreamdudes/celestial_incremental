@@ -150,7 +150,7 @@
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
         12: {
-            title() { return "<h2>Leave Battle" },
+            title() { return "Leave Battle" },
             canClick() { return true },
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {

@@ -154,7 +154,7 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0)) {
+        if (level.modulo(20).eq(0) || level.eq(2)) {
             SB_spawnCelestialite("nox")
         }
     },
@@ -1170,7 +1170,7 @@ SB_warnings.allyNoxSpear = {
             let target = 0
             for (let i = 0; i < arena.enemies.length; i++) {
                 let celestialite = arena.enemies[0]
-                let closest = arena.getClosestCoordsDouble([warning.x, warning.y], [celestialite.x, celestialite.y])
+                let closest = arena.getClosestCoords([warning.x, warning.y], [celestialite.x, celestialite.y])
                 let dist = Math.hypot(closest[0] - celestialite.x, closest[1] - celestialite.y)
                 if (targetDist > dist) {
                     targetDist = dist

@@ -468,23 +468,14 @@ class SpaceArena {
         - ship - coord > 0 : ship, edge, coord -> coord, edge, ship.
         - NOT ship - coord > 0 : coord, edge, ship -> ship, edge, coord.
     */
-    getClosestCoords(xy) {
-        let coordX = xy[0]
-        let coordY = xy[1]
-        let shipX = this.ship.x
-        let shipY = this.ship.y
-        if (Math.abs(shipX - coordX) > this.width / 2) shipX += (shipX - coordX > 0 ? -this.width : this.width);
-        if (Math.abs(shipY - coordY) > this.height / 2) shipY += (shipY - coordY > 0 ? -this.height : this.height);
-        return [shipX, shipY];
-    }
-    getClosestCoordsDouble(xy2, xy1) {
-        let coordX2 = xy2[0]
-        let coordY2 = xy2[1]
+    getClosestCoords(xy1, xy2 = [this.ship.x, this.ship.y]) {
         let coordX1 = xy1[0]
         let coordY1 = xy1[1]
-        if (Math.abs(coordX1 - coordX2) > this.width / 2) coordX1 += (coordX1 - coordX2 > 0 ? -this.width : this.width);
-        if (Math.abs(coordY1 - coordY2) > this.height / 2) coordY1 += (coordY1 - coordY2 > 0 ? -this.height : this.height);
-        return [coordX1, coordY1];
+        let coordX2 = xy2[0]
+        let coordY2 = xy2[1]
+        if (Math.abs(coordX2 - coordX1) > this.width / 2) coordX2 += (coordX2 - coordX1 > 0 ? -this.width : this.width);
+        if (Math.abs(coordY2 - coordY1) > this.height / 2) coordY2 += (coordY2 - coordY1 > 0 ? -this.height : this.height);
+        return [coordX2, coordY2];
     }
     drawMinimapIcon(color, diameter, xy) {
         this.ctx.fillStyle = color
@@ -698,7 +689,7 @@ class SpaceArena {
                 rotationSpeed: 0.065,
                 cooldown: 250,
                 lastShot: 0,
-                damage: 20,
+                damage: 12,
                 collisionDamage: 5,
             };
         }
@@ -1393,15 +1384,14 @@ class SpaceArena {
         if (player.ir.shipType == 4) pierce = 10;
         if (player.ir.shipType == 6) pierce = 2;
 
-        // implement later
         let target = null;
-        if (player.ir.shipType == null) { //not yet
+        if (player.ir.shipType == 4) {
             let closest = null;
-            let closestDist = Infinity;
-            for (let e of this.enemies.concat(this.asteroids)) {
-                if (!e.alive) continue;
-                let dx = e.x - this.ship.x;
-                let dy = e.y - this.ship.y;
+            let closestDist = 600;
+            for (let e of this.enemies) {
+                let c = this.getClosestCoords([e.x, e.y]);
+                let dx = c[0] - e.x;
+                let dy = c[1] - e.y;
                 let d = Math.hypot(dx, dy);
                 if (d < closestDist) {
                     closestDist = d;
@@ -1409,7 +1399,12 @@ class SpaceArena {
                 }
             }
             if (closest) {
-                angle = Math.atan2(closest.y - this.ship.y, closest.x - this.ship.x);
+                let c = this.getClosestCoords([closest.x, closest.y]);
+                let timeToHit = Math.hypot(c[1] - closest.y, c[0] - closest.x) / speed
+                c[0] -= closest.vx * timeToHit
+                c[1] -= closest.vy * timeToHit
+                angle = Math.atan2(c[1] - closest.y, c[0] - closest.x);
+                angle = (angle % (2 * Math.PI)) - Math.PI
                 target = closest;
                 this.ship.currentTarget = closest; // keep marker for drawing
             } else {
@@ -1990,6 +1985,14 @@ class SpaceArena {
                 }
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
+                if (false && this.ship.target && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD']) {
+                    let closest = this.getClosestCoords([bullet.target.x, bullet.target.y])
+                    let timeToHit = Math.hypot(closest[1] - bullet.y, closest[0] - bullet.x) / (Math.hypot(bullet.vx, bullet.vy) || 1)
+                    closest[0] += bullet.target.vx * timeToHit
+                    closest[1] += bullet.target.vy * timeToHit
+
+                    let desired = Math.atan2(bullet.target.y - bullet.y, bullet.target.x - bullet.x);
+                }
             }
             if ((!player.ir.mobileControls && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
                 if (player.ir.shipType == 10) {
@@ -2254,7 +2257,6 @@ class SpaceArena {
         
         }
         for (let bullet of this.bullets) {
-            let closest = this.getClosestCoords([bullet.x, bullet.y])
             // Homing behavior: enemy homing bullets should home to the player;
             // player-fired homing bullets should home to enemies.
             if (bullet.homing) {
@@ -2273,13 +2275,14 @@ class SpaceArena {
                     bullet.vy = Math.sin(newAngle) * speed;
                 } else {
                     // Player-fired homing: seek the nearest enemy
-                    if ((!bullet.target || !bullet.target.alive) && this.enemies.length) {
+                    if ((!bullet.target || !bullet.target.health.gt(0)) && this.enemies.length) {
                         let closest = null;
                         let closestDist = Infinity;
                         for (let e of this.enemies) {
                             if (e.health.lte(0)) continue;
-                            let dx = e.x - bullet.x;
-                            let dy = e.y - bullet.y;
+                            let c = this.getClosestCoords([bullet.x, bullet.y], [e.x, e.y]);
+                            let dx = c[0] - this.ship.x;
+                            let dy = c[1] - this.ship.y;
                             let d = Math.hypot(dx, dy);
                             if (d < closestDist) {
                                 closestDist = d;
@@ -2289,7 +2292,12 @@ class SpaceArena {
                         bullet.target = closest;
                     }
 
-                    if (bullet.target && bullet.target.alive) {
+                    if (bullet.target && bullet.target.health.gt(0)) {
+                        let closest = this.getClosestCoords([bullet.target.x, bullet.target.y])
+                        let timeToHit = Math.hypot(closest[1] - bullet.y, closest[0] - bullet.x) / (Math.hypot(bullet.vx, bullet.vy) || 1)
+                        closest[0] += bullet.target.vx * timeToHit
+                        closest[1] += bullet.target.vy * timeToHit
+
                         let desired = Math.atan2(bullet.target.y - bullet.y, bullet.target.x - bullet.x);
                         let current = Math.atan2(bullet.vy, bullet.vx);
                         let diff = desired - current;
@@ -4066,27 +4074,6 @@ class SpaceArena {
             }
         }
 
-
-        // Draw sniper auto-aim target cross if present
-        if (player.ir.shipType == 4 && this.ship.currentTarget && this.ship.currentTarget.alive) {
-            let t = this.ship.currentTarget;
-            this.ctx.save();
-            this.ctx.strokeStyle = "#ff4444";
-            this.ctx.lineWidth = 2;
-            this.ctx.beginPath();
-            this.ctx.moveTo(t.x - 14, t.y);
-            this.ctx.lineTo(t.x + 14, t.y);
-            this.ctx.moveTo(t.x, t.y - 14);
-            this.ctx.lineTo(t.x, t.y + 14);
-            this.ctx.stroke();
-            // small center dot
-            this.ctx.fillStyle = "#ff6666";
-            this.ctx.beginPath();
-            this.ctx.arc(t.x, t.y, 3, 0, Math.PI * 2);
-            this.ctx.fill();
-            this.ctx.restore();
-        }
-
         // Draw gamma trails
         if (this.gammaTrails) {
             for (let trail of this.gammaTrails) {
@@ -4525,6 +4512,31 @@ class SpaceArena {
                     }
                 }
             }
+        }
+
+        // Draw sniper auto-aim target cross if present
+        if (player.ir.shipType == 4 && this.ship.currentTarget && this.ship.currentTarget.health.gt(0)) {
+            let t = this.ship.currentTarget;
+            let wrapped = this.getVisibleWrappedCoords([t.x, t.y], [t.radius * 2, t.radius * 2])
+            if (wrapped) {
+                this.ctx.save();
+                this.ctx.translate(wrapped[0], wrapped[1]);
+                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+                this.ctx.beginPath();
+                this.ctx.moveTo(-16, 0);
+                this.ctx.lineTo(16, 0);
+                this.ctx.moveTo(0, -16);
+                this.ctx.lineTo(0, 16);
+                this.ctx.moveTo(0, 0);
+                this.ctx.arc(0, 0, 4, 0, Math.PI * 2);
+                this.ctx.strokeStyle = "#ff4444";
+                this.ctx.lineWidth = 6;
+                this.ctx.stroke();
+                this.ctx.strokeStyle = "yellow";
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+                this.ctx.restore();
+            };
         }
 
         // Draw loot flashes

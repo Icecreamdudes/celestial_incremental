@@ -161,76 +161,38 @@
     bars: {},
     upgrades: {
         11: {
+            title: "Singularity Upgrade I",
             unlocked() { return true},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade I</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Boost all pre-OTF currencies by x10.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "2 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
+            description: "Boost all pre-OTF currencies by x10.",
             cost: new Decimal("2"),
             currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            //style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
+            title: "Singularity Upgrade II",
             unlocked() { return true},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade II</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Gain 4% of all mastery points per second, and gain is based on highest of each currency.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "50 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
+            description: "Gain 4% of all mastery points per second, and gain is based on highest of each currency.",
             cost: new Decimal("50"),
             currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
+            title: "Singularity Upgrade III",
             unlocked() { return true},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade III</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Unlock a new challenge dice upgrade and keep tier 2 dice effects.<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "300 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
             description: "Unlock a new challenge dice upgrade and keep tier 2 dice effects.",
             cost: new Decimal("300"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
+            title: "Singularity Upgrade IV",
             unlocked() { return true},
-            fullDisplay() {
-                return "<div style='height:25px;display:flex;align-items:center'><div>" +
-                "<h3>Singularity Upgrade IV</h3>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:69px;display:flex;align-items:center'><div>" + 
-                "<br>Boost steel, crystal, and time cubes based on unspent singularity points. (x" + format(this.effect()) + ")<br>" + // MIDDLE
-                "<br></div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
-                "3,600 Singularity Points" + // BOTTOM
-                "</div></div>"
-            },
             description: "Boost steel, crystal, and time cubes based on unspent singularity points.",
             cost: new Decimal("3600"),
             currencyLocation() { return player.s },
@@ -240,10 +202,7 @@
                 return player.s.singularityPoints.add(1).log(10).pow(5).add(1)
             },
             effectDisplay() { return formatShort(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Singularity Upgrade V",
@@ -253,10 +212,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Singularity Upgrade VI",
@@ -266,10 +222,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Singularity Upgrade VII",
@@ -279,10 +232,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Singularity Upgrade VIII",
@@ -292,10 +242,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Singularity Upgrade IX",
@@ -305,10 +252,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         20: {
             title: "Singularity Upgrade X",
@@ -318,10 +262,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Singularity Upgrade XI",
@@ -331,10 +272,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Singularity Upgrade XII",
@@ -344,10 +282,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Singularity Upgrade XIII",
@@ -357,10 +292,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
             title: "Singularity Upgrade XIV",
@@ -370,10 +302,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         25: {
             title: "Singularity Upgrade XV",
@@ -383,10 +312,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {
             title: "Singularity Upgrade XVI",
@@ -396,10 +322,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         27: {
             title: "Singularity Upgrade XVII",
@@ -409,10 +332,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         28: {
             title: "Singularity Upgrade XVIII",
@@ -422,10 +342,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         28: {
             title: "Singularity Upgrade XVIII",
@@ -435,10 +352,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style() {
-                let look = {color: "#000000bf", borderColor: "#0000007f", borderWidth: "2px", borderRadius: "10px", margin: "2px", padding: "0px", width: "200px", height: "125px"}
-                return look
-            },
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         29: {
             title: "Singularity Upgrade XIX",
@@ -458,7 +372,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         31: {
             title: "Singularity Upgrade XXI",
@@ -468,7 +382,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

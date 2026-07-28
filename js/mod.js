@@ -480,7 +480,11 @@ function updateStyles() {
 	        for (let i = Math.min(window.innerWidth * window.innerHeight / 100, 256) - 1; i >= 0; i--) {
 				let droplet = rainBackground.droplets[i]
 				ctx.lineWidth = droplet.size
-				ctx.strokeStyle = "rgb(255,255,255," + (droplet.size/96) + ")"
+				let g = ctx.createLinearGradient(droplet.x * rainBackground.width, droplet.y * rainBackground.height, droplet.x * rainBackground.width + (16 * droplet.size), droplet.y * rainBackground.height + 64 * droplet.size)
+				g.addColorStop(0, "rgb(255,255,255,0)")
+				g.addColorStop(1, "rgb(255,255,255," + (droplet.size/96) + ")")
+				ctx.strokeStyle = g
+				//ctx.strokeStyle = "rgb(255,255,255," + (droplet.size/96) + ")"
 				ctx.beginPath()
             	ctx.moveTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height)
             	ctx.lineTo(droplet.x * rainBackground.width + (16 * droplet.size), droplet.y * rainBackground.height + 64 * droplet.size)

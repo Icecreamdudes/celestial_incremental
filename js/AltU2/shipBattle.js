@@ -1752,7 +1752,7 @@ class SpaceArena {
         
         this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
 
-        if (player.ir.menu == 0 && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
+        if (player.ir.menu == 0 && !arena.bossActive && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
             this.noxSpearCooldown--
             if (this.noxSpearCooldown <= 0) {
                 this.noxSpearCooldown = 90
@@ -1985,13 +1985,16 @@ class SpaceArena {
                 }
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
-                if (false && this.ship.target && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD']) {
-                    let closest = this.getClosestCoords([bullet.target.x, bullet.target.y])
-                    let timeToHit = Math.hypot(closest[1] - bullet.y, closest[0] - bullet.x) / (Math.hypot(bullet.vx, bullet.vy) || 1)
-                    closest[0] += bullet.target.vx * timeToHit
-                    closest[1] += bullet.target.vy * timeToHit
+                if (this.ship.currentTarget && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD']) {
+                    let target = this.ship.currentTarget
+                    let closest = this.getClosestCoords([target.x, target.y])
+                    let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed)
+                    closest[0] += target.vx * timeToHit
+                    closest[1] += target.vy * timeToHit
 
-                    let desired = Math.atan2(bullet.target.y - bullet.y, bullet.target.x - bullet.x);
+                    let desired = Math.atan2(closest[1] - target.y, closest[0] - target.x);
+                    let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI*2) - Math.PI;
+                    this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
                 }
             }
             if ((!player.ir.mobileControls && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
@@ -2137,6 +2140,17 @@ class SpaceArena {
                             this.chargeShot()
                         } else {
                             this.shoot()
+                            if (this.ship.currentTarget && player.ir.shipType == 4) {
+                                let target = this.ship.currentTarget
+                                let closest = this.getClosestCoords([target.x, target.y])
+                                let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed)
+                                closest[0] += target.vx * timeToHit
+                                closest[1] += target.vy * timeToHit
+                            
+                                let desired = Math.atan2(closest[1] - target.y, closest[0] - target.x);
+                                let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI*2) - Math.PI;
+                                this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
+                            }
                         }
                     break;}
                     default: break;

@@ -1115,51 +1115,56 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.14 - The Interspace Update Part I: e</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
-			- Remade the dragon pet.<br>
+			- Added the multiverse map.<br>
+			- Revamped the dragon pet.<br>
+			- Revamped space battles.<br>
 			- Added space battle zones. Prior space battle content has been divided into space zone I, space zone II, iridite zone, and space zone III.<br>
 			- Added a pet evolution that allows progressing through iridite content without entering space battles.<br>
 			- Added more iridite upgrades.<br>
-			- Added the multiverse map.<br>
-			- Added time capsules.<br>
-			- Added four punchcards.<br>
-			- Added two check back blessings.<br>
+			- Added three new space dust buyables.<br>
+			- Added four new punchcards.<br>
+			- Added two new check back blessings.<br>
+			- Added cloud upgrades.<br>
 			- Added new booster milestones.<br>
 			- Added new starmetal essence studies.<br>
-			- Added new space dust buyables.<br>
+			- Added time capsules.<br>
 			- Added stage 13 achievements.<br>
 			- Added a theme.<br>
 		<br>QoL:<br>
-			- Remade a lot of check back UI.<br>
+			- Changed many layer node styles for readability and consistency.<br>
 			- Shifted the hue of check back's blue.<br>
-			- Redrew the art of many pet icons.<br>
-			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
+			- Redesigned many check back tab UIs.<br>
 			- Moved evo and para shard pity to below the checkback XP bar.<br>
-			- Redesigned the otherworldly features UI.<br>
-			- Added space exploration completion popups.<br>
-			- Redesigned the coin flip, wheel of fortune, and slot machine UI.<br>
-			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
-			- Remade the checkback shrine UI.<br>
+			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
+			- Redrew the art of many pet icons.<br>
+			- Redesigned OTF UI.<br>
+			- Redesigned punchcard UI.<br>
 			- Changed some punchcard textures.<br>
-			- Tweaked all pylon UI.<br>
-			- Changed the SP upgrade styles.<br>
+			- Added space exploration completion popups.<br>
+			- Redesigned pylon UI.<br>
+			- Redesigned coin flip, wheel of fortune, slot machine, and check back shrine UI.<br>
+			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
-			- The evolution fragment pet's pet point button now has a chance to grant fragments.<br>
-			- Reduced the scaling of several effects in D1 eclipse.<br>
+			- The evolution fragment's pet point button now has a chance to grant fragments.<br>
+			- Nerfed several effects in D1 eclipse.<br>
 			- Increased the scaling of both unavoidable softcaps in D1 eclipse.<br>
-			- Heavily weakened the negative effect of clouds.<br>
+			- Weakened the effect clouds have on eclipse timer tickspeed.<br>
 			- Changed the formulas of some iridite upgrades.<br>
+			- Nerfed space building 3 through 6 effects.<br>
+			- Nerfed ancient and paradox pylon energy gain.<br>
+			- Increased paradox energy factor buyable caps.<br>
+			- Nerfed the second infected infinity effect.<br>
+			- Nerfed the effect SP has on singularity gain after defeating aleph.<br>
+			- Nerfed enhance upgrade "Emotional Enhancer".<br>
 			- Changed the effect and cost scaling of check back factors.<br>
-			- Reduced the effect scaling of enhance upgrade "Emotional Enhancer".<br>
-			- Mildly deflated ancient and paradox pylon energies, but increased paradox energy factor buyable caps.<br>
-			- Heavily reduced the effect SP has on singularity gain after defeating aleph.<br>
-			- Reduced the second infected infinity effect.<br>
-			- Reduced space building 3 through 6 effects.<br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
-			- Fixed dark universe reset cheese.<br>
+			- Added a gap between cante perks and tab selection in the cante tab.<br>
 			- Added "the" to the jocus layer tooltip.<br>
+			- Fixed dark universe reset cheese.<br>
+			- Fixed aleph layer UI size inconsistencies.<br>
 		<br>
 
 	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>

@@ -536,7 +536,7 @@ addLayer("settings", {
             },
         },
         110: {
-            title() {return true ? "Teal Theme" : "[LOCKED]"},
+            title() {return player.lightRift.interspaceUnlocked ? "Teal Theme" : "[LOCKED]"},
             canClick() {return options.theme != "teal" && player.lightRift.interspaceUnlocked},
             unlocked: "true",
             tooltip() {return !player.lightRift.interspaceUnlocked ? "Meet a second developer." : ""},

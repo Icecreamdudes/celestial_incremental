@@ -1153,6 +1153,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Weakened the effect clouds have on eclipse timer tickspeed.<br>
 			- Changed the formulas of some iridite upgrades.<br>
 			- Nerfed space building 3 through 6 effects.<br>
+			- Made astral ship's ship level cap boost exclude itself.<br>
 			- Nerfed ancient and paradox pylon energy gain.<br>
 			- Increased paradox energy factor buyable caps.<br>
 			- Nerfed the second infected infinity effect.<br>

@@ -696,7 +696,7 @@
             }],
             ["raw-html", () => {return player.rf.rocketFuelToGet.gt("1e100000") ? "[SOFTCAPPED<sup>2</sup>]" : player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
-        ["raw-html", () => {return !inChallenge("ip", 16) || hasUpgrade("rf", 19) ? "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." : "<s>Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + ".</s>" }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return !inChallenge("ip", 16) || hasUpgrade("rf", 19) ? "Boosts grasshoppers by x" + format(player.rf.rocketFuelEffect) + "." : "<s>Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + ".</s>" }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["style-column", [
             ["style-row", [

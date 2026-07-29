@@ -803,7 +803,7 @@
         ]],
         ["raw-html", () => {return player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.p.doomSoftcapStart) + " is raised by ^" + format(player.p.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [
-            ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celestial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ], () => {return hasUpgrade("p", 12) ? {} : {display: "none !important"}}],
         ["row", [

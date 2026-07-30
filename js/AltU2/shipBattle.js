@@ -3470,7 +3470,7 @@ class SpaceArena {
                     y: pos.y,
                     text: `+${formatWhole(pos.amount)} space gem`,
                     timer: 240,
-                    color: "#66e8fff",
+                    color: "#66e8ff",
                     style: "24px monospace"
                 });
             }

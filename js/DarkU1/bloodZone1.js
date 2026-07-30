@@ -156,7 +156,7 @@ addLayer("bloodZone1", {
     milestones: {
         11: {
             requirementDescription: "Level 20",
-            effectDescription() { return "Keep blood battle buyables on D1 exit." },
+            effectDescription() { return "Keep blood battle buyables on D1 exit. Unlock something in blood battle upgrades." },
             description() {return ""},
             done() { return player[this.layer].highestLevel.gte(20) },
             style() {

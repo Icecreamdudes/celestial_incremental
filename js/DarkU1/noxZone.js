@@ -154,7 +154,7 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0)) {
+        if (level.modulo(20).eq(0) || level.eq(2)) {
             SB_spawnCelestialite("nox")
         }
     },
@@ -171,9 +171,9 @@ SB_celestialites.nox = {
     radius: 64,
     color: "#7a0000",
     health: new Decimal(1e5),
-    damage: new Decimal(20),
+    damage: new Decimal(12),
     bodyDamage: new Decimal(1),
-    regen: new Decimal(20),
+    regen: new Decimal(16),
     reward() {
         let gain = {}
         let random = Math.random()
@@ -198,7 +198,7 @@ SB_celestialites.nox = {
         // Stat changes
         celestialite.maxHealth = new Decimal(1e5)
         celestialite.health = new Decimal(1e5)
-        celestialite.damage = new Decimal(16)
+        celestialite.damage = new Decimal(12)
         celestialite.regen = new Decimal(16)
 
         celestialite.phase = 1
@@ -221,9 +221,9 @@ SB_celestialites.nox = {
         celestialite.playerAng = Math.atan2(dy, dx);
         // Decide on an attack
         let options = ['barrage', 'fireball'];
+        options.push("spinningSword")
         if (!celestialite.isBat) options = options.concat(['charge', 'orbit']);
-        if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'toggleBat']);
-        //if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'spinSword', 'batCircle']);
+        if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'toggleBat', 'spinningSword']);
         options.splice(options.indexOf(celestialite.currentAttack), 1)
         if (celestialite.playerDist < 800) {
             celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
@@ -323,7 +323,7 @@ SB_celestialites.nox = {
                 SB_spawnProjectile("noxFireball", celestialite)
                 let random = Math.random() * Math.PI * 2
                 SB_spawnProjectile("noxFireball", celestialite, {
-                    ang: celestialite.playerAng + Math.random() * Math.PI / 4
+                    ang: celestialite.playerAng + (Math.random()-0.5) * Math.PI / 4
                 })
             }
         },
@@ -347,6 +347,16 @@ SB_celestialites.nox = {
                 celestialite.orbitDirection = Math.random() < 0.5
             }
             // Attack
+        },
+        spinningSword(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 150
+            }
+            // Attack
+            if (celestialite.attackTimer / 15 % 1 == 0) {
+                SB_spawnProjectile("noxSpinningSword", celestialite)
+            }
         },
     },
     tick(celestialite) {
@@ -998,6 +1008,14 @@ SB_projectiles.noxSpear = {
     initialize(projectile) {
     },
     tick(projectile) {
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 10
+            projectile.shaftLen = m * 56
+            projectile.shaftW = m * 6
+            projectile.tipLen = m * 18
+            projectile.damage = projectile.celestialite.damage.mul(m)
+        };
     },
     onHit(projectile, attacker) {
         projectile.warning.timer = 0
@@ -1091,23 +1109,30 @@ SB_projectiles.noxSpear = {
 
 SB_projectiles.noxFireball = {
     template(celestialite, warning = {}) {
-        return {
+        let projectile = {
             x: celestialite.x + Math.cos(celestialite.playerAng) * (celestialite.radius || 64),
             y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius || 64),
             vx: Math.cos(celestialite.playerAng) * 14,
             vy: Math.sin(celestialite.playerAng) * 14,
             life: 180,
-            damage: 14,
+            damage: celestialite.damage,
             pierce: 0,
             fromEnemy: true,
             fireball: true,
             radius: 14 + Math.floor(Math.random() * 6),
             flamePulse: Math.random() * Math.PI * 2
         }
+        projectile.maxRadius = projectile.radius
+        return projectile
     },
     initialize(projectile) {
     },
     tick(projectile) {
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * projectile.maxRadius
+            projectile.damage = projectile.celestialite.damage.mul(m)
+        };
     },
     onHit(projectile, attacker) {
     },
@@ -1136,6 +1161,85 @@ SB_projectiles.noxFireball = {
         ctx.beginPath();
         ctx.arc(0, 0, Math.max(3, projectile.radius * 0.28), 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
+    },
+}
+SB_projectiles.noxSpinningSword = {
+    template(celestialite, warning = {}) {
+        return {
+            x: celestialite.x + Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * (celestialite.radius || 64),
+            y: celestialite.y + Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * (celestialite.radius || 64),
+            vx: Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 14,
+            vy: Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 14,
+            life: 120,
+            damage: celestialite.damage.mul(1.5),
+            pierce: 0,
+            fromEnemy: true,
+            homing: true,
+            homingStrength: 0.0625,
+            radius: 20,
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+        if (projectile.life < 90) projectile.homing = false;
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 24
+            projectile.damage = projectile.celestialite.damage.mul(m * 1.5)
+        };
+    },
+    onHit(projectile, attacker) {
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        ctx.rotate((projectile.life / 4) || 0);
+        let r = projectile.radius * 2;
+        let bladeLen = r * 1.5;
+        let bladeW = r * 0.3;
+
+        // Blade
+        let grad = ctx.createLinearGradient(-bladeW/2, 0, bladeW/2, 0);
+        grad.addColorStop(0, "#888");
+        grad.addColorStop(0.5, "#eee");
+        grad.addColorStop(1, "#888");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(0, -bladeLen); // Tip
+        ctx.lineTo(-bladeW/2, -bladeLen * 0.2);
+        ctx.lineTo(-bladeW/2, 0);
+        ctx.lineTo(bladeW/2, 0);
+        ctx.lineTo(bladeW/2, -bladeLen * 0.2);
+        ctx.closePath();
+        ctx.fill();
+        // Blade Edge Highlight
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        // Crossguard
+        ctx.fillStyle = "#553300";
+        ctx.fillRect(-bladeW * 1.2, 0, bladeW * 2.4, bladeW * 0.4);
+        // Handle
+        ctx.fillStyle = "#331100";
+        ctx.fillRect(-bladeW * 0.2, bladeW * 0.4, bladeW * 0.4, bladeW * 0.8);
+        // Pommel
+        ctx.fillStyle = "#553300";
+        ctx.beginPath();
+        ctx.arc(0, bladeW * 1.3, bladeW * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+        // Glow
+        ctx.shadowColor = "rgba(255, 0, 0, 0.5)";
+        if (!options.performanceMode) {ctx.shadowBlur = 20} else {ctx.shadowBlur = 0};
+        ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
         ctx.restore();
     },
 }

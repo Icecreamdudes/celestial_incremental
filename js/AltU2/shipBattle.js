@@ -1385,7 +1385,7 @@ class SpaceArena {
         if (player.ir.shipType == 6) pierce = 2;
 
         let target = null;
-        if (player.ir.shipType == 4) {
+        if (player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD'] && !this.keys['KeyW'] && !this.keys['KeyS']) {
             let closest = null;
             let closestDist = 600;
             for (let e of this.enemies) {
@@ -1985,7 +1985,7 @@ class SpaceArena {
                 }
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
-                if (this.ship.currentTarget && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD']) {
+                if (this.ship.currentTarget && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD'] && !this.keys['KeyW'] && !this.keys['KeyS']) {
                     let target = this.ship.currentTarget
                     let closest = this.getClosestCoords([target.x, target.y])
                     let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed)
@@ -2276,6 +2276,7 @@ class SpaceArena {
             if (bullet.homing) {
                 if (bullet.fromEnemy) {
                     // Home to player: compute desired and rotate toward it with clamped turn.
+                    let closest = this.getClosestCoords([bullet.x, bullet.y])
                     let desired = Math.atan2(closest[1] - bullet.y, closest[0] - bullet.x);
                     let current = Math.atan2(bullet.vy, bullet.vx);
                     let diff = desired - current;
@@ -3527,6 +3528,12 @@ class SpaceArena {
             orb.timer--;
         }
         this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
+
+        // Update special projectiles
+        for (let projectile of this.bullets) {
+            if (!projectile.type) continue;
+            SB_projectiles[projectile.type].tick(projectile)
+        }
 
         this.draw();
     }
@@ -4851,19 +4858,19 @@ class SpaceArena {
                         this.ctx.strokeStyle = player.ir.primaryColor;
                         this.ctx.lineWidth = 3;
                         this.ctx.beginPath();
-                        this.ctx.roundRect(12.5, confirmY + 62 + i * 61, 775, 50, 10);
+                        this.ctx.roundRect(this.canvasWidth / 2 - 387.5, confirmY + 62 + i * 61, 775, 50, 10);
                         this.ctx.fill();
                         this.ctx.stroke();
 
                         this.ctx.font = "bold 24px monospace";
                         this.ctx.fillStyle = "#fff";
                         this.ctx.textAlign = "left";
-                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, 25, confirmY + 97 + i * 61, 775);
+                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, this.canvasWidth / 2 - 375, confirmY + 97 + i * 61, 775);
 
                         this.ctx.font = "bold 24px monospace";
                         this.ctx.fillStyle = "#fff";
                         this.ctx.textAlign = "right";
-                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix + " → " + SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, 775, confirmY + 97 + i * 61, 750);
+                        this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(this.shipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix + " → " + SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(potentialShipStats[key] * statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, this.canvasWidth / 2 + 375, confirmY + 97 + i * 61, 750);
 
                         this.ctx.restore();
                     }
@@ -4890,19 +4897,19 @@ class SpaceArena {
                     this.ctx.strokeStyle = player.ir.primaryColor;
                     this.ctx.lineWidth = 3;
                     this.ctx.beginPath();
-                    this.ctx.roundRect(this.canvasWidth / 2 - 387.5, 122 + i * 61, 775, 50, 10);
+                    this.ctx.roundRect(this.canvasWidth / 2 - 387.5, (this.canvasHeight / 2 - 278) + i * 61, 775, 50, 10);
                     this.ctx.fill();
                     this.ctx.stroke();
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "left";
-                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, this.canvasWidth / 2 - 375, 157 + i * 61, 775);
+                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].name, this.canvasWidth / 2 - 375, (this.canvasHeight / 2 - 243) + i * 61, 775);
 
                     this.ctx.font = "bold 24px monospace";
                     this.ctx.fillStyle = "#fff";
                     this.ctx.textAlign = "right";
-                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, this.canvasWidth / 2 + 375, 157 + i * 61, 750);
+                    this.ctx.fillText(SHIP_STAT_FORMATTING[key].valuePrefix + formatSimple(statMul, 2) + SHIP_STAT_FORMATTING[key].valueSuffix, this.canvasWidth / 2 + 375, (this.canvasHeight / 2 - 243) + i * 61, 750);
                     
                     this.ctx.restore();
                 }

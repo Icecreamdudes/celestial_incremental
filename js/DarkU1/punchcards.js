@@ -333,6 +333,18 @@ addLayer("pu", {
             },
             onClick() {
                 player.pu.selectionIndex = 4
+                if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400) {
+                    if (player.bl.noxDefeated && player.pu.selectedPunchcards[player.pu.selectionIndex] == 401) {
+                        player.pu.selectionCost = new Decimal(3)
+                    } else {
+                        player.pu.selectionCost = new Decimal(5)
+                    }
+                    if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 402) {
+                        player.pu.selectionCost = new Decimal(2)
+                    }
+                } else {
+                    player.pu.selectionCost = new Decimal(1)
+                }
             },
             style() {
                 let look = {width: "75px", height: "125px", border: "3px solid", padding: "0px", borderRadius: "0px", margin: "5px"}

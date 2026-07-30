@@ -2208,7 +2208,7 @@ class SpaceArena {
             if (this.ship.y > this.height) this.ship.y -= this.height;
             // Rotation purely visual: smoothly face the mouse (won't affect movement)
             if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
-                let desired = Math.atan2(this.mouseY - 400, this.mouseX - 400);
+                let desired = Math.atan2(this.mouseY - this.canvasHeight / 2, this.mouseX - this.canvasWidth / 2);
                 let diff = desired - this.ship.angle;
                 while (diff > Math.PI) diff -= 2 * Math.PI;
                 while (diff < -Math.PI) diff += 2 * Math.PI;

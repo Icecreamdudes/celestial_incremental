@@ -360,7 +360,7 @@ addLayer("ir", {
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         // TEMP
-        if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
+        //if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);

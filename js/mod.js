@@ -1143,6 +1143,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redrew the art of many pet icons.<br>
 			- Redesigned OTF UI.<br>
 			- Redesigned punchcard UI.<br>
+			- Punchcard UI now shows the punchcard XP gained on universe exit.<br>
 			- Changed some punchcard textures.<br>
 			- Added space exploration completion popups.<br>
 			- Redesigned pylon UI.<br>
@@ -1170,6 +1171,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added "the" to the jocus layer tooltip.<br>
 			- Fixed dark universe reset cheese.<br>
 			- Fixed aleph layer UI size inconsistencies.<br>
+			- Fixed the punchcard selection cost being displayed when you don't have a legendary punchcard selected.<br>
 		<br>
 
 	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>

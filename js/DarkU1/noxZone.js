@@ -221,7 +221,6 @@ SB_celestialites.nox = {
         celestialite.playerAng = Math.atan2(dy, dx);
         // Decide on an attack
         let options = ['barrage', 'fireball'];
-        options.push("spinningSword")
         if (!celestialite.isBat) options = options.concat(['charge', 'orbit']);
         if (celestialite.phase >= 2) options = options.concat(['burstSpears', 'toggleBat', 'spinningSword']);
         options.splice(options.indexOf(celestialite.currentAttack), 1)
@@ -1169,21 +1168,21 @@ SB_projectiles.noxSpinningSword = {
         return {
             x: celestialite.x + Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * (celestialite.radius || 64),
             y: celestialite.y + Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * (celestialite.radius || 64),
-            vx: Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 14,
-            vy: Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 14,
+            vx: Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 15,
+            vy: Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 15,
             life: 120,
             damage: celestialite.damage.mul(1.5),
             pierce: 0,
             fromEnemy: true,
             homing: true,
-            homingStrength: 0.0625,
+            homingStrength: 0.25,
             radius: 20,
         }
     },
     initialize(projectile) {
     },
     tick(projectile) {
-        if (projectile.life < 90) projectile.homing = false;
+        projectile.homing = projectile.life > 90 && projectile.life < 105
         if (projectile.life < 15) {
             let m = projectile.life / 15
             projectile.radius = m * 24
@@ -1262,6 +1261,8 @@ SB_warnings.noxSpear = {
     onReady(warning) {
         warning.targetAng = warning.ang
         SB_spawnProjectile("noxSpear", warning.celestialite, warning);
+        warning.vx = 0
+        warning.vy = 0
     }
 }
 SB_warnings.allyNoxSpear = {

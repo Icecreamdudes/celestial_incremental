@@ -658,11 +658,11 @@
                             ["raw-html", "Emotions", {color: "white", fontSize: "24px"}],
                             ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[2]) + ")"}, {color: "white", fontSize: "16px"}],
                             ["blank", "10px"],
-                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
                             ["style-column", [
                                 ["raw-html", () => {return "Boosts all emotion gain by x" + format(player.en.enhancersEffect[2]) + "."}, {color: "white", fontSize: "16px"}],
                             ], {width: "calc(100% - 24px)", height: "100px"}],
-                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
                             ["blank", "6px"],
                             ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[2]) + " enhance points."}, {color: "white", fontSize: "16px"}],
                             ["blank", "6px"],

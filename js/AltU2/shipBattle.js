@@ -1365,7 +1365,7 @@ class SpaceArena {
             return;
         }
         
-        if (player.ir.shipType == 8 && (typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls && player.ir.autoShoot)) {
+        if (player.ir.shipType == 8 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls && player.ir.autoShoot))) {
             if (player.ir.autoShoot && !this.ship._laserActive) {
                 this.ship._laserActive = true
                 this.ship._laserTimer = -60
@@ -1750,7 +1750,7 @@ class SpaceArena {
 
     update() {
         
-        this.arenaDiv.style.backgroundPosition = (400 - this.ship.x) + "px " + (400 - this.ship.y) + "px"
+        this.arenaDiv.style.backgroundPosition = (this.canvasWidth - this.ship.x) + "px " + (this.canvasHeight - this.ship.y) + "px"
 
         if (player.ir.menu == 0 && !arena.bossActive && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
             this.noxSpearCooldown--
@@ -2139,7 +2139,6 @@ class SpaceArena {
                         if (player.ir.shipType == 10) {
                             this.chargeShot()
                         } else {
-                            this.shoot()
                             if (this.ship.currentTarget && player.ir.shipType == 4) {
                                 let target = this.ship.currentTarget
                                 let closest = this.getClosestCoords([target.x, target.y])
@@ -2151,6 +2150,7 @@ class SpaceArena {
                                 let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI*2) - Math.PI;
                                 this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
                             }
+                            this.shoot()
                         }
                     break;}
                     default: break;

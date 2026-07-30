@@ -1134,7 +1134,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added time capsules.<br>
 			- Added stage 13 achievements.<br>
 			- Added a theme.<br>
-		<br>QoL:<br>
+		<br>Design and QoL:<br>
 			- Changed many layer node styles for readability and consistency.<br>
 			- Shifted the hue of check back's blue.<br>
 			- Redesigned many check back tab UIs.<br>
@@ -1142,6 +1142,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
 			- Redrew the art of many pet icons.<br>
 			- Redesigned OTF UI.<br>
+			- Added a rain effect to AU1 layers' background.<br>
 			- Redesigned punchcard UI.<br>
 			- Punchcard UI now shows the punchcard XP gained on universe exit.<br>
 			- Changed some punchcard textures.<br>

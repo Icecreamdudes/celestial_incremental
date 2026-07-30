@@ -154,7 +154,7 @@ SB_zones.noxZone = {
         return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0) || level.eq(2)) {
+        if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("nox")
         }
     },
@@ -166,7 +166,7 @@ SB_zones.noxZone = {
 // CELESTIALITES
 
 SB_celestialites.nox = {
-    name: "Nox",
+    name: "Nox, the Vampire Knight",
     symbol: "nox",
     radius: 64,
     color: "#7a0000",
@@ -1252,7 +1252,6 @@ SB_warnings.noxSpear = {
     width: 2,
     initialize(warning) {
         warning.targetAng = warning.celestialite.playerAng + ((Math.random() - 0.5) * Math.PI)
-        console.log(warning.targetAng)
     },
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;

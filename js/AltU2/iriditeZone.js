@@ -187,11 +187,324 @@ SB_zones.iriditeZone = {
         else return "smallAsteroid";
     },
     levelUp(level) {
-        // ADD IRIDITE HERE
+        if (level.modulo(20).eq(0) || level.eq(2)) {
+            SB_spawnCelestialite("iridite")
+        }
     },
     statMult: new Decimal(2),
     rockMult: new Decimal(3),
     gemMult: new Decimal(1.75),
+}
+
+SB_celestialites.iridite = {
+    name: "Iridite, the Astral Celestial",
+    symbol: "iridite",
+    radius: 64,
+    color: "#ffffff",
+    health: new Decimal(5e4),
+    damage: new Decimal(6),
+    bodyDamage: new Decimal(1),
+    regen: new Decimal(6),
+    reward() {
+        let gain = {}
+        let random = Math.random()
+        gain.bloodGems = Decimal.add(1, Math.random()).mul(5)
+        return gain
+    },
+    experienceReward() {
+        return Decimal.add(2, Math.random()).mul(9)
+    },
+    initialize(celestialite) {
+        screenFlash("— Iridite, the Astral Celestial —", 1200)
+        arena.enterFullscreen()
+        arena.enemies = []
+        arena.bullets = []
+        arena.asteroids = []
+        arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
+        arena.bossActive = true
+        player.ir.iriditeFought = true
+
+        // Stat changes
+        celestialite.maxHealth = new Decimal(5e4)
+        celestialite.health = new Decimal(5e4)
+        celestialite.damage = new Decimal(6)
+        celestialite.regen = new Decimal(6)
+
+        celestialite.phase = 1
+        celestialite.minionWave = 0
+        //celestialite.currentAttack = ['dagger', 'radial', 'shortBurst', 'homing'][Math.floor(Math.random() * 3)];
+        celestialite.currentAttack = 'dagger';
+        celestialite.attackInitialized = true
+
+        
+        celestialite.wingPhase = Math.random() * Math.PI * 2,
+        celestialite.attackTimer = 150
+
+        celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.dvx = 0.875
+        celestialite.dvy = 0.875
+    },
+    decideAttack(celestialite) {
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+        celestialite.playerAng = Math.atan2(dy, dx);
+        // Decide on an attack
+        
+        /*
+        let options = ['dagger', 'radial', 'shortBurst', 'homing', 'charge'];
+        if (celestialite.phase >= 2) options = options.concat(['radialDagger', 'raining']);
+        if (celestialite.phase >= 3) options = options.concat(['giant', 'laser']);
+        if (celestialite.phase >= 4) options = options.concat(['laser', 'charge']);
+        */
+
+        let options = ['dagger', 'radialDagger', 'homing'];
+
+        options.splice(options.indexOf(celestialite.currentAttack), 1)
+        if (celestialite.playerDist < 800) {
+            celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        } else {
+            celestialite.currentAttack = "charge";
+        }
+        celestialite.attackInitialized = false
+    },
+    attacks: {
+        dagger(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 90) % 1 == 0) {
+                for (i = 0; i < 5; i++) {
+                    SB_spawnWarning("iriditeDagger", celestialite, {
+                        vx: celestialite.vx,
+                        vy: celestialite.vy,
+                        dvx: 0.875,
+                        dvy: 0.875,
+                        targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
+                    })
+                }
+            }
+        },
+        radialDagger(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 150
+            }
+            // Attack
+            if (celestialite.attackTimer == 150 || celestialite.attackTimer == 120 || celestialite.attackTimer == 90) {
+                for (i = 0; i < 12; i++) {
+                    let ang = celestialite.playerAng + ((i / 12) * Math.PI * 2)
+                    SB_spawnWarning("iriditeDagger", celestialite, {
+                        vx: celestialite.vx,
+                        vy: celestialite.vy,
+                        dvx: 0.875,
+                        dvy: 0.875,
+                        ang: ang,
+                        targetAng: ang,
+                    })
+                }
+            }
+        },
+        homing(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 150
+            }
+            // Attack
+            if ((celestialite.attackTimer / 15) % 1 == 0 && celestialite.attackTimer != 150 && celestialite.attackTimer != 0) {
+                SB_spawnProjectile("iriditeHoming", celestialite)
+            }
+        },
+        radial(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 150
+            }
+            // Attack
+        },
+        charge(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 150
+            }
+            // Attack
+        },
+    },
+    tick(celestialite) {
+        celestialite.phase = 3 - celestialite.health.div(celestialite.maxHealth).mul(4).ceil().toNumber()
+        celestialite.wingPhase += 0.16 + celestialite.phase * 0.4;
+        celestialite.wingPhase %= Math.PI * 2;
+
+        // Get distance/angle to the player
+        if (celestialite.currentAttack != "radialDagger") {
+            let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+            let dx = closest[0] - celestialite.x;
+            let dy = closest[1] - celestialite.y;
+            celestialite.playerDist = Math.hypot(dx, dy) || 1;
+            celestialite.playerAng = Math.atan2(dy, dx);
+        }
+
+        // Decide on a move angle
+        celestialite.moveAng = celestialite.playerAng;
+
+        // Decide on an attack
+        celestialite.attackTimer--
+        if (celestialite.attackTimer <= 0) SB_celestialites[celestialite.type].decideAttack(celestialite);
+
+        // Move
+        if (celestialite.currentAttack == "dagger" && celestialite.attackTimer % 90 > 30) {
+            celestialite.ax = 0
+            celestialite.ay = 0
+        } else if (celestialite.currentAttack == "radialDagger" && celestialite.attackTimer > 30) {
+            celestialite.ax = 0
+            celestialite.ay = 0
+        } else {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+        }
+
+        // Attack
+        SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
+    },
+    onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {
+        arena.exitFullscreen()
+        arena.bullets = []
+        arena.asteroids = []
+        arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.bossActive = false
+
+        player.ir.iriditeDefeated = true
+        player.ir.battleXP = player.ir.battleXPReq
+    },
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (!wrapped) return;
+        
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+        
+        // wing flap drive
+        const phase = (celestialite.wingPhase || 0);
+        // normalized flap t in [0,1], eased for realistic acceleration/deceleration
+        let raw = Math.sin(phase);
+        let t = (raw + 1) / 2;
+        let ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        const r = celestialite.radius;
+        // wider spread on upstroke, tighter on downstroke
+        const spreadBase = 0.9 + ease * 0.6;
+        const tipBend = Math.sin(phase * 1.9) * (0.6 + ease * 0.6);
+        // Glow for whole boss
+        ctx.shadowColor = "rgba(240,230,255,0.9)";
+        if (!options.performanceMode) {ctx.shadowBlur = 30} else {ctx.shadowBlur = 0}
+        // wing drawing function; draws a richer, layered feather set (no back/filler blob)
+        const drawWing = (mirror = false) => {
+            ctx.save();
+            if (mirror) ctx.scale(-1, 1);
+            // root transform (each wing attached slightly outward)
+            ctx.translate(r * 0.56, r * 0.02);
+            // base rotation: open/close with flap
+            let baseAngle = -0.22 - tipBend * 0.14;
+            ctx.rotate(baseAngle);
+            // three feather groups: primaries, secondaries, coverts — fuller counts and gradual taper
+            const groups = [
+                { count: 8, len: r * 1.08, width: r * 0.32, offset: 0.0, light: -8 },
+                { count: 7, len: r * 0.82, width: r * 0.26, offset: 0.08, light: -2 },
+                { count: 6, len: r * 0.56, width: r * 0.2, offset: 0.16, light: 6 },
+                { count: 4, len: r * 0.36, width: r * 0.14, offset: 0.28, light: 10 } // extra small coverts for fullness
+            ];
+            for (let gi = 0; gi < groups.length; gi++) {
+                const g = groups[gi];
+                // angular spread for this group
+                const groupSpread = (0.72 + gi * 0.18) * (0.9 + ease * 0.15);
+                for (let i = 0; i < g.count; i++) {
+                    // normalized position along wing span - center is 0
+                    let norm = (i / (g.count - 1)) - 0.5;
+                    // base position along the wing
+                    let bx = r * 0.06 + norm * r * (0.48 - gi * 0.02);
+                    let by = r * 0.02 + Math.abs(norm) * r * 0.06 + g.offset * r;
+                    // feather angle and variation
+                    let featherAngle = norm * groupSpread + tipBend * (0.32 + gi * 0.12);
+                    // feather shape
+                    let len = g.len * (0.86 + (1 - Math.abs(norm)) * 0.22 - gi * 0.07);
+                    let width = g.width * (0.82 - gi * 0.08) * (1 - Math.abs(norm) * 0.5);
+                    ctx.save();
+                    ctx.translate(bx, by);
+                    ctx.rotate(featherAngle);
+                    // feather silhouette with slight concave edge for natural look
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.quadraticCurveTo(len * 0.35, -width * 0.6, len * 0.92, -width * 0.08);
+                    ctx.lineTo(len * 0.86, width * 0.14);
+                    ctx.quadraticCurveTo(len * 0.38, width * 0.6, 0, 0);
+                    ctx.closePath();
+                    // feather gradient for depth
+                    let fg = ctx.createLinearGradient(0, -width, len, width);
+                    fg.addColorStop(0, `rgba(${240 + g.light},${236 + g.light},${255 - g.light},0.98)`);
+                    fg.addColorStop(0.5, `rgba(${232 + g.light},${226 + g.light},${246 - g.light},0.92)`);
+                    fg.addColorStop(1, `rgba(${210 + g.light},${208 + g.light},${232 - g.light},0.86)`);
+                    ctx.fillStyle = fg;
+                    ctx.fill();
+                    // central shaft highlight (subtle)
+                    ctx.beginPath();
+                    ctx.moveTo(len * 0.08, -width * 0.02);
+                    ctx.lineTo(len * 0.72, -width * 0.02);
+                    ctx.strokeStyle = "rgba(255,255,255,0.24)";
+                    ctx.lineWidth = Math.max(1, r * 0.01);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+            // Outer rim/fold to shape the wing edge (thin stroke)
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(r * 0.18, -r * 0.5 * spreadBase, r * 0.95, -r * 0.28 * spreadBase, r * 1.04, -r * 0.04);
+            ctx.lineTo(r * 0.92, r * 0.02);
+            ctx.bezierCurveTo(r * 0.6, r * 0.42 * spreadBase, r * 0.18, r * 0.46 * spreadBase, 0, r * 0.28);
+            ctx.closePath();
+            ctx.strokeStyle = "rgba(255,255,255,0.12)";
+            ctx.lineWidth = Math.max(1, r * 0.02);
+            ctx.stroke();
+            ctx.restore();
+            ctx.restore();
+        };
+        // Draw left and right wings (right wing mirrored to avoid vertical inversion)
+        drawWing(false); // left-looking (draws to right in local coords)
+        drawWing(true);  // mirrored right wing
+        // Thin white circle showing hitbox (centered)
+        ctx.save();
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(255,255,255,0.95)";
+        ctx.beginPath();
+        ctx.arc(0, 0, celestialite.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+        // Draw star centered exactly in hitbox: use middle baseline so glyph is vertically centered
+        ctx.save();
+        if (!options.performanceMode) {ctx.shadowBlur = 36} else {ctx.shadowBlur = 0};
+        const fontSize = Math.max(12, Math.floor(celestialite.radius * 1.4));
+        ctx.font = `${fontSize}px monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle"; // ensure center vertically
+        ctx.fillStyle = "#e0ccffff";
+        ctx.fillText("✦", 0, 8); // exact center
+        // subtle stroke for definition
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "rgba(240,200,80,0.12)";
+        ctx.strokeText("✦", 0, 8);
+        ctx.restore();
+        ctx.restore();
+    },
 }
 
 SB_celestialites.largeAsteroid = {
@@ -697,4 +1010,135 @@ SB_celestialites.iridianShip4 = {
             ctx.restore();
         }
     },
+}
+
+// PROJECTILES
+
+SB_projectiles.iriditeDagger = {
+    template(celestialite, warning = {}) {
+        let speed = (warning && warning.speed) ? warning.speed : 8
+        return {
+            x: warning ? warning.x : celestialite.x,
+            y: warning ? warning.y : celestialite.y,
+            vx: Math.cos(warning ? warning.ang : celestialite.ang) * speed,
+            vy: Math.sin(warning ? warning.ang : celestialite.ang) * speed,
+            life: 240,
+            initialLife: 240,
+            damage: celestialite ? celestialite.damage : new Decimal(6),
+            pierce: 3,
+            radius: 12,
+            fromEnemy: true,
+            star: true,
+            ang: warning ? warning.ang : celestialite.ang,
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 4
+            projectile.damage = projectile.celestialite ? projectile.celestialite.damage.mul(m) : new Decimal(m * 6)
+        };
+    },
+    onHit(projectile, attacker) {
+        projectile.warning.timer = 0
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+
+        let ang = Math.atan2(projectile.vy, projectile.vx || 0);
+        ctx.rotate(ang);
+        // determine font size; giant projectiles are significantly larger
+        let fontSize = projectile.radius * 2;
+        ctx.font = `${fontSize}px monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#d5ccff";
+        ctx.shadowColor = "#fff1";
+        if (!options.performanceMode) {ctx.shadowBlur = 6} else {ctx.shadowBlur = 0};
+        ctx.fillText("✦", 0, 0);
+        ctx.restore();
+    },
+}
+
+SB_projectiles.iriditeHoming = {
+    template(celestialite, warning = {}) {
+        let ang = Math.random() < 0.5 ? Math.PI / 2 : -Math.PI / 2
+        return {
+            x: celestialite.x + Math.cos(celestialite.playerAng + ang) * celestialite.radius,
+            y: celestialite.y + Math.sin(celestialite.playerAng + ang) * celestialite.radius,
+            vx: Math.cos(celestialite.playerAng + ang) * 6,
+            vy: Math.sin(celestialite.playerAng + ang) * 6,
+            ang: celestialite.playerAng + ang,
+            life: 300,
+            damage: celestialite.damage,
+            pierce: 0,
+            piercedAsteroids: [],
+            fromEnemy: true,
+            star: true,
+            homing: true,
+            homingStrength: 1 / 64,
+            radius: 8,
+        };
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+        projectile.homingStrength = projectile.life / 9000
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 4
+            projectile.damage = projectile.celestialite ? projectile.celestialite.damage.mul(m) : new Decimal(m * 6)
+        };
+    },
+    onHit(projectile, attacker) {
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+
+        let ang = Math.atan2(projectile.vy, projectile.vx || 0);
+        ctx.rotate(ang);
+        // determine font size; giant projectiles are significantly larger
+        let fontSize = projectile.radius * 2;
+        ctx.font = `${fontSize}px monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffeecb";
+        ctx.shadowColor = "#fff1";
+        if (!options.performanceMode) {ctx.shadowBlur = 6} else {ctx.shadowBlur = 0};
+        ctx.fillText("✦", 0, 0);
+        ctx.restore();
+    },
+}
+
+// WARNINGS
+
+SB_warnings.iriditeDagger = {
+    readyTimer: 60,
+    postReadyTimer: 240,
+    dist: 1920,
+    width: 2,
+    initialize(warning) {
+    },
+    tick(warning) {
+        let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
+        warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
+    },
+    onReady(warning) {
+        warning.targetAng = warning.ang
+        SB_spawnProjectile("iriditeDagger", warning.celestialite, warning);
+    }
 }

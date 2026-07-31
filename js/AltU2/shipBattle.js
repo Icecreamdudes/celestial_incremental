@@ -1750,7 +1750,7 @@ class SpaceArena {
 
     update() {
         
-        this.arenaDiv.style.backgroundPosition = (this.canvasWidth - this.ship.x) + "px " + (this.canvasHeight - this.ship.y) + "px"
+        this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px"
 
         if (player.ir.menu == 0 && !arena.bossActive && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
             this.noxSpearCooldown--
@@ -3995,11 +3995,11 @@ class SpaceArena {
             let down = warning.ang < 0
             let right = Math.abs(warning.ang) < Math.PI / 2
             let j = 0
-            
+
+            this.ctx.fillStyle = "#ff7f00";
             while (remainingDistance > 0) {
                 j++
                 this.ctx.save()
-                this.ctx.fillStyle = "#ff7f00";
                 this.ctx.lineWidth = warnRef.width;
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 this.ctx.moveTo(currentPos[0], currentPos[1])
@@ -4032,7 +4032,7 @@ class SpaceArena {
                         currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
                         currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
                         nextPos[0],
-                        nextPos[1]
+                        nextPos[1],
                     );
                     
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
@@ -4060,7 +4060,7 @@ class SpaceArena {
                             currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
                             currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
                             nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang), 
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
                         );
                         currentPos[0] = !right ? this.width : 0
                         currentPos[1] = nextPos[1]
@@ -4071,7 +4071,7 @@ class SpaceArena {
                             currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
                             currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
                             nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang)
+                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
                         );
                         currentPos[0] = nextPos[0]
                         currentPos[1] = down ? this.height : 0
@@ -4080,9 +4080,15 @@ class SpaceArena {
                     remainingDistance -= currentDistance
 
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
+                    /*
+                    g.addColorStop(gStart, 'rgba(0, 255, 0, 0)');
+                    g.addColorStop(gStart, 'rgba(0, 255, 0, 0.5)');
+                    g.addColorStop(1, 'rgba(0, 255, 0, 0)');
+                    */
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0.5)');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+                    
                     this.ctx.strokeStyle = g;
 
                     this.ctx.lineTo(nextPos[0] + remainingDistance * Math.cos(warning.ang), nextPos[1] + remainingDistance * Math.sin(warning.ang))

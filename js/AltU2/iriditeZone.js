@@ -1136,6 +1136,7 @@ SB_warnings.iriditeDagger = {
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
         warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
+        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
     },
     onReady(warning) {
         warning.targetAng = warning.ang

@@ -987,6 +987,12 @@ SB_projectiles.noxSpear = {
             y: warning ? warning.y : celestialite.y,
             vx: Math.cos(warning ? warning.ang : celestialite.ang) * 12,
             vy: Math.sin(warning ? warning.ang : celestialite.ang) * 12,
+            dvx: 1,
+            dvy: 1,
+            ax: 0,
+            ay: 0,
+            dax: 1,
+            day: 1,
             life: 120,
             initialLife: 120,
             damage: celestialite ? celestialite.damage : new Decimal(16),
@@ -1113,6 +1119,12 @@ SB_projectiles.noxFireball = {
             y: celestialite.y + Math.sin(celestialite.playerAng) * (celestialite.radius || 64),
             vx: Math.cos(celestialite.playerAng) * 14,
             vy: Math.sin(celestialite.playerAng) * 14,
+            dvx: 1,
+            dvy: 1,
+            ax: 0,
+            ay: 0,
+            dax: 1,
+            day: 1,
             life: 180,
             damage: celestialite.damage,
             pierce: 0,
@@ -1170,6 +1182,12 @@ SB_projectiles.noxSpinningSword = {
             y: celestialite.y + Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * (celestialite.radius || 64),
             vx: Math.cos(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 15,
             vy: Math.sin(celestialite.playerAng + (Math.sign(Math.random()-0.5) * Math.PI/2)) * 15,
+            dvx: 1,
+            dvy: 1,
+            ax: 0,
+            ay: 0,
+            dax: 1,
+            day: 1,
             life: 120,
             damage: celestialite.damage.mul(1.5),
             pierce: 0,
@@ -1256,6 +1274,7 @@ SB_warnings.noxSpear = {
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
         warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
+        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
     },
     onReady(warning) {
         warning.targetAng = warning.ang

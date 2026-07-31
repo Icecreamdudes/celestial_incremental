@@ -2329,8 +2329,12 @@ class SpaceArena {
                 }
             }
 
-            bullet.x += bullet.vx;
-            bullet.y += bullet.vy;
+            if (bullet.type) {
+                SB_updateMovement(bullet)
+            } else {
+                bullet.x += bullet.vx;
+                bullet.y += bullet.vy;
+            }
             if (bullet.x < 0) bullet.x = this.width;
             if (bullet.x > this.width) bullet.x = 0;
             if (bullet.y < 0) bullet.y = this.height;
@@ -4037,7 +4041,7 @@ class SpaceArena {
                     
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.5)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warnRef.fade ? (warning.timer - warnRef.postReadyTimer) / warnRef.readyTimer * 0.5 : 0.5) + ')');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
                     this.ctx.strokeStyle = g;
                     
@@ -4086,7 +4090,7 @@ class SpaceArena {
                     g.addColorStop(1, 'rgba(0, 255, 0, 0)');
                     */
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0.5)');
+                    g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warnRef.fade ? (warning.timer - warnRef.postReadyTimer) / warnRef.readyTimer * 0.5 : 0.5) + ')');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
                     
                     this.ctx.strokeStyle = g;

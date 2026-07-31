@@ -1166,6 +1166,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Nerfed the effect SP has on singularity gain after defeating aleph.<br>
 			- Nerfed enhance upgrade "Emotional Enhancer".<br>
 			- Changed the effect and cost scaling of check back factors.<br>
+			- Reduced the diamondsmith evo and diamond dust reset coin dust requirements by /10.<br>
 		<br>Bugfixes:<br>
 			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
 			- Added a gap between cante perks and tab selection in the cante tab.<br>

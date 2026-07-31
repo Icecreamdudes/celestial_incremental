@@ -140,7 +140,7 @@ function SB_updateMovement(obj) {
 
 // PROJECTILES
 
-function SB_spawnProjectile(projId, celestialite, warning = {}, properties = {}) {
+function SB_spawnProjectile(projId, celestialite, warning, properties = {}) {
     const projRef = SB_projectiles[projId]
     if (!projRef) {
         console.warn("Cannot find projectile \"" + projId + "\".")
@@ -148,6 +148,7 @@ function SB_spawnProjectile(projId, celestialite, warning = {}, properties = {})
     };
 
     let projectile = projRef.template(celestialite, warning)
+
     projectile.type = projId
     projectile.celestialite = celestialite
     projectile.warning = warning

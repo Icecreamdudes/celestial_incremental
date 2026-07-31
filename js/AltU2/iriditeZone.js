@@ -187,7 +187,8 @@ SB_zones.iriditeZone = {
         else return "smallAsteroid";
     },
     levelUp(level) {
-        if (level.modulo(20).eq(0) || level.eq(2)) {
+        // || level.eq(2)
+        if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("iridite")
         }
     },
@@ -254,18 +255,17 @@ SB_celestialites.iridite = {
         celestialite.playerAng = Math.atan2(dy, dx);
         // Decide on an attack
         
-        let options = ['dagger', 'radial', 'shortBurst', 'homing', 'charge'];
-        if (celestialite.phase >= 2) options = options.concat(['radialDagger', 'raining']);
-        /*
-        if (celestialite.phase >= 3) options = options.concat(['giant', 'laser']);
-        if (celestialite.phase >= 4) options = options.concat(['laser', 'charge']);
-        */
-
-        options.splice(options.indexOf(celestialite.currentAttack), 1)
         if (celestialite.playerDist < 800) {
+            let options = ['dagger', 'radial', 'shortBurst', 'homing', 'charge', 'teleport'];
+            if (celestialite.phase >= 2) options = options.concat(['radialDagger', 'raining']);
+            if (celestialite.phase >= 3) options = options.concat(['giant', 'laser']);
+            if (celestialite.phase >= 4) options = options.concat(['laser', 'charge', 'teleport']);
+            options.splice(options.indexOf(celestialite.currentAttack), 1)
             celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        } else if (celestialite.playerDist < 1200) {
+            celestialite.currentAttack = Math.random() < 0.5 ? "charge" : "teleport";
         } else {
-            celestialite.currentAttack = "charge";
+            celestialite.currentAttack = "teleport";
         }
         celestialite.attackInitialized = false
     },
@@ -277,14 +277,26 @@ SB_celestialites.iridite = {
             }
             // Attack
             if ((celestialite.attackTimer / 90) % 1 == 0) {
-                for (i = 0; i < 5; i++) {
-                    SB_spawnWarning("iriditeDagger", celestialite, {
-                        vx: celestialite.vx,
-                        vy: celestialite.vy,
-                        dvx: 0.875,
-                        dvy: 0.875,
-                        targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
-                    })
+                if (celestialite.phase >= 3) {
+                    for (i = 0; i < 7; i++) {
+                        SB_spawnWarning("iriditeDagger", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 3) * Math.PI / 8)
+                        })
+                    }
+                } else {
+                    for (i = 0; i < 5; i++) {
+                        SB_spawnWarning("iriditeDagger", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
+                        })
+                    }
                 }
             }
         },
@@ -341,6 +353,19 @@ SB_celestialites.iridite = {
             }
             // Attack
         },
+        teleport(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            // Attack
+            if (celestialite.attackTimer == 30) {
+                let ang = Math.random() * Math.PI * 2
+                let dist = Math.random() * 200 + 400
+                celestialite.x = arena.ship.x + dist * Math.cos(ang)
+                celestialite.y = arena.ship.y + dist * Math.sin(ang)
+            }
+        },
         radialDagger(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
@@ -370,10 +395,69 @@ SB_celestialites.iridite = {
                 SB_spawnProjectile("iriditeRain", celestialite)
             }
         },
+        giant(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 90) % 1 == 0) {
+                if (celestialite.phase >= 4) {
+                    for (i = 0; i < 7; i++) {
+                        SB_spawnWarning("iriditeGiant", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 3) * Math.PI / 8)
+                        })
+                    }
+                } else {
+                    for (i = 0; i < 5; i++) {
+                        SB_spawnWarning("iriditeGiant", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
+                        })
+                    }
+                }
+            }
+        },
+        laser(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 90) % 1 == 0) {
+                if (celestialite.phase >= 4) {
+                    for (i = 0; i < 7; i++) {
+                        SB_spawnWarning("iriditeGiant", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 3) * Math.PI / 8)
+                        })
+                    }
+                } else {
+                    for (i = 0; i < 5; i++) {
+                        SB_spawnWarning("iriditeGiant", celestialite, {
+                            vx: celestialite.vx,
+                            vy: celestialite.vy,
+                            dvx: 0.875,
+                            dvy: 0.875,
+                            targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
+                        })
+                    }
+                }
+            }
+        },
     },
     tick(celestialite) {
-        //celestialite.phase = 3 - celestialite.health.div(celestialite.maxHealth).mul(4).ceil().toNumber()
-        celestialite.phase = 2
+        celestialite.phase = 5 - celestialite.health.div(celestialite.maxHealth).mul(4).ceil().toNumber()
         celestialite.wingPhase += 0.16 + celestialite.phase * 0.04;
         celestialite.wingPhase %= Math.PI * 2;
 
@@ -387,14 +471,24 @@ SB_celestialites.iridite = {
         }
 
         // Decide on a move angle
-        celestialite.moveAng = celestialite.playerAng;
+        if (celestialite.currentAttack == "charge") {
+            let angDist = ( (celestialite.playerAng-Math.PI/2) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.03125;
+        } else {
+            celestialite.moveAng = celestialite.playerAng;
+        }
 
         // Decide on an attack
         celestialite.attackTimer--
         if (celestialite.attackTimer <= 0) SB_celestialites[celestialite.type].decideAttack(celestialite);
+        if (celestialite.phase == 3 && celestialite.attackTimer % 30 == 1) {
+            if (Math.random() < 0.2) SB_spawnProjectile("iriditeRain", celestialite);
+        } else if (celestialite.phase == 4 && celestialite.attackTimer % 15 == 1) {
+            if (Math.random() < 0.4) SB_spawnProjectile("iriditeRain", celestialite);
+        }
 
         // Move
-        if (celestialite.currentAttack == "dagger" && celestialite.attackTimer % 90 > 30) {
+        if ((celestialite.currentAttack == "dagger" || celestialite.currentAttack == "giant" || celestialite.currentAttack == "laser") && celestialite.attackTimer % 90 > 30) {
             celestialite.ax = 0
             celestialite.ay = 0
         } else if ((celestialite.currentAttack == "radial" || celestialite.currentAttack == "shortBurst") && celestialite.attackTimer > 30) {
@@ -406,6 +500,14 @@ SB_celestialites.iridite = {
         } else if (celestialite.currentAttack == "raining" && celestialite.attackTimer > 30) {
             celestialite.ax = 0
             celestialite.ay = 0
+        } else if (celestialite.currentAttack == "charge") {
+            if (celestialite.attackTimer < 120) {
+                celestialite.ax = Math.cos(celestialite.moveAng) * (0.6 + celestialite.phase * 0.15) * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+                celestialite.ay = Math.sin(celestialite.moveAng) * (0.6 + celestialite.phase * 0.15) * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            } else {
+                celestialite.ax = 0
+                celestialite.ay = 0
+            }
         } else {
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
@@ -545,11 +647,19 @@ SB_celestialites.iridite = {
         ctx.textBaseline = "middle"; // ensure center vertically
         ctx.fillStyle = "#e0ccffff";
         ctx.fillText("✦", 0, 8); // exact center
+        ctx.fillStyle = "rgba(255,255,255," + (0 + (celestialite.phase - 1) * 0.25) + ")";
+        ctx.fillText("✦", 0, 8); // exact center
         // subtle stroke for definition
         ctx.lineWidth = 4;
-        ctx.strokeStyle = "rgba(240,200,80,0.12)";
+        ctx.strokeStyle = "rgba(240,200,80," + (0.12 + celestialite.phase * 0.06) + ")";
         ctx.strokeText("✦", 0, 8);
         ctx.restore();
+        if (celestialite.currentAttack == "teleport") {
+            ctx.fillStyle = "rgba(255,255,255," + ((30 - Math.abs(30 - celestialite.attackTimer)) / 30) + ")";
+            ctx.beginPath();
+            ctx.arc(0, 0, (Math.abs(30 - celestialite.attackTimer) / 30) * 128, 0, Math.PI * 2)
+            ctx.fill();
+        }
         ctx.restore();
     },
 }
@@ -1097,7 +1207,7 @@ SB_projectiles.iriditeDagger = {
         };
     },
     onHit(projectile, attacker) {
-        projectile.warning.timer = 0
+        if (projectile.warning) projectile.warning.timer = 0;
     },
     draw(ctx, projectile) {
         if (!arena) return;
@@ -1253,6 +1363,69 @@ SB_projectiles.iriditeRain = {
     },
 }
 
+SB_projectiles.iriditeGiant = {
+    template(celestialite, warning) {
+        let source = warning !== null ? warning : celestialite
+        let ang = warning !== null ? warning.ang : celestialite.playerAng
+        let speed = (warning !== null && warning.speed) ? warning.speed : 12
+        return {
+            x: source.x,
+            y: source.y,
+            vx: Math.cos(ang) * speed,
+            vy: Math.sin(ang) * speed,
+            dvx: 1,
+            dvy: 1,
+            ax: 0,
+            ay: 0,
+            dax: 1,
+            day: 1,
+            life: 160,
+            initialLife: 160,
+            damage: celestialite !== null ? celestialite.damage.mul(2) : new Decimal(12),
+            pierce: 3,
+            radius: 24,
+            fromEnemy: true,
+            star: true,
+            ang: ang
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 4
+            projectile.damage = projectile.celestialite ? projectile.celestialite.damage.mul(m) : new Decimal(m * 6)
+        };
+    },
+    onHit(projectile, attacker) {
+        if (projectile.warning) projectile.warning.timer = 0;
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+
+        let ang = Math.atan2(projectile.vy, projectile.vx || 0);
+        ctx.rotate(ang);
+        // determine font size; giant projectiles are significantly larger
+        let fontSize = projectile.radius * 2;
+        ctx.font = `${fontSize}px monospace`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#ffd580";
+        ctx.shadowColor = "#fff1";
+        if (!options.performanceMode) {ctx.shadowBlur = 6} else {ctx.shadowBlur = 0};
+        ctx.fillText("✦", 0, 0);
+        ctx.restore();
+    },
+}
+
+
 // WARNINGS
 
 SB_warnings.iriditeDagger = {
@@ -1272,5 +1445,22 @@ SB_warnings.iriditeDagger = {
         warning.targetAng = warning.ang
         SB_spawnProjectile("iriditeDagger", warning.celestialite, warning);
         arena.warnings.splice(arena.warnings.indexOf(warning), 1)
+    }
+}
+SB_warnings.iriditeGiant = {
+    readyTimer: 60,
+    postReadyTimer: 160,
+    dist: 1920,
+    width: 2,
+    initialize(warning) {
+    },
+    tick(warning) {
+        let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
+        warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
+        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
+    },
+    onReady(warning) {
+        warning.targetAng = warning.ang
+        SB_spawnProjectile("iriditeGiant", warning.celestialite, warning);
     }
 }

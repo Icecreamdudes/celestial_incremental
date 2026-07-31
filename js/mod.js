@@ -1060,8 +1060,8 @@ function updateStyles() {
 						break;
 					case "A2":
 						if (!player.ir.inBattle) playAndLoopAudio("music/space.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && !player.ir.iriditeFightActive) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && player.ir.iriditeFightActive) playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && arena && !(arena.bossActive && player.ir.battleStage == "iriditeZone")) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && arena && arena.bossActive && player.ir.battleStage == "iriditeZone") playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
 						break;
 					case "MI":
 						playAndLoopAudio("music/mining.mp3", options.musicVolume/10)

@@ -353,14 +353,14 @@ addLayer("ir", {
 
         player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
 
-        player.ir.battleXPReq = player.ir.battleLevel.pow(1.5).mul(5).add(40)
+        player.ir.battleXPReq = player.ir.battleLevel.add(9).mul(5).add(player.ir.battleLevel.sub(1).pow(2))
         if (player.tab == "bl" && player.ir.battleLevel.gt(10)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.1, player.ir.battleLevel.sub(10)))
-        if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.25)
-        if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.4)
+        if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
+        if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         // TEMP
-        if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
+        //if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
@@ -1383,7 +1383,7 @@ addLayer("ir", {
             currencyInternalName: "spaceRock",
             style() {
                 let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "white", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
-                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : true ? look.backgroundColor = "#361e1e" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#37078f"
                 return look
             },
         },
@@ -1958,7 +1958,7 @@ addLayer("ir", {
             },
             title: "Alleviator",
             unlocked() { return true },
-            description() { return "Battle XP requirements are cut by /1.25."},
+            description() { return "Battle XP requirements are cut by /1.5."},
             cost: new Decimal(12),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
@@ -2027,7 +2027,7 @@ addLayer("ir", {
             },
             title: "Alleviator II",
             unlocked() { return true },
-            description() { return "Battle XP requirements are cut by /1.4"},
+            description() { return "Battle XP requirements are cut by /1.5 again."},
             cost: new Decimal(30),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",

@@ -2115,7 +2115,12 @@ addLayer("ep1", {
                                             ["hoverless-clickable", 22],
                                         ], {background: "", width: "600px", height: "342px"}],
                                     ]],
-                                ], {background: "linear-gradient(90deg, #e9bfff, #a6b2ff)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}], 
+                                ], () => {
+                                    let look = {background: "linear-gradient(90deg, #e9bfff, #a6b2ff)", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
+                                        if (player.s.singularities.lt(2)) look.display = "none !important";
+                                        return look
+                                    }
+                                ]
                             ], {position: "relative", left: "-300px", top: "425px", width: "0px", height: "0px"}],
                             
                             // Fire
@@ -2271,8 +2276,6 @@ addLayer("ep1", {
                             
                         ], {background: "repeating-linear-gradient(135deg, #272727 0 15px, #2f2f2f 0 30px)", width: "2400px", height: "1600px"}],
                     ], {border: "6px solid #171717", width: "800px", height: "600px", flexFlow: "column"}],
-                    ["blank", "10px"],
-                    ["raw-html", () => {return (getLevelableAmount("pet", 402).gte(7) || getLevelableTier("pet", 402).gte(1)) ? "" : getLevelableAmount("pet", 402).gte(2) ? "You will unlock the next button at level 7!" : "You will unlock the next button at level 2!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                 ]
             },

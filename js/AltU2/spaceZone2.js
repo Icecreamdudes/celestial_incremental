@@ -457,7 +457,7 @@ SB_celestialites.etaShip = {
     color: "#bf6078",
     health: new Decimal(125),
     damage: new Decimal(4),
-    bodyDamage: new Decimal(3),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(5),
     reward() {
         let gain = {}

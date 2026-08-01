@@ -202,7 +202,7 @@ SB_celestialites.iridite = {
     symbol: "iridite",
     radius: 64,
     color: "#ffffff",
-    health: new Decimal(5e4),
+    health: new Decimal(1e5),
     damage: new Decimal(6),
     bodyDamage: new Decimal(1),
     regen: new Decimal(6),
@@ -228,8 +228,8 @@ SB_celestialites.iridite = {
         player.ir.iriditeFought = true
 
         // Stat changes
-        celestialite.maxHealth = new Decimal(5e4)
-        celestialite.health = new Decimal(5e4)
+        celestialite.maxHealth = new Decimal(1e5)
+        celestialite.health = new Decimal(1e5)
         celestialite.damage = new Decimal(6)
         celestialite.regen = new Decimal(6)
 

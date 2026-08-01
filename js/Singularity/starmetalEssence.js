@@ -1675,7 +1675,7 @@
         161: {
             costBase() { return [new Decimal(20), new Decimal(1e6)] },
             costGrowth() { return [new Decimal(2), new Decimal(3)] },
-            purchaseLimit() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(3) },
             currency() { return [player.sma.eclipseShards, player.sme.starmetalEssence]},
             pay(amt, amt2) {
                 player.sma.eclipseShards = this.currency()[0].sub(amt)

@@ -197,7 +197,8 @@
         16: {
             requirementDescription: "30 Boosters",
             effectDescription() { return "Autobuy all grass buyables." },
-            done() { return player.db.boosters.gte(30) && player.ir.iriditeDefeated },
+            unlocked() {return player.ir.iriditeDefeated && getBuyableAmount("sme", 161).gte(3)},
+            done() { return player.db.boosters.gte(30) && getBuyableAmount("sme", 161).gte(3) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -207,7 +208,8 @@
         17: {
             requirementDescription: "45 Boosters",
             effectDescription() { return "/2 to the eclipse timer tickspeed." },
-            done() { return player.db.boosters.gte(45) && player.ir.iriditeDefeated },
+            unlocked() { return player.lightRift.interspaceUnlocked },
+            done() { return player.db.boosters.gte(45) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -217,6 +219,7 @@
         18: {
             requirementDescription: "90 Boosters",
             effectDescription() { return "Starmetal alloy reduces the eclipse timer tickspeed.<br>Currently: /" + format(player.db.milestone8Effect) + "." },
+            unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.boosters.gte(90) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
@@ -227,6 +230,7 @@
         19: {
             requirementDescription: "100 Boosters",
             effectDescription() { return "Divisors to the eclipse timer tickspeed multiply D1 tickspeed.<br>Currently: x" + format(player.db.milestone9Effect) + "." },
+            unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.boosters.gte(100) && player.lightRift.interspaceUnlocked },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #9f98d4", borderTop: "0px", borderRadius: "0px"}
@@ -356,55 +360,91 @@
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "1", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[11].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 11],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "3", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[12].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 12],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "7", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[13].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 13],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "12", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[14].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 14],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "16", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[15].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 15],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "30", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[16].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 16],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "45", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[17].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 17],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "90", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[18].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 18],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "100", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[19].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 19],
                             ]],
                             ], () => {return player.db.milestoneTab == 0 ? {} : {display: "none !important"}}],
@@ -414,49 +454,81 @@
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "1", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[101].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 101],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "5", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[102].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 102],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "10", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[103].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 103],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "15", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[104].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 104],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "20", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[105].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 105],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "30", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[106].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 106],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "70", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[107].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 107],
                             ]],
                             ["style-row", [
                                 ["style-column", [
                                     ["raw-html", "85", {color: "white", fontSize: "32px", fontFamily: "monospace"}],
-                                ], {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                                ], () => {
+                                    let look =  {backgroundColor: "#6e64c4", border: "3px solid #9f98d4", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}
+                                    look.display = tmp.db.milestones[108].unlocked ? "" : "none !important"
+                                    return look
+                                }],
                                 ["titleless-milestone", 108],
                             ]],
                             ], () => {return player.db.milestoneTab == 1 ? {} : {display: "none !important"}}],

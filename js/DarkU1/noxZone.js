@@ -170,7 +170,7 @@ SB_celestialites.nox = {
     symbol: "nox",
     radius: 64,
     color: "#7a0000",
-    health: new Decimal(1e5),
+    health: new Decimal(2e5),
     damage: new Decimal(12),
     bodyDamage: new Decimal(1),
     regen: new Decimal(16),
@@ -196,8 +196,8 @@ SB_celestialites.nox = {
         player.bl.foughtNox = true
 
         // Stat changes
-        celestialite.maxHealth = new Decimal(1e5)
-        celestialite.health = new Decimal(1e5)
+        celestialite.maxHealth = new Decimal(2e5)
+        celestialite.health = new Decimal(2e5)
         celestialite.damage = new Decimal(12)
         celestialite.regen = new Decimal(16)
 

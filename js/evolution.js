@@ -185,7 +185,7 @@
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
         },
-        114: {
+        113: {
             title() { return "<img src='resources/Pets/johnUncommonPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[209].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.unlocked},
@@ -679,7 +679,7 @@
                 setLevelableAmount("pet", 1102, new Decimal(1))
             }
         },
-        14: {
+        13: {
             title() { return "Captain" },
             description() {
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
@@ -703,7 +703,7 @@
                 player.cb.paragonShards = player.cb.paragonShards.sub(12)
                 player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(12)
 
-                player.ev.evolutionsUnlocked[14] = true
+                player.ev.evolutionsUnlocked[13] = true
                 setLevelableAmount("pet", 1209, new Decimal(1))
             }
         },

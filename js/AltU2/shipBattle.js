@@ -626,7 +626,7 @@ class SpaceArena {
                 cooldown: 120,
                 lastShot: 0,
                 damage: 7,
-                collisionDamage: 5,
+                collisionDamage: 1,
             };
         }
         // hit invulnerability timer in milliseconds (prevents >3 hits/sec)
@@ -645,7 +645,7 @@ class SpaceArena {
                 cooldown: 500,
                 lastShot: 0,
                 damage: 25,
-                collisionDamage: 10,
+                collisionDamage: 2,
             };
         }
         if (player.ir.shipType == 3) {
@@ -690,7 +690,7 @@ class SpaceArena {
                 cooldown: 250,
                 lastShot: 0,
                 damage: 12,
-                collisionDamage: 5,
+                collisionDamage: 1,
             };
         }
         if (player.ir.shipType == 5) {
@@ -710,7 +710,7 @@ class SpaceArena {
                 cooldown: 250,
                 lastShot: 0,
                 damage: 3,
-                collisionDamage: 0.1,
+                collisionDamage: 0.5,
             };
         }
         if (player.ir.shipType == 6) {
@@ -730,7 +730,7 @@ class SpaceArena {
                 cooldown: 50,
                 lastShot: 0,
                 damage: 4,
-                collisionDamage: 5,
+                collisionDamage: 1.5,
             };
         }
         if (player.ir.shipType == 7) {
@@ -776,7 +776,7 @@ class SpaceArena {
                 cooldown: 300,
                 lastShot: 0,
                 damage: 7,
-                collisionDamage: 5,
+                collisionDamage: 1,
                 wingPhase: Math.random() * Math.PI * 2,
                 _laserTimer: 0,
                 _laserActive: false,
@@ -800,7 +800,7 @@ class SpaceArena {
                 cooldown: 500,
                 lastShot: 0,
                 damage: 40,
-                collisionDamage: 0.1,
+                collisionDamage: 1,
             };
         }
         if (player.ir.shipType == 10) {
@@ -817,7 +817,7 @@ class SpaceArena {
                 cooldown: 5000,
                 lastShot: 0,
                 damage: 600,
-                collisionDamage: 15,
+                collisionDamage: 1.5,
             };
             this.awaitingShotCharge = false
             this.shotChargeTimer = 0
@@ -836,7 +836,7 @@ class SpaceArena {
                 cooldown: 120,
                 lastShot: 0,
                 damage: 5,
-                collisionDamage: 5,
+                collisionDamage: 2,
             };
         }
 
@@ -2399,7 +2399,7 @@ class SpaceArena {
 
         // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
         // TEMP
-        if ((player.ir.battleLevel.gte(3) || player.ir.battleStage == "iriditeZone" || player.ir.battleStage == "spaceZone4" || player.ir.battleStage == "bloodZone1" || player.ir.battleStage == "noxZone") && !this.bossActive) {
+        if ((player.ir.battleStage !== "spaceZone1" || player.ir.battleLevel.gte(5)) && !this.bossActive) {
             let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
             if (this.enemySpawnCooldown > 0) {
                 this.enemySpawnCooldown--;

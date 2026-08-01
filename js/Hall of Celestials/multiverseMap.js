@@ -240,7 +240,7 @@
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return true }
+    layerShown() { return player.startedGame && player.lightRift.interspaceUnlocked }
 })
 
 function createMultiverseMapConnection(id_1, id_2) {

@@ -835,8 +835,8 @@ SB_celestialites.deltaShip = {
     radius: 28,
     color: "#bf60bf",
     health: new Decimal(150),
-    damage: new Decimal(4),
-    bodyDamage: new Decimal(3),
+    damage: new Decimal(1),
+    bodyDamage: new Decimal(4),
     regen: new Decimal(2),
     reward() {
         let gain = {}

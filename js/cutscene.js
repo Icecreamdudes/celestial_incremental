@@ -2760,7 +2760,7 @@
             background: "radial-gradient(circle, #151230, #000000)",
             portrait: "resources/secret.png",
             music: "music/iriditeCutscene.mp3",
-            trigger() {return player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && arena && arena.enemies.length > 0 && arena.enemies[0].health.lte(25000)},
+            trigger() {return player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && arena && arena.enemies.length > 0 && arena.enemies[0].health.lte(5e4)},
             dialogue: [
                 { text: "God damn it... You guys just won't stop no matter what. I don't understand.", portrait: "resources/iridite.png"  },
                 { text: "It's too late to quit. I must prove myself the strongest out of all the Novasent!", portrait: "resources/iridite.png"  },

@@ -1105,7 +1105,7 @@ class SpaceArena {
     };
     handlePointerMove = (e) => {
         if (!this.canvas) return;
-        if (!player.mobileControls || player.ir.shipType == 3 || player.ir.shipType == 7) {
+        if (player.mobileControls || player.ir.shipType == 3 || player.ir.shipType == 7) {
             let rect = this.canvas.getBoundingClientRect();
             this.mouseX = e.clientX - rect.left;
             this.mouseY = e.clientY - rect.top;

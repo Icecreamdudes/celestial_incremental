@@ -377,11 +377,6 @@ addLayer("ir", {
                 }
             }
         }
-
-        if (player.ir.battleLevel.gte(20) && player.ir.battleStage == "iriditeZone" && !player.ir.iriditeFought && player.tab == "ir") {
-            summonIridite();
-            player.ir.iriditeFought = true
-        }
         
         if (arena) {
             if (player.ir.menu > 0) {

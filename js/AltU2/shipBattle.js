@@ -661,7 +661,8 @@ class SpaceArena {
                 bouncing: false,
                 bounceFrames: 0,
                 maxVelocity: 10,
-                collisionDamage: 10,
+                damage: 20,
+                collisionDamage: 1,
             };
             this.lastBounceClick = Date.now() - 1500;
             this.bounceCooldown = 2000; // 2 seconds in ms
@@ -747,7 +748,8 @@ class SpaceArena {
                 dashing: false,
                 dashFrames: 0,
                 maxVelocity: 10,
-                collisionDamage: 10,
+                damage: 16,
+                collisionDamage: 1,
             };
             this.lastDashClick = Date.now() - 500;
             this.dashCooldown = 1000; // 1 second in ms

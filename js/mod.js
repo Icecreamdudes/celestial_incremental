@@ -1147,6 +1147,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Punchcard UI now shows the punchcard XP gained on universe exit.<br>
 			- Changed some punchcard textures.<br>
 			- Added space exploration completion popups.<br>
+			- Added space battle mobile controls.<br>
+			- Changed unarmed ship movement.<br>
 			- Redesigned pylon UI.<br>
 			- Redesigned coin flip, wheel of fortune, slot machine, and check back shrine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
@@ -1157,8 +1159,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Nerfed several effects in D1 eclipse.<br>
 			- Increased the scaling of both unavoidable softcaps in D1 eclipse.<br>
 			- Weakened the effect clouds have on eclipse timer tickspeed.<br>
+			- Buffed core fragment effects.<br>
 			- Changed the formulas of some iridite upgrades.<br>
 			- Nerfed space building 3 through 6 effects.<br>
+			- Reduced sniper ship damage but improved its accuracy.<br>
+			- Reduced stinger ship attack cooldown.<br>
 			- Made astral ship's ship level cap boost exclude itself.<br>
 			- Nerfed ancient and paradox pylon energy gain.<br>
 			- Increased paradox energy factor buyable caps.<br>
@@ -1168,7 +1173,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Changed the effect and cost scaling of check back factors.<br>
 			- Reduced the diamondsmith evo and diamond dust reset coin dust requirements by /10.<br>
 		<br>Bugfixes:<br>
-			- Eliminated almost all screen flashing caused by switching between certain layers.<br>
+			- Eliminated all (???) screen flashing caused by switching between certain layers.<br>
 			- Added a gap between cante perks and tab selection in the cante tab.<br>
 			- Added "the" to the jocus layer tooltip.<br>
 			- Fixed dark universe reset cheese.<br>

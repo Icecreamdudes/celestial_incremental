@@ -1747,7 +1747,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Perseverance",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts space rock gain based on stored time capsules. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(4e8),
             currencyLocation() { return player.ir },
@@ -1774,7 +1774,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Destruction II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "All ships deal 20% more damage."},
             cost: new Decimal(2e9),
             currencyLocation() { return player.ir },
@@ -1801,7 +1801,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Loyalty",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a second space building slot adder."},
             cost: new Decimal(1.4e10),
             currencyLocation() { return player.ir },
@@ -1828,7 +1828,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Familiarity",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts light gain based on starmetal alloy. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(1e9),
             currencyLocation() { return player.ir },
@@ -1855,7 +1855,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Railgun",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Unlock a new ship: Railgun."},
             cost: new Decimal(4e9),
             currencyLocation() { return player.ir },
@@ -1882,7 +1882,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Unity",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Project effects are 5% stronger."},
             cost: new Decimal(4e10),
             currencyLocation() { return player.ir },
@@ -2094,7 +2094,7 @@ addLayer("ir", {
                 "<span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
                 "</div></div>"
             },
-            title: "Cosmic Links",
+            title: "Fragmented Links",
             unlocked() { return true },
             description() { return "Uncap the ancient, paradox, and technological core fragment effects."},
             cost: new Decimal(1e3),
@@ -2118,7 +2118,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Dedication",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Boosts project speed by x1.2."},
             cost: new Decimal(1e3),
             currencyLocation() { return player.ir },
@@ -2141,7 +2141,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Momentum II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Space battle celestialite stats scale another 2% slower."},
             cost: new Decimal(3e3),
             currencyLocation() { return player.ir },
@@ -2164,7 +2164,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Empire",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 32) },
             description() { return "Automate the first six space buildings."},
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
@@ -2390,7 +2390,7 @@ addLayer("ir", {
                             ], {background: "#0000007f", width: "247px", height: "300px"}],
                             ["style-column", [
                                 ["clickable", 17],
-                                ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up, sniper does not auto-turn.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
                             ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #5e4ee6", borderRight: "3px solid #5e4ee6", width: "300px", height: "300px"}],
                             ["style-column", [
 

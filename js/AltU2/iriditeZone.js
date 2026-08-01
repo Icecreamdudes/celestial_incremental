@@ -668,7 +668,7 @@ SB_celestialites.largeAsteroid = {
     name: "Large Asteroid",
     symbol: "3",
     radius: 50,
-    color: "#6f6f6f",
+    color: "#afafaf",
     health: new Decimal(180),
     damage: new Decimal(1),
     bodyDamage: new Decimal(3),

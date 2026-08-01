@@ -1019,7 +1019,7 @@ SB_projectiles.noxSpear = {
             projectile.shaftLen = m * 56
             projectile.shaftW = m * 6
             projectile.tipLen = m * 18
-            projectile.damage = projectile.celestialite.damage.mul(m)
+            projectile.damage = projectile.celestialite ? projectile.celestialite.damage.mul(m) : Decimal.mul(48, m)
         };
     },
     onHit(projectile, attacker) {

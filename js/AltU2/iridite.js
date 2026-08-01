@@ -1325,7 +1325,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Reinforcement II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "All ships have 30% increased max hp."},
             cost: new Decimal(5000),
             currencyLocation() { return player.ir },
@@ -1348,7 +1348,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Timekeeper",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Cut ship cooldown times based on space gems. (/" + format(this.effect()) + ")"},
             effect() {
                 return player.ir.spaceGem.add(1).log(10).add(1).pow(1.5).sub(1).div(8).add(1)
@@ -1375,7 +1375,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Iridite",
-            unlocked() { return player.ir.ufoDefeated },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Unlocks Iridite Zone and Geroa's fighting upgrades."},
             canAfford() {return player.spaceZone2.highestLevel.gte(20)},
             currencyLocation() { return player.ir },
@@ -1454,7 +1454,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Solar Power",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Slightly boosts ship damage based on stars. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(3.5e3),
             currencyLocation() { return player.ir },
@@ -1483,7 +1483,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Momentum",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Space battle celestialite stats scale 2% slower."},
             cost: new Decimal(6666),
             currencyLocation() { return player.ir },
@@ -1510,7 +1510,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Armoured",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "All ships take 25% less damage from collisions."},
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
@@ -1537,7 +1537,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Boundless",
-            unlocked() { return true },
+            unlocked() { return player.ir.iriditeDefeated },
             description() { return "Unlocks Space Zone III."},
             canAfford() {return player.sb.storedSpaceEnergy.gte(1e5)},
             currencyLocation() { return player.ir },
@@ -1560,7 +1560,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Evolve",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Boosts core fragment scores based on replicanti points. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(1e5),
             currencyLocation() { return player.ir },
@@ -1587,7 +1587,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Flourish",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Boosts bees based on space gems. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(4e5),
             currencyLocation() { return player.ir },
@@ -1616,7 +1616,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Sustain",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "x1.05 check back tickspeed."},
             cost: new Decimal(1.5e6),
             currencyLocation() { return player.ir },
@@ -1643,7 +1643,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Damage Dilation",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Slightly boosts ship health based on stored space energy. (x" + format(this.effect(), 3) + ")"},
             cost: new Decimal(2e5),
             currencyLocation() { return player.ir },
@@ -1670,7 +1670,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Prosper",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Square base steel gain."},
             cost: new Decimal(1e6),
             currencyLocation() { return player.ir },
@@ -1697,7 +1697,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Decay",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Boosts all star dimension power gain by x3."},
             cost: new Decimal(1e7),
             currencyLocation() { return player.ir },
@@ -1724,7 +1724,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Warped",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("bum", 23) },
             description() { return "Unlocks Space Zone IV."},
             canAfford() {return player.prj.projectSpeed.gte(1e5)},
             currencyLocation() { return player.ir },
@@ -1980,7 +1980,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Treasure",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Double the probability of getting space gems from asteroids."},
             cost: new Decimal(15),
             currencyLocation() { return player.ir },
@@ -2003,7 +2003,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Exploration",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Unlock more star exploration nodes."},
             cost: new Decimal(20),
             currencyLocation() { return player.ir },
@@ -2026,7 +2026,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Alleviator II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Battle XP requirements are cut by /1.5 again."},
             cost: new Decimal(30),
             currencyLocation() { return player.ir },
@@ -2049,7 +2049,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Head Start",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Gain an extra ship save slot."},
             cost: new Decimal(50),
             currencyLocation() { return player.ir },
@@ -2072,7 +2072,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Destruction",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "All ships deal 15% more damage."},
             cost: new Decimal(200),
             currencyLocation() { return player.ir },
@@ -2095,7 +2095,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Fragmented Links",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 25) },
             description() { return "Uncap the ancient, paradox, and technological core fragment effects."},
             cost: new Decimal(1e3),
             currencyLocation() { return player.ir },
@@ -2189,7 +2189,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Medkit",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("ir", 19) },
             description() { return "Unlock Geroa's \"Self Repair\" skill"},
             cost: new Decimal(25),
             currencyLocation() { return player.ir },
@@ -2212,7 +2212,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Spicy Energy",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("ir", 19) },
             description() { return "Unlock Geroa's \"Cosmic Ray\" skill"},
             cost: new Decimal(5000),
             currencyLocation() { return player.ir },
@@ -2235,7 +2235,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "I'M A FIRIN' MY LASAR",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("ir", 19) },
             description() { return "Unlock Geroa's \"Orbital Cannon\" skill"},
             cost: new Decimal(100),
             currencyLocation() { return player.ir },
@@ -2258,7 +2258,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Probably should use these",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("ir", 19) },
             description() { return "Unlock Geroa's \"Defense Satellites\" skill"},
             cost: new Decimal(1e5),
             currencyLocation() { return player.ir },
@@ -2281,7 +2281,7 @@ addLayer("ir", {
                 "</div></div>"
             },
             title: "Version 2.0",
-            unlocked() { return getLevelableAmount("pet", 502).gt(0) },
+            unlocked() { return getLevelableAmount("pet", 502).gt(0) && hasUpgrade("ir", 19) },
             description() { return "Increase Geroa's base stats by 20%"},
             cost: new Decimal(250),
             currencyLocation() { return player.ir },

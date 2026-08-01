@@ -151,7 +151,7 @@ const UPGRADE_POOL = {
     defenseEpic: {
         name() { return "Defense"},
         description() {
-            let regen = 0.5
+            let regen = 0.75
             regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
             return "Take 15% less damage, +" + formatSimple(regen, 2) + " HP/sec"
         },
@@ -655,26 +655,27 @@ class SpaceArena {
                 vx: 0,
                 vy: 0,
                 radius: 30,
-                gravity: 0.5,
-                bounce: 0.8,
-                bounceTarget: null,
-                bouncing: false,
-                bounceFrames: 0,
+                angle: 0,
+                deceleration: 0.98,
                 maxVelocity: 10,
-                damage: 20,
+                damage: 16,
                 collisionDamage: 1,
+                rollingAng: 0,
+                rollingSpeed: 0,
             };
-            this.lastBounceClick = Date.now() - 1500;
-            this.bounceCooldown = 2000; // 2 seconds in ms
+            this.ship.lastRollClick = Date.now() - 1500;
+            this.ship.rollCooldown = 1500; // 1.5 seconds in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.bounceCooldown = 2000 * this.shipStats.attackSpeed
-                if (now - this.lastBounceClick < this.bounceCooldown) return;
-                this.lastBounceClick = now;
-                let rect = this.canvas.getBoundingClientRect();
-                let mx = e.clientX - rect.left;
-                let my = e.clientY - rect.top;
-                this.ship.bounceTarget = { x: mx, y: my };
+                this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
+                if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {
+                    this.ship.lastRollClick = now;
+                    let rect = this.canvas.getBoundingClientRect();
+                    let mx = e.clientX - (this.canvasWidth / 2) - rect.left;
+                    let my = e.clientY - (this.canvasHeight / 2) - rect.top;
+                    this.ship.rollingAng = Math.atan2(my, mx);
+                    this.ship.rollingSpeed = Math.min(1, Math.max(0, (Math.hypot(my, mx) - 100) / 200))
+                };
             };
         }
         if (player.ir.shipType == 4) {
@@ -748,19 +749,19 @@ class SpaceArena {
                 dashing: false,
                 dashFrames: 0,
                 maxVelocity: 10,
-                damage: 16,
+                damage: 12,
                 collisionDamage: 1,
             };
             this.lastDashClick = Date.now() - 500;
             this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
-                this.dashCooldown = 1000 * this.shipStats.attackSpeed
+                this.dashCooldown = 1000 / this.shipStats.attackSpeed
                 if (now - this.lastDashClick < this.dashCooldown) return;
                 this.lastDashClick = now;
                 let rect = this.canvas.getBoundingClientRect();
-                let mx = e.clientX + this.ship.x - (canvasWidth / 2) - rect.left;
-                let my = e.clientY + this.ship.y - (canvasHeight / 2) - rect.top;
+                let mx = e.clientX + this.ship.x - (this.canvasWidth / 2) - rect.left;
+                let my = e.clientY + this.ship.y - (this.canvasHeight / 2) - rect.top;
                 this.ship.dashTarget = { x: mx, y: my };
             };
         }
@@ -1299,7 +1300,7 @@ class SpaceArena {
     };
     handlePointerMove = (e) => {
         if (!this.canvas) return;
-        if (!player.ir.mobileControls) {
+        if (true) {
             let rect = this.canvas.getBoundingClientRect();
             this.mouseX = e.clientX - rect.left;
             this.mouseY = e.clientY - rect.top;
@@ -1856,73 +1857,36 @@ class SpaceArena {
                 player.ir.shipHealth = new Decimal(arena.shipStats.maxHp);
             }
         }
-
-        // Ship movement
         if (player.ir.shipType == 3) {
-            // Gravity
-            this.ship.vy += this.ship.gravity;
-
-            // Auto Bounce
-            if (player.ir.autoShoot) {
+            // Auto Roll
+            if (player.ir.autoShoot && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
                 let now = Date.now();
-                this.bounceCooldown = 2000 / this.shipStats.attackSpeed
-                if (now - this.lastBounceClick >= this.bounceCooldown) {
-                    this.lastBounceClick = now;
+                this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
+                if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {
+                    this.ship.lastRollClick = now;
                     let rect = this.canvas.getBoundingClientRect();
-                    this.ship.bounceTarget = { x: this.mouseX, y: this.mouseY };
-                    if (this.ship.bounceTarget.x == undefined) {
-                        this.ship.bounceTarget = {x: this.width / 2, y: this.height / 2}
-                    }
-                }
+                    let mx = this.mouseX - (this.canvasWidth / 2);
+                    let my = this.mouseY - (this.canvasHeight / 2);
+                    this.ship.rollingAng = Math.atan2(my, mx);
+                    this.ship.rollingSpeed = Math.min(1, Math.max(0, (Math.hypot(my, mx) - 100) / 200))
+                };
             }
 
-            // Bounce click logic
-            if (this.ship.bounceTarget) {
-                let dx = this.ship.bounceTarget.x - this.ship.x;
-                let dy = this.ship.bounceTarget.y - this.ship.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-
-                // Calculate velocity to move toward the target, but keep moving after
-                let frames = 30;
-                let speed = Math.max(12, dist / frames);
-                let angle = Math.atan2(dy, dx);
-
-                this.ship.vx = Math.cos(angle) * speed;
-                this.ship.vy = Math.sin(angle) * speed - (this.ship.gravity * frames) / 2;
-                this.ship.bouncing = true;
-                this.ship.bounceFrames = frames;
-                this.ship.bounceTarget = null;
-            }
-
+            this.ship.vx += Math.cos(this.ship.rollingAng) * this.ship.rollingSpeed * this.shipStats.moveSpeed / 5;
+            this.ship.vy += Math.sin(this.ship.rollingAng) * this.ship.rollingSpeed * this.shipStats.moveSpeed / 5;
             // Apply velocities
             this.ship.x += this.ship.vx;
             this.ship.y += this.ship.vy;
 
-            // Friction for horizontal movement
-            this.ship.vx *= 0.98;
+            // Apply deceleration
+            this.ship.vx *= this.ship.deceleration;
+            this.ship.vy *= this.ship.deceleration;
 
-            // Horizontal movement (left/right keys)
-            if (this.keys['KeyA'] && player.ir.shipType != 3) this.ship.vx -= this.ship.maxVelocity * 0.2;
-            if (this.keys['KeyD'] && player.ir.shipType != 3) this.ship.vx += this.ship.maxVelocity * 0.2;
-
-            // Bounce off floor/ceiling
-            if (this.ship.y + this.ship.radius > this.height) {
-                this.ship.y = this.height - this.ship.radius;
-                this.ship.vy = -this.ship.vy * this.ship.bounce;
-            }
-            if (this.ship.y - this.ship.radius < 0) {
-                this.ship.y = this.ship.radius;
-                this.ship.vy = -this.ship.vy * this.ship.bounce;
-            }
-            // Bounce off walls
-            if (this.ship.x + this.ship.radius > this.width) {
-                this.ship.x = this.width - this.ship.radius;
-                this.ship.vx = -this.ship.vx * this.ship.bounce;
-            }
-            if (this.ship.x - this.ship.radius < 0) {
-                this.ship.x = this.ship.radius;
-                this.ship.vx = -this.ship.vx * this.ship.bounce;
-            }
+            // Wrap ship around arena edges
+            if (this.ship.x < 0) this.ship.x += this.width;
+            if (this.ship.x > this.width) this.ship.x -= this.width;
+            if (this.ship.y < 0) this.ship.y += this.height;
+            if (this.ship.y > this.height) this.ship.y -= this.height;
         } else if (player.ir.shipType == 7) {
             // Auto Dash
             if (player.ir.autoShoot) {
@@ -3433,13 +3397,7 @@ class SpaceArena {
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
 
-                if (player.ir.shipType == 3) {
-                    let angle = Math.atan2(dy, dx);
-                    let bounceSpeed = Math.max(8, Math.abs(this.ship.vy) * this.ship.bounce);
-                    if (Number.isNaN(bounceSpeed) || !isFinite(bounceSpeed) || bounceSpeed < 0) bounceSpeed = 8;
-                    this.ship.vy = Math.sin(angle) * bounceSpeed;
-                    this.ship.x += Math.cos(angle) * bounceSpeed;
-                } else if (player.ir.shipType == 7) {
+               if (player.ir.shipType == 3 || player.ir.shipType == 7) {
                     let angle = Math.atan2(dy, dx);
                     let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)))
                     if (Number.isNaN(speed) || !isFinite(speed) || speed < 0) speed = 0
@@ -3624,15 +3582,6 @@ class SpaceArena {
         // Draw ship
         this.ctx.save();
         this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
-        if (player.ir.shipType == 3) {
-            this.ctx.beginPath();
-            this.ctx.arc(this.ship.x, this.ship.y, this.ship.radius, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#a7a7a7ff";
-            this.ctx.shadowColor = "#ffffffff";
-            if (!options.performanceMode) {this.ctx.shadowBlur = 16} else {this.ctx.shadowBlur = 0};
-            this.ctx.fill();
-            
-        }
         if (player.ir.shipType == 1) {
             
             this.ctx.rotate(this.ship.angle);
@@ -3658,6 +3607,18 @@ class SpaceArena {
             this.ctx.fillStyle = "#eaf6f7";
             this.ctx.fill();
             
+        }
+        if (player.ir.shipType == 3) {
+            this.ctx.rotate(this.ship.angle);
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, this.ship.radius, 0, 2 * Math.PI);
+            this.ctx.fillStyle = "#a7a7a7ff";
+            this.ctx.strokeStyle = "#000000";
+            this.ctx.lineWidth = 2;
+            this.ctx.shadowColor = "#ffffffff";
+            if (!options.performanceMode) {this.ctx.shadowBlur = 16} else {this.ctx.shadowBlur = 0};
+            this.ctx.fill();
+            this.ctx.stroke();
         }
         if (player.ir.shipType == 4) {
             // Sniper-style ship: long barrel and scope
@@ -4651,6 +4612,63 @@ class SpaceArena {
             this.ctx.restore();
         }
 
+        // Draw unarmed indicator
+        if (player.ir.shipType == 3) {
+            this.ctx.save();
+            this.ctx.globalAlpha = 0.0625
+            let g = this.ctx.createRadialGradient(this.canvasWidth / 2, this.canvasHeight / 2, 100, this.canvasWidth / 2, this.canvasHeight / 2, 300)
+            g.addColorStop(0, "#00ff0000")
+            g.addColorStop(0, "#00ff00")
+            g.addColorStop(0.5, "#ffff00")
+            g.addColorStop(1, "#ff0000")
+            this.ctx.fillStyle = g;
+            this.ctx.beginPath();
+            this.ctx.ellipse(this.canvasWidth / 2, this.canvasHeight / 2, 300, 300, 0, 0, 360);
+            this.ctx.fill();
+            this.ctx.strokeStyle = "#ffff00";
+            this.ctx.lineWidth = 3;
+            this.ctx.beginPath();
+            this.ctx.ellipse(this.canvasWidth / 2, this.canvasHeight / 2, 100, 100, 0, 0, 360);
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.ellipse(this.canvasWidth / 2, this.canvasHeight / 2, 300, 300, 0, 0, 360);
+            this.ctx.stroke();
+
+            this.ctx.globalAlpha = 0.5
+
+            this.ctx.lineJoin = "round";
+            this.ctx.strokeStyle = "#ff0000";
+            this.ctx.beginPath();
+            this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2)
+            this.ctx.rotate(this.ship.rollingAng)
+            this.ctx.moveTo(this.ship.radius, 0)
+            this.ctx.lineTo(this.ship.rollingSpeed * 200 + 90, 0)
+            this.ctx.stroke();
+            this.ctx.fillStyle = "#ff0000";
+            this.ctx.beginPath();
+            this.ctx.lineTo(this.ship.rollingSpeed * 200 + 90, 5)
+            this.ctx.lineTo(this.ship.rollingSpeed * 200 + 90, -5)
+            this.ctx.lineTo(this.ship.rollingSpeed * 200 + 100, 0)
+            this.ctx.fill()
+
+            let dist = Math.min(1, Math.hypot(this.ship.vy, this.ship.vx) / (this.shipStats.moveSpeed / 5 * this.ship.deceleration) * (1 - this.ship.deceleration))
+            this.ctx.strokeStyle = "#00ff00";
+            this.ctx.beginPath();
+            this.ctx.rotate(-this.ship.rollingAng)
+            this.ctx.rotate(Math.atan2(this.ship.vy, this.ship.vx))
+            this.ctx.moveTo(this.ship.radius, 0)
+            this.ctx.lineTo(dist * 200 + 90, 0)
+            this.ctx.stroke();
+            this.ctx.fillStyle = "#00ff00";
+            this.ctx.beginPath();
+            this.ctx.lineTo(dist * 200 + 90, 5)
+            this.ctx.lineTo(dist * 200 + 90, -5)
+            this.ctx.lineTo(dist * 200 + 100, 0)
+            this.ctx.fill()
+
+            this.ctx.restore();
+        }
+
         // Draw mobile controls
         if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
             this.ctx.save();
@@ -4745,7 +4763,6 @@ class SpaceArena {
                 this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
             }
 
-            this.ctx.restore();
         }
 
         // Draw upgrade choice overlay (unchanged)

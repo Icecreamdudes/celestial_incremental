@@ -666,6 +666,7 @@ class SpaceArena {
             this.ship.lastRollClick = Date.now() - 1500;
             this.ship.rollCooldown = 1500; // 1.5 seconds in ms
             this.canvasClickListener = (e) => {
+                if (player.ir.menu != 0) return;
                 let now = Date.now();
                 this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
                 if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {
@@ -1859,7 +1860,7 @@ class SpaceArena {
         }
         if (player.ir.shipType == 3) {
             // Auto Roll
-            if (player.ir.autoShoot && typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+            if (player.ir.autoShoot && typeof this.mouseX === "number" && typeof this.mouseY === "number" && player.ir.menu == 0) {
                 let now = Date.now();
                 this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
                 if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {

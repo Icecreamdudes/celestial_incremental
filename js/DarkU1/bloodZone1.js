@@ -349,6 +349,7 @@ SB_celestialites.leech = {
         celestialite.wrigglePhase = 0
         celestialite.attachGracePeriod = 60
         celestialite.attached = false
+        celestialite.attachedTimer = 0
 
         celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
@@ -371,7 +372,10 @@ SB_celestialites.leech = {
         celestialite.playerDist = Math.hypot(dx, dy) || 1;
 
         // Latch onto the player at close range
-        if (!celestialite.attached && celestialite.attachGracePeriod <= 0 && celestialite.playerDist < 40) celestialite.attached = true;
+        if (!celestialite.attached && celestialite.attachGracePeriod <= 0 && celestialite.playerDist < 40) {
+            if (Math.hypot(arena.ship.vx, arena.ship.vy) < 8) celestialite.attached = true;
+            else celestialite.attachGracePeriod = 6;
+        }
 
         // Reset the targeting cooldown the player if they're close
         if (celestialite.playerDist < 600 && !celestialite.attached) {
@@ -382,8 +386,9 @@ SB_celestialites.leech = {
 
         // Handle celestialite movement changes
         if (celestialite.targetingTimer > 0) {
-            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
-            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2
+            let speed = celestialite.attachGracePeriod > 0 ? 0.1 : 0.2
+            celestialite.ax = Math.cos(celestialite.moveAng) * speed * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay = Math.sin(celestialite.moveAng) * speed
         } else {
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.4
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.4
@@ -405,6 +410,15 @@ SB_celestialites.leech = {
             celestialite.vy = 0
             celestialite.ax = 0
             celestialite.ay = 0
+
+            celestialite.attachedTimer++
+            celestialite.regen = SB_celestialites[celestialite.type].regen.mul(4).sub(celestialite.attachedTimer / 30 * arena.shipStats.attackDamage)
+            if (celestialite.attachedTimer > 150) {
+                celestialite.attached = false
+                celestialite.attachGracePeriod = 60;
+                celestialite.regen = SB_celestialites[celestialite.type].regen
+                celestialite.attachedTimer = 0
+            };
 
             player.ir.shipHealth = player.ir.shipHealth.sub(celestialite.damage.div(60))
         }
@@ -772,6 +786,8 @@ SB_celestialites.largeLeech = {
     initialize(celestialite) {
         celestialite.wrigglePhase = 0
         celestialite.attached = false
+        celestialite.attachGracePeriod = 60
+        celestialite.attachedTimer = 0
 
         celestialite.targetingTimer = 0
         celestialite.turnTimer = 600
@@ -782,7 +798,8 @@ SB_celestialites.largeLeech = {
     },
     tick(celestialite) {
         // Decrease timers
-        celestialite.wrigglePhase += 0.1;
+        celestialite.wrigglePhase += 0.075;
+        celestialite.attachGracePeriod--;
         celestialite.targetingTimer--;
         if (celestialite.targetingTimer > 0) celestialite.turnTimer--;
 
@@ -793,7 +810,10 @@ SB_celestialites.largeLeech = {
         celestialite.playerDist = Math.hypot(dx, dy) || 1;
 
         // Latch onto the player at close range
-        if (celestialite.playerDist < 54) celestialite.attached = true;
+        if (!celestialite.attached && celestialite.playerDist < 54 && celestialite.attachGracePeriod <= 0) {
+            if (Math.hypot(arena.ship.vx, arena.ship.vy) < 8) celestialite.attached = true;
+            else celestialite.attachGracePeriod = 6;
+        };
 
         // Reset the targeting cooldown the player if they're close
         if (celestialite.playerDist < 600 && !celestialite.attached) {
@@ -804,6 +824,7 @@ SB_celestialites.largeLeech = {
 
         // Handle celestialite movement changes
         if (celestialite.targetingTimer > 0) {
+            let speed = celestialite.attachGracePeriod > 0 ? 0.1 : 0.2
             celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
             celestialite.ay = Math.sin(celestialite.moveAng) * 0.2
         } else {
@@ -823,6 +844,15 @@ SB_celestialites.largeLeech = {
             celestialite.vy = 0
             celestialite.ax = 0
             celestialite.ay = 0
+
+            celestialite.attachedTimer++
+            celestialite.regen = SB_celestialites[celestialite.type].regen.mul(4).sub(celestialite.attachedTimer / 30 * arena.shipStats.attackDamage)
+            if (celestialite.attachedTimer > 150) {
+                celestialite.attached = false
+                celestialite.attachGracePeriod = 60;
+                celestialite.regen = SB_celestialites[celestialite.type].regen
+                celestialite.attachedTimer = 0
+            };
 
             player.ir.shipHealth = player.ir.shipHealth.sub(celestialite.damage.div(60))
         }

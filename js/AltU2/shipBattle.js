@@ -3272,10 +3272,10 @@ class SpaceArena {
             SB_updateMovement(warning)
             warnRef.tick(warning)
             warning.timer--
-            if (warning.x < 0) warning.x = 0;
-            if (warning.x > this.width) warning.x = this.width;
-            if (warning.y < 0) warning.y = 0;
-            if (warning.y > this.height) warning.y = this.height;
+            while (warning.x < 0) warning.x += this.width
+            while (warning.x > this.width) warning.x -= this.width;
+            while (warning.y < 0) warning.y += this.height
+            while (warning.y > this.height) warning.y -= this.height;
         }
         this.warnings = this.warnings.filter(warning => warning.timer >= 0);
 

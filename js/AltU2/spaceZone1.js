@@ -334,7 +334,7 @@ SB_celestialites.smallAsteroid = {
     name: "Small Asteroid",
     symbol: "1",
     radius: 20,
-    color: "#afafaf",
+    color: "#6f6f6f",
     health: new Decimal(20),
     damage: new Decimal(1),
     bodyDamage: new Decimal(1),

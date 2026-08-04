@@ -169,7 +169,6 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
 
     let warning = {
         type: warnId,
-        celestialite: celestialite || null,
         timer: warnRef.readyTimer + warnRef.postReadyTimer,
         ready: false,
         dist: warnRef.dist,

@@ -96,6 +96,9 @@ addLayer("noxZone", {
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #f57171", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["bl"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", "<u>Nox", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Nox will always be attacking", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #f57171"}],
 
                 ], {width: "397px", height: "363px"}],
@@ -373,15 +376,16 @@ SB_celestialites.nox = {
             celestialite.moveAng = celestialite.playerAng + (celestialite.orbitDirection ? Math.PI / 2 : -Math.PI / 2)
         }
         else if (celestialite.currentAttack == "charge") {
-            let angDist = ( (celestialite.playerAng-Math.PI/2) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
-            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.03125;
+            let angDist = ( (celestialite.playerAng) - celestialite.moveAng + 3 * Math.PI ) % (Math.PI*2) - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI * 2 : angDist) * 0.03125;
         }
         else if (celestialite.currentAttack == "orbit") {
-            let angDist = ( (celestialite.playerAng-(celestialite.orbitDirection ? Math.PI/8 : 7*Math.PI/8)) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
-            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.0625;
+            let angDist = ( (celestialite.playerAng - (celestialite.orbitDirection ? 15*Math.PI/8 : 21*Math.PI/8)) - celestialite.moveAng + Math.PI ) % (Math.PI * 2) - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI * 2 : angDist) * 0.0625;
         } else {
             celestialite.moveAng = celestialite.playerAng;
         }
+        celestialite.moveAng = (celestialite.moveAng + Math.PI * 3) % (Math.PI * 2) - Math.PI
 
         // Decide on an attack
         celestialite.attackTimer--

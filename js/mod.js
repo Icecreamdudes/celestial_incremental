@@ -1152,6 +1152,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redesigned pylon UI.<br>
 			- Redesigned coin flip, wheel of fortune, slot machine, and check back shrine UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
+			- Redesigned enhance point UI.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>

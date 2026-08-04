@@ -861,7 +861,7 @@ class SpaceArena {
         this.shipStats = this.getDefaultShipStats();
         this.resourceMult = 1;
 
-        this.noxSpearCooldown = 90;
+        this.propertyAttackCooldown = 90;
 
         // Enemy system
         this.enemies = [];
@@ -1063,8 +1063,8 @@ class SpaceArena {
         this.exitFullscreen();
     }
 
-    handleKeyDown = (e) => { if (player.ir.menu == 0) this.keys[e.code] = true; };
-    handleKeyUp = (e) => { if (player.ir.menu == 0) this.keys[e.code] = false; };
+    handleKeyDown = (e) => { this.keys[e.code] = true; };
+    handleKeyUp = (e) => { this.keys[e.code] = false; };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
         if (player.ir.mobileControls) {
@@ -1105,12 +1105,10 @@ class SpaceArena {
     };
     handlePointerMove = (e) => {
         if (!this.canvas) return;
-        if (player.mobileControls || player.ir.shipType == 3 || player.ir.shipType == 7) {
-            let rect = this.canvas.getBoundingClientRect();
-            this.mouseX = e.clientX - rect.left;
-            this.mouseY = e.clientY - rect.top;
-        }
-        else if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
+        let rect = this.canvas.getBoundingClientRect();
+        this.mouseX = e.clientX - rect.left;
+        this.mouseY = e.clientY - rect.top;
+        if (player.ir.mobileControls) {
             this.pointerTouches.forEach((value, key, map) => {
                 if (value.pointerId === e.pointerId) {
                     value.clientX = e.clientX
@@ -1472,11 +1470,32 @@ class SpaceArena {
         
         this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px"
 
-        if (player.ir.menu == 0 && !arena.bossActive && (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20)))) {
-            this.noxSpearCooldown--
-            if (this.noxSpearCooldown <= 0) {
-                this.noxSpearCooldown = 90
-                SB_spawnWarning("allyNoxSpear", null)
+        if (player.ir.menu == 0 && !arena.bossActive) {
+            this.propertyAttackCooldown--
+            if (this.propertyAttackCooldown <= 0) {
+                // IRIDITE DAGGERS
+                if (player.ir.battleStage == "iriditeZone" || (player.ir.battleStage == "spaceZone2" && player.ir.battleLevel.gte(10))) {
+                    this.propertyAttackCooldown = 600
+                    let repititions = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 2 : 1
+                    for (let i = 0; i < repititions; i++) {
+                        let ang = (Math.random() - 0.5) * Math.PI * 2
+                        let dist = 800
+                        let count = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 3 : 5
+                        for (let j = 0; j < count; j++) {
+                            SB_spawnWarning("iriditeDagger", null, {
+                                x: this.ship.x - Math.cos(ang) * dist,
+                                y: this.ship.y - Math.sin(ang) * dist,
+                                ang: ang,
+                                targetAng: (j - (count - 1) / 2) * Math.PI / 16 + ang,
+                            })
+                        }
+                    }
+                }
+                // NOX SPEARS
+                if (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20))) {
+                    this.propertyAttackCooldown = 90
+                    SB_spawnWarning("allyNoxSpear", null)
+                }
             }
         }
 
@@ -3725,61 +3744,80 @@ class SpaceArena {
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
                     this.ctx.strokeStyle = g;
                     
-                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    this.ctx.moveTo(currentPos[0], currentPos[1])
                     this.ctx.lineTo(nextPos[0], nextPos[1])
                     this.ctx.closePath()
                     this.ctx.stroke();
+
+                    // Looping
+                    let loopTranslation = [0, 0]
+                    if (this.ship.x <= this.canvasWidth / 2 && ((currentPos[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
+                    if (this.ship.x >= this.width - this.canvasWidth / 2 && ((currentPos[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
+                    if (this.ship.y <= this.canvasHeight / 2 && ((currentPos[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
+                    if (this.ship.y >= this.height - this.canvasHeight / 2 && ((currentPos[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
+                    if (loopTranslation[0] != 0 || loopTranslation[1] != 0) {
+                        this.ctx.translate(loopTranslation[0], loopTranslation[1])
+                        this.ctx.beginPath()
+
+                        this.ctx.moveTo(currentPos[0], currentPos[1])
+                        this.ctx.lineTo(nextPos[0], nextPos[1])
+                        this.ctx.closePath()
+                        this.ctx.stroke();
+                    }
 
                     remainingDistance = 0
                 } else {
                     // Keep going
 
-                    this.ctx.moveTo(currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang), currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang))
+                    let start = [currentPos[0], currentPos[1]]                    
                     
-                    let g
                     if (hx < hy) {
                         nextPos[0] = right ? this.width : 0
                         nextPos[1] = currentPos[1] + currentDistance * Math.sin(warning.ang)
-                        g = this.ctx.createLinearGradient(
-                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang), 
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
-                        );
                         currentPos[0] = !right ? this.width : 0
                         currentPos[1] = nextPos[1]
                     } else {
                         nextPos[0] = currentPos[0] + currentDistance * Math.cos(warning.ang)
                         nextPos[1] = !down ? this.height : 0
-                        g = this.ctx.createLinearGradient(
-                            currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                            currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                            nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
-                            nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
-                        );
                         currentPos[0] = nextPos[0]
                         currentPos[1] = down ? this.height : 0
                     }
-
-                    remainingDistance -= currentDistance
+                    let g = this.ctx.createLinearGradient(
+                        start[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
+                        start[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
+                        nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
+                        nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
+                    );
 
                     let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
-                    /*
-                    g.addColorStop(gStart, 'rgba(0, 255, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(0, 255, 0, 0.5)');
-                    g.addColorStop(1, 'rgba(0, 255, 0, 0)');
-                    */
                     g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
                     g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warnRef.fade ? (warning.timer - warnRef.postReadyTimer) / warnRef.readyTimer * 0.5 : 0.5) + ')');
                     g.addColorStop(1, 'rgba(255, 128, 0, 0)');
-                    
                     this.ctx.strokeStyle = g;
 
-                    this.ctx.lineTo(nextPos[0] + remainingDistance * Math.cos(warning.ang), nextPos[1] + remainingDistance * Math.sin(warning.ang))
+                    this.ctx.moveTo(start[0], start[1])
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
                     this.ctx.closePath()
                     this.ctx.stroke();
+
+                    // Looping
+                    let loopTranslation = [0, 0]
+                    if (this.ship.x <= this.canvasWidth / 2 && ((start[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
+                    if (this.ship.x >= this.width - this.canvasWidth / 2 && ((start[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
+                    if (this.ship.y <= this.canvasHeight / 2 && ((start[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
+                    if (this.ship.y >= this.height - this.canvasHeight / 2 && ((start[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
+                    if (loopTranslation[0] != 0 || loopTranslation[1] != 0) {
+                        this.ctx.beginPath()
+                        this.ctx.translate(loopTranslation[0], loopTranslation[1])
+
+                        this.ctx.moveTo(start[0], start[1])
+                        this.ctx.lineTo(nextPos[0], nextPos[1])
+                        this.ctx.closePath()
+                        this.ctx.stroke();
+                    }
                 }
                 this.ctx.restore()
+                remainingDistance -= currentDistance
                 if (remainingDistance > 100000) {console.warn("uh oh"); break; }
                 if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
             }

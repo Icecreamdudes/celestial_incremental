@@ -55,8 +55,8 @@
             },
         },
         102: {
-            title() { return "<h3>" + (player.lightRift.interspaceConditions[1] ? "<h3>LOOP" : "<h3>DEPOSIT SINGULARITIES") },
-            canClick() { return player.s.singularities.gte(1e8) && !player.lightRift.interspaceConditions[1] },
+            title() { return "<h3>" + (player.lightRift.interspaceConditions[1] ? "<h3>CYCLE" : "<h3>DEPOSIT SINGULARITIES") },
+            canClick() { return player.s.singularities.gte(1e9) && !player.lightRift.interspaceConditions[1] },
             unlocked() { return true },
             onClick() {
                 player.lightRift.interspaceConditions[1] = true
@@ -107,7 +107,7 @@
             },
         },
         104: {
-            title() { return "<h3>" + (player.lightRift.interspaceConditions[3] ? "<h3>END" : "<h3>DEPOSIT CORE FRAGMENTS") },
+            title() { return "<h3>" + (player.lightRift.interspaceConditions[3] ? "<h3>BREAK" : "<h3>DEPOSIT CORE FRAGMENTS") },
             canClick() { return player.cof.coreFragments[2].gte(1e10) && !player.lightRift.interspaceConditions[3] },
             unlocked() { return true },
             onClick() {
@@ -187,7 +187,7 @@
                             ["style-column", [
                                 ["raw-html", "β", {color: "#1a6641", fontSize: "125px", fontFamily: "monospace"}],
                                 ["style-row", [
-                                    ["raw-html", () => {return format(player.s.singularities) + " / 100,000,000<br>Singularities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return format(player.s.singularities) + " / 1e9<br>Singularities"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#1a6641", borderRadius: "10px 10px 0px 0px", width: "250px", height:"50px"}],
                                 ["blank", "3px", {width: "3px"}],
                                 ["clickable", 102],

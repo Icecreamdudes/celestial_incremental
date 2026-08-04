@@ -80,7 +80,7 @@
         player.db.milestone1Effect = Decimal.pow(100, player.db.boosters.pow(0.75))
         player.db.milestone2Effect = player.du.points.add(1).pow(0.15).div(30).add(1)
         player.db.milestone4Effect = player.db.boosters.sub(11).max(0).pow(0.666).pow_base(2.5)
-        player.db.milestone8Effect = player.sma.starmetalAlloy.div(1e10).add(1).log(10).pow(2).div(50).add(1)
+        player.db.milestone8Effect = player.sma.starmetalAlloy.div(1e10).add(1).log(10).pow(2).div(100).add(1)
         player.db.milestone9Effect = player.pet.eclipseTimerTickspeedDivisor
 
         player.db.permaMilestone4Effect = player.db.bestBoosters.sub(12).pow(0.35).div(10).add(1)

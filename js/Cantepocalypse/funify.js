@@ -3294,7 +3294,7 @@
                     ["row", [["challenge", 12]]],
                     ["blank", "10px"],
                     ["row", [
-                        ["raw-html", () => { return player.fu.enterNumb ? "You have <h3>" + formatSimple(player.fu.apathy) + "</h3> apathy" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.fu.enterNumb ? "You have <h3>" + formatSimple(player.fu.apathy) + "</h3> apathy." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return inChallenge("fu", 12) ? "(+" + formatSimple(player.fu.apathyToGet) + ")" : "" }, () => {
                             let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                             player.fu.apathyToGet.gte(1) ? look.color = "white" : look.color = "gray"

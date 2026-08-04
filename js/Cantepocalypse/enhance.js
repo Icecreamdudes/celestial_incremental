@@ -685,6 +685,14 @@
     },
     tabFormat: [
         ["row", [
+            ["raw-html", () => { return player.fu.enterNumb ? "You have " + formatSimple(player.fu.apathy) + " apathy." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => { return inChallenge("fu", 12) ? "(+" + formatSimple(player.fu.apathyToGet) + ")" : "" }, () => {
+                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                player.fu.apathyToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.en.enhancePoints) + "</h3> enhance points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + format(player.en.enhancePointsToGet) + ")" }, () => {
                     let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}

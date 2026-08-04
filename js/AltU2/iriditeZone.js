@@ -24,12 +24,12 @@ addLayer("iriditeZone", {
             textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
             marginRight: "50px !important",
         }
-        if (player.subtabs["ir"]["spaceStages"] == "spaceZone2") str.outline = "3px solid #fff"
+        if (player.subtabs["ir"]["spaceStages"] == "iriditeZone") str.outline = "3px solid #fff"
         return str
     },
     tooltip: "Iridite Zone",
     branches: ["spaceZone2"],
-    color: "#904ee6",
+    color: "#ffffff",
     update(delta) {
         player[this.layer].levelScaling = new Decimal(1.1)
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
@@ -128,6 +128,9 @@ addLayer("iriditeZone", {
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", "<u>Iridite", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Iridite will always be attacking", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
 
                 ], {width: "397px", height: "363px"}],
@@ -188,7 +191,7 @@ SB_zones.iriditeZone = {
     },
     levelUp(level) {
         // || level.eq(2)
-        if (level.modulo(20).eq(0)) {
+        if (level.modulo(20).eq(0) || level.eq(2)) {
             SB_spawnCelestialite("iridite")
         }
     },
@@ -256,11 +259,14 @@ SB_celestialites.iridite = {
         // Decide on an attack
         
         if (celestialite.playerDist < 800) {
+/*
             let options = ['dagger', 'radial', 'shortBurst', 'homing', 'charge', 'teleport'];
             if (celestialite.phase >= 2) options = options.concat(['radialDagger', 'raining']);
             if (celestialite.phase >= 3) options = options.concat(['giant', 'laser']);
             if (celestialite.phase >= 4) options = options.concat(['laser', 'charge', 'teleport']);
             options.splice(options.indexOf(celestialite.currentAttack), 1)
+*/
+            let options = ['giant'];
             celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
         } else if (celestialite.playerDist < 1200) {
             celestialite.currentAttack = Math.random() < 0.5 ? "charge" : "teleport";
@@ -372,11 +378,11 @@ SB_celestialites.iridite = {
                 celestialite.attackTimer = 90
                 for (i = 0; i < 6; i++) {
                     let ang = Math.random() * Math.PI * 2
-                    let revAng = (ang + Math.PI * 2) % (Math.PI * 2) - Math.PI
+                    let revAng = (ang + Math.PI * 3) % (Math.PI * 2) - Math.PI
                     let dist = 800 + Math.random() * 400
                     SB_spawnWarning("iriditeDagger", celestialite, {
-                        x: arena.ship.x + Math.cos(ang) * dist,
-                        y: arena.ship.y + Math.sin(ang) * dist,
+                        x: arena.ship.x - Math.cos(ang) * dist,
+                        y: arena.ship.y - Math.sin(ang) * dist,
                         ang: revAng,
                         targetAng: revAng,
                     })
@@ -472,8 +478,8 @@ SB_celestialites.iridite = {
 
         // Decide on a move angle
         if (celestialite.currentAttack == "charge") {
-            let angDist = ( (celestialite.playerAng-Math.PI/2) - celestialite.moveAng + Math.PI ) % Math.PI*2 - Math.PI;
-            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI*2 : angDist) * 0.03125;
+            let angDist = ( (celestialite.playerAng) - celestialite.moveAng + 3 * Math.PI ) % (Math.PI*2) - Math.PI;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI * 2 : angDist) * 0.03125;
         } else {
             celestialite.moveAng = celestialite.playerAng;
         }
@@ -1439,7 +1445,7 @@ SB_warnings.iriditeDagger = {
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
         warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
-        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
+        warning.ang = ((warning.ang + 3 * Math.PI) % (Math.PI * 2)) - Math.PI
     },
     onReady(warning) {
         warning.targetAng = warning.ang
@@ -1457,7 +1463,7 @@ SB_warnings.iriditeGiant = {
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
         warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
-        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
+        warning.ang = ((warning.ang + 3 * Math.PI) % (Math.PI * 2)) - Math.PI
     },
     onReady(warning) {
         warning.targetAng = warning.ang

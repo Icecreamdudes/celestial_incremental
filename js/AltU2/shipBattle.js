@@ -495,6 +495,140 @@ class SpaceArena {
             );
         }
     }
+    drawWrappingLine(source, sourceRef) {
+        /*
+
+            "source" NEEDS:
+            - x, y
+            - length
+            - ang
+            - timer
+
+            "sourceRef" NEEDS:
+            - width
+            - postReadyTimer
+            - getStyle
+
+        */
+        let remainingDistance = source.length
+        let currentPos = [source.x, source.y]
+        let nextPos = [source.x, source.y]
+        let down = source.ang < 0
+        let right = Math.abs(source.ang) < Math.PI / 2
+        let j = 0
+        this.ctx.fillStyle = "#ff7f00";
+        while (remainingDistance > 0) {
+            j++
+            this.ctx.save()
+            this.ctx.lineWidth = sourceRef.width;
+            this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
+            this.ctx.moveTo(currentPos[0], currentPos[1])
+            if (source.timer > sourceRef.postReadyTimer) {
+                let wrapped = this.getVisibleWrappedCoords([source.x, source.y], [8, 8])
+                if (wrapped) {
+                    this.ctx.beginPath()
+                    this.ctx.arc(wrapped[0], wrapped[1], 4, 0, 360)
+                    this.ctx.fill()
+                }
+            }
+            this.ctx.beginPath()
+            // Get distance to next point of screen looping
+            // Vertical Wall
+            let hx = Math.abs((right ? this.width - currentPos[0] : currentPos[0]) / Math.cos(source.ang)) || 0
+            // Horizontal Wall
+            let hy = Math.abs((!down ? this.height - currentPos[1] : currentPos[1]) / Math.sin(source.ang)) || 0
+            let currentDistance = Math.min(hx, hy)
+            if (remainingDistance < currentDistance) {
+                // ^ This needs to account for screen wrapping
+                // Finish
+                
+                nextPos[0] = currentPos[0] + Math.cos(source.ang) * remainingDistance
+                nextPos[1] = currentPos[1] + Math.sin(source.ang) * remainingDistance
+                this.ctx.strokeStyle = sourceRef.style(this.ctx, source,
+                    [currentPos[0] - (source.length - remainingDistance) * Math.cos(source.ang), currentPos[1] - (source.length - remainingDistance) * Math.sin(source.ang)],
+                    [nextPos[0], nextPos[1]]
+                );
+                this.ctx.moveTo(currentPos[0], currentPos[1])
+                this.ctx.lineTo(nextPos[0], nextPos[1])
+                this.ctx.closePath()
+                this.ctx.stroke();
+                // Looping
+                let loopTranslation = [0, 0]
+                if (this.ship.x <= this.canvasWidth / 2 && ((currentPos[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
+                if (this.ship.x >= this.width - this.canvasWidth / 2 && ((currentPos[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
+                if (this.ship.y <= this.canvasHeight / 2 && ((currentPos[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
+                if (this.ship.y >= this.height - this.canvasHeight / 2 && ((currentPos[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
+                if (loopTranslation[0] != 0) {
+                    this.ctx.translate(loopTranslation[0], 0)
+                    this.ctx.beginPath()
+                    this.ctx.moveTo(currentPos[0], currentPos[1])
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+                    this.ctx.translate(-loopTranslation[0], 0)
+                }
+                if (loopTranslation[1] != 0) {
+                    this.ctx.translate(0, loopTranslation[1])
+                    this.ctx.beginPath()
+                    this.ctx.moveTo(currentPos[0], currentPos[1])
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+                    this.ctx.translate(0, -loopTranslation[1])
+                }
+                if (loopTranslation[0] != 0 && loopTranslation[1] != 0) {
+                    this.ctx.translate(loopTranslation[0], loopTranslation[1])
+                    this.ctx.beginPath()
+                    this.ctx.moveTo(currentPos[0], currentPos[1])
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+                }
+                remainingDistance = 0
+            } else {
+                // Keep going
+                let start = [currentPos[0], currentPos[1]]                    
+                
+                if (hx < hy) {
+                    nextPos[0] = right ? this.width : 0
+                    nextPos[1] = currentPos[1] + currentDistance * Math.sin(source.ang)
+                    currentPos[0] = !right ? this.width : 0
+                    currentPos[1] = nextPos[1]
+                } else {
+                    nextPos[0] = currentPos[0] + currentDistance * Math.cos(source.ang)
+                    nextPos[1] = !down ? this.height : 0
+                    currentPos[0] = nextPos[0]
+                    currentPos[1] = down ? this.height : 0
+                }
+                this.ctx.strokeStyle = sourceRef.style(this.ctx, source,
+                    [start[0] - (source.length - remainingDistance) * Math.cos(source.ang), start[1] - (source.length - remainingDistance) * Math.sin(source.ang)],
+                    [nextPos[0] + (remainingDistance - currentDistance) * Math.cos(source.ang), nextPos[1] + (remainingDistance - currentDistance) * Math.sin(source.ang)]
+                );
+                this.ctx.moveTo(start[0], start[1])
+                this.ctx.lineTo(nextPos[0], nextPos[1])
+                this.ctx.closePath()
+                this.ctx.stroke();
+                // Looping
+                let loopTranslation = [0, 0]
+                if (this.ship.x <= this.canvasWidth / 2 && ((start[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
+                if (this.ship.x >= this.width - this.canvasWidth / 2 && ((start[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
+                if (this.ship.y <= this.canvasHeight / 2 && ((start[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
+                if (this.ship.y >= this.height - this.canvasHeight / 2 && ((start[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
+                if (loopTranslation[0] != 0 || loopTranslation[1] != 0) {
+                    this.ctx.beginPath()
+                    this.ctx.translate(loopTranslation[0], loopTranslation[1])
+                    this.ctx.moveTo(start[0], start[1])
+                    this.ctx.lineTo(nextPos[0], nextPos[1])
+                    this.ctx.closePath()
+                    this.ctx.stroke();
+                }
+            }
+            this.ctx.restore()
+            remainingDistance -= currentDistance
+            if (remainingDistance > 100000) {console.warn("uh oh"); break; }
+            if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
+        }
+    }
 
     // Expand the arena to cover the entire screen and make it transparent
     enterFullscreen() {
@@ -928,7 +1062,7 @@ class SpaceArena {
         shipStats.maxHp = player.ir.shipHealthMax.toNumber()
 
         shipStats.bulletSize = 1
-        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
+        if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
             shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
         } else {
             shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
@@ -2115,823 +2249,9 @@ class SpaceArena {
         for (let enemy of this.enemies.concat(this.asteroids)) {
             enemy.health = enemy.health.add(enemy.regen.div(60)).min(enemy.maxHealth)
             SB_celestialites[enemy.type].tick(enemy)
-            if (enemy.type === "iriditeBoss") {
-                // If the asteroid minigame is paused, also pause Iridite boss actions
-                if (this._asteroidMinigamePaused) {
-                    // Skip AI updates for the boss while paused (keeps current position/state)
-                    continue;
-                }
-                player.ir.iriditePhase = enemy.phase
-
-
-                // ensure wingPhase exists and animate it (controls flap)
-                if (typeof enemy.wingPhase !== "number") enemy.wingPhase = Math.random() * Math.PI * 2;
-                // speed scales subtly with phase so later phases flap a bit faster
-                enemy.wingPhase += 0.16 + enemy.phase * 0.02;
-                if (enemy.wingPhase > 1e9) enemy.wingPhase = enemy.wingPhase % (Math.PI * 2);
-
-                // Phase management based on remaining health
-                const pct = enemy.health / enemy.maxHealth;
-                let newPhase = 1;
-                if (pct <= 0.4) newPhase = 4;
-                else if (pct <= 0.6) newPhase = 3;
-                else if (pct <= 0.8) newPhase = 2;
-                if (newPhase !== enemy.phase) {
-                    enemy.phase = newPhase;
-                    enemy.state = "idle";
-                    enemy.attackTimer = 150;
-                    // change some parameters by phase
-                    if (enemy.phase === 2) { enemy.dashDistance = 260; enemy.dashSpeed = 8; }
-                    if (enemy.phase === 3) { enemy.dashDistance = 320; enemy.dashSpeed = 10; }
-                    if (enemy.phase === 4) { enemy.dashDistance = 420; enemy.dashSpeed = 12; }
-                }
-
-                // decide next action if idle and not currently dashing
-                if (!enemy.dashing && enemy.state === "idle") {
-                    enemy.attackTimer--;
-                    if (enemy.attackTimer <= 0) {
-                        let r = Math.random();
-                        let dr = ((dist - 400) / 1600);
-                        // make dagger and shortBurst available in all phases;
-                        // add laser possibility in phase 3+
-                        if (enemy.phase === 1) {
-                            if (Math.random() < dr) enemy.state = "lunge";
-                            else if (r < 0.3) enemy.state = "dagger"; // 30%
-                            else if (r < 0.5) enemy.state = "homing"; // 20%
-                            else if (r < 0.75) enemy.state = "radial"; // 25%
-                            else enemy.state = "shortBurst"; // 25%
-                        } else if (enemy.phase === 2) {
-                            if (Math.random() < dr) enemy.state = "lunge";
-                            else if (r < 0.25) enemy.state = "dagger"; // 25%
-                            else if (r < 0.4) enemy.state = "homing"; // 15%
-                            else if (r < 0.6) enemy.state = "radial"; // 20%
-                            else if (r < 0.8) enemy.state = "shortBurst"; // 20%
-                            else enemy.state = "raining"; // 20%
-                        } else if (enemy.phase === 3) {
-                            if (r < 0.2) enemy.state = "homing";
-                            else if (r < 0.38) enemy.state = "raining";
-                            else if (r < 0.54) enemy.state = "dagger";
-                            else if (r < 0.64) enemy.state = "burst";
-                            else if (r < 0.72) enemy.state = "giant";
-                            else if (r < 0.8) enemy.state = "laser";
-                            else enemy.state = "lunge";
-                        } else {
-                            // phase 4 (very aggressive)
-                            if (r < 0.08) enemy.state = "homing";
-                            else if (r < 0.18) enemy.state = "raining";
-                            else if (r < 0.34) enemy.state = "dagger";
-                            else if (r < 0.54) enemy.state = "burst";
-                            else if (r < 0.66) enemy.state = "giant";
-                            else if (r < 0.88) enemy.state = "laser";
-                            else enemy.state = "lunge";
-                        }
-
-                        // setup counters / targets for chosen attack
-                        if (enemy.state === "radial") {
-                            enemy.radialShotsRemaining = 2 + enemy.phase;
-                            enemy._actionCooldown = 9;
-                        } else if (enemy.state === "homing") {
-                            enemy.homingShotsRemaining = 3 + Math.floor(enemy.phase);
-                            enemy._actionCooldown = 18;
-                        } else if (enemy.state === "dashSequence") {
-                            enemy.dashSeqRemaining = 2 + enemy.phase;
-                            enemy._dashState = "prepare";
-                            enemy._actionCooldown = 6;
-                            enemy.dashing = true;
-                            enemy._dashTargets = [];
-                            const margin = Math.max(80, enemy.radius + 40);
-                            for (let i = 0; i < enemy.dashSeqRemaining; i++) {
-                                let tx = margin + Math.random() * (this.width - margin * 2);
-                                let ty = margin + Math.random() * (this.height - margin * 2);
-                                enemy._dashTargets.push({ x: tx, y: ty });
-                            }
-                            enemy.dashSpeed = Math.max(8, (enemy.phase * 1) + 8);
-                            enemy._dashTimer = 300;
-                        } else if (enemy.state === "lunge") {
-                            enemy._lungeTimer = 40 + Math.floor(enemy.phase * 6); // frames lunge lasts
-                        } else if (enemy.state === "raining") {
-                            enemy._rainingTimer = 240 + enemy.phase * 60; // total raining duration
-                            enemy._rainingInterval = Math.max(6, 18 - enemy.phase * 2);
-                        } else if (enemy.state === "dagger") {
-                            // choose dagger variation: legacy arena-lines or converge-circle (phase>=2)
-                            enemy._daggerPrep = 48;
-                            enemy._daggerFired = false;
-                            enemy._daggerLines = [];
-                            enemy._daggerConverge = null;
-                            // 60% chance to do converging circle when phase >= 2
-                            if (enemy.phase >= 2 && Math.random() < 0.60) {
-                                enemy._daggerConverge = { point: null, origins: [], prep: enemy._daggerPrep };
-                            }
-                            // prep counters used later
-                        } else if (enemy.state === "giant") {
-                            // Giant bouncing-star attack setup
-                            enemy._giantPrep = 54;
-                            enemy._giantFired = false;
-                            enemy._giantLines = [];
-                            enemy._giantLife = 260 + Math.floor(enemy.phase * 40); // exist for a few seconds
-                            enemy._giantSpeed = 8 + enemy.phase * 1.2;
-                            // plan 5 directions around player
-                            let count = 5;
-                            for (let i = 0; i < count; i++) {
-                                let baseAng = ang + (i - (count - 1) / 2) * 0.28 + (Math.random() - 0.5) * 0.18;
-                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
-                                let cx = enemy.x, cy = enemy.y;
-                                let ts = [];
-                                if (Math.abs(cosA) > 1e-6) {
-                                    ts.push((0 - cx) / cosA);
-                                    ts.push((this.width - cx) / cosA);
-                                }
-                                if (Math.abs(sinA) > 1e-6) {
-                                    ts.push((0 - cy) / sinA);
-                                    ts.push((this.height - cy) / sinA);
-                                }
-                                ts = ts.filter(t => isFinite(t));
-                                if (ts.length < 2) ts = [-1000, 1000];
-                                let tMin = Math.min(...ts), tMax = Math.max(...ts);
-                                let x1 = cx + cosA * tMin, y1 = cy + sinA * tMin;
-                                let x2 = cx + cosA * tMax, y2 = cy + sinA * tMax;
-                                enemy._giantLines.push({ x1, y1, x2, y2, timer: enemy._giantPrep, ang });
-                            }
-                        } else if (enemy.state === "shortBurst") {
-                            enemy._shortBurstShots = 2 + Math.floor(enemy.phase / 2);
-                            enemy._actionCooldown = 10;
-                        } else if (enemy.state === "burst") {
-                            enemy._burstShots = 2; // shoot shotgun twice
-                            enemy._actionCooldown = 10;
-                        } else if (enemy.state === "laser") {
-                            // laser duration and rotation speed
-                            enemy._laserTimer = 180 + enemy.phase * 40; // frames total (3s +)
-                            enemy._laserActive = false;
-                            enemy._laserAngle = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                            enemy._laserSpin = (Math.random() < 0.5 ? 1 : -1) * (0.006 + enemy.phase * 0.004); // radians/frame
-                            enemy._laserHitCooldown = 0;
-                        }
-                    }
-                }
-
-                // Radial volley
-                if (enemy.state === "radial") {
-                    if (enemy._actionCooldown <= 0) {
-                        let pieces = 14 + enemy.phase * 2;
-                        let baseSpread = (enemy.phase >= 3) ? 0.5 : 0;
-                        for (let i = 0; i < pieces; i++) {
-                            let baseAng = (i / pieces) * Math.PI * 2 + (Math.random() - 0.5) * baseSpread;
-                            let spd = 6;
-                            this.bullets.push({
-                                x: enemy.x + Math.cos(baseAng) * (enemy.radius - 6),
-                                y: enemy.y + Math.sin(baseAng) * (enemy.radius - 6),
-                                vx: Math.cos(baseAng) * spd,
-                                vy: Math.sin(baseAng) * spd,
-                                life: 240,
-                                damage: 5,
-                                pierce: 0,
-                                fromEnemy: true,
-                                homing: false,
-                                star: true
-                            });
-                        }
-                        enemy.radialShotsRemaining--;
-                        enemy._actionCooldown = 12;
-                    } else {
-                        enemy._actionCooldown--;
-                    }
-                    if (enemy.radialShotsRemaining <= 0) {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 10;
-                    }
-                }
-
-                // Homing volley (enemy homing bullets that target the player)
-                if (enemy.state === "homing") {
-                    if (enemy._actionCooldown <= 0) {
-                        // spawn homing projectile aimed at player (initial direction toward player)
-                        let ang = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x) + (Math.random() - 0.5) * 0.12;
-                        let spd = 3.5; // stronger initial speed
-                        // normalize (defensive) and set vx/vy
-                        let vx = Math.cos(ang) * spd;
-                        let vy = Math.sin(ang) * spd;
-                        this.bullets.push({
-                            x: enemy.x + Math.cos(ang) * (enemy.radius - 8),
-                            y: enemy.y + Math.sin(ang) * (enemy.radius - 8),
-                            vx: vx,
-                            vy: vy,
-                            life: 250,
-                            damage: 5,
-                            pierce: 0,
-                            fromEnemy: true,
-                            homing: true,
-                            homingToPlayer: true, // explicit: these home to player
-                            homingStrength: 0.16 + enemy.phase * 0.02, // allow faster turn to avoid orbit
-                            star: true,
-                            size: 20 // drawing hint for larger homing projectile
-                        });
-                        enemy.homingShotsRemaining--;
-                        enemy._actionCooldown = 14;
-                    } else {
-                        enemy._actionCooldown--;
-                    }
-                    if (enemy.homingShotsRemaining <= 0) {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 10;
-                    }
-                }
-                // --- Lunge: single directed dash toward player (any phase) ---
-                if (enemy.state === "lunge") {
-                    // End lunge if close to the player
-                    if (dist < 150) {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 10;
-                        enemy._lungeHit = 0;
-                    }
-                    if (enemy._lungeTimer > 0) {
-                        // compute normalized direction to player
-                        let strength = 6 + enemy.phase * 1.5; // per-frame movement
-                        let vx = (dx / dist) * strength;
-                        let vy = (dy / dist) * strength;
-                        enemy.x += vx;
-                        enemy.y += vy;
-
-                        // light contact damage while lunging (once per hit cooldown)
-                        let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-                        let sdx = closest[0] - enemy.x;
-                        let sdy = closest[1] - enemy.y;
-                        let sdist = Math.hypot(sdx, sdy);
-                        if (sdist < enemy.radius + shipRadius) {
-                            if (!enemy._lungeHit) {
-                                enemy._lungeHit = 18; // few frames cooldown
-                                let impactDmg = (6 + enemy.phase * 3) / this.shipStats.damageReduction;
-                                this.applyShipDamage(impactDmg);
-                            }
-                        }
-                        if (enemy._lungeHit && enemy._lungeHit > 0) enemy._lungeHit--;
-
-                        enemy._lungeTimer--;
-                    } else {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 10;
-                        enemy._lungeHit = 0;
-                    }
-                }
-
-                // --- Raining stars (phase 2+) : spawn many falling star projectiles from top ---
-                if (enemy.state === "raining") {
-                    if (enemy._rainingTimer > 0) {
-                        enemy._rainingTimer--;
-                        enemy._rainingInterval--;
-                        if (enemy._rainingInterval <= 0) {
-                            enemy._rainingInterval = Math.max(6, 18 - enemy.phase * 2);
-                            // spawn a small cluster each tick
-                            let count = 2 + Math.floor(enemy.phase / 2);
-                            for (let i = 0; i < count; i++) {
-                                let rPos = Math.random() - 0.5
-                                let rAng = Math.random() - 0.5
-                                let sx = enemy.x + (rPos * 1200 * Math.cos(ang + (Math.PI/2))) - (600 * Math.cos(ang));
-                                let sy = enemy.y + (rPos * 1200 * Math.sin(ang + (Math.PI/2))) - (600 * Math.sin(ang));
-                                let vx = Math.cos(ang + (rAng * 0.125 * Math.PI)) * 6;
-                                let vy = Math.sin(ang + (rAng * 0.125 * Math.PI)) * 6;
-                                this.bullets.push({
-                                    x: sx,
-                                    y: sy,
-                                    vx: vx,
-                                    vy: vy,
-                                    life: 600,
-                                    damage: 4 + enemy.phase,
-                                    pierce: 0,
-                                    fromEnemy: true,
-                                    homing: false,
-                                    star: true
-                                });
-                            }
-                        }
-                    } else {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 10;
-                    }
-                }
-
-                // --- Dagger attack (phase 2+): warn with red lines across arena, or converge-circle variant ---
-                if (enemy.state === "dagger") {
-                    // CONVERGE VARIANT: spawn many dagger origins around perimeter that aim at one converge point
-                    if (enemy._daggerConverge) {
-                        if (!enemy._daggerConverge.point) {
-                            // choose a random interior converge point (biased toward player)
-                            const jitter = 80;
-                            const cx = Math.max(80, Math.min(this.width - 80, closest[0] + (Math.random() - 0.5) * jitter));
-                            const cy = Math.max(80, Math.min(this.height - 80, closest[1] + (Math.random() - 0.5) * jitter));
-                            enemy._daggerConverge.point = { x: cx, y: cy };
-                            // choose origins around the arena edge
-                            const originCount = 8 + Math.floor(enemy.phase * 2);
-                            enemy._daggerConverge.origins = [];
-                            for (let i = 0; i < originCount; i++) {
-                                let side = i % 4;
-                                let ox = 0, oy = 0;
-                                if (side === 0) { ox = Math.random() * this.width; oy = -20 - Math.random() * 40; }
-                                if (side === 1) { ox = this.width + 20 + Math.random() * 40; oy = Math.random() * this.height; }
-                                if (side === 2) { ox = Math.random() * this.width; oy = this.height + 20 + Math.random() * 40; }
-                                if (side === 3) { ox = -20 - Math.random() * 40; oy = Math.random() * this.height; }
-                                enemy._daggerConverge.origins.push({ x: ox, y: oy, timer: enemy._daggerPrep });
-                            }
-                        }
-
-                        // countdown prep, flash converge point and origins (these are the red warning lines)
-                        if (enemy._daggerPrep > 0) {
-                            enemy._daggerPrep--;
-                            for (let o of enemy._daggerConverge.origins) o.timer = enemy._daggerPrep;
-                        } else if (!enemy._daggerFired) {
-                            // spawn daggers from each origin converging toward point
-                            const tgt = enemy._daggerConverge.point;
-                            for (let o of enemy._daggerConverge.origins) {
-                                let dx = tgt.x - o.x, dy = tgt.y - o.y;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                let nx = dx / dist, ny = dy / dist;
-                                let spd = 10 + enemy.phase * 1.4;
-                                this.bullets.push({
-                                    x: o.x,
-                                    y: o.y,
-                                    vx: nx * spd,
-                                    vy: ny * spd,
-                                    life: Math.floor(dist / spd) + 90,
-                                    damage: 8 + enemy.phase * 4,
-                                    pierce: 0,
-                                    fromEnemy: true,
-                                    dagger: true,
-                                    star: true,
-                                    daggerLine: { x1: o.x, y1: o.y, x2: tgt.x, y2: tgt.y }
-                                });
-                            }
-                            enemy._daggerFired = true;
-                            enemy._daggerEndDelay = 36;
-                        } else {
-                            enemy._daggerEndDelay--;
-                            if (enemy._daggerEndDelay <= 0) {
-                                enemy._daggerConverge = null;
-                                enemy._daggerFired = false;
-                                enemy.state = "idle";
-                                enemy.attackTimer = 50 - enemy.phase * 8;
-                            }
-                        }
-                    } else {
-                        // legacy line-based dagger across arena (single-line warnings then dagger along line)
-                        if (!enemy._daggerLines || enemy._daggerLines.length === 0) {
-                            enemy._daggerLines = [];
-                            let lineCount = 2 + Math.min(5, Math.floor(enemy.phase) + 1);
-                            enemy._daggerPrep = 48;
-                            for (let i = 0; i < lineCount; i++) {
-                                let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                                let baseAng = base + (Math.random() - 0.5) * 1.2 + (i - (lineCount - 1) / 2) * 0.18;
-                                let cosA = Math.cos(baseAng), sinA = Math.sin(baseAng);
-                                let cx = enemy.x, cy = enemy.y;
-                                let ts = [];
-                                if (Math.abs(cosA) > 1e-6) {
-                                    ts.push((0 - cx) / cosA);
-                                    ts.push((this.width - cx) / cosA);
-                                }
-                                if (Math.abs(sinA) > 1e-6) {
-                                    ts.push((0 - cy) / sinA);
-                                    ts.push((this.height - cy) / sinA);
-                                }
-                                ts = ts.filter(t => isFinite(t));
-                                if (ts.length < 2) { ts = [-1000, 1000]; cosA = 1; sinA = 0; }
-                                let tMin = Math.min(...ts), tMax = Math.max(...ts);
-                                let x1 = cx + cosA * tMin, y1 = cy + sinA * tMin;
-                                let x2 = cx + cosA * tMax, y2 = cy + sinA * tMax;
-                                enemy._daggerLines.push({ x1, y1, x2, y2, timer: enemy._daggerPrep });
-                            }
-                            enemy._daggerFired = false;
-                        }
-
-                        if (enemy._daggerPrep > 0) {
-                            enemy._daggerPrep--;
-                            for (let ln of enemy._daggerLines) ln.timer = enemy._daggerPrep;
-                        } else if (!enemy._daggerFired) {
-                            for (let ln of enemy._daggerLines) {
-                                let daggerPerLine = 1 + Math.floor(enemy.phase / 1);
-                                let dx = ln.x2 - ln.x1, dy = ln.y2 - ln.y1;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                let nx = dx / dist, ny = dy / dist;
-                                for (let k = 0; k < daggerPerLine; k++) {
-                                    let startT = (k + 0.5) / daggerPerLine;
-                                    let sx = ln.x1 + nx * dist * (startT * 0.2);
-                                    let sy = ln.y1 + ny * dist * (startT * 0.2);
-                                    let spd = 10 + enemy.phase * 1.2;
-                                    this.bullets.push({
-                                        x: sx,
-                                        y: sy,
-                                        vx: nx * spd,
-                                        vy: ny * spd,
-                                        life: Math.floor(dist / spd) + 120,
-                                        damage: 9 + enemy.phase * 4,
-                                        pierce: 0,
-                                        fromEnemy: true,
-                                        dagger: true,
-                                        star: true,
-                                        daggerLine: { x1: ln.x1, y1: ln.y1, x2: ln.x2, y2: ln.y2 }
-                                    });
-                                }
-                            }
-                            enemy._daggerFired = true;
-                            enemy._daggerEndDelay = 30;
-                        } else {
-                            enemy._daggerEndDelay--;
-                            if (enemy._daggerEndDelay <= 0) {
-                                enemy._daggerLines = [];
-                                enemy._daggerFired = false;
-                                enemy.state = "idle";
-                                enemy.attackTimer = 80 - enemy.phase * 12;
-                            }
-                        }
-                    }
-                }
-
-                // --- Giant bouncing-star attack logic ---
-                if (enemy.state === "giant") {
-                    if (enemy._giantPrep > 0) {
-                        enemy._giantPrep--;
-                        for (let ln of enemy._giantLines) ln.timer = enemy._giantPrep;
-                    } else if (!enemy._giantFired) {
-                        for (let ln of enemy._giantLines) {
-                            let ang = ln.ang || Math.atan2(ln.y2 - ln.y1, ln.x2 - ln.x1);
-                            let spd = enemy._giantSpeed || 8;
-                            let bx = enemy.x + Math.cos(ang) * (enemy.radius - 8);
-                            let by = enemy.y + Math.sin(ang) * (enemy.radius - 8);
-                            let life = enemy._giantLife || 240;
-                            this.bullets.push({
-                                x: bx,
-                                y: by,
-                                vx: Math.cos(ang) * spd,
-                                vy: Math.sin(ang) * spd,
-                                life: life,
-                                _maxLife: life,
-                                damage: 6 + enemy.phase * 3,
-                                pierce: 0,
-                                fromEnemy: true,
-                                giant: true,
-                                star: true,
-                                radius: 18,
-                            });
-                        }
-                        enemy._giantFired = true;
-                        enemy._giantEndDelay = 120;
-                    } else {
-                        enemy._giantEndDelay--;
-                        if (enemy._giantEndDelay <= 0) {
-                            enemy._giantLines = [];
-                            enemy._giantFired = false;
-                            enemy.state = "idle";
-                            enemy.attackTimer = 90 - enemy.phase * 14;
-                        }
-                    }
-                }
-
-                // --- Short Burst: quick aimed volleys at the player (all phases) ---
-                if (enemy.state === "shortBurst") {
-                    if (enemy._shortBurstShots > 0) {
-                        if (enemy._actionCooldown <= 0) {
-                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                            let pellets = 6 + Math.floor(enemy.phase * 1.5);
-                            let spread = 0.28 - enemy.phase * 0.02;
-                            let speed = 10 + enemy.phase * 0.6;
-                            for (let i = 0; i < pellets; i++) {
-                                let offset = (i / (pellets - 1) - 0.5) * spread + (Math.random() - 0.5) * 0.02;
-                                let ang = base + offset;
-                                this.bullets.push({
-                                    x: enemy.x + Math.cos(ang) * (enemy.radius - 8),
-                                    y: enemy.y + Math.sin(ang) * (enemy.radius - 8),
-                                    vx: Math.cos(ang) * speed,
-                                    vy: Math.sin(ang) * speed,
-                                    life: 200,
-                                    damage: 5 + Math.floor(enemy.phase * 1.2),
-                                    pierce: 0,
-                                    fromEnemy: true,
-                                    homing: false,
-                                    star: true
-                                });
-                            }
-                            enemy._shortBurstShots--;
-                            enemy._actionCooldown = 16;
-                        } else {
-                            enemy._actionCooldown--;
-                        }
-                    } else {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 60 - enemy.phase * 9;
-                    }
-                }
-
-                // --- Laser attack (phase 3+): rotating sustained beam that damages along its line ---
-                if (enemy.state === "laser") {
-                    if (enemy._laserTimer > 0) {
-                        // start active after brief windup
-                        if (!enemy._laserActive && enemy._laserTimer < (180 + enemy.phase * 40) - 8) {
-                            enemy._laserActive = true;
-                        }
-                        // rotate beam angle
-                        enemy._laserAngle += enemy._laserSpin;
-                        // damage check once per few frames using cooldown
-                        if (enemy._laserHitCooldown > 0) enemy._laserHitCooldown--;
-                        // check ship intersection with beam (in world space)
-                        if (enemy._laserActive && enemy._laserHitCooldown <= 0) {
-                            // compute perpendicular distance to beam line
-                            let bx = closest[0] - enemy.x;
-                            let by = closest[1] - enemy.y;
-                            let ang = enemy._laserAngle;
-                            let ux = Math.cos(ang), uy = Math.sin(ang);
-                            // projection along beam
-                            let proj = bx * ux + by * uy;
-                            // perpendicular distance
-                            let perp = Math.abs(bx * (-uy) + by * ux);
-                            // beam effective length and thickness
-                            let beamLen = Math.max(this.width, this.height) * 1.5;
-                            let thickness = enemy.radius * 0.9;
-                            if (proj > -enemy.radius && proj < beamLen && perp < thickness + (player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12)) {
-                                // apply damage once per short cooldown
-                                let dmg = (6 + enemy.phase * 1) / this.shipStats.damageReduction;
-                                this.applyShipDamage(dmg);
-                                enemy._laserHitCooldown = 8; // frames between hits
-                            }
-                        }
-                        enemy._laserTimer--;
-                    } else {
-                        // laser finished
-                        enemy._laserActive = false;
-                        enemy.state = "idle";
-                        enemy.attackTimer = 140 - enemy.phase * 16;
-                    }
-                }
-
-                // --- Burst attack (phase 3+): shotgun burst toward player, repeated twice ---
-                if (enemy.state === "burst") {
-                    if (enemy._burstShots > 0) {
-                        if (enemy._actionCooldown <= 0) {
-                            // spawn shotgun spread aimed at player
-                            let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                            let pellets = 7 + enemy.phase; // number of pellets
-                            let spread = 0.36; // total spread radians
-                            let speed = 9 + enemy.phase * 0.6;
-                            for (let i = 0; i < pellets; i++) {
-                                let offset = (i / (pellets - 1) - 0.5) * spread;
-                                let ang = base + offset + (Math.random() - 0.5) * 0.03;
-                                this.bullets.push({
-                                    x: enemy.x + Math.cos(ang) * (enemy.radius - 8),
-                                    y: enemy.y + Math.sin(ang) * (enemy.radius - 8),
-                                    vx: Math.cos(ang) * speed,
-                                    vy: Math.sin(ang) * speed,
-                                    life: 220,
-                                    damage: 5 + enemy.phase * 1,
-                                    pierce: 0,
-                                    fromEnemy: true,
-                                    homing: false,
-                                    star: true
-                                });
-                            }
-                            enemy._burstShots--;
-                            enemy._actionCooldown = 12;
-                        } else {
-                            enemy._actionCooldown--;
-                        }
-                    } else {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 80 - enemy.phase * 9;
-                    }
-                }
-                // Dash sequence using precomputed random targets
-                if (enemy.dashing) {
-
-                    if (!enemy._dashState) enemy._dashState = "prepare";
-
-                    // In dash 'prepare' select next target and compute direction
-                    if (enemy._dashState === "prepare") {
-                        // If the global dash timer expired, end dash sequence immediately
-                        if (typeof enemy._dashTimer === "number" && enemy._dashTimer <= 0) {
-                            enemy.dashing = false;
-                            enemy._dashState = null;
-                            enemy._dashVel = null;
-                            enemy.state = "idle";
-                            enemy.attackTimer = 120 - enemy.phase * 12;
-                        } else {
-                            let targetPos = null;
-                            if (enemy._dashTargets && enemy._dashTargets.length > 0) {
-                                targetPos = enemy._dashTargets.shift();
-                            } else {
-                                targetPos = { x: closest[0], y: closest[1] };
-                            }
-                            enemy._dashDir = { x: dx / dist, y: dy / dist };
-                            // store target pos & remaining distance so we can know when to pick next
-                            enemy._dashTargetPos = targetPos;
-                            enemy._dashRemainingDistance = dist;
-                            // set continuous dash velocity similar to gamma/delta behavior (no trails)
-                            enemy._dashVel = { x: enemy._dashDir.x * (enemy.dashSpeed || 36), y: enemy._dashDir.y * (enemy.dashSpeed || 36) };
-                            enemy._dashState = "moving";
-                            // lock state so boss doesn't pick other attacks mid-dash
-                            enemy.state = "dashing";
-                        }
-                    }
-
-                    // moving: apply continuous velocity each update frame (like gamma/delta)
-                    if (enemy._dashState === "moving") {
-                        // global dash timer tick
-                        if (typeof enemy._dashTimer === "number") enemy._dashTimer--;
-
-                        // move by dash velocity
-                        enemy.x += enemy._dashVel.x;
-                        enemy.y += enemy._dashVel.y;
-
-                        // decrement remaining distance toward current target
-                        let moved = Math.hypot(enemy._dashVel.x, enemy._dashVel.y) || 0;
-                        enemy._dashRemainingDistance -= moved;
-
-                        // contact damage (apply once per collision and immediately knockback & damage)
-                        let sx = closest[0] - enemy.x;
-                        let sy = closest[1] - enemy.y;
-                        let sdist = Math.hypot(sx, sy);
-                        let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-                        if (sdist < enemy.radius + shipRadius) {
-                            // prevent fast repeated damage by using a short cooldown flag on enemy
-                            if (!enemy._recentlyHit) {
-                                enemy._recentlyHit = 6; // frames of invuln for player from this contact
-                                // reduced dash damage to make attack less violent
-                                let impactDmg = (5) / this.shipStats.damageReduction;
-                                this.applyShipDamage(impactDmg);
-                                // reduced knockback
-                                let kn = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                                if (player.ir.shipType == 3 || player.ir.shipType == 7) {
-                                    this.ship.vx += Math.cos(kn) * 6;
-                                    this.ship.vy += Math.sin(kn) * 6;
-                                } else {
-                                    closest[0] += Math.cos(kn) * 4;
-                                    closest[1] += Math.sin(kn) * 4;
-                                }
-                                if (player.ir.shipHealth.lte(0)) this.onShipDeath();
-                            }
-                        }
-                        // reduce hit cooldown counter
-                        if (enemy._recentlyHit && enemy._recentlyHit > 0) enemy._recentlyHit--;
-
-                        // If we've reached the current dash target, count one dash done and prepare next
-                        if (enemy._dashRemainingDistance <= 0) {
-                            enemy.dashSeqRemaining--;
-                            // If the global dash timer expired or no more dashes left, stop
-                            if ((typeof enemy._dashTimer === "number" && enemy._dashTimer <= 0) || enemy.dashSeqRemaining <= 0) {
-                                enemy.dashing = false;
-                                enemy._dashState = null;
-                                enemy._dashVel = null;
-                                enemy.state = "idle";
-                                enemy.attackTimer = 100 - enemy.phase * 14;
-                            } else {
-                                // prepare next dash target immediately
-                                enemy._dashState = "prepare";
-                            }
-                        }
-
-                        // If the global dash timer expired mid-dash, stop immediately
-                        if (typeof enemy._dashTimer === "number" && enemy._dashTimer <= 0) {
-                            enemy.dashing = false;
-                            enemy._dashState = null;
-                            enemy._dashVel = null;
-                            enemy.state = "idle";
-                            enemy.attackTimer = 100 - enemy.phase * 14;
-                        }
-                    }
-
-                }
-
-                // Follow player when idle (instead of drifting to center)
-                if (!enemy.dashing && enemy.state === "idle") {
-                    let dx = closest[0] - enemy.x;
-                    let dy = closest[1] - enemy.y;
-                    let dist = Math.hypot(dx, dy) || 1;
-                    // follow speed small; slightly increase by phase so later phases close gap faster
-                    let followSpeed = 0.5 + enemy.phase * 0.25;
-                    enemy.x += (dx / dist) * followSpeed;
-                    enemy.y += (dy / dist) * followSpeed;
-                    // subtle jitter so movement looks organic
-                    if (!enemy.wanderAngle) enemy.wanderAngle = Math.random() * Math.PI * 2;
-                    enemy.wanderAngle += (Math.random() - 0.5) * 0.01;
-                }
-
-                // continue to next enemy after special boss handling
-                enemy.x = ((enemy.x % this.width) + this.width) % this.width
-                enemy.y = ((enemy.y % this.height) + this.height) % this.height
-                continue;
-            }
-
-            // Generic wander updates
             SB_updateMovement(enemy)
-
-            // --- UFO Miniboss behavior ---
-            if (enemy.type === "ufoBoss") {
-                // Hovering: maintain an orbit distance ~220 from player
-                let dx = closest[0] - enemy.x;
-                let dy = closest[1] - enemy.y;
-                let dist = Math.hypot(dx, dy) || 1;
-                let desiredDist = 220;
-                // Move toward or away to keep distance
-                let moveSpeed = 2.5;
-                if (dist > desiredDist + 10) {
-                    enemy.vx = (dx / dist) * moveSpeed;
-                    enemy.vy = (dy / dist) * moveSpeed;
-                } else if (dist < desiredDist - 10) {
-                    enemy.vx = -(dx / dist) * moveSpeed;
-                    enemy.vy = -(dy / dist) * moveSpeed;
-                } else {
-                    // small orbit / wobble
-                    let wobble = 0.02;
-                    enemy.wanderAngle += (Math.random() - 0.5) * wobble;
-                    enemy.vx = Math.cos(enemy.wanderAngle) * 0.8;
-                    enemy.vy = Math.sin(enemy.wanderAngle) * 0.8;
-                }
-                // Apply movement unless dashing (dash overrides)
-                if (!enemy.dashing) {
-                    enemy.x += enemy.vx;
-                    enemy.y += enemy.vy;
-                }
-                // Attack state machine
-                enemy.attackTimer--;
-                if (!enemy.dashing && enemy.attackTimer <= 0 && enemy.state === "idle") {
-                    // pick an attack
-                    let r = Math.random();
-                    if (r < 0.6) {
-                        enemy.state = "burst";
-                        enemy.burstShots = 6;
-                    }  else {
-                        enemy.state = "spin";
-                        enemy.spinTimer = 90;
-                        enemy.spinAngle = 0;
-                    }
-                }
-                // Burst: shoot a short burst aimed at player
-                if (enemy.state === "burst") {
-                    if (enemy.burstShots > 0 && (enemy.burstIntervalCounter === undefined || enemy.burstIntervalCounter <= 0)) {
-                        enemy.burstIntervalCounter = enemy.burstInterval;
-                        // shoot a spread toward player
-                        let base = Math.atan2(closest[1] - enemy.y, closest[0] - enemy.x);
-                        let spread = 0.24;
-                        let bulletsThisShot = 3;
-                        for (let i = 0; i < bulletsThisShot; i++) {
-                            let offset = (i / (bulletsThisShot - 1) - 0.5) * spread;
-                            let ang = base + offset;
-                            let spd = this.enemyTypes.ufoBoss.bulletSpeed;
-                            this.bullets.push({
-                                x: enemy.x + Math.cos(ang) * enemy.radius,
-                                y: enemy.y + Math.sin(ang) * enemy.radius,
-                                vx: Math.cos(ang) * spd,
-                                vy: Math.sin(ang) * spd,
-                                life: 120,
-                                damage: 5,
-                                pierce: 0,
-                                piercedAsteroids: [],
-                                fromEnemy: true,
-                            });
-                        }
-                        enemy.burstShots--;
-                    }
-                    if (enemy.burstIntervalCounter !== undefined) enemy.burstIntervalCounter--;
-                    if (enemy.burstShots <= 0 && enemy.burstIntervalCounter <= 0) {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 70;
-                    }
-                }
-                // Spin: rotate and spray bullets in 360 over time
-                if (enemy.state === "spin") {
-                    // spawn a handful of bullets each frame at current spinAngle
-                    let bulletsPerFrame = 1;
-                    for (let i = 0; i < bulletsPerFrame; i++) {
-                        let ang = enemy.spinAngle + (i / bulletsPerFrame) * (Math.PI * 2);
-                        let spd = 6;
-                        this.bullets.push({
-                            x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
-                            y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
-                            vx: Math.cos(ang) * spd,
-                            vy: Math.sin(ang) * spd,
-                            life: 120,
-                            damage: 6,
-                            pierce: 0,
-                            piercedAsteroids: [],
-                            fromEnemy: true
-                        });
-                    }
-                    // advance spin angle to rotate spray
-                    enemy.spinAngle += 0.125;
-                    enemy.spinTimer--;
-                    if (enemy.spinTimer <= 0) {
-                        enemy.state = "idle";
-                        enemy.attackTimer = 100;
-                    }
-                }
-                // Keep UFO inside arena bounds (simple clamp)
-                if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-                // continue to next enemy handling
-                enemy.x = ((enemy.x % this.width) + this.width) % this.width
-                enemy.y = ((enemy.y % this.height) + this.height) % this.height
-                continue;
-            }
-
             enemy.x = ((enemy.x % this.width) + this.width) % this.width
             enemy.y = ((enemy.y % this.height) + this.height) % this.height
-            
             if (enemy.health.lte(0)) {
                 handleEnemyDeath(enemy);
                 continue;
@@ -3690,137 +3010,8 @@ class SpaceArena {
         // Draw warns
         for (let i = this.warnings.length - 1; i >= 0; i--) {
             let warning = this.warnings[i];
-            let remainingDistance = warning.dist
-            let currentPos = [warning.x, warning.y]
-            let nextPos = [warning.x, warning.y]
             let warnRef = SB_warnings[warning.type]
-
-            let down = warning.ang < 0
-            let right = Math.abs(warning.ang) < Math.PI / 2
-            let j = 0
-
-            this.ctx.fillStyle = "#ff7f00";
-            while (remainingDistance > 0) {
-                j++
-                this.ctx.save()
-                this.ctx.lineWidth = warnRef.width;
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.moveTo(currentPos[0], currentPos[1])
-                if (warning.timer > warnRef.postReadyTimer) {
-                    let wrapped = this.getVisibleWrappedCoords([warning.x, warning.y], [8, 8])
-                    if (wrapped) {
-                        this.ctx.beginPath()
-                        this.ctx.arc(wrapped[0], wrapped[1], 4, 0, 360)
-                        this.ctx.fill()
-                    }
-                }
-                this.ctx.beginPath()
-
-                // Get distance to next point of screen looping
-                // Vertical Wall
-                let hx = Math.abs((right ? this.width - currentPos[0] : currentPos[0]) / Math.cos(warning.ang)) || 0
-                // Horizontal Wall
-                let hy = Math.abs((!down ? this.height - currentPos[1] : currentPos[1]) / Math.sin(warning.ang)) || 0
-                let currentDistance = Math.min(hx, hy)
-
-                if (remainingDistance < currentDistance) {
-                    // ^ This needs to account for screen wrapping
-
-                    // Finish
-                    
-                    nextPos[0] = currentPos[0] + Math.cos(warning.ang) * remainingDistance
-                    nextPos[1] = currentPos[1] + Math.sin(warning.ang) * remainingDistance
-
-                    let g = this.ctx.createLinearGradient(
-                        currentPos[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                        currentPos[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                        nextPos[0],
-                        nextPos[1],
-                    );
-                    
-                    let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warnRef.fade ? (warning.timer - warnRef.postReadyTimer) / warnRef.readyTimer * 0.5 : 0.5) + ')');
-                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
-                    this.ctx.strokeStyle = g;
-                    
-                    this.ctx.moveTo(currentPos[0], currentPos[1])
-                    this.ctx.lineTo(nextPos[0], nextPos[1])
-                    this.ctx.closePath()
-                    this.ctx.stroke();
-
-                    // Looping
-                    let loopTranslation = [0, 0]
-                    if (this.ship.x <= this.canvasWidth / 2 && ((currentPos[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
-                    if (this.ship.x >= this.width - this.canvasWidth / 2 && ((currentPos[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
-                    if (this.ship.y <= this.canvasHeight / 2 && ((currentPos[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
-                    if (this.ship.y >= this.height - this.canvasHeight / 2 && ((currentPos[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
-                    if (loopTranslation[0] != 0 || loopTranslation[1] != 0) {
-                        this.ctx.translate(loopTranslation[0], loopTranslation[1])
-                        this.ctx.beginPath()
-
-                        this.ctx.moveTo(currentPos[0], currentPos[1])
-                        this.ctx.lineTo(nextPos[0], nextPos[1])
-                        this.ctx.closePath()
-                        this.ctx.stroke();
-                    }
-
-                    remainingDistance = 0
-                } else {
-                    // Keep going
-
-                    let start = [currentPos[0], currentPos[1]]                    
-                    
-                    if (hx < hy) {
-                        nextPos[0] = right ? this.width : 0
-                        nextPos[1] = currentPos[1] + currentDistance * Math.sin(warning.ang)
-                        currentPos[0] = !right ? this.width : 0
-                        currentPos[1] = nextPos[1]
-                    } else {
-                        nextPos[0] = currentPos[0] + currentDistance * Math.cos(warning.ang)
-                        nextPos[1] = !down ? this.height : 0
-                        currentPos[0] = nextPos[0]
-                        currentPos[1] = down ? this.height : 0
-                    }
-                    let g = this.ctx.createLinearGradient(
-                        start[0] - (warning.dist - remainingDistance) * Math.cos(warning.ang),
-                        start[1] - (warning.dist - remainingDistance) * Math.sin(warning.ang),
-                        nextPos[0] + (remainingDistance - currentDistance) * Math.cos(warning.ang),
-                        nextPos[1] + (remainingDistance - currentDistance) * Math.sin(warning.ang),
-                    );
-
-                    let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warnRef.postReadyTimer))
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
-                    g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warnRef.fade ? (warning.timer - warnRef.postReadyTimer) / warnRef.readyTimer * 0.5 : 0.5) + ')');
-                    g.addColorStop(1, 'rgba(255, 128, 0, 0)');
-                    this.ctx.strokeStyle = g;
-
-                    this.ctx.moveTo(start[0], start[1])
-                    this.ctx.lineTo(nextPos[0], nextPos[1])
-                    this.ctx.closePath()
-                    this.ctx.stroke();
-
-                    // Looping
-                    let loopTranslation = [0, 0]
-                    if (this.ship.x <= this.canvasWidth / 2 && ((start[0] >= this.width - this.canvasWidth / 2) || (nextPos[0] >= this.width - this.canvasWidth / 2))) loopTranslation[0] -= this.width;
-                    if (this.ship.x >= this.width - this.canvasWidth / 2 && ((start[0] <= this.canvasWidth / 2) || (nextPos[0] <= this.canvasWidth / 2))) loopTranslation[0] += this.width;
-                    if (this.ship.y <= this.canvasHeight / 2 && ((start[1] >= this.height - this.canvasHeight / 2) || (nextPos[1] >= this.height - this.canvasHeight / 2))) loopTranslation[1] -= this.height;
-                    if (this.ship.y >= this.height - this.canvasHeight / 2 && ((start[1] <= this.canvasHeight / 2) || (nextPos[1] <= this.canvasHeight / 2))) loopTranslation[1] += this.height;
-                    if (loopTranslation[0] != 0 || loopTranslation[1] != 0) {
-                        this.ctx.beginPath()
-                        this.ctx.translate(loopTranslation[0], loopTranslation[1])
-
-                        this.ctx.moveTo(start[0], start[1])
-                        this.ctx.lineTo(nextPos[0], nextPos[1])
-                        this.ctx.closePath()
-                        this.ctx.stroke();
-                    }
-                }
-                this.ctx.restore()
-                remainingDistance -= currentDistance
-                if (remainingDistance > 100000) {console.warn("uh oh"); break; }
-                if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
-            }
+            this.drawWrappingLine(warning, warnRef)
         }
 
         // Draw gamma trails

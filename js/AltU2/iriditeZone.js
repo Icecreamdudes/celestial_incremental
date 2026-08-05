@@ -19,7 +19,7 @@ addLayer("iriditeZone", {
         let str = {
             background: "radial-gradient(#151230)",
             backgroundOrigin: "border-box",
-            borderColor: "#904ee6",
+            borderColor: "#ffffff",
             color: "white",
             textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
             marginRight: "50px !important",
@@ -237,8 +237,7 @@ SB_celestialites.iridite = {
         celestialite.regen = new Decimal(6)
 
         celestialite.phase = 1
-        celestialite.minionWave = 0
-        //celestialite.currentAttack = ['dagger', 'radial', 'shortBurst', 'homing'][Math.floor(Math.random() * 3)];
+        //celestialite.currentAttack = ['dagger', 'radial', 'shortBurst', 'homing'][Math.floor(Math.random() * 4)];
         celestialite.currentAttack = 'dagger';
         celestialite.attackInitialized = true
 
@@ -434,30 +433,14 @@ SB_celestialites.iridite = {
         laser(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 300
+                celestialite.attackTimer = 450
             }
             // Attack
             if ((celestialite.attackTimer / 90) % 1 == 0) {
                 if (celestialite.phase >= 4) {
-                    for (i = 0; i < 7; i++) {
-                        SB_spawnWarning("iriditeGiant", celestialite, {
-                            vx: celestialite.vx,
-                            vy: celestialite.vy,
-                            dvx: 0.875,
-                            dvy: 0.875,
-                            targetAng: celestialite.playerAng + ((i - 3) * Math.PI / 8)
-                        })
-                    }
+                    
                 } else {
-                    for (i = 0; i < 5; i++) {
-                        SB_spawnWarning("iriditeGiant", celestialite, {
-                            vx: celestialite.vx,
-                            vy: celestialite.vy,
-                            dvx: 0.875,
-                            dvy: 0.875,
-                            targetAng: celestialite.playerAng + ((i - 2) * Math.PI / 8)
-                        })
-                    }
+                    
                 }
             }
         },
@@ -542,6 +525,10 @@ SB_celestialites.iridite = {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
         if (!wrapped) return;
+
+        if (celestialite.currentAttack == "laser") {
+            //arena.drawWrappingLine()
+        }
         
         ctx.save();
         ctx.translate(wrapped[0], wrapped[1]);
@@ -1437,7 +1424,7 @@ SB_projectiles.iriditeGiant = {
 SB_warnings.iriditeDagger = {
     readyTimer: 60,
     postReadyTimer: 240,
-    dist: 1920,
+    length: 1920,
     width: 2,
     fade: true,
     initialize(warning) {
@@ -1451,12 +1438,21 @@ SB_warnings.iriditeDagger = {
         warning.targetAng = warning.ang
         SB_spawnProjectile("iriditeDagger", warning.celestialite, warning);
         arena.warnings.splice(arena.warnings.indexOf(warning), 1)
-    }
+    },
+    style(ctx, warning, xy1, xy2) {
+        let warningRef = SB_warnings[warning.type]
+        let g = ctx.createLinearGradient(xy1[0], xy1[1], xy2[0], xy2[1]);
+        let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warningRef.postReadyTimer))
+        g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+        g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warningRef.fade ? (warning.timer - warningRef.postReadyTimer) / warningRef.readyTimer * 0.5 : 0.5) + ')');
+        g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+        return g
+    },
 }
 SB_warnings.iriditeGiant = {
     readyTimer: 60,
     postReadyTimer: 160,
-    dist: 1920,
+    length: 1920,
     width: 2,
     initialize(warning) {
     },
@@ -1468,5 +1464,14 @@ SB_warnings.iriditeGiant = {
     onReady(warning) {
         warning.targetAng = warning.ang
         SB_spawnProjectile("iriditeGiant", warning.celestialite, warning);
-    }
+    },
+    style(ctx, warning, xy1, xy2) {
+        let warningRef = SB_warnings[warning.type]
+        let g = ctx.createLinearGradient(xy1[0], xy1[1], xy2[0], xy2[1]);
+        let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warningRef.postReadyTimer))
+        g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+        g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warningRef.fade ? (warning.timer - warningRef.postReadyTimer) / warningRef.readyTimer * 0.5 : 0.5) + ')');
+        g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+        return g
+    },
 }

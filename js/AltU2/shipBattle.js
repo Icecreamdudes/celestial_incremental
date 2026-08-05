@@ -499,15 +499,16 @@ class SpaceArena {
         /*
 
             "source" NEEDS:
-            - x, y
+            - x
+            - y
             - length
+            - width
             - ang
             - timer
 
             "sourceRef" NEEDS:
-            - width
             - postReadyTimer
-            - getStyle
+            - style()
 
         */
         let remainingDistance = source.length
@@ -516,11 +517,12 @@ class SpaceArena {
         let down = source.ang < 0
         let right = Math.abs(source.ang) < Math.PI / 2
         let j = 0
+        this.ctx.globalCompositeOperation = "lighter";
         this.ctx.fillStyle = "#ff7f00";
         while (remainingDistance > 0) {
             j++
             this.ctx.save()
-            this.ctx.lineWidth = sourceRef.width;
+            this.ctx.lineWidth = source.width;
             this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
             this.ctx.moveTo(currentPos[0], currentPos[1])
             if (source.timer > sourceRef.postReadyTimer) {
@@ -548,6 +550,7 @@ class SpaceArena {
                     [currentPos[0] - (source.length - remainingDistance) * Math.cos(source.ang), currentPos[1] - (source.length - remainingDistance) * Math.sin(source.ang)],
                     [nextPos[0], nextPos[1]]
                 );
+                //this.ctx.lineJoin = "round";
                 this.ctx.moveTo(currentPos[0], currentPos[1])
                 this.ctx.lineTo(nextPos[0], nextPos[1])
                 this.ctx.closePath()
@@ -628,6 +631,7 @@ class SpaceArena {
             if (remainingDistance > 100000) {console.warn("uh oh"); break; }
             if (j >= 100) {console.warn("BIG uh oh: " + remainingDistance); break; }
         }
+        this.ctx.globalCompositeOperation = "source-over";
     }
 
     // Expand the arena to cover the entire screen and make it transparent
@@ -750,6 +754,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -769,6 +774,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -788,7 +794,7 @@ class SpaceArena {
                 y: arenaHeight / 2,
                 vx: 0,
                 vy: 0,
-                radius: 30,
+                radius: 24,
                 angle: 0,
                 deceleration: 0.98,
                 maxVelocity: 10,
@@ -817,6 +823,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -834,6 +841,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -854,6 +862,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 vx: 0,
                 vy: 0,
@@ -874,9 +883,9 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 vx: 0,
                 vy: 0,
-                radius: 20,
                 angle: 0,
                 deceleration: 0.98,
                 dash: 0.8,
@@ -904,6 +913,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -928,6 +938,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -945,6 +956,7 @@ class SpaceArena {
             this.ship = {
                 x: arenaWidth / 2,
                 y: arenaHeight / 2,
+                radius: 16,
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
@@ -3274,9 +3286,9 @@ class SpaceArena {
         // Draw Enemies
         for (let enemy of this.enemies.concat(this.asteroids)) {
             let type = SB_celestialites[enemy.type];
+            type.draw(this.ctx, enemy);
             let wrapped = this.getVisibleWrappedCoords([enemy.x, enemy.y], [enemy.radius * 2, enemy.radius * 2])
-            if (type && type.draw && wrapped) {
-                type.draw(this.ctx, enemy);
+            if (wrapped) {
                 if (enemy.type == "muShip") this.ctx.globalAlpha = Math.max(1 - enemy.playerDist / 300, 0);
                 this.ctx.save();
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
@@ -3300,158 +3312,6 @@ class SpaceArena {
                 this.ctx.restore();
             }
             this.ctx.globalAlpha = 1;
-
-            if (enemy.type === "iriditeBoss") {
-                // NEW: Laser visual when active or winding-up
-                if (enemy._laserTimer && enemy._laserTimer > 0) {
-                    // show winding glow for first frames, then full beam
-                    const laserTotal = 180 + enemy.phase * 40;
-                    const elapsed = laserTotal - enemy._laserTimer;
-                    const windup = 8;
-                    const progress = Math.max(0, Math.min(1, (elapsed - windup) / (laserTotal - windup)));
-                    const angle = enemy._laserAngle || Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                    // beam parameters
-                    const beamLen = Math.max(this.width, this.height) * 1.5;
-                    const maxThickness = Math.max(16, enemy.radius * 1.0 + enemy.phase * 2);
-                    const thickness = windup > elapsed ? (maxThickness * (elapsed / windup)) : (maxThickness * (0.6 + 0.4 * progress));
-                    // draw glow
-                    this.ctx.save();
-                    this.ctx.translate(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
-                    this.ctx.rotate(angle);
-                    // additive glow
-                    this.ctx.globalCompositeOperation = "lighter";
-                    // long soft gradient
-                    let g = this.ctx.createLinearGradient(0, -thickness * 2, beamLen, thickness * 2);
-                    g.addColorStop(0, `rgba(200,120,255,${0.12 + 0.28 * progress})`);
-                    g.addColorStop(0.1, `rgba(255,120,180,${0.18 + 0.32 * progress})`);
-                    g.addColorStop(0.6, `rgba(180,255,255,${0.06 + 0.18 * progress})`);
-                    g.addColorStop(1, `rgba(200,120,255,${0.02 + 0.06 * progress})`);
-                    this.ctx.fillStyle = g;
-                    this.ctx.beginPath();
-                    this.ctx.rect(0, -thickness, beamLen, thickness * 2);
-                    this.ctx.fill();
-                    // core bright stripe
-                    this.ctx.fillStyle = `rgba(255,220,160,${0.9 * (0.5 + 0.5 * progress)})`;
-                    this.ctx.fillRect(0, -Math.max(2, thickness * 0.12), beamLen * 0.75, Math.max(2, thickness * 0.12) * 2);
-                    // sparks along beam
-                    for (let i = 0; i < 12; i++) {
-                        let t = Math.random() * (0.85);
-                        let x = t * beamLen;
-                        let y = (Math.random() - 0.5) * thickness * 1.6;
-                        this.ctx.fillStyle = `rgba(255,${200 + Math.floor(Math.random()*55)},${180},${0.12 + Math.random()*0.3})`;
-                        this.ctx.fillRect(x, y, 2 + Math.random() * 4, 1 + Math.random() * 3);
-                    }
-                    this.ctx.restore();
-                    this.ctx.globalCompositeOperation = "source-over";
-                }
-            }
-            if (enemy.type === "iriditeBoss") {
-                // support both legacy _daggerWarnings and new _daggerLines shape to be safe
-                if (enemy._daggerWarnings && enemy._daggerWarnings.length > 0) {
-                    for (let warn of enemy._daggerWarnings) {
-                        let alpha = Math.max(0.12, Math.min(0.95, warn.timer / 60));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,40,40,${alpha})`;
-                        this.ctx.lineWidth = 2 + Math.max(0, 4 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(enemy.x + (this.canvasWidth / 2) - this.ship.x, enemy.y + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        this.ctx.fillStyle = `rgba(255,50,50,${alpha})`;
-                        this.ctx.beginPath();
-                        this.ctx.arc(warn.tx + (this.canvasWidth / 2) - this.ship.x, warn.ty + (this.canvasHeight / 2) - this.ship.y, 6 * alpha + 2, 0, Math.PI * 2);
-                        this.ctx.fill();
-                        this.ctx.restore();
-                        if (typeof warn.timer === "number") warn.timer--;
-                    }
-                    enemy._daggerWarnings = enemy._daggerWarnings.filter(w => w.timer > 0);
-                }
-                // NEW: draw arena-spanning dagger warning lines
-                if (enemy._daggerLines && enemy._daggerLines.length > 0) {
-                    for (let ln of enemy._daggerLines) {
-                        let prepMax = 48; // should match prep chosen in update
-                        let alpha = Math.max(0.08, Math.min(0.95, (ln.timer || 0) / prepMax));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,60,60,${0.25 * alpha})`;
-                        this.ctx.lineWidth = 14 * (0.3 + 0.7 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        // sharp red core
-                        this.ctx.strokeStyle = `rgba(255,20,20,${0.95 * alpha})`;
-                        this.ctx.lineWidth = 2;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1 + (this.canvasWidth / 2) - this.ship.x, ln.y1 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.lineTo(ln.x2 + (this.canvasWidth / 2) - this.ship.x, ln.y2 + (this.canvasHeight / 2) - this.ship.y);
-                        this.ctx.stroke();
-                        // little markers along the line
-                        const markers = 6;
-                        for (let m = 0; m < markers; m++) {
-                            let t = m / (markers - 1);
-                            let mx = ln.x1 + (ln.x2 - ln.x1) * t;
-                            let my = ln.y1 + (ln.y2 - ln.y1) * t;
-                            this.ctx.fillStyle = `rgba(255,90,90,${0.6 * alpha})`;
-                            this.ctx.beginPath();
-                            this.ctx.arc(mx + (this.canvasWidth / 2) - this.ship.x, my + (this.canvasHeight / 2) - this.ship.y, 2 + 2 * alpha, 0, Math.PI * 2);
-                            this.ctx.fill();
-                        }
-                        this.ctx.restore();
-                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
-                    }
-                    enemy._daggerLines = enemy._daggerLines.filter(l => (l.timer === undefined) || l.timer >= 0);
-                }
-
-                // Draw converge dagger warnings (origins->point)
-                if (enemy._daggerConverge && enemy._daggerConverge.point) {
-                    const tgt = enemy._daggerConverge.point;
-                    for (let o of enemy._daggerConverge.origins) {
-                        let alpha = Math.max(0.08, Math.min(0.95, (o.timer || enemy._daggerPrep) / (enemy._daggerPrep || 48)));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,60,60,${0.18 * alpha})`;
-                        this.ctx.lineWidth = 6 * (0.4 + 0.6 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(o.x, o.y);
-                        this.ctx.lineTo(tgt.x, tgt.y);
-                        this.ctx.stroke();
-                        this.ctx.fillStyle = `rgba(255,40,40,${0.95 * alpha})`;
-                        this.ctx.beginPath();
-                        this.ctx.arc(o.x, o.y, 4 + 4 * alpha, 0, Math.PI * 2);
-                        this.ctx.fill();
-                        this.ctx.restore();
-                        if (typeof o.timer === "number") o.timer = Math.max(0, o.timer - 1);
-                    }
-                    this.ctx.save();
-                    this.ctx.fillStyle = "rgba(255,90,90,0.95)";
-                    this.ctx.beginPath();
-                    this.ctx.arc(enemy._daggerConverge.point.x, enemy._daggerConverge.point.y, 8, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    this.ctx.restore();
-                }
-
-                // Draw giant attack warning lines if present
-                if (enemy._giantLines && enemy._giantLines.length > 0) {
-                    for (let ln of enemy._giantLines) {
-                        let prepMax = enemy._giantPrep || 54;
-                        let alpha = Math.max(0.06, Math.min(0.95, (ln.timer || prepMax) / prepMax));
-                        this.ctx.save();
-                        this.ctx.strokeStyle = `rgba(255,200,80,${0.14 * alpha})`;
-                        this.ctx.lineWidth = 10 * (0.3 + 0.7 * alpha);
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
-                        this.ctx.stroke();
-                        this.ctx.strokeStyle = `rgba(255,90,40,${0.95 * alpha})`;
-                        this.ctx.lineWidth = 2;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(ln.x1, ln.y1);
-                        this.ctx.lineTo(ln.x2, ln.y2);
-                        this.ctx.stroke();
-                        this.ctx.restore();
-                        if (typeof ln.timer === "number") ln.timer = Math.max(0, ln.timer - 1);
-                    }
-                }
-            }
         }
 
         // Draw sniper auto-aim target cross if present

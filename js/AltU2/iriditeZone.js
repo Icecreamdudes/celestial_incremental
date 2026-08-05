@@ -191,7 +191,7 @@ SB_zones.iriditeZone = {
     },
     levelUp(level) {
         // || level.eq(2)
-        if (level.modulo(20).eq(0) || level.eq(2)) {
+        if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("iridite")
         }
     },
@@ -246,6 +246,7 @@ SB_celestialites.iridite = {
         celestialite.attackTimer = 150
 
         celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.vMoveAng = 0
         celestialite.dvx = 0.875
         celestialite.dvy = 0.875
     },
@@ -255,17 +256,16 @@ SB_celestialites.iridite = {
         let dy = closest[1] - celestialite.y;
         celestialite.playerDist = Math.hypot(dx, dy) || 1;
         celestialite.playerAng = Math.atan2(dy, dx);
+        celestialite.moveAng = celestialite.playerAng;
+        celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
         // Decide on an attack
         
         if (celestialite.playerDist < 800) {
-/*
             let options = ['dagger', 'radial', 'shortBurst', 'homing', 'charge', 'teleport'];
             if (celestialite.phase >= 2) options = options.concat(['radialDagger', 'raining']);
             if (celestialite.phase >= 3) options = options.concat(['giant', 'laser']);
             if (celestialite.phase >= 4) options = options.concat(['laser', 'charge', 'teleport']);
             options.splice(options.indexOf(celestialite.currentAttack), 1)
-*/
-            let options = ['giant'];
             celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
         } else if (celestialite.playerDist < 1200) {
             celestialite.currentAttack = Math.random() < 0.5 ? "charge" : "teleport";
@@ -433,14 +433,16 @@ SB_celestialites.iridite = {
         laser(celestialite) {
             // Initialize attack
             if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
-                celestialite.attackTimer = 450
+                celestialite.attackTimer = 150
             }
             // Attack
-            if ((celestialite.attackTimer / 90) % 1 == 0) {
-                if (celestialite.phase >= 4) {
-                    
-                } else {
-                    
+            if (celestialite.attackTimer < 60) {
+                let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+                let bx = closest[0] - celestialite.x;
+                let by = closest[1] - celestialite.y;
+                let perpDist = Math.abs(bx * (-Math.sin(celestialite.moveAng)) + by * Math.cos(celestialite.moveAng));
+                if (celestialite.playerDist < 1600 && perpDist < 16 + arena.ship.radius) {
+                    player.ir.shipHealth = player.ir.shipHealth.sub(celestialite.damage.mul(0.1));
                 }
             }
         },
@@ -462,9 +464,18 @@ SB_celestialites.iridite = {
         // Decide on a move angle
         if (celestialite.currentAttack == "charge") {
             let angDist = ( (celestialite.playerAng) - celestialite.moveAng + 3 * Math.PI ) % (Math.PI*2) - Math.PI;
-            celestialite.moveAng += (angDist < -Math.PI ? angDist + Math.PI * 2 : angDist) * 0.03125;
+            celestialite.moveAng += (angDist < -Math.PI ? angDist + (Math.PI * 2) : angDist) * 0.03125;
+            celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
+        } else if (celestialite.currentAttack == "laser") {
+            if (celestialite.attackTimer > 90) {
+                let angDist = ( (celestialite.playerAng) - celestialite.moveAng + 3 * Math.PI ) % (Math.PI*2) - Math.PI;
+                celestialite.vMoveAng = Math.max(-Math.PI / 16, Math.min(Math.PI / 16, angDist < -Math.PI ? angDist + (Math.PI * 2) : angDist));
+            }
+            celestialite.moveAng += celestialite.vMoveAng;
+            celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
         } else {
             celestialite.moveAng = celestialite.playerAng;
+            celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
         }
 
         // Decide on an attack
@@ -523,13 +534,58 @@ SB_celestialites.iridite = {
     },
     draw: (ctx, celestialite) => {
         if (!arena) return;
+
+        if (celestialite.currentAttack == "laser") {
+            if (celestialite.attackTimer < 60) {
+                let source = {
+                    x: celestialite.x,
+                    y: celestialite.y,
+                    length: 1600,
+                    width: celestialite.attackTimer < 6 ? Math.pow(celestialite.attackTimer / 15, 0.5) * 64 : Math.pow(1 - ((celestialite.attackTimer - 6) / 54), 0.5) * 64,
+                    ang: celestialite.moveAng,
+                    timer: 1,
+                }
+                let sourceRef = {
+                    postReadyTimer: 1,
+                    style(ctx, warning, xy1, xy2) {
+                        let g = ctx.createLinearGradient(xy1[0], xy1[1], xy2[0], xy2[1]);
+                        g.addColorStop(0, `rgba(200,120,255,${0.12 + 0.28 * (1 - celestialite.attackTimer / 60)})`);
+                        g.addColorStop(0.1, `rgba(255,120,180,${0.18 + 0.32 * (1 - celestialite.attackTimer / 60)})`);
+                        g.addColorStop(0.6, `rgba(180,255,255,${0.06 + 0.18 * (1 - celestialite.attackTimer / 60)})`);
+                        g.addColorStop(1, `rgba(200,120,255,${0.02 + 0.06 * (1 - celestialite.attackTimer / 60)})`);
+                        return g
+                    },
+                }
+                arena.drawWrappingLine(source, sourceRef)
+                source.width /= 4
+                sourceRef.style = (ctx, warning, xy1, xy2) => {
+                    return `rgba(255,234,202,${0.75 + 0.25 * (1 - celestialite.attackTimer / 60)})`
+                }
+                arena.drawWrappingLine(source, sourceRef)
+            } else {
+                arena.drawWrappingLine({
+                    x: celestialite.x,
+                    y: celestialite.y,
+                    length: 1600,
+                    width: Math.pow(1 - (celestialite.attackTimer - 60) / 90, 0.5) * 16,
+                    ang: celestialite.moveAng,
+                    timer: 1,
+                }, {
+                    postReadyTimer: 1,
+                    style() {
+                        if (celestialite.attackTimer < 90) {
+                            return "rgb(255, 0, 0, 0.125)"
+                        } else {
+                            return "rgb(255, 128, 0, " + ((celestialite.attackTimer - 60) / 180) + ")"
+                        }
+                    },
+                })
+            }
+        }
+
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
         if (!wrapped) return;
 
-        if (celestialite.currentAttack == "laser") {
-            //arena.drawWrappingLine()
-        }
-        
         ctx.save();
         ctx.translate(wrapped[0], wrapped[1]);
         ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);

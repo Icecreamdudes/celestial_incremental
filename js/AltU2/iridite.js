@@ -360,7 +360,7 @@ addLayer("ir", {
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
 
         // TEMP
-        if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
+        //if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
@@ -2000,7 +2000,7 @@ addLayer("ir", {
             title: "Exploration",
             unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Unlock more star exploration nodes."},
-            cost: new Decimal(20),
+            cost: new Decimal(30),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",
@@ -2023,7 +2023,7 @@ addLayer("ir", {
             title: "Alleviator II",
             unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Battle XP requirements are cut by /1.5 again."},
-            cost: new Decimal(30),
+            cost: new Decimal(45),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Gems",
             currencyInternalName: "spaceGem",

@@ -517,7 +517,7 @@ class SpaceArena {
         let down = source.ang < 0
         let right = Math.abs(source.ang) < Math.PI / 2
         let j = 0
-        this.ctx.globalCompositeOperation = "lighter";
+        this.ctx.globalCompositeOperation = options.performanceMode ? "source-over" : "lighter";
         this.ctx.fillStyle = "#ff7f00";
         while (remainingDistance > 0) {
             j++

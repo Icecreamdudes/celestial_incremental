@@ -171,7 +171,7 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
         type: warnId,
         timer: warnRef.readyTimer + warnRef.postReadyTimer,
         ready: false,
-        dist: warnRef.dist,
+        length: warnRef.length,
 
         vx: 0,
         vy: 0,

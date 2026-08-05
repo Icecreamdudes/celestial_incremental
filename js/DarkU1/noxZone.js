@@ -1284,7 +1284,7 @@ SB_projectiles.noxSpinningSword = {
 SB_warnings.noxSpear = {
     readyTimer: 30,
     postReadyTimer: 120,
-    dist: 1440,
+    length: 1440,
     width: 2,
     initialize(warning) {
         warning.targetAng = warning.celestialite.playerAng + ((Math.random() - 0.5) * Math.PI)
@@ -1299,12 +1299,21 @@ SB_warnings.noxSpear = {
         SB_spawnProjectile("noxSpear", warning.celestialite, warning);
         warning.vx = 0
         warning.vy = 0
-    }
+    },
+    style(ctx, warning, xy1, xy2) {
+        let warningRef = SB_warnings[warning.type]
+        let g = ctx.createLinearGradient(xy1[0], xy1[1], xy2[0], xy2[1]);
+        let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warningRef.postReadyTimer))
+        g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+        g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warningRef.fade ? (warning.timer - warningRef.postReadyTimer) / warningRef.readyTimer * 0.5 : 0.5) + ')');
+        g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+        return g
+    },
 }
 SB_warnings.allyNoxSpear = {
     readyTimer: 0,
     postReadyTimer: 120,
-    dist: 1440,
+    length: 1440,
     width: 2,
     initialize(warning) {
         if (arena.enemies.length > 0) {
@@ -1313,9 +1322,9 @@ SB_warnings.allyNoxSpear = {
             for (let i = 0; i < arena.enemies.length; i++) {
                 let celestialite = arena.enemies[0]
                 let closest = arena.getClosestCoords([warning.x, warning.y], [celestialite.x, celestialite.y])
-                let dist = Math.hypot(closest[0] - celestialite.x, closest[1] - celestialite.y)
-                if (targetDist > dist) {
-                    targetDist = dist
+                let length = Math.hypot(closest[0] - celestialite.x, closest[1] - celestialite.y)
+                if (targetDist > length) {
+                    targetDist = length
                     target = i
                 }
             }
@@ -1338,5 +1347,14 @@ SB_warnings.allyNoxSpear = {
             damage: new Decimal(48),
             //damage: Decimal.div(arena.shipStats.attackDamage, levelableEffect("ir", player.ir.shipType)[2].toNumber()).div(arena.ship.damage).mul(48),
         });
-    }
+    },
+    style(ctx, warning, xy1, xy2) {
+        let warningRef = SB_warnings[warning.type]
+        let g = ctx.createLinearGradient(xy1[0], xy1[1], xy2[0], xy2[1]);
+        let gStart = Math.min(1, Math.max(0, 1 - warning.timer / warningRef.postReadyTimer))
+        g.addColorStop(gStart, 'rgba(255, 128, 0, 0)');
+        g.addColorStop(gStart, 'rgba(255, 128, 0, ' + (warningRef.fade ? (warning.timer - warningRef.postReadyTimer) / warningRef.readyTimer * 0.5 : 0.5) + ')');
+        g.addColorStop(1, 'rgba(255, 128, 0, 0)');
+        return g
+    },
 }

@@ -13,13 +13,13 @@ var activeFunctions = [
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "pointClick",
-	"evoClick", "onHover", "onStart", "onEnd"
+	"evoClick", "onHover", "onStart", "onEnd",
 ]
 
 // Tmp will completely ignore these
 var ignoreFunctions = [
 	"title", "description", "requirementDescription", "challengeDescription", "rewardDescription",
-	"goalDescription", "image", "lore", "tooltip", "img", "style", "complete"
+	"goalDescription", "image", "lore", "tooltip", "img", "style", "complete", "levelableButtons"
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick

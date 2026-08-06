@@ -2164,6 +2164,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"diamondDustReset",
 	"openChest",
 	"checkAchs",
+	"levelableButtonStyle",
 	"prismReset", "blueshiftReset", "starlightReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection",
 	"makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "makeStarlightFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
 ]

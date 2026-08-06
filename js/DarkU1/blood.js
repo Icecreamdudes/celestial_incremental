@@ -892,7 +892,7 @@
                                 ], {background: "#0000007f", width: "247px", height: "300px"}],
                                 ["style-column", [
                                     ["clickable", 17],
-                                    ["raw-html", "notice for testers: only one mobile control scheme is implemented, and not all ships are 100% done. unarmed is not set up.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "notice for testers: only one mobile control scheme is implemented.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #f57171", borderRight: "3px solid #f57171", width: "300px", height: "300px"}],
                                 ["style-column", [
 

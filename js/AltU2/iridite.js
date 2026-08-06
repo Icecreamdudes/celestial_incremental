@@ -1723,7 +1723,7 @@ addLayer("ir", {
                 return look
             },
         },
-        17: {
+        "toggleMobileControls": {
             title() { return player.ir.mobileControls ? "Mobile Controls [ON]" : "Mobile Controls [OFF]" },
             canClick() { return true },
             unlocked() { return true },
@@ -1731,7 +1731,7 @@ addLayer("ir", {
                 player.ir.mobileControls = !player.ir.mobileControls
             },
             style() {
-                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid #008000", borderRadius: "10px"}
+                let look = {width: "259px", minHeight: "50px", color: "white", border: "3px solid #008000", borderRadius: "10px"}
                 if (this.canClick()) {
                     look.background = "#005400"
                 } else {
@@ -2968,10 +2968,11 @@ addLayer("ir", {
                             ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                             ["blank", "8.5px"],
                             ["clickable", "newRun"],
-                        ], {width: "384px", paddingLeft: "6px"}],
+                        ], {width: "535px"}],
                         ["style-column", [
-                        ], {width: "384px", paddingLeft: "6px"}],
-                        ["style-column", [], {width: "19px"}],
+                            ["blank", "33px"],
+                            ["clickable", "toggleMobileControls"],
+                        ], {width: "259px", marginRight: "6px"}],
                     ], {width: "800px", minHeight: "95px", background: "#00007f"}],
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["always-scroll-column", [
@@ -2997,10 +2998,11 @@ addLayer("ir", {
                             ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                             ["blank", "8.5px"],
                             ["clickable", "newRun"],
-                        ], {width: "504px", paddingLeft: "6px"}],
+                        ], {width: "535px"}],
                         ["style-column", [
-                        ], {width: "283px", paddingLeft: "6px"}],
-                        //["style-column", [], {width: "19px"}],
+                            ["blank", "33px"],
+                            ["clickable", "toggleMobileControls"],
+                        ], {width: "259px", marginRight: "6px"}],
                     ], {width: "800px", minHeight: "95px", background: "#00007f"}],
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["style-row", [

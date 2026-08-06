@@ -924,12 +924,12 @@ function loadVue() {
 				</div>
 				<div class="exBuyableRow" v-bind:style="[{'border-radius': '0px 0px 10px 10px'}]">
 					<button v-bind:class="{ darkBuyableButton1: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
-					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#5e4d18', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 0px 10px'}, run(layers[layer].buyables[data].buttonStyle)]"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 0px 10px'}, run(layers[layer].buyables[data].buttonStyle)]"
 					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 					Buy 1</button>
 					<div style="background:#0000007f;width:3px;height:40px"></div>
 					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
-					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#5e4d18', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 10px 0px'}, run(layers[layer].buyables[data].buttonStyle)]"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#1a3b0f', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || tmp[layer].color, 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#402424', 'color': 'white', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 10px 0px'}, run(layers[layer].buyables[data].buttonStyle)]"
 					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
 					Buy Max</button>
 				</div>
@@ -1088,6 +1088,149 @@ function loadVue() {
 		</div>
 		`
 	})
+
+	Vue.component('extended-levelable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
+			<div v-bind:class="{ extendedLevelableHolder: true, tooltipBox: true}"
+			v-bind:style="[{'background-color': tmp[layer].color}, run(layers[layer].levelables[data].style, layers[layer].levelables[data])]">
+				<div class="extendedLevelableTop">
+					<div v-bind:class="{extendedLevelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
+						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatSimple(tmp[layer].levelables[data].currency) : formatSimple(tmp[layer].levelables[data].currency)+'/'+formatSimple(tmp[layer].levelables[data].xpReq)"></span>
+					</div>
+					<div v-if="tmp[layer].levelables[data].condition" v-bind:class="{extendedLevelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '100%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+					<div class="extendedLevelableBarOutline"></div>
+				</div>
+				<div class="extendedLevelableMiddle">
+					<div class="extendedLevelableImageContainer">
+						<img v-bind:src="run(layers[layer].levelables[data].image, layers[layer].levelables[data])" class="extendedLevelableImage"></img>
+						<div v-bind:class="{extendedLevelableImageText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)&&!(player[layer].levelables[data][2].gt(0) && tmp[layer].levelables[data].levelLimit.neq(Infinity))}">
+							<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
+							<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && layers[layer].levelableAscend && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
+						</div>
+					</div>
+					<div class="extendedLevelableTextContainer">
+						<span v-bind:class="{extendedLevelableText: true}" v-html="run(layers[layer].levelables[data].display)"></span>
+					</div>
+				</div>
+				<div class="extendedLevelableBottom" v-if="layers[layer].levelables[data].levelableButtons">
+					<div style="margin:0;width:inherit" v-for="(item, index) in layers[layer].levelables[data].levelableButtons.filter((e) => {return e.unlocked.apply(tmp[layer].levelables[data], [])})" :set="filtered = layers[layer].levelables[data].levelableButtons.filter((e) => {return e.unlocked.apply(tmp[layer].levelables[data], [])})">
+						<button v-if="item.unlocked.apply(tmp[layer].levelables[data], [])" v-bind:class="{
+							extendedLevelableButtonSingle: filtered.length == 1,
+							extendedLevelableButtonLeftmost: index == 0,
+							extendedLevelableButtonRightmost: index == filtered.length - 1,
+							extendedLevelableButton: index > 0 && index != filtered.length - 1,
+							can: item.canClick.apply(tmp[layer].levelables[data], []), locked: !item.canClick.apply(tmp[layer].levelables[data], []), bought: false, tooltipBox: true
+						}"
+						v-bind:style="[{'width': 'calc(100% / filtered.length)'}, item.complete.apply(tmp[layer].levelables[data], []) ? {'background-color': '#77bf5f'} : item.canClick.apply(tmp[layer].levelables[data], []) ? {'background-color': '#ccc'} : {'background-color': '#bf8f8f'}, layers[layer].levelables[data].levelableButtonStyle(layers[layer].levelables[data].levelableButtons.indexOf(item))]"
+						v-on:click="if (item.canClick.apply(tmp[layer].levelables[data], [])) item.onClick.apply(tmp[layer].levelables[data], [])">
+							<span v-html="item.title.apply(tmp[layer].levelables[data], [])"></span>
+						</button>
+					</div>
+				</div>
+				<tooltip v-if="layers[layer].levelables[data].tooltip" :text="run(layers[layer].levelables[data].tooltip, layers[layer].levelables[data])"></tooltip>
+			</div>
+		</div>
+		`
+	})
+	Vue.component('dark-extended-levelable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
+			<div v-bind:class="{ extendedLevelableHolder: true, tooltipBox: true}"
+			v-bind:style="[{'background-color': tmp[layer].color}, run(layers[layer].levelables[data].style, layers[layer].levelables[data])]">
+				<div class="extendedLevelableTop">
+					<div v-if="tmp[layer].levelables[data].condition" v-bind:class="{extendedLevelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
+						<span v-html="player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? formatSimple(tmp[layer].levelables[data].currency) : formatSimple(tmp[layer].levelables[data].currency)+'/'+formatSimple(tmp[layer].levelables[data].xpReq)"></span>
+					</div>
+					<div v-if="tmp[layer].levelables[data].condition" v-bind:class="{extendedLevelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': player[layer].levelables[data][0].gte(tmp[layer].levelables[data].levelLimit) ? '100%' : toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+					<div class="extendedLevelableBarOutline"></div>
+				</div>
+				<div class="extendedLevelableMiddle">
+					<div class="extendedLevelableImageContainer">
+						<img v-bind:src="run(layers[layer].levelables[data].image, layers[layer].levelables[data])" class="extendedLevelableImage"></img>
+						<div v-bind:class="{extendedLevelableImageText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)&&!(player[layer].levelables[data][2].gt(0) && tmp[layer].levelables[data].levelLimit.neq(Infinity))}">
+							<span v-if="tmp[layer].levelables[data].condition" v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
+							<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && layers[layer].levelableAscend && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
+						</div>
+					</div>
+					<div class="extendedLevelableTextContainer">
+						<span v-bind:class="{extendedLevelableText: true}" v-html="run(layers[layer].levelables[data].display, layers[layer].levelables[data])"></span>
+					</div>
+				</div>
+				<div class="extendedLevelableBottom" v-if="layers[layer].levelables[data].levelableButtons">
+					<div style="margin:0;width:inherit" v-for="(item, index) in layers[layer].levelables[data].levelableButtons.filter((e) => {return e.unlocked.apply(tmp[layer].levelables[data], [])})" :set="filtered = layers[layer].levelables[data].levelableButtons.filter((e) => {return e.unlocked.apply(tmp[layer].levelables[data], [])})">
+						<button v-if="item.unlocked.apply(tmp[layer].levelables[data], [])" v-bind:class="{
+							extendedLevelableButtonSingle: filtered.length == 1,
+							extendedLevelableButtonLeftmost: index == 0 && filtered.length != 1,
+							extendedLevelableButtonRightmost: index == filtered.length - 1 && filtered.length != 1,
+							extendedLevelableButton: index > 0 && index != filtered.length - 1,
+							can: item.canClick.apply(tmp[layer].levelables[data], []), locked: !item.canClick.apply(tmp[layer].levelables[data], []), bought: false, tooltipBox: true
+						}"
+						v-bind:style="[{'width': 'calc(100% / filtered.length)'}, item.complete.apply(tmp[layer].levelables[data], []) ? {'background-color': '#1a3b0f', 'color': 'white'} : item.canClick.apply(tmp[layer].levelables[data], []) ? {'background-color': 'black', 'color': 'white'} : {'background-color': '#402424', 'color': 'white'}, layers[layer].levelables[data].levelableButtonStyle(layers[layer].levelables[data].levelableButtons.indexOf(item))]"
+						v-on:click="if (item.canClick.apply(tmp[layer].levelables[data], [])) item.onClick.apply(tmp[layer].levelables[data], [])">
+							<span v-html="item.title.apply(tmp[layer].levelables[data], [])"></span>
+						</button>
+					</div>
+				</div>
+				<tooltip v-if="layers[layer].levelables[data].tooltip" :text="run(layers[layer].levelables[data].tooltip, layers[layer].levelables[data])"></tooltip>
+			</div>
+		</div>
+		`
+	})
+
+	/*
+	Vue.component('rounded-ex-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color, 'border': '3px solid #000000bf'}, run(layers[layer].buyables[data].style, layers[layer].buyables[data]), {'border-radius': '13px'}]">
+				<div class="exBuyableBar" v-bind:style="[{'border-radius': '10px 10px 0px 0px', 'height': '40px'}]">
+					<div class="exBuyableBarText" v-bind:style="[{'height': '33px'}]">
+						<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					</div>
+					<div class="customBuyableBarProgress" v-bind:style="{'width': tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? '100%' : toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%',
+					'background-color': run(layers[layer].buyables[data].progressColor) || (run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).borderColor : run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor != undefined ? run(layers[layer].buyables[data].style, layers[layer].buyables[data]).backgroundColor : tmp[layer].color)}"></div>
+				</div>
+				<div class="exBuyableInfo">
+					<div class="exBuyableInfo2">
+						<span v-if= "layers[layer].buyables[data].title"><h2 v-html="run(layers[layer].buyables[data].title, layers[layer].buyables[data])"></h2><br></span>
+						<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+					</div>
+				</div>
+				<div class="exBuyableRow" v-bind:style="[{'border-radius': '0px 0px 10px 10px'}]">
+					<button v-bind:class="{ darkBuyableButton1: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#77bf5f', 'color': 'black', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || '#ccc', 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#bf8f8f', 'color': 'black', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 0px 10px'}, run(layers[layer].buyables[data].buttonStyle)]"
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					Buy 1</button>
+					<div style="background:#0000007f;width:3px;height:40px"></div>
+					<button v-bind:class="{ darkBuyableButton2: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="[player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit) ? {'background-color': '#77bf5f', 'color': 'black', 'border': '3px solid #0000003f'} : tmp[layer].buyables[data].canBuy ? {'background-color': run(layers[layer].buyables[data].buttonColor) || '#ccc', 'color': 'black', 'border': '3px solid #0000003f'} : {'background-color': '#bf8f8f', 'color': 'black', 'border': '3px solid #0000003f'}, {'border-radius': '0px 0px 10px 0px'}, run(layers[layer].buyables[data].buttonStyle)]"
+					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					Buy Max</button>
+				</div>
+			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+	*/
 
 	Vue.component('levelable-display', {
 		props: ['layer', 'data'],

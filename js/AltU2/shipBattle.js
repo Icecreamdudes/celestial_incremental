@@ -16,35 +16,29 @@ function getRandomInt(max) {
 const UPGRADE_POOL = {
     // Common
     attackDamageCommon: {
-        name() { return "Attack Damage"},
+        name() { return "Attack Damage" },
         description() { return "+10% attack damage"},
         rarity: "common",
-        effect(arena) { arena.upgrades.attackDamageCommon++; }
-    },
-    spaceRockGainCommon: {
-        name() { return "Space Rock Gain"},
-        description() { return "+10% space rock gain"},
-        rarity: "common",
-        effect(arena) { arena.upgrades.spaceRockGainCommon++; }
+        effect() { arena.upgrades.attackDamageCommon++; },
     },
     xpGainCommon: {
         name() { return "XP Gain"},
         description() { return "+10% XP gain"},
         rarity: "common",
-        effect(arena) { arena.upgrades.xpGainCommon++; }
+        effect() { arena.upgrades.xpGainCommon++; },
     },
     // Uncommon
     attackDamageUncommon: {
         name() { return "Attack Damage"},
         description() { return "+15% attack damage"},
         rarity: "uncommon",
-        effect(arena) { arena.upgrades.attackDamageUncommon++; }
+        effect() { arena.upgrades.attackDamageUncommon++; },
     },
     attackSpeedUncommon: {
         name() { return "Attack Speed"},
         description() { return "+5% faster attack speed"},
         rarity: "uncommon",
-        effect(arena) { arena.upgrades.attackSpeedUncommon++; }
+        effect() { arena.upgrades.attackSpeedUncommon++; },
     },
     healthRegenUncommon: {
         name() { return "Health Regen"},
@@ -54,33 +48,32 @@ const UPGRADE_POOL = {
             return "+" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "uncommon",
-        effect(arena) {
+        effect() {
             arena.upgrades.healthRegenUncommon++;
-        }
-    },
-    spaceRockGainUncommon: {
-        name() { return "Space Rock Gain"},
-        description() { return "+15% space rock gain"},
-        rarity: "uncommon",
-        effect(arena) { arena.upgrades.spaceRockGainUncommon++; }
+        },
+        multi() {
+            let regen = 0.5
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return arena.upgrades.attackSpeedUncommon * regen;
+        },
     },
     xpGainUncommon: {
         name() { return "XP Gain"},
         description() { return "+15% XP gain"},
         rarity: "uncommon",
-        effect(arena) { arena.upgrades.xpGainUncommon++; }
+        effect() { arena.upgrades.xpGainUncommon++; },
     },
     attackDamageRare: {
         name() { return "Attack Damage"},
         description() { return "+20% attack damage"},
         rarity: "rare",
-        effect(arena) { arena.upgrades.attackDamageRare++; }
+        effect() { arena.upgrades.attackDamageRare++; },
     },
     attackSpeedRare: {
         name() { return "Attack Speed"},
         description() { return "+7.5% faster attack speed"},
         rarity: "rare",
-        effect(arena) { arena.upgrades.attackSpeedRare++; }
+        effect() { arena.upgrades.attackSpeedRare++; },
     },
     healthRegenRare: {
         name() { return "Health Regen"},
@@ -90,63 +83,50 @@ const UPGRADE_POOL = {
             return "+" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "rare",
-        effect(arena) {
+        effect() {
             arena.upgrades.healthRegenRare++;
-        }
+        },
+        multi() {
+            let regen = 0.75
+            regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+            return arena.upgrades.healthRegenRare * regen;
+        },
     },
     damageReductionRare: {
         name() { return "Defense"},
         description() { return "Take 10% less damage"},
         rarity: "rare",
-        effect(arena) { arena.upgrades.damageReductionRare++; }
+        effect() { arena.upgrades.damageReductionRare++; },
     },
     moveSpeedRare: {
         name() { return "Movement Speed"},
         description() { return "+10% max movement speed"},
         rarity: "rare",
-        effect(arena) { arena.upgrades.moveSpeedRare++; }
-    },
-    spaceRockGainRare: {
-        name() { return "Space Rock Gain"},
-        description() { return "+20% space rock gain"},
-        rarity: "rare",
-        effect(arena) { arena.upgrades.spaceRockGainRare++; }
-    },
-    spaceGemGainRare: {
-        name() { return "Space Gem Gain"},
-        description() { return "+5% space gem gain"},
-        rarity: "rare",
-        effect(arena) { arena.upgrades.spaceGemGainRare++; }
+        effect() { arena.upgrades.moveSpeedRare++; },
     },
     bulletSizeRare: {
         name() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "Bullet Size"} else {return "Max Health"}},
         description() {if (player.ir.shipType != 3 && player.ir.shipType != 7 && player.ir.shipType != 8) {return "+10% bullet size"} else {return "+10% max HP"}},
         rarity: "rare",
-        effect(arena) {arena.upgrades.bulletSizeRare++; }
+        effect() {arena.upgrades.bulletSizeRare++; },
     },
     xpGainRare: {
         name() { return "XP Gain"},
         description() { return "+20% XP gain"},
         rarity: "rare",
-        effect(arena) { arena.upgrades.xpGainRare++; }
+        effect() { arena.upgrades.xpGainRare++; },
     },
     attackEpic: {
         name() { return "Attack"},
         description() { return "+20% attack damage, +7.5% faster attack speed"},
         rarity: "epic",
-        effect(arena) { arena.upgrades.attackEpic++; }
+        effect() { arena.upgrades.attackEpic++; },
     },
     xpGainEpic: {
         name() { return "XP Gain"},
         description() { return "+30% XP gain"},
         rarity: "epic",
-        effect(arena) { arena.upgrades.xpGainEpic++; }
-    },
-    lootGainEpic: {
-        name() { return "Loot Gain"},
-        description() { return "+20% rock gain, +5% space gem gain"},
-        rarity: "epic",
-        effect(arena) { arena.upgrades.lootGainEpic++; }
+        effect() { arena.upgrades.xpGainEpic++; },
     },
     defenseEpic: {
         name() { return "Defense"},
@@ -156,31 +136,25 @@ const UPGRADE_POOL = {
             return "Take 15% less damage, +" + formatSimple(regen, 2) + " HP/sec"
         },
         rarity: "epic",
-        effect(arena) { arena.upgrades.defenseEpic++; }
+        effect() { arena.upgrades.defenseEpic++; },
     },
     attackLegendary: {
         name() { return "Attack"},
         description() { return "+75% attack damage, but +25% slower attack speed"},
         rarity: "legendary",
-        effect(arena) { arena.upgrades.attackLegendary++; }
-    },
-    dropGainLegendary: {
-        name() { return "Drop Gain"},
-        description() { return "+40% space rock and XP gain, +20% space gem gain"},
-        rarity: "legendary",
-        effect(arena) { arena.upgrades.dropGainLegendary++; }
+        effect() { arena.upgrades.attackLegendary++; },
     },
     defenseLegendary: {
         name() { return "Defense"},
         description() { return "Take 25% less damage, gain 25% more HP/sec" },
         rarity: "legendary",
-        effect(arena) { arena.upgrades.defenseLegendary++; }
+        effect() { arena.upgrades.defenseLegendary++; },
     },
     moveSpeedLegendary: {
         name() { return "Movement Speed"},
         description() { return "+25% max movement speed"},
         rarity: "legendary",
-        effect(arena) { arena.upgrades.moveSpeedLegendary++; }
+        effect() { arena.upgrades.moveSpeedLegendary++; },
     },
 
     // SPACE
@@ -190,42 +164,42 @@ const UPGRADE_POOL = {
         description() { return "+10% space rock gain"},
         rarity: "common",
         pool: "space",
-        effect(arena) { arena.upgrades.spaceRockGainCommon++; }
+        effect() { arena.upgrades.spaceRockGainCommon++; },
     },
     spaceRockGainUncommon: {
         name() { return "Space Rock Gain"},
         description() { return "+15% space rock gain"},
         rarity: "uncommon",
         pool: "space",
-        effect(arena) { arena.upgrades.spaceRockGainUncommon++; }
+        effect() { arena.upgrades.spaceRockGainUncommon++; },
     },
     spaceRockGainRare: {
         name() { return "Space Rock Gain"},
         description() { return "+20% space rock gain"},
         rarity: "rare",
         pool: "space",
-        effect(arena) { arena.upgrades.spaceRockGainRare++; }
+        effect() { arena.upgrades.spaceRockGainRare++; },
     },
     spaceGemGainRare: {
         name() { return "Space Gem Gain"},
         description() { return "+5% space gem gain"},
         rarity: "rare",
         pool: "space",
-        effect(arena) { arena.upgrades.spaceGemGainRare++; }
+        effect() { arena.upgrades.spaceGemGainRare++; },
     },
     lootGainEpic: {
         name() { return "Loot Gain"},
         description() { return "+20% rock gain, +5% space gem gain"},
         rarity: "epic",
         pool: "space",
-        effect(arena) { arena.upgrades.lootGainEpic++; }
+        effect() { arena.upgrades.lootGainEpic++; },
     },
     dropGainLegendary: {
         name() { return "Drop Gain"},
         description() { return "+40% space rock and XP gain, +20% space gem gain"},
         rarity: "legendary",
         pool: "space",
-        effect(arena) { arena.upgrades.dropGainLegendary++; }
+        effect() { arena.upgrades.dropGainLegendary++; },
     },
 
     // BLOOD
@@ -235,42 +209,42 @@ const UPGRADE_POOL = {
         description() { return "+10% blood stone gain"},
         rarity: "common",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodStoneGainCommon++; }
+        effect() { arena.upgrades.bloodStoneGainCommon++; },
     },
     bloodStoneGainUncommon: {
         name() { return "Blood Stone Gain"},
         description() { return "+15% blood stone gain"},
         rarity: "uncommon",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodStoneGainUncommon++; }
+        effect() { arena.upgrades.bloodStoneGainUncommon++; },
     },
     bloodStoneGainRare: {
         name() { return "Blood Stone Gain"},
         description() { return "+20% blood stone gain"},
         rarity: "rare",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodStoneGainRare++; }
+        effect() { arena.upgrades.bloodStoneGainRare++; },
     },
     bloodGemGainRare: {
         name() { return "Blood Gem Gain"},
         description() { return "+5% blood gem gain"},
         rarity: "rare",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodGemGainRare++; }
+        effect() { arena.upgrades.bloodGemGainRare++; },
     },
     bloodLootGainEpic: {
         name() { return "Blood Loot Gain"},
         description() { return "+20% blood stone gain, +5% blood gem gain"},
         rarity: "epic",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodLootGainEpic++; }
+        effect() { arena.upgrades.bloodLootGainEpic++; },
     },
     bloodLootGainLegendary: {
         name() { return "Blood Loot Gain"},
         description() { return "+40% blood stone gain, +20% blood gem gain"},
         rarity: "legendary",
         pool: "blood",
-        effect(arena) { arena.upgrades.bloodLootGainLegendary++; }
+        effect() { arena.upgrades.bloodLootGainLegendary++; },
     },
 };
 
@@ -317,84 +291,156 @@ const SHIP_STAT_FORMATTING = {
         name: "Attack Damage",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: [],
+        associatedUpgrades: {
+            common: "attackDamageCommon",
+            uncommon: "attackDamageUncommon",
+            rare: "attackDamageRare",
+            epic: "attackEpic",
+            legendary: "offenseLegendary",
+        },
         showCondition() {return true},
     },
     attackSpeed: {
         name: "Attack Speed",
         valuePrefix: "x",
         valueSuffix: "",
-        excludedRarities: ['common'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: "attackSpeedUncommon",
+            rare: "attackSpeedRare",
+            epic: "attackEpic",
+            legendary: "offenseLegendary",
+        },
         showCondition() {return true},
     },
     bulletSize: {
         name: "Bullet Size",
         valuePrefix: "x",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon', 'epic', 'legendary'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "bulletSizeRare",
+            epic: null,
+            legendary: null,
+        },
         showCondition() {return true},
     },
     healthRegen: {
         name: "Health Regen",
         valuePrefix: "+",
         valueSuffix: "/s",
-        excludedRarities: ['common'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: "healthRegenUncommon",
+            rare: "healthRegenRare",
+            epic: "defenseEpic",
+            legendary: "defenseLegendary",
+        },
         showCondition() {return true},
     },
     damageReduction: {
         name: "Damage Reduction",
         valuePrefix: "/",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "damageReductionRare",
+            epic: "defenseEpic",
+            legendary: "defenseLegendary",
+        },
         showCondition() {return true},
     },
     maxHp: {
         name: "Max Health",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon', 'epic', 'legendary'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "bulletSizeRare",
+            epic: null,
+            legendary: null,
+        },
         showCondition() {return true},
     },
     moveSpeed: {
         name: "Movement Speed",
         valuePrefix: "x",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon', 'epic'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "moveSpeedRare",
+            epic: null,
+            legendary: "moveSpeedLegendary",
+        },
         showCondition() {return true},
     },
     spaceRockGain: {
         name: "Space Rock Gain",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: [],
+        associatedUpgrades: {
+            common: "spaceRockGainCommon",
+            uncommon: "spaceRockGainUncommon",
+            rare: "spaceRockGainRare",
+            epic: "lootGainEpic",
+            legendary: "dropGainLegendary",
+        },
         showCondition() {return player.tab == "ir"},
     },
     spaceGemGain: {
         name: "Space Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "spaceGemGainRare",
+            epic: "lootGainEpic",
+            legendary: "dropGainLegendary",
+        },
         showCondition() {return player.tab == "ir"},
     },
     bloodStoneGain: {
         name: "Blood Stone Gain",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: [],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: null,
+            epic: "bloodLootGainEpic",
+            legendary: "bloodLootGainLegendary",
+        },
         showCondition() {return player.tab == "bl"},
     },
     bloodGemGain: {
         name: "Blood Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
-        excludedRarities: ['common', 'uncommon'],
+        associatedUpgrades: {
+            common: null,
+            uncommon: null,
+            rare: "bloodGemGainRare",
+            epic: "bloodLootGainEpic",
+            legendary: "bloodLootGainLegendary",
+        },
         showCondition() {return player.tab == "bl"},
     },
     xpGain: {
         name: "XP Gain",
         valuePrefix: "x",
         valueSuffix: "",
-        excludedRarities: [],
+        associatedUpgrades: {
+            common: "xpGainCommon",
+            uncommon: "xpGainUncommon",
+            rare: "xpGainRare",
+            epic: "xpGainEpic",
+            legendary: "dropGainLegendary",
+        },
         showCondition() {return true},
     },
 }

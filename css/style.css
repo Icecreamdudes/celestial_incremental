@@ -138,6 +138,14 @@ td {
 	max-width: 100%;
 	margin: 0 auto;
 }
+.upgRightTable {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: end;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
 
 .upgScrollRowTable {
 	display: flex !important;

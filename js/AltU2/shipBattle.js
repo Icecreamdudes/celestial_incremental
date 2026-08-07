@@ -280,7 +280,7 @@ const UPGRADE_RARITIES = {
             let base = 80
             return base
         },
-        color: "#fff",
+        color: "#ffffff",
     },
     uncommon: {
         weight() {
@@ -317,72 +317,84 @@ const SHIP_STAT_FORMATTING = {
         name: "Attack Damage",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: [],
         showCondition() {return true},
     },
     attackSpeed: {
         name: "Attack Speed",
         valuePrefix: "x",
         valueSuffix: "",
+        excludedRarities: ['common'],
         showCondition() {return true},
     },
     bulletSize: {
         name: "Bullet Size",
         valuePrefix: "x",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon', 'epic', 'legendary'],
         showCondition() {return true},
     },
     healthRegen: {
         name: "Health Regen",
         valuePrefix: "+",
         valueSuffix: "/s",
+        excludedRarities: ['common'],
         showCondition() {return true},
     },
     damageReduction: {
         name: "Damage Reduction",
         valuePrefix: "/",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon'],
         showCondition() {return true},
     },
     maxHp: {
         name: "Max Health",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon', 'epic', 'legendary'],
         showCondition() {return true},
     },
     moveSpeed: {
         name: "Movement Speed",
         valuePrefix: "x",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon', 'epic'],
         showCondition() {return true},
     },
     spaceRockGain: {
         name: "Space Rock Gain",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: [],
         showCondition() {return player.tab == "ir"},
     },
     spaceGemGain: {
         name: "Space Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon'],
         showCondition() {return player.tab == "ir"},
     },
     bloodStoneGain: {
         name: "Blood Stone Gain",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: [],
         showCondition() {return player.tab == "bl"},
     },
     bloodGemGain: {
         name: "Blood Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
+        excludedRarities: ['common', 'uncommon'],
         showCondition() {return player.tab == "bl"},
     },
     xpGain: {
         name: "XP Gain",
         valuePrefix: "x",
         valueSuffix: "",
+        excludedRarities: [],
         showCondition() {return true},
     },
 }
@@ -1072,14 +1084,7 @@ class SpaceArena {
         shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
 
         shipStats.maxHp = player.ir.shipHealthMax.toNumber()
-
-        shipStats.bulletSize = 1
-        if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
-            shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
-        } else {
-            shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
-        }
-
+        
         shipStats.healthRegen = 0
         if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
         if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
@@ -1088,6 +1093,13 @@ class SpaceArena {
         shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
         shipStats.healthRegen *= 1 + 0.25 * upgrades.defenseLegendary
         shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+
+        shipStats.bulletSize = 1
+        if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
+            shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
+        } else {
+            shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
+        }
 
         shipStats.damageReduction = 1
         shipStats.damageReduction *= 1 + 0.1 * upgrades.damageReductionRare
@@ -1196,11 +1208,6 @@ class SpaceArena {
 
         // Ensure fight flags are cleared when arena closes
         this.bossActive = false;
-        player.ir.iriditeFightActive = false;
-
-        // Ensure fight flags are cleared when arena closes
-        this.bossActive = false;
-        player.ir.iriditeFightActive = false;
 
         // Exit all menus
         player.ir.menu = 0;
@@ -1687,22 +1694,6 @@ class SpaceArena {
             if (celRef && celRef.experienceReward) {
                 let amt = celRef.experienceReward()
                 xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
-            }
-
-            // Mark Iridite defeat when boss dies
-            if (enemy.type === "iriditeBoss") {
-                this.bossActive = false;
-                player.ir.iriditeDefeated = true;
-                if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true;
-                player.ir.iriditeFightActive = false;
-                localStorage.setItem('arenaActive', 'false');
-                player.ir.battleLevel = player.ir.battleLevel.add(1)
-                let gain = Math.floor(5 * this.shipStats.spaceGemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1))
-                player.ir.spaceGem = player.ir.spaceGem.add(gain);
-                lootFlashPositions.push({ x: enemy.x, y: enemy.y + 12, amount: 2, type: "spaceGem" });
-                arena.enhanced = true;
-                arena.showUpgradeChoice();
-                player.ir.menu = 1
             }
 
             SB_celestialites[enemy.type].onDeath(enemy)
@@ -2461,7 +2452,6 @@ class SpaceArena {
                 let shipDmgRaw = enemy.bodyDamage.toNumber() / this.shipStats.damageReduction * enemy.damage.toNumber();
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
                 if (Number.isNaN(shipDmg) || !isFinite(shipDmg) || shipDmg < 0) shipDmg = 3 * (typeof this.shipStats.damageReduction === 'number' ? this.shipStats.damageReduction : (this.shipStats.damageReduction.toNumber ? this.shipStats.damageReduction.toNumber() : Number(this.shipStats.damageReduction)));
-                if (player.ir.iriditeFightActive) shipDmg /= 12;
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 20;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
 
@@ -3823,10 +3813,6 @@ class SpaceArena {
     }
 
     onShipDeath() {
-        // Ensure iridite flags reset if player dies during the fight
-        if (player.ir.iriditeFightActive) {
-            player.ir.iriditeFightActive = false;
-        }
         if (arena) {
             arena.removeArena();
             arena = null;

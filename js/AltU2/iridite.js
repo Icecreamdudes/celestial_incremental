@@ -67,7 +67,6 @@ addLayer("ir", {
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
-        shipHealthMaxTrue: new Decimal(100),
         shipDamageMult: new Decimal(1),
 
         spaceRock: new Decimal(0),
@@ -258,7 +257,6 @@ addLayer("ir", {
         ufoDefeated: false,
 
         iriditeFought: false,
-        iriditeFightActive: false,
         iriditeDefeated: false,
         astralShipUnlocked: false,
         tookDamageInIriditeFight: false,
@@ -324,8 +322,8 @@ addLayer("ir", {
         if (player.ir.shipType == 6) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 7) player.ir.shipHealthMax = new Decimal(75)
         if (player.ir.shipType == 8) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(75)
-        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(100)
+        if (player.ir.shipType == 9) player.ir.shipHealthMax = new Decimal(100)
+        if (player.ir.shipType == 10) player.ir.shipHealthMax = new Decimal(125)
 
         if (hasUpgrade("ir", 102)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25)
         if (player.ir.shipType != 0) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(levelableEffect("ir", player.ir.shipType)[3])
@@ -334,8 +332,6 @@ addLayer("ir", {
         if (hasMilestone("spaceZone2", 11)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.25);
         if (hasMilestone("spaceZone2", 13)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(1.15);
         if (hasUpgrade("ir", 29)) player.ir.shipHealthMax = player.ir.shipHealthMax.mul(upgradeEffect("ir", 29).toNumber());
-
-        if (arena && arena.shipStats) player.ir.shipHealthMaxTrue = arena.shipStats.maxHp;
 
         player.ir.shipDamageMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 14)) player.ir.shipDamageMult = player.ir.shipDamageMult.mul(upgradeEffect("darkTemple", 14))
@@ -348,9 +344,9 @@ addLayer("ir", {
         player.ir.timers[5].max = new Decimal(1800)
         player.ir.timers[6].max = new Decimal(1200)
         player.ir.timers[7].max = new Decimal(600)
-        player.ir.timers[8].max = new Decimal(2100)
-        player.ir.timers[9].max = new Decimal(1500)
-        player.ir.timers[10].max = new Decimal(1800)
+        player.ir.timers[8].max = new Decimal(3600)
+        player.ir.timers[9].max = new Decimal(1800)
+        player.ir.timers[10].max = new Decimal(7200)
         for (let i in player.ir.timers) {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
             player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
@@ -360,7 +356,6 @@ addLayer("ir", {
         player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
 
         player.ir.battleXPReq = player.ir.battleLevel.add(9).mul(5).add(player.ir.battleLevel.sub(1).pow(2))
-        if (player.tab == "bl" && player.ir.battleLevel.gt(10)) player.ir.battleXPReq = player.ir.battleXPReq.mul(Decimal.pow(1.1, player.ir.battleLevel.sub(10)))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
         player.ir.battleXPReq = player.ir.battleXPReq.div(getBuyableAmount("bl", 14).div(100).add(1))
@@ -372,6 +367,7 @@ addLayer("ir", {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
             if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
             player.ir.battleLevel = player.ir.battleLevel.add(1);
+            if (player.ir.battleLevel % 20 == 1) SB_saveRun();
             if (player.ir.battleLevel.gt(SB_zones[player.ir.battleStage].levelLimit)) {
                 clickClickable("ir", 12)
             } else {
@@ -401,13 +397,13 @@ addLayer("ir", {
             width() {return (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "398.5px"},
             height: "40px",
             progress() {
-                return player.ir.shipHealth.div(player.ir.shipHealthMaxTrue);
+                return arena ? player.ir.shipHealth.div(arena.shipStats.maxHp) : 1;
             },
             borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #7f7f00 0%, #545400 100%)"},
             display() {
-                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(player.ir.shipHealthMaxTrue) + " HP";
+                return formatWhole(player.ir.shipHealth) + "/" + formatWhole(arena.shipStats.maxHp) + " HP";
             },
         },
         xpBar: {
@@ -510,6 +506,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -598,6 +595,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -686,6 +684,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -781,6 +780,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -875,6 +875,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -963,6 +964,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1058,6 +1060,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1157,6 +1160,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1255,6 +1259,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1350,6 +1355,7 @@ addLayer("ir", {
                             shipType: this.id,
                             slot: -1,
                             upgrades: {},
+                            upgradeMultis: {},
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1409,11 +1415,12 @@ addLayer("ir", {
         },
         "loadShipSave_0": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[0]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[0] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[0].slot = 0
@@ -1428,11 +1435,12 @@ addLayer("ir", {
         },
         "loadShipSave_1": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[1]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[1] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[1].slot = 1
@@ -1447,11 +1455,12 @@ addLayer("ir", {
         },
         "loadShipSave_2": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[2]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[2] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[2].slot = 2
@@ -1466,11 +1475,12 @@ addLayer("ir", {
         },
         "loadShipSave_3": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[3]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[3] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[3].slot = 3
@@ -1485,11 +1495,12 @@ addLayer("ir", {
         },
         "loadShipSave_4": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[4]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[4] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[4].slot = 4
@@ -1504,11 +1515,12 @@ addLayer("ir", {
         },
         "loadShipSave_5": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
                     player.ir.shipBattleSaveCurrent = player.ir.shipBattleSaves[5]
+                    player.ir.selectingShip = false
                 } else {
                     player.ir.shipBattleSaves[5] = structuredClone(player.ir.shipBattleSaveCurrent)
                     player.ir.shipBattleSaves[5].slot = 5
@@ -1552,75 +1564,18 @@ addLayer("ir", {
                 return look
             },
         },
-        11: {
-            title() { return player.ir.timers[player.ir.shipType].current.lte(0) ? "<h2>Enter Space Battle" : "<h2>Cooldown: " + formatTime(player.ir.timers[player.ir.shipType].current)},
-            canClick() { return player.ir.timers[player.ir.shipType].current.lte(0) },
-            unlocked() { return true },
-            tooltip() { return "Universes are paused to save performance." },
-            onClick() {
-                player.ir.inBattle = true
-                options.fullscreen = true
-                player.subtabs["ir"]['stuff'] = 'Battle'
-
-                arena = new SpaceArena(800, 800, 3200, 3200);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-
-                pauseUniverseAll(["A2", "DS", "D1"], "pause", true)
-
-                player.ir.shipHealth = player.ir.shipHealthMax
-                let regen = 0
-                if (hasUpgrade("ir", 14)) regen += 0.5
-                regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.shipStats.healthRegen = regen / 60
-
-                player.ir.ufoFought = false
-                player.ir.iriditeFought = false
-            },
-            style() {
-                let look = {width: "300px", minHeight: "100px", color: "white", border: "3px solid #480e8a", borderRadius: "10px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#000"
-                } else {
-                    look.backgroundColor = "#361e1e"
-                }
-                return look
-            },
-        },
         12: {
-            title() { return player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1) ? "Save and Leave Battle" : "Leave Battle" },
+            title() { return player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1) ? "Leave Battle<br><small>(New progress has been saved!)" : "Leave Battle" },
             canClick() { return true },
             unlocked() { return true || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
-                player.ir.inBattle = false
-                options.fullscreen = false
-                if (player.tab == "ir") player.subtabs["ir"]['stuff'] = 'stages'
-                if (player.tab == "bl") player.subtabs["bl"]['stuff'] = 'stages'
-
-                if (arena) {
-                    if (player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1)) {
-                        player.ir.shipBattleSaveCurrent.upgrades = arena.upgrades
-                        player.ir.shipBattleSaveCurrent.slot = -2
-                    }
-
-                    arena.removeArena();
-                    arena = null;
-                }
-                localStorage.setItem('arenaActive', 'false');
-
-                if (player.tab == "ir") pauseUniverseAll(["A2", "DS", "D1"], "unpause", true);
-
-                player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
-
-                player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(1)
-                player.ir.iriditeFightActive = false
+                SB_exitRun()
             },
             style() {
                 let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + "#bf0000", borderRadius: "10px"}
                 if (player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1)) {
-                    look.background = "#000080"
-                    look.borderColor = "#ffff00"
+                    look.background = "#7f3f00"
+                    look.borderColor = "#bf5f00"
                 } else if (this.canClick()) {
                     look.background = "#7f0000"
                     look.borderColor = "#bf0000"
@@ -1739,54 +1694,6 @@ addLayer("ir", {
                 }
                 return look
             },
-        },
-        1001: {
-            title() {return "W"},
-            canClick: true,
-            unlocked() { return !player.ir.iriditeFightActive},
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'w', code: 'KeyW', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1002: {
-            title() {return "A"},
-            canClick: true,
-            unlocked() { return !player.ir.iriditeFightActive},
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'a', code: 'KeyA', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1003: {
-            title() {return "S"},
-            canClick: true,
-            unlocked() { return !player.ir.iriditeFightActive},
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 's', code: 'KeyS', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
-        },
-        1004: {
-            title() {return "D"},
-            canClick: true,
-            unlocked() { return !player.ir.iriditeFightActive},
-            onClick() {
-                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
-                setTimeout(() => {
-                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'd', code: 'KeyD', bubbles: true}))
-                }, 100)
-            },
-            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
         },
     },
     upgrades: {
@@ -3006,8 +2913,25 @@ addLayer("ir", {
                     ], {width: "800px", minHeight: "95px", background: "#00007f"}],
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["style-row", [
-                        ["top-column", [
-                        ], {background: "#151230", borderRight: "3px solid #5e4ee6", width: "532px", height: "579px"}],
+                        ["always-scroll-column", [
+                            ["top-column", () => {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null) return container;
+                                for (const [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                                    let statFormat = SHIP_STAT_FORMATTING[i]
+                                    container.push(["style-column", [
+                                        ["style-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px 12px 0 0", width: "502px", height: "25px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "502px", height: "3px"}],
+                                        ["style-row", [], {width: "502px", height: "26.5px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "502px", height: "3px"}],
+                                        ["style-row", [], {width: "502px", height: "25px"}],
+                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "83.5px", marginBottom: "6px", marginRight: "24px"}])
+                                }
+                                return container
+                            }, {background: "#151230", borderRight: "3px solid #5e4ee6", width: "532px", minHeight: "567px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: "535px", height: "579px"}],
                         ["always-scroll-column", [
                             ["top-column", () => {
                                 let container = []
@@ -3015,13 +2939,22 @@ addLayer("ir", {
                                 if (hasUpgrade('ir', 107)) maxSaves++;
                                 if (player.bl.noxDefeated) maxSaves++;
                                 for (let i = 0; i < maxSaves; i++) {
+                                    let save = player.ir.shipBattleSaves[i]
                                     container.push(["style-column", [
                                         ["style-column", [
                                             ["raw-html", "Slot #" + (i + 1), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {height: "25px"}],
                                         ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
                                         ["style-column", [
-                                            ["raw-html", (player.ir.shipBattleSaves[i] == null ? "<h3 style='color:#aaa2f2'>Empty" : ("<h3>" + layers.ir.levelables[player.ir.shipBattleSaves[i].shipType].title())), { "color": "white", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
+                                            ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
+                                                layers.ir.levelables[save.shipType].title()
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>x" + formatSimple(save.upgradeMultis.attackDamage, 2) + " Attack"
+                                                + " - x" + formatSimple(save.upgradeMultis.damageReduction, 2) + " Defense"
+                                                + "<br>+" + formatSimple(save.upgradeMultis.healthRegen*60, 2) + " HP/s Regen"
+                                                + " - x" + formatSimple(save.upgradeMultis.xpGain, 2) + " XP"
+                                                + "<br>x" + formatSimple(save.upgradeMultis.spaceRockGain, 2) + " Rocks"
+                                                + " - x" + formatSimple(save.upgradeMultis.spaceGemGain, 2) + " Gems"
+                                            )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
                                         ], {height: "98px"}],
                                         ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
                                         ["clickable", "loadShipSave_" + i],

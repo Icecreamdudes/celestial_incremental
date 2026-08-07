@@ -1415,7 +1415,7 @@ addLayer("ir", {
         },
         "loadShipSave_0": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 0 && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1435,7 +1435,7 @@ addLayer("ir", {
         },
         "loadShipSave_1": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 1 && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1455,7 +1455,7 @@ addLayer("ir", {
         },
         "loadShipSave_2": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 2 && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1475,7 +1475,7 @@ addLayer("ir", {
         },
         "loadShipSave_3": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 3 && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1495,7 +1495,7 @@ addLayer("ir", {
         },
         "loadShipSave_4": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 4 && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1515,7 +1515,7 @@ addLayer("ir", {
         },
         "loadShipSave_5": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.shipBattleSaveCurrent.slot != 5 && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -2917,6 +2917,9 @@ addLayer("ir", {
                                     ], {background: "#00007f", borderRadius: "12px", width: "502px", height: "35.75px"}],
                                 ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
                     ], {width: "532px", height: "388px"}],
@@ -2930,6 +2933,27 @@ addLayer("ir", {
                         ["top-column", () => {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(player.ir.shipBattleSaveCurrent.upgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
                     ], {width: "532px", height: "388px"}],

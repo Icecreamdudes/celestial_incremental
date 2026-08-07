@@ -227,8 +227,6 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.damageReduction *= 1 + 0.25 * upgrades.defenseLegendary
 
     shipStats.healthRegen = 0
-    if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
-    if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
     shipStats.healthRegen += upgrades.healthRegenUncommon * 0.5 / 60
     shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
     shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60

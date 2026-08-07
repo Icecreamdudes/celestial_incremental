@@ -2864,6 +2864,78 @@ addLayer("ir", {
         },
     },
     microtabs: {
+        shipSelectionStats: {
+            "finalStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["always-scroll-column", [
+                        ["top-column", () => {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            return container
+                        }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
+                    ], {width: "532px", height: "388px"}],
+                ],
+            },
+            "baseStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["always-scroll-column", [
+                        ["top-column", () => {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            return container
+                        }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
+                    ], {width: "532px", height: "388px"}],
+                ],
+            },
+            "upgradeEffects": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["always-scroll-column", [
+                        ["top-column", () => {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            for (let [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                                let prefix = "x"
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                    prefix = "+"
+                                }
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + SHIP_STAT_FORMATTING[i].valueSuffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: "#00007f", borderRadius: "12px", width: "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            return container
+                        }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
+                    ], {width: "532px", height: "388px"}],
+                ],
+            },
+            "upgradeCounts": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["always-scroll-column", [
+                        ["top-column", () => {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            return container
+                        }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
+                    ], {width: "532px", height: "388px"}],
+                ],
+            },
+        },
         ships: {
             "levelables": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
@@ -2913,25 +2985,21 @@ addLayer("ir", {
                     ], {width: "800px", minHeight: "95px", background: "#00007f"}],
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["style-row", [
-                        ["always-scroll-column", [
-                            ["top-column", () => {
-                                let container = []
-                                if (player.ir.shipBattleSaveCurrent == null) return container;
-                                for (const [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgradeMultis)) {
-                                    let statFormat = SHIP_STAT_FORMATTING[i]
-                                    container.push(["style-column", [
-                                        ["style-row", [
-                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                        ], {background: "#00007f", borderRadius: "12px 12px 0 0", width: "502px", height: "25px"}],
-                                        ["style-row", [], {background: "#5e4ee6", width: "502px", height: "3px"}],
-                                        ["style-row", [], {width: "502px", height: "26.5px"}],
-                                        ["style-row", [], {background: "#5e4ee6", width: "502px", height: "3px"}],
-                                        ["style-row", [], {width: "502px", height: "25px"}],
-                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "83.5px", marginBottom: "6px", marginRight: "24px"}])
-                                }
-                                return container
-                            }, {background: "#151230", borderRight: "3px solid #5e4ee6", width: "532px", minHeight: "567px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: "535px", height: "579px"}],
+                        ["top-column", [
+                            ["style-column", [], {width: "532px", height: "135px"}],
+                            ["style-row", [], {background: "#5e4ee6", width: "532px", height: "3px"}],
+                            ["style-row", [
+                                ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: "130px", height: "50px", background: "#00007f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
+                                ["category-button", ["Base Stats", "shipSelectionStats", "baseStats"], {width: "131px", height: "50px", background: "#00007f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
+                                ["category-button", ["Upgrade Effects", "shipSelectionStats", "upgradeEffects"], {width: "131px", height: "50px", background: "#00007f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
+                                ["category-button", ["Upgrade Counts", "shipSelectionStats", "upgradeCounts"], {width: "131px", height: "50px", background: "#00007f", borderRadius: "0"}],
+                            ], {width: "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                            ["style-row", [], {background: "#5e4ee6", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "shipSelectionStats", {borderWidth: "0"}],
+                        ], {borderRight: "3px solid #5e4ee6", height: "579px"}],
                         ["always-scroll-column", [
                             ["top-column", () => {
                                 let container = []

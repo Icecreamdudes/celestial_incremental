@@ -49,24 +49,7 @@ addLayer("spaceZone3", {
             canClick: true,
             unlocked: true,
             onClick() {
-                player.ir.inBattle = true
-                player.ir.battleStage = "spaceZone3"
-                options.fullscreen = true
-                player.subtabs["ir"]['stuff'] = 'Battle'
-
-                player.ir.primaryColor = SB_zones[this.layer].primaryColor
-                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
-
-                arena = new SpaceArena(800, 800, 3200, 3200);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-
-                pauseUniverseAll(["A2", "DS"], "pause", true)
-
-                player.ir.shipHealth = player.ir.shipHealthMax
-
-                player.ir.ufoFought = false
-                player.ir.iriditeFought = false
+                SB_enterRun(this.layer)
             },
             style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#8f0749, black)", border: "3px solid #e64ebd", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
@@ -339,7 +322,7 @@ SB_celestialites.iotaShip = {
     radius: 24,
     color: "#28819e",
     health: new Decimal(150),
-    damage: new Decimal(7),
+    damage: new Decimal(6),
     bodyDamage: new Decimal(2),
     regen: new Decimal(3),
     reward() {
@@ -456,7 +439,7 @@ SB_celestialites.kappaShip = {
     radius: 30,
     color: "#6fdede",
     health: new Decimal(175),
-    damage: new Decimal(10),
+    damage: new Decimal(5),
     bodyDamage: new Decimal(1),
     regen: new Decimal(3),
     reward() {
@@ -607,7 +590,7 @@ SB_celestialites.lambdaShip = {
         return Decimal.add(2, Math.random()).mul(15)
     },
     initialize(celestialite) {
-        celestialite.attackCooldown = 150
+        celestialite.attackCooldown = 120
         celestialite.targetingTimer = 0
 
         celestialite.preferredDistance = 250 + Math.random() * 100
@@ -647,7 +630,7 @@ SB_celestialites.lambdaShip = {
                 fromEnemy: true,
                 radius: 4,
             });
-            celestialite.attackCooldown = 150
+            celestialite.attackCooldown = 120
             celestialite.preferredDistance = 250 + Math.random() * 100
         }
 

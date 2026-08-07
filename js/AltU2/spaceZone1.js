@@ -49,24 +49,7 @@ addLayer("spaceZone1", {
             canClick: true,
             unlocked: true,
             onClick() {
-                player.ir.inBattle = true
-                player.ir.battleStage = "spaceZone1"
-                options.fullscreen = true
-                player.subtabs["ir"]['stuff'] = 'Battle'
-
-                player.ir.primaryColor = SB_zones[this.layer].primaryColor
-                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
-
-                arena = new SpaceArena(800, 800, 3200, 3200);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-
-                pauseUniverseAll(["A2", "DS"], "pause", true)
-
-                player.ir.shipHealth = player.ir.shipHealthMax
-
-                player.ir.ufoFought = false
-                player.ir.iriditeFought = false
+                SB_enterRun(this.layer)
             },
             style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#37078f, black)", border: "3px solid #5e4ee6", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },
@@ -1043,8 +1026,8 @@ SB_celestialites.ufo = {
     radius: 48,
     color: "#7f7f7f",
     health: new Decimal(2500),
-    damage: new Decimal(8),
-    bodyDamage: new Decimal(3),
+    damage: new Decimal(3),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(0),
     reward() {
         let gain = {}

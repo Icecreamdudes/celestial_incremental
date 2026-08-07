@@ -44,22 +44,7 @@ addLayer("noxZone", {
             canClick: true,
             unlocked: true,
             onClick() {
-                player.ir.inBattle = true
-                player.ir.battleStage = "noxZone"
-                options.fullscreen = true
-                player.subtabs["bl"]['stuff'] = 'Battle'
-
-                player.ir.primaryColor = SB_zones[this.layer].primaryColor
-                player.ir.secondaryColor = SB_zones[this.layer].secondaryColor
-
-                arena = new SpaceArena(800, 800, 3200, 3200);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-
-                player.ir.shipHealth = player.ir.shipHealthMax
-
-                player.ir.ufoFought = false
-                player.ir.iriditeFought = false
+                SB_enterRun(this.layer)
             },
             style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#5e1818, black)", border: "3px solid #f5b8b8", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
         },

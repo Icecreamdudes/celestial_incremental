@@ -78,6 +78,32 @@ addLayer("ir", {
 
         shipBattleSaveCurrent: null,
         shipBattleSaves: [null, null, null, null, null, null,],
+        saveTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+            4: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+            5: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+            },
+        },
 
         selectingShip: false,
 
@@ -281,7 +307,7 @@ addLayer("ir", {
         player.ir.shipType = player.ir.shipBattleSaveCurrent == null ? 0 : player.ir.shipBattleSaveCurrent.shipType
 
         if (arena && arena.upgrades && arena.shipStats) {
-            arena.shipStats = arena.getUpgradedShipStats()
+            arena.shipStats = SB_getUpgradedShipStats(arena.upgrades)
         }
 
         let zoneRef = SB_zones[player.ir.battleStage]
@@ -350,6 +376,14 @@ addLayer("ir", {
             if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
             player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
             if (!player.ir.inBattle) player.ir.timers[i].current = player.ir.timers[i].current.sub(delta);
+        }
+        for (let i in player.ir.saveTimers) {
+            if (player.ir.shipBattleSaves[i] == null) {
+                player.ir.saveTimers[i].max = new Decimal(0)
+            } else {
+                player.ir.saveTimers[i].max = player.ir.timers[player.ir.shipBattleSaves[i].shipType].max.mul(player.ir.shipBattleSaves[i].upgradeScore / 40 + 1)
+            }
+            if (!player.ir.inBattle) player.ir.saveTimers[i].current = player.ir.saveTimers[i].current.sub(delta);
         }
 
         player.ir.sendCooldownTimer = player.ir.sendCooldownTimer.sub(delta);
@@ -488,14 +522,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -506,6 +532,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -517,8 +545,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -577,14 +605,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -595,6 +615,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -606,8 +628,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -666,14 +688,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -684,6 +698,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -695,8 +711,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -720,8 +736,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -762,14 +778,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -780,6 +788,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -791,8 +801,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -816,8 +826,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -857,14 +867,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -875,6 +877,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -904,8 +908,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -946,14 +950,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -964,6 +960,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -975,8 +973,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1000,8 +998,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1042,14 +1040,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -1060,6 +1050,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1071,8 +1063,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             onClick() {
@@ -1100,8 +1092,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1142,14 +1134,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -1160,6 +1144,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1171,8 +1157,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             onClick() {
@@ -1200,8 +1186,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1241,14 +1227,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -1259,6 +1237,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1270,8 +1250,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1295,8 +1275,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             }
         },
@@ -1337,14 +1317,6 @@ addLayer("ir", {
                     },
                 },
                 {
-                    title() {return "View Stats"},
-                    unlocked() {return tmp.ir.levelables[this.id].condition && !player.ir.selectingShip},
-                    canClick() {return true},
-                    complete() {return false},
-                    onClick: function () {
-                    },
-                },
-                {
                     title() {return player.ir.timers[this.id].current.lte(0) ? "Select" : ("On Cooldown: " + formatTime(player.ir.timers[this.id].current))},
                     unlocked() {return tmp.ir.levelables[this.id].condition && player.ir.selectingShip},
                     canClick() {return player.ir.timers[this.id].current.lte(0)},
@@ -1355,6 +1327,8 @@ addLayer("ir", {
                             slot: -1,
                             upgrades: {},
                             upgradeMultis: {},
+                            upgradeScore: 0,
+                            upgradeCount: 0,
                             highestLevels: {
                                 "spaceZone1": new Decimal(0),
                             },
@@ -1366,8 +1340,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1391,8 +1365,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 2 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
-                look.borderColor = i == 2 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1413,8 +1387,8 @@ addLayer("ir", {
             },
         },
         "loadShipSave_0": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[0] != null && player.ir.shipBattleSaveCurrent.slot != 0) && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[0].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[0].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[0].current.lte(0) && (player.ir.shipBattleSaves[0] != null && player.ir.shipBattleSaveCurrent.slot != 0) && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1426,15 +1400,15 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
             },
         },
         "loadShipSave_1": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[1] != null && player.ir.shipBattleSaveCurrent.slot != 1) && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[1].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[1].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[1].current.lte(0) && (player.ir.shipBattleSaves[1] != null && player.ir.shipBattleSaveCurrent.slot != 1) && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1446,15 +1420,15 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
             },
         },
         "loadShipSave_2": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[2] != null && player.ir.shipBattleSaveCurrent.slot != 2) && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[2].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[2].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[2].current.lte(0) && (player.ir.shipBattleSaves[2] != null && player.ir.shipBattleSaveCurrent.slot != 2) && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1466,15 +1440,15 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
             },
         },
         "loadShipSave_3": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[3] != null && player.ir.shipBattleSaveCurrent.slot != 3) && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[3].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[3].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[3].current.lte(0) && (player.ir.shipBattleSaves[3] != null && player.ir.shipBattleSaveCurrent.slot != 3) && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1486,15 +1460,15 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
             },
         },
         "loadShipSave_4": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[4] != null && player.ir.shipBattleSaveCurrent.slot != 4) && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[4].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[4].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[4].current.lte(0) && (player.ir.shipBattleSaves[4] != null && player.ir.shipBattleSaveCurrent.slot != 4) && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1506,15 +1480,15 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
             },
         },
         "loadShipSave_5": {
-            title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return (player.ir.shipBattleSaves[5] != null && player.ir.shipBattleSaveCurrent.slot != 5) && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            title() { return player.ir.saveTimers[5].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[5].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
+            canClick() { return player.ir.saveTimers[5].current.lte(0) && (player.ir.shipBattleSaves[5] != null && player.ir.shipBattleSaveCurrent.slot != 5) && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1526,7 +1500,7 @@ addLayer("ir", {
                 }
             },
             style() {
-                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px"}
+                let look = {width: "232px", minHeight: "50px", color: "white", borderRadius: "0 0 12px 12px", fontSize: "9px"}
                 look.background = !tmp[this.layer].clickables[this.id].canClick ? "#361e1e" : !player.ir.selectingShip ? "#7f0000" : "#545400"
                 look.border = "3px solid " + (!tmp[this.layer].clickables[this.id].canClick ? "#5e4ee67f" : !player.ir.selectingShip ? "#bf0000" : "#7f7f00")
                 return look
@@ -2878,6 +2852,38 @@ addLayer("ir", {
                         ["top-column", () => {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let shipStats = SB_getUpgradedShipStats(player.ir.shipBattleSaveCurrent.upgrades)
+                            for (let [i, v] of Object.entries(shipStats)) {
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = statFormat.valuePrefix
+                                let suffix = statFormat.valueSuffix
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                }
+                                if (i == "attackSpeed") {
+                                    v = 1000 / v
+                                    prefix = ""
+                                    suffix = "/s"
+                                }
+                                if (i == "bulletSize") {
+                                    v *= SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.bulletRadius
+                                    prefix = ""
+                                }
+                                if (i == "moveSpeed") {
+                                    v *= SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.moveSpeed
+                                    prefix = ""
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: "#00007f", borderRadius: "12px", width: "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
                     ], {width: "532px", height: "388px"}],
@@ -2891,6 +2897,41 @@ addLayer("ir", {
                         ["top-column", () => {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let shipStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
+                            for (let [i, v] of Object.entries(SB_getDefaultShipStats())) {
+                                v = shipStats[i]
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = statFormat.valuePrefix
+                                let suffix = statFormat.valueSuffix
+                                if (i == "attackSpeed") {
+                                    v = 1000 / v
+                                    prefix = ""
+                                    suffix = "/s"
+                                }
+                                if (i == "bulletSize") {
+                                    v = shipStats.bulletRadius
+                                    prefix = ""
+                                }
+                                if (i == "moveSpeed") {
+                                    prefix = ""
+                                }
+                                if (i == "spaceRockGain" || i == "spaceGemGain" || i == "bloodStoneGain" || i == "bloodGemGain") {
+                                    prefix = "x"
+                                }
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {background: "#00007f", borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: "#00007f", borderRadius: "12px", width: "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
                     ], {width: "532px", height: "388px"}],
@@ -2905,12 +2946,12 @@ addLayer("ir", {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
                             for (let [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                                let statFormat = SHIP_STAT_FORMATTING[i]
                                 let prefix = "x"
                                 if (i == "healthRegen") {
                                     v *= 60
                                     prefix = "+"
                                 }
-                                let statFormat = SHIP_STAT_FORMATTING[i]
                                 container.push(["style-column", [
                                     ["style-row", [
                                         ["left-row", [
@@ -3015,7 +3056,16 @@ addLayer("ir", {
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["style-row", [
                         ["top-column", [
-                            ["style-column", [], {width: "532px", height: "135px"}],
+                            ["style-column", () => {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null) return container;
+                                container.push(
+                                    ["style-column", [
+                                        ["raw-html", "\"" + layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].lore() + "\"", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "508px"}],
+                                )
+                                return container
+                            }, {background: "#00007f", width: "532px", height: "135px"}],
                             ["style-row", [], {background: "#5e4ee6", width: "532px", height: "3px"}],
                             ["style-row", [
                                 ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: "130px", height: "50px", background: "#00007f", borderRadius: "0"}],
@@ -3045,12 +3095,8 @@ addLayer("ir", {
                                         ["style-column", [
                                             ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
                                                 layers.ir.levelables[save.shipType].title()
-                                                + "<br><span style='color:#aaa2f2;font-size:12px'>x" + formatSimple(save.upgradeMultis.attackDamage, 2) + " Attack"
-                                                + " - x" + formatSimple(save.upgradeMultis.damageReduction, 2) + " Defense"
-                                                + "<br>+" + formatSimple(save.upgradeMultis.healthRegen*60, 2) + " HP/s Regen"
-                                                + " - x" + formatSimple(save.upgradeMultis.xpGain, 2) + " XP"
-                                                + "<br>x" + formatSimple(save.upgradeMultis.spaceRockGain, 2) + " Rocks"
-                                                + " - x" + formatSimple(save.upgradeMultis.spaceGemGain, 2) + " Gems"
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>Upgrade Count: " + formatSimple(save.upgradeCount, 2)
+                                                + "<br>Upgrade Score: " + formatSimple(save.upgradeScore, 2)
                                             )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
                                         ], {height: "98px"}],
                                         ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],

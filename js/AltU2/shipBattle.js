@@ -255,6 +255,7 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#ffffff",
+        score: 0,
     },
     uncommon: {
         weight() {
@@ -262,6 +263,7 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#4cff4c",
+        score: 1,
     },
     rare: {
         weight() {
@@ -269,6 +271,7 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#4c8cff",
+        score: 2,
     },
     epic: {
         weight() {
@@ -276,6 +279,7 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#b44cff",
+        score: 3,
     },
     legendary: {
         weight() {
@@ -283,6 +287,7 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#ffd34d",
+        score: 6,
     },
 };
 
@@ -954,7 +959,7 @@ class SpaceArena {
                 damage: 12,
                 collisionDamage: 1,
             };
-            this.lastDashClick = Date.now() - 500;
+            this.lastDashClick = Date.now() - 1000;
             this.dashCooldown = 1000; // 1 second in ms
             this.canvasClickListener = (e) => {
                 let now = Date.now();
@@ -1018,7 +1023,7 @@ class SpaceArena {
                 angle: 0,
                 velocity: 0,
                 angularVelocity: 0,
-                maxVelocity: 5,
+                maxVelocity: 4.5,
                 acceleration: 0.25,
                 deceleration: 0.2,
                 rotationSpeed: 0.02,
@@ -1062,7 +1067,9 @@ class SpaceArena {
         this.upgradeChoices = [];
         this.selectedUpgradeIndex = null;
         this.upgrades = this.getDefaultUpgrades();
-        this.shipStats = this.getDefaultShipStats();
+        this.upgradeCount = 0;
+        this.upgradeScore = 0;
+        this.shipStats = SB_getDefaultShipStats();
         this.resourceMult = 1;
 
         this.propertyAttackCooldown = 90;
@@ -1090,108 +1097,6 @@ class SpaceArena {
         let base = {}
         for (const [i, v] of Object.entries(UPGRADE_POOL)) {base[i] = 0;}
         return base
-    }
-    getDefaultShipStats() {
-        let base = {
-            attackDamage: 1,
-            attackSpeed: 1,
-            bulletSize: 1,
-            healthRegen: 0,
-            damageReduction: 1,
-            maxHp: 1,
-            moveSpeed: 1,
-            spaceRockGain: 1,
-            spaceGemGain: 1,
-            xpGain: 1,
-        };
-        return base
-    }
-
-    getUpgradedShipStats(upgrades = this.upgrades) {
-        let shipStats = this.getDefaultShipStats()
-
-        shipStats.attackDamage = this.ship.damage
-        shipStats.attackDamage *= 1 + 0.1 * upgrades.attackDamageCommon
-        shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageUncommon
-        shipStats.attackDamage *= 1 + 0.2 * upgrades.attackDamageRare
-        shipStats.attackDamage *= 1 + 0.2 * upgrades.attackEpic
-        shipStats.attackDamage *= 1 + 0.75 * upgrades.attackLegendary
-        shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
-        if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
-        if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
-        if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
-        if (hasUpgrade("ir", 108)) shipStats.attackDamage *= 1.15;
-        if ((player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0))) shipStats.attackDamage = shipStats.attackDamage.mul(1.5);
-
-        shipStats.attackSpeed = 1
-        shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
-        shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackSpeedRare
-        shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
-        shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
-
-        shipStats.maxHp = player.ir.shipHealthMax.toNumber()
-        
-        shipStats.healthRegen = 0
-        if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
-        if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
-        shipStats.healthRegen += upgrades.healthRegenUncommon * 0.5 / 60
-        shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
-        shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
-        shipStats.healthRegen *= 1 + 0.25 * upgrades.defenseLegendary
-        shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-
-        shipStats.bulletSize = 1
-        if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
-            shipStats.maxHp *= 1 + 0.1 * upgrades.bulletSizeRare
-        } else {
-            shipStats.bulletSize *= 1 + 0.1 * upgrades.bulletSizeRare
-        }
-
-        shipStats.damageReduction = 1
-        shipStats.damageReduction *= 1 + 0.1 * upgrades.damageReductionRare
-        shipStats.damageReduction *= 1 + 0.15 * upgrades.defenseEpic
-        shipStats.damageReduction *= 1 + 0.25 * upgrades.defenseLegendary
-
-        shipStats.moveSpeed = 1
-        shipStats.moveSpeed *= 1 + 0.1 * upgrades.moveSpeedRare
-        shipStats.moveSpeed *= 1 + 0.25 * upgrades.moveSpeedLegendary
-        
-        shipStats.spaceRockGain = player.ir.spaceRockMult.toNumber()
-        shipStats.spaceRockGain *= 1 + 0.1 * upgrades.spaceRockGainCommon
-        shipStats.spaceRockGain *= 1 + 0.15 * upgrades.spaceRockGainUncommon
-        shipStats.spaceRockGain *= 1 + 0.2 * upgrades.spaceRockGainRare
-        shipStats.spaceRockGain *= 1 + 0.2 * upgrades.lootGainEpic
-        shipStats.spaceRockGain *= 1 + 0.4 * upgrades.dropGainLegendary
-        if (player.bl.noxDefeated) shipStats.spaceRockGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
-        
-        shipStats.spaceGemGain = player.ir.spaceGemMult.toNumber()
-        shipStats.spaceGemGain *= 1 + 0.05 * upgrades.spaceGemGainRare
-        shipStats.spaceGemGain *= 1 + 0.05 * upgrades.lootGainEpic
-        shipStats.spaceGemGain *= 1 + 0.2 * upgrades.dropGainLegendary
-        if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
-
-        shipStats.bloodStoneGain = player.bl.bloodStonesMult.toNumber()
-        shipStats.bloodStoneGain *= 1 + 0.1 * upgrades.bloodStoneGainCommon
-        shipStats.bloodStoneGain *= 1 + 0.15 * upgrades.bloodStoneGainUncommon
-        shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodStoneGainRare
-        shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodLootGainEpic
-        shipStats.bloodStoneGain *= 1 + 0.4 * upgrades.bloodLootGainLegendary
-        if (player.bl.noxDefeated) shipStats.bloodStoneGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
-        
-        shipStats.bloodGemGain = player.bl.bloodGemsMult.toNumber()
-        shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodGemGainRare
-        shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodLootGainEpic
-        shipStats.bloodGemGain *= 1 + 0.2 * upgrades.bloodLootGainLegendary
-        if (player.bl.noxDefeated) shipStats.bloodGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
-
-        shipStats.xpGain = 1
-        shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
-        shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainUncommon
-        shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainRare
-        shipStats.xpGain *= 1 + 0.3 * upgrades.xpGainEpic
-        shipStats.xpGain *= 1 + 0.4 * upgrades.dropGainLegendary
-
-        return shipStats
     }
 
     spawnArena() {
@@ -3711,7 +3616,7 @@ class SpaceArena {
 
                     let upgrades = structuredClone(this.upgrades)
                     upgrades[this.upgradeChoices[this.selectedUpgradeIndex]]++
-                    let potentialShipStats = this.getUpgradedShipStats(upgrades)
+                    let potentialShipStats = SB_getUpgradedShipStats(upgrades)
                     let matches = []
                     for (const [i, v] of Object.entries(potentialShipStats)) {
                         if (typeof(v) === "object") {
@@ -3835,7 +3740,9 @@ class SpaceArena {
                     y < confirmY + confirmHeight
                 ) {
                     let upg = UPGRADE_POOL[this.upgradeChoices[this.selectedUpgradeIndex]];
-                    upg.effect(this);
+                    upg.effect();
+                    this.upgradeCount++;
+                    this.upgradeScore += UPGRADE_RARITIES[upg.rarity].score;
                     player.ir.menu = 0;
                     this.upgradeChoices = [];
                     this.selectedUpgradeIndex = null;

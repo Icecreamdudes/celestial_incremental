@@ -12,7 +12,7 @@ addLayer("spaceZone1", {
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
         levelScaling: new Decimal(1.08),
-        levelScalingStart: new Decimal(10),
+        levelScalingStart: new Decimal(20),
 
         selectedStageStart: new Decimal(0),
     }},
@@ -37,7 +37,7 @@ addLayer("spaceZone1", {
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
-        player[this.layer].levelScalingStart = new Decimal(10)
+        player[this.layer].levelScalingStart = new Decimal(20)
     },
     clickables: {
         "enter": {
@@ -221,7 +221,7 @@ addLayer("spaceZone1", {
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart.add(1)) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #5e4ee6"}],
 
                 ], {width: "397px", height: "363px"}],
@@ -299,6 +299,9 @@ SB_zones.spaceZone1 = {
         
         let cel = ["alphaShip", "betaShip", "gammaShip"]
         if (level >= 20) cel = cel.concat(["deltaShip", "epsilonShip"]);
+        if (level >= 40) cel = cel.concat(["zetaShip", "etaShip"]);
+        if (level >= 60) cel = cel.concat(["gammaShip", "deltaShip", "iotaShip"]);
+        if (level >= 80) cel = cel.concat(["kappaShip"]);
 
         return cel[Math.floor(Math.random()*cel.length)]
     },

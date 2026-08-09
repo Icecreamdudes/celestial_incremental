@@ -378,10 +378,10 @@ function SB_saveRun() {
     if (!arena) return;
     player.ir.shipBattleSaveCurrent.slot = -2
     player.ir.shipBattleSaveCurrent.upgrades = arena.upgrades
-    player.ir.shipBattleSaveCurrent.upgradeCount = arena.upgradeCount
-    player.ir.shipBattleSaveCurrent.upgradeScore = arena.upgradeScore
     player.ir.shipBattleSaveCurrent.upgradeMultis = SB_getUpgradeMultis(arena.upgrades)
     player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage] = player.ir.battleLevel.sub(1)
+    player.ir.shipBattleSaveCurrent.upgradeCount = arena.upgradeCount
+    player.ir.shipBattleSaveCurrent.upgradeScore = arena.upgradeScore
 }
 
 function SB_exitRun() {
@@ -418,6 +418,7 @@ function SB_enterRun(zoneId) {
     player.ir.battleStage = zoneId
 
     player.ir.shipHealth = player.ir.shipHealthMax
+    player.ir.battleLevel = player[player.ir.battleStage].selectedStageStart.add(1)
 
     if (player.tab == "ir") {
         player.subtabs["ir"]['stuff'] = 'Battle'

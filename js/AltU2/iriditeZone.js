@@ -39,13 +39,26 @@ addLayer("iriditeZone", {
     },
     clickables: {
         "enter": {
-            title: "<h2>Enter Iridite Zone",
-            canClick: true,
+            title() {
+                let str = "<h2>Enter Iridite Zone"
+                let timer = new Decimal(0)
+                if (player.ir.shipBattleSaveCurrent != null) {
+                    timer = player.ir.timers[player.ir.shipBattleSaveCurrent.shipType].current.max(timer);
+                    if (player.ir.shipBattleSaveCurrent.slot >= 0) timer = timer.max(player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current)
+                }
+                if (timer.gt(0)) str += "</h2><br>(Ship Cooling Down: " + formatTime(timer) + ")";
+                return str
+            },
+            canClick() {return player.ir.timers[player.ir.shipBattleSaveCurrent.shipType].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot < 0 || player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0))},
             unlocked: true,
             onClick() {
                 SB_enterRun(this.layer)
             },
-            style: {width: "350px", minHeight: "75px", color: "white", background: "radial-gradient(#151230)", border: "3px solid white", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"},
+            style() {
+                let look = {width: "350px", minHeight: "75px", color: "white", border: "3px solid white", borderRadius: "20px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"}
+                look.background = tmp[this.layer].clickables[this.id].canClick ? "radial-gradient(#151230)" : "#361e1e"
+                return look
+            },
         },
         "startStage0": {
             title: "0",

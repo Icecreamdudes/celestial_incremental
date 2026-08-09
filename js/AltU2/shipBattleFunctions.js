@@ -203,6 +203,24 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
     arena.warnings.push(warning)
 }
 
+function SB_getDefaultShipStats() {
+    let base = {
+        attackDamage: 1,
+        attackSpeed: 1,
+        bulletSize: 1,
+        healthRegen: 0,
+        damageReduction: 1,
+        maxHp: 1,
+        moveSpeed: 1,
+        spaceRockGain: 1,
+        spaceGemGain: 1,
+        bloodStoneGain: 1,
+        bloodGemGain: 1,
+        xpGain: 1,
+    };
+    return base
+}
+
 function SB_getUpgradeMultis(upgrades) {
     let shipStats = {}
 
@@ -278,10 +296,90 @@ function SB_getUpgradeMultis(upgrades) {
     return shipStats
 }
 
+function SB_getUpgradedShipStats(upgrades) {
+    let shipStats = SB_getDefaultShipStats()
+    shipStats.attackDamage = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.attackDamage
+    shipStats.attackDamage *= 1 + 0.1 * (upgrades.attackDamageCommon || 0)
+    shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackDamageUncommon || 0)
+    shipStats.attackDamage *= 1 + 0.2 * (upgrades.attackDamageRare || 0)
+    shipStats.attackDamage *= 1 + 0.2 * (upgrades.attackEpic || 0)
+    shipStats.attackDamage *= 1 + 0.75 * (upgrades.attackLegendary || 0)
+    shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
+    if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
+    if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
+    if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
+    if (hasUpgrade("ir", 108)) shipStats.attackDamage *= 1.15;
+    if ((player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0))) shipStats.attackDamage = shipStats.attackDamage.mul(1.5);
+    shipStats.attackSpeed = 1
+    shipStats.attackSpeed *= 1 + 0.05 * (upgrades.attackSpeedUncommon || 0)
+    shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackSpeedRare || 0)
+    shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackEpic || 0)
+    shipStats.attackSpeed /= 1 + 0.25 * (upgrades.attackLegendary || 0)
+    shipStats.maxHp = player.ir.shipHealthMax.toNumber()
+    
+    shipStats.healthRegen = 0
+    if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
+    if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
+    shipStats.healthRegen += (upgrades.healthRegenUncommon * 0.5 / 60 || 0)
+    shipStats.healthRegen += (upgrades.healthRegenRare * 0.75 / 60 || 0)
+    shipStats.healthRegen += (upgrades.defenseEpic * 0.75 / 60 || 0)
+    shipStats.healthRegen *= 1 + 0.25 * (upgrades.defenseLegendary || 0)
+    shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
+    shipStats.bulletSize = 1
+    if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
+        shipStats.maxHp *= 1 + 0.1 * (upgrades.bulletSizeRare || 0)
+    } else {
+        shipStats.bulletSize *= 1 + 0.1 * (upgrades.bulletSizeRare || 0)
+    }
+    shipStats.damageReduction = 1
+    shipStats.damageReduction *= 1 + 0.1 * (upgrades.damageReductionRare || 0)
+    shipStats.damageReduction *= 1 + 0.15 * (upgrades.defenseEpic || 0)
+    shipStats.damageReduction *= 1 + 0.25 * (upgrades.defenseLegendary || 0)
+    shipStats.moveSpeed = 1
+    shipStats.moveSpeed *= 1 + 0.1 * (upgrades.moveSpeedRare || 0)
+    shipStats.moveSpeed *= 1 + 0.25 * (upgrades.moveSpeedLegendary || 0)
+    
+    shipStats.spaceRockGain = player.ir.spaceRockMult.toNumber()
+    shipStats.spaceRockGain *= 1 + 0.1 * (upgrades.spaceRockGainCommon || 0)
+    shipStats.spaceRockGain *= 1 + 0.15 * (upgrades.spaceRockGainUncommon || 0)
+    shipStats.spaceRockGain *= 1 + 0.2 * (upgrades.spaceRockGainRare || 0)
+    shipStats.spaceRockGain *= 1 + 0.2 * (upgrades.lootGainEpic || 0)
+    shipStats.spaceRockGain *= 1 + 0.4 * (upgrades.dropGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.spaceRockGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    
+    shipStats.spaceGemGain = player.ir.spaceGemMult.toNumber()
+    shipStats.spaceGemGain *= 1 + 0.05 * (upgrades.spaceGemGainRare || 0)
+    shipStats.spaceGemGain *= 1 + 0.05 * (upgrades.lootGainEpic || 0)
+    shipStats.spaceGemGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    shipStats.bloodStoneGain = player.bl.bloodStonesMult.toNumber()
+    shipStats.bloodStoneGain *= 1 + 0.1 * (upgrades.bloodStoneGainCommon || 0)
+    shipStats.bloodStoneGain *= 1 + 0.15 * (upgrades.bloodStoneGainUncommon || 0)
+    shipStats.bloodStoneGain *= 1 + 0.2 * (upgrades.bloodStoneGainRare || 0)
+    shipStats.bloodStoneGain *= 1 + 0.2 * (upgrades.bloodLootGainEpic || 0)
+    shipStats.bloodStoneGain *= 1 + 0.4 * (upgrades.bloodLootGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.bloodStoneGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    
+    shipStats.bloodGemGain = player.bl.bloodGemsMult.toNumber()
+    shipStats.bloodGemGain *= 1 + 0.05 * (upgrades.bloodGemGainRare || 0)
+    shipStats.bloodGemGain *= 1 + 0.05 * (upgrades.bloodLootGainEpic || 0)
+    shipStats.bloodGemGain *= 1 + 0.2 * (upgrades.bloodLootGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.bloodGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    shipStats.xpGain = 1
+    shipStats.xpGain *= 1 + 0.1 * (upgrades.xpGainCommon || 0)
+    shipStats.xpGain *= 1 + 0.15 * (upgrades.xpGainUncommon || 0)
+    shipStats.xpGain *= 1 + 0.2 * (upgrades.xpGainRare || 0)
+    shipStats.xpGain *= 1 + 0.3 * (upgrades.xpGainEpic || 0)
+    shipStats.xpGain *= 1 + 0.4 * (upgrades.dropGainLegendary || 0)
+    return shipStats
+}
+
 function SB_saveRun() {
     if (!arena) return;
     player.ir.shipBattleSaveCurrent.slot = -2
     player.ir.shipBattleSaveCurrent.upgrades = arena.upgrades
+    player.ir.shipBattleSaveCurrent.upgradeCount = arena.upgradeCount
+    player.ir.shipBattleSaveCurrent.upgradeScore = arena.upgradeScore
     player.ir.shipBattleSaveCurrent.upgradeMultis = SB_getUpgradeMultis(arena.upgrades)
     player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage] = player.ir.battleLevel.sub(1)
 }
@@ -291,6 +389,7 @@ function SB_exitRun() {
     options.fullscreen = false
 
     player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
+    if (player.ir.shipBattleSaveCurrent.slot > -1) player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current = player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].max
     player.ir.battleXP = new Decimal(0)
     player.ir.battleLevel = new Decimal(1)
 
@@ -340,5 +439,7 @@ function SB_enterRun(zoneId) {
     for (const [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgrades)) {
         arena.upgrades[i] = v
     }
+    arena.upgradeCount = player.ir.shipBattleSaveCurrent.upgradeCount
+    arena.upgradeScore = player.ir.shipBattleSaveCurrent.upgradeScore
     localStorage.setItem('arenaActive', 'true');
 }

@@ -1,3 +1,17 @@
+const SB_shipNames = [ // TEMPORARY BEFORE MOVING TO A NEW SYSTEM
+    "",
+    "cruiser",
+    "impact",
+    "unarmed",
+    "sniper",
+    "ufo",
+    "streamliner",
+    "stinger",
+    "astral",
+    "evolver",
+    "railgun",
+]
+
 SB_ships.cruiser = {
     name: "Cruiser",
     baseStats: {
@@ -11,7 +25,7 @@ SB_ships.cruiser = {
         // OFFENSE
         attackDamage: 7,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 120,
 
         // AGILITY
         moveSpeed: 6,
@@ -22,6 +36,7 @@ SB_ships.cruiser = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -51,12 +66,12 @@ SB_ships.impact = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 25,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 500,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 4,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -64,6 +79,7 @@ SB_ships.impact = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -93,12 +109,12 @@ SB_ships.unarmed = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 16,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 1500,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 10,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -106,6 +122,7 @@ SB_ships.unarmed = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -135,12 +152,12 @@ SB_ships.sniper = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 12,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 250,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 4.5,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -148,6 +165,7 @@ SB_ships.sniper = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -177,12 +195,12 @@ SB_ships.ufo = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 3,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 250,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 5,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -190,6 +208,7 @@ SB_ships.ufo = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -219,12 +238,12 @@ SB_ships.streamliner = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 4,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 50,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 3,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -232,6 +251,7 @@ SB_ships.streamliner = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -261,12 +281,12 @@ SB_ships.stinger = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 12,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 1000,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 10,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -274,6 +294,7 @@ SB_ships.stinger = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -305,7 +326,7 @@ SB_ships.astral = {
         // OFFENSE
         attackDamage: 7,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 300,
 
         // AGILITY
         moveSpeed: 6,
@@ -316,6 +337,7 @@ SB_ships.astral = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -345,12 +367,12 @@ SB_ships.evolver = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 40,
         bodyDamage: 1,
-        attackSpeed: 8,
+        attackSpeed: 500,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 4,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -358,6 +380,7 @@ SB_ships.evolver = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 1,
@@ -387,12 +410,12 @@ SB_ships.railgun = {
         healthRegen: 0,
 
         // OFFENSE
-        attackDamage: 7,
+        attackDamage: 600,
         bodyDamage: 1,
-        attackSpeed: 1 / 6,
+        attackSpeed: 5000,
 
         // AGILITY
-        moveSpeed: 6,
+        moveSpeed: 4.5,
         acceleration: 0.3,
         deceleration: 0.15,
         rotationSpeed: 0.06,
@@ -400,6 +423,7 @@ SB_ships.railgun = {
         // SCALE
         shipRadius: 16,
         bulletRadius: 3,
+        bulletSize: 1,
 
         // HARVESTING
         xpGain: 0.5,

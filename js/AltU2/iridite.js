@@ -381,7 +381,7 @@ addLayer("ir", {
             if (player.ir.shipBattleSaves[i] == null) {
                 player.ir.saveTimers[i].max = new Decimal(0)
             } else {
-                player.ir.saveTimers[i].max = player.ir.timers[player.ir.shipBattleSaves[i].shipType].max.mul(player.ir.shipBattleSaves[i].upgradeScore / 40 + 1)
+                player.ir.saveTimers[i].max = player.ir.timers[player.ir.shipBattleSaves[i].shipType].max.mul((player.ir.shipBattleSaves[i].upgradeScore || 0) / 40 + 1)
             }
             if (!player.ir.inBattle) player.ir.saveTimers[i].current = player.ir.saveTimers[i].current.sub(delta);
         }
@@ -1388,7 +1388,7 @@ addLayer("ir", {
         },
         "loadShipSave_0": {
             title() { return player.ir.saveTimers[0].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[0].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[0].current.lte(0) && (player.ir.shipBattleSaves[0] != null && player.ir.shipBattleSaveCurrent.slot != 0) && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[0].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 0) && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1408,7 +1408,7 @@ addLayer("ir", {
         },
         "loadShipSave_1": {
             title() { return player.ir.saveTimers[1].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[1].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[1].current.lte(0) && (player.ir.shipBattleSaves[1] != null && player.ir.shipBattleSaveCurrent.slot != 1) && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[1].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 1) && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1428,7 +1428,7 @@ addLayer("ir", {
         },
         "loadShipSave_2": {
             title() { return player.ir.saveTimers[2].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[2].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[2].current.lte(0) && (player.ir.shipBattleSaves[2] != null && player.ir.shipBattleSaveCurrent.slot != 2) && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[2].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 2) && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1448,7 +1448,7 @@ addLayer("ir", {
         },
         "loadShipSave_3": {
             title() { return player.ir.saveTimers[3].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[3].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[3].current.lte(0) && (player.ir.shipBattleSaves[3] != null && player.ir.shipBattleSaveCurrent.slot != 3) && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[3].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 3) && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1468,7 +1468,7 @@ addLayer("ir", {
         },
         "loadShipSave_4": {
             title() { return player.ir.saveTimers[4].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[4].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[4].current.lte(0) && (player.ir.shipBattleSaves[4] != null && player.ir.shipBattleSaveCurrent.slot != 4) && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[4].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 4) && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1488,7 +1488,7 @@ addLayer("ir", {
         },
         "loadShipSave_5": {
             title() { return player.ir.saveTimers[5].current.gt(0) ? ("On Cooldown: " + formatTime(player.ir.saveTimers[5].current)) : !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.saveTimers[5].current.lte(0) && (player.ir.shipBattleSaves[5] != null && player.ir.shipBattleSaveCurrent.slot != 5) && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return player.ir.saveTimers[5].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot != 5) && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {

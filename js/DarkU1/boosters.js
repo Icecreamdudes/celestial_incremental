@@ -304,7 +304,7 @@
         },
         107: {
             requirementDescription: "70 Total Boosters",
-            effectDescription() { return "/1.2 to legendary summon cooldown.<br>"},
+            effectDescription() { return "Increase the \"Auto-Draw Req Divider\" buyable level cap by highest boosters.<br>Currently: +" + formatWhole(player.db.bestBoosters) + "."},
             unlocked() { return player.lightRift.interspaceUnlocked },
             done() { return player.db.bestBoosters.gte(70) && player.lightRift.interspaceUnlocked },
             style() {

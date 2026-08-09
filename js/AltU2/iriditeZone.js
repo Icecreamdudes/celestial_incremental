@@ -9,8 +9,8 @@ addLayer("iriditeZone", {
         
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
-        levelScaling: new Decimal(1.1),
-        levelScalingStart: new Decimal(10),
+        levelScaling: new Decimal(1.08),
+        levelScalingStart: new Decimal(0),
 
         selectedStageStart: new Decimal(0),
     }},
@@ -31,11 +31,11 @@ addLayer("iriditeZone", {
     branches: ["spaceZone2"],
     color: "#ffffff",
     update(delta) {
-        player[this.layer].levelScaling = new Decimal(1.1)
+        player[this.layer].levelScaling = new Decimal(1.08)
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
-        player[this.layer].levelScalingStart = new Decimal(10)
+        player[this.layer].levelScalingStart = new Decimal(0)
     },
     clickables: {
         "enter": {
@@ -123,7 +123,7 @@ addLayer("iriditeZone", {
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart.add(1)) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Iridite", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "Iridite will always be attacking", {color: "white", fontSize: "16px", fontFamily: "monospace"}],

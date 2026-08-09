@@ -12,7 +12,7 @@ addLayer("spaceZone4", {
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
         levelScaling: new Decimal(1.15),
-        levelScalingStart: new Decimal(10),
+        levelScalingStart: new Decimal(20),
 
         selectedStageStart: new Decimal(0),
         milestone11Effect: new Decimal(1),
@@ -40,7 +40,7 @@ addLayer("spaceZone4", {
         if (hasUpgrade("ir", 23)) player[this.layer].levelScaling = player[this.layer].levelScaling.sub(0.02);
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
-        player[this.layer].levelScalingStart = new Decimal(10)
+        player[this.layer].levelScalingStart = new Decimal(20)
 
         player.spaceZone4.milestone11Effect = player.au2.stars.add(1).log(10).pow(10).div(1e15).add(1)
         player.spaceZone4.milestone12Effect = player.bum.starlight.add(1).log(10).pow(1.5).div(10).add(1)
@@ -232,7 +232,7 @@ addLayer("spaceZone4", {
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #5e4ee6", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["ir"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["ir"]["stages"]].levelScalingStart.add(1)) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Time Attack", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", "A deadly timer counts down to your doom", {color: "white", fontSize: "16px", fontFamily: "monospace"}],

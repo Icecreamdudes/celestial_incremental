@@ -12,7 +12,7 @@ addLayer("bloodZone1", {
         highestLevel: new Decimal(0),
         LevelStart: new Decimal(0),
         levelScaling: new Decimal(1.15),
-        levelScalingStart: new Decimal(10),
+        levelScalingStart: new Decimal(20),
 
         selectedStageStart: new Decimal(0),
     }},
@@ -38,7 +38,7 @@ addLayer("bloodZone1", {
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("pl", 17));
         player[this.layer].levelScaling = player[this.layer].levelScaling.sub(buyableEffect("bl", 16));
         player[this.layer].levelScaling = player[this.layer].levelScaling.max(1)
-        player[this.layer].levelScalingStart = new Decimal(10)
+        player[this.layer].levelScalingStart = new Decimal(20)
     },
     clickables: {
         "enter": {
@@ -222,7 +222,7 @@ addLayer("bloodZone1", {
                             ["raw-html", "Properties", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ], {width: "350px", height: "35px", borderBottom: "2px solid #f57171", marginBottom: "10px"}],
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? "<u>Level Scaling" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["bl"]["stages"]].levelScalingStart) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["bl"]["stages"]].levelScalingStart.add(1)) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["style-column", [
                             ["blank", "10px"],
                             ["raw-html", "<u>Nox", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -305,6 +305,8 @@ SB_zones.bloodZone1 = {
         
         let cel = ["leech", "bloodBat"]
         let cel2 = ["bloodEye", "largeLeech", "largeBloodBat"]
+        if (level >= 40) cel = cel.concat(["whiteLeech", "whiteBloodBat"]);
+        if (level >= 60) cel2 = cel2.concat(["redBloodEye"]);
 
         if (Math.random() < player.ir.battleLevel.toNumber() / 200 ) {
             return cel2[Math.floor(Math.random()*cel2.length)]

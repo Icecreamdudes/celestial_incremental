@@ -2851,7 +2851,7 @@ addLayer("ir", {
                     ["always-scroll-column", [
                         ["top-column", () => {
                             let container = []
-                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                             let shipStats = SB_getUpgradedShipStats(player.ir.shipBattleSaveCurrent.upgrades)
                             for (let [i, v] of Object.entries(shipStats)) {
                                 let statFormat = SHIP_STAT_FORMATTING[i]

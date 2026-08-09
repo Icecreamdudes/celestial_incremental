@@ -60,10 +60,9 @@ addLayer("ir", {
 
         inBattle: false,
         menu: 0,
-        mobileControls: false,
+        mobileControls: 0,
         battleStage: "spaceZone1",
         levelScalingMult: new Decimal(1),
-
 
         shipHealth: new Decimal(0),
         shipHealthMax: new Decimal(100),
@@ -1415,7 +1414,7 @@ addLayer("ir", {
         },
         "loadShipSave_0": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 0 && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[0] != null && player.ir.shipBattleSaveCurrent.slot != 0) && !(player.ir.shipBattleSaves[0] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1435,7 +1434,7 @@ addLayer("ir", {
         },
         "loadShipSave_1": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 1 && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[1] != null && player.ir.shipBattleSaveCurrent.slot != 1) && !(player.ir.shipBattleSaves[1] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1455,7 +1454,7 @@ addLayer("ir", {
         },
         "loadShipSave_2": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 2 && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[2] != null && player.ir.shipBattleSaveCurrent.slot != 2) && !(player.ir.shipBattleSaves[2] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1475,7 +1474,7 @@ addLayer("ir", {
         },
         "loadShipSave_3": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 3 && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[3] != null && player.ir.shipBattleSaveCurrent.slot != 3) && !(player.ir.shipBattleSaves[3] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1495,7 +1494,7 @@ addLayer("ir", {
         },
         "loadShipSave_4": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 4 && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[4] != null && player.ir.shipBattleSaveCurrent.slot != 4) && !(player.ir.shipBattleSaves[4] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1515,7 +1514,7 @@ addLayer("ir", {
         },
         "loadShipSave_5": {
             title() { return !player.ir.selectingShip ? "Overwrite Slot" : "Select" },
-            canClick() { return player.ir.shipBattleSaveCurrent.slot != 5 && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
+            canClick() { return (player.ir.shipBattleSaves[5] != null && player.ir.shipBattleSaveCurrent.slot != 5) && !(player.ir.shipBattleSaves[5] == null && player.ir.selectingShip) && !(!player.ir.selectingShip && (player.ir.shipBattleSaveCurrent == null || (player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot == -1))) },
             unlocked() { return true },
             onClick() {
                 if (player.ir.selectingShip) {
@@ -1679,11 +1678,17 @@ addLayer("ir", {
             },
         },
         "toggleMobileControls": {
-            title() { return player.ir.mobileControls ? "Mobile Controls [ON]" : "Mobile Controls [OFF]" },
+            title() { switch (player.ir.mobileControls) {
+                case 0: {return "Mobile Controls<br>[OFF]"; break;}
+                case 1: {return "Mobile Controls<br>[Simplified]"; break;}
+                case 2: {return "Mobile Controls<br>[Extended]"; break;}
+                default: {return ""; break;}
+            }},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.ir.mobileControls = !player.ir.mobileControls
+                player.ir.mobileControls++
+                if (player.ir.mobileControls > 2) player.ir.mobileControls = 0;
             },
             style() {
                 let look = {width: "259px", minHeight: "50px", color: "white", border: "3px solid #008000", borderRadius: "10px"}

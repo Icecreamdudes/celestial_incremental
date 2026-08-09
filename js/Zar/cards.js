@@ -2927,10 +2927,14 @@
         101: {
             costBase() { return new Decimal(1e8) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() {
+                let amt = new Decimal(100)
+                if (hasMilestone("db", 107)) amt = amt.add(player.db.bestBoosters);
+                return amt
+            },
             currency() { return player.car.cardGenerators },
             pay(amt) { player.car.cardGenerators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

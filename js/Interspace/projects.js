@@ -80,6 +80,7 @@
         },
 
         milestone105Effect: new Decimal(1),
+        milestone107Effect: new Decimal(1),
         milestone112Effect: new Decimal(1),
         milestone207Effect: new Decimal(1),
         milestone210Effect: new Decimal(1),
@@ -161,6 +162,7 @@
         // MILESTONE EFFECTS
 
         player.prj.milestone105Effect = player.prj.projectSpeed.pow(0.2).mul(player.prj.projectSpeed.max(1).log10().mul(0.75)).add(1)
+        player.prj.milestone107Effect = player.wel.light.add(1).log(10).add(1).pow(0.75).sub(1).pow_base(10).pow(1.5)
         player.prj.milestone112Effect = player.prj.projectSpeed.sub(1).div(100).add(1)
         player.prj.milestone207Effect = player.pri.prisms.add(1).log(1e4).floor().pow_base(1.5)
         player.prj.milestone210Effect = player.bum.starshines.pow_base(1.1).min(100)
@@ -613,7 +615,7 @@
         },
         107: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Light reduces the D1 universe reset requirement. (/" + formatSimple(player.prj.milestone107Effect) + ")</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 201) },
@@ -632,7 +634,7 @@
         },
         108: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Unlock Interspace-related SME buyables.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 1 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 201) },

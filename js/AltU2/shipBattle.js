@@ -1266,7 +1266,7 @@ class SpaceArena {
     handleKeyUp = (e) => { this.keys[e.code] = false; };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
-        if (player.ir.mobileControls) {
+        if (player.ir.mobileControls > 0) {
             let rect = this.canvas.getBoundingClientRect();
 
             if (player.ir.shipType != 3 && player.ir.shipType != 7) {
@@ -1296,7 +1296,7 @@ class SpaceArena {
             }
         }
         if (player.ir.shipType == 8 && player.ir.menu == 0 && !player.ir.autoShoot) {
-            if (!(player.ir.mobileControls && e.action != "rightStick")) {
+            if (!(player.ir.mobileControls > 0 && e.action != "rightStick")) {
                 this.ship._laserActive = true
                 this.ship._laserTimer = -60;
             }
@@ -1307,7 +1307,7 @@ class SpaceArena {
         let rect = this.canvas.getBoundingClientRect();
         this.mouseX = e.clientX - rect.left;
         this.mouseY = e.clientY - rect.top;
-        if (player.ir.mobileControls) {
+        if (player.ir.mobileControls > 0) {
             this.pointerTouches.forEach((value, key, map) => {
                 if (value.pointerId === e.pointerId) {
                     value.clientX = e.clientX
@@ -1318,8 +1318,8 @@ class SpaceArena {
     };
     handlePointerUp = (e) => {
         if (player.ir.menu == 0) this.pointerDown = false;
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot && !(player.ir.mobileControls && this.pointerTouches.get(e.pointerId).action != "rightStick")) this.ship._laserActive = false;
-        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
+        if (player.ir.shipType == 8 && player.ir.menu == 0 && this.ship._laserActive && !player.ir.autoShoot && !(player.ir.mobileControls > 0 && this.pointerTouches.get(e.pointerId).action != "rightStick")) this.ship._laserActive = false;
+        if (player.ir.mobileControls > 0 && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
             let p = this.pointerTouches.get(e.pointerId);
             switch (p.action) {
                 case "leftStick": this.mobileLeftStickAngle = null; break;
@@ -1342,8 +1342,8 @@ class SpaceArena {
         if (player.ir.shipType == 10) r = 12;
         r *= this.shipStats.bulletSize;
         // shipType 5 aims at the mouse and fires burst shots toward it
-        if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || player.ir.mobileControls)) {
-            if (player.ir.mobileControls) angle = this.mobileRightStickAngle || this.ship.angle;
+        if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || player.ir.mobileControls > 0)) {
+            if (player.ir.mobileControls > 0) angle = this.mobileRightStickAngle || this.ship.angle;
             else angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
             // spawn a short burst (multiple pellets) per shot
             let pellets = 5;
@@ -1370,7 +1370,7 @@ class SpaceArena {
             return;
         }
         
-        if (player.ir.shipType == 8 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls && player.ir.autoShoot))) {
+        if (player.ir.shipType == 8 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls > 0 && player.ir.autoShoot))) {
             if (player.ir.autoShoot && !this.ship._laserActive) {
                 this.ship._laserActive = true
                 this.ship._laserTimer = -60
@@ -1854,7 +1854,7 @@ class SpaceArena {
         } else {
 
             // MOBILE MOVEMENT / KEYBOARD SHOOTING
-            if (!player.ir.mobileControls) {
+            if (player.ir.mobileControls == 0) {
                 if (this.keys['KeyW']) {
                     this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
                 } else if (this.keys['KeyS']) {
@@ -1882,7 +1882,7 @@ class SpaceArena {
                     this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
                 }
             }
-            if ((!player.ir.mobileControls && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
+            if ((player.ir.mobileControls == 0 && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
                 if (player.ir.shipType == 10) {
                     this.chargeShot()
                 } else {
@@ -1909,7 +1909,7 @@ class SpaceArena {
             if (this.ship.y > this.height) this.ship.y -= this.height;
         }
 
-        if (player.ir.mobileControls) {
+        if (player.ir.mobileControls > 0) {
             this.pointerTouches.forEach((value, key, map) => {
                 if (!value.action) return;
                 switch (value.action) {
@@ -2060,7 +2060,7 @@ class SpaceArena {
 
             // Build input vector
             let ix = 0, iy = 0;
-            if (!player.ir.mobileControls) {
+            if (player.ir.mobileControls == 0) {
                 if (this.keys['KeyW']) iy -= 1;
                 if (this.keys['KeyS']) iy += 1;
                 if (this.keys['KeyA']) ix -= 1;
@@ -2107,8 +2107,8 @@ class SpaceArena {
                 // handle laser firing
                 if (this.ship._laserActive) {
                     // Laser follows mouse direction
-                    if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null || (player.ir.mobileControls && player.ir.autoShoot)) {
-                        let desired = (player.ir.mobileControls) ? -this.mobileRightStickAngle || -this.ship.angle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+                    if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null || (player.ir.mobileControls > 0 && player.ir.autoShoot)) {
+                        let desired = (player.ir.mobileControls > 0) ? -this.mobileRightStickAngle || -this.ship.angle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
                         let diff = desired - (this.ship._laserAngle || 0);
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
@@ -3512,7 +3512,7 @@ class SpaceArena {
         }
 
         // Draw mobile controls
-        if (player.ir.mobileControls && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
+        if (player.ir.mobileControls > 0 && (player.ir.shipType != 3 && player.ir.shipType != 7)) {
             this.ctx.save();
             this.ctx.globalAlpha = 1
             this.ctx.lineWidth = 3;

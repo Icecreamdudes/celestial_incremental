@@ -2853,6 +2853,7 @@ addLayer("ir", {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                             let shipStats = SB_getUpgradedShipStats(player.ir.shipBattleSaveCurrent.upgrades)
+                            let baseStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
                             for (let [i, v] of Object.entries(shipStats)) {
                                 let statFormat = SHIP_STAT_FORMATTING[i]
                                 let prefix = statFormat.valuePrefix
@@ -2861,16 +2862,16 @@ addLayer("ir", {
                                     v *= 60
                                 }
                                 if (i == "attackSpeed") {
-                                    v = 1000 / v
+                                    v *= (1000 / baseStats.attackSpeed)
                                     prefix = ""
                                     suffix = "/s"
                                 }
                                 if (i == "bulletSize") {
-                                    v *= SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.bulletRadius
+                                    v *= baseStats.bulletRadius
                                     prefix = ""
                                 }
                                 if (i == "moveSpeed") {
-                                    v *= SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.moveSpeed
+                                    v *= baseStats.moveSpeed
                                     prefix = ""
                                 }
                                 container.push(["style-column", [

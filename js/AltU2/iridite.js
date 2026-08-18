@@ -348,6 +348,10 @@ addLayer("ir", {
         }
 
         let zoneRef = SB_zones[player.ir.battleStage]
+        if (!zoneRef) {
+            player.ir.battleStage = "spaceZone1"
+            zoneRef = SB_zones[player.ir.battleStage]
+        }
 
         player.ir.spaceRockMult = new Decimal(1)
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(upgradeEffect("ir", 21))
@@ -476,7 +480,7 @@ addLayer("ir", {
             progress() {
                 return arena ? player.ir.shipHealth.div(arena.shipStats.maxHp) : 1;
             },
-            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #7f7f00 0%, #545400 100%)"},
             display() {
@@ -491,7 +495,7 @@ addLayer("ir", {
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
-            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230",},
             fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #00007f 100%)"},
             display() {
@@ -508,7 +512,7 @@ addLayer("ir", {
                     return arena.enemies[0].health / arena.enemies[0].maxHealth
                 } else return 1;
             },
-            borderStyle() { return {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {

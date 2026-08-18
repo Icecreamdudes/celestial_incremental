@@ -163,6 +163,7 @@ addLayer("iriditeZone", {
 SB_zones.iriditeZone = {
     nameCap: "Iridite Zone",
     nameLow: "iridite zone",
+    location: "space",
 
     primaryColor: "#ffffff",
     secondaryColor: "#151230",
@@ -191,9 +192,13 @@ SB_zones.iriditeZone = {
             SB_spawnCelestialite("iridite")
         }
     },
-    statMult: new Decimal(2),
+    statMult: new Decimal(4),
     rockMult: new Decimal(3),
     gemMult: new Decimal(1.75),
+    xpReqMult: new Decimal(3),
+    savePoints: [
+        0,
+    ],
 }
 
 SB_celestialites.iridite = {
@@ -208,7 +213,7 @@ SB_celestialites.iridite = {
     reward() {
         let gain = {}
         let random = Math.random()
-        gain.bloodGems = Decimal.add(1, Math.random()).mul(5)
+        gain.spaceGem = Decimal.add(1, Math.random()).mul(5)
         return gain
     },
     experienceReward() {
@@ -227,10 +232,10 @@ SB_celestialites.iridite = {
         player.ir.iriditeFought = true
 
         // Stat changes
-        celestialite.maxHealth = new Decimal(1e5)
-        celestialite.health = new Decimal(1e5)
-        celestialite.damage = new Decimal(6)
-        celestialite.regen = new Decimal(6)
+        celestialite.maxHealth = new Decimal(5e5)
+        celestialite.health = new Decimal(5e5)
+        celestialite.damage = new Decimal(8)
+        celestialite.regen = new Decimal(50)
 
         celestialite.phase = 1
         //celestialite.currentAttack = ['dagger', 'radial', 'shortBurst', 'homing'][Math.floor(Math.random() * 4)];

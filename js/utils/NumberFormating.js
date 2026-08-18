@@ -142,6 +142,14 @@ function formatTime(s) {
     else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
 }
 
+function formatSimpleTime(s, precision = 1) {
+    if (s < 60) return formatSimple(s, precision) + "s"
+    else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + formatSimple(s % 60, precision) + "s"
+    else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + formatSimple(s % 60, precision) + "s"
+    else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + formatSimple(s % 60, precision) + "s"
+    else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + formatSimple(s % 60, precision) + "s"
+}
+
 function toPlaces(x, precision, maxAccepted) {
     x = new Decimal(x)
     let result = x.toStringWithDecimalPlaces(precision)

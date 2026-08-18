@@ -288,6 +288,7 @@ addLayer("spaceZone3", {
 SB_zones.spaceZone3 = {
     nameCap: "Zone III",
     nameLow: "zone iii",
+    location: "space",
 
     primaryColor: "#e64ebd",
     secondaryColor: "#8f0749",
@@ -325,9 +326,13 @@ SB_zones.spaceZone3 = {
             SB_spawnCelestialite("ufo")
         }
     },
-    statMult: new Decimal(2.5),
+    statMult: new Decimal(6),
     rockMult: new Decimal(5),
     gemMult: new Decimal(1.5),
+    xpReqMult: new Decimal(4),
+    savePoints: [
+        0, 20, 40, 60, 80
+    ],
 }
 
 SB_celestialites.iotaShip = {

@@ -1,13 +1,26 @@
 ﻿
-const createClickableConnection = function(id_1, id_2, color) {
-    return ["style-row", [], {
+let getShrineUpgradeTreeLeft = function(x) {
+    return (-106.5 + 224 * x)
+}
+let getShrineUpgradeTreeTop = function(x) {
+    return (149 * x)
+}
+let createShrineUpgradeConnection = function(xy1_b, xy2_b) {
+    let xy1 = [getShrineUpgradeTreeLeft(xy1_b[0]), getShrineUpgradeTreeTop(xy1_b[1])]
+    let xy2 = [getShrineUpgradeTreeLeft(xy2_b[0]), getShrineUpgradeTreeTop(xy2_b[1])]
+    return ["style-row", [["style-row", [], {
         position: "relative",
-            left: () => {return ((layers.cbs.clickables[id_1].xPos + layers.cbs.clickables[id_2].xPos) / 2) - 50 + "px"},
-            top: () => {return ((layers.cbs.clickables[id_1].yPos + layers.cbs.clickables[id_2].yPos) / 2) + "px"},
-            transform: () => {return "rotate(" + Math.atan2(layers.cbs.clickables[id_2].yPos - layers.cbs.clickables[id_1].yPos, layers.cbs.clickables[id_2].xPos - layers.cbs.clickables[id_1].xPos) + "rad)"},
-            width: () => {return Math.sqrt(Math.pow(layers.cbs.clickables[id_2].yPos - layers.cbs.clickables[id_1].yPos, 2) + Math.pow(layers.cbs.clickables[id_2].xPos - layers.cbs.clickables[id_1].xPos, 2)) + "px"},
-            height: "0px", border: "2px solid " + color, borderBottom: "0", marginLeft: "100px", marginTop: "-2px"
-        }]
+            left: () => {return (106 + (xy1[0] + xy2[0]) / 2) + "px"},
+            top: () => {return ((xy1[1] + xy2[1]) / 2) + "px"},
+            transform: () => {return "rotate(" + Math.atan2(xy2[1] - xy1[1], xy2[0] - xy1[0]) + "rad)"},
+            width: () => {return Math.hypot(xy2[1] - xy1[1], xy2[0] - xy1[0]) + "px"},
+            height: "12px", background: "#3383ab",
+    }]], {width: "0", height: "0"}]
+}
+let createShrineUpgrade = function(type, id, xy) {
+    return ["style-column", [
+        [type, id],
+    ], {width: "0", height: "0", position: "relative", left: getShrineUpgradeTreeLeft(xy[0]) + "px", top: getShrineUpgradeTreeTop(xy[1]) + "px"}]
 }
 
 addLayer("cbs", {
@@ -55,16 +68,16 @@ addLayer("cbs", {
     }},
     nodeStyle() {
         return {
-            background: "linear-gradient(180deg, #094599 0%, #062a5eff 50%, #094599 100%)",
+            background: "linear-gradient(180deg, #064666 0%, #032333 50%, #064666 100%)",
             "background-origin": "border-box",
-            "border-color": "#3466acff",
-            "color": "#3466acff",
+            "border-color": "#3383ab",
+            "color": "#3383ab",
             borderRadius: "4px",
             transform: "translateX(-50px)",
         }
     },
     tooltip: "Check Back Shrine",
-    color: "#3466acff",
+    color: "#c6f7ff",
     branches: ["sm",],
     update(delta) {
         if (arena == null && player.subtabs["cbs"]['stuff'] == 'Battle') {
@@ -150,6 +163,37 @@ addLayer("cbs", {
         }
     },
     clickables: {
+        "enter": {
+            tooltip() { return "Gives +4 movement speed, +2 HP/sec, and 40% damage reduction." },
+            title() {
+                let str = "<h2>Perform Ritual</h2>"
+                str += (player.cbs.ritualSpiritCooldown.lte(0) ? ("<br>Requires:<br>" + formatWhole(player.cbs.ritualCosts[0]) + " Evolution Shards<br>" + formatWhole(player.cbs.ritualCosts[1]) + " Paragon Shards") : ("Check back in " + formatTime(player.cbs.ritualSpiritCooldown)))
+                let timer = new Decimal(0)
+                if (player.ir.shipBattleSaveCurrent != null) {
+                    timer = player.ir.timers[player.ir.shipBattleSaveCurrent.shipType].current.max(timer);
+                    if (player.ir.shipBattleSaveCurrent.slot >= 0) timer = timer.max(player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current)
+                }
+                if (timer.gt(0)) str += "<br>(Ship Cooling Down: " + formatTime(timer) + ")";
+                return str
+            },
+            canClick() {return player.cb.evolutionShards.gte(player.cbs.ritualCosts[0]) && player.cb.paragonShards.gte(player.cbs.ritualCosts[1]) && player.cbs.ritualSpiritCooldown.lte(0) && player.ir.shipBattleSaveCurrent != null && player.ir.timers[player.ir.shipBattleSaveCurrent.shipType].current.lte(0) && (player.ir.shipBattleSaveCurrent.slot < 0 || player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0))},
+            unlocked: true,
+            onClick() {
+                SB_enterRun(this.layer)
+
+                arena.upgrades.moveSpeedLegendary += 1
+                arena.upgrades.healthRegenUncommon += 2
+                summonSpirit();
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.cbs.ritualCosts[0])
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.cbs.ritualCosts[1])
+                player.cbs.ritualSpiritCooldown = player.cbs.ritualSpiritCooldownMax
+            },
+            style() {
+                let look = {width: "350px", minHeight: "131px", color: "white", border: "3px solid #c6f7ff", borderRadius: "15px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"}
+                look.background = tmp[this.layer].clickables[this.id].canClick ? "linear-gradient(180deg, #064666 0%, #032333 50%, #064666 100%)" : "#361e1e"
+                return look
+            },
+        },
         11: {
             title() { return player.cbs.ritualSpiritCooldown.lte(0) ? "<h2>Ritual<br><h4>Cost: " + formatWhole(player.cbs.ritualCosts[0]) + " Evolution Shards<br><h4>" + formatWhole(player.cbs.ritualCosts[1]) + " Paragon Shards" : "<h2>Check back in " + formatTime(player.cbs.ritualSpiritCooldown)},
             canClick() { return player.cb.evolutionShards.gte(player.cbs.ritualCosts[0]) && player.cb.paragonShards.gte(player.cbs.ritualCosts[1]) && player.cbs.ritualSpiritCooldown.lte(0) }, //change this eventually
@@ -310,825 +354,30 @@ addLayer("cbs", {
                 return look
             },
         },
-        101: {
-            title() { return "<h2>1</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 1 },
-            xPos: 75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        102: {
-            title() { return "<h2>2</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 2 },
-            xPos: 129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        103: {
-            title() { return "<h2>3</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 3 },
-            xPos: 150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        104: {
-            title() { return "<h2>4</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 4 },
-            xPos: 129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        105: {
-            title() { return "<h2>5</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 5 },
-            xPos: 75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        106: {
-            title() { return "<h2>6</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 6 },
-            xPos: 0,
-            yPos: 150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        107: {
-            title() { return "<h2>7</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 7 },
-            xPos: -75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        108: {
-            title() { return "<h2>8</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 8 },
-            xPos: -129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        109: {
-            title() { return "<h2>9</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 9 },
-            xPos: -150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        110: {
-            title() { return "<h2>10</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 10 },
-            xPos: -129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        111: {
-            title() { return "<h2>11</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 11 },
-            xPos: -75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        112: {
-            title() { return "<h2>12</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() { player.cbs.blessing1Selection = 12 },
-            xPos: 0,
-            yPos: -150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "#c6f7ff", border: "3px solid #c6f7ff", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "#c6f7ff"
-                    look.color = "#062a5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #094599 0%, #062a5e 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        113: {
-            title() { return "<h2>13</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        114: {
-            title() { return "<h2>14</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        115: {
-            title() { return "<h2>15</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        116: {
-            title() { return "<h2>16</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        117: {
-            title() { return "<h2>17</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        118: {
-            title() { return "<h2>18</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 0,
-            yPos: 150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        119: {
-            title() { return "<h2>19</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: -75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        120: {
-            title() { return "<h2>20</h2>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: -129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        121: {
-            title() { return "<h2>21</h2>" },
-            canClick() { return false },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: -150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        122: {
-            title() { return "<h2>22</h2>" },
-            canClick() { return false },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: -129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        123: {
-            title() { return "<h2>23</h2>" },
-            canClick() { return false },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: -75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-        124: {
-            title() { return "<h2>24</h2>" },
-            canClick() { return false },
-            unlocked() { return true },
-            onClick() {
-                
-            },
-            xPos: 0,
-            yPos: -150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", color: "white", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #3466ac 0%, #203f6b 70%)"
-                } else {
-                    look.background = "black"
-                    look.color = "#637c80"
-                    look.border = "3px solid #637c80"
-                }
-                return look
-            },
-        },
-
-        201: {
-            title() { return "I" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 1 },
-            xPos: 75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        202: {
-            title() { return "II" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 2 },
-            xPos: 129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        203: {
-            title() { return "III" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 3 },
-            xPos: 150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.background = "#ff7070"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        204: {
-            title() { return "IV" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 4 },
-            xPos: 129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        205: {
-            title() { return "V" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 5 },
-            xPos: 75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        206: {
-            title() { return "VI" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 6 },
-            xPos: 0,
-            yPos: 150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        207: {
-            title() { return "VII" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 7 },
-            xPos: -75,
-            yPos: 129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.background = "#7970ff"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        208: {
-            title() { return "VIII" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 8 },
-            xPos: -129.903810568,
-            yPos: 75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        209: {
-            title() { return "IX" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 9 },
-            xPos: -150,
-            yPos: 0,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        210: {
-            title() { return "X" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 10 },
-            xPos: -129.903810568,
-            yPos: -75,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        211: {
-            title() { return "XI" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 11 },
-            xPos: -75,
-            yPos: -129.903810568,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.background = "#fffd70"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
-        212: {
-            title() { return "XII" },
-            canClick() { return hasUpgrade(this.layer, this.id - 190) },
-            unlocked() { return true },
-            onClick() { player.cbs.factorSelection = 12 },
-            xPos: 0,
-            yPos: -150,
-            style() {
-                let look = {margin: "-28px", left: this.xPos + "px", top: this.yPos + "px", width: "50px", minHeight: "50px", maxHeight: "50px", border: "3px solid white", borderRadius: "25px", position: "relative"}
-                if (hasUpgrade(this.layer, this.id - 90)) {
-                    look.background = "white"
-                    look.color = "#5e5e5e"
-                } else if (this.canClick()) {
-                    look.backgroundImage = "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)"
-                    look.border = "3px solid black"
-                } else {
-                    look.background = "black"
-                    look.color = "#808080"
-                    look.border = "3px solid #808080"
-                }
-                return look
-            },
-        },
     },
     bars: {
     },
     upgrades: {
         11: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing I",
             unlocked() { return true },
             description() {{return "Boosts chance points based on check back level. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(5e14),
             currencyLocation() { return player.za },
             currencyInternalName: "chancePoints",
+            currencyDisplayName: "Chance Points",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1136,7 +385,16 @@ addLayer("cbs", {
             },
         },    
         12: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing II",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Boosts wheel points based on best chance points. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(2e16),
@@ -1144,20 +402,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1165,7 +411,16 @@ addLayer("cbs", {
             },
         },    
         13: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing III",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Reduce slot machine spin time by /3."}},
             cost: new Decimal(3e17),
@@ -1173,25 +428,22 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
         },  
         14: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing IV",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Chance point softcap start weakens chance point softcap. (^" + format(this.effect()) + ")"}},
             cost: new Decimal(5e18),
@@ -1199,20 +451,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1220,7 +460,16 @@ addLayer("cbs", {
             },
         }, 
         15: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing V",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Best chance points boost total chip gain. (x" + format(this.effect()) + ")"}},
             cost: new Decimal(4e21),
@@ -1228,20 +477,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1249,7 +486,16 @@ addLayer("cbs", {
             },
         }, 
         16: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing VI",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Heads and and tails softcap start weaken heads and tails softcap. (^" + format(this.effect()[0]) + ", ^" + format(this.effect()[1]) + ")"}},
             cost: new Decimal(1e24),
@@ -1257,20 +503,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1278,7 +512,16 @@ addLayer("cbs", {
             },
         }, 
         17: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing VII",
             unlocked() { return player.cbs.shrineReactivated },
             description() {{return "Unlock some rather unique slot machine researches."}},
             cost: new Decimal(1e28),
@@ -1286,27 +529,24 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
         }, 
 
         //check back blessings
         18: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing VIII",
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Check back level boosts check back XP gain. (x" + format(this.effect()) + ")"},
             cost: new Decimal(1e38),
@@ -1314,20 +554,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1336,7 +564,16 @@ addLayer("cbs", {
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         19: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing IX",
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
             cost: new Decimal(1e42),
@@ -1344,20 +581,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
             effect() {
@@ -1366,7 +591,16 @@ addLayer("cbs", {
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
         }, 
         20: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing X",
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Unlocks another XP button."},
             cost: new Decimal(1e60),
@@ -1374,25 +608,22 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
         },
         21: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing XI",
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Ascension rituals completed in under 2 minutes yield an extra Shard of Ascension."},
             cost: new Decimal(1e300),
@@ -1400,25 +631,22 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
         },
         22: {
-            fullDisplay() {return hasUpgrade(this.layer, this.id) ? "BOUGHT!" : "BUY"},
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing XII",
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Unlock a new zone in space battle. [COMING SOON]"},
             cost: new Decimal("1e500"),
@@ -1426,20 +654,8 @@ addLayer("cbs", {
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
             style() {
-                let look = {borderRadius: "10px", color: "white", fontSize: "20px", width: "300px", minHeight: "50px"}
-                if (hasUpgrade(this.layer, this.id)) {
-                    look.backgroundColor = "#c6f7ff"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#062a5e"
-                } else if (!canAffordUpgrade(this.layer, this.id)) {
-                    look.backgroundColor =  "#361e1e"
-                    look.border =  "3px solid #663737"
-                    look.color =  "#c6f7ff"
-                } else {
-                    look.backgroundColor = "#3466ac"
-                    look.border =  "3px solid #c6f7ff"
-                    look.color =  "#c6f7ff"
-                }
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#064666"
                 return look
             },
         },
@@ -1447,11 +663,11 @@ addLayer("cbs", {
     buyables: {
         11: {
             costBase() { return new Decimal(1e8) },
-            costGrowth() { return new Decimal(1.75) },
+            costGrowth() { return new Decimal(1.5) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.za.chancePoints },
             pay(amt) { player.za.chancePoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.05).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.66666666).mul(0.05).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1477,15 +693,16 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         12: {
             costBase() { return new Decimal(1e10) },
-            costGrowth() { return new Decimal(1.875) },
+            costGrowth() { return new Decimal(2.5) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.za.chancePoints },
             pay(amt) { player.za.chancePoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.05).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.66666666).mul(0.05).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1511,15 +728,16 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         13: {
             costBase() { return new Decimal(1e12) },
-            costGrowth() { return new Decimal(2) },
+            costGrowth() { return new Decimal(3.5) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.za.chancePoints },
             pay(amt) { player.za.chancePoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.05).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.66666666).mul(0.05).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1545,7 +763,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         14: {
             costBase() { return new Decimal(1e7) },
@@ -1553,7 +772,7 @@ addLayer("cbs", {
             purchaseLimit() { return new Decimal(333) },
             currency() { return player.cf.heads },
             pay(amt) { player.cf.heads = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.55).mul(0.04).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1579,7 +798,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         15: {
             costBase() { return new Decimal(1e7) },
@@ -1587,7 +807,7 @@ addLayer("cbs", {
             purchaseLimit() { return new Decimal(333) },
             currency() { return player.cf.tails },
             pay(amt) { player.cf.tails = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.55).mul(0.04).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1613,7 +833,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         16: {
             costBase() { return new Decimal(1e5) },
@@ -1621,7 +842,7 @@ addLayer("cbs", {
             purchaseLimit() { return new Decimal(333) },
             currency() { return player.wof.wheelPoints },
             pay(amt) { player.wof.wheelPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.55).mul(0.04).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1647,7 +868,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #144b34ff 0%, #3d8165ff 100%)" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         17: {
             costBase() { return new Decimal(10) },
@@ -1681,7 +903,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundColor: "#ff7070ff" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "#ff7070ff", margin: "6px" },
+            progressColor: "#3383ab",
         },
         18: {
             costBase() { return new Decimal(10) },
@@ -1715,7 +938,8 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundColor: "#7970ffff" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "#7970ffff", margin: "6px" },
+            progressColor: "#3383ab",
         },
         19: {
             costBase() { return new Decimal(10) },
@@ -1749,7 +973,113 @@ addLayer("cbs", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundColor: "#fffd70ff" }
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "#fffd70ff", margin: "6px" },
+            progressColor: "#3383ab",
+        },
+        21: {
+            costBase() { return new Decimal(1e3) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(33) },
+            currency() { return player.cb.evolutionShards },
+            pay(amt) { player.cb.evolutionShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.1).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Check Back Pet Point Factor I"
+            },
+            display() {
+                return 'which are boosting pet point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Evolution Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)", margin: "6px" },
+            progressColor: "#3383ab",
+        },
+        22: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(33) },
+            currency() { return player.cb.paragonShards },
+            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.1).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Check Back Pet Point Factor II"
+            },
+            display() {
+                return 'which are boosting pet point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Paragon Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)", margin: "6px" },
+            progressColor: "#3383ab",
+        },
+        23: {
+            costBase() { return new Decimal(1) },
+            costGrowth() { return new Decimal(1.04) },
+            purchaseLimit() { return new Decimal(33) },
+            currency() { return player.cbs.ascensionShards },
+            pay(amt) { player.cbs.ascensionShards = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Check Back Pet Point Factor III"
+            },
+            display() {
+                return 'which are boosting pet point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Ascension Shards'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '248px', height: '150px', color: "black", border: "3px solid", outline: "3px solid #064666", borderColor: "#032333", background: "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)", margin: "6px" },
+            progressColor: "#3383ab",
         },
         101: {
             costBase() { return new Decimal(500) },
@@ -1865,54 +1195,54 @@ addLayer("cbs", {
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
-                                                                    ["left-row", [
-                    ["blank", "25px"],
-                                ["tooltip-row", [
-                ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
-                ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
-            ], {width: "700px", height: "100px"}],
-        ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
-                                                ["left-row", [
-                    ["blank", "25px"],
-                ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "348px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
-        ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
+                        ], {width: "700px", height: "100px"}],
+                    ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                        ], {width: "348px", height: "50px", borderRight: "2px solid white"}],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                        ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
+                    ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
                     ["blank", "25px"],
                     ["layer-proxy", ["ir", [
-                    ["style-row", [
-                    ["style-column", [
-                    ["blank", "25px"],
-                    ["layer-proxy", ["cbs", [["style-row", [["clickable", 11],],]]]],
-                    ["blank", "5px"],
-                ["raw-html", () => { return player.cbs.ascensionShards.gt(0) ? "<h5>Note from Dev: If you're worrying about having to fight this guy like a billion times, don't worry as there will be other ways to obtain ascension shards in the future." : ""}, { color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "12px"}],
-                    ["blank", "5px"],
-                    ["style-column", [
-                            ["levelable-display", [
-                                ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                            ]],
-                    ], {width: "550px", height: "175px", backgroundImage: "linear-gradient(180deg, #205197ff 0%, #1c375cff 50%, #205197ff 100%)", border: "3px solid #6094ddff", borderRight: "3px solid #6094ddff", borderRadius: "2px 2px 0 0"}],
-                    ["always-scroll-column", [
+                        ["style-row", [
                             ["style-column", [
-                                ["raw-html", "Ships", {color: "#6094ddff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "541px", height: "40px", backgroundColor: "#205197ff", borderBottom: "3px solid #6094ddff",  borderLeft: "3px solid #6094ddff",  userSelect: "none"}],
-                            ["style-column", [
-                                ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
-                            ], {width: "531px", height: "250px", backgroundColor: "#112138ff", borderLeft: "3px solid #6094ddff", padding: "5px"}],
-                        ], {width: "556px", height: "220px" }],
-                    ["blank", "25px"],
-                        ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "1000px", border: "3px solid #6094ddff", backgroundColor: "#1c375cff", borderRadius: "15px 15px 15px 15px"}],
-                ]]]
+                                ["blank", "25px"],
+                                ["layer-proxy", ["cbs", [["style-row", [["clickable", 11],],]]]],
+                                ["blank", "5px"],
+                                ["raw-html", () => { return player.cbs.ascensionShards.gt(0) ? "<h5>Note from Dev: If you're worrying about having to fight this guy like a billion times, don't worry as there will be other ways to obtain ascension shards in the future." : ""}, { color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "12px"}],
+                                ["blank", "5px"],
+                                ["style-column", [
+                                    ["levelable-display", [
+                                        ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
+                                    ]],
+                                ], {width: "550px", height: "175px", backgroundImage: "linear-gradient(180deg, #205197ff 0%, #1c375cff 50%, #205197ff 100%)", border: "3px solid #6094ddff", borderRight: "3px solid #6094ddff", borderRadius: "2px 2px 0 0"}],
+                                ["always-scroll-column", [
+                                    ["style-column", [
+                                        ["raw-html", "Ships", {color: "#6094ddff", fontSize: "20px", fontFamily: "monospace"}],
+                                    ], {width: "541px", height: "40px", backgroundColor: "#205197ff", borderBottom: "3px solid #6094ddff",  borderLeft: "3px solid #6094ddff",  userSelect: "none"}],
+                                    ["style-column", [
+                                        ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
+                                        ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
+                                    ], {width: "531px", height: "250px", backgroundColor: "#112138ff", borderLeft: "3px solid #6094ddff", padding: "5px"}],
+                                ], {width: "556px", height: "220px" }],
+                                ["blank", "25px"],
+                            ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
+                        ], {width: "1000px", border: "3px solid #6094ddff", backgroundColor: "#1c375cff", borderRadius: "15px 15px 15px 15px"}],
+                    ]]]
                 ]
             },
             "Check Back Factors": {
@@ -1920,10 +1250,13 @@ addLayer("cbs", {
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
-                    ["row", [["ex-buyable", 14],["ex-buyable", 15],["ex-buyable", 16],]],
-                    ["row", [["ex-buyable", 17],["ex-buyable", 18],["ex-buyable", 19],]],
-
+                    ["style-column", [
+                        ["row", [ ["rounded-ex-buyable", 11],["rounded-ex-buyable", 12],["rounded-ex-buyable", 13]]],
+                        ["row", [ ["rounded-ex-buyable", 14],["rounded-ex-buyable", 15],["rounded-ex-buyable", 16]]],
+                        ["row", [ ["rounded-ex-buyable", 17],["rounded-ex-buyable", 18],["rounded-ex-buyable", 19]]],
+                        ["row", [ ["rounded-ex-buyable", 21],["rounded-ex-buyable", 22],["rounded-ex-buyable", 23]]],
+                    ], {width: "800px", background: "linear-gradient(180deg, #064666 0%, #032333 50%, #064666 100%)", border: "3px solid #3383ab", borderRadius: "22px"}],
+                    ["blank", "25px"],
                 ]
             },
             "Shrine": {
@@ -1936,296 +1269,77 @@ addLayer("cbs", {
                     ["clickable", 13],
                     
                     // SHARDS
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/ascensionShard.png'style='width:75px;height:75px;margin:12.5px'></img>", {width: "100px", height: "100px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "95px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
+                        ], {width: "700px", height: "100px"}],
+                    ], {width: "700px", height: "100px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
+                    ["left-row", [
+                        ["blank", "25px"],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                        ], {width: "348px", height: "50px", borderRight: "2px solid white"}],
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                        ], {width: "350px", height: "50px", borderRight: "0px solid white"}],
+                    ], {width: "700px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "0px 0px 10px 10px", borderTop: "0px",  userSelect: "none"}],
+
+                    // UPGRADES
                     ["style-row", [
-                        ["left-row", [
-                            ["tooltip-row", [
-                                ["raw-html", "<img src='resources/evoShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "147px", height: "100px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-                            ], {width: "203px", height: "50px"}],
-                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
-                            ["tooltip-row", [
-                                ["raw-html", "<img src='resources/paragonShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "147px", height: "100px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-                            ], {width: "203px", height: "50px"}],
-                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
-                            ["tooltip-row", [
-                                ["raw-html", "<img src='resources/ascensionShard.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cbs.ascensionShards)}, {width: "147px", height: "100px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
-                                ["raw-html", "<div class='bottomTooltip'>Shards of Ascension<hr><small>(Gained from ascension rituals)</small></div>"],
-                            ], {width: "203px", height: "50px"}],
-                            ["style-row", [], {background: "#094599", width: "3px", height: "50px"}],
-                            ["row", [
-                                ["raw-html", "<img src='resources/fragments/temporalFragment.png'style='width:44px;height:44px;margin:0px;margin-top:3px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cof.coreFragments[6])}, {width: "147px", height: "100px", color: "#6ba9bf", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "16px"}],
-                            ], {width: "203px", height: "50px"}],
-                        ], {width: "821px", height: "50px", backgroundColor: "black", borderRadius: "0px 0px 0px 0px", userSelect: "none"}],
-                    ], {background: "#041d40", border: "3px solid #094599", borderRadius: "0px 0px 0px 0px", width: "821px", height: "50px"}],
-                    
-                    // TAB SELECTION
-                    ["style-row", [
-                        ["hoverless-clickable", 21],
-                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
-                        ["hoverless-clickable", 22],
-                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
-                        ["hoverless-clickable", 23], 
-                        ["style-row", [], {backgroundColor: "#094599", width: "3px", height: "50px"}],
-                        ["hoverless-clickable", 24], 
-                    ], {background: "#041d40", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px", width: "821px", height: "50px"}],
-                    
-                    // BLESSINGS I
-                    ["style-row", [
+                        createShrineUpgrade("upgrade", 11, [0, -2]),
+                        createShrineUpgrade("upgrade", 12, [1, -2]),
+                        createShrineUpgrade("upgrade", 13, [1.41421356237, -1]),
+                        createShrineUpgrade("upgrade", 14, [1.41421356237, 0]),
+                        createShrineUpgrade("upgrade", 15, [1.41421356237, 1]),
+                        createShrineUpgrade("upgrade", 16, [1, 2]),
+                        createShrineUpgrade("upgrade", 17, [0, 2]),
+                        createShrineUpgrade("upgrade", 18, [-1, 2]),
+                        createShrineUpgrade("upgrade", 19, [-1.41421356237, 1]),
+                        createShrineUpgrade("upgrade", 20, [-1.41421356237, 0]),
+                        createShrineUpgrade("upgrade", 21, [-1.41421356237, -1]),
+                        createShrineUpgrade("upgrade", 22, [-1, -2]),
                         ["style-row", [
-                            ["style-row", [
-                                createClickableConnection(101, 105, "#094599"),
-                                createClickableConnection(102, 106, "#094599"),
-                                createClickableConnection(103, 107, "#094599"),
-                                createClickableConnection(104, 108, "#094599"),
-                                createClickableConnection(105, 109, "#094599"),
-                                createClickableConnection(106, 110, "#094599"),
-                                createClickableConnection(107, 111, "#094599"),
-                                createClickableConnection(108, 112, "#094599"),
-                                createClickableConnection(109, 101, "#094599"),
-                                createClickableConnection(110, 102, "#094599"),
-                                createClickableConnection(111, 103, "#094599"),
-                                createClickableConnection(112, 104, "#094599"),
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "100px",
-                                    height: "0px", background: "#c6f7ff", border: "1px solid #c6f7ff", margin: "-1px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "50px",
-                                    height: "0px", background: "#094599", border: "2px solid #094599", margin: "-2px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: "0px",
-                                    top: "0px",
-                                    width: "0px",
-                                    height: "0px", background: "#c6f7ff", border: "8px solid #c6f7ff", margin: "-8px", borderRadius: "8px"
-                                }],
-                            ], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 101]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 102]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 103]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 104]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 105]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 106]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 107]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 108]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 109]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 110]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 111]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 112]], {width: "0", height: "0"}],
-                        ], {background: "radial-gradient(circle, #094599 -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
-                        ["blank", "3px", {width: "3px"}],
-                        ["style-row", [
-                            ["style-column", [
-                                ["blank", "6px"],
-                                ["raw-html", () => {return "~ Blessing " + player.cbs.blessing1Selection + " ~"}, {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
-                                ["blank", "6px"],
-                                ["style-row", [], {backgroundColor: "#094599", width: "360px", height: "3px"}],
-                                ["blank", "6px"],
-                                ["style-column", [
-                                    ["raw-html", () => {return layers.cbs.upgrades[10 + player.cbs.blessing1Selection].description()}, {color: "#c6f7ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {width: "348px"}],
-                                ["blank", "6px"],
-                                ["style-row", [], {backgroundColor: "#094599", width: "360px", height: "3px"}],
-                                ["blank", "15px"],
-                                ["style-column", [
-                                    ["raw-html", () => {return "Costs " + format(layers.cbs.upgrades[10 + player.cbs.blessing1Selection].cost) + " Chance Points"}, {color: "#c6f7ff", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {width: "348px"}],
-                                ["blank", "6px"],
-                                ["upgrade", () => {return 10 + player.cbs.blessing1Selection}],
-                            ]]
-                        ], {background: "radial-gradient(circle, #094599 0%, #062a5e 100%)", border: "3px solid #094599", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}],
-                    ], () => {
-                        return {background: "#041d40", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 0 ? "" : "none !important"}
-                    }],
-
-                    // BLESSINGS II
-                    ["style-row", [
-                        ["style-row", [
-                            ["style-row", [
-                                createClickableConnection(113, 117, "#3466ac"),
-                                createClickableConnection(114, 118, "#3466ac"),
-                                createClickableConnection(115, 119, "#3466ac"),
-                                createClickableConnection(116, 120, "#3466ac"),
-                                createClickableConnection(117, 121, "#3466ac"),
-                                createClickableConnection(118, 122, "#3466ac"),
-                                createClickableConnection(119, 123, "#3466ac"),
-                                createClickableConnection(120, 124, "#3466ac"),
-                                createClickableConnection(121, 113, "#3466ac"),
-                                createClickableConnection(122, 114, "#3466ac"),
-                                createClickableConnection(123, 115, "#3466ac"),
-                                createClickableConnection(124, 116, "#3466ac"),
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "100px",
-                                    height: "0px", background: "#3466ac", border: "1px solid #3466ac", margin: "-1px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "50px",
-                                    height: "0px", background: "#c6f7ff", border: "2px solid #c6f7ff", margin: "-2px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: "0px",
-                                    top: "0px",
-                                    width: "0px",
-                                    height: "0px", background: "#c6f7ff", border: "8px solid #c6f7ff", margin: "-8px", borderRadius: "8px"
-                                }],
-                            ], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 113]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 114]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 115]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 116]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 117]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 118]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 119]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 120]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 121]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 122]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 123]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 124]], {width: "0", height: "0"}],
-                        ], {background: "radial-gradient(circle, #3466ac -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
-                        ["blank", "3px", {width: "3px"}],
-                        ["style-row", [
-
-                        ], {background: "radial-gradient(circle, #3466ac 0%, #203f6b 100%)", border: "3px solid #3466ac", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}],
-                    ], () => {
-                        return {background: "#102036", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 1 ? "" : "none !important"}
-                    }],
-
-                    // FACTORS
-                    ["style-row", [
-                        ["style-row", [
-                            ["style-row", [
-                                createClickableConnection(201, 205, "white"),
-                                createClickableConnection(202, 206, "white"),
-                                createClickableConnection(203, 207, "white"),
-                                createClickableConnection(204, 208, "white"),
-                                createClickableConnection(205, 209, "white"),
-                                createClickableConnection(206, 210, "white"),
-                                createClickableConnection(207, 211, "white"),
-                                createClickableConnection(208, 212, "white"),
-                                createClickableConnection(209, 201, "white"),
-                                createClickableConnection(210, 202, "white"),
-                                createClickableConnection(211, 203, "white"),
-                                createClickableConnection(212, 204, "white"),
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 6000 % 1000 * 2 * Math.PI)) * 50) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 6000 % 1000 * 2 * Math.PI) * 50) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 6000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "100px",
-                                    height: "0px", background: "#536580", border: "1px solid #536580", margin: "-1px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: () => {return ((Math.cos(Date.now() / 72000 % 1000 * 2 * Math.PI)) * 25) + "px"},
-                                    top: () => {return (Math.sin(Date.now() / 72000 % 1000 * 2 * Math.PI) * 25) + "px"},
-                                    transform: () => {return "rotate(" + ((Date.now() / 72000 % 1000 * 2 * Math.PI)) + "rad"},
-                                    width: "50px",
-                                    height: "0px", background: "#536580", border: "2px solid #536580", margin: "-2px"
-                                }],
-                                ["style-row", [], {
-                                    position: "relative",
-                                    left: "0px",
-                                    top: "0px",
-                                    width: "0px",
-                                    height: "0px", background: "#536580", border: "8px solid #536580", margin: "-8px", borderRadius: "8px"
-                                }],
-                            ], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 201]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 202]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 203]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 204]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 205]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 206]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 207]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 208]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 209]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 210]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 211]], {width: "0", height: "0"}],
-                            ["style-column", [["clickable", 212]], {width: "0", height: "0"}],
-                        ], {background: "radial-gradient(circle, #536580 -50%, #00000000 70%)", borderRadius: "200px", width: "360px", height: "360px", margin: "20px"}],
-                        ["blank", "3px", {width: "3px"}],
-                        ["style-row", [
-                            ["style-column", [
-                                ["blank", "6px"],
-                                ["raw-html", () => {return "~ Factor " + layers.cbs.clickables[player.cbs.factorSelection + 200].title() + " ~"}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                                ["blank", "6px"],
-                                ["style-row", [], {backgroundColor: "black", width: "360px", height: "3px"}],
-                                ["blank", "6px"],
-                                ["style-row", [], {backgroundColor: "black", width: "360px", height: "3px"}],
-                                ["blank", "6px"],
-                            ]]
-                        ], () => {
-                            let look = {border: "3px solid black", borderRadius: "10px", width: "360px", height: "360px", margin: "20px"}
-                            switch (player.cbs.factorSelection) {
-                                case 1: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
-                                case 2: look.background = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"; break;
-                                case 3: look.background = "#ff7070"; break;
-                                case 4: look.background = "linear-gradient(45deg, #5d51ff 0%, #af51ff 100%)"; break;
-                                case 5: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
-                                case 6: look.background = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"; break;
-                                case 7: look.background = "#7970ff"; break;
-                                case 8: look.background = "linear-gradient(45deg, #1ba861 0%, #89ee30 33%, #e79c44 67%, #cb1816 100%)"; break;
-                                case 9: look.background = "radial-gradient(circle, #808080 0%, #5e5e5e 70%)"; break;
-                                case 10: look.background = "linear-gradient(120deg, #1f7350 0%, #5abf95 100%)"; break;
-                                case 11: look.background = "fffd70"; break;
-                                case 12: look.background = "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)"; break;
-                                default: look.background = "radial-gradient(circle, #536580 0%, #333f4f 100%)"; break;
-                            }
-                            return look
-                        }],
-                    ], () => {
-                        return {background: "#1b2029", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 2 ? "" : "none !important"}
-                    }],
-
-                    // PYLON
-                    ["style-column", [
-                        
-                        ["clickable", 14],
-                        ["raw-html", () => { return player.cbs.pylonBuilt ? "You will earn pylon energy in " + formatTime(player.cbs.energyTimerMax.sub(player.cbs.energyTimer)) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-
-                        ["raw-html", () => { return player.cbs.pylonBuilt ? "You have <h3>" + format(player.cbs.pylonEnergy) + "/" + format(player.cbs.pylonEnergyMax) +  "</h3> temporal pylon energy (+" + format(player.cbs.pylonEnergyToGet) + ")." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts CB tickspeed by x" + format(player.cbs.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts pet point gain by x" + format(player.cbs.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts crate roll chance by x" + format(player.cbs.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts base paradox pylon energy gain by +" + format(player.cbs.pylonEnergyEffect4, 3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.cbs.pylonBuilt ? "Your temporal pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                        ["row", [["rounded-ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 103],]], 
-                        ["blank", "10px"],
-                        ["clickable", 15],
-
-                    ], () => {
-                        return {background: "linear-gradient(90deg, #2a6378 0%, #09366e 100%)", border: "3px solid #094599", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "821px", height: "412px", display: player.cbs.shrineTab == 3 ? "" : "none !important"}
-                    }],
-
-                    //
+                            ["clickable", "enter"],
+                        ], {width: "0", height: "0"}]
+                    ], {background: "radial-gradient(circle, #c6f7ff7f 0%, #00000000 70%)", width: "800px", height: "800px", flexFlow: "column"}],
                     ["blank", "25px"],
                 ]
+            },
+            "Pylon": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/fragments/temporalFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[6])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", "<div class='bottomTooltip'>Temporal Core Fragments</div>"],
+                        ], {width: "158px", height: "50px",}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #c6f7ff", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["clickable", 14],
+                    ["raw-html", () => { return player.cbs.pylonBuilt ? "You will earn pylon energy in " + formatTime(player.cbs.energyTimerMax.sub(player.cbs.energyTimer)) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.cbs.pylonBuilt ? "You have <h3>" + format(player.cbs.pylonEnergy) + "/" + format(player.cbs.pylonEnergyMax) +  "</h3> temporal pylon energy (+" + format(player.cbs.pylonEnergyToGet) + ")." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts CB tickspeed by x" + format(player.cbs.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts pet point gain by x" + format(player.cbs.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts crate roll chance by x" + format(player.cbs.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Boosts base paradox pylon energy gain by +" + format(player.cbs.pylonEnergyEffect4, 3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Passive effect: Boosts pollinator gain by ^" + format(player.cbs.pylonPassiveEffect) + " (Based on pollinators)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.cbs.pylonBuilt ? "Your temporal pylon is tier " + formatWhole(player.cbs.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + format(player.cbs.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 101], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 102], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 103],]], 
+                    ["blank", "10px"],
+                    ["clickable", 15],
+                ],
             },
             "Battle": {
                 buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },

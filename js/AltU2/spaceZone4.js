@@ -298,6 +298,7 @@ addLayer("spaceZone4", {
 SB_zones.spaceZone4 = {
     nameCap: "Zone IV",
     nameLow: "zone iv",
+    location: "space",
 
     primaryColor: "#bf41bf",
     secondaryColor: "#802080",
@@ -330,9 +331,12 @@ SB_zones.spaceZone4 = {
             SB_spawnCelestialite("ufo")
         }
     },
-    statMult: new Decimal(5),
+    statMult: new Decimal(20),
     rockMult: new Decimal(12.5),
     gemMult: new Decimal(2.5),
+    savePoints: [
+        0, 20, 40, 60, 80
+    ],
 }
 
 SB_celestialites.nuShip = {

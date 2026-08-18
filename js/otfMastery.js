@@ -1,5 +1,5 @@
 ﻿addLayer("om", {
-    name: "Otherworldy Feature Mastery", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Otherworldly Feature Mastery", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OM", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
     row: 1,
@@ -38,7 +38,7 @@
             color: "white",
         };
     },
-    tooltip: "Otherworldy Feature Mastery",
+    tooltip: "Otherworldly Feature Mastery",
     color: "#8a00a9",
     update(delta) {
         let onepersec = new Decimal(1)

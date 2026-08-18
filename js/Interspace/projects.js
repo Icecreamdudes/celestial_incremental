@@ -19,6 +19,9 @@
         focused: new Decimal(0),
 
         completedProjects: new Decimal(1),
+        lightFountainFocusExtension: new Decimal(1),
+        lightWellFocusExtension: new Decimal(1),
+        prismFountainFocusExtension: new Decimal(1),
         
         modules: {
             1: {
@@ -113,12 +116,8 @@
     update(delta) {
 
         player.prj.maxFocused = new Decimal(1)
-        if (hasUpgrade("wel", 21)) player.prj.maxFocused = player.prj.maxFocused.add(1);
-        if (hasUpgrade("wel", 24)) player.prj.maxFocused = player.prj.maxFocused.add(1);
-        if (hasUpgrade("wel", 31)) player.prj.maxFocused = player.prj.maxFocused.add(1);
-        if (hasUpgrade("wel", 33)) player.prj.maxFocused = player.prj.maxFocused.add(1);
-        if (hasMilestone("prj", 205)) player.prj.maxFocused = player.prj.maxFocused.add(1);
-        if (hasMilestone("prj", 302)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        if (hasMilestone("prj", 102)) player.prj.maxFocused = player.prj.maxFocused.add(1);
+        player.prj.maxFocused = player.prj.maxFocused.add(buyableEffect("prj", 11));
 
         player.prj.totalProjectLevels = player.prj.modules[1].completions
         .add(player.prj.modules[2].completions)
@@ -168,6 +167,9 @@
         player.prj.milestone210Effect = player.bum.starshines.pow_base(1.1).min(100)
         player.prj.milestone304Effect = player.wel.modules[4].completions.div(1e9).add(1).log10().pow(0.5).pow_base(10).add(1).pow(0.333)
 
+        player.prj.lightFountainFocusExtension = player.prj.projectSpeed.pow(0.75)
+        player.prj.lightWellFocusExtension = player.prj.projectSpeed.div(4).pow(0.5)
+        player.prj.prismFountainFocusExtension = player.prj.projectSpeed.div(100).pow(0.75)
         // MISC
 
         if (player.prj.projectSpeed.gte(player.prj.bestProjectSpeed)) player.prj.bestProjectSpeed = player.prj.projectSpeed;
@@ -231,12 +233,12 @@
                     look.border = "3px solid #994d86"
                     look.color = "white"
                 } else if (this.canClick()) {
-                    look.backgroundColor = "#ffa8d3"
+                    look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
                     look.background = "#361e1e"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #6633667f"
                     look.color = "white"
                 }
                 return look
@@ -262,12 +264,12 @@
                     look.border = "3px solid #994d86"
                     look.color = "white"
                 } else if (this.canClick()) {
-                    look.backgroundColor = "#ffa8d3"
+                    look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
                     look.background = "#361e1e"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #6633667f"
                     look.color = "white"
                 }
                 return look
@@ -293,12 +295,12 @@
                     look.border = "3px solid #994d86"
                     look.color = "white"
                 } else if (this.canClick()) {
-                    look.backgroundColor = "#ffa8d3"
+                    look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
                     look.background = "#361e1e"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #6633667f"
                     look.color = "white"
                 }
                 return look
@@ -324,12 +326,12 @@
                     look.border = "3px solid #994d86"
                     look.color = "white"
                 } else if (this.canClick()) {
-                    look.backgroundColor = "#ffa8d3"
+                    look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
                     look.background = "#361e1e"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #6633667f"
                     look.color = "white"
                 }
                 return look
@@ -337,7 +339,12 @@
         },
         "projects_respecFocus": {
             title() { return "<h3>Respec Focus</h3><br><small>(you won't get your stored time capsules back!)</small>" },
-            canClick() { return player.prj.focused.gt(0)},
+            canClick() {
+                for (let v in player.prj.modules) {
+                    if (player.prj.modules[v].focused || player.prj.modules[v].automated) return true;
+                }
+                return false
+            },
             unlocked() { return true },
             onClick() {
                 Object.keys(layers.prj.projects).forEach(i => {
@@ -354,7 +361,7 @@
             style() {
                 let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
                 if (this.canClick()) {
-                    look.backgroundColor = "#ffa8d3"
+                    look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
                     look.color = "black"
                 } else {
@@ -391,6 +398,51 @@
     bars: {},
     upgrades: {},
     buyables: {
+        11: {
+            purchaseLimit() { return new Decimal(999) },
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(3) },
+            currency() { return player.prj.storedTimeCapsules },
+            pay(amt) { player.prj.storedTimeCapsules = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id)},
+            unlocked() { return hasMilestone("prj", 102) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Clone"
+            },
+            display() {
+                return 'Increases your focus cap by +' + formatSimple(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Stored Time Capsules'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "white", border: "3px solid #994d86", outline: "3px solid #663366", borderColor: "#994d86", background: "radial-gradient(circle, #12332b 0%, #00663c 100%)", margin: "6px" },
+            progressColor: "#663366",
+            buttonStyle() {
+                return tmp.prj.buyables[11].canAfford ? {
+                    background: "#dfffdf",
+                    color: "black",
+                } : {
+                    background: "#361e1e",
+                    color: "white",
+                    border: "3px solid #6633667f",
+                }
+            },
+        },
         101: {
             costBase() { return new Decimal(1e8) },
             costGrowth() { return new Decimal(1.25) },
@@ -787,7 +839,7 @@
         // PRISMATIC
         201: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>Unlock prismatic. Unlock a light fountain automator every primsatic.</small>" },
+            effectDescription() { return "<small>Unlock prismatic. Unlock focusing on one light fountain each prismatic.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -882,7 +934,7 @@
         },
         206: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Unlock the greenhouse. (in prismatic layer)</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -901,7 +953,7 @@
         },
         207: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Photosynthesis is twice as fast.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -920,7 +972,7 @@
         },
         208: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>???</small>" },
+            effectDescription() { return "<small>Unlock the second row of greenhouse machines.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
@@ -1035,7 +1087,7 @@
         // BLUESHIFT
         301: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>Unlock blueshifts. Unlock a pyramid automator every blueshift.</small>" },
+            effectDescription() { return "<small>Unlock blueshifts. Unlock focusing on one prism fountain each blueshift.</small>" },
             cycleReq() { return new Decimal(1) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -1636,14 +1688,16 @@
                     let look = [
                         ["blank", "25px"],
                         ["raw-html", "You have <h3>" + formatWhole(player.prj.storedTimeCapsules) + "</h3> stored time capsules. (From Dark Universe Eclipse)", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "Boosts project speed by x" + format(player.prj.storedTimeCapsuleEffect), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "Boosts project speed by x" + formatSimple(player.prj.storedTimeCapsuleEffect, 2), {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["raw-html", "You are gaining <h3>" + format(player.prj.projectSpeed) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You are gaining <h3>" + formatSimple(player.prj.projectSpeed, 2) + "</h3> project progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
+                        ["blank", "9px"],
+                        ["style-row", [
+                            ["rounded-ex-buyable", 11],
+                        ]],
+                        ["blank", "9px"],
                         ["raw-html", "You have a total of <h3>" + formatWhole(player.prj.completedProjects) + "</h3> project ↻.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["raw-html", "<small>Unlocks from project milestones are permanent!</small>", {color: "#bfbfbf", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "15px"],
                         ["style-row", [
                             makeProject(1),
@@ -1756,7 +1810,7 @@ const makeProject = function (id) {
                     ["style-column", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", player.prj.modules[id].time.gte(player.prj.modules[id].timeReq) ? "0%" : formatShortestWhole(player.prj.modules[id].time.div(player.prj.modules[id].timeReq).min(1).max(0).mul(100)) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", player.prj.modules[id].time.gte(player.prj.modules[id].timeReq) ? "0%" : formatSimple(player.prj.modules[id].time.div(player.prj.modules[id].timeReq).min(1).max(0).mul(100), 0) + "%", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ], {background: "#994d86", border: "3px solid #663366", borderRadius: "100px", width: "75px", height:"75px"}]
                         ], {borderRadius: "50%", width: "125px", height:"125px", border: "3px solid #663366", margin: "-3px", marginTop: "75px",
                             background: player.prj.modules[id].time.lt(player.prj.modules[id].timeReq) ?

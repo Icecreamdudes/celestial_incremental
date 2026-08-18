@@ -292,7 +292,7 @@
                 } else {
                     look.background = "#361e1e"
                     look.color = "white"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #3366597f"
                 }
                 return look
             },
@@ -313,7 +313,7 @@
                 } else {
                     look.background = "#361e1e"
                     look.color = "white"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #3366597f"
                 }
                 return look
             },
@@ -334,7 +334,7 @@
                 } else {
                     look.background = "#361e1e"
                     look.color = "white"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #3366597f"
                 }
                 return look
             },
@@ -355,7 +355,7 @@
                 } else {
                     look.background = "#361e1e"
                     look.color = "white"
-                    look.border = "3px solid #663737"
+                    look.border = "3px solid #3366597f"
                 }
                 return look
             },
@@ -552,7 +552,17 @@
         },
     },
     tabFormat: [
-        ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["style-column", [
+            ["raw-html", () => {return "Light wells operate at <h3>x" + format(player.wel.lightWellSpeed) + "</h3> speed."}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ],  () => {return {display: player.wel.lightWellSpeed.gt(1) ? "" : "none !important"}}],
+        ["style-column", [
+            ["raw-html", () => {return "<small>Next blueshift at <h3>x" + formatWhole(
+                player.blu.blueshifts[1].amount.add(1).pow_base(100)
+                .min(player.blu.blueshifts[2].amount.add(1).pow_base(600))
+                .min(player.blu.blueshifts[3].amount.add(1).pow_base(3000))
+                .min(player.blu.blueshifts[4].amount.add(1).pow_base(24190000))
+            ) + "</h3> speed.</small>"}, {color: "white", textShadow: "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff", fontSize: "18px", fontFamily: "monospace"}],
+        ],  () => {return {display: hasMilestone("prj", 301) ? "" : "none !important"}}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasMilestone("prj", 301)},

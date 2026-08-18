@@ -132,9 +132,11 @@ addLayer("noxZone", {
 SB_zones.noxZone = {
     nameCap: "Nox Zone",
     nameLow: "nox zone",
+    location: "blood",
 
     primaryColor: "#f5b8b8",
     secondaryColor: "#5e1818",
+    
     levelLimit: 20,
     asteroidLimit: 0,
     celestialiteSpawnCooldown: 60,
@@ -162,6 +164,10 @@ SB_zones.noxZone = {
     statMult: new Decimal(1.5),
     rockMult: new Decimal(1.5),
     gemMult: new Decimal(1.5),
+    xpReqMult: new Decimal(6.66),
+    savePoints: [
+        0, 
+    ],
 }
 
 // CELESTIALITES

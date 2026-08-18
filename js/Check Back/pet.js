@@ -4563,16 +4563,16 @@ addLayer("pet", {
         1209: {
             image() { return this.canClick() ? "resources/Pets/johnUncommonPet.png" : "resources/secret.png"},
             title() { return "Captain" },
-            lore() { return "he pilot spaecship." }, 
+            lore() { return "John Captain, the greatest pilot in the Cosmic Cosmos, or at least out of the four of you on the spaceship." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to ship damage.<br>" +
+                return "x" + format(this.effect()[0], 3) + " to ship damage.<br>" +
                     "x" + format(this.effect()[1]) + " to activated fuel.<br>" +
                     "^" + format(this.effect()[2]) + " to space dust.<br>"
             },
             levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).pow(0.75).div(20).add(1), // All ship damage
+                    getLevelableAmount(this.layer, this.id).div(75).add(1), // All ship damage
                     getLevelableAmount(this.layer, this.id).mul(1.5).pow(1.5).add(1), // Rocket parts
                     getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // Space dust
                 ]

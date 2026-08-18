@@ -2167,8 +2167,8 @@
             },
         },
         191: {
-            costBase() { return [new Decimal(10), new Decimal(4e7)] },
-            costGrowth() { return [new Decimal(8), new Decimal(1.3)] },
+            costBase() { return [new Decimal(10), new Decimal(2e8)] },
+            costGrowth() { return [new Decimal(8), new Decimal(1.5)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.prj.storedTimeCapsules, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -2202,8 +2202,8 @@
             },
         },
         192: {
-            costBase() { return [new Decimal(1e25), new Decimal(1e8)] },
-            costGrowth() { return [new Decimal(1000), new Decimal(1.5)] },
+            costBase() { return [new Decimal(1e26), new Decimal(4e8)] },
+            costGrowth() { return [new Decimal(1e4), new Decimal(1.75)] },
             purchaseLimit() { return new Decimal(10) },
             currency() { return [player.sb.storedSpaceEnergy, player.sme.starmetalEssence]},
             pay(amt, amt2) {
@@ -2237,8 +2237,8 @@
             },
         },
         193: {
-            costBase() { return [new Decimal(2), new Decimal(2e8)] },
-            costGrowth() { return [new Decimal(1.5), new Decimal(1.5)] },
+            costBase() { return [new Decimal(2), new Decimal(1e9)] },
+            costGrowth() { return [new Decimal(1.5), new Decimal(2.5)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.blu.totalBlueshifts, player.sme.starmetalEssence]},
             pay(amt2) {
@@ -2271,7 +2271,7 @@
             },
         },
         194: {
-            costBase() { return [new Decimal(3600), new Decimal(1e9)] },
+            costBase() { return [new Decimal(3600), new Decimal(4e9)] },
             costGrowth() { return [new Decimal(10), new Decimal(3)] },
             purchaseLimit() { return new Decimal(5) },
             currency() { return [player.prj.projectSpeed, player.sme.starmetalEssence]},

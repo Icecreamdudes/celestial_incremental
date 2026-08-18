@@ -292,6 +292,7 @@ addLayer("bloodZone1", {
 SB_zones.bloodZone1 = {
     nameCap: "Zone I",
     nameLow: "zone i",
+    location: "blood",
 
     primaryColor: "#f57171",
     secondaryColor: "#4f1818",
@@ -322,6 +323,10 @@ SB_zones.bloodZone1 = {
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
+    xpReqMult: new Decimal(6),
+    savePoints: [
+        0, 20, 40, 60, 80
+    ],
 }
 
 

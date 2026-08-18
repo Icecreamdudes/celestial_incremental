@@ -529,7 +529,7 @@
     milestones: {
         1: {
             requirementDescription: "<h3>1 Infinity",
-            effectDescription: "Unlock the Otherworldy Feature: Rocket Fuel.",
+            effectDescription: "Unlock the Otherworldly Feature: Rocket Fuel.",
             done() { return player.in.infinities.gte(1) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -661,7 +661,7 @@
                 return new Decimal(1)
             },
             marked: false,
-            challengeDescription() { return "<h4>You can't pick an otherworldy feature." },
+            challengeDescription() { return "<h4>You can't pick an otherworldly feature." },
             goal() {
                 if (hasUpgrade("bi", 28) && challengeCompletions(this.layer, this.id) >= 1) return new Decimal("1e7500")
                 return new Decimal("1.79e308")

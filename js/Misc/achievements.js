@@ -1008,7 +1008,7 @@ addLayer("achievements", {
         1206: {
             name: "Every Last Drop",
             image: "resources/achievements/12_06.png",
-            tooltip: "<h3>Every Last Drop</h3><hr style='margin-bottom:4px'>Store at least 5 time<br>capsules at once.<br><br>Reward: +1 base time<br>capsules stored.",
+            tooltip: "<h3>Every Last Drop</h3><hr style='margin-bottom:4px'>Store at least 7 time<br>capsules at once.<br><br>Reward: +1 base time<br>capsules stored.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,

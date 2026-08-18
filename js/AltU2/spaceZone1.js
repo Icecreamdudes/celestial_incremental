@@ -286,6 +286,7 @@ addLayer("spaceZone1", {
 SB_zones.spaceZone1 = {
     nameCap: "Zone I",
     nameLow: "zone i",
+    location: "space",
 
     primaryColor: "#5e4ee6",
     secondaryColor: "#37078f",
@@ -324,6 +325,10 @@ SB_zones.spaceZone1 = {
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
+    xpReqMult: new Decimal(1),
+    savePoints: [
+        0, 20, 40, 60, 80
+    ],
 }
 
 SB_celestialites.smallAsteroid = {

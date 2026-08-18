@@ -590,7 +590,7 @@
             currency() { return player.bl.blood},
             pay(amt) { player.bl.blood = this.currency().sub(amt) },
             effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).add(1).pow(0.1)) },
-            unlocked() { return true },
+            unlocked() { return !player.pet.legPetTimers[0].current.gt(0) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -623,7 +623,7 @@
             currency() { return player.bl.blood},
             pay(amt) { player.bl.blood = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(2).pow(0.5).add(1) },
-            unlocked() { return true },
+            unlocked() { return !player.pet.legPetTimers[0].current.gt(0) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

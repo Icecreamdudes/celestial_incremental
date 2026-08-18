@@ -165,7 +165,12 @@ function updateStyles() {
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
-			layerBG = "linear-gradient(-180deg, #31344eff 0%, #54538bff 100%)"
+			if (player.cbs.pylonBuilt && player.subtabs["cbs"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(90deg, #2a6378 0%, #09366e 100%)"
+			} else
+			{
+				layerBG = "linear-gradient(-180deg, #31344eff 0%, #54538bff 100%)"
+			}
 			break;
 		case "t":
 			layerBG = "linear-gradient(0deg, #02172f)"
@@ -1116,7 +1121,7 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
-	<h3>v1.14 - The Interspace Update Part I: e</h3><br>
+	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
 			- Added the multiverse map.<br>
@@ -1127,7 +1132,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added more iridite upgrades.<br>
 			- Added three new space dust buyables.<br>
 			- Added four new punchcards.<br>
+			- Added three new check back factors.<br>
 			- Added two new check back blessings.<br>
+			- Added a zar upgrade.<br>
 			- Added cloud upgrades.<br>
 			- Added new booster milestones.<br>
 			- Added new starmetal essence studies.<br>
@@ -1149,8 +1156,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added space exploration completion popups.<br>
 			- Added space battle mobile controls.<br>
 			- Changed unarmed ship movement.<br>
+			- Removed the first two blood buyables from eclipse.<br>
 			- Redesigned pylon UI.<br>
-			- Redesigned coin flip, wheel of fortune, slot machine, and check back shrine UI.<br>
+			- Redesigned zar upgrade, coin flip, wheel of fortune, slot machine, check back shrine, and card UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 			- Redesigned enhance point UI.<br>
 		<br>Balancing:<br>

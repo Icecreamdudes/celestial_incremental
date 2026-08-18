@@ -289,7 +289,7 @@
 
         if (hasMilestone("prj", 203)) player.pri.prismsToGet = player.pri.prismsToGet.mul(2);
         player.pri.prismsToGet = player.pri.prismsToGet.mul(player.pri.fountains[8].completionEffect);
-        //if (hasMilestone("prj", 206)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.blu.blueshiftEffect);
+        if (player.wel.modules[3].completions.gte(1e12)) player.pri.prismsToGet = player.pri.prismsToGet.mul(player.wel.modules[4].completionEffect);
         if (hasAchievement("achievements", 1214)) player.pri.prismsToGet = player.pri.prismsToGet.mul(1.2);
 
         player.pri.prismsToGet = player.pri.prismsToGet.floor()
@@ -314,7 +314,7 @@
             module.prismReq = fountain.getprismReq()
             module.completionEffect = fountain.getCompletionEffect()
 
-            player.pri.fountains[i].focusTimerMax = player.prj.prismFountainFocusExtension.mul(4).div(i)
+            player.pri.fountains[i].focusTimerMax = player.prj.prismFountainFocusExtension.mul(4).div(Math.pow(1.4, i - 1))
             if (player.pri.fountains[i].isFocused) {
                 player.pri.fountains[i].focusTimer = player.pri.fountains[i].focusTimer.sub(delta)
                 if (player.pri.prisms.gte(module.prismReq) && module.timeSpeed.gt(0)) module.time = module.time.add(module.timeSpeed.div(player.pri.totalPrisms).mul(player.pri.totalPrisms.sub(module.prismReq)).mul(delta));
@@ -1744,7 +1744,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             getCompletionEffect() {
                 let completions = player.pri.fountains[9].completions
 
-                s = completions.pow(0.8).pow_base(1.2).sub(1).mul(2.5).add(1)
+                s = completions.div(4).add(1)
 
                 return s
             },
@@ -2362,7 +2362,12 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
                 buttonStyle() { return { color: "white", borderRadius: "8px"} },
                 unlocked() { return hasMilestone("prj", 206) },
                 content() {
-                    let look = []
+                    let look = [
+                        ["blank", "25px"],
+                        ["raw-html", 
+                        "COMING SOON..."
+                        , {color: "#dfffdf", fontSize: "32px", fontFamily: "monospace"}],
+                    ]
                     return look
                 }
             },

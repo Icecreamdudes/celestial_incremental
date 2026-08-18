@@ -1128,7 +1128,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Revamped the dragon pet.<br>
 			- Revamped space battles.<br>
 			- Added space battle zones. Prior space battle content has been divided into space zone I, space zone II, iridite zone, and space zone III.<br>
-			- Added a pet evolution that allows progressing through iridite content without entering space battles.<br>
+			- Added a pet evolution.<br>
 			- Added more iridite upgrades.<br>
 			- Added three new space dust buyables.<br>
 			- Added four new punchcards.<br>
@@ -1182,7 +1182,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Changed the effect and cost scaling of check back factors.<br>
 			- Reduced the diamondsmith evo and diamond dust reset coin dust requirements by /10.<br>
 		<br>Bugfixes:<br>
-			- Eliminated all (???) screen flashing caused by switching between certain layers.<br>
+			- Fixed the screen flashing white when switching between certain layers.<br>
+			- Fixed a few cases of the word "otherworldly" being spelled as "otherworldy".<br>
 			- Added a gap between cante perks and tab selection in the cante tab.<br>
 			- Added "the" to the jocus layer tooltip.<br>
 			- Fixed dark universe reset cheese.<br>

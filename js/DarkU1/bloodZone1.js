@@ -293,6 +293,9 @@ SB_zones.bloodZone1 = {
     nameCap: "Zone I",
     nameLow: "zone i",
     location: "blood",
+    unlocked() {
+        return true
+    },
 
     primaryColor: "#f57171",
     secondaryColor: "#4f1818",

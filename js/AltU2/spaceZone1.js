@@ -287,6 +287,9 @@ SB_zones.spaceZone1 = {
     nameCap: "Zone I",
     nameLow: "zone i",
     location: "space",
+    unlocked() {
+        return true
+    },
 
     primaryColor: "#5e4ee6",
     secondaryColor: "#37078f",

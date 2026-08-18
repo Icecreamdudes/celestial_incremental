@@ -413,4 +413,13 @@
     ],
     layerShown() { return hasUpgrade("dv", 14) },
     deactivated() { return !player.sma.inStarmetalChallenge},
+    hotkeys: [
+        {
+            key: "t", 
+            description: "Reset for Time Capsules",
+            onPress() {
+                clickClickable(this.layer, 11)
+            },
+        },  
+    ],
 })

@@ -254,8 +254,8 @@
             else player.wel.modules[3].completionEffect = player.wel.modules[3].completions.mul(0.01).add(1);
             player.wel.lightGain = player.wel.lightGain.mul(player.wel.modules[3].completionEffect)
 
-            player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e9).pow(0.25).add(1);
-            if (player.wel.modules[4].completionEffect.gte(100)) player.wel.modules[4].completionEffect = player.wel.modules[4].completionEffect.div(100).pow(0.5).mul(100);
+            if (player.wel.modules[4].completions.gte(1e3)) player.wel.modules[4].completionEffect = player.wel.modules[4].completions.div(1e3).pow(player.wel.lightWellCycleEffectSoftcap).mul(1e3).mul(0.01).add(1);
+            else player.wel.modules[4].completionEffect = player.wel.modules[4].completions.mul(0.02).add(1);
         }
         if (hasUpgrade("wel", 14)) player.wel.lightGain = player.wel.lightGain.mul(player.wel.bestLight.add(1).log(1e4).floor().pow_base(2));
         if (hasMilestone("prj", 103)) player.wel.lightGain = player.wel.lightGain.mul(2);
@@ -306,11 +306,8 @@
             } else {
                 player.wel.modules[i].time = player.wel.modules[i].time.add(player.wel.modules[i].timeSpeed.mul(delta))
             }
-
-            if (hasUpgrade("wel", 31)) player.wel.light = player.wel.light.add(
-                layers.wel.clickables["lightWell1_collect"].lightGain()
-                .add(layers.wel.clickables["lightWell2_collect"].lightGain())
-                .add(layers.wel.clickables["lightWell3_collect"].lightGain())
+            if (hasUpgrade("wel", 31) && i < 5) player.wel.light = player.wel.light.add(
+                layers.wel.clickables["lightWell" + i + "_collect"].lightGain()
                 .mul(new Decimal(1).sub(player.wel.modules[i].time.div(player.wel.modules[i].maxTime).min(1))).div(player.wel.modules[i].maxTime).mul(player.wel.modules[i].timeSpeed).mul(delta).mul(2));
 
             // CYCLE SPEED
@@ -322,6 +319,7 @@
 
             // CYCLE GAIN
             player.wel.modules[i].completionsGain = player.wel.lightWellCycleYield
+            if (i == 4) player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.div(1e8).floor().max(1);
             if (hasUpgrade("wel", 32) && player.wel.modules[i].completions.lt(player.wel.modules[i].bestCompletions)) {
                 // MAKE THIS MORE DYNAMIC EVENTUALLY
                 player.wel.modules[i].completionsGain = player.wel.modules[i].completionsGain.mul(3);
@@ -355,8 +353,6 @@
                 player.wel.modules[i].focusTimer = player.wel.modules[i].focusTimerMax
             }
         }
-        player.wel.wellCycleProduct = player.wel.wellCycleProduct.div(player.wel.modules[4].completions.add(1))
-        player.wel.wellCycleProduct = player.wel.wellCycleProduct.mul(player.wel.modules[4].completions.div(1e9).add(1))
 
         // ACHIEVEMENT CYCLE GAIN
 
@@ -377,7 +373,7 @@
             module.lightReq = fountain.getLightReq()
             module.completionEffect = fountain.getCompletionEffect()
 
-            player.wel.fountains[i].focusTimerMax = player.prj.lightFountainFocusExtension.mul(2).div(i)
+            player.wel.fountains[i].focusTimerMax = player.prj.lightFountainFocusExtension.mul(4).div(Math.pow(2, i - 1))
             if (player.wel.fountains[i].isFocused) {
                 player.wel.fountains[i].focusTimer = player.wel.fountains[i].focusTimer.sub(delta)
                 if (player.wel.light.gte(module.lightReq) && module.timeSpeed.gt(0)) module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
@@ -973,13 +969,13 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Light well cooldowns can no longer exceed one minute. You're welcome.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "COMING SOON.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><br><h3>Req: 8 Blueshifts</h3>"
                 }
                 return s
             },
-            cost: new Decimal(1e67),
+            cost: new Decimal("9.99e999"),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1017,7 +1013,7 @@
                 }
                 return s
             },
-            cost: new Decimal(1e75),
+            cost: new Decimal("9.99e999"),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1160,23 +1156,22 @@
             },
         },
         "lightWell4_collect": {
-            title() { return "UNFINISHED" },//"<h3>Collect"
-            canClick() { return player.wel.modules[4].time.gte(player.wel.modules[4].maxTime) && false},
+            title() { return "<h3>Collect" },
+            canClick() { return player.wel.modules[4].time.gte(player.wel.modules[4].maxTime)},
             unlocked() { return true },
             onClick() {
                 tickProjects(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).div(2))
-                player.wel.lightGen = player.wel.lightGen.add(layers.wel.clickables[this.id].lightGain())
+                player.wel.light = player.wel.light.add(layers.wel.clickables[this.id].lightGain())
                 player.wel.modules[4].time = new Decimal(0)
                 player.wel.modules[4].completions = player.wel.modules[4].completions.add(player.wel.modules[4].completionsGain)
                 if (!hasAchievement("achievements", 1213)) completeAchievement("achievements", 1213);
                 if (!hasAchievement("achievements", 1203) && player.wel.modules[4].completions.gte(1e3)) completeAchievement("achievements", 1203)
             },
             lightGain() {
-                let gain = new Decimal(0.01)
-                gain = gain.mul(player.wel.lightGain.div(1e40).pow(0.25))
+                let gain = player.wel.lightGain
+                gain = gain.mul(3e4)
                 gain = gain.mul(player.blu.blueshifts[4].cycleGainMul)
-                gain = gain.add(1).log(10).add(1).pow(0.5).sub(1).pow_base(10).sub(1)
-                return gain.mul(10).floor().div(10)
+                return gain.floor()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -2035,10 +2030,10 @@
                             ], {display: hasUpgrade("wel", 33) ? "" : "none !important"}],
                         ]],
                         ["blank", "25px"],
-                        ["style-column", [
+                        ["style-column", [/*
                             ["raw-html", "Generating " + format(player.wel.lightGen.mul(100)) + "% of well light yield /s.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
                             ["raw-html", "Generating " + format(player.wel.modules[4].completionEffect) + "% of well ↻ yield /s.", {color: "white", fontSize: "18px", fontFamily: "monospace", display: (player.wel.modules[1].completions.gte(1e3) ? "" : "none !important")}],
-                            ["blank", "25px"],
+                            ["blank", "25px"],*/
                         ], {display: player.wel.lightGen.gt(0) ? "" : "none !important"}],
                         ["row", [
                             // light well alpha
@@ -2189,7 +2184,7 @@
                     }
                     }
                     if (player.wel.modules[2].completions.gte(500) && hasMilestone("prj", 303)) {
-                    if (player.wel.modules[3].completions.gte(1e12) || player.wel.modules[4].completions.gt(0)) {
+                    if (player.wel.modules[3].completions.gte(1e12)) {
                             // light well delta
                         look[4][1].push(["blank", "1px"])
                         look[4][1].push(
@@ -2209,7 +2204,7 @@
                             ["raw-html", player.wel.modules[4].time.lt(player.wel.modules[4].maxTime) ? formatSimpleTime(player.wel.modules[4].maxTime.sub(player.wel.modules[4].time).div(player.wel.modules[4].timeSpeed), 2) : formatSimpleTime(player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed), 2) + " CD", {color: "white", fontSize: "16px", fontFamily: "monospace", textShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                             ["blank", "9px"],
                             ["style-column", [
-                                    ["raw-html", "+" + formatSimple(layers.wel.clickables["lightWell4_collect"].lightGain()) + " LR", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", "+" + formatSimple(layers.wel.clickables["lightWell4_collect"].lightGain()) + " Light", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                 ], {background: "#408069", borderRadius: "10px 10px 0px 0px", width: "150px", height:"25px"}],
                             ["blank", "3px"],
                             ["hoverless-clickable", "lightWell4_collect"],
@@ -2218,9 +2213,9 @@
                             ["style-column", [
                                 ["tooltip-row", [
                                     ["raw-html", formatShortWhole(player.wel.modules[4].completions) + " δ ↻", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.modules[4].bestCompletions) + " δ ↻</div>"],
+                                    ["raw-html", "<div class='bottomTooltip'><small style='color:yellow'>Base ↻ gain is reduced by /100,000,000!</small><br>--<br>Best: " + formatShortWhole(player.wel.modules[4].bestCompletions) + " δ ↻</div>"],
                                 ], {}],
-                                ["raw-html", "(x" + formatShort(player.wel.modules[4].completionEffect) + " Light Rays)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
+                                ["raw-html", "(x" + formatShort(player.wel.modules[4].completionEffect) + " Prisms)", {color: "white", fontSize: "12px", fontFamily: "monospace", display: hasUpgrade("wel", 13) ? "" : "none !important"}],
                             ], {border: "3px solid #408069", borderRadius: "0 0 10px 10px", height: "44px"}],
                         ], {background: "#274d48",border: "3px solid #274d48", borderRadius: "103px 103px 16px 16px", width: "150px", boxShadow: player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1) ? "1px 1px 0 #3f3fff, -1px 1px 0 #3f3fff, 1px -1px 0 #3f3fff, -1px -1px 0 #3f3fff" : ""}],
                         ["blank", "6px"],
@@ -2440,7 +2435,7 @@
                             ], {display: player.wel.lightFountainReqDivisor.gt(1) ? "" : "none !important"}],
                             ["style-column", [
                                 ["tooltip-row", [
-                                    ["raw-html", "<small>Base fountain focus duration is " + formatSimpleTime(player.prj.lightFountainFocusExtension.mul(2), 1) + ", reduced for each consecutive fountain.</small>", {color: "#dfffdf", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["raw-html", "<small>Base fountain focus duration is " + formatSimpleTime(player.prj.lightFountainFocusExtension.mul(4), 1) + ", reduced for each consecutive fountain.</small>", {color: "#dfffdf", fontSize: "18px", fontFamily: "monospace"}],
                                     ["raw-html", "<div class='bottomTooltip'>2 * (Project Speed)<sup>0.75</div>"],
                                 ], {}],
                             ], {display: hasMilestone("prj", 201) && !hasUpgrade("wel", 33) ? "" : "none !important"}],
@@ -2511,7 +2506,7 @@
     },
     tabFormat() {
         let look = [
-            ["raw-html", "You have <h3>" + formatWhole(player.wel.light) + "</h3> light.", {color: "#a8ffd3", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", "You have <h3>" + formatWhole(player.wel.light) + "</h3> light.", {color: "#ffdfdf", fontSize: "24px", fontFamily: "monospace"}],
             ["microtabs", "stuff", { 'border-width': '0px' }],
         ]
         return look

@@ -133,6 +133,9 @@ SB_zones.noxZone = {
     nameCap: "Nox Zone",
     nameLow: "nox zone",
     location: "blood",
+    unlocked() {
+        return hasUpgrade("bl", 11)
+    },
 
     primaryColor: "#f5b8b8",
     secondaryColor: "#5e1818",

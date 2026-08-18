@@ -443,12 +443,12 @@
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", 
-                                    "<small>When a well's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as prisms and the pyramid. Each blueshift done roots cycle speed and increases yield for its respective well. You also gain multipliers from total blueshifts done.</small>"
+                                    "<small>When a well's timer gets at or below 0.1s, you can do a blueshift. Blueshifting resets everything prismatic does, as well as prisms and the pyramid's fountains. Each blueshift done roots cycle speed and increases yield for its respective well. You also gain multipliers from total blueshifts done.</small>"
                                 , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                            ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", height: "125px", padding: "3px"}],                   
-                        ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "612px"}],
+                            ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "600px", padding: "12px"}],                   
+                        ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "630px"}],
                         ["blank", "25px"],
-                        ["raw-html", "You have blueshifted <h3>" + formatWhole(player.blu.totalBlueshifts) + "</h3> times.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "You have blueshifted <h3>" + formatWhole(player.blu.totalBlueshifts) + "</h3> times.", {color: "#ffffd1", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", "<small>Boosts light well ↻" + (hasMilestone("prj", 111) ? " and prism" : "") + " gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
 
@@ -522,7 +522,7 @@
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px"}],
 
                             ["blank", "", {width: "6px"}],
-
+                            /*
                             // delta
                             ["style-row", [
                                 ["style-column", [
@@ -543,8 +543,18 @@
                                     ["raw-html", "(√" + formatSimple(player.blu.blueshifts[4].cycleSpeedRoot) + " δ Spd)", {color: "#ffff00", fontSize: "12px", fontFamily: "monospace"}],
                                 ], {border: "3px solid #4d9973", borderRadius: "0 0 10px 10px", width: "144px", height: "60px"}],
                             ], {backgroundColor: "#336659", borderRadius: "13px", width: "150px", padding: "3px", display: hasMilestone("prj", 303) ? "" : "none !important"}],
-
+                            */
                         ]],
+                        ["style-column", [
+                            ["blank", "1400px"],
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", 
+                                        "<small>touch grass</small>"
+                                    , {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                                ], {background: "#2f2f80", border: "3px solid #4242b3", borderRadius: "10px", width: "624px", padding: "3px"}],                   
+                            ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "630px"}],
+                        ], {display: player.blu.totalBlueshifts.gte(5) ? "" : "none !important"}],
                         ["blank", "25px"],
                     ]
                 }
@@ -587,13 +597,13 @@
             onPress() {
                 clickClickable(this.layer, "lightWell3_blueshift")
             },
-        },
+        },/*
         {
             key: "$", 
             description: "Blueshift light well δ",
             onPress() {
                 clickClickable(this.layer, "lightWell4_blueshift")
             },
-        },
+        },*/
 	]
 })

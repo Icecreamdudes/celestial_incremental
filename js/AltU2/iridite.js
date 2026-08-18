@@ -362,12 +362,14 @@ addLayer("ir", {
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("pl", 16))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("bl", 15))
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
+        player.ir.spaceRockMultTrue = player.ir.spaceRockMult
 
         player.ir.spaceGemMult = new Decimal(1)
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("sme", 156))
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("pl", 16))
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("bl", 15))
         if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
+        player.ir.spaceGemMultTrue = player.ir.spaceGemMult
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
 
@@ -444,7 +446,7 @@ addLayer("ir", {
             if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
             player.ir.battleLevel = player.ir.battleLevel.add(1);
             if (!player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage]) player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage] = {}
-            let showUpgrades = !player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage][Math.floor((player.ir.battleLevel.toNumber() - 2) / 20)*20]
+            let showUpgrades = !player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage][Math.floor((player.ir.battleLevel.toNumber() - 1) / 20)*20]
             let index = zoneRef.savePoints.indexOf(player.ir.battleLevel.toNumber() - 21)
             if (index != -1) {
                 SB_saveRun()
@@ -457,6 +459,11 @@ addLayer("ir", {
                     arena.enhanced = false;
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
+                } else if (arena && !showUpgrades) {
+                    let amt = player.ir.spaceJunkMult.mul(zoneRef.gemMult).floor();
+                    amt = amt.max(1)
+                    player.ir.spaceJunk = player.ir.spaceJunk.add(amt);
+                    arena.lootFlashPositions.push({ x: arena.ship.x, y: arena.ship.y, amount: amt, type: "spaceJunk" });
                 }
             }
         }
@@ -1565,8 +1572,8 @@ addLayer("ir", {
             },
             style() {
                 let look = {width: "523px", minHeight: "50px", color: "white", borderRadius: "10px"}
-                look.background = player.ir.selectingShip ? "#7f0000" : "#545400"
-                look.border = "3px solid " + (player.ir.selectingShip ? "#bf0000" : "#7f7f00")
+                look.background = player.ir.shipBattleSaveCurrent.slot >= 0 && player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0) ? "#361e1e" : "#545400"
+                look.border = "3px solid " + (player.ir.shipBattleSaveCurrent.slot >= 0 && player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0) ? "#5e4ee67f" : "#7f7f00")
                 return look
             },
         },
@@ -2890,7 +2897,7 @@ addLayer("ir", {
                             let container = [["style-row", [], {width: "514px", marginRight: "24px"}]]
                             if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                             for (let [i, v] of Object.entries(SB_zones)) {
-                                if (!v.location || (v.location && v.location != "space")) continue;
+                                if (!v.location || !v.unlocked() || (v.location && v.location != "space")) continue;
                                 let element = ["style-column", [
                                     ["style-column", [
                                         ["style-row", [
@@ -2914,7 +2921,7 @@ addLayer("ir", {
                                 container[0][1].push(element)
                             }
                             container.push(["style-column", [
-                                ["raw-html", "Each level can provide upgrades ONLY ONCE per run.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                             ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #1b0447 0 15px, #150336 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],
@@ -2930,7 +2937,7 @@ addLayer("ir", {
                             let container = [["style-row", [], {width: "514px", marginRight: "24px"}]]
                             if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                             for (let [i, v] of Object.entries(SB_zones)) {
-                                if (!v.location || (v.location && v.location != "blood")) continue;
+                                if (!v.location || !v.unlocked() || (v.location && v.location != "blood")) continue;
                                 let element = ["style-column", [
                                     ["style-column", [
                                         ["style-row", [
@@ -2954,7 +2961,7 @@ addLayer("ir", {
                                 container[0][1].push(element)
                             }
                             container.push(["style-column", [
-                                ["raw-html", "Each level can provide upgrades ONLY ONCE per run.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                             ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
                             return container
                         }, {background: "repeating-linear-gradient(135deg, #260b0b 0 15px, #1c0808 0 30px)", width: "532px", minHeight: "382px", padding: "6px", paddingBottom: "0"}],

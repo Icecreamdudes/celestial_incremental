@@ -299,6 +299,9 @@ SB_zones.spaceZone4 = {
     nameCap: "Zone IV",
     nameLow: "zone iv",
     location: "space",
+    unlocked() {
+        return hasUpgrade("ir", 32)
+    },
 
     primaryColor: "#bf41bf",
     secondaryColor: "#802080",

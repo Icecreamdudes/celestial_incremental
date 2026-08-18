@@ -1062,6 +1062,7 @@ class SpaceArena {
         this.loop = null;
         this.asteroidSpawnTimer = 0;
         this.maxAsteroids = 16;
+        this.lootFlashPositions = [];
         this.lootFlashes = [];
         this.warnings = [];
         this.upgradeChoices = [];
@@ -1605,7 +1606,6 @@ class SpaceArena {
 
         // Prepare collectors used by multiple death paths
         let newAsteroids = [];
-        let lootFlashPositions = [];
         let xpOrbsToAdd = [];
         if (player.ir.shipHealth.lt(0)) this.onShipDeath();
         // Helper to handle enemy death logic (drops, flags, etc.)
@@ -1620,25 +1620,25 @@ class SpaceArena {
                     let amt = reward.spaceRock.mul(this.shipStats.spaceRockGain).floor();
                     amt = amt.max(1)
                     player.ir.spaceRock = player.ir.spaceRock.add(amt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceRock" });
+                    arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceRock" });
                 }
                 if (reward.spaceGem) {
                     let amt = reward.spaceGem.mul(this.shipStats.spaceGemGain).floor();
                     amt = amt.max(1)
                     player.ir.spaceGem = player.ir.spaceGem.add(amt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceGem" });
+                    arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceGem" });
                 }
                 if (reward.bloodStones) {
                     let amt = reward.bloodStones.mul(this.shipStats.bloodStoneGain).floor();
                     amt = amt.max(1)
                     player.bl.bloodStones = player.bl.bloodStones.add(amt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodStones" });
+                    arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodStones" });
                 }
                 if (reward.bloodGems) {
                     let amt = reward.bloodGems.mul(this.shipStats.bloodGemGain).floor();
                     amt = amt.max(1)
                     player.bl.bloodGems = player.bl.bloodGems.add(amt);
-                    lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
+                    arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
                 }
             }
             // xp drop -> spawn xp orb
@@ -2426,7 +2426,7 @@ class SpaceArena {
         }
 
         // Add loot flashes
-        for (let pos of lootFlashPositions) {
+        for (let pos of arena.lootFlashPositions) {
             if (pos.type == "spaceRock") {
                 this.lootFlashes.push({
                     x: pos.x,
@@ -2445,6 +2445,16 @@ class SpaceArena {
                     timer: 240,
                     color: "#66e8ff",
                     style: "24px monospace"
+                });
+            }
+            if (pos.type == "spaceJunk") {
+                this.lootFlashes.push({
+                    x: pos.x,
+                    y: pos.y,
+                    text: `+${formatWhole(pos.amount)} space junk`,
+                    timer: 120,
+                    color: "#ffb366",
+                    style: "18px monospace"
                 });
             }
             if (pos.type == "bloodStones") {
@@ -2468,6 +2478,7 @@ class SpaceArena {
                 });
             }
         }
+        arena.lootFlashPositions = [];
 
         // Add XP orbs
         for (let orb of xpOrbsToAdd) {

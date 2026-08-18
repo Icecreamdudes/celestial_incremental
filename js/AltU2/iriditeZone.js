@@ -164,6 +164,9 @@ SB_zones.iriditeZone = {
     nameCap: "Iridite Zone",
     nameLow: "iridite zone",
     location: "space",
+    unlocked() {
+        return hasUpgrade("ir", 19)
+    },
 
     primaryColor: "#ffffff",
     secondaryColor: "#151230",

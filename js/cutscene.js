@@ -3231,7 +3231,7 @@
                 { text: "You better keep a good eye on them. I'm sure they'll be coming for you.", portrait: "resources/nova.png"},
                 { text: "Do I kill them?", portrait: "resources/matos.png"},
                 { text: "If you can't kill them, it's okay. As long as you get them all together in the black heart.", portrait: "resources/nova.png"},
-                { text: "I'll finally freed...", portrait: "resources/nova.png"},
+                { text: "I'll finally be freed...", portrait: "resources/nova.png"},
                 { text: "That wretched celestial really had to lock me up in this stasis!", portrait: "resources/nova.png"},
                 { text: "A celestial built on pollution... and I know you hate pollution.", portrait: "resources/nova.png"},
                 { text: "Maybe one day, I will get to see the sky clear. I will get to see animals live freely.", portrait: "resources/matos.png"},

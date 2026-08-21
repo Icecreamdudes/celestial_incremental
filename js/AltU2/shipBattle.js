@@ -1179,16 +1179,19 @@ class SpaceArena {
                 // LEFT STICK
                 let originX = 100 * this.mobileControlsScale
                 let originY = this.canvasHeight - (100 * this.mobileControlsScale)
+                let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
                 this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
                 if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
-                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                if (isOmnidirectionalMoving || player.ir.mobileControls == 2) {
                     // RIGHT STICK
                     originX = this.canvasWidth - (100 * this.mobileControlsScale)
                     this.mobileRightStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
                     if (this.mobileRightStickDist < this.mobileControlsScale * 80) e.action = "rightStick";
-                } else {
+                }
+                if (!isOmnidirectionalMoving || player.ir.mobileControls == 2) {
                     // RIGHT BUTTON
                     originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                    if (player.ir.mobileControls == 2) originY = this.canvasHeight / 2;
                     this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
                     if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
                 }
@@ -1824,11 +1827,16 @@ class SpaceArena {
                         let mouseY = value.clientY - rect.top;
                         let originX = 100 * this.mobileControlsScale
                         let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                        this.mobileLeftStickDist = Math.hypot(mouseY - originY, mouseX - originX)
+                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
+                        this.mobileLeftStickDist = Math.hypot(mouseY - originY, !isOmnidirectionalMoving ? 0 : mouseX - originX)
                         if (this.mobileLeftStickDist < this.mobileControlsScale * 20) {
                             this.mobileLeftStickAngle = null
                         } else {
-                            this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * Math.PI / 4
+                            if (player.ir.mobileControls == 1 || (player.ir.shipType == 5 || player.ir.shipType == 8)) {
+                                this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * (Math.PI / 4)
+                            } else {
+                                this.mobileLeftStickAngle = Math.atan2(mouseY - originY, mouseX - originX) > 0 ? (Math.PI / 2) : (-Math.PI / 2)
+                            }
                         }
                         
                         if (this.mobileLeftStickAngle != null) {
@@ -1913,16 +1921,25 @@ class SpaceArena {
                         let mouseY = value.clientY - rect.top;
                         let originX = this.canvasWidth - (100 * this.mobileControlsScale)
                         let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                        this.mobileRightStickDist = Math.hypot(mouseY - originY, mouseX - originX)
+                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
+                        this.mobileRightStickDist = Math.hypot(!isOmnidirectionalMoving ? 0 : mouseY - originY, mouseX - originX)
                         if (this.mobileRightStickDist < this.mobileControlsScale * 20) {
                             this.mobileRightStickAngle = null
                         } else {
-                            this.mobileRightStickAngle = Math.atan2(mouseY - originY, mouseX - originX)
+                            if (player.ir.mobileControls == 1 || isOmnidirectionalMoving) {
+                                this.mobileRightStickAngle = Math.atan2(mouseY - originY, mouseX - originX)
+                            } else {
+                                this.mobileRightStickAngle = Math.abs(Math.atan2(mouseY - originY, mouseX - originX)) > Math.PI / 2 ? Math.PI : 0
+                            }
                         }
                         
                         if (this.mobileRightStickAngle != null) {
-                            this.ship.angle = this.mobileRightStickAngle
-                            this.shoot()
+                            if (player.ir.mobileControls == 1) {
+                                this.ship.angle = this.mobileRightStickAngle
+                                this.shoot()
+                            } else {
+                                this.ship.angle += this.mobileRightStickAngle == 0 ? this.ship.rotationSpeed : -this.ship.rotationSpeed;
+                            }
                         }
                     break;}
                     case "rightButton": {
@@ -3433,53 +3450,136 @@ class SpaceArena {
             this.ctx.globalAlpha = 1
             this.ctx.lineWidth = 3;
 
+            let isCondensedControls = player.ir.mobileControls == 1 || player.ir.shipType == 5 || player.ir.shipType == 8
+
             // LEFT STICK
 
-            // OUTER CIRCLE
-            this.ctx.fillStyle = "#ffff003f";
-            this.ctx.beginPath();
-            this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
-            this.ctx.closePath();
-            this.ctx.fill();
+            if (isCondensedControls) { // CONDENSED
 
-            // INNER CIRCLE
-            this.ctx.fillStyle = "#0000003f";
-            this.ctx.beginPath();
-            this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
-            this.ctx.closePath();
-            this.ctx.fill();
+                // OUTER CIRCLE
+                this.ctx.fillStyle = "#ffff003f";
+                this.ctx.strokeStyle = "#ffff006e";
+                this.ctx.beginPath();
+                this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
 
-            // STICK
-            this.ctx.fillStyle = "#ffff00bf";
-            this.ctx.beginPath();
-            if (this.mobileLeftStickAngle == null) {
-                this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
-            } else {
-                this.ctx.ellipse(100 * this.mobileControlsScale + Math.cos(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
-            }
-            this.ctx.closePath();
-            this.ctx.fill();
+                // INNER CIRCLE
+                this.ctx.fillStyle = "#0000003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
 
-            // OUTLINE
-            this.ctx.strokeStyle = "#ffff006e";
-            this.ctx.beginPath();
-            this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
-            this.ctx.stroke();
-            
-            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-                // RIGHT STICK
+                // STICK
+                this.ctx.fillStyle = "#ffff00bf";
+                this.ctx.beginPath();
+                if (this.mobileLeftStickAngle == null) {
+                    this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                } else {
+                    this.ctx.ellipse(100 * this.mobileControlsScale + Math.cos(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                }
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                // OUTLINE
+                this.ctx.strokeStyle = "#ffff006e";
+                this.ctx.beginPath();
+                this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                this.ctx.stroke();
+
+            } else { // EXTENDED
+
                 // OUTER CIRCLE
                 this.ctx.fillStyle = "#ffff003f";
                 this.ctx.beginPath();
-                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (140 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -Math.PI, 0)
+                this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (60 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 0, Math.PI)
                 this.ctx.closePath();
                 this.ctx.fill();
+
+                // INNER CIRCLE
+                this.ctx.fillStyle = "#0000003f";
+                this.ctx.beginPath();
+                this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                // STICK
+                this.ctx.fillStyle = "#ffff00bf";
+                this.ctx.beginPath();
+                if (this.mobileLeftStickAngle == null) {
+                    this.ctx.ellipse(100 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                } else {
+                    this.ctx.ellipse(100 * this.mobileControlsScale + Math.cos(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileLeftStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                }
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                // OUTLINE
+                this.ctx.strokeStyle = "#ffff006e";
+                this.ctx.beginPath();
+                this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (140 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -Math.PI, 0)
+                this.ctx.arc(100 * this.mobileControlsScale, this.canvasHeight - (60 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 0, Math.PI)
+                this.ctx.closePath();
+                this.ctx.stroke();
+
+            }
+
+            // RIGHT STICK
+
+            if (isCondensedControls) { // CONDENSED
+                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                    // OUTER CIRCLE
+                    this.ctx.fillStyle = "#ffff003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // INNER CIRCLE
+                    this.ctx.fillStyle = "#0000003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // STICK
+                    this.ctx.fillStyle = "#ffff00bf";
+                    this.ctx.beginPath();
+                    if (this.mobileRightStickAngle == null) {
+                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                    } else {
+                        this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale) + Math.cos(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, this.canvasHeight - (100 * this.mobileControlsScale) + Math.sin(this.mobileRightStickAngle) * 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 40 * this.mobileControlsScale, 0, 0, 360);
+                    }
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // OUTLINE
+                    this.ctx.strokeStyle = "#ffff006e";
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                    this.ctx.stroke();
+                }
+
+            } else { // EXTENDED
+
+                // OUTER CIRCLE
+                this.ctx.fillStyle = "#ffff003f";
+                this.ctx.beginPath();
+                this.ctx.arc(this.canvasWidth - (140 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -3 * Math.PI / 2, -Math.PI / 2)
+                this.ctx.arc(this.canvasWidth - (60 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -Math.PI / 2, Math.PI / 2)
+                this.ctx.closePath();
+                this.ctx.fill();
+
                 // INNER CIRCLE
                 this.ctx.fillStyle = "#0000003f";
                 this.ctx.beginPath();
                 this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, 40 * this.mobileControlsScale + 6, 0, 0, 360);
                 this.ctx.closePath();
                 this.ctx.fill();
+
                 // STICK
                 this.ctx.fillStyle = "#ffff00bf";
                 this.ctx.beginPath();
@@ -3490,35 +3590,79 @@ class SpaceArena {
                 }
                 this.ctx.closePath();
                 this.ctx.fill();
+
                 // OUTLINE
                 this.ctx.strokeStyle = "#ffff006e";
                 this.ctx.beginPath();
-                this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
-                this.ctx.stroke();
-            } else if (!player.ir.autoShoot) {
-                // RIGHT BUTTON
-                // OUTER CIRCLE
-                this.ctx.fillStyle = "#ffff003f";
-                this.ctx.beginPath();
-                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                this.ctx.arc(this.canvasWidth - (140 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -3 * Math.PI / 2, -Math.PI / 2)
+                this.ctx.arc(this.canvasWidth - (60 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 40 * this.mobileControlsScale + 6, -Math.PI / 2, Math.PI / 2)
                 this.ctx.closePath();
-                this.ctx.fill();
-                // INNER CIRCLE
-                this.ctx.fillStyle = "#0000003f";
-                this.ctx.beginPath();
-                this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
-                this.ctx.closePath();
-                this.ctx.fill();
-                // OUTLINE
-                this.ctx.strokeStyle = "#ffff006e";
-                this.ctx.beginPath();
-                this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
                 this.ctx.stroke();
-                // TEXT
-                this.ctx.fillStyle = "#ffff00bf";
-                this.ctx.font = "bold 48px monospace";
-                this.ctx.textAlign = "center";
-                this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+
+            }
+
+            // SHOOT BUTTON
+
+            if (!player.ir.autoShoot && player.ir.shipType != 5 && player.ir.shipType != 8) {
+                if (isCondensedControls) { // CONDENSED
+
+                    // OUTER CIRCLE
+                    this.ctx.fillStyle = "#ffff003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // INNER CIRCLE
+                    this.ctx.fillStyle = "#0000003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // OUTLINE
+                    this.ctx.strokeStyle = "#ffff006e";
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale), (80 * this.mobileControlsScale), 0, 360);
+                    this.ctx.stroke();
+
+                    // TEXT
+                    this.ctx.fillStyle = "#ffff00bf";
+                    this.ctx.font = "bold 48px monospace";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight - (100 * this.mobileControlsScale) + 12);
+
+                } else { // EXTENDED
+
+                    // OUTER CIRCLE
+                    this.ctx.fillStyle = "#ffff003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight / 2, 80 * this.mobileControlsScale, 80 * this.mobileControlsScale, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // INNER CIRCLE
+                    this.ctx.fillStyle = "#0000003f";
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight / 2, 71 * this.mobileControlsScale + 6, 71 * this.mobileControlsScale + 6, 0, 0, 360);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+
+                    // OUTLINE
+                    this.ctx.strokeStyle = "#ffff006e";
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight / 2, (80 * this.mobileControlsScale), 0, 360);
+                    this.ctx.stroke();
+
+                    // TEXT
+                    this.ctx.fillStyle = "#ffff00bf";
+                    this.ctx.font = "bold 48px monospace";
+                    this.ctx.textAlign = "center";
+                    this.ctx.fillText("Shoot", this.canvasWidth - (100 * this.mobileControlsScale), this.canvasHeight / 2 + 12);
+
+
+                }
+
             }
 
         }

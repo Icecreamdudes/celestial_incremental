@@ -59,7 +59,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space rock"}
+        statDisplay() {return "Space Rock"}
     },
     1: {
         mult: new Decimal(30),
@@ -71,7 +71,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space rock"}
+        statDisplay() {return "Space Rock"}
     },
     2: {
         mult: new Decimal(2),
@@ -84,7 +84,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space gem"}
+        statDisplay() {return "Space Gem"}
     },
     3: {
         mult: new Decimal(150),
@@ -97,7 +97,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space rock"}
+        statDisplay() {return "Space Rock"}
     },
     4: {
         mult: new Decimal(10),
@@ -110,7 +110,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space gem"}
+        statDisplay() {return "Space Gem"}
     },
     5: {
         mult: new Decimal(4),
@@ -123,7 +123,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space rock"}
+        statDisplay() {return "Space Rock"}
     },
     6: {
         mult: new Decimal(0.5),
@@ -136,7 +136,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space gem"}
+        statDisplay() {return "Space Gem"}
     },
     7: {
         mult: new Decimal(24),
@@ -149,7 +149,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space junk"}
+        statDisplay() {return "Space Junk"}
     },
     8: {
         mult: new Decimal(48),
@@ -162,20 +162,22 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space junk"}
+        statDisplay() {return "Space Junk"}
     },
     9: {
-        mult: new Decimal(1),
+        mult: new Decimal(4),
         max: new Decimal(3600),
         getBaseStatMult() { return player.cb.baseESC },
         onClick(baseGain) {
             // 1 / 3600s = 1 / 1h
             player.cb.evolutionShards = player.cb.evolutionShards.add(baseGain.mul(Math.random() + 1).floor())
+            if (Math.random() < this.ascensionShardChance()) player.cbs.ascensionShards = player.cbs.ascensionShards.add(1);
         },
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "evolution shards"}
+        statDisplay() {return "Evolution Shards"},
+        ascensionShardChance() {return new Decimal(0.1).div(player.ir.timerMaxDivisior.pow(0.75)).toNumber()},
     },
     10: {
         mult: new Decimal(8),
@@ -188,7 +190,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "space junk"}
+        statDisplay() {return "Space Junk"}
     },
 }
 
@@ -309,6 +311,7 @@ addLayer("ir", {
                 max: new Decimal(1800),
             },
         },
+        timerMaxDivisior: new Decimal(1),
 
         battleLevel: new Decimal(0),
         battleXP: new Decimal(0),
@@ -404,6 +407,10 @@ addLayer("ir", {
         player.ir.shipDamageMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 14)) player.ir.shipDamageMult = player.ir.shipDamageMult.mul(upgradeEffect("darkTemple", 14))
 
+        player.ir.timerMaxDivisior = new Decimal(1)
+        if (hasUpgrade("ir", 18)) player.ir.timerMaxDivisior = player.ir.timerMaxDivisior.mul(upgradeEffect("ir", 18));
+        player.ir.timerMaxDivisior = player.ir.timerMaxDivisior.mul(levelableEffect("pu", 401)[1])
+
         player.ir.timers[0].max = new Decimal(0)
         player.ir.timers[1].max = new Decimal(600)
         player.ir.timers[2].max = new Decimal(900)
@@ -416,9 +423,10 @@ addLayer("ir", {
         player.ir.timers[9].max = new Decimal(1800)
         player.ir.timers[10].max = new Decimal(7200)
         for (let i in player.ir.timers) {
-            if (hasUpgrade("ir", 18)) player.ir.timers[i].max = player.ir.timers[i].max.div(upgradeEffect("ir", 18))
-            player.ir.timers[i].max = player.ir.timers[i].max.div(levelableEffect("pu", 401)[1])
+            player.ir.timers[i].max = player.ir.timers[i].max.div(player.ir.timerMaxDivisior)
             if (!player.ir.inBattle) player.ir.timers[i].current = player.ir.timers[i].current.sub(delta);
+            //TEMP
+            player.ir.timers[i].max = new Decimal(1)
         }
         for (let i in player.ir.saveTimers) {
             if (player.ir.shipBattleSaves[i] == null) {
@@ -1563,17 +1571,40 @@ addLayer("ir", {
         },
         "gainAutoStats": {
             title() {
-                return "<h3>+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay()
+                let save = player.ir.shipBattleSaveCurrent
+                if (save && save.slot >= 0) {
+                    if (player.ir.saveTimers[save.slot].current.gt(0)) {
+                        return "+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + "<br>(On Cooldown: " + formatTime(player.ir.saveTimers[save.slot].current) + ")"
+                    } else {
+                        return "+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + "<br>(Sets Save #" + formatSimple(save.slot + 1) + " cooldown to " + formatSimpleTime(SB_AUTO_DATA[save.shipType].max) + ")"
+                    }
+                } else {
+                    return "Select a saved run to gain instant resources"
+                }
             },
-            canClick() { return true },
+            canClick() { return player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 && (player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0)) },
             unlocked() { return true },
+            tooltip() {
+                let save = player.ir.shipBattleSaveCurrent
+                if (!save) return "";
+                let mult = SB_AUTO_DATA[save.shipType].mult
+                let str = !save ? "" : ("x" + formatWhole(mult.ceil()) + " to x" + formatWhole(mult.mul(2).ceil()) + " of base " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + " gain")
+                if (save.shipType == 9 && player.cbs.shrineReactivated) str += "<br><small style='color:#c6f7ff'>(" + format(SB_AUTO_DATA[save.shipType].ascensionShardChance() * 100, 3) + "% chance for a Shard of Ascension, decreases with ship cooldown)</small>";
+                return str
+            },
             onClick() {
                 SB_AUTO_DATA[player.ir.shipType].onClick(player.ir.sendGain)
+                player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current = SB_AUTO_DATA[player.ir.shipBattleSaveCurrent.shipType].max
             },
             style() {
                 let look = {width: "523px", minHeight: "50px", color: "white", borderRadius: "10px"}
-                look.background = player.ir.shipBattleSaveCurrent.slot >= 0 && player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0) ? "#361e1e" : "#545400"
-                look.border = "3px solid " + (player.ir.shipBattleSaveCurrent.slot >= 0 && player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current.lte(0) ? "#5e4ee67f" : "#7f7f00")
+                if (tmp.ir.clickables["gainAutoStats"].canClick) {
+                    look.background = "#545400"
+                    look.border = "3px solid #7f7f00"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #5e4ee67f"
+                }
                 return look
             },
         },
@@ -1658,7 +1689,7 @@ addLayer("ir", {
         "toggleMobileControls": {
             title() { switch (player.ir.mobileControls) {
                 case 0: {return "Mobile Controls<br>[OFF]"; break;}
-                case 1: {return "Mobile Controls<br>[Simplified]"; break;}
+                case 1: {return "Mobile Controls<br>[Condensed]"; break;}
                 case 2: {return "Mobile Controls<br>[Extended]"; break;}
                 default: {return ""; break;}
             }},

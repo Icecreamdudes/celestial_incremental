@@ -114,8 +114,9 @@ addLayer("se", {
         ]
     },
     arriveAtStar(x, y) {
-        let visitGain = 1
-        if (buyableEffect("sme", 153).sub(1).gte(Math.random())) visitGain += 1
+        let visitGain = new Decimal(1)
+        visitGain = visitGain.mul(buyableEffect("ir", 302))
+        if (buyableEffect("sme", 153).sub(1).gte(Math.random())) visitGain = visitGain.mul(2)
         player.se.starsExploreCount[x][y] = player.se.starsExploreCount[x][y].add(visitGain).min(100)
         player.se.currentPosition = player.se.currentStar
         player.se.currentlyTravelling = false

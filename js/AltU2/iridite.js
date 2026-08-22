@@ -47,7 +47,11 @@ const createConnectionComponent = function(x1, y1, x2, y2, color) {
         }]
 }
 
-const SB_AUTO_DATA = {
+let rerollBuyableShipUpgrades = function(luck) {
+    // whatever
+}
+
+const SB_AUTO_DATA = {//player.ir.shipBattleSaves[0].shipType = 8
     0: {
         mult: new Decimal(30),
         max: new Decimal(600),
@@ -59,7 +63,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Rock"}
+        statDisplay() {return "Space Rock"},
     },
     1: {
         mult: new Decimal(30),
@@ -71,7 +75,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Rock"}
+        statDisplay() {return "Space Rock"},
     },
     2: {
         mult: new Decimal(2),
@@ -84,7 +88,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Gem"}
+        statDisplay() {return "Space Gem"},
     },
     3: {
         mult: new Decimal(150),
@@ -97,7 +101,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Rock"}
+        statDisplay() {return "Space Rock"},
     },
     4: {
         mult: new Decimal(10),
@@ -110,7 +114,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Gem"}
+        statDisplay() {return "Space Gem"},
     },
     5: {
         mult: new Decimal(4),
@@ -123,7 +127,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Rock"}
+        statDisplay() {return "Space Rock"},
     },
     6: {
         mult: new Decimal(0.5),
@@ -136,20 +140,20 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Gem"}
+        statDisplay() {return "Space Gem"},
     },
     7: {
-        mult: new Decimal(24),
-        max: new Decimal(2400),
+        mult: new Decimal(8),
+        max: new Decimal(640),
         getBaseStatMult() { return player.ir.spaceJunkMultTrue },
         onClick(baseGain) {
-            // 24 / 2400 = 1 / 1m 40s
+            // 8 / 640s = 1 / 1m 20s
             player.ir.spaceJunk = player.ir.spaceJunk.add(baseGain.mul(Math.random() + 1).floor())
         },
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Junk"}
+        statDisplay() {return "Space Junk"},
     },
     8: {
         mult: new Decimal(48),
@@ -162,7 +166,7 @@ const SB_AUTO_DATA = {
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Junk"}
+        statDisplay() {return "Space Junk"},
     },
     9: {
         mult: new Decimal(4),
@@ -171,26 +175,24 @@ const SB_AUTO_DATA = {
         onClick(baseGain) {
             // 1 / 3600s = 1 / 1h
             player.cb.evolutionShards = player.cb.evolutionShards.add(baseGain.mul(Math.random() + 1).floor())
-            if (Math.random() < this.ascensionShardChance()) player.cbs.ascensionShards = player.cbs.ascensionShards.add(1);
         },
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
         statDisplay() {return "Evolution Shards"},
-        ascensionShardChance() {return new Decimal(0.1).div(player.ir.timerMaxDivisior.pow(0.75)).toNumber()},
     },
     10: {
-        mult: new Decimal(8),
-        max: new Decimal(640),
+        mult: new Decimal(24),
+        max: new Decimal(2400),
         getBaseStatMult() { return player.ir.spaceJunkMultTrue },
         onClick(baseGain) {
-            // 8 / 640s = 1 / 1m 20s
+            // 24 / 2400s = 1 / 1m 40s
             player.ir.spaceJunk = player.ir.spaceJunk.add(baseGain.mul(Math.random() + 1).floor())
         },
         getFinalMult(baseGain) {
             return baseGain.mul(this.mult)
         },
-        statDisplay() {return "Space Junk"}
+        statDisplay() {return "Space Junk"},
     },
 }
 
@@ -225,7 +227,7 @@ addLayer("ir", {
         spaceJunkMult: new Decimal(1),
         spaceJunkMultTrue: new Decimal(1),
 
-        autoCooldown: new Decimal(0),
+        shipUpgradeRerollTimer: new Decimal(1800),
 
         primaryColor: "#5e4ee6",
         secondaryColor: "#37078f",
@@ -356,8 +358,9 @@ addLayer("ir", {
             zoneRef = SB_zones[player.ir.battleStage]
         }
 
+        // Space Rock Mult
         player.ir.spaceRockMult = new Decimal(1)
-        player.ir.spaceRockMult = player.ir.spaceRockMult.mul(upgradeEffect("ir", 21))
+        if (hasUpgrade("ir", 21)) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(upgradeEffect("ir", 21))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pet", 502)[1])
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(buyableEffect("sme", 155))
         player.ir.spaceRockMult = player.ir.spaceRockMult.mul(levelableEffect("pu", 212)[1])
@@ -367,12 +370,18 @@ addLayer("ir", {
         if (zoneRef) player.ir.spaceRockMult = player.ir.spaceRockMult.mul(zoneRef.rockMult);
         player.ir.spaceRockMultTrue = player.ir.spaceRockMult
 
+        // Space Gem Mult
         player.ir.spaceGemMult = new Decimal(1)
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("sme", 156))
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("pl", 16))
         player.ir.spaceGemMult = player.ir.spaceGemMult.mul(buyableEffect("bl", 15))
         if (zoneRef) player.ir.spaceGemMult = player.ir.spaceGemMult.mul(zoneRef.gemMult);
         player.ir.spaceGemMultTrue = player.ir.spaceGemMult
+
+        // Space Junk Mult
+        player.ir.spaceJunkMult = new Decimal(1)
+        if (hasUpgrade("ir", 301)) player.ir.spaceJunkMult = player.ir.spaceJunkMult.mul(upgradeEffect("ir", 301));
+        player.ir.spaceJunkMultTrue = player.ir.spaceJunkMult
 
         if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
 
@@ -438,6 +447,11 @@ addLayer("ir", {
         }
 
         player.ir.sendGain = SB_AUTO_DATA[player.ir.shipType].getFinalMult(SB_AUTO_DATA[player.ir.shipType].getBaseStatMult())
+        player.ir.shipUpgradeRerollTimer = player.ir.shipUpgradeRerollTimer.sub(delta)
+        if (player.ir.shipUpgradeRerollTimer.lte(0)) {
+            rerollBuyableShipUpgrades(0)
+            player.ir.shipUpgradeRerollTimer = new Decimal(1800)
+        }
 
         player.ir.battleXPReq = player.ir.battleLevel.add(9).mul(5).add(player.ir.battleLevel.sub(1).pow(2))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
@@ -468,7 +482,7 @@ addLayer("ir", {
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
                 } else if (arena && !showUpgrades) {
-                    let amt = player.ir.spaceJunkMult.mul(zoneRef.gemMult).floor();
+                    let amt = player.ir.spaceJunkMult.mul(zoneRef.xpReqMult).floor();
                     amt = amt.max(1)
                     player.ir.spaceJunk = player.ir.spaceJunk.add(amt);
                     arena.lootFlashPositions.push({ x: arena.ship.x, y: arena.ship.y, amount: amt, type: "spaceJunk" });
@@ -1576,7 +1590,7 @@ addLayer("ir", {
                     if (player.ir.saveTimers[save.slot].current.gt(0)) {
                         return "+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + "<br>(On Cooldown: " + formatTime(player.ir.saveTimers[save.slot].current) + ")"
                     } else {
-                        return "+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + "<br>(Sets Save #" + formatSimple(save.slot + 1) + " cooldown to " + formatSimpleTime(SB_AUTO_DATA[save.shipType].max) + ")"
+                        return "+" + formatSimple(player.ir.sendGain.floor()) + " to " + formatSimple(player.ir.sendGain.mul(2).floor()) + " " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + "<br>(Will set Slot #" + formatSimple(save.slot + 1) + " cooldown to " + formatSimpleTime(SB_AUTO_DATA[save.shipType].max) + ")"
                     }
                 } else {
                     return "Select a saved run to gain instant resources"
@@ -1589,7 +1603,6 @@ addLayer("ir", {
                 if (!save) return "";
                 let mult = SB_AUTO_DATA[save.shipType].mult
                 let str = !save ? "" : ("x" + formatWhole(mult.ceil()) + " to x" + formatWhole(mult.mul(2).ceil()) + " of base " + SB_AUTO_DATA[player.ir.shipType].statDisplay() + " gain")
-                if (save.shipType == 9 && player.cbs.shrineReactivated) str += "<br><small style='color:#c6f7ff'>(" + format(SB_AUTO_DATA[save.shipType].ascensionShardChance() * 100, 3) + "% chance for a Shard of Ascension, decreases with ship cooldown)</small>";
                 return str
             },
             onClick() {
@@ -1953,6 +1966,7 @@ addLayer("ir", {
             effect() {
                 let eff = player.ir.spaceRock.add(1).log10().add(1).pow(0.75).sub(1).pow_base("1e100")
                 if (hasMilestone("spaceZone3", 11)) eff = eff.pow(2);
+                eff = eff.pow(buyableEffect("ir", 303))
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
@@ -2876,6 +2890,213 @@ addLayer("ir", {
                 return look
             },
         },
+        // Captain / Automation Upgrades
+        301: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Hazardous Waste",
+            unlocked() { return true },
+            description() { return "Radiation boosts Space Junk gain.<br>(x" + formatSimple(this.effect(), 2) + ")" },
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Junk",
+            currencyInternalName: "spaceJunk",
+            effect() {
+                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        302: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Salvaged Upgrades",
+            unlocked() { return true },
+            description() { return "Unlock the resource extraction tab and the ability to reset a zone's upgrades." },
+            cost: new Decimal(1e4),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Junk",
+            currencyInternalName: "spaceJunk",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        303: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Space Junk Space Dust",
+            unlocked() { return true },
+            description() { return "Boost space dust gain and cap by x100." },
+            cost: new Decimal(1e5),
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Junk",
+            currencyInternalName: "spaceJunk",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+    },
+    buyables: {
+        301: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.6) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.ir.spaceJunk},
+            pay(amt) { player.ir.spaceJunk = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow_base(1.3) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Boosts all star dimension power gain by x1.3.<br>(x" + formatSimple(this.effect(), 2) + ")"
+            },
+            currencyDisplayName: "Space Junk",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Salvaged Power" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        302: {
+            costBase() { return new Decimal(500) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(4) },
+            currency() { return player.ir.spaceJunk},
+            pay(amt) { player.ir.spaceJunk = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Boosts space exploration visits gained on arrival by +1.<br>(+" + formatSimple(this.effect()) + ")"
+            },
+            currencyDisplayName: "Space Junk",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Thourough Exploration" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
+        303: {
+            costBase() { return new Decimal(1e3) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.ir.spaceJunk},
+            pay(amt) { player.ir.spaceJunk = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Improve the \"Repair\" Iridite upgrade effect by +^0.1.<br>(^" + formatSimple(this.effect()) + ")"
+            },
+            currencyDisplayName: "Space Junk",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Salvaged Steel" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#536bdb", outline: "3px solid #ffb366", width: "250px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#37078f"
+                return look
+            },
+        },
     },
     microtabs: {
         shipSelection: {
@@ -3170,6 +3391,40 @@ addLayer("ir", {
                 ],
             },
         },
+        automation: {
+            "spaceJunkUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["blank", "4.5px"],
+                    ["style-row", [
+                        ["buyable", 301], ["buyable", 302],
+                    ]],
+                    ["style-row", [
+                        ["buyable", 303], ["upgrade", 301],
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 302], ["upgrade", 303],
+                    ]],
+                    ["blank", "4.5px"],
+                    ["raw-html", "Gain <span style='color:#ffb366;text-shadow:0 0 6px #ffb366'>space junk</span> in place of ship level-up upgrades you're already obtained.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
+                ],
+            },
+            "shipUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+
+                ],
+            },
+            "resourceExtraction": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+
+                ],
+            },
+        },
         ships: {
             "levelables": {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
@@ -3291,6 +3546,22 @@ addLayer("ir", {
                     ["style-row", [], {width: "800px", height: "3px", background: "#5e4ee6"}],
                     ["style-row", [
                         ["top-column", [
+                            ["style-row", [
+                                ["category-button", ["Space Junk Upgrades", "automation", "spaceJunkUpgrades"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                ["category-button", [() => {return "Ship Upgrades<br><small>(Reroll in " + formatSimpleTime(player.ir.shipUpgradeRerollTimer) + ")"}, "automation", "shipUpgrades"], {width: "177px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
+                                ["style-row", [
+                                    ["style-row", [
+                                        ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "176px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "none !important" : ""}}],
+                                ["style-row", [
+                                    ["category-button", ["Resource Extraction", "automation", "resourceExtraction"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "" : "none !important"}}],
+                            ], {}],
+
+                            ["style-row", [], {background: "#5e4ee6", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "automation", {borderWidth: "0"}],
                         ], {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", borderRight: "3px solid #5e4ee6", width: "532px", height: "579px"}],
                         ["always-scroll-column", [
                             ["top-column", () => {
@@ -3396,7 +3667,7 @@ addLayer("ir", {
                                 ], {width: "265px", height: "40px", background: "#00003f", borderRadius: "0"}],
                             ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}}],
                             ["style-row", [
-                                ["category-button", ["Automation", "ships", "automation"], {width: "265px", height: "40px", background: "#00007f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                ["category-button", ["Captain", "ships", "automation"], {width: "265px", height: "40px", background: "#00007f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
                             ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}}],
 
                         ], {width: "800px", height: "40px", borderBottom: "3px solid #5e4ee6", borderRadius: "0"}],

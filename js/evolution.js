@@ -186,7 +186,7 @@
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
         },
         113: {
-            title() { return "<img src='resources/Pets/johnUncommonPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/captainEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[209].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.unlocked},
             tooltip() { return "██████ buttons ███ █████ battle █████████" },
@@ -685,23 +685,23 @@
                 return "<div class='evoContainer'><h3>Costs:</h3>" +
                 "<br>"  + formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/12 Paragon Shards" +
-                "<br>"  + formatWhole(player.stagnantSynestia.temporalShard) + "/12 Temporal Shards" +
+                "<br>"  + formatWhole(player.stagnantSynestia.temporalShard) + "/24 Temporal Shards" +
                 "</div>" +
                 "<div class='evoContainer'><h3>Requires:</h3>" +
-                "<br>"  + formatWhole(player.au2.stars) + "/2.5e10 Stars" +
+                "<br>"  + formatWhole(player.au2.stars) + "/5e10 Stars" +
                 "<br>"  + formatWhole(player.oi.oil) + "/1e500 Oil" +
                 "</div>"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(12) && player.stagnantSynestia.temporalShard.gte(12)
-                && player.au2.stars.gte("2.5e10") && player.oi.oil.gte("1e500"))
+                && player.au2.stars.gte("5e10") && player.oi.oil.gte("1e500"))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(60)
                 player.cb.paragonShards = player.cb.paragonShards.sub(12)
-                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(12)
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(24)
 
                 player.ev.evolutionsUnlocked[13] = true
                 setLevelableAmount("pet", 1209, new Decimal(1))

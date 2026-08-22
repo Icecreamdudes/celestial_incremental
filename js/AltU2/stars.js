@@ -52,6 +52,7 @@ addLayer("st", {
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(player.st.dimensionPowerEffects[i + 1])
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("st", i + 11))
                 if (hasUpgrade("ir", 31)) player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(3)
+                player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("ir", 301))
             }
             player.st.dimensionsTimerMax[i] = player.st.dimensionsTimerMax[i].div(buyableEffect("sme", 152))
             if (player.st.dimensionsTimer[i].gte(player.st.dimensionsTimerMax[i])) {

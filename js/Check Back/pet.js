@@ -4561,7 +4561,7 @@ addLayer("pet", {
             } 
         },
         1209: {
-            image() { return this.canClick() ? "resources/Pets/johnUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/captainEvoPet.png" : "resources/secret.png"},
             title() { return "Captain" },
             lore() { return "John Captain, the greatest pilot in the Cosmic Cosmos, or at least out of the four of you on the spaceship." }, 
             description() {

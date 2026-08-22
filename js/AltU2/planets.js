@@ -45,6 +45,7 @@
 
         player.pl.spaceDustCapacity = new Decimal(100)
         player.pl.spaceDustCapacity = player.pl.spaceDustCapacity.mul(buyableEffect("pl", 11))
+        if (hasUpgrade("ir", 303)) player.pl.spaceDustCapacity = player.pl.spaceDustCapacity.mul(100);
 
         player.pl.spaceDust = player.pl.spaceDust.add(player.pl.spaceDustPerSecond.mul(delta))
         if (player.pl.spaceDust.gt(player.pl.spaceDustCapacity)) {
@@ -53,6 +54,7 @@
 
         player.pl.spaceDustPerSecond = player.pl.planets.mul(0.01).mul(player.pl.planets.pow(0.75).mul(0.1))
         if (hasMilestone("spaceZone1", 11)) player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.mul(3);
+        if (hasUpgrade("ir", 303)) player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.mul(100);
         player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.pow(levelableEffect("pet", 1209)[2])
     },
     bars: {},

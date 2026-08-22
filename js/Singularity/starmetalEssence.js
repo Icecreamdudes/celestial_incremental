@@ -1550,7 +1550,7 @@
             },
             display() {
                 return "<h3>SME-F3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Gain a chance to gain another visit on space exploration\n\
+                    Gain a chance to gain double visits on space exploration\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.pl.planets) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Planets\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"

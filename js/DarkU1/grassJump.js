@@ -354,7 +354,7 @@ addLayer("dgj", {
             },
         },
         15: {
-            effectDescription() { return "All forms of dark grass automation are effected by dark grass growth speed<br>Currently: x" + format(player.dgj.milestone5Effect) + "." },
+            effectDescription() { return "All forms of dark grass automation are affected by dark grass growth speed<br>Currently: x" + format(player.dgj.milestone5Effect) + "." },
             done() { return player.dgj.grassJump.gte(8) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #00488F", borderTop: "0px", borderRadius: "0px"}

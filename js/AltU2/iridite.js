@@ -2925,11 +2925,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -2959,11 +2962,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -2993,11 +2999,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3027,11 +3036,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3061,11 +3073,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3095,11 +3110,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3129,11 +3147,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3163,11 +3184,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3197,11 +3221,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3231,11 +3258,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3265,11 +3295,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3299,11 +3332,14 @@ addLayer("ir", {
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(tmp.ir.upgrades[this.id].cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
+            canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() { return "..." },
             cost() {
+                if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
+                if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
@@ -3833,6 +3869,7 @@ addLayer("ir", {
                     ]],
                     ]],
                     ["blank", "4.5px"],
+                    ["raw-html", "You must have a saved ship selected in order to purchase ship upgrades.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
                 ],
             },
             "resourceExtraction": {

@@ -48,7 +48,17 @@ const createConnectionComponent = function(x1, y1, x2, y2, color) {
 }
 
 let rerollBuyableShipUpgrades = function(luck) {
-    // whatever
+    player.ir.shipUpgradeShop = pickUpgrade(true, 12, {forceIncludePool:
+        {
+            space: true,
+            blood: hasUpgrade("le", 201),
+            junk: true,
+        }
+    })
+    for (let i = 0; i < 12; i++) {
+        let index = player.ir.upgrades.indexOf(i + 401)
+        if (index) player.ir.upgrades.splice(index, 1);
+    }
 }
 
 const SB_AUTO_DATA = {//player.ir.shipBattleSaves[0].shipType = 8
@@ -227,6 +237,7 @@ addLayer("ir", {
         spaceJunkMult: new Decimal(1),
         spaceJunkMultTrue: new Decimal(1),
 
+        savedRun: false,
         shipUpgradeRerollTimer: new Decimal(0),
         shipUpgradeShop: [],
 
@@ -452,7 +463,6 @@ addLayer("ir", {
         if (player.ir.shipUpgradeRerollTimer.lte(0)) {
             rerollBuyableShipUpgrades(0)
             player.ir.shipUpgradeRerollTimer = new Decimal(1800)
-            player.ir.shipUpgradeShop = pickUpgrade(true, 12)
         }
 
         player.ir.battleXPReq = player.ir.battleLevel.add(9).mul(5).add(player.ir.battleLevel.sub(1).pow(2))
@@ -484,7 +494,7 @@ addLayer("ir", {
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
                 } else if (arena && !showUpgrades) {
-                    let amt = player.ir.spaceJunkMult.mul(zoneRef.xpReqMult).floor();
+                    let amt = player.ir.spaceJunkMult.mul(zoneRef.xpReqMult).mul(Math.random() + 1).floor();
                     amt = amt.max(1)
                     player.ir.spaceJunk = player.ir.spaceJunk.add(amt);
                     arena.lootFlashPositions.push({ x: arena.ship.x, y: arena.ship.y, amount: amt, type: "spaceJunk" });
@@ -614,7 +624,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -697,7 +706,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -780,7 +788,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -870,7 +877,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -959,7 +965,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1042,7 +1047,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1132,7 +1136,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1226,7 +1229,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1319,7 +1321,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1409,7 +1410,6 @@ addLayer("ir", {
                             upgradeScore: 0,
                             upgradeCount: 0,
                             highestLevels: {
-                                "spaceZone1": new Decimal(0),
                             },
                         }
                         player.ir.selectingShip = false
@@ -1634,7 +1634,7 @@ addLayer("ir", {
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
         12: {
-            title() { return player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1) ? "Leave Battle<br><small>(New progress has been saved!)" : "Leave Battle" },
+            title() { return player.ir.savedRun ? "Leave Battle<br><small>(New progress has been saved!)" : "Leave Battle" },
             canClick() { return true },
             unlocked() { return true || player.subtabs["ir"]["stuff"] == "Refresh Page :("},
             onClick() {
@@ -1642,7 +1642,7 @@ addLayer("ir", {
             },
             style() {
                 let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + "#bf0000", borderRadius: "10px"}
-                if (player.ir.menu > 0 && player.ir.battleLevel.modulo(20).eq(1) && !player.ir.battleLevel.eq(1)) {
+                if (player.ir.savedRun) {
                     look.background = "#7f3f00"
                     look.borderColor = "#bf5f00"
                 } else if (this.canClick()) {
@@ -3535,7 +3535,7 @@ addLayer("ir", {
                                         element[1][0][1][1][1].push(
                                             ["style-row", [
                                                 ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                            ], {background: (player.ir.shipBattleSaveCurrent.highestLevels[i] && player.ir.shipBattleSaveCurrent.highestLevels[i][i2]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                            ], {background: (player.ir.shipBattleSaveCurrent.highestLevels[i] && player.ir.shipBattleSaveCurrent.highestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
                                         )
                                     }
                                     container[0][1].push(element)
@@ -3579,7 +3579,7 @@ addLayer("ir", {
                                         element[1][0][1][1][1].push(
                                             ["style-row", [
                                                 ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                            ], {background: (player.ir.shipBattleSaveCurrent.highestLevels[i] && player.ir.shipBattleSaveCurrent.highestLevels[i][i2]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                            ], {background: (player.ir.shipBattleSaveCurrent.highestLevels[i] && player.ir.shipBattleSaveCurrent.highestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
                                         )
                                     }
                                     container[0][1].push(element)
@@ -3607,7 +3607,7 @@ addLayer("ir", {
                             ["top-column", function () {
                                 let container = []
                                 if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
-                                let shipStats = SB_getUpgradedShipStats(player.ir.shipBattleSaveCurrent.upgrades)
+                                let shipStats = SB_getUpgradedShipStats(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
                                 let baseStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
                                 for (let [i, v] of Object.entries(shipStats)) {
                                     let statFormat = SHIP_STAT_FORMATTING[i]
@@ -3719,7 +3719,7 @@ addLayer("ir", {
                             ["top-column", function () {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
-                            for (let [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                            for (let [i, v] of Object.entries(arena ? SB_getUpgradeMultis(arena.upgrades) : player.ir.shipBattleSaveCurrent.upgradeMultis)) {
                                 let statFormat = SHIP_STAT_FORMATTING[i]
                                 let prefix = "x"
                                 if (i == "healthRegen") {
@@ -3759,7 +3759,7 @@ addLayer("ir", {
                             ["top-column", function () {
                             let container = []
                             if (player.ir.shipBattleSaveCurrent == null) return container;
-                            let entries = Object.entries(player.ir.shipBattleSaveCurrent.upgrades)
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
                             let entriesIndex = 0
                             for (let [i, v] of entries) {
                                 entriesIndex++

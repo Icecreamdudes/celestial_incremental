@@ -276,6 +276,13 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.spaceRockGain *= 1 + 0.2 * upgrades.lootGainEpic
     shipStats.spaceRockGain *= 1 + 0.2 * upgrades.dropGainLegendary
     
+    shipStats.spaceJunkGain = 1
+    shipStats.spaceJunkGain *= 1 + 0.05 * upgrades.spaceJunkGainCommon
+    shipStats.spaceJunkGain *= 1 + 0.1 * upgrades.spaceJunkGainUncommon
+    shipStats.spaceJunkGain *= 1 + 0.15 * upgrades.spaceJunkGainRare
+    shipStats.spaceJunkGain *= 1 + 0.2 * upgrades.spaceJunkGainEpic
+    shipStats.spaceJunkGain *= 1 + 0.25 * upgrades.spaceJunkGainLegendary
+    
     shipStats.spaceGemGain = 1
     shipStats.spaceGemGain *= 1 + 0.05 * upgrades.spaceGemGainRare
     shipStats.spaceGemGain *= 1 + 0.05 * upgrades.lootGainEpic
@@ -352,6 +359,15 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.spaceGemGain *= 1 + 0.05 * (upgrades.lootGainEpic || 0)
     shipStats.spaceGemGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    
+    shipStats.spaceJunkGain = player.ir.spaceJunkMult.toNumber()
+    shipStats.spaceJunkGain *= 1 + 0.05 * (upgrades.spaceJunkGainCommon || 0)
+    shipStats.spaceJunkGain *= 1 + 0.1 * (upgrades.spaceJunkGainUncommon || 0)
+    shipStats.spaceJunkGain *= 1 + 0.15 * (upgrades.spaceJunkGainRare || 0)
+    shipStats.spaceJunkGain *= 1 + 0.2 * (upgrades.spaceJunkGainEpic || 0)
+    shipStats.spaceJunkGain *= 1 + 0.25 * (upgrades.spaceJunkGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.spaceJunkGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+
     shipStats.bloodStoneGain = player.bl.bloodStonesMult.toNumber()
     shipStats.bloodStoneGain *= 1 + 0.05 * (upgrades.bloodStoneGainCommon || 0)
     shipStats.bloodStoneGain *= 1 + 0.1 * (upgrades.bloodStoneGainUncommon || 0)
@@ -365,17 +381,20 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.bloodGemGain *= 1 + 0.05 * (upgrades.bloodLootGainEpic || 0)
     shipStats.bloodGemGain *= 1 + 0.2 * (upgrades.bloodLootGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.bloodGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    
     shipStats.xpGain = 1
     shipStats.xpGain *= 1 + 0.05 * (upgrades.xpGainCommon || 0)
     shipStats.xpGain *= 1 + 0.1 * (upgrades.xpGainUncommon || 0)
     shipStats.xpGain *= 1 + 0.15 * (upgrades.xpGainRare || 0)
     shipStats.xpGain *= 1 + 0.2 * (upgrades.xpGainEpic || 0)
     shipStats.xpGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
+    if (player.bl.noxDefeated) shipStats.xpGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
     return shipStats
 }
 
 function SB_saveRun() {
     if (!arena) return;
+    player.ir.savedRun = true
     player.ir.shipBattleSaveCurrent.slot = -2
     player.ir.shipBattleSaveCurrent.upgrades = arena.upgrades
     player.ir.shipBattleSaveCurrent.upgradeMultis = SB_getUpgradeMultis(arena.upgrades)
@@ -391,6 +410,7 @@ function SB_saveRun() {
 function SB_exitRun() {
     player.ir.inBattle = false
     options.fullscreen = false
+    player.ir.savedRun = false
 
     player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
     if (player.ir.shipBattleSaveCurrent.slot > -1) player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].current = player.ir.saveTimers[player.ir.shipBattleSaveCurrent.slot].max

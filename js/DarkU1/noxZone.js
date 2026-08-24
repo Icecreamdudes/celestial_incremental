@@ -115,7 +115,7 @@ addLayer("noxZone", {
                 ["blank", "10px"],
                 ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                ["raw-html", "Gain +2% more ship battle resources per in-battle level.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                ["raw-html", "Gain +2% more ship battle resources and XP per in-battle level.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                 ["raw-html", "+1 ship battle save slot.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
             ], () => {
                 let look = {background: "#5e1818", width: "800px", height: "357px"}

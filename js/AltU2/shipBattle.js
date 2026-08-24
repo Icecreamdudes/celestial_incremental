@@ -189,7 +189,7 @@ const UPGRADE_POOL = {
     },
     lootGainEpic: {
         name() { return "Loot Gain"},
-        description() { return "+15% rock gain, +5% space gem gain"},
+        description() { return "+15% space rock gain, +5% space gem gain"},
         rarity: "epic",
         pool: "space",
         effect() { arena.upgrades.lootGainEpic++; },
@@ -246,6 +246,44 @@ const UPGRADE_POOL = {
         pool: "blood",
         effect() { arena.upgrades.bloodLootGainLegendary++; },
     },
+
+    // JUNK
+
+    spaceJunkGainCommon: {
+        name() { return "Space Junk Gain"},
+        description() { return "+5% space junk gain"},
+        rarity: "common",
+        pool: "junk",
+        effect() { arena.upgrades.spaceJunkGainCommon++; },
+    },
+    spaceJunkGainUncommon: {
+        name() { return "Space Junk Gain"},
+        description() { return "+10% space junk gain"},
+        rarity: "uncommon",
+        pool: "junk",
+        effect() { arena.upgrades.spaceJunkGainUncommon++; },
+    },
+    spaceJunkGainRare: {
+        name() { return "Space Junk Gain"},
+        description() { return "+15% space junk gain"},
+        rarity: "rare",
+        pool: "junk",
+        effect() { arena.upgrades.spaceJunkGainRare++; },
+    },
+    spaceJunkGainEpic: {
+        name() { return "Space Junk Gain"},
+        description() { return "+20% space junk gain"},
+        rarity: "epic",
+        pool: "junk",
+        effect() { arena.upgrades.spaceJunkGainEpic++; },
+    },
+    spaceJunkGainLegendary: {
+        name() { return "Space Junk Gain"},
+        description() { return "+25% space junk gain"},
+        rarity: "legendary",
+        pool: "junk",
+        effect() { arena.upgrades.spaceJunkGainLegendary++; },
+    },
 };
 
 const UPGRADE_RARITIES = {
@@ -256,7 +294,7 @@ const UPGRADE_RARITIES = {
         },
         color: "#ffffff",
         baseCost: new Decimal(50),
-        costGrowth: new Decimal(1.5),
+        costGrowth: new Decimal(1.2),
         score: 0,
     },
     uncommon: {
@@ -266,7 +304,7 @@ const UPGRADE_RARITIES = {
         },
         color: "#4cff4c",
         baseCost: new Decimal(150),
-        costGrowth: new Decimal(2),
+        costGrowth: new Decimal(1.4),
         score: 1,
     },
     rare: {
@@ -276,7 +314,7 @@ const UPGRADE_RARITIES = {
         },
         color: "#4c8cff",
         baseCost: new Decimal(600),
-        costGrowth: new Decimal(2.5),
+        costGrowth: new Decimal(1.6),
         score: 2,
     },
     epic: {
@@ -286,7 +324,7 @@ const UPGRADE_RARITIES = {
         },
         color: "#b44cff",
         baseCost: new Decimal(3000),
-        costGrowth: new Decimal(3),
+        costGrowth: new Decimal(2),
         score: 3,
     },
     legendary: {
@@ -296,7 +334,7 @@ const UPGRADE_RARITIES = {
         },
         color: "#ffd34d",
         baseCost: new Decimal(20000),
-        costGrowth: new Decimal(5),
+        costGrowth: new Decimal(3),
         score: 6,
     },
 };
@@ -306,161 +344,83 @@ const SHIP_STAT_FORMATTING = {
         name: "Attack Damage",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: "attackDamageCommon",
-            uncommon: "attackDamageUncommon",
-            rare: "attackDamageRare",
-            epic: "attackEpic",
-            legendary: "offenseLegendary",
-        },
         showCondition() {return true},
     },
     attackSpeed: {
         name: "Attack Speed",
         valuePrefix: "x",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: "attackSpeedUncommon",
-            rare: "attackSpeedRare",
-            epic: "attackEpic",
-            legendary: "offenseLegendary",
-        },
         showCondition() {return true},
     },
     bulletSize: {
         name: "Bullet Size",
         valuePrefix: "x",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "bulletSizeRare",
-            epic: null,
-            legendary: null,
-        },
         showCondition() {return true},
     },
     healthRegen: {
         name: "Health Regen",
         valuePrefix: "+",
         valueSuffix: "/s",
-        associatedUpgrades: {
-            common: null,
-            uncommon: "healthRegenUncommon",
-            rare: "healthRegenRare",
-            epic: "defenseEpic",
-            legendary: "defenseLegendary",
-        },
         showCondition() {return true},
     },
     damageReduction: {
         name: "Damage Reduction",
         valuePrefix: "/",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "damageReductionRare",
-            epic: "defenseEpic",
-            legendary: "defenseLegendary",
-        },
         showCondition() {return true},
     },
     maxHp: {
         name: "Max Health",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "bulletSizeRare",
-            epic: null,
-            legendary: null,
-        },
         showCondition() {return true},
     },
     moveSpeed: {
         name: "Movement Speed",
         valuePrefix: "x",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "moveSpeedRare",
-            epic: null,
-            legendary: "moveSpeedLegendary",
-        },
         showCondition() {return true},
     },
     spaceRockGain: {
         name: "Space Rock Gain",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: "spaceRockGainCommon",
-            uncommon: "spaceRockGainUncommon",
-            rare: "spaceRockGainRare",
-            epic: "lootGainEpic",
-            legendary: "dropGainLegendary",
-        },
         showCondition() {return player.tab == "ir"},
     },
     spaceGemGain: {
         name: "Space Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "spaceGemGainRare",
-            epic: "lootGainEpic",
-            legendary: "dropGainLegendary",
-        },
         showCondition() {return player.tab == "ir"},
+    },
+    spaceJunkGain: {
+        name: "Space Junk Gain",
+        valuePrefix: "",
+        valueSuffix: "",
+        showCondition() {return true},
     },
     bloodStoneGain: {
         name: "Blood Stone Gain",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: null,
-            epic: "bloodLootGainEpic",
-            legendary: "bloodLootGainLegendary",
-        },
         showCondition() {return player.tab == "bl"},
     },
     bloodGemGain: {
         name: "Blood Gem Gain",
         valuePrefix: "",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: null,
-            uncommon: null,
-            rare: "bloodGemGainRare",
-            epic: "bloodLootGainEpic",
-            legendary: "bloodLootGainLegendary",
-        },
         showCondition() {return player.tab == "bl"},
     },
     xpGain: {
         name: "XP Gain",
         valuePrefix: "x",
         valueSuffix: "",
-        associatedUpgrades: {
-            common: "xpGainCommon",
-            uncommon: "xpGainUncommon",
-            rare: "xpGainRare",
-            epic: "xpGainEpic",
-            legendary: "dropGainLegendary",
-        },
         showCondition() {return true},
     },
 }
 
-function pickUpgrade(canRepeat = true, repititions = 12) {
+function pickUpgrade(canRepeat = true, repititions = 12, data = {}) {
     let possibleUpgrades = {}
     let totalChance = 0;
     // Build Rarity Table
@@ -474,10 +434,13 @@ function pickUpgrade(canRepeat = true, repititions = 12) {
         if (possibleUpgrades[upg.rarity]) {
             switch (upg.pool) {
                 case "space": {
-                    if (player.tab == "ir") possibleUpgrades[upg.rarity].push(id);
+                    if (player.tab == "ir" || (data.forceIncludePool && data.forceIncludePool.space)) possibleUpgrades[upg.rarity].push(id);
                 break; }
                 case "blood": {
-                    if (player.tab == "bl") possibleUpgrades[upg.rarity].push(id);
+                    if (player.tab == "bl" || (data.forceIncludePool && data.forceIncludePool.blood)) possibleUpgrades[upg.rarity].push(id);
+                break; }
+                case "junk": {
+                    if ((data.forceIncludePool && data.forceIncludePool.junk)) possibleUpgrades[upg.rarity].push(id);
                 break; }
                 default : {
                     possibleUpgrades[upg.rarity].push(id);
@@ -502,7 +465,7 @@ function pickUpgrade(canRepeat = true, repititions = 12) {
     return chosen;
 }
 
-function pickUpgrades() {
+function pickUpgrades(data = {}) {
     let possibleUpgrades = {}
     let totalChance = 0;
     // Build Rarity Table
@@ -516,10 +479,13 @@ function pickUpgrades() {
         if (possibleUpgrades[upg.rarity]) {
             switch (upg.pool) {
                 case "space": {
-                    if (player.tab == "ir") possibleUpgrades[upg.rarity].push(id);
+                    if (player.tab == "ir" || (data.forceIncludePool && data.forceIncludePool.space)) possibleUpgrades[upg.rarity].push(id);
                 break; }
                 case "blood": {
-                    if (player.tab == "bl") possibleUpgrades[upg.rarity].push(id);
+                    if (player.tab == "bl" || (data.forceIncludePool && data.forceIncludePool.blood)) possibleUpgrades[upg.rarity].push(id);
+                break; }
+                case "junk": {
+                    if ((data.forceIncludePool && data.forceIncludePool.junk)) possibleUpgrades[upg.rarity].push(id);
                 break; }
                 default : {
                     possibleUpgrades[upg.rarity].push(id);

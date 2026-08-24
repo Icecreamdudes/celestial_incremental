@@ -225,30 +225,30 @@ function SB_getUpgradeMultis(upgrades) {
     let shipStats = {}
 
     shipStats.attackDamage = 1
-    shipStats.attackDamage *= 1 + 0.1 * upgrades.attackDamageCommon
-    shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageUncommon
-    shipStats.attackDamage *= 1 + 0.2 * upgrades.attackDamageRare
+    shipStats.attackDamage *= 1 + 0.05 * upgrades.attackDamageCommon
+    shipStats.attackDamage *= 1 + 0.1 * upgrades.attackDamageUncommon
+    shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageRare
     shipStats.attackDamage *= 1 + 0.2 * upgrades.attackEpic
-    shipStats.attackDamage *= 1 + 0.75 * upgrades.attackLegendary
+    shipStats.attackDamage *= 1 + 0.3 * upgrades.attackLegendary
 
     shipStats.attackSpeed = 1
     shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
     shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackSpeedRare
     shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
-    shipStats.attackSpeed /= 1 + 0.25 * upgrades.attackLegendary
+    shipStats.attackSpeed /= 1 + 0.2 * upgrades.attackLegendary
 
     shipStats.maxHp = 1
 
     shipStats.damageReduction = 1
     shipStats.damageReduction *= 1 + 0.1 * upgrades.damageReductionRare
     shipStats.damageReduction *= 1 + 0.15 * upgrades.defenseEpic
-    shipStats.damageReduction *= 1 + 0.25 * upgrades.defenseLegendary
+    shipStats.damageReduction *= 1 + 0.2 * upgrades.defenseLegendary
 
     shipStats.healthRegen = 0
     shipStats.healthRegen += upgrades.healthRegenUncommon * 0.5 / 60
     shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
     shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
-    shipStats.healthRegen *= 1 + 0.25 * upgrades.defenseLegendary
+    shipStats.healthRegen *= 1 + 0.2 * upgrades.defenseLegendary
     shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
 
     shipStats.moveSpeed = 1
@@ -263,18 +263,18 @@ function SB_getUpgradeMultis(upgrades) {
     }
 
     shipStats.xpGain = 1
-    shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainCommon
-    shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainUncommon
-    shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainRare
-    shipStats.xpGain *= 1 + 0.3 * upgrades.xpGainEpic
-    shipStats.xpGain *= 1 + 0.4 * upgrades.dropGainLegendary
+    shipStats.xpGain *= 1 + 0.05 * upgrades.xpGainCommon
+    shipStats.xpGain *= 1 + 0.1 * upgrades.xpGainUncommon
+    shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainRare
+    shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainEpic
+    shipStats.xpGain *= 1 + 0.2 * upgrades.dropGainLegendary
     
     shipStats.spaceRockGain = 1
-    shipStats.spaceRockGain *= 1 + 0.1 * upgrades.spaceRockGainCommon
-    shipStats.spaceRockGain *= 1 + 0.15 * upgrades.spaceRockGainUncommon
-    shipStats.spaceRockGain *= 1 + 0.2 * upgrades.spaceRockGainRare
+    shipStats.spaceRockGain *= 1 + 0.05 * upgrades.spaceRockGainCommon
+    shipStats.spaceRockGain *= 1 + 0.1 * upgrades.spaceRockGainUncommon
+    shipStats.spaceRockGain *= 1 + 0.15 * upgrades.spaceRockGainRare
     shipStats.spaceRockGain *= 1 + 0.2 * upgrades.lootGainEpic
-    shipStats.spaceRockGain *= 1 + 0.4 * upgrades.dropGainLegendary
+    shipStats.spaceRockGain *= 1 + 0.2 * upgrades.dropGainLegendary
     
     shipStats.spaceGemGain = 1
     shipStats.spaceGemGain *= 1 + 0.05 * upgrades.spaceGemGainRare
@@ -282,11 +282,11 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.spaceGemGain *= 1 + 0.2 * upgrades.dropGainLegendary
 
     shipStats.bloodStoneGain = 1
-    shipStats.bloodStoneGain *= 1 + 0.1 * upgrades.bloodStoneGainCommon
-    shipStats.bloodStoneGain *= 1 + 0.15 * upgrades.bloodStoneGainUncommon
-    shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodStoneGainRare
+    shipStats.bloodStoneGain *= 1 + 0.05 * upgrades.bloodStoneGainCommon
+    shipStats.bloodStoneGain *= 1 + 0.1 * upgrades.bloodStoneGainUncommon
+    shipStats.bloodStoneGain *= 1 + 0.15 * upgrades.bloodStoneGainRare
     shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodLootGainEpic
-    shipStats.bloodStoneGain *= 1 + 0.4 * upgrades.bloodLootGainLegendary
+    shipStats.bloodStoneGain *= 1 + 0.2 * upgrades.bloodLootGainLegendary
     
     shipStats.bloodGemGain = 1
     shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodGemGainRare
@@ -299,11 +299,11 @@ function SB_getUpgradeMultis(upgrades) {
 function SB_getUpgradedShipStats(upgrades) {
     let shipStats = SB_getDefaultShipStats()
     shipStats.attackDamage = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats.attackDamage
-    shipStats.attackDamage *= 1 + 0.1 * (upgrades.attackDamageCommon || 0)
-    shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackDamageUncommon || 0)
-    shipStats.attackDamage *= 1 + 0.2 * (upgrades.attackDamageRare || 0)
-    shipStats.attackDamage *= 1 + 0.2 * (upgrades.attackEpic || 0)
-    shipStats.attackDamage *= 1 + 0.75 * (upgrades.attackLegendary || 0)
+    shipStats.attackDamage *= 1 + 0.05 * (upgrades.attackDamageCommon || 0)
+    shipStats.attackDamage *= 1 + 0.1 * (upgrades.attackDamageUncommon || 0)
+    shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackDamageRare || 0)
+    shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackEpic || 0)
+    shipStats.attackDamage *= 1 + 0.3 * (upgrades.attackLegendary || 0)
     shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
     if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
     if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
@@ -314,7 +314,7 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.attackSpeed *= 1 + 0.05 * (upgrades.attackSpeedUncommon || 0)
     shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackSpeedRare || 0)
     shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackEpic || 0)
-    shipStats.attackSpeed /= 1 + 0.25 * (upgrades.attackLegendary || 0)
+    shipStats.attackSpeed /= 1 + 0.2 * (upgrades.attackLegendary || 0)
     shipStats.maxHp = player.ir.shipHealthMax.toNumber()
     
     shipStats.healthRegen = 0
@@ -323,7 +323,7 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.healthRegen += (upgrades.healthRegenUncommon * 0.5 / 60 || 0)
     shipStats.healthRegen += (upgrades.healthRegenRare * 0.75 / 60 || 0)
     shipStats.healthRegen += (upgrades.defenseEpic * 0.75 / 60 || 0)
-    shipStats.healthRegen *= 1 + 0.25 * (upgrades.defenseLegendary || 0)
+    shipStats.healthRegen *= 1 + 0.2 * (upgrades.defenseLegendary || 0)
     shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
     shipStats.bulletSize = 1
     if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
@@ -334,17 +334,17 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.damageReduction = 1
     shipStats.damageReduction *= 1 + 0.1 * (upgrades.damageReductionRare || 0)
     shipStats.damageReduction *= 1 + 0.15 * (upgrades.defenseEpic || 0)
-    shipStats.damageReduction *= 1 + 0.25 * (upgrades.defenseLegendary || 0)
+    shipStats.damageReduction *= 1 + 0.2 * (upgrades.defenseLegendary || 0)
     shipStats.moveSpeed = 1
     shipStats.moveSpeed *= 1 + 0.1 * (upgrades.moveSpeedRare || 0)
     shipStats.moveSpeed *= 1 + 0.25 * (upgrades.moveSpeedLegendary || 0)
     
     shipStats.spaceRockGain = player.ir.spaceRockMult.toNumber()
-    shipStats.spaceRockGain *= 1 + 0.1 * (upgrades.spaceRockGainCommon || 0)
-    shipStats.spaceRockGain *= 1 + 0.15 * (upgrades.spaceRockGainUncommon || 0)
-    shipStats.spaceRockGain *= 1 + 0.2 * (upgrades.spaceRockGainRare || 0)
+    shipStats.spaceRockGain *= 1 + 0.05 * (upgrades.spaceRockGainCommon || 0)
+    shipStats.spaceRockGain *= 1 + 0.1 * (upgrades.spaceRockGainUncommon || 0)
+    shipStats.spaceRockGain *= 1 + 0.15 * (upgrades.spaceRockGainRare || 0)
     shipStats.spaceRockGain *= 1 + 0.2 * (upgrades.lootGainEpic || 0)
-    shipStats.spaceRockGain *= 1 + 0.4 * (upgrades.dropGainLegendary || 0)
+    shipStats.spaceRockGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.spaceRockGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
     
     shipStats.spaceGemGain = player.ir.spaceGemMult.toNumber()
@@ -353,11 +353,11 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.spaceGemGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.spaceGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
     shipStats.bloodStoneGain = player.bl.bloodStonesMult.toNumber()
-    shipStats.bloodStoneGain *= 1 + 0.1 * (upgrades.bloodStoneGainCommon || 0)
-    shipStats.bloodStoneGain *= 1 + 0.15 * (upgrades.bloodStoneGainUncommon || 0)
-    shipStats.bloodStoneGain *= 1 + 0.2 * (upgrades.bloodStoneGainRare || 0)
+    shipStats.bloodStoneGain *= 1 + 0.05 * (upgrades.bloodStoneGainCommon || 0)
+    shipStats.bloodStoneGain *= 1 + 0.1 * (upgrades.bloodStoneGainUncommon || 0)
+    shipStats.bloodStoneGain *= 1 + 0.15 * (upgrades.bloodStoneGainRare || 0)
     shipStats.bloodStoneGain *= 1 + 0.2 * (upgrades.bloodLootGainEpic || 0)
-    shipStats.bloodStoneGain *= 1 + 0.4 * (upgrades.bloodLootGainLegendary || 0)
+    shipStats.bloodStoneGain *= 1 + 0.2 * (upgrades.bloodLootGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.bloodStoneGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
     
     shipStats.bloodGemGain = player.bl.bloodGemsMult.toNumber()
@@ -366,11 +366,11 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.bloodGemGain *= 1 + 0.2 * (upgrades.bloodLootGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.bloodGemGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
     shipStats.xpGain = 1
-    shipStats.xpGain *= 1 + 0.1 * (upgrades.xpGainCommon || 0)
-    shipStats.xpGain *= 1 + 0.15 * (upgrades.xpGainUncommon || 0)
-    shipStats.xpGain *= 1 + 0.2 * (upgrades.xpGainRare || 0)
-    shipStats.xpGain *= 1 + 0.3 * (upgrades.xpGainEpic || 0)
-    shipStats.xpGain *= 1 + 0.4 * (upgrades.dropGainLegendary || 0)
+    shipStats.xpGain *= 1 + 0.05 * (upgrades.xpGainCommon || 0)
+    shipStats.xpGain *= 1 + 0.1 * (upgrades.xpGainUncommon || 0)
+    shipStats.xpGain *= 1 + 0.15 * (upgrades.xpGainRare || 0)
+    shipStats.xpGain *= 1 + 0.2 * (upgrades.xpGainEpic || 0)
+    shipStats.xpGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
     return shipStats
 }
 

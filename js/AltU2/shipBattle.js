@@ -17,20 +17,20 @@ const UPGRADE_POOL = {
     // Common
     attackDamageCommon: {
         name() { return "Attack Damage" },
-        description() { return "+10% attack damage"},
+        description() { return "+5% attack damage"},
         rarity: "common",
         effect() { arena.upgrades.attackDamageCommon++; },
     },
     xpGainCommon: {
         name() { return "XP Gain"},
-        description() { return "+10% XP gain"},
+        description() { return "+5% XP gain"},
         rarity: "common",
         effect() { arena.upgrades.xpGainCommon++; },
     },
     // Uncommon
     attackDamageUncommon: {
         name() { return "Attack Damage"},
-        description() { return "+15% attack damage"},
+        description() { return "+10% attack damage"},
         rarity: "uncommon",
         effect() { arena.upgrades.attackDamageUncommon++; },
     },
@@ -59,13 +59,13 @@ const UPGRADE_POOL = {
     },
     xpGainUncommon: {
         name() { return "XP Gain"},
-        description() { return "+15% XP gain"},
+        description() { return "+10% XP gain"},
         rarity: "uncommon",
         effect() { arena.upgrades.xpGainUncommon++; },
     },
     attackDamageRare: {
         name() { return "Attack Damage"},
-        description() { return "+20% attack damage"},
+        description() { return "+15% attack damage"},
         rarity: "rare",
         effect() { arena.upgrades.attackDamageRare++; },
     },
@@ -112,19 +112,19 @@ const UPGRADE_POOL = {
     },
     xpGainRare: {
         name() { return "XP Gain"},
-        description() { return "+20% XP gain"},
+        description() { return "+15% XP gain"},
         rarity: "rare",
         effect() { arena.upgrades.xpGainRare++; },
     },
     attackEpic: {
         name() { return "Attack"},
-        description() { return "+20% attack damage, +7.5% faster attack speed"},
+        description() { return "+15% attack damage, +7.5% faster attack speed"},
         rarity: "epic",
         effect() { arena.upgrades.attackEpic++; },
     },
     xpGainEpic: {
         name() { return "XP Gain"},
-        description() { return "+30% XP gain"},
+        description() { return "+20% XP gain"},
         rarity: "epic",
         effect() { arena.upgrades.xpGainEpic++; },
     },
@@ -140,13 +140,13 @@ const UPGRADE_POOL = {
     },
     attackLegendary: {
         name() { return "Attack"},
-        description() { return "+75% attack damage, but +25% slower attack speed"},
+        description() { return "+30% attack damage, but +20% slower attack speed"},
         rarity: "legendary",
         effect() { arena.upgrades.attackLegendary++; },
     },
     defenseLegendary: {
         name() { return "Defense"},
-        description() { return "Take 25% less damage, gain 25% more HP/sec" },
+        description() { return "Take 20% less damage, gain 20% more HP/sec" },
         rarity: "legendary",
         effect() { arena.upgrades.defenseLegendary++; },
     },
@@ -161,21 +161,21 @@ const UPGRADE_POOL = {
 
     spaceRockGainCommon: {
         name() { return "Space Rock Gain"},
-        description() { return "+10% space rock gain"},
+        description() { return "+5% space rock gain"},
         rarity: "common",
         pool: "space",
         effect() { arena.upgrades.spaceRockGainCommon++; },
     },
     spaceRockGainUncommon: {
         name() { return "Space Rock Gain"},
-        description() { return "+15% space rock gain"},
+        description() { return "+10% space rock gain"},
         rarity: "uncommon",
         pool: "space",
         effect() { arena.upgrades.spaceRockGainUncommon++; },
     },
     spaceRockGainRare: {
         name() { return "Space Rock Gain"},
-        description() { return "+20% space rock gain"},
+        description() { return "+15% space rock gain"},
         rarity: "rare",
         pool: "space",
         effect() { arena.upgrades.spaceRockGainRare++; },
@@ -189,14 +189,14 @@ const UPGRADE_POOL = {
     },
     lootGainEpic: {
         name() { return "Loot Gain"},
-        description() { return "+20% rock gain, +5% space gem gain"},
+        description() { return "+15% rock gain, +5% space gem gain"},
         rarity: "epic",
         pool: "space",
         effect() { arena.upgrades.lootGainEpic++; },
     },
     dropGainLegendary: {
         name() { return "Drop Gain"},
-        description() { return "+40% space rock and XP gain, +20% space gem gain"},
+        description() { return "+20% space rock, space gem, and XP gain"},
         rarity: "legendary",
         pool: "space",
         effect() { arena.upgrades.dropGainLegendary++; },
@@ -206,21 +206,21 @@ const UPGRADE_POOL = {
 
     bloodStoneGainCommon: {
         name() { return "Blood Stone Gain"},
-        description() { return "+10% blood stone gain"},
+        description() { return "+5% blood stone gain"},
         rarity: "common",
         pool: "blood",
         effect() { arena.upgrades.bloodStoneGainCommon++; },
     },
     bloodStoneGainUncommon: {
         name() { return "Blood Stone Gain"},
-        description() { return "+15% blood stone gain"},
+        description() { return "+10% blood stone gain"},
         rarity: "uncommon",
         pool: "blood",
         effect() { arena.upgrades.bloodStoneGainUncommon++; },
     },
     bloodStoneGainRare: {
         name() { return "Blood Stone Gain"},
-        description() { return "+20% blood stone gain"},
+        description() { return "+15% blood stone gain"},
         rarity: "rare",
         pool: "blood",
         effect() { arena.upgrades.bloodStoneGainRare++; },
@@ -234,14 +234,14 @@ const UPGRADE_POOL = {
     },
     bloodLootGainEpic: {
         name() { return "Blood Loot Gain"},
-        description() { return "+20% blood stone gain, +5% blood gem gain"},
+        description() { return "+15% blood stone gain, +5% blood gem gain"},
         rarity: "epic",
         pool: "blood",
         effect() { arena.upgrades.bloodLootGainEpic++; },
     },
     bloodLootGainLegendary: {
         name() { return "Blood Loot Gain"},
-        description() { return "+40% blood stone gain, +20% blood gem gain"},
+        description() { return "+20% blood stone and blood gem gain"},
         rarity: "legendary",
         pool: "blood",
         effect() { arena.upgrades.bloodLootGainLegendary++; },
@@ -255,6 +255,8 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#ffffff",
+        baseCost: new Decimal(50),
+        costGrowth: new Decimal(1.5),
         score: 0,
     },
     uncommon: {
@@ -263,6 +265,8 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#4cff4c",
+        baseCost: new Decimal(150),
+        costGrowth: new Decimal(2),
         score: 1,
     },
     rare: {
@@ -271,6 +275,8 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#4c8cff",
+        baseCost: new Decimal(600),
+        costGrowth: new Decimal(2.5),
         score: 2,
     },
     epic: {
@@ -279,6 +285,8 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#b44cff",
+        baseCost: new Decimal(3000),
+        costGrowth: new Decimal(3),
         score: 3,
     },
     legendary: {
@@ -287,6 +295,8 @@ const UPGRADE_RARITIES = {
             return base
         },
         color: "#ffd34d",
+        baseCost: new Decimal(20000),
+        costGrowth: new Decimal(5),
         score: 6,
     },
 };
@@ -450,7 +460,49 @@ const SHIP_STAT_FORMATTING = {
     },
 }
 
-function pickUpgrades(enhanced = false) {
+function pickUpgrade(canRepeat = true, repititions = 12) {
+    let possibleUpgrades = {}
+    let totalChance = 0;
+    // Build Rarity Table
+    for (let id of Object.keys(UPGRADE_RARITIES)) {
+        possibleUpgrades[id] = []
+        totalChance += UPGRADE_RARITIES[id].weight()
+    }
+    // Build Upgrade Table
+    for (let id of Object.keys(UPGRADE_POOL)) {
+        let upg = UPGRADE_POOL[id]
+        if (possibleUpgrades[upg.rarity]) {
+            switch (upg.pool) {
+                case "space": {
+                    if (player.tab == "ir") possibleUpgrades[upg.rarity].push(id);
+                break; }
+                case "blood": {
+                    if (player.tab == "bl") possibleUpgrades[upg.rarity].push(id);
+                break; }
+                default : {
+                    possibleUpgrades[upg.rarity].push(id);
+                break; }
+            }
+        };
+    }
+    // Select Upgrades
+    let chosen = [];
+    let maxChance = totalChance;
+    while (chosen.length < repititions) {
+        for (let id of Object.keys(UPGRADE_RARITIES)) {
+            if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
+                let index = Math.floor(possibleUpgrades[id].length * Math.random())
+                chosen.push(possibleUpgrades[id][index])
+                if (!canRepeat) possibleUpgrades[id].splice(index, 1)
+                break;
+            } else totalChance -= UPGRADE_RARITIES[id].weight();
+        }
+        totalChance = maxChance
+    }
+    return chosen;
+}
+
+function pickUpgrades() {
     let possibleUpgrades = {}
     let totalChance = 0;
     // Build Rarity Table
@@ -1106,7 +1158,7 @@ class SpaceArena {
         Object.assign(this.arenaDiv.style, {
             position: 'fixed',
             left: '50%',
-            top: '547px',
+            top: '549px',
             width: this.canvasWidth + 'px',
             height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
@@ -1123,6 +1175,7 @@ class SpaceArena {
         document.body.appendChild(this.arenaDiv);
 
         this.canvas = document.createElement('canvas');
+	    this.canvas.style["transition-duration"] = "0s",
         this.canvas.width = this.canvasWidth;
         this.canvas.height = this.canvasHeight;
         this.arenaDiv.appendChild(this.canvas);
@@ -1577,6 +1630,7 @@ class SpaceArena {
     update() {
         
         this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px"
+        this.arenaDiv.style.visibility = player.ir.menu != 2 ? "visible" : "hidden"
 
         if (player.ir.menu == 0 && !arena.bossActive) {
             this.propertyAttackCooldown--

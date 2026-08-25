@@ -397,13 +397,14 @@ function SB_saveRun() {
     player.ir.savedRun = true
     player.ir.shipBattleSaveCurrent.slot = -2
     player.ir.shipBattleSaveCurrent.upgrades = arena.upgrades
+    player.ir.shipBattleSaveCurrent.perZoneUpgrades[player.ir.battleStage] = arena.perZoneUpgrades
     player.ir.shipBattleSaveCurrent.upgradeMultis = SB_getUpgradeMultis(arena.upgrades)
     player.ir.shipBattleSaveCurrent.upgradeCount = arena.upgradeCount
     player.ir.shipBattleSaveCurrent.upgradeScore = arena.upgradeScore
 
     let level = player.ir.battleLevel.toNumber() - 21
-    if (!player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage][level]) {
-        player.ir.shipBattleSaveCurrent.highestLevels[player.ir.battleStage][level] = true
+    if (!player.ir.shipBattleSaveCurrent.perZoneHighestLevels[player.ir.battleStage][level]) {
+        player.ir.shipBattleSaveCurrent.perZoneHighestLevels[player.ir.battleStage][level] = true
     }
 }
 
@@ -464,6 +465,7 @@ function SB_enterRun(zoneId) {
     for (const [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgrades)) {
         arena.upgrades[i] = v
     }
+    if (player.ir.battleLevel.gt(1)) arena.showUpgradeChoice();
     arena.upgradeCount = player.ir.shipBattleSaveCurrent.upgradeCount
     arena.upgradeScore = player.ir.shipBattleSaveCurrent.upgradeScore
     localStorage.setItem('arenaActive', 'true');

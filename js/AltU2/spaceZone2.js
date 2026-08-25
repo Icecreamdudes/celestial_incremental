@@ -346,7 +346,7 @@ SB_celestialites.zetaShip = {
     color: "#9e2863",
     health: new Decimal(150),
     damage: new Decimal(7),
-    bodyDamage: new Decimal(1),
+    bodyDamage: new Decimal(0.5),
     regen: new Decimal(1),
     reward() {
         let gain = {}

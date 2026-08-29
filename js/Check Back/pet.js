@@ -570,6 +570,9 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
         if (hasUpgrade("stagnantSynestia", 6)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 21))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 22))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 23))
         player.pet.petPointMult = player.pet.petPointMult.mul(player.cbs.pylonEnergyEffect2)
         if (hasUpgrade("gwaTemple", 17)) player.pet.petPointMult = player.pet.petPointMult.mul(player.gwaTemple.gwaPointsEffect)
 
@@ -4581,7 +4584,9 @@ addLayer("pet", {
             evoCan() { return true },
             evoTooltip() { return ""},
             evoClick() {
-                player.tab = "ev10"
+                player.tab = "ir"
+                player.subtabs["ir"].stuff = "ships"
+                player.subtabs["ir"].ships = "automation"
             },
             // CLICK CODE
             unlocked() { return player.ir.unlocked},

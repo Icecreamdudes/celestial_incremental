@@ -409,7 +409,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             description() {
-                return "Boosts ship regen by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
+                return "Boosts all forms of ship regen by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
             currencyDisplayName: "Blood Stones",
             display() {

@@ -57,7 +57,7 @@ let rerollBuyableShipUpgrades = function(luck) {
     })
     for (let i = 0; i < 12; i++) {
         let index = player.ir.upgrades.indexOf(i + 401)
-        if (index) player.ir.upgrades.splice(index, 1);
+        if (index >= 0) player.ir.upgrades.splice(index, 1);
     }
 }
 
@@ -376,7 +376,6 @@ addLayer("ir", {
     branches: ["pl", "se"],
     color: "#151230",
     update(delta) {
-        // TEMP
         
         if (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.highestLevels) {
             player.ir.shipBattleSaveCurrent.perZoneHighestLevels = player.ir.shipBattleSaveCurrent.highestLevels
@@ -426,15 +425,17 @@ addLayer("ir", {
         if (hasUpgrade("ir", 301)) player.ir.spaceJunkMult = player.ir.spaceJunkMult.mul(upgradeEffect("ir", 301));
         player.ir.spaceJunkMultTrue = player.ir.spaceJunkMult
 
-        if (!player[player.ir.battleStage]) player.ir.battleStage = "spaceZone1";
-
         if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
             player.subtabs["ir"]['stuff'] = "Refresh Page :(";
         }
 
         if (options.fullscreen && player.tab == "ir" && player.subtabs["ir"]["stuff"] != "Battle") options.fullscreen = false
         
-        player.ir.levelScalingMult = player.ir.battleLevel.sub(player[player.ir.battleStage].levelScalingStart).max(0).pow_base(player[player.ir.battleStage].levelScaling)
+        if (player[player.ir.battleStage]) {
+            player.ir.levelScalingMult = player.ir.battleLevel.sub(player[player.ir.battleStage].levelScalingStart).max(0).pow_base(player[player.ir.battleStage].levelScaling)
+        } else {
+            player.ir.levelScalingMult = new Decimal(1)
+        }
 
         // Ship max health by type
         if (player.ir.shipType == 1) player.ir.shipHealthMax = new Decimal(100)
@@ -477,8 +478,6 @@ addLayer("ir", {
         for (let i in player.ir.timers) {
             player.ir.timers[i].max = player.ir.timers[i].max.div(player.ir.timerMaxDivisior)
             if (!player.ir.inBattle) player.ir.timers[i].current = player.ir.timers[i].current.sub(delta);
-            //TEMP
-            player.ir.timers[i].max = new Decimal(1)
         }
         for (let i in player.ir.saveTimers) {
             if (player.ir.shipBattleSaves[i] == null) {
@@ -490,8 +489,9 @@ addLayer("ir", {
         }
 
         player.ir.sendGain = SB_AUTO_DATA[player.ir.shipType].getFinalMult(SB_AUTO_DATA[player.ir.shipType].getBaseStatMult())
+        if (hasUpgrade("ir", 302)) player.ir.sendGain = player.ir.sendGainult.mul(1.5)
         player.ir.shipUpgradeRerollTimer = player.ir.shipUpgradeRerollTimer.sub(delta)
-        if (player.ir.shipUpgradeRerollTimer.lte(0)) {
+        if (player.ir.shipUpgradeShop.length == 0 || player.ir.shipUpgradeRerollTimer.lte(0)) {
             rerollBuyableShipUpgrades(0)
             player.ir.shipUpgradeRerollTimer = new Decimal(1800)
         }
@@ -503,12 +503,11 @@ addLayer("ir", {
 
         if (zoneRef) player.ir.battleXPReq = player.ir.battleXPReq.mul(zoneRef.xpReqMult)
 
-        // TEMP
-        //if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*20);
+        //if (arena && player.ir.battleLevel.lt(2)) player.ir.battleXP = player.ir.battleXP.add(delta*100);
 
         if (player.ir.battleXP.gte(player.ir.battleXPReq) && arena && player.ir.menu == 0) {
             player.ir.battleXP = player.ir.battleXP.sub(player.ir.battleXPReq).max(0);
-            if (player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
+            if (player[player.ir.battleStage] && player[player.ir.battleStage].highestLevel && player[player.ir.battleStage].highestLevel.lt(player.ir.battleLevel)) player[player.ir.battleStage].highestLevel = player.ir.battleLevel;
             player.ir.battleLevel = player.ir.battleLevel.add(1);
             if (!player.ir.shipBattleSaveCurrent.perZoneHighestLevels[player.ir.battleStage]) player.ir.shipBattleSaveCurrent.perZoneHighestLevels[player.ir.battleStage] = {}
             let showUpgrades = !player.ir.shipBattleSaveCurrent.perZoneHighestLevels[player.ir.battleStage][Math.floor((player.ir.battleLevel.toNumber() - 1) / 20)*20]
@@ -552,7 +551,7 @@ addLayer("ir", {
             progress() {
                 return arena ? player.ir.shipHealth.div(arena.shipStats.maxHp) : 1;
             },
-            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderBottom: "0", borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #7f7f00 0%, #545400 100%)"},
             display() {
@@ -567,7 +566,7 @@ addLayer("ir", {
             progress() {
                 return player.ir.battleXP.div(player.ir.battleXPReq);
             },
-            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderBottom: "0", borderLeft: "0", borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderLeft: "0", borderRadius: "0", color: "white"}},
             baseStyle: {background: "#151230",},
             fillStyle: { background: "linear-gradient(15deg, #0000bf 0%, #00007f 100%)"},
             display() {
@@ -584,7 +583,7 @@ addLayer("ir", {
                     return arena.enemies[0].health / arena.enemies[0].maxHealth
                 } else return 1;
             },
-            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", color: "white"}},
+            borderStyle() { return !SB_zones[player.ir.battleStage] ? {} : {border: "3px solid " + SB_zones[player.ir.battleStage].primaryColor, borderRadius: "0", borderTop: "0", color: "white"}},
             baseStyle: {background: "#151230"},
             fillStyle: { background: "linear-gradient(15deg, #bf0000 0%, #800000 100%)"},
             display() {
@@ -1591,7 +1590,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 return "<div style='height:50px;display:flex;align-items:center'><div>" +
                 "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:93px;display:flex;align-items:center'><div>" + 
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
             canClick() { return true},
@@ -1617,7 +1616,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 return "<div style='height:50px;display:flex;align-items:center'><div>" +
                 "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:93px;display:flex;align-items:center'><div>" + 
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
             canClick() { return true},
@@ -1643,7 +1642,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 return "<div style='height:50px;display:flex;align-items:center'><div>" +
                 "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i>" + // TOP
-                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:93px;display:flex;align-items:center'><div>" + 
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
             canClick() { return true},
@@ -1662,6 +1661,84 @@ addLayer("ir", {
                 return look
             },
         },
+        "salvagedUpgrade_0": {
+            title() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 0) return "???";
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[0]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                return "<div style='height:50px;display:flex;align-items:center'><div>" +
+                "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i> <i style='color:#ffb366'>(" + player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[0]] + " Left)</i>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
+                upg.description() // MIDDLE
+            },
+            canClick() { return true},
+            unlocked() { return arena && arena.salvagedUpgradeChoices.length > 0},
+            onClick() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 0) return;
+                arena.selectedSalvagedUpgradeIndex = 0
+            },
+            style() {
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                if (!arena || arena.salvagedUpgradeChoices.length <= 0) return look;
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[0]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                look.borderColor = rarity.color
+                look.outline = arena.selectedSalvagedUpgradeIndex == 0 ? "3px solid #ffff00" : ""
+                return look
+            },
+        },
+        "salvagedUpgrade_1": {
+            title() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 1) return "???";
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[1]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                return "<div style='height:50px;display:flex;align-items:center'><div>" +
+                "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i> <i style='color:#ffb366'>(" + player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[1]] + " Left)</i>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
+                upg.description() // MIDDLE
+            },
+            canClick() { return true},
+            unlocked() { return arena && arena.salvagedUpgradeChoices.length > 1},
+            onClick() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 1) return;
+                arena.selectedSalvagedUpgradeIndex = 1
+            },
+            style() {
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                if (!arena || arena.salvagedUpgradeChoices.length <= 1) return look;
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[1]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                look.borderColor = rarity.color
+                look.outline = arena.selectedSalvagedUpgradeIndex == 1 ? "3px solid #ffff00" : ""
+                return look
+            },
+        },
+        "salvagedUpgrade_2": {
+            title() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 2) return "???";
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[2]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                return "<div style='height:50px;display:flex;align-items:center'><div>" +
+                "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i> <i style='color:#ffb366'>(" + player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[2]] + " Left)</i>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
+                upg.description() // MIDDLE
+            },
+            canClick() { return true},
+            unlocked() { return arena && arena.salvagedUpgradeChoices.length > 2},
+            onClick() {
+                if (!arena || arena.salvagedUpgradeChoices.length <= 2) return;
+                arena.selectedSalvagedUpgradeIndex = 2
+            },
+            style() {
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                if (!arena || arena.salvagedUpgradeChoices.length <= 2) return look;
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[2]];
+                let rarity = UPGRADE_RARITIES[upg.rarity];
+                look.borderColor = rarity.color
+                look.outline = arena.selectedSalvagedUpgradeIndex == 2 ? "3px solid #ffff00" : ""
+                return look
+            },
+        },
         "levelUpUpgrade_confirm": {
             title() {
                 return "<h3>Confirm"
@@ -1676,7 +1753,38 @@ addLayer("ir", {
                 arena.upgradeScore += UPGRADE_RARITIES[upg.rarity].score;
                 player.ir.menu = 0;
                 arena.upgradeChoices = [];
+                arena.salvagedUpgradeChoices = [];
                 arena.selectedUpgradeIndex = null;
+                arena.selectedSalvagedUpgradeIndex = null;
+                arena.resumeEvents();
+                arena.canvas.onclick = null;
+            },
+            style() {
+                let look = {width: "250px", minHeight: "50px", maxHeight: "50px", margin: "6px", color: "white", borderWidth: "3px", borderColor: player.ir.primaryColor, background: "#00007f", borderRadius: "10px", padding: "0"}
+                if (!arena) return look;
+                look.background = tmp.ir.clickables[this.id].canClick ? "#00007f" : "#361e1e"
+                return look
+            },
+        },
+        "salvagedUpgrade_confirm": {
+            title() {
+                return "<h3>Confirm"
+            },
+            canClick() { return arena ? (arena.selectedSalvagedUpgradeIndex != null) : false},
+            unlocked() { return true},
+            onClick() {
+                if (!arena) return;
+                let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[arena.selectedSalvagedUpgradeIndex]];
+                upg.effect();
+                arena.upgradeCount++;
+                player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[arena.selectedSalvagedUpgradeIndex]]--;
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[arena.selectedSalvagedUpgradeIndex]] <= 0) delete player.ir.shipBattleSaveCurrent.bankedUpgrades[arena.salvagedUpgradeChoices[arena.selectedSalvagedUpgradeIndex]];
+                arena.upgradeScore += UPGRADE_RARITIES[upg.rarity].score;
+                player.ir.menu = 0;
+                arena.upgradeChoices = [];
+                arena.salvagedUpgradeChoices = [];
+                arena.selectedUpgradeIndex = null;
+                arena.selectedSalvagedUpgradeIndex = null;
                 arena.resumeEvents();
                 arena.canvas.onclick = null;
             },
@@ -2945,9 +3053,9 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
                 "<span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
-            title: "Salvaged Upgrades",
+            title: "Salvaged Automation",
             unlocked() { return true },
-            description() { return "Unlock the resource extraction tab." },
+            description() { return "Boost instant space battle resource and rune by-product gain by x1.5." },
             cost: new Decimal(1e4),
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
@@ -2991,7 +3099,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3007,8 +3118,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3028,7 +3145,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3044,8 +3164,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3065,7 +3191,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3081,8 +3210,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3102,7 +3237,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3118,8 +3256,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3139,7 +3283,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3155,8 +3302,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3176,7 +3329,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3192,8 +3348,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3213,7 +3375,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3229,8 +3394,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3250,7 +3421,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3266,8 +3440,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3287,7 +3467,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3303,8 +3486,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3324,7 +3513,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3340,8 +3532,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3361,7 +3559,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3377,8 +3578,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3398,7 +3605,10 @@ addLayer("ir", {
             title() {return UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]].name()},
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
-            description() { return "..." },
+            description() {
+                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
+            },
             cost() {
                 if (player.ir.shipUpgradeShop.length != 12) return new Decimal(1);
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3414,8 +3624,14 @@ addLayer("ir", {
             currencyLocation() { return player.ir },
             currencyDisplayName: "Space Junk",
             currencyInternalName: "spaceJunk",
-            effect() {
-                return player.ra.radiation.add(1).log(10).add(1).pow(1.5).sub(1).div(200).add(1)
+            tooltip() {
+                let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
+                return upgrade.description()
+            },
+            onPurchase() {
+                let banked = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (!banked) player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]] = 1;
+                else player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]++;
             },
             style() {
                 let upgrade = UPGRADE_POOL[player.ir.shipUpgradeShop[this.id - 401]]
@@ -3563,10 +3779,9 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     return [
                         ["style-row", [
-                            ["category-button", ["Space", "shipSelectionProgression", "space"], {width: player.ir.inBattle ? isFullscreen ? "calc(50vw - 6px)" : "398.5px" : "264px", height: "50px", background: "#37078f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ["category-button", ["Space", "shipSelectionProgression", "space"], {width: player.ir.inBattle ? "398.5px" : "264px", height: "50px", background: "#37078f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
                             ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"}],
                             ["style-row", [
                                 ["style-row", [
@@ -3574,10 +3789,10 @@ addLayer("ir", {
                                 ], {width: "265px", height: "50px", background: "#00003f", borderRadius: "0"}],
                             ], {display: hasUpgrade("le", 201) ? "none !important" : ""}],
                             ["style-row", [
-                                ["category-button", ["Blood", "shipSelectionProgression", "blood"], {width: player.ir.inBattle ? isFullscreen ? "calc(50vw - 6px)" : "398.5px" : "265px", height: "50px", background: "#4f1818", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                                ["category-button", ["Blood", "shipSelectionProgression", "blood"], {width: player.ir.inBattle ? "398.5px" : "265px", height: "50px", background: "#4f1818", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
                             ], {display: hasUpgrade("le", 201) ? "" : "none !important"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
-                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6", width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: "3px"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
                         ["buttonless-microtabs", "shipSelectionProgression", {borderWidth: "0"}],
                     ]
                 },
@@ -3586,19 +3801,29 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     return [
                         ["style-row", [], {width: "0", height: "0"}],
                         ["style-row", [
-                            ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: player.ir.inBattle ? isFullscreen ? "calc(25vw - 6px)" : "197.75px" : "130.5px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
                             ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"}],
-                            ["category-button", ["Base Stats", "shipSelectionStats", "baseStats"], {width: player.ir.inBattle ? isFullscreen ? "calc(25vw - 6px)" : "197.75px" : "130.5px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ["category-button", ["Base Stats", "shipSelectionStats", "baseStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
                             ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"}],
-                            ["category-button", ["Upgrade Effects", "shipSelectionStats", "upgradeEffects"], {width: player.ir.inBattle ? isFullscreen ? "calc(25vw - 6px)" : "197.75px" : "130.5px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ["category-button", ["Upgrade Effects", "shipSelectionStats", "upgradeEffects"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
                             ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"}],
-                            ["category-button", ["Upgrade Counts", "shipSelectionStats", "upgradeCounts"], {width: player.ir.inBattle ? isFullscreen ? "calc(25vw - 6px)" : "197.75px" : "130.5px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
-                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6", width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: "3px"}],
+                            ["category-button", ["Upgrade Counts", "shipSelectionStats", "upgradeCounts"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"}],
+                            
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.secondaryColor + "7f", borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                            ["style-row", [
+                                ["category-button", ["Salvaged Upgrades", "shipSelectionStats", "salvagedUpgrades"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#5e4ee67f"), borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
                         ["buttonless-microtabs", "shipSelectionStats", {borderWidth: "0"}],
                     ]
                 },
@@ -3609,12 +3834,11 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let maxListWidth = player.ir.inBattle ? 376 : 245
                     return [
                         ["always-scroll-column", [
                             ["top-column", function () {
-                                let container = [["style-row", [], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 24px)" : "782px" : "514px", marginRight: "24px"}]]
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
                                 if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                                 for (let [i, v] of Object.entries(SB_zones)) {
                                     if (!v.location || !v.unlocked() || (v.location && v.location != "space")) continue;
@@ -3635,7 +3859,7 @@ addLayer("ir", {
                                         element[1][0][1][1][1].push(
                                             ["style-row", [
                                                 ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                            ], {background: (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
                                         )
                                     }
                                     container[0][1].push(element)
@@ -3644,8 +3868,8 @@ addLayer("ir", {
                                     ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                                 ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
                                 return container
-                            } (), {background: "repeating-linear-gradient(135deg, #1b0447 0 15px, #150336 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: "repeating-linear-gradient(135deg, #1b0447 0 15px, #150336 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]//
                 },
             },
@@ -3653,12 +3877,11 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let maxListWidth = player.ir.inBattle ? 376 : 245
                     return [
                         ["always-scroll-column", [
                             ["top-column", function () {
-                                let container = [["style-row", [], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 24px)" : "782px" : "514px", marginRight: "24px"}]]
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
                                 if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
                                 for (let [i, v] of Object.entries(SB_zones)) {
                                     if (!v.location || !v.unlocked() || (v.location && v.location != "blood")) continue;
@@ -3679,7 +3902,7 @@ addLayer("ir", {
                                         element[1][0][1][1][1].push(
                                             ["style-row", [
                                                 ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                            ], {background: (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
                                         )
                                     }
                                     container[0][1].push(element)
@@ -3688,8 +3911,8 @@ addLayer("ir", {
                                     ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                                 ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
                                 return container
-                            } (), {background: "repeating-linear-gradient(135deg, #260b0b 0 15px, #1c0808 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: "repeating-linear-gradient(135deg, #260b0b 0 15px, #1c0808 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 },
             },
@@ -3699,7 +3922,6 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
                     let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
                     return [
@@ -3737,16 +3959,16 @@ addLayer("ir", {
                                             ["left-row", [
                                                 ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                             ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
-                                            ["blank", "", {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 478px)" : "268px" : "0px"}],
+                                            ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
                                             ["right-row", [
                                                 ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                             ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
-                                        ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px"}],
-                                    ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                        ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                    ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                                 }
                                 return container
-                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 }
             },
@@ -3754,7 +3976,6 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
                     let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
                     return [
@@ -3794,16 +4015,16 @@ addLayer("ir", {
                                         ["left-row", [
                                             ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
-                                        ["blank", "", {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 478px)" : "268px" : "0px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
                                         ["right-row", [
                                             ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
-                                    ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px"}],
-                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                    ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             }
                                 return container
-                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 }
             },
@@ -3811,7 +4032,6 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
                     let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
                     return [
@@ -3831,19 +4051,19 @@ addLayer("ir", {
                                         ["left-row", [
                                             ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
-                                        ["blank", "", {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 478px)" : "268px" : "0px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
                                         ["right-row", [
                                             ["raw-html", prefix + formatSimple(v, 2) + SHIP_STAT_FORMATTING[i].valueSuffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
-                                    ], {background: "#00007f", borderRadius: "12px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px"}],
-                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                    ], {background: "#00007f", borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             }
                             container.push(["style-column", [
                                 ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                             ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                                 return container
-                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 }
             },
@@ -3851,7 +4071,6 @@ addLayer("ir", {
                 buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
                     let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
                     return [
@@ -3870,20 +4089,59 @@ addLayer("ir", {
                                         ["left-row", [
                                             ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
-                                        ["blank", "", {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 478px)" : "268px" : "0px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
                                         ["right-row", [
                                             ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                         ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
                                         ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
-                                    ], {borderRadius: "12px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px"}],
-                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 36px)" : "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                             }
                             container.push(["style-column", [
                                 ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
                             ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
                                 return container
-                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", minHeight: player.ir.inBattle ? isFullscreen ? "calc(100vh - 391px)" : "688px" : "382px", padding: "6px", paddingBottom: "0"}],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vh - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "salvagedUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.bankedUpgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 }
             },
@@ -3999,7 +4257,7 @@ addLayer("ir", {
                                 if (player.ir.shipBattleSaveCurrent == null) return container;
                                 container.push(
                                     ["style-column", [
-                                        ["raw-html", "\"" + layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].lore() + "\"", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ["raw-html", "<i>" + layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].lore() + "</i>", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                                     ], {width: "508px"}],
                                 )
                                 return container
@@ -4066,17 +4324,18 @@ addLayer("ir", {
                     ["style-row", [
                         ["top-column", [
                             ["style-row", [
-                                ["category-button", ["Space Junk Upgrades", "automation", "spaceJunkUpgrades"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
-                                ["category-button", [() => {return "Ship Upgrades<br><small>(Reroll in " + formatSimpleTime(player.ir.shipUpgradeRerollTimer) + ")"}, "automation", "shipUpgrades"], {width: "177px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                ["category-button", ["Space Junk Upgrades", "automation", "spaceJunkUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
                                 ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
-                                ["style-row", [
+                                ["category-button", [() => {return "Ship Upgrades<br><small>(Reroll in " + formatSimpleTime(player.ir.shipUpgradeRerollTimer) + ")"}, "automation", "shipUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
+                                //["style-row", [], {width: "3px", height: "50px", backgroundColor: "#5e4ee6"}],
+                                /*["style-row", [
                                     ["style-row", [
                                         ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
                                     ], {width: "176px", height: "50px", background: "#00003f", borderRadius: "0"}],
                                 ], () => {return {display: hasUpgrade("ir", 302) ? "none !important" : ""}}],
                                 ["style-row", [
                                     ["category-button", ["Resource Extraction", "automation", "resourceExtraction"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #5e4ee67f", borderRadius: "0"}],
-                                ], () => {return {display: hasUpgrade("ir", 302) ? "" : "none !important"}}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "" : "none !important"}}],*/
                             ], {}],
 
                             ["style-row", [], {background: "#5e4ee6", width: "532px", height: "3px"}],
@@ -4612,35 +4871,34 @@ addLayer("ir", {
                 content() {
 
                     let container = []
-                    let isFullscreen = arena && arena._fullscreen
                     switch (player.ir.menu) {
                         case 1: { // IN UPGRADE SELECTION
                             container.push(
                                 ["top-column", [
                                     ["style-row", [
-                                        ["category-button", ["Level-Up Upgrades", "battleUpgradeSelection", "experience"], {width: isFullscreen ? "calc(50vw - 6px)" : "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["category-button", ["Level-Up Upgrades", "battleUpgradeSelection", "experience"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
                                         ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
                                         ["style-row", [
                                             ["style-row", [
                                                 ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
-                                            ], {width: isFullscreen ? "calc(50vw - 6px)" : "398.5px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                            ], {width: "398.5px", height: "50px", background: "#00003f", borderRadius: "0"}],
                                         ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
                                         ["style-row", [
-                                            ["category-button", ["Salvaged Upgrades", "battleUpgradeSelection", "salvage"], {width: isFullscreen ? "calc(50vw - 6px)" : "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                            ["category-button", ["Salvaged Upgrades", "battleUpgradeSelection", "salvage"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
                                         ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
                                     ], {background: "black", width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
                                     ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
                                     ["buttonless-microtabs", "battleUpgradeSelection", {borderWidth: "0"}],
-                                ], {background: ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "5f 0 15px, " + player.ir.secondaryColor + "7f 0 30px)"), height: "800px"}],
+                                ], {background: ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "2f 0 15px, " + player.ir.secondaryColor + "3f 0 30px)"), height: "800px"}],
                             )
                         break; }
                         case 2: { // IN STATS
                             container.push(
                                 ["top-column", [
                                     ["style-row", [
-                                        ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: isFullscreen ? "calc(50vw - 6px)" : "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
                                         ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
-                                        ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: isFullscreen ? "calc(50vw - 6px)" : "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
                                     ], {width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
                                     ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
                                     ["buttonless-microtabs", "shipSelection", {borderWidth: "0"}],
@@ -4660,8 +4918,12 @@ addLayer("ir", {
                             ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gt(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
                         ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._fullscreen) ? "none !important" : ""}],
                         ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
-                        ["style-column", [], {display: player.ir.menu != 0 ? "none !important" : "", border: "3px solid " + player.ir.primaryColor, height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: "800px"}],
-                        ["style-column", container, {display: player.ir.menu == 0 ? "none !important" : "", background: player.ir.menu != 2 ? "transparent" : "black", border: "3px solid " + player.ir.primaryColor, height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: "800px"}],
+                        ["style-column", [
+                        ], {display: player.ir.menu != 0 ? "none !important" : "", border: "3px solid " + player.ir.primaryColor, borderTop: "0", borderBottom: "0", height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [
+                            ["style-column", container, {marginLeft: "-3px", border: "3px solid " + player.ir.primaryColor, background: player.ir.menu != 2 ? "transparent" : "black"}]
+                        ], {display: player.ir.menu == 0 ? "none !important" : "",  height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [], {background: player.ir.primaryColor, width: (arena && arena._fullscreen) ? "calc(100vw)" : "806px", height: "3px"}],
                         ["row", [["ex-bar", "bossHealthBar"],]],
                         ["style-column", [
                             ["blank", "9px", {width: "6px"}],
@@ -4702,7 +4964,6 @@ addLayer("ir", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return false },
                 content() {
-                    let isFullscreen = arena && arena._fullscreen
                     return [
                         ["style-column", [
                             ["raw-html", "<h2>Choose an Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -4711,17 +4972,34 @@ addLayer("ir", {
                                 ["clickable", "levelUpUpgrade_0"],
                                 ["clickable", "levelUpUpgrade_1"],
                                 ["clickable", "levelUpUpgrade_2"],
-                            ]],
+                            ], {width: "800px", background: player.ir.secondaryColor, height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}],
+                            ["blank", "10px"],
                             ["clickable", "levelUpUpgrade_confirm"],
-                        ], {width: player.ir.inBattle ? isFullscreen ? "calc(100vw - 6px)" : "800px" : "532px", height: player.ir.inBattle ? isFullscreen ? "calc(100vh - 385px)" : "694px" : "388px"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
                     ]
                 }
             },
             "salvage": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return false },
-                content: [
-                ]
+                content() {
+                    return [
+                        ["style-column", [
+                            ["raw-html", "<h2>Choose a Salvaged Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "10px"],
+                            ["style-row", [
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 0 ? "none !important" : ""}],
+                                ["clickable", "salvagedUpgrade_0"],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 1 ? "none !important" : ""}],
+                                ["clickable", "salvagedUpgrade_1"],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 2 ? "none !important" : ""}],
+                                ["clickable", "salvagedUpgrade_2"],
+                            ], {width: "800px", background: "radial-gradient(circle, #ffb366, " + player.ir.secondaryColor + ")", height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}],
+                            ["blank", "10px"],
+                            ["clickable", "salvagedUpgrade_confirm"],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
             },
         }
     },

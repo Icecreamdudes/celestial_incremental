@@ -52,8 +52,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.26, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Battle Bonanza",
+	num: 11400, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 11403 = v1.14.3)
+	name: "A Change of Space",
 }
 
 function miscCode() {
@@ -1169,6 +1169,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Increased the scaling of both unavoidable softcaps in D1 eclipse.<br>
 			- Weakened the effect clouds have on eclipse timer tickspeed.<br>
 			- Buffed core fragment effects.<br>
+			- Reduced space teste effect formula.<br>
 			- Changed the formulas of some iridite upgrades.<br>
 			- Nerfed space building 3 through 6 effects.<br>
 			- Reduced sniper ship damage but improved its accuracy.<br>
@@ -1183,7 +1184,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Reduced the diamondsmith evo and diamond dust reset coin dust requirements by /10.<br>
 		<br>Bugfixes:<br>
 			- Fixed the screen flashing white when switching between certain layers.<br>
-			- Fixed a few cases of the word "otherworldly" being spelled as "otherworldy".<br>
+			- Fixed a few cases of the word "otherworldly" being mispelled as "otherworldy".<br>
 			- Added a gap between cante perks and tab selection in the cante tab.<br>
 			- Added "the" to the jocus layer tooltip.<br>
 			- Fixed dark universe reset cheese.<br>
@@ -2616,6 +2617,30 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.25) {
 		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
+	if (oldVersion < 11400) {
+		if (player.s.singularities.gt(1e9)) player.s.singularities = player.s.singularities.div(1e9).log(10).add(1).mul(1e9);
+		if (player.s.singularityPoints.gt("1e7500")) player.s.singularityPoints = player.s.singularityPoints.div("1e7500").pow(0.1).mul("1e7500");
+		if (player.gh.steel.gt("1e25000")) player.gh.steel = player.gh.steel.div("1e25000").pow(0.1).mul("1e25000");
+		if (player.au2.stars.gt(1e40)) player.au2.stars = player.au2.stars.div(1e40).log(10).add(1).mul(1e40);
+		if (player.ir.spaceRock.gt(1e9)) player.ir.spaceRock = player.ir.spaceRock.div(1e9).log(10).add(1).mul(1e9);
+		if (player.ir.spaceGem.gt(1e5)) player.ir.spaceGem = player.ir.spaceGem.div(1e5).log(10).add(1).mul(1e5);
+		if (player.ev2.orbs.gt(1e4)) player.ev2.orbs = player.ev2.orbs.div(1e4).log(10).add(1).mul(1e4);
+		player.ep1.buyables[11] = player.ep1.buyables[11].mul(4).ceil();
+		player.ep1.buyables[12] = player.ep1.buyables[12].mul(0.4).ceil();
+		player.ep1.buyables[13] = player.ep1.buyables[13].mul(0.2).ceil();
+		if (player.ir.levelables[1][0].gt(55)) player.ir.levelables[1][0] = new Decimal(55);
+		if (player.ir.levelables[2][0].gt(55)) player.ir.levelables[2][0] = new Decimal(55);
+		if (player.ir.levelables[3][0].gt(55)) player.ir.levelables[3][0] = new Decimal(55);
+		if (player.ir.levelables[4][0].gt(55)) player.ir.levelables[4][0] = new Decimal(55);
+		if (player.ir.levelables[5][0].gt(55)) player.ir.levelables[5][0] = new Decimal(55);
+		if (player.ir.levelables[6][0].gt(55)) player.ir.levelables[6][0] = new Decimal(55);
+		if (player.ir.levelables[7][0].gt(55)) player.ir.levelables[7][0] = new Decimal(55);
+		if (player.ir.levelables[8][0].gt(50)) player.ir.levelables[8][0] = new Decimal(50);
+		if (player.ir.levelables[9][0].gt(55)) player.ir.levelables[9][0] = new Decimal(55);
+		for (let i in player.cs.resourceCoreScraps) {
+			if (player.cs.resourceCoreScraps[i].gt(1e27)) player.cs.resourceCoreScraps[i] = player.cs.resourceCoreScraps[i].div(1e27).log(10).add(1).mul(1e27);
+		}
 	}
 }
 

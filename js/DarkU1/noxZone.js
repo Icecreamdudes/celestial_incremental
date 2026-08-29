@@ -96,7 +96,7 @@ addLayer("noxZone", {
                         ["raw-html", () => {return Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).gt(1) ? formatSimple(Decimal.sub(player[player.subtabs["bl"]["stages"]].levelScaling, player.ir.levelScalingReduction).max(1).sub(1).mul(100)) + "% starting at " + formatWhole(player[player.subtabs["bl"]["stages"]].levelScalingStart.add(1)) : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ["blank", "10px"],
                         ["raw-html", "<u>Nox", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "Nox will always be attacking", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", "Nox will always be assisting", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #f57171"}],
 
                 ], {width: "397px", height: "363px"}],
@@ -164,7 +164,7 @@ SB_zones.noxZone = {
             SB_spawnCelestialite("nox")
         }
     },
-    statMult: new Decimal(1.5),
+    statMult: new Decimal(4.44),
     rockMult: new Decimal(1.5),
     gemMult: new Decimal(1.5),
     xpReqMult: new Decimal(6.66),
@@ -182,7 +182,7 @@ SB_celestialites.nox = {
     color: "#7a0000",
     health: new Decimal(2e5),
     damage: new Decimal(12),
-    bodyDamage: new Decimal(1),
+    bodyDamage: new Decimal(0.125),
     regen: new Decimal(16),
     reward() {
         let gain = {}
@@ -206,9 +206,9 @@ SB_celestialites.nox = {
         player.bl.foughtNox = true
 
         // Stat changes
-        celestialite.maxHealth = new Decimal(2e5)
-        celestialite.health = new Decimal(2e5)
-        celestialite.damage = new Decimal(12)
+        celestialite.maxHealth = new Decimal(5e5)
+        celestialite.health = new Decimal(5e5)
+        celestialite.damage = new Decimal(30)
         celestialite.regen = new Decimal(16)
 
         celestialite.phase = 1
@@ -1299,7 +1299,7 @@ SB_warnings.noxSpear = {
     tick(warning) {
         let angDist = (warning.targetAng - warning.ang) % (Math.PI*2) - Math.PI;
         warning.ang += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
-        warning.ang = ((warning.ang + Math.PI) % (Math.PI * 2)) - Math.PI
+        warning.ang = ((warning.ang + 3 * Math.PI) % (Math.PI * 2)) - Math.PI
     },
     onReady(warning) {
         warning.targetAng = warning.ang

@@ -1600,12 +1600,12 @@ addLayer("ir", {
                 arena.selectedUpgradeIndex = 0
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena) return look;
                 let upg = UPGRADE_POOL[arena.upgradeChoices[0]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedUpgradeIndex == 0 ? "3px solid #ffff00" : ""
+                look.background = arena.selectedUpgradeIndex == 0 ? "#0000bf" : "#00007f"
                 return look
             },
         },
@@ -1626,12 +1626,12 @@ addLayer("ir", {
                 arena.selectedUpgradeIndex = 1
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena) return look;
                 let upg = UPGRADE_POOL[arena.upgradeChoices[1]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedUpgradeIndex == 1 ? "3px solid #ffff00" : ""
+                look.background = arena.selectedUpgradeIndex == 1 ? "#0000bf" : "#00007f"
                 return look
             },
         },
@@ -1640,10 +1640,10 @@ addLayer("ir", {
                 if (!arena) return "???";
                 let upg = UPGRADE_POOL[arena.upgradeChoices[2]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
-                return "<div style='height:50px;display:flex;align-items:center'><div>" +
+                return "<div><div style='height:50px;display:flex;align-items:center'><div>" +
                 "<h3>" + upg.name() + "</h3><br><i style='color:" + rarity.color + "'>(" + upg.rarity.charAt(0).toUpperCase() + upg.rarity.slice(1) + ")</i>" + // TOP
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
-                upg.description() // MIDDLE
+                upg.description() + "</div>" // MIDDLE
             },
             canClick() { return true},
             unlocked() { return true},
@@ -1652,12 +1652,11 @@ addLayer("ir", {
                 arena.selectedUpgradeIndex = 2
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {background: arena.selectedUpgradeIndex == 2 ? "#0000bf" : "#00007f", width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena) return look;
                 let upg = UPGRADE_POOL[arena.upgradeChoices[2]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedUpgradeIndex == 2 ? "3px solid #ffff00" : ""
                 return look
             },
         },
@@ -1678,12 +1677,12 @@ addLayer("ir", {
                 arena.selectedSalvagedUpgradeIndex = 0
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena || arena.salvagedUpgradeChoices.length <= 0) return look;
                 let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[0]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedSalvagedUpgradeIndex == 0 ? "3px solid #ffff00" : ""
+                look.background = arena.selectedSalvagedUpgradeIndex == 0 ? "#0000bf" : "#00007f"
                 return look
             },
         },
@@ -1704,12 +1703,12 @@ addLayer("ir", {
                 arena.selectedSalvagedUpgradeIndex = 1
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena || arena.salvagedUpgradeChoices.length <= 1) return look;
                 let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[1]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedSalvagedUpgradeIndex == 1 ? "3px solid #ffff00" : ""
+                look.background = arena.selectedSalvagedUpgradeIndex == 1 ? "#0000bf" : "#00007f"
                 return look
             },
         },
@@ -1730,12 +1729,12 @@ addLayer("ir", {
                 arena.selectedSalvagedUpgradeIndex = 2
             },
             style() {
-                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", background: "#00007f", borderRadius: "10px", padding: "0", margin: "6px"}
+                let look = {width: "250px", minHeight: "150px", maxHeight: "150px", color: "white", borderWidth: "3px", borderColor: "white", borderRadius: "10px", padding: "0", margin: "6px"}
                 if (!arena || arena.salvagedUpgradeChoices.length <= 2) return look;
                 let upg = UPGRADE_POOL[arena.salvagedUpgradeChoices[2]];
                 let rarity = UPGRADE_RARITIES[upg.rarity];
                 look.borderColor = rarity.color
-                look.outline = arena.selectedSalvagedUpgradeIndex == 2 ? "3px solid #ffff00" : ""
+                look.background = arena.selectedSalvagedUpgradeIndex == 2 ? "#0000bf" : "#00007f"
                 return look
             },
         },

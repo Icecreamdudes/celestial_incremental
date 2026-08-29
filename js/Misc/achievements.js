@@ -1085,7 +1085,7 @@ addLayer("achievements", {
         1215: {
             name: "Big Time",
             image: "resources/achievements/12_15.png",
-            tooltip: "<h3>Big Time</h3><hr style='margin-bottom:4px'>Store at least 10,000<br>time capsules at once.<br><br>Reward: Generate twice<br>as much time energy.",
+            tooltip: "<h3>Big Time</h3><hr style='margin-bottom:4px'>Store at least 7,200<br>time capsules at once.<br><br>Reward: Generate twice<br>as much time energy.",
             color: "#994d99",
             complete() {return false},
             unlocked: true,

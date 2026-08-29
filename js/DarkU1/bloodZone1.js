@@ -226,7 +226,7 @@ addLayer("bloodZone1", {
                         ["style-column", [
                             ["blank", "10px"],
                             ["raw-html", "<u>Nox", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", "Nox will begin attacking at 20", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", "Nox will begin assisting at 20", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], () => {return {display: hasMilestone("bloodZone1", 11) ? "" : "none !important"}}]
                     ], {width: "397px", height: "210px", background: "#0000007f", borderBottom: "3px solid #f57171"}],
 
@@ -323,7 +323,7 @@ SB_zones.bloodZone1 = {
     },
     levelUp(level) {
     },
-    statMult: new Decimal(1),
+    statMult: new Decimal(3),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
     xpReqMult: new Decimal(6),

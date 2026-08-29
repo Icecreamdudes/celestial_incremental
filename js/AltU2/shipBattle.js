@@ -512,6 +512,30 @@ function pickUpgrades(data = {}) {
     }
     return chosen;
 }
+function pickSalvagedUpgrades(data = {}) {
+    let possibleUpgrades = []
+    let totalChance = 0;
+    // Build Rarity Table
+    for (let [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.bankedUpgrades)) {
+        totalChance += v
+        possibleUpgrades.push(i);
+    }
+    // Select Upgrades
+    let chosen = [];
+    let k = Object.entries(player.ir.shipBattleSaveCurrent.bankedUpgrades)
+    while (chosen.length < Math.min(k.length, 3)) {
+        for (let [i, v] of k) {
+        let r = Math.random()
+            if (totalChance * r < v) {
+                let index = Math.floor(possibleUpgrades.length * r)
+                chosen.push(possibleUpgrades[index])
+                possibleUpgrades.splice(index, 1)
+                break;
+            } else totalChance -= v;
+        }
+    }
+    return chosen;
+}
 
 class SpaceArena {
     /*
@@ -733,7 +757,6 @@ class SpaceArena {
             width: this.width,
             height: this.height,
             backgroundImage: this.arenaDiv.style.backgroundImage,
-            border: this.arenaDiv.style.border,
             overflow: this.arenaDiv.style.overflow,
             zIndex: this.arenaDiv.style.zIndex,
             canvasWidth: this.canvasWidth,
@@ -745,12 +768,11 @@ class SpaceArena {
         // Apply fullscreen & transparent styles
         Object.assign(this.arenaDiv.style, {
             left: '0px',
-            top: '103px',
+            top: '106px',
             transform: 'none',
-            width: 'calc(100vw - 6px)',
-            height: 'calc(100vh - 276px)',
+            width: 'calc(100vw)',
+            height: 'calc(100vh - 279px)',
             backgroundImage: this._prevArenaStyle.backgroundImage,
-            border: '3px solid ' + SB_zones[player.ir.battleStage].primaryColor,
             overflow: 'hidden',
             zIndex: 10000
         });
@@ -794,7 +816,6 @@ class SpaceArena {
             top: s.top || '50%',
             transform: s.transform || 'translate(-50%, -50%)',
             backgroundImage: s.backgroundImage || 'url(resources/ui/spaceBattle/iriditeZone.png)',
-            border: s.border || '3px solid #fff',
             overflow: s.overflow || 'hidden',
             zIndex: s.zIndex || 9999
         });
@@ -1089,7 +1110,9 @@ class SpaceArena {
         this.lootFlashes = [];
         this.warnings = [];
         this.upgradeChoices = [];
+        this.salvagedUpgradeChoices = [];
         this.selectedUpgradeIndex = null;
+        this.selectedSalvagedUpgradeIndex = null;
         this.upgrades = this.getDefaultUpgrades();
         this.perZoneUpgrades = player.ir.shipBattleSaveCurrent.perZoneUpgrades[player.ir.battleStage] ? player.ir.shipBattleSaveCurrent.perZoneUpgrades[player.ir.battleStage] : this.getDefaultUpgrades();
         this.upgradeCount = 0;
@@ -1135,7 +1158,6 @@ class SpaceArena {
             height: this.canvasHeight + 'px',
             transform: `translate(-50%, -50%)`,
             backgroundImage: "url(resources/ui/spaceBattle/" + player.ir.battleStage + ".png)",
-            border: '3px solid ' + player.ir.primaryColor,
             borderRadius: '0',
             zIndex: 9999,
             overflow: 'hidden',
@@ -1602,7 +1624,6 @@ class SpaceArena {
     update() {
         
         this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px"
-        this.arenaDiv.style.visibility = player.ir.menu == 2 ? "hidden" : "visible"
         this.arenaDiv.style.zIndex = player.ir.menu == 0 ? 10000 : -3
 
         if (player.ir.menu == 0 && !arena.bossActive) {
@@ -1674,7 +1695,7 @@ class SpaceArena {
             // xp drop -> spawn xp orb
             if (celRef && celRef.experienceReward) {
                 let amt = celRef.experienceReward()
-                xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
+                if (amt.gt(0)) xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
             }
 
             SB_celestialites[enemy.type].onDeath(enemy)
@@ -2169,10 +2190,10 @@ class SpaceArena {
                 bullet.x += bullet.vx;
                 bullet.y += bullet.vy;
             }
-            if (bullet.x < 0) bullet.x = this.width;
-            if (bullet.x > this.width) bullet.x = 0;
-            if (bullet.y < 0) bullet.y = this.height;
-            if (bullet.y > this.height) bullet.y = 0;
+            if (bullet.x < 0) bullet.x += this.width;
+            if (bullet.x > this.width) bullet.x -= this.width;
+            if (bullet.y < 0) bullet.y += this.height;
+            if (bullet.y > this.height) bullet.y -= this.height;
             bullet.life--;
 
             // Evolver shard edge collision: primary shard breaks into 3 mini shards when hitting arena edge
@@ -3879,12 +3900,14 @@ class SpaceArena {
             this.ctx.restore();
             */
         }
+        this.arenaDiv.style.filter = player.ir.menu != 0 ? "blur(4px)" : ""
     }
 
     showUpgradeChoice() {
         this.ship._laserActive = false
         player.ir.menu = 1;
         this.upgradeChoices = pickUpgrades();
+        this.salvagedUpgradeChoices = pickSalvagedUpgrades();
         this.selectedUpgradeIndex = null;
         this.pauseEvents();
     }

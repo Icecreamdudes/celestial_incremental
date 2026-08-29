@@ -1,27 +1,44 @@
 SB_zones.ascensionRitual = {
     nameCap: "Ascension Ritual",
     nameLow: "ascension ritual",
+    location: "unknown",
+    unlocked() {
+        return hasUpgrade("za", 19)
+    },
+
+    primaryColor: "#3383ab",
+    secondaryColor: "#064666",
+
     levelLimit: 1,
     asteroidLimit: 1,
-
     celestialiteSpawnCooldown: 600,
     celestialiteLimit: 1,
     generateCelestialite(level) {
-        return "ritualSpirit"
+        return "alphaShip" // lmao
+    },
+    generateAsteroid(level) {
+        return "smallAsteroid";
+    },
+    levelUp(level) {
     },
     statMult: new Decimal(1),
     rockMult: new Decimal(1),
     gemMult: new Decimal(1),
-}
+    xpReqMult: new Decimal(999),
+    savePoints: [
+        0
+    ],
+} // SB_spawnCelestialite("ritualSpirit")
 
 SB_celestialites.ritualSpirit = {
     name: "Ritual Spirit",
     symbol: "x",
     radius: 64,
     color: '#88eaff',
-    health: new Decimal(25000),
-    damage: new Decimal(8),
-    regen: new Decimal(0),
+    health: new Decimal(5e4),
+    damage: new Decimal(6),
+    regen: new Decimal(20),
+    bodyDamage: new Decimal(0.5),
     reward() {
         return {}
     },
@@ -29,6 +46,21 @@ SB_celestialites.ritualSpirit = {
         return new Decimal(0)
     },
     initialize(celestialite) {
+
+        arena.enterFullscreen()
+        arena.enemies = []
+        arena.bullets = []
+        arena.asteroids = []
+        arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.enemySpawnCooldown = arena.enemySpawnCooldownMax;
+        arena.bossActive = true
+
+        celestialite.healthMax = player.cbs.ascensionShards.mul(1e4).add(5e4)
+        celestialite.health = player.cbs.ascensionShards.mul(1e4).add(5e4)
+        celestialite.regen = player.cbs.ascensionShards.add(5)
+        celestialite.damage = player.cbs.ascensionShards.mul(1.2).add(6)
+
         let angle = Math.random() * Math.PI * 2;
         let dist = Math.max(arena.width, arena.height) * 0.35;
         let ex = Math.round(arena.width / 2 + Math.cos(angle) * dist);
@@ -40,24 +72,263 @@ SB_celestialites.ritualSpirit = {
         celestialite.y = ey
         celestialite.vx = 0
         celestialite.vy = 0
+        celestialite.dvx = 0.875
+        celestialite.dvy = 0.875
         celestialite.phase = 1
-        celestialite._phaseConfig = {
-            auraIntensity: 1.0,
-            glowColor: '#88eaff',
-            scaleModifier: 1.0,
-        }
-        celestialite.state = 'idle'
-        celestialite.attackTimer = 90
-        celestialite._barrageTimer = 0
-        celestialite._barrageTick = 0
-        celestialite._chargeTimer = 0
-        celestialite._chargeTick = 0
-        celestialite._pulseTimer = 0
-        celestialite._homingTimer = 0
-        celestialite._summonTimer = 0
+        celestialite.phaseMiddle = 1
+        celestialite.phaseMiddleTimer = -1
+        celestialite.currentAttack = 'idle'
+        celestialite.attackTimer = 120
+        celestialite._anim = 0
     },
-    tick(celestialite) {},
+    decideAttack(celestialite) {
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+        celestialite.playerAng = Math.atan2(dy, dx);
+        celestialite.moveAng = celestialite.playerAng;
+        celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
+        // Decide on an attack
+        
+        if (celestialite.playerDist < 800) {
+            //let options = ['summonMinions', 'teleport'];
+            
+            let options = ['directionalBarrage', 'longSpinningBarrage', 'radialBarrage', 'teleport'];
+            if (celestialite.phase >= 2) options = options.concat(['spinningBarrage', 'summonMinions']);
+            if (celestialite.phase >= 3) options = options.concat(['wideDirectionalBarrage']);
+            if (celestialite.phase >= 4) options = options.concat(['spinningBarrage', 'teleport']);
+            if ((celestialite.invulnerable && celestialite.phaseMiddle == 2) || (celestialite.invulnerable && celestialite.phaseMiddle == 4)) options = ['spinningBarrage', 'teleport'];
+            if (celestialite.invulnerable && celestialite.phaseMiddle == 3) options = ['shortIdle', 'teleport'];
+            
+            if (options.length > 1) options.splice(options.indexOf(celestialite.currentAttack), 1);
+            celestialite.currentAttack = options[Math.floor(Math.random() * options.length)];
+        } else {
+            celestialite.currentAttack = "teleport";
+        }
+        celestialite.attackInitialized = false
+    },
+    attacks: {
+        idle(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 120
+            }
+            // Attack
+            // NONE
+        },
+        shortIdle(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 30
+            }
+            // Attack
+            // NONE
+        },
+        directionalBarrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 8) % 1 == 0 && celestialite.attackTimer > 60) {
+                for (i = 0; i < 3; i++) {
+                    let ang = celestialite.playerAng + ((i - 0.5) * Math.PI / 32) + (Math.random() - 0.5) * Math.PI / 128
+                    SB_spawnProjectile("ritualBlade", celestialite, null, {
+                        vx: Math.cos(ang) * 15,
+                        vy: Math.sin(ang) * 15,
+                    })
+                }
+            }
+        },
+        wideDirectionalBarrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 240
+            }
+            // Attack
+            if ((celestialite.attackTimer / 8) % 1 == 0 && celestialite.attackTimer > 60) {
+                for (i = 0; i < 2; i++) {
+                    let ang = celestialite.playerAng + ((i - 0.5) * Math.PI / 32) + (Math.random() - 0.5) * Math.PI / 128
+                    SB_spawnProjectile("ritualBlade", celestialite, null, {
+                        vx: Math.cos(ang) * 15,
+                        vy: Math.sin(ang) * 15,
+                    })
+                }
+            }
+            if ((celestialite.attackTimer / 8) % 1 == 0 && celestialite.attackTimer > 75 && celestialite.attackTimer < 225) {
+                for (i = 0; i < 2; i++) {
+                    let ang = celestialite.playerAng + ((i - 0.5) * Math.PI / 8) + (Math.random() - 0.5) * Math.PI / 8
+                    SB_spawnProjectile("ritualBlade", celestialite, null, {
+                        vx: Math.cos(ang) * 12,
+                        vy: Math.sin(ang) * 12,
+                    })
+                }
+            }
+        },
+        spinningBarrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 60
+            }
+            // Attack
+            if ((celestialite.attackTimer / 2) % 1 == 0 && celestialite.attackTimer > 30) {
+                let ang = celestialite.playerAng + (celestialite.attackTimer / 30) * Math.PI + Math.PI / 2
+                SB_spawnProjectile("ritualBlade", celestialite, null, {
+                    vx: Math.cos(ang) * 15,
+                    vy: Math.sin(ang) * 15,
+                })
+            }
+        },
+        longSpinningBarrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 2) % 1 == 0 && celestialite.attackTimer > 30) {
+                let ang = celestialite.playerAng + (celestialite.attackTimer / 30) * Math.PI + Math.PI / 2
+                SB_spawnProjectile("ritualBlade", celestialite, null, {
+                    vx: Math.cos(ang) * 12,
+                    vy: Math.sin(ang) * 12,
+                })
+            }
+        },
+        radialBarrage(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 300
+            }
+            // Attack
+            if ((celestialite.attackTimer / 16) % 1 == 0 && celestialite.attackTimer > 60) {
+                for (i = 0; i < 6; i++) {
+                    let ang = (i * Math.PI / 3) + (Math.random() - 0.5) * Math.PI / 48
+                    SB_spawnProjectile("ritualBlade", celestialite, null, {
+                        vx: Math.cos(ang) * 12,
+                        vy: Math.sin(ang) * 12,
+                    })
+                }
+                if (celestialite.attackTimer < 270) {
+                    for (i = 0; i < 3; i++) {
+                        let ang = celestialite.playerAng + ((i - 1) * Math.PI / 16) + (Math.random() - 0.5) * Math.PI / 128
+                        SB_spawnProjectile("ritualBlade", celestialite, null, {
+                            vx: Math.cos(ang) * 15,
+                            vy: Math.sin(ang) * 15,
+                        })
+                    }
+                }
+            }
+        },
+        summonMinions(celestialite) {
+            if (arena.enemies.length >= 7) {
+                SB_celestialites[celestialite.type].decideAttack(celestialite);
+                return;
+            }
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 30
+            }
+            // Attack
+            if ((celestialite.attackTimer / 10) % 1 == 0) {
+                let ang = celestialite.playerAng + (celestialite.attackTimer / 30) * Math.PI + Math.PI / 2
+                SB_spawnCelestialite("ritualMinion", {
+                    x: celestialite.x,
+                    y: celestialite.y,
+                    preferredSpeed: celestialite.attackTimer / 150 * (Math.random() + 0.5),
+                })
+            }
+        },
+        teleport(celestialite) {
+            // Initialize attack
+            if (!celestialite.attackInitialized) { celestialite.attackInitialized = true;
+                celestialite.attackTimer = 30
+            }
+            // Attack
+            if (celestialite.attackTimer == 15) {
+                let ang = Math.random() * Math.PI * 2
+                let dist = Math.random() * 200 + 400
+                celestialite.x = arena.ship.x + dist * Math.cos(ang)
+                celestialite.y = arena.ship.y + dist * Math.sin(ang)
+                if (celestialite.phase >= 3) {
+                    for (i = 0; i < 12; i++) {
+                        let ang = celestialite.playerAng + ((i - 5.5) * Math.PI / 6) + (Math.random() - 0.5) * Math.PI / 32
+                        SB_spawnProjectile("ritualBlade", celestialite, null, {
+                            vx: Math.cos(ang) * 12,
+                            vy: Math.sin(ang) * 12,
+                        })
+                    }
+                }
+            }
+        },
+    },
+    tick(celestialite) {
+        celestialite.phase = Math.max(celestialite.phase, 5 - celestialite.health.div(celestialite.maxHealth).mul(4).ceil().toNumber())
+        celestialite._anim += 1
+        celestialite.phaseMiddleTimer -= 1
+
+        if (celestialite.phaseMiddle != celestialite.phase && celestialite.phaseMiddleTimer <= 0) {
+            celestialite.phaseMiddle = celestialite.phase
+            celestialite.phaseMiddleTimer = 600
+            celestialite.invulnerable = true
+            celestialite.attackTimer = 0
+        }
+        if (celestialite.phaseMiddleTimer <= 0) {
+            celestialite.invulnerable = false
+        }
+
+        // Get distance/angle to the player
+        if (true) {
+            let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+            let dx = closest[0] - celestialite.x;
+            let dy = closest[1] - celestialite.y;
+            celestialite.playerDist = Math.hypot(dx, dy) || 1;
+            celestialite.playerAng = Math.atan2(dy, dx);
+        }
+
+        // Decide on a move angle
+        if (true) {
+            celestialite.moveAng = celestialite.playerAng;
+            celestialite.moveAng = (celestialite.moveAng + (Math.PI * 3)) % (Math.PI * 2) - Math.PI;
+        }
+
+        // Decide on an attack
+        celestialite.attackTimer--
+        if (celestialite.attackTimer <= 0) SB_celestialites[celestialite.type].decideAttack(celestialite);
+
+        // Move
+        if ((celestialite.currentAttack == "dagger") && celestialite.attackTimer % 90 > 30) {
+            celestialite.ax = 0
+            celestialite.ay = 0
+        } else {
+            celestialite.ax = Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay = Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+        }
+        if (celestialite.playerDist > 800) {
+            celestialite.ax += Math.cos(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+            celestialite.ay += Math.sin(celestialite.moveAng) * 0.2 * Math.min(2.5, (celestialite.playerDist + 400) / 400)
+        }
+        if ((celestialite.phase >= 2 && celestialite.phaseMiddle == 1) || celestialite.currentAttack == "teleport") {
+            celestialite.ax = 0
+            celestialite.ay = 0
+        }
+
+        // Attack
+        SB_celestialites[celestialite.type].attacks[celestialite.currentAttack](celestialite)
+    },
     onAttacked(celestialite, damage, attacker) {},
+    onDeath(celestialite) {
+        arena.exitFullscreen()
+        arena.bullets = []
+        arena.asteroids = []
+        arena.xpOrbs = []
+        arena.gammaTrails = []
+        arena.bossActive = false
+
+        player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
+        player.ir.battleXP = player.ir.battleXPReq
+
+        screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
+    },
     draw: (ctx, celestialite) => {
         if (!arena) return;
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 6, celestialite.radius * 6])
@@ -68,10 +339,34 @@ SB_celestialites.ritualSpirit = {
             let t = (celestialite._anim || 0) / 12;
             let bob = Math.sin(t) * 8;
             // Get phase configuration for visual scaling
-            const phaseConfig = celestialite._phaseConfig || { auraIntensity: 1.0, glowColor: '#88eaff', scaleModifier: 1.0 };
-            const auraIntensity = phaseConfig.auraIntensity || 1.0;
-            const glowColor = phaseConfig.glowColor || '#88eaff';
-            const scaleModifier = phaseConfig.scaleModifier || 1.0;
+            let auraIntensity, glowColor, scaleModifier
+            switch (celestialite.phase) {
+                case 1: {
+                    auraIntensity = 1
+                    glowColor = "#88eaff"
+                    scaleModifier = 1
+                break; }
+                case 2: {
+                    auraIntensity = 1.1
+                    glowColor = "#879bff"
+                    scaleModifier = 1.05
+                break; }
+                case 3: {
+                    auraIntensity = 1.2
+                    glowColor = "#c387ff"
+                    scaleModifier = 1.1
+                break; }
+                case 4: {
+                    auraIntensity = 1.3
+                    glowColor = "#ff87eb"
+                    scaleModifier = 1.15
+                break; }
+                default: {
+                    auraIntensity = 1
+                    glowColor = "#88eaff"
+                    scaleModifier = 1
+                break; }
+            }
             
             // Apply phase-based scaling
             const scaledRadius = celestialite.radius * scaleModifier;
@@ -80,10 +375,17 @@ SB_celestialites.ritualSpirit = {
             let g = ctx.createRadialGradient(wrapped[0], wrapped[1] + bob, scaledRadius * 0.1, wrapped[0], wrapped[1] + bob, scaledRadius * 2.4 * auraIntensity);
             
             // Use phase-specific colors with simpler approach
+            if (celestialite.invulnerable) {
+            g.addColorStop(0, 'rgba(209, 228, 255,0.95)');
+            g.addColorStop(0.35, `rgba(135, 165, 255,${0.4 * auraIntensity})`);
+            g.addColorStop(0.7, `rgba(135, 165, 255,${0.15 * auraIntensity})`);
+            g.addColorStop(1, 'rgba(135, 165, 255,0)');
+            } else {
             g.addColorStop(0, 'rgba(210,255,255,0.95)');
             g.addColorStop(0.35, `rgba(136,234,255,${0.4 * auraIntensity})`);
             g.addColorStop(0.7, `rgba(136,234,255,${0.15 * auraIntensity})`);
             g.addColorStop(1, 'rgba(136,234,255,0)');
+            }
             ctx.fillStyle = g;
             ctx.beginPath();
             ctx.arc(wrapped[0], wrapped[1] + bob, scaledRadius * 2.4 * auraIntensity, 0, Math.PI * 2);
@@ -97,9 +399,15 @@ SB_celestialites.ritualSpirit = {
             ctx.rotate(sway * 0.03);
             // Robe/Body (flowing bottom) - simplified colors
             let bodyG = ctx.createLinearGradient(0, -celestialite.radius * 0.5, 0, celestialite.radius * 1.5);
-            bodyG.addColorStop(0, '#88eaff');
-            bodyG.addColorStop(0.6, '#4ac6ff');
-            bodyG.addColorStop(1, 'rgba(74, 198, 255, 0)');
+            if (celestialite.invulnerable) {
+                bodyG.addColorStop(0, '#87a5ff');
+                bodyG.addColorStop(0.6, '#4a59ff');
+                bodyG.addColorStop(1, '#4a59ff00');
+            } else {
+                bodyG.addColorStop(0, '#88eaff');
+                bodyG.addColorStop(0.6, '#4ac6ff');
+                bodyG.addColorStop(1, '#4ac6ff00');
+            }
             ctx.fillStyle = bodyG;
             ctx.beginPath();
             ctx.moveTo(-celestialite.radius * 0.45, 0);
@@ -123,7 +431,7 @@ SB_celestialites.ritualSpirit = {
             ctx.lineTo(celestialite.radius * 0.2, celestialite.radius * 0.2);
             ctx.stroke();
             // Head & Hood - simplified
-            ctx.fillStyle = '#66d4ff';
+            ctx.fillStyle = celestialite.invulnerable ? '#6673ff' : '#66d4ff';
             ctx.beginPath();
             ctx.arc(0, -celestialite.radius * 0.45, celestialite.radius * 0.45, Math.PI, 0);
             ctx.ellipse(0, -celestialite.radius * 0.45, celestialite.radius * 0.45, celestialite.radius * 0.6, 0, 0, Math.PI);
@@ -173,7 +481,15 @@ SB_celestialites.ritualSpirit = {
             ctx.beginPath();
             ctx.arc(rArmX, rArmY, 5 * scaleModifier, 0, Math.PI * 2);
             ctx.fill();
+            if (celestialite.currentAttack == "teleport") {
+                ctx.fillStyle = "rgba(192,255,255," + ((15 - Math.abs(15 - celestialite.attackTimer)) / 15) + ")";
+                ctx.beginPath();
+                ctx.arc(0, 0, (Math.abs(15 - celestialite.attackTimer) / 15) * 256, 0, Math.PI * 2)
+                ctx.fill();
+            }
             ctx.restore();
+            ctx.restore();
+            /*
             // draw sword trail for dash attack
             if (celestialite._swordTrail && celestialite._swordTrail.length) {
                 ctx.save();
@@ -266,10 +582,218 @@ SB_celestialites.ritualSpirit = {
                     this.effectsManager.addScreenShake(shakeIntensity, 50);
                 }
             }
-            ctx.restore();
+            */
+            //ctx.restore();
         }
     }
 }
+
+SB_celestialites.ritualMinion = {
+    name: "Ritual Spirit Minion",
+    symbol: "x",
+    radius: 16,
+    color: "#ffffe0",
+    health: new Decimal(500),
+    damage: new Decimal(5),
+    bodyDamage: new Decimal(1),
+    regen: new Decimal(-5),
+    reward() {
+        let gain = {}
+        return gain
+    },
+    experienceReward() {
+        return new Decimal(0)
+    },
+    initialize(celestialite) {
+        celestialite._anim = 0
+
+        celestialite.healthMax = player.cbs.ascensionShards.mul(100).add(500)
+        celestialite.health = player.cbs.ascensionShards.mul(100).add(500)
+        celestialite.regen = player.cbs.ascensionShards.mul(-2).add(-10)
+        celestialite.damage = player.cbs.ascensionShards.add(5)
+
+        celestialite.moveAng = Math.random() * Math.PI * 2
+        celestialite.dvx = 0.99
+        celestialite.dvy = 0.99
+    },
+    tick(celestialite) {
+        celestialite._anim++
+        // Decrease timers
+
+        // Calculate distance to the player
+        let closest = arena.getClosestCoords([celestialite.x, celestialite.y])
+        let dx = closest[0] - celestialite.x;
+        let dy = closest[1] - celestialite.y;
+        celestialite.playerDist = Math.hypot(dx, dy) || 1;
+
+        // Reset the targeting cooldown the player if they're close
+        if (celestialite.playerDist < 600) {
+            celestialite.playerAng = Math.atan2(dy, dx);
+        };
+
+        // Attack the player
+        celestialite.moveAng = celestialite.moveAng = celestialite.playerAng
+
+        // Handle celestialite movement changes
+        celestialite.ax = Math.cos(celestialite.moveAng) * celestialite.preferredSpeed
+        celestialite.ay = Math.sin(celestialite.moveAng) * celestialite.preferredSpeed
+    },
+    onAttacked(celestialite, damage, attacker) {
+        celestialite.targetingTimer = 60
+
+        celestialite.vx -= Math.cos(celestialite.playerAng) / 8
+        celestialite.vy -= Math.sin(celestialite.playerAng) / 8
+    },
+    onDeath(celestialite) {},
+    draw: (ctx, celestialite) => {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 2, celestialite.radius * 2])
+        if (wrapped) {
+            ctx.save();
+            ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+            //ctx.translate(wrapped[0], wrapped[1]);
+            
+            let t = (celestialite._anim || 0) / 8;
+            let bob = Math.sin(t) * 4;
+            
+            ctx.globalCompositeOperation = 'lighter';
+            // Aura
+            let g = ctx.createRadialGradient(wrapped[0], wrapped[1] + bob, 2, wrapped[0], wrapped[1] + bob, celestialite.radius * 1.5);
+            g.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+            g.addColorStop(1, 'rgba(95, 232, 255, 0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(wrapped[0], wrapped[1] + bob, celestialite.radius * 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            // Core (tear-drop spirit shape)
+            ctx.save();
+            ctx.translate(wrapped[0], wrapped[1] + bob);
+            let ang = Math.atan2(celestialite.vy, celestialite.vx) + Math.PI/2;
+            ctx.rotate(ang);
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.moveTo(0, -celestialite.radius * 0.8);
+            ctx.quadraticCurveTo(celestialite.radius * 0.6, 0, 0, celestialite.radius * 0.8);
+            ctx.quadraticCurveTo(-celestialite.radius * 0.6, 0, 0, -celestialite.radius * 0.8);
+            ctx.fill();
+            ctx.restore();
+            
+            ctx.restore();
+            
+        }
+    },
+}
+
+// PROJECTILES
+
+SB_projectiles.ritualBlade = {
+    template(celestialite, warning) {
+        let source = warning !== null ? warning : celestialite
+        let ang = warning !== null ? warning.ang : celestialite.playerAng
+        let speed = (warning !== null && warning.speed) ? warning.speed : 8
+        return {
+            x: source.x,
+            y: source.y,
+            vx: Math.cos(ang) * speed,
+            vy: Math.sin(ang) * speed,
+            dvx: 1,
+            dvy: 1,
+            ax: 0,
+            ay: 0,
+            dax: 1,
+            day: 1,
+            life: 120,
+            initialLife: 120,
+            damage: celestialite !== null ? celestialite.damage : player.cbs.ascensionShards.mul(2).add(10),
+            pierce: 3,
+            radius: 12,
+            fromEnemy: true,
+            star: true,
+            ang: ang
+        }
+    },
+    initialize(projectile) {
+    },
+    tick(projectile) {
+        if (projectile.life < 15) {
+            let m = projectile.life / 15
+            projectile.radius = m * 4
+            projectile.damage = projectile.celestialite ? projectile.celestialite.damage.mul(m) : new Decimal(m * 6)
+        };
+    },
+    onHit(projectile, attacker) {
+        if (projectile.warning) projectile.warning.timer = 0;
+    },
+    draw(ctx, projectile) {
+        if (!arena) return;
+        let wrapped = arena.getVisibleWrappedCoords([projectile.x, projectile.y], [projectile.radius * 2, projectile.radius * 2])
+        if (!wrapped) return;
+
+        ctx.save();
+        ctx.translate(wrapped[0], wrapped[1]);
+        ctx.translate((arena.canvasWidth / 2) - arena.ship.x, (arena.canvasHeight / 2) - arena.ship.y);
+
+        // Ritual-themed projectiles matching ritualSpirit visual style
+        
+        // Rotate based on velocity to face movement direction
+        let angle = Math.atan2(projectile.vy, projectile.vx);
+        ctx.rotate(angle + Math.PI / 2);
+        
+        // Glow effect
+        ctx.globalCompositeOperation = 'lighter';
+        let g = ctx.createRadialGradient(0, 0, 0, 0, 0, 16);
+        g.addColorStop(0, 'rgba(136, 234, 255, 0.9)');
+        g.addColorStop(0.5, 'rgba(136, 234, 255, 0.3)');
+        g.addColorStop(1, 'rgba(136, 234, 255, 0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, 16, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.globalCompositeOperation = 'source-over';
+        
+        // Spirit core (tear-drop shape matching ritualSpirit)
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.quadraticCurveTo(7, 0, 0, 10);
+        ctx.quadraticCurveTo(-7, 0, 0, -10);
+        ctx.fill();
+        
+        // Inner cyan glow
+        ctx.fillStyle = '#88eaff';
+        ctx.beginPath();
+        ctx.moveTo(0, -6);
+        ctx.quadraticCurveTo(4, 0, 0, 6);
+        ctx.quadraticCurveTo(-4, 0, 0, -6);
+        ctx.fill();
+        
+        ctx.restore();
+                    
+    },
+}
+
+// OLD CODE IS BELOW; MAY WANT TO ADD PARTICLES BACK AT SOME POINT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 // Enhanced Phase Transition Manager for dramatic boss phase changes
 class PhaseTransitionManager {
@@ -378,7 +902,6 @@ class PhaseTransitionManager {
             }
         }
     }
-    
     updateTransition(delta, boss) {
         if (!this.transitionInProgress) return;
         
@@ -1398,14 +1921,7 @@ class RitualArena extends SpaceArena {
             console.warn('RitualArena removeArena error', e);
         }
     }
-
-    // disable asteroids if desired
-    spawnAsteroid(big = false, x = null, y = null) {
-        // intentionally disabled for RitualArena by default
-    }
-
     
-
     update(delta) {
         // keep minimal: allow boss AI for `ritualSpirit`, then let SpaceArena handle physics/collisions/draw
         const dtMs = (typeof delta === 'number') ? delta : (1000 / 60);
@@ -1888,7 +2404,6 @@ class RitualArena extends SpaceArena {
                         }
                         
                         try { if (typeof this.exitFullscreenBossMode === 'function') this.exitFullscreenBossMode(); } catch (e) {}
-                        player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
                         player.ir.inBattle = false
                         options.fullscreen = false
                         player.subtabs["cbs"]['stuff'] = 'Ritual'
@@ -1958,63 +2473,4 @@ class RitualArena extends SpaceArena {
 
 //alternatively make the ritual a bullet hell attack
 
-// Global helper to summon the ritual spirit boss from anywhere.
-function summonSpirit() {
-    try {
-        // Ensure we have a RitualArena instance
-        if (!(arena && arena.constructor && arena.constructor.name === 'RitualArena')) {
-            try {
-                arena = new RitualArena(800, 800, 3200, 3200);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-            } catch (e) { console.warn('failed to create RitualArena', e); }
-        }
-        /*
-        if (!(arena && arena.constructor && arena.constructor.name === 'RitualArena')) {
-            try {
-                arena = new RitualArena((typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : 1800, (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : 600);
-                arena.spawnArena();
-                localStorage.setItem('arenaActive', 'true');
-            } catch (e) { console.warn('failed to create RitualArena', e); }
-        }*/
-
-        if (!arena) return;
-
-        // prevent duplicate boss
-        if (arena.enemies && arena.enemies.some(e => e && e.type === 'ritualSpirit' && e.alive)) return;
-
-        // set player battle state if available
-        try {
-            if (player) {
-                player.ir.inBattle = true;
-                if (options) {
-                    options.fullscreen = true;
-                }
-                player.subtabs = player.subtabs || {};
-                player.subtabs["cbs"] = player.subtabs["cbs"] || {};
-                player.subtabs["cbs"]["stuff"] = 'Battle';
-            }
-        } catch (e) {}
-
-        // clear existing enemies and spawn the ritualSpirit
-        arena.enemies = arena.enemies || [];
-        for (let e of arena.enemies) if (e) e.alive = false;
-        arena.enemies.length = 0;
-
-        let angle = Math.random() * Math.PI * 2;
-        let dist = Math.max(arena.width, arena.height) * 0.35;
-        let ex = Math.round(arena.width / 2 + Math.cos(angle) * dist);
-        let ey = Math.round(arena.height / 2 + Math.sin(angle) * dist);
-        ex = Math.max(80, Math.min(arena.width - 80, ex));
-        ey = Math.max(80, Math.min(arena.height - 80, ey));
-
-        SB_spawnNaturalCelestialite("ascensionRitual")
-        arena.bossActive = true;
-        try { if (player && player.cbs) player.cbs.ritualSpiritActive = true; } catch (e) {}
-        // expand arena to full-screen for boss
-        try { if (typeof arena.enterFullscreen() === 'function') arena.enterFullscreen(); } catch (e) {}
-        try { if (player && player.cbs) player.cbs.inBattle = true; } catch (e) {}
-    } catch (e) { console.warn('summonSpirit global failed', e); }
-}
-
-try { if (typeof window !== 'undefined') window.summonSpirit = summonSpirit; } catch (e) {}
+*/

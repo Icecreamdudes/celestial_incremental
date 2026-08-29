@@ -115,13 +115,6 @@
         player.bl.bloodGemsMult = new Decimal(1)
         player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("sme", 155))
         player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("bl", 15))
-
-        // SPAWN NOX
-        if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
-        {
-            spawnNox();
-            player.bl.foughtNox = true
-        }
     },
     bars: {},
     clickables: {
@@ -821,6 +814,605 @@
     challenges: {},
     infoboxes: {},
     microtabs: {
+        shipSelection: {
+            "shipSelectionProgression": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    return [
+                        ["style-row", [
+                            ["category-button", ["Space", "shipSelectionProgression", "space"], {width: player.ir.inBattle ? "398.5px" : "264px", height: "50px", background: "#37078f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "265px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                            ], {display: hasUpgrade("le", 201) ? "none !important" : ""}],
+                            ["style-row", [
+                                ["category-button", ["Blood", "shipSelectionProgression", "blood"], {width: player.ir.inBattle ? "398.5px" : "265px", height: "50px", background: "#4f1818", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ], {display: hasUpgrade("le", 201) ? "" : "none !important"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#f57171", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
+                        ["buttonless-microtabs", "shipSelectionProgression", {borderWidth: "0"}],
+                    ]
+                },
+            },
+            "shipSelectionStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    return [
+                        ["style-row", [], {width: "0", height: "0"}],
+                        ["style-row", [
+                            ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Base Stats", "shipSelectionStats", "baseStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Upgrade Effects", "shipSelectionStats", "upgradeEffects"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Upgrade Counts", "shipSelectionStats", "upgradeCounts"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.secondaryColor + "7f", borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                            ["style-row", [
+                                ["category-button", ["Salvaged Upgrades", "shipSelectionStats", "salvagedUpgrades"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#f57171", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
+                        ["buttonless-microtabs", "shipSelectionStats", {borderWidth: "0"}],
+                    ]
+                },
+            },
+        },
+        shipSelectionProgression: {
+            "space": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let maxListWidth = player.ir.inBattle ? 376 : 245
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                for (let [i, v] of Object.entries(SB_zones)) {
+                                    if (!v.location || !v.unlocked() || (v.location && v.location != "space")) continue;
+                                    let element = ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["raw-html", v.nameCap, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: v.secondaryColor, borderBottom: "3px solid" + v.primaryColor, borderRadius: "12px 12px 0 0", width: maxListWidth + "px", height: "25px"}],
+                                            ["style-row", [
+                                            ], {background: "black", borderRadius: "0 0 12px 12px", width: maxListWidth + "px", height: "27.5px"}],
+                                        ], {background: "#37078f", borderRadius: "12px", width: maxListWidth + "px", height: "55.5px"}],
+                                    ], {background: "#151230", border: "3px solid" + v.primaryColor, borderRadius: "15px", width: maxListWidth + "px", height: "55.5px", marginBottom: "6px", marginBottom: "6px", marginRight: "6px"}]
+                                    let len = v.savePoints.length
+                                    for (let i2 = 0; i2 < len; i2++) {
+                                        let corners = "0 0"
+                                        if (i2 == len - 1) corners += " 12px"; else corners += " 0";
+                                        if (i2 == 0) corners += " 12px"; else corners += " 0";
+                                        element[1][0][1][1][1].push(
+                                            ["style-row", [
+                                                ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                        )
+                                    }
+                                    container[0][1].push(element)
+                                }
+                                container.push(["style-column", [
+                                    ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: "repeating-linear-gradient(135deg, #1b0447 0 15px, #150336 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                },
+            },
+            "blood": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let maxListWidth = player.ir.inBattle ? 376 : 245
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                for (let [i, v] of Object.entries(SB_zones)) {
+                                    if (!v.location || !v.unlocked() || (v.location && v.location != "blood")) continue;
+                                    let element = ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["raw-html", v.nameCap, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: v.secondaryColor, borderBottom: "3px solid" + v.primaryColor, borderRadius: "12px 12px 0 0", width: maxListWidth + "px", height: "25px"}],
+                                            ["style-row", [
+                                            ], {background: "black", borderRadius: "0 0 12px 12px", width: maxListWidth + "px", height: "27.5px"}],
+                                        ], {background: "#37078f", borderRadius: "12px", width: maxListWidth + "px", height: "55.5px"}],
+                                    ], {background: "#151230", border: "3px solid" + v.primaryColor, borderRadius: "15px", width: maxListWidth + "px", height: "55.5px", marginBottom: "6px", marginBottom: "6px", marginRight: "6px"}]
+                                    let len = v.savePoints.length
+                                    for (let i2 = 0; i2 < len; i2++) {
+                                        let corners = "0 0"
+                                        if (i2 == len - 1) corners += " 12px"; else corners += " 0";
+                                        if (i2 == 0) corners += " 12px"; else corners += " 0";
+                                        element[1][0][1][1][1].push(
+                                            ["style-row", [
+                                                ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                        )
+                                    }
+                                    container[0][1].push(element)
+                                }
+                                container.push(["style-column", [
+                                    ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: "repeating-linear-gradient(135deg, #260b0b 0 15px, #1c0808 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                },
+            },
+        },
+        shipSelectionStats: {
+            "finalStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                let shipStats = SB_getUpgradedShipStats(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
+                                let baseStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
+                                for (let [i, v] of Object.entries(shipStats)) {
+                                    let statFormat = SHIP_STAT_FORMATTING[i]
+                                    let prefix = statFormat.valuePrefix
+                                    let suffix = statFormat.valueSuffix
+                                    if ((i == "bloodStoneGain" || i == "bloodGemGain") && !hasUpgrade("le", 201)) {
+                                        continue;
+                                    }
+                                    if (i == "healthRegen") {
+                                        v *= 60
+                                    }
+                                    if (i == "attackSpeed") {
+                                        v *= (1000 / baseStats.attackSpeed)
+                                        prefix = ""
+                                        suffix = "/s"
+                                    }
+                                    if (i == "bulletSize") {
+                                        v *= baseStats.bulletRadius
+                                        prefix = ""
+                                    }
+                                    if (i == "moveSpeed") {
+                                        v *= baseStats.moveSpeed
+                                        prefix = ""
+                                    }
+                                    container.push(["style-column", [
+                                        ["style-row", [
+                                            ["left-row", [
+                                                ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                            ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                            ["right-row", [
+                                                ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                    ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                }
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "baseStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let shipStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
+                            for (let [i, v] of Object.entries(SB_getDefaultShipStats())) {
+                                v = shipStats[i]
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = statFormat.valuePrefix
+                                let suffix = statFormat.valueSuffix
+                                if ((i == "bloodStoneGain" || i == "bloodGemGain") && !hasUpgrade("le", 201)) {
+                                    continue;
+                                }
+                                if (i == "attackSpeed") {
+                                    v = 1000 / v
+                                    prefix = ""
+                                    suffix = "/s"
+                                }
+                                if (i == "bulletSize") {
+                                    v = shipStats.bulletRadius
+                                    prefix = ""
+                                }
+                                if (i == "moveSpeed") {
+                                    prefix = ""
+                                }
+                                if (i == "spaceRockGain" || i == "spaceGemGain" || i == "bloodStoneGain" || i == "bloodGemGain") {
+                                    prefix = "x"
+                                }
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "upgradeEffects": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            for (let [i, v] of Object.entries(arena ? SB_getUpgradeMultis(arena.upgrades) : player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = "x"
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                    prefix = "+"
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + SHIP_STAT_FORMATTING[i].valueSuffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: "#00007f", borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "upgradeCounts": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "salvagedUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.bankedUpgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+        },
+        ships: {
+            "levelables": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                            ["layer-proxy", ["ir", [["clickable", "newRun"]]]],
+                        ], {width: "535px"}],
+                        ["style-column", [
+                            ["blank", "33px"],
+                            ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                        ], {width: "259px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["always-scroll-column", [
+                        ["top-column", [
+                            ["layer-proxy", ["ir", [["row", [
+                                ["dark-extended-levelable", 1], ["dark-extended-levelable", 2],
+                                ["dark-extended-levelable", 3], ["dark-extended-levelable", 4],
+                                ["dark-extended-levelable", 5], ["dark-extended-levelable", 6],
+                                ["dark-extended-levelable", 7], ["dark-extended-levelable", 8],
+                                ["dark-extended-levelable", 9], ["dark-extended-levelable", 10],
+                            ]]]]],
+                        ], {width: "780px", minHeight: "573px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "3px", marginRight: "20px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+            "saves": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                            ["layer-proxy", ["ir", [["clickable", "newRun"]]]],
+                        ], {width: "535px"}],
+                        ["style-column", [
+                            ["blank", "33px"],
+                            ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                        ], {width: "259px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["style-row", [
+                        ["top-column", [
+                            ["style-column", () => {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null) return container;
+                                container.push(
+                                    ["style-column", [
+                                        ["raw-html", "<i>" + layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].lore() + "</i>", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "508px"}],
+                                )
+                                return container
+                            }, {background: "#00007f", width: "532px", height: "82px"}],
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["style-row", [
+                                ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: "265px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], {width: "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "shipSelection", {borderWidth: "0"}],
+                        ], {borderRight: "3px solid #f57171", height: "579px"}],
+                        ["always-scroll-column", [
+                            ["top-column", () => {
+                                let container = []
+                                let maxSaves = 3
+                                if (hasUpgrade('ir', 107)) maxSaves++;
+                                if (player.bl.noxDefeated) maxSaves++;
+                                for (let i = 0; i < maxSaves; i++) {
+                                    let save = player.ir.shipBattleSaves[i]
+                                    container.push(["style-column", [
+                                        ["style-column", [
+                                            ["raw-html", "Slot #" + (i + 1), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "25px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["style-column", [
+                                            ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
+                                                layers.ir.levelables[save.shipType].title()
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>Upgrade Count: " + formatSimple(save.upgradeCount, 2)
+                                                + "<br>Upgrade Score: " + formatSimple(save.upgradeScore, 2)
+                                            )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "98px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["layer-proxy", ["ir", [["clickable", "loadShipSave_" + i]]]],
+                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", marginBottom: "6px", width: "232px", height: "179px"}])
+                                }
+                                return container
+                            }, {width: "238px", minHeight: "567px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "6px", paddingBottom: "0", marginRight: "0px"}],
+                        ], {width: "265px", height: "579px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+            "automation": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-column", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", function () { return "You have <span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(player.ir.spaceRock) + " space rocks</span>, <span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(player.ir.spaceGem) + " space gems</span>, and <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(player.ir.spaceJunk) + " space junk</span>."  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                        ], {width: "800px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["layer-proxy", ["ir", [["clickable", "gainAutoStats"]]]],
+                            ], {width: "535px"}],
+                            ["style-row", [
+                                ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                            ], {width: "259px", marginRight: "6px"}],
+                        ], {width: "800px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["style-row", [
+                        ["top-column", [
+                            ["style-row", [
+                                ["category-button", ["Space Junk Upgrades", "automation", "spaceJunkUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                ["category-button", [() => {return "Ship Upgrades<br><small>(Reroll in " + formatSimpleTime(player.ir.shipUpgradeRerollTimer) + ")"}, "automation", "shipUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                //["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                /*["style-row", [
+                                    ["style-row", [
+                                        ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "176px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "none !important" : ""}}],
+                                ["style-row", [
+                                    ["category-button", ["Resource Extraction", "automation", "resourceExtraction"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "" : "none !important"}}],*/
+                            ], {}],
+
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "automation", {borderWidth: "0"}],
+                        ], {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", borderRight: "3px solid #f57171", width: "532px", height: "579px"}],
+                        
+                        ["always-scroll-column", [
+                            ["top-column", () => {
+                                let container = []
+                                let maxSaves = 3
+                                if (hasUpgrade('ir', 107)) maxSaves++;
+                                if (player.bl.noxDefeated) maxSaves++;
+                                for (let i = 0; i < maxSaves; i++) {
+                                    let save = player.ir.shipBattleSaves[i]
+                                    container.push(["style-column", [
+                                        ["style-column", [
+                                            ["raw-html", "Slot #" + (i + 1), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "25px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["style-column", [
+                                            ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
+                                                layers.ir.levelables[save.shipType].title()
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>Upgrade Count: " + formatSimple(save.upgradeCount, 2)
+                                                + "<br>Upgrade Score: " + formatSimple(save.upgradeScore, 2)
+                                            )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "98px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["layer-proxy", ["ir", [["clickable", "loadShipSave_" + i]]]],
+                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", marginBottom: "6px", width: "232px", height: "179px"}])
+                                }
+                                return container
+                            }, {width: "238px", minHeight: "567px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "6px", paddingBottom: "0", marginRight: "0px"}],
+                        ], {width: "265px", height: "579px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+        },
+        automation: {
+            "spaceJunkUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [["layer-proxy", ["ir", [
+                    ["blank", "4.5px"],
+                    ["style-row", [
+                        ["buyable", 301], ["buyable", 302],
+                    ]],
+                    ["style-row", [
+                        ["buyable", 303], ["upgrade", 301],
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 302], ["upgrade", 303],
+                    ]],
+                    ["blank", "4.5px"],
+                    ["raw-html", "Gain <span style='color:#ffb366;text-shadow:0 0 6px #ffb366'>space junk</span> in place of ship level-up upgrades you're already obtained.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
+                ]]]],
+            },
+            "shipUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [["layer-proxy", ["ir", [
+                    ["blank", "4.5px"],
+                    ["style-column", [
+                        ["style-row", [
+                            ["upgrade", 401], ["upgrade", 402],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 403], ["upgrade", 404],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 405], ["upgrade", 406],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 407], ["upgrade", 408],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 409], ["upgrade", 410],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 411], ["upgrade", 412],
+                        ]],
+                    ]],
+                    ["blank", "4.5px"],
+                    ["raw-html", "You must have a saved ship selected in order to purchase ship upgrades.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
+                ]]]],
+            },
+            "resourceExtraction": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+
+                ],
+            },
+        },
         stages: {
             "bloodZone1": {
                 unlocked: true,
@@ -878,44 +1470,42 @@
                 content: [
                     ["blank", "25px"],
                     ["style-row", [
-                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "13px 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
-                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "0 0 0 0"}],
                         ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
-                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "0 13px 0 0"}],
                     ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
-                    ["layer-proxy", ["ir", [
+                    ["top-column", [
+                        ["style-row", [
+                            ["category-button", ["Levelables", "ships", "levelables"], {width: "265px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "10"}],
+                            ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "264px", height: "40px", background: "#00003f", borderRadius: "0"}],
+                            ], () => {return {display: hasMilestone("spaceZone1", 11) ? "none !important" : ""}}],
+                            ["style-row", [
+                                ["category-button", ["Saves", "ships", "saves"], {width: "264px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], () => {return {display: hasMilestone("spaceZone1", 11) ? "" : "none !important"}}],
+
+                            ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "265px", height: "40px", background: "#00003f", borderRadius: "0"}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}}],
+                            ["style-row", [
+                                ["category-button", ["Space Junk", "ships", "automation"], {width: "265px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}}],
+
+                        ], {width: "800px", height: "40px", borderBottom: "3px solid #f57171", borderRadius: "0"}],
                         ["style-column", [
-                            ["style-row", [
-                                ["style-column", [
-
-                                ], {background: "#0000007f", width: "247px", height: "300px"}],
-                                ["style-column", [
-                                    ["clickable", 17],
-                                    ["raw-html", "notice for testers: only one mobile control scheme is implemented.", {color: "yellow", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {background: "radial-gradient(circle, white -100%, #00000000 50%)", borderLeft: "3px solid #f57171", borderRight: "3px solid #f57171", width: "300px", height: "300px"}],
-                                ["style-column", [
-
-                                ], {background: "#0000007f", width: "247px", height: "300px"}],
-                            ], {borderBottom: "3px solid #f57171", width: "800px", height: "300px"}],
-                            ["style-row", [
-                                ["style-column", [
-                                    ["levelable-display", [
-                                        ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                    ]],
-                                ], {width: "550px", height: "175px", backgroundColor: "#1a0808", borderBottom: "3px solid #f57171", borderRadius: "2px 2px 0 0"}],
-                                ["always-scroll-column", [
-                                    ["style-column", [
-                                        ["raw-html", "Ships", {color: "#f57171", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "541px", height: "40px", backgroundColor: "#401313", borderBottom: "3px solid #f57171",  borderLeft: "3px solid #f57171",  userSelect: "none"}],
-                                    ["style-column", [
-                                        ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                        ["row", [["levelable", 6],["levelable", 7],["levelable", 8],["levelable", 9],["levelable", 10],]],
-                                    ], {width: "531px", height: "260px", backgroundColor: "#290c0c", borderLeft: "3px solid #f57171", padding: "5px"}],
-                                ], {width: "556px", height: "240px"}],
-                            ], {width: "800px", height: "417px"}],
-                        ], {width: "800px", height: "720px", background: "radial-gradient(circle, #290c0c 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}]
-                    ]]],
+                            ["buttonless-microtabs", "ships", {borderWidth: "0"}],
+                        ], {width: "800px", height: "677px", borderRadius: "0"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #260b0b 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}],
                     ["blank", "25px"],
                 ],
             },
@@ -1072,30 +1662,75 @@
                 ],
             },
             "Battle": {
-                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
-                content() { return [
-                    ["layer-proxy", ["ir", [
+                content() {
+
+                    let container = []
+                    switch (player.ir.menu) {
+                        case 1: { // IN UPGRADE SELECTION
+                            container.push(
+                                ["top-column", [
+                                    ["style-row", [
+                                        ["category-button", ["Level-Up Upgrades", "battleUpgradeSelection", "experience"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {width: "398.5px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                        ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                                        ["style-row", [
+                                            ["category-button", ["Salvaged Upgrades", "battleUpgradeSelection", "salvage"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+                                    ], {background: "black", width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                                    ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
+                                    ["buttonless-microtabs", "battleUpgradeSelection", {borderWidth: "0"}],
+                                ], {background: ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "2f 0 15px, " + player.ir.secondaryColor + "3f 0 30px)"), height: "800px"}],
+                            )
+                        break; }
+                        case 2: { // IN STATS
+                            container.push(
+                                ["top-column", [
+                                    ["style-row", [
+                                        ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
+                                        ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                    ], {width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                                    ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
+                                    ["buttonless-microtabs", "shipSelection", {borderWidth: "0"}],
+                                ], {height: "800px"}],
+                            )
+                        break; }
+                        default: { // IN NOTHING
+                        break; };
+                    }
+
+                    return [
                         ["style-column", [], {height: (arena && arena._fullscreen) ? "10px" : "0"}],
                         ["style-column", [
                             ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
                             ["style-row", [
                                 ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
-                            ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gte(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
+                            ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gt(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
                         ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._fullscreen) ? "none !important" : ""}],
-                        ["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]],
-                        ["style-column", [], {height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px"}],
-                        ["row", [["ex-bar", "bossHealthBar"],]],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]]]]],
                         ["style-column", [
+                        ], {display: player.ir.menu != 0 ? "none !important" : "", border: "3px solid " + player.ir.primaryColor, borderTop: "0", borderBottom: "0", height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [
+                            ["style-column", container, {marginLeft: "-3px", border: "3px solid " + player.ir.primaryColor, background: player.ir.menu != 2 ? "transparent" : "black"}]
+                        ], {display: player.ir.menu == 0 ? "none !important" : "",  height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [], {background: player.ir.primaryColor, width: (arena && arena._fullscreen) ? "calc(100vw)" : "806px", height: "3px"}],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "bossHealthBar"],]]]]],
+                        ["layer-proxy", ["ir", [["style-column", [
                             ["blank", "9px", {width: "6px"}],
                             ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                             ["blank", "9px", {width: "6px"}],
                             ["row", [
                                 ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
                             ]],
-                        ], {width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._fullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}]
-                    ]],
-                ]]}
+                        ], {width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._fullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],]]]
+                    ]
+                }
             },
             "Refresh Page :(": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -1104,7 +1739,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You baboon. WHY DID YOU REFRESH THE PAGE???" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["clickable", 12],
+                    ["layer-proxy", ["ir", [["clickable", 12]]]],
                 ]
             },
             "Lose": {
@@ -1114,8 +1749,51 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You lost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["clickable", 12],
+                    ["layer-proxy", ["ir", [["clickable", 12]]]],
                 ]
+            },
+        },
+        battleUpgradeSelection: {
+            "experience": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return false },
+                content() {
+                    return [
+                        ["style-column", [
+                            ["raw-html", "<h2>Choose an Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["style-row", [
+                                ["clickable", "levelUpUpgrade_0"],
+                                ["clickable", "levelUpUpgrade_1"],
+                                ["clickable", "levelUpUpgrade_2"],
+                            ], {width: "800px", background: player.ir.secondaryColor, height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}]]]],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["clickable", "levelUpUpgrade_confirm"]]]],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "salvage": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return false },
+                content() {
+                    return [
+                        ["style-column", [
+                            ["raw-html", "<h2>Choose a Salvaged Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "10px"],
+                            ["style-row", [
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 0 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_0"]]]],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 1 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_1"]]]],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 2 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_2"]]]],
+                            ], {width: "800px", background: "radial-gradient(circle, #ffb366, " + player.ir.secondaryColor + ")", height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_confirm"]]]],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
             },
         },
     },

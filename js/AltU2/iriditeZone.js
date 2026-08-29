@@ -168,7 +168,7 @@ SB_zones.iriditeZone = {
         return hasUpgrade("ir", 19)
     },
 
-    primaryColor: "#ffffff",
+    primaryColor: "#5e4ee6",
     secondaryColor: "#151230",
 
     levelLimit: 20,
@@ -191,7 +191,7 @@ SB_zones.iriditeZone = {
     },
     levelUp(level) {
         // || level.eq(2)
-        if (level.modulo(20).eq(0)) {
+        if (level.modulo(1).eq(0)) {
             SB_spawnCelestialite("iridite")
         }
     },
@@ -209,10 +209,10 @@ SB_celestialites.iridite = {
     symbol: "iridite",
     radius: 64,
     color: "#ffffff",
-    health: new Decimal(1e5),
+    health: new Decimal(2e5),
     damage: new Decimal(6),
-    bodyDamage: new Decimal(1),
-    regen: new Decimal(6),
+    bodyDamage: new Decimal(0.5),
+    regen: new Decimal(20),
     reward() {
         let gain = {}
         let random = Math.random()
@@ -235,10 +235,10 @@ SB_celestialites.iridite = {
         player.ir.iriditeFought = true
 
         // Stat changes
-        celestialite.maxHealth = new Decimal(5e5)
-        celestialite.health = new Decimal(5e5)
+        celestialite.maxHealth = new Decimal(1e5)
+        celestialite.health = new Decimal(1e5)
         celestialite.damage = new Decimal(8)
-        celestialite.regen = new Decimal(50)
+        celestialite.regen = new Decimal(20)
 
         celestialite.phase = 1
         //celestialite.currentAttack = ['dagger', 'radial', 'shortBurst', 'homing'][Math.floor(Math.random() * 4)];

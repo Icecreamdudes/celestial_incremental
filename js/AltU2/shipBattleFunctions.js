@@ -443,7 +443,7 @@ function SB_enterRun(zoneId) {
     player.ir.battleStage = zoneId
 
     player.ir.shipHealth = player.ir.shipHealthMax
-    player.ir.battleLevel = player[player.ir.battleStage].selectedStageStart.add(1)
+    player.ir.battleLevel = player[player.ir.battleStage] && player[player.ir.battleStage].selectedStageStart ? player[player.ir.battleStage].selectedStageStart.add(1) : new Decimal(1)
 
     if (player.tab == "ir") {
         player.subtabs["ir"]['stuff'] = 'Battle'

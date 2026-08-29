@@ -2641,6 +2641,9 @@ function fixOldSave(oldVersion){
 		for (let i in player.cs.resourceCoreScraps) {
 			if (player.cs.resourceCoreScraps[i].gt(1e27)) player.cs.resourceCoreScraps[i] = player.cs.resourceCoreScraps[i].div(1e27).log(10).add(1).mul(1e27);
 		}
+		for (let i = player.ir.upgrades.length - 1; i >= 0; i--) {
+			if (typeof player.ir.upgrades[i] === "string") player.ir.upgrades.splice(i, 1);
+		}
 	}
 }
 

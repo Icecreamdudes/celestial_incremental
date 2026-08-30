@@ -1121,6 +1121,7 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 
+	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
 	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
 		Content:<br>
 			- Added universe δ.<br>
@@ -1142,6 +1143,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added stage 13 achievements.<br>
 			- Added a theme.<br>
 		<br>Design and QoL:<br>
+			- Temporarily removed the savebank tab because it can break your save.<br>
+			- Added a spoiler indicator to the changelog tab.<br>
 			- Changed many layer node styles for readability and consistency.<br>
 			- Shifted the hue of check back's blue.<br>
 			- Redesigned many check back tab UIs.<br>
@@ -1161,6 +1164,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Redesigned zar upgrade, coin flip, wheel of fortune, slot machine, check back shrine, and card UI.<br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 			- Redesigned enhance point UI.<br>
+			- Made zar perks state that a new singularity upgrade is unlocked, requiring the natural pylon.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
@@ -2619,8 +2623,10 @@ function fixOldSave(oldVersion){
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
 	}
 	if (oldVersion < 11400) {
+
 		if (player.s.singularities.gt(1e9)) player.s.singularities = new Decimal(player.s.singularities).div(1e9).log(10).add(1).mul(1e9);
 		if (player.s.singularityPoints.gt("1e7500")) player.s.singularityPoints = new Decimal(player.s.singularityPoints).div("1e7500").pow(0.1).mul("1e7500");
+		if (player.s.highestSingularityPoints.gt("1e7500")) player.s.highestSingularityPoints = new Decimal(player.s.highestSingularityPoints).div("1e7500").pow(0.1).mul("1e7500");
 		if (player.in.infinityPoints.gt("1e100000")) player.in.infinityPoints = new Decimal(player.in.infinityPoints).div("1e100000").pow(0.1).mul("1e100000");
 		if (player.in.infinities.gt("1e250")) player.in.infinities = new Decimal(player.in.infinities).div("1e250").pow(0.1).mul("1e250");
 		if (player.gh.steel.gt("1e25000")) player.gh.steel = new Decimal(player.gh.steel).div("1e25000").pow(0.1).mul("1e25000");
@@ -2628,13 +2634,54 @@ function fixOldSave(oldVersion){
 		if (player.au2.stars.gt(1e40)) player.au2.stars = new Decimal(player.au2.stars).div(1e40).log(10).add(1).mul(1e40);
 		if (player.ir.spaceRock.gt(1e9)) player.ir.spaceRock = new Decimal(player.ir.spaceRock).div(1e9).log(10).add(1).mul(1e9);
 		if (player.ir.spaceGem.gt(1e5)) player.ir.spaceGem = new Decimal(player.ir.spaceGem).div(1e5).log(10).add(1).mul(1e5);
-		if (player.ev2.orbs.gt(1e4)) player.ev2.orbs = new Decimal(player.ev2.orbs).div(1e4).log(10).add(1).mul(1e4);
 		if (player.i.pylonEnergy.gt(1e36)) player.i.pylonEnergy = new Decimal(player.i.pylonEnergy).div(1e36).log(10).add(1).mul(1e36);
 		if (player.in.pylonEnergy.gt(1e240)) player.in.pylonEnergy = new Decimal(player.in.pylonEnergy).div(1e240).log(10).add(1).mul(1e240);
-		
 		player.ep1.buyables[11] = new Decimal(player.ep1.buyables[11]).mul(4).ceil()
 		player.ep1.buyables[12] = new Decimal(player.ep1.buyables[12]).mul(0.4).ceil()
 		player.ep1.buyables[13] = new Decimal(player.ep1.buyables[13]).mul(0.2).ceil()
+
+		if (player.bl.noxDefeated && player.bl.upgrades.indexOf(11) == -1) player.bl.upgrades.push(11)
+
+		if (player.cs.scraps.point.amount.gt(1e27)) player.cs.scraps.point.amount = new Decimal(player.cs.scraps.point.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.factor.amount.gt(1e27)) player.cs.scraps.factor.amount = new Decimal(player.cs.scraps.factor.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.prestige.amount.gt(1e27)) player.cs.scraps.prestige.amount = new Decimal(player.cs.scraps.prestige.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.tree.amount.gt(1e27)) player.cs.scraps.tree.amount = new Decimal(player.cs.scraps.tree.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grass.amount.gt(1e27)) player.cs.scraps.grass.amount = new Decimal(player.cs.scraps.grass.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grasshopper.amount.gt(1e27)) player.cs.scraps.grasshopper.amount = new Decimal(player.cs.scraps.grasshopper.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.code.amount.gt(1e27)) player.cs.scraps.code.amount = new Decimal(player.cs.scraps.code.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.dice.amount.gt(1e27)) player.cs.scraps.dice.amount = new Decimal(player.cs.scraps.dice.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.rocket.amount.gt(1e27)) player.cs.scraps.rocket.amount = new Decimal(player.cs.scraps.rocket.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.antimatter.amount.gt(1e27)) player.cs.scraps.antimatter.amount = new Decimal(player.cs.scraps.antimatter.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.infinity.amount.gt(1e27)) player.cs.scraps.infinity.amount = new Decimal(player.cs.scraps.infinity.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.checkback.amount.gt(1e27)) player.cs.scraps.checkback.amount = new Decimal(player.cs.scraps.checkback.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.radioactive.amount.gt(1e27)) player.cs.scraps.radioactive.amount = new Decimal(player.cs.scraps.radioactive.amount).div(1e27).log(10).add(1).mul(1e27);
+
+		if (player.cs.scraps.point.gain.gt(1e27)) player.cs.scraps.point.gain = new Decimal(player.cs.scraps.point.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.factor.gain.gt(1e27)) player.cs.scraps.factor.gain = new Decimal(player.cs.scraps.factor.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.prestige.gain.gt(1e27)) player.cs.scraps.prestige.gain = new Decimal(player.cs.scraps.prestige.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.tree.gain.gt(1e27)) player.cs.scraps.tree.gain = new Decimal(player.cs.scraps.tree.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grass.gain.gt(1e27)) player.cs.scraps.grass.gain = new Decimal(player.cs.scraps.grass.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grasshopper.gain.gt(1e27)) player.cs.scraps.grasshopper.gain = new Decimal(player.cs.scraps.grasshopper.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.code.gain.gt(1e27)) player.cs.scraps.code.gain = new Decimal(player.cs.scraps.code.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.dice.gain.gt(1e27)) player.cs.scraps.dice.gain = new Decimal(player.cs.scraps.dice.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.rocket.gain.gt(1e27)) player.cs.scraps.rocket.gain = new Decimal(player.cs.scraps.rocket.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.antimatter.gain.gt(1e27)) player.cs.scraps.antimatter.gain = new Decimal(player.cs.scraps.antimatter.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.infinity.gain.gt(1e27)) player.cs.scraps.infinity.gain = new Decimal(player.cs.scraps.infinity.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.checkback.gain.gt(1e27)) player.cs.scraps.checkback.gain = new Decimal(player.cs.scraps.checkback.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.radioactive.gain.gt(1e27)) player.cs.scraps.radioactive.gain = new Decimal(player.cs.scraps.radioactive.gain).div(1e27).log(10).add(1).mul(1e27);
+		
+		if (player.ir.levelables[1][0].gt(55)) player.ir.levelables[1][0] = new Decimal(55);
+		if (player.ir.levelables[2][0].gt(55)) player.ir.levelables[2][0] = new Decimal(55);
+		if (player.ir.levelables[3][0].gt(55)) player.ir.levelables[3][0] = new Decimal(55);
+		if (player.ir.levelables[4][0].gt(55)) player.ir.levelables[4][0] = new Decimal(55);
+		if (player.ir.levelables[5][0].gt(55)) player.ir.levelables[5][0] = new Decimal(55);
+		if (player.ir.levelables[6][0].gt(55)) player.ir.levelables[6][0] = new Decimal(55);
+		if (player.ir.levelables[7][0].gt(55)) player.ir.levelables[7][0] = new Decimal(55);
+		if (player.ir.levelables[8][0].gt(50)) player.ir.levelables[8][0] = new Decimal(50);
+		if (player.ir.levelables[9][0].gt(55)) player.ir.levelables[9][0] = new Decimal(55);
+		for (let i = player.ir.upgrades.length - 1; i >= 0; i--) {
+			if (typeof player.ir.upgrades[i] === "string") player.ir.upgrades.splice(i, 1);
+		}
 
 		player.bl.buyables[11] =  new Decimal(player.bl.buyables[11]).mul(0.4).ceil()
 		player.bl.buyables[12] =  new Decimal(player.bl.buyables[12]).mul(0.2).ceil()
@@ -2647,41 +2694,12 @@ function fixOldSave(oldVersion){
 		player.bl.buyables[102] = new Decimal(player.bl.buyables[32]).mul(30/50).ceil()
 		player.bl.buyables[103] = new Decimal(player.bl.buyables[33]).mul(30/25).ceil()
 
-		if (player.bl.noxDefeated && player.bl.upgrades.indexOf(11) == -1) player.bl.upgrades.push(11)
-
 		player.cbs.buyables[101] = new Decimal(player.cbs.buyables[21])
 		player.cbs.buyables[102] = new Decimal(player.cbs.buyables[22])
 		player.cbs.buyables[103] = new Decimal(player.cbs.buyables[23])
 		player.cbs.buyables[21] = new Decimal(0)
 		player.cbs.buyables[22] = new Decimal(0)
 		player.cbs.buyables[23] = new Decimal(0)
-		
-		if (player.ir.levelables[1][0].gt(55)) player.ir.levelables[1][0] = new Decimal(55);
-		if (player.ir.levelables[2][0].gt(55)) player.ir.levelables[2][0] = new Decimal(55);
-		if (player.ir.levelables[3][0].gt(55)) player.ir.levelables[3][0] = new Decimal(55);
-		if (player.ir.levelables[4][0].gt(55)) player.ir.levelables[4][0] = new Decimal(55);
-		if (player.ir.levelables[5][0].gt(55)) player.ir.levelables[5][0] = new Decimal(55);
-		if (player.ir.levelables[6][0].gt(55)) player.ir.levelables[6][0] = new Decimal(55);
-		if (player.ir.levelables[7][0].gt(55)) player.ir.levelables[7][0] = new Decimal(55);
-		if (player.ir.levelables[8][0].gt(50)) player.ir.levelables[8][0] = new Decimal(50);
-		if (player.ir.levelables[9][0].gt(55)) player.ir.levelables[9][0] = new Decimal(55);
-
-		if (player.cs.scraps.point.amount.gt(1e27)) player.cs.scraps.point.amount = new Decimal(player.cs.scraps.point).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.factor.amount.gt(1e27)) player.cs.scraps.factor.amount = new Decimal(player.cs.scraps.factor).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.prestige.amount.gt(1e27)) player.cs.scraps.prestige.amount = new Decimal(player.cs.scraps.prestige).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.tree.amount.gt(1e27)) player.cs.scraps.tree.amount = new Decimal(player.cs.scraps.tree).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.grass.amount.gt(1e27)) player.cs.scraps.grass.amount = new Decimal(player.cs.scraps.grass).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.grasshopper.amount.gt(1e27)) player.cs.scraps.grasshopper.amount = new Decimal(player.cs.scraps.grasshopper).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.code.amount.gt(1e27)) player.cs.scraps.code.amount = new Decimal(player.cs.scraps.code).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.dice.amount.gt(1e27)) player.cs.scraps.dice.amount = new Decimal(player.cs.scraps.dice).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.rocket.amount.gt(1e27)) player.cs.scraps.rocket.amount = new Decimal(player.cs.scraps.rocket).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.antimatter.amount.gt(1e27)) player.cs.scraps.antimatter.amount = new Decimal(player.cs.scraps.antimatter).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.infinity.amount.gt(1e27)) player.cs.scraps.infinity.amount = new Decimal(player.cs.scraps.infinity).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.checkback.amount.gt(1e27)) player.cs.scraps.checkback.amount = new Decimal(player.cs.scraps.checkback).div(1e27).log(10).add(1).mul(1e27);
-		if (player.cs.scraps.radioactive.amount.gt(1e27)) player.cs.scraps.radioactive.amount = new Decimal(player.cs.scraps.radioactive).div(1e27).log(10).add(1).mul(1e27);
-		for (let i = player.ir.upgrades.length - 1; i >= 0; i--) {
-			if (typeof player.ir.upgrades[i] === "string") player.ir.upgrades.splice(i, 1);
-		}
 	}
 }
 

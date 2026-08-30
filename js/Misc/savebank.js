@@ -21,7 +21,7 @@ addLayer("savebank", {
         4: {
             title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
             canClick: true,
-            unlocked: true,
+            unlocked: false,
             onClick() {
                 player.tab = "savebank"
             },

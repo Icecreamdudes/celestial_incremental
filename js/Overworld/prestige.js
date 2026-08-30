@@ -838,6 +838,8 @@
             onPress() {
                 clickClickable(this.layer, 12)
             },
+
+            style: { color: "white", borderColor: "#31aeb0", backgroundColor: "#98245c"}
         },
 	]
 })

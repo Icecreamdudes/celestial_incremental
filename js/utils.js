@@ -377,7 +377,7 @@ document.onkeydown = function (e) {
 	if (k) {
 		if (
 			(readData(layers[k.layer].layerShown) == true || k.layer == "settings") // make hotkeys in settings always active
-			&& readData(k.unlocked !== false) && !tmp[k.layer].hotkeys[k.id].isAutomated
+			&& readData(k.unlocked) !== false && !tmp[k.layer].hotkeys[k.id].isAutomated
 		)
 			k.onPress()
 	}

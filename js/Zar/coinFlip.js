@@ -20,6 +20,7 @@
         coinHeads: true, //tails if false
         flipLength: new Decimal(5), //how long the coin flip lasts (seconds)
         flipTimer: new Decimal(0), // elapsed flip time (seconds)
+        flipDelay: 0, // flip delay (seconds) tracked for the coin flip animation
 
         // runtime-only state
         flipping: false,
@@ -28,6 +29,7 @@
 
         flipCost: new Decimal(10),
         coinsFlipped: new Decimal(0),
+        reductionCooldown: new Decimal(0),
 
         autoFlip: false,
         coinExploit: new Decimal(0),
@@ -67,7 +69,7 @@
         }
     },
     tooltip: "Coin Flip",
-    color: "#80613fff",
+    color: "#f5b678ff",
     branches: ["za",],
     update(delta) {
         // one-time client-side reset after a page load to clear any saved timers
@@ -184,6 +186,7 @@
         if (player.cf.coinsFlipped.gte(500)) player.cf.flipCost = player.cf.coinsFlipped.mul(20).pow(2.75).add(1)
         if (player.cf.coinsFlipped.gte(1500)) player.cf.flipCost = player.cf.coinsFlipped.mul(20).pow(5).add(1)
         player.cf.flipCost = player.cf.flipCost.div(buyableEffect("cf", 22))
+        player.cf.reductionCooldown = player.cf.reductionCooldown.sub(delta)
 
         if (player.cf.autoFlip)
         {
@@ -200,22 +203,25 @@
         if (Decimal.gt(player.cf.coinExploit, 0)) {
             player.cf.coinExploit = Decimal.sub(player.cf.coinExploit, 0.01).max(0)
         }
-        if (Decimal.lt(player.cf.coinExploit, 0)) {
-            player.cf.coinExploit = Decimal.add(player.cf.coinExploit, delta)
+        if (player.cf.coinExploit < 0) {
+            player.cf.coinExploit = player.cf.coinExploit + delta
         }
 
-        if (Decimal.gte(player.cf.coinExploit, 5)) {
+        if (player.cf.coinExploit >= 10) {
             player.cf.heads = new Decimal(0)
             player.cf.tails = new Decimal(0)
             player.cf.coinsFlipped = new Decimal(0)
 
-            player.cf.coinExploit = new Decimal(-5)
+            player.cf.coinExploit = -5
             if (player.tab == "cf") makeParticles(BIG_COOKIE_NUMBER, 1, `normal`, {text: "SUPER COIN CLIP"})
         }
     },
     clickables: {
         11: {
-            title() { return player.cf.coinHeads ? "<img src='resources/coinHeads.png'style='width:150px;height:150px;margin:-35px;'></img>" : "<img src='resources/coinTails.png'style='width:150px;height:150px;margin:-35px'></img>"},
+            title() { 
+                return player.cf.flipping ? player.cf.coinHeads ? "<img src='resources/coinHeads.png'style='width:" + Math.abs(Math.sin((Date.now() - player.cf.flipDelayStart) / (player.cf.flipDelayEnd - player.cf.flipDelayStart) * Math.PI) * 150) + "px;height:150px;margin:-35px;'></img>" : "<img src='resources/coinTails.png'style='width:" + Math.abs(Math.sin((Date.now() - player.cf.flipDelayStart) / (player.cf.flipDelayEnd - player.cf.flipDelayStart) * Math.PI) * 150) + "px;height:150px;margin:-35px'></img>"
+                : player.cf.coinHeads ? "<img src='resources/coinHeads.png'style='width:" + Math.abs(Math.sin(Math.min(Math.PI / 2, (Date.now() - player.cf.flipDelayStart) / (player.cf.flipDelayEnd - player.cf.flipDelayStart)) * Math.PI) * 150) + "px;height:150px;margin:-35px;'></img>" : "<img src='resources/coinTails.png'style='width:" + Math.abs(Math.sin(Math.min(Math.PI / 2, (Date.now() - player.cf.flipDelayStart) / (player.cf.flipDelayEnd - player.cf.flipDelayStart)) * Math.PI) * 150) + "px;height:150px;margin:-35px'></img>"
+            },
             canClick() { return !player.cf.flipping && player.za.chancePoints.gte(player.cf.flipCost)},
             tooltip() { return "<h5>Flip Length: " + format(player.cf.flipLength) + ". <h6>(I don't know what unit of measurement this is in, but it's probably seconds.)" },
             unlocked() { return true },
@@ -227,7 +233,7 @@
                 player.cf.coinsFlipped = player.cf.coinsFlipped.add(1)
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '100px', "min-height": '100px', borderRadius: "1000px", backgroundColor: "#202020ff", borderColor: "#000000ff", color: "#ffffff" },
+            style: { width: '110px', minHeight: '110px', paddingTop: "5px", borderRadius: "150px", backgroundColor: "#00000000", borderColor: "#00000000", color: "#ffffff" },
         },
         12: {
             title() { return player.cf.autoFlip ? "Autoflip: ON" : "Autoflip: OFF" },
@@ -237,54 +243,29 @@
                 if (!player.cf.autoFlip) player.cf.autoFlip = true
                 else player.cf.autoFlip = false
             },
-            style() { 
-                return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
-            },
+            style: {width: '300px', minHeight: '45px', color: "black", border: "2px solid #000000bf", borderRadius: "10px", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         13: {
-            title() { return "Coin Clipper" },
-            canClick() { return Decimal.gte(player.cf.coinExploit, 0) || typeof player.cf.coinExploit === "string" },
-            tooltip() { return "<h5>Resets flip count, heads, tails, and heads and tails buyables. Use it when you screw up. (You suck at this game)" },
+            title() { return player.cf.reductionCooldown.gt(0) ? "On cooldown...<br><small>" + formatTime(player.cf.reductionCooldown) + "</small>" : "Reduce coins flipped by /1.2<br><small>That pesky softcap got to you yet?</small>"},
+            canClick() { return player.cf.reductionCooldown.lte(0) },
             unlocked() { return true },
             onClick() {
-                player.za.chancePoints = new Decimal(0)
-
-                player.cf.coinsFlipped = new Decimal(0)
-                player.cf.heads = new Decimal(0)
-                player.cf.tails = new Decimal(0)
-
-                try {
-                    if (typeof window !== 'undefined' && !window.__cfInitDone) {
-                        // clear any leftover timeout id (might be present from a saved object)
-                        if (player.cf && player.cf._flipTimeoutId) {
-                            try { clearTimeout(player.cf._flipTimeoutId) } catch (e) {}
-                            player.cf._flipTimeoutId = null
-                        }
-
-                        // reset runtime flip state so the coin isn't mid-flip on a reload
-                        if (player.cf) {
-                            player.cf.flipping = false
-                            player.cf.flipTimer = new Decimal(0)
-                            player.cf.coinHeads = true
-                            player.cf._finalSide = null
-                        }
-
-                        window.__cfInitDone = true
-                    }
-                } catch (e) { console.error("cf update init error:", e) }
-
-                player.cf.buyables[21] = new Decimal(0)
-                player.cf.buyables[22] = new Decimal(0)
-                player.cf.buyables[23] = new Decimal(0)
-                player.cf.buyables[31] = new Decimal(0)
-                player.cf.buyables[32] = new Decimal(0)
-                player.cf.buyables[33] = new Decimal(0)
-                player.cf.buyables[34] = new Decimal(0)
+                player.cf.coinsFlipped = player.cf.coinsFlipped.div(1.2).floor()
+                player.cf.reductionCooldown = new Decimal(1800).div(buyableEffect("wof", 16))
             },
-            onHold() {player.cf.coinExploit = Decimal.add(player.cf.coinExploit, 0.1)},
-            style() { 
-                return { width: '100px', "min-height": '100px', borderRadius: "15px 15px 15px 15px", border: "3px solid #9b5a48ff", backgroundColor: "#744335ff" }
-            },
+            style() {
+                let look = {width: '300px', minHeight: '60px', border: "2px solid #000000bf", borderRadius: "10px" }
+                if (this.canClick()) {
+                    look.backgroundImage = "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)"
+                    look.border = "2px solid black"
+                    look.color = "black"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                    look.border = "2px solid #663737"
+                    look.color = "white"
+                }
+                return look
+            }
         },
     },
     coinFlip() {
@@ -310,6 +291,7 @@
 
             const startTS = Date.now()
             const endTS = startTS + L * 1000
+            player.cf.flipDelayEnd = endTS
 
             player.cf.flipping = true
             player.cf.flipTimer = new Decimal(0)
@@ -326,8 +308,8 @@
                 player.cf.flipTimer = Decimal.min(player.cf.flipLength, new Decimal(elapsedMs / 1000))
 
                 if (msLeft <= 0) {
-                    // finish: settle on the pre-determined final side (fair 50/50)
-                    player.cf.coinHeads = !!player.cf._finalSide
+
+                    player.cf.coinHeads = !player.cf.coinHeads
 
                     // award heads or tails amount
                     try {
@@ -359,6 +341,8 @@
                 // schedule next tick
                 let delay = 1000 / Math.max(currentRate, 0.0001)
                 delay = Math.max(10, Math.min(2000, delay))
+                player.cf.flipDelayStart = Date.now()
+                player.cf.flipDelayEnd = Date.now() + delay
 
                 player.cf._flipTimeoutId = setTimeout(tick, delay)
             }
@@ -387,13 +371,14 @@
         coinFlip: {
             unlocked: true,
             direction: RIGHT,
-            width: 300,
+            width: 240,
             height: 30,
             progress() {
                 return player.cf.flipTimer.div(player.cf.flipLength)
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#683e31ff"},
+            baseStyle: {backgroundColor: "black",},
+            fillStyle: {backgroundColor: "#7f5f00"},
+            borderStyle: {border: "3px soild red"},
             textStyle: {fontSize: "14px"},
             display() {
                 return player.cf.flipping ? "Coin is being flipped..." : "Flip the coin!";
@@ -436,7 +421,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)" }
         },
         12: {
             costBase() { return new Decimal(50) },
@@ -470,7 +455,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)" }
         },
         13: {
             costBase() { return new Decimal(100) },
@@ -504,7 +489,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)" }
         },
         14: {
             costBase() { return new Decimal(1000) },
@@ -538,7 +523,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, #474747ff 0%, #8d8d8dff 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #474747ff 0%, #8d8d8dff 74%)" }
         },
 
         //heads
@@ -553,7 +538,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase())},
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Heads > Tails (I'm not biased because my symbol is on it)."
+                return "Oooh that's my symbol!"
             },
             display() {
                 return 'which are boosting heads gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -574,7 +559,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         22: {
             costBase() { return new Decimal(6) },
@@ -587,7 +572,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Let me flip more coins please!"
+                return "Let me flip more coins!"
             },
             display() {
                 return 'which dividing coin flip cost by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -608,7 +593,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         23: {
             costBase() { return new Decimal(10000) },
@@ -621,7 +606,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Might as well just extend the softcap a bit more"
+                return "Might as well extend the softcap a bit!"
             },
             display() {
                 return 'which are extending the tails softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -642,7 +627,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         24: {
             costBase() { return new Decimal(50000) },
@@ -655,10 +640,10 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "You're such a gambling addict. (Kept on wheel reset)"
+                return "You're such a gambling addict!"
             },
             display() {
-                return 'which are boosting wheel point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting wheel point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '. Kept on wheel reset.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Heads'
             },
             buy(mult) {
@@ -676,7 +661,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         //tails
         31: {
@@ -690,7 +675,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Bruh why is Iridite even the symbol for tails I hate her"
+                return "Nooo I hate Iridite!"
             },
             display() {
                 return 'which are boosting tails gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -711,7 +696,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         32: {
             costBase() { return new Decimal(10) },
@@ -745,7 +730,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         33: {
             costBase() { return new Decimal(10000) },
@@ -758,7 +743,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Why are everything just extending softcaps we need more creative boosts"
+                return "More creative boosts when?"
             },
             display() {
                 return 'which are extending the heads softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -779,7 +764,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
         34: {
             costBase() { return new Decimal(50000) },
@@ -792,7 +777,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Encourage your gambling addiction"
+                return "Fuel your gambling addiction!"
             },
             display() {
                 return 'which are dividing wheel spin requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -813,7 +798,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '192px', height: '221px', color: "black", backgroundImage: "linear-gradient(120deg, rgb(129, 112, 93) 0%, rgb(156, 93, 74) 100%)" }
+            style: { width: '180px', height: '180px', color: "black", border: "2px solid #000000bf", backgroundImage: "linear-gradient(105deg, #bf905e 0%, #d17c62 74%)" }
         },
     },
     milestones: {},
@@ -828,56 +813,59 @@
                 content: [
                     //make any of the columns scrollable when needed
 
-                    ["blank", "25px"],
-                    ["style-row", [
-                    ["style-column", [ //heads
-                    ["style-column", [ 
-                    ["raw-html", function () { return "You have <h3>" + format(player.cf.heads) + "</h3> heads. (+" + format(player.cf.headsToGet) + ")" }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ["raw-html", () => { return player.cf.heads.gte(player.cf.headsSoftcapStart) ? "After " + format(player.cf.headsSoftcapStart) + " heads, gain is divided by /" + format(player.cf.headsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Boosts chance points by x" + format(player.cf.headsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts tails gain by x" + format(player.cf.headsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "400px", height: "97px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 0px"}],   
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 21],["ex-buyable", 22],]],
-                    ["row", [["ex-buyable", 23],["ex-buyable", 24],]],
-                    ], {width: "400px", height: "600px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 0px 0px 15px"}],  
-                    ], {width: "400px", height: "700px", background: "rgb(129, 112, 93, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "15px 0px 0px 15px"}],
-                    
-                    
-                    ["style-column", [ //coin
-                    ["style-column", [ 
-                    ["row", [ ["bar", "coinFlip"],]],
-                    ["blank", "5px"],
-                    ["raw-html", function () { return player.cf.coinHeads ? "Coin is currently heads." : "Coin is currently tails." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Coins flipped: " + formatWhole(player.cf.coinsFlipped) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Cost to flip coin: " + format(player.cf.flipCost) + " Chance Points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [ ["clickable", 11], ["blank", "25px"], ["clickable", 12], ["blank", "25px"], ["clickable", 13],]],
-                    ], {width: "394px", height: "247px", background: "rgb(156, 93, 74, 0.5)", border: "0px solid #ccc",   borderRadius: "0px"}],
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],]],
-                    ["row", [["ex-buyable", 13],["ex-buyable", 14],]],
-    
-                    ], {width: "394px", height: "450px", background: "rgb(156, 93, 74, 0.5)", border: "3px solid #ccc", borderBottom: "0px", borderRight: "0px", borderLeft: "0px", borderRadius: "0px"}],
-                    ], {width: "394px", height: "700px", background: "rgb(156, 93, 74, 0.5)", border: "3px solid #ccc",  borderRadius: "0px"}],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["style-row", [ //coin
+                            ["style-column", [
+                                ["blank", "3px"],
+                                ["row", [ ["bar", "coinFlip"],]],
+                                ["blank", "6px"],
+                                ["raw-html", function () { return player.cf.coinHeads ? "Coin is currently heads." : "Coin is currently tails." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["row", [["clickable", 11]]],
+                                ["blank", "6px"],
+                                ["raw-html", function () { return "Coins flipped: " + formatWhole(player.cf.coinsFlipped) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "Cost to flip coin: " + format(player.cf.flipCost) + " Chance Points." }, () => {
+                                    return { "color": "white", "font-size": "16px", "font-family": "monospace", display: hasUpgrade("za", 18) ? "none !important" : ""}
+                                }],
+                                ["blank", "6px"],
+                                ["clickable", 12],
+                                ["blank", "3px"],
+                                ["clickable", 13],
+                            ], {width: "400px", height: "250px", borderRadius: "0px"}],
+                            ["style-column", [
+                                ["row", [ ["layerColor-dark-buyable", 11], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 12], ]],
+                                ["blank", "3px", {width: "3px"}],
+                                ["row", [ ["layerColor-dark-buyable", 13], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 14], ]],
+                            ], {width: "400px", borderRadius: "0px"}],
+                        ], {width: "800px", height: "400px", background: "#00000000", borderRadius: "10px 10px 0px 0px"}],
+                        ["style-row", [], {backgroundColor: "#f5b678ff", width: "100%", height: "3px"}],
+                        ["style-row", [
+                            ["top-column", [ //heads
+                                ["blank", "6px"],
+                                ["raw-html", function () { return "You have <h3>" + format(player.cf.heads) + "</h3> heads. (+" + format(player.cf.headsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", () => { return player.cf.heads.gte(player.cf.headsSoftcapStart) ? "<small>After " + format(player.cf.headsSoftcapStart) + " heads, gain is divided by /" + format(player.cf.headsSoftcapEffect) + ".</small>" : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", function () { return "<small>Boosts chance points by x" + format(player.cf.headsEffect) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts tails gain by x" + format(player.cf.headsEffect2) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["row", [ ["layerColor-dark-buyable", 21], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 22], ]],
+                                ["blank", "3px", {width: "3px"}],
+                                ["row", [ ["layerColor-dark-buyable", 23], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 24], ]],
+                            ], {width: "400px", height: "475px", background: "#0000005f", borderRadius: "0px 0px 0px 10px"}],
+                            ["top-column", [ //tails
+                                ["blank", "6px"],
+                                ["raw-html", function () { return "You have <h3>" + format(player.cf.tails) + "</h3> tails. (+" + format(player.cf.tailsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", () => { return player.cf.tails.gte(player.cf.tailsSoftcapStart) ? "<small>After " + format(player.cf.tailsSoftcapStart) + " tails, gain is divided by /" + format(player.cf.tailsSoftcapEffect) + ".</small>" : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", function () { return "<small>Extends chance point softcap by x" + format(player.cf.tailsEffect) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "<small>Boosts heads gain by x" + format(player.cf.tailsEffect2) + ".</small>" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "6px"],
+                                ["row", [ ["layerColor-dark-buyable", 31], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 32], ]],
+                                ["blank", "3px", {width: "3px"}],
+                                ["row", [ ["layerColor-dark-buyable", 33], ["blank", "3px", {width: "3px"}], ["layerColor-dark-buyable", 34], ]],
+                            ], {width: "400px", height: "475px", background: "#0000007f", borderRadius: "0px 0px 10px 0px"}],
+                        ]]
+                    ], {background: "linear-gradient(105deg, #80613fff 0%, #9c5d4aff 74%)", border: "3px solid #f5b678ff",  borderRadius: "13px"}],
 
-
-                    ["style-column", [ //tails
-                    ["style-column", [ 
-                    ["raw-html", function () { return "You have <h3>" + format(player.cf.tails) + "</h3> tails. (+" + format(player.cf.tailsToGet) + ")" }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ["raw-html", () => { return player.cf.tails.gte(player.cf.tailsSoftcapStart) ? "After " + format(player.cf.tailsSoftcapStart) + " tails, gain is divided by /" + format(player.cf.tailsSoftcapEffect) + "." : "" }, {color: "red", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Extends chance point softcap by x" + format(player.cf.tailsEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Boosts heads gain by x" + format(player.cf.tailsEffect2) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "400px", height: "97px", background: "rgb(128, 87, 54, 0.5)", border: "3px solid #ccc",  borderBottom: "0px", borderTop: "0px", borderLeft: "0px", borderRadius: "15px 15px 0px 15px"}],
-                    ["style-column", [ 
-                    ["row", [["ex-buyable", 31],["ex-buyable", 32],]],
-                    ["row", [["ex-buyable", 33],["ex-buyable", 34],]],
-
-
-
-                    ], {width: "400px", height: "600px", background: "rgb(128, 87, 54, 0.5)", border: "3px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 0px 15px 0px"}],
-                    ], {width: "400px", height: "700px", background: "rgb(128, 87, 54, 0.5)", border: "0px solid #ccc", borderRight: "0px", borderLeft: "0px", borderRadius: "0px 15px 15px 0px"}],
-                    ], {width: "1200px", height: "700px", background: "rgb(129, 112, 93, 0.5)", border: "3px solid #ccc", borderRadius: "15px"}],
                 ]
             },
         },

@@ -50,6 +50,8 @@ addLayer("st", {
             if (i < 7) {
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(player.st.dimensionPowerEffects[i + 1])
                 player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("st", i + 11))
+                if (hasUpgrade("ir", 31)) player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(3)
+                player.st.dimensionsGain[i] = player.st.dimensionsGain[i].mul(buyableEffect("ir", 301))
             }
             player.st.dimensionsTimerMax[i] = player.st.dimensionsTimerMax[i].div(buyableEffect("sme", 152))
             if (player.st.dimensionsTimer[i].gte(player.st.dimensionsTimerMax[i])) {
@@ -72,9 +74,13 @@ addLayer("st", {
 
         // Star Power Softcap
         let base = new Decimal(300)
-        if (player.st.starPowerPerSecond.gt(1e300)) player.st.starPowerPerSecond = player.st.starPowerPerSecond.div(1e300).pow(Decimal.div(base, player.st.starPowerPerSecond.plus(1).log(10))).mul(1e300)
+        if (player.st.starPowerPerSecond.gt(1e300)) player.st.starPowerPerSecond = player.st.starPowerPerSecond.div(1e300).pow(Decimal.div(base, player.st.starPowerPerSecond.plus(1).log(10))).mul(1e300);
 
-        player.st.starPowerEffect = player.st.starPower.plus(1).log10().div(100).add(1).min(1.3)
+        player.st.starPowerEffect = player.st.starPower.plus(1).log10().div(100).add(1)
+        if (player.st.starPowerEffect.gte(1.3)) {
+            if (hasMilestone("spaceZone1", 13)) player.st.starPowerEffect = player.st.starPowerEffect.div(1.3).pow(0.5).mul(1.3);
+            else player.st.starPowerEffect = player.st.starPowerEffect.min(1.3);
+        }
         player.st.starPowerEffect2 = player.st.starPower.pow(50).add(1)
         player.st.starPowerEffect3 = player.st.starPower.pow(0.4).add(1)
 
@@ -226,7 +232,7 @@ addLayer("st", {
                 }
             },
             style() {
-                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                let look = {width: "262.5px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
                 return look
             },
@@ -247,7 +253,7 @@ addLayer("st", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "211px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
+                let look = {width: "262.5px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 if (!player.ev.evolutionsUnlocked[3]) look.width = "425px"
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : look.backgroundColor = "#4e7cff"
                 return look
@@ -693,7 +699,7 @@ addLayer("st", {
             effect() {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
-                    amt.eq(0) ? new Decimal(1) : Decimal.pow(0.98, amt.mul(Decimal.pow(2, getLevelableTier(this.layer, this.id)))), // Softcap 
+                    amt.eq(0) ? new Decimal(1) : Decimal.pow(0.98, amt.mul(Decimal.pow(1.25, getLevelableTier(this.layer, this.id)))), // Softcap 
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -2108,6 +2114,70 @@ addLayer("st", {
             },
             style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg,rgb(128, 24, 11) 0%,rgb(136, 6, 82) 100%", border: "5px solid #000000", borderColor: "#000000", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
+        111: {
+            costBase() { return new Decimal(1e26) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.au2.stars},
+            pay(amt) { player.au2.stars = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2).sub(1).div(10).add(1)  },
+            unlocked() { return player.st.buyables[110].gte(50) && hasMilestone("prj", 403) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting cloud gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+            },
+            branches: [110],
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(150deg,rgb(122, 122, 122) 0%,rgb(233, 233, 233) 50%,rgb(122, 122, 122) 100%)", border: "5px solid white", borderColor: "white", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        112: {
+            costBase() { return new Decimal(1e30) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.au2.stars},
+            pay(amt) { player.au2.stars = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2) },
+            unlocked() { return player.st.buyables[111].gte(5) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are boosting first four emotions gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+            },
+            branches: [111],
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(90deg, #fcff04 0%, white 100%)", border: "5px solid grey", borderColor: "grey", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
         //Progression
         201: {
             costBase() { return new Decimal(50) },
@@ -2273,6 +2343,70 @@ addLayer("st", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(50deg, #9c86ebff 0%, #433186ff 50%, #231947ff 100%)", border: "5px solid #010003ff", borderColor: "#010003ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        207: {
+            costBase() { return new Decimal(1e27) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.au2.stars},
+            pay(amt) { player.au2.stars = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2).sub(1).div(10).add(1)  },
+            unlocked() { return player.st.buyables[203].gte(1) && hasMilestone("prj", 403) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "which are multiplying space energy and time capsules stored by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+            },
+            branches: [203],
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(0deg, #221473ff 0%, #c5c5c5ff 50%, #147363 100%)", border: "5px solid #464646ff", borderColor: "#464646ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
+        208: {
+            costBase() { return new Decimal(1e32) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(1) },
+            currency() { return player.au2.stars},
+            pay(amt) { player.au2.stars = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01)  },
+            unlocked() { return player.st.buyables[207].gte(5)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "Reveals a new ascension pet.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+            },
+            branches: [207],
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(45deg, #c6f7ff 0%, #d5abff 100%)", border: "5px solid #5d51ff", borderColor: "#5d51ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         //planets
         301: {
@@ -2472,34 +2606,35 @@ addLayer("st", {
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
-                                ["style-row", [["clickable", 2], ["style-row", [], {width: "3px", height: "40px", background: "white"}], ["clickable", 1]], {width: '425px', height: '40px' }],
-                            ]],
-                        ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #9badff", borderRadius: "2px 2px 0 0"}],
+                                ["style-row", [["clickable", 2], ["clickable", 1]], {width: '650px', height: '40px' }],
+                            ], {width: "650px"}],
+                        ], {width: "650px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #37078f", borderRadius: "2px 2px 0 0"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Common", {color: "#9badff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#293b54", borderBottom: "3px solid #9badff", userSelect: "none"}],
+                                ["raw-html", "Common", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#9badff", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 101],["levelable", 102],["levelable", 103],["levelable", 104],["levelable", 105]]],
-                                ["row", [["levelable", 106],["levelable", 107],["levelable", 108],["levelable", 109],["levelable", 110]]],
-                            ], {width: "525px", backgroundColor: "#1f2133", padding: "5px"}],
+                                ["row", [["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104], ["levelable", 105], ["levelable", 106]]],
+                                ["row", [["levelable", 107], ["levelable", 108], ["levelable", 109], ["levelable", 110]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #4e5780 0 15px, #606c9e 0 30px)", padding: "2px"}],
             
                             ["style-column", [
-                                ["raw-html", "Uncommon", {color: "#6ddea9", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#1b2e1b", borderTop: "3px solid #6ddea9", borderBottom: "3px solid #6ddea9", userSelect: "none"}],
+                                ["raw-html", "Uncommon", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#6ddea9", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
-                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
-                            ], {width: "525px", backgroundColor: "#0f1c18", padding: "5px"}],
+                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205], ["levelable", 206]]],
+                                ["row", [["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #377055 0 15px, #458c6b 0 30px)", padding: "2px"}],
+                            
                             ["style-column", [
-                                ["raw-html", () => {return "Rare"}, {color: "#866dde", fontSize: "24px", fontFamily: "monospace"}],
-                            ], () => { return player.zarDungeon.zarDefeated ? {width: "535px", height: "40px", backgroundColor: "#2c224d", borderTop: "3px solid #866dde", borderBottom: "3px solid #866dde", userSelect: "none"}: {display: "none !important"}}],
+                                ["raw-html", "Rare", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.zarDungeon.zarDefeated ? {width: "631px", height: "40px", backgroundColor: "#866dde", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
-                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
-                            ], {width: "525px", backgroundColor: "#151024", padding: "5px"}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", borderRadius: "5px 5px 5px 5px"}],
+                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305], ["levelable", 306]]],
+                                ["row", [["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
+                            ], {width: "631px", background: "repeating-linear-gradient(-45deg, #433770 0 15px, #54458c 0 30px)", padding: "2px"}],
+                        ], {width: "650px", height: "522px"}],
+                    ], {width: "650px", height: "700px", backgroundColor: "#161616", border: "3px solid #37078f", borderRadius: "0"}],
                 ]
             },
             "Upgrade Trees": {
@@ -2523,7 +2658,11 @@ addLayer("st", {
                         }],
                         ["raw-html", () => {return player.st.starPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", () => { return "Boosts point gain by ^" + format(player.st.starPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {
+                        let str = "Boosts point gain by ^" + format(player.st.starPowerEffect, 3)
+                        str += player.st.starPowerEffect.gte(1.3) ? hasMilestone("spaceZone1", 13) ? " <small style='color:red'>[SOFTCAPPED]</small>" : " <small style='color:red'>[HARDCAPPED]</small>" : ""
+                        return str
+                        }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts dice points and rocket fuel by x" + format(player.st.starPowerEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts singularity dimensions by x" + format(player.st.starPowerEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
@@ -2621,6 +2760,10 @@ addLayer("st", {
                         ]],
                         ["row", [
                             ["ex-buyable", 110],
+                            ["ex-buyable", 111],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 112],
                         ]],
                         ["blank", "10px"],
                     ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
@@ -2639,14 +2782,16 @@ addLayer("st", {
                         ]],
                         ["row", [
                             ["ex-buyable", 203],
+                            ["ex-buyable", 207],
                         ]],
                         ["row", [
                             ["ex-buyable", 204],
+                            ["ex-buyable", 208],
                         ]],                        
                         ["row", [
                             ["ex-buyable", 205],
                             ["ex-buyable", 206],
-                        ]],
+                        ]],                        
                         ["blank", "10px"],
                     ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
@@ -2684,7 +2829,7 @@ addLayer("st", {
                 return look
             }],
         ]],
-        ["raw-html", () => {return player.au2.starSoftcapActive ? "After " + format(player.au2.starSoftcapStart) + " stars, raise star gain by ^" + format(player.au2.starSoftcapEffect) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => {return player.au2.starSoftcapActive ? "After " + format(player.au2.starSoftcapStart) + " stars, raise star gain by ^" + format(player.au2.starSoftcapEffect, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "You have " + formatWhole(player.pl.planets) + " planets"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

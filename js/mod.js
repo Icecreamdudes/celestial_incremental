@@ -17,22 +17,31 @@
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
-		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
+		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js", "AltU2/shipBattleFunctions.js", "AltU2/shipBattleShips.js",
+		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/evolutionField.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js", "Hive/twig.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
-		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "Zar/zar.js", "Zar/coinFlip.js",
- 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
+		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "DarkU1/blood.js", "DarkU1/bloodZone1.js", "DarkU1/noxZone.js", "Zar/zar.js", "Zar/coinFlip.js",
+ 		"Zar/wheelOfFortune.js", "Check Back/singularityPet.js", "Zar/slotMachine.js", "Zar/checkBackShrine.js", "Zar/ascensionRitual.js", "Zar/cards.js", "Cantepocalypse/enhance.js",
 		"Black Heart/blackHeart.js", "Black Heart/blackHeartFunctions.js", "Black Heart/characters.js", "Black Heart/skills.js", "Black Heart/depth1.js",
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
+
+		"Singularity/lightRift.js",
+		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
+		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
+		
 		"Puzzle World/akash.js", "Puzzle World/elements.js", 
 		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
+
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
+
+		"Hall of Celestials/multiverseMap.js",
 	],
 
 	discordName: "",
@@ -43,8 +52,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 190.26, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "Battle Bonanza",
+	num: 11400, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 11403 = v1.14.3)
+	name: "A Change of Space",
 }
 
 function miscCode() {
@@ -116,7 +125,7 @@ function updateStyles() {
 	// Find background color
 	switch(player.tab) {
 		case "c":
-			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) layerBG = "black"
+			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) layerBG = "linear-gradient(-0deg, #000)"
 			if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "settings": case "jukebox": case "savebank": case "changelog": case "credits":
@@ -139,79 +148,91 @@ function updateStyles() {
 		case "i":
 			if (player.i.pylonBuilt && player.subtabs["i"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(90deg, #927550ff, #725442ff)"
-			} else {
-				layerBG = "#161616"
+			} else
+			{
+				layerBG = "linear-gradient(0deg, #161616)"
 			}
 			break;
 		case "in":
 			if (player.i.pylonBuilt && player.subtabs["in"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(0deg, #1FF8AF, #2162D2)"
-			} else {
-				layerBG = "#001f18"
+			} else
+			{
+				layerBG = "linear-gradient(0deg, #001f18)"
 			}
 			break; 
 	    case "za": case "cf": case "wof": case "sm": case "car": case "zd":
 			layerBG = "linear-gradient(-180deg, #3b3b3bff 0%, #8d8d8dff 100%)"
 			break;
 		case "cbs":
-			layerBG = "linear-gradient(-180deg, #31344eff 0%, #54538bff 100%)"
+			if (player.cbs.pylonBuilt && player.subtabs["cbs"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(90deg, #2a6378 0%, #09366e 100%)"
+			} else
+			{
+				layerBG = "linear-gradient(-180deg, #31344eff 0%, #54538bff 100%)"
+			}
 			break;
 		case "t":
-			layerBG = "#02172f"
+			layerBG = "linear-gradient(0deg, #02172f)"
 			break;
 		case "g":
-			layerBG = "#042347"
+			layerBG = "linear-gradient(0deg, #042347)"
 			break;
 		case "gh":
-			layerBG = "#073b77"
+			layerBG = "linear-gradient(0deg, #073b77)"
 			break;
 		case "hpr": case "m":
-			layerBG = "#000919"
+			layerBG = "linear-gradient(0deg, #000919)"
 			break;
 		case "hbl": case "pol":
-			layerBG = "#191300"
+			layerBG = "linear-gradient(0deg, #191300)"
 			break;
 		case "hcu":
-			layerBG = "#111515"
+			layerBG = "linear-gradient(0deg, #111515)"
 			break;
 		case "hpu":
-			layerBG = "#161511"
+			layerBG = "linear-gradient(0deg, #161511)"
 			break;
 		case "hpw": case "pe":
-			layerBG = "#200"
+			layerBG = "linear-gradient(0deg, #200)"
 			break;
 		case "hve":
-			layerBG = "#101"
+			layerBG = "linear-gradient(0deg, #101)"
 			break;
 		case "hrm":
 			layerBG = "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)"
 			break;
 		case "hsa":
-			layerBG = "#aaab88"
+			layerBG = "linear-gradient(0deg, #aaab88)"
 			break;
 		case "bigc":
-			layerBG = "#b87c34"
+			layerBG = "linear-gradient(0deg, #b87c34)"
 			break;
 		case "in": case "ad": case "ip": case "ta": case "bi":
 		case "om": case "id":
-			layerBG = "#001f18"
+			layerBG = "linear-gradient(0deg, #001f18)"
 			break;
 		case "revc":
-			layerBG = "#31aeb0"
+			layerBG = "linear-gradient(0deg, #31aeb0)"
 			break;
 		case "tad":
-			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "#b2d8d8"
-			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "#c8c9fc"
-			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "#9dc7fe"
+			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "linear-gradient(0deg, #b2d8d8)"
+			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "linear-gradient(0deg, #c8c9fc)"
+			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "linear-gradient(0deg, #9dc7fe)"
 			break;
 		case "ca":
-			layerBG = "#2a3e66"
-			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "#0f1226"
-			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "#1f1e33"
+			layerBG = "linear-gradient(0deg, #2a3e66)"
+			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "linear-gradient(0deg, #1f1e33)"
+			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "linear-gradient(0deg, #1f1e33)"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
-			layerBG = "#204387"
+			if (inChallenge("fu", 11)) layerBG = "linear-gradient(0deg, #152a54 0%, white 800%)";
+			else if (inChallenge("fu", 12)) layerBG = "linear-gradient(0deg, #2f2f5e 0%, white 800%)";
+			else layerBG = "linear-gradient(0deg, #204080 0%, white 800%)";
+			break;
+		case "en":
+			layerBG = "linear-gradient(0deg, #400c42 0%, white 800%)"
 			break;
 		case "en":
 			layerBG = "#400c42"
@@ -220,17 +241,17 @@ function updateStyles() {
 			if (player.s.pylonBuilt && player.subtabs["s"]["stuff"] == "Pylon") {
 				layerBG = "linear-gradient(120deg, #801757 0%, #D3173A 100%)"
 			} else {
-				if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+				if (player.matosLair.milestone[25] == 0) layerBG = "linear-gradient(0deg, #260300)"
 				if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			}
 			break;
 		case "co": case "ra": case "sd": case "cs":
-		case "cof":
-			if (player.matosLair.milestone[25] == 0) layerBG = "#260300"
+		case "cof": case "nvs": case "lightRift":
+			if (player.matosLair.milestone[25] == 0) layerBG = "linear-gradient(0deg, #260300)"
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
-		case "sma": case "sme":
+		case "sma": case "sme": case "smn":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			if (player.tab == "sme" && player.subtabs["sme"]["stuff"] == "Starmetal Studies") layerBG = "linear-gradient(120deg, #393a15 0%, #2f260c 25%, #3a181d 50%, #35183a, 75%, #18333a 100%)"
 			break;
@@ -272,29 +293,51 @@ function updateStyles() {
 					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
 					break;
 				default: 
-					layerBG = "black"
+					layerBG = "linear-gradient(0deg, black)"
 					break;
 			}
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
-			layerBG = "black"
+			layerBG = "linear-gradient(0deg, #000)"
 			break;
-		case "ch":
+		case "ch": case "mm":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
 			break;
 		case "ro": case "mi":
 			layerBG = "radial-gradient(circle, #1d1738, #1e0d61)"
 			break;
 		case "au2":
-			layerBG = "#151230"
+			layerBG = "linear-gradient(0deg, #151230)"
 			break;
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
 		case "ho": case "wa":
-			layerBG = "#2a1c00"
+			layerBG = "linear-gradient(0deg, #2a1c00)"
 			break;
 		case "al":
-			layerBG = "#1f001f"
+			layerBG = "linear-gradient(0deg, #1f001f)"
+			break;
+		case "wel":
+			layerBG = "linear-gradient(0deg, #1f4040 0%, #0f1f1f 100%)"
+			break;
+		case "prj":
+			if (player.subtabs["prj"]["stuff"] == "Pylon") {
+				layerBG = "linear-gradient(120deg, #595A5C 0%, #9c9c9c 100%)"
+			} else {
+				layerBG = "linear-gradient(0deg, #2e152e 0%, #1f0e1f 100%)"
+			}
+			break;
+		case "pri":
+			layerBG = "linear-gradient(0deg, #203040 0%, #0f171f 100%)"
+			break;
+		case "blu":
+			layerBG = "linear-gradient(0deg, #282040 0%, #130f1f 100%)"
+			break;
+		case "bum":
+			layerBG = "linear-gradient(0deg, #dfffdf -700%, #180b18 100%)"
+			break;
+		case "cer":
+			layerBG = "linear-gradient(0deg, #402030 0%, #1f0812 100%)"
 			break;
 		case "n":
 			if (player.subtabs["n"]["Tabs"] == "Pylon") {
@@ -304,25 +347,19 @@ function updateStyles() {
 			}
 			break;
 		case "tw":
-			layerBG = "#021507"
+			layerBG = "linear-gradient(0deg, #021507)"
 			break;
 		case "cb":
-			layerBG = "#021124"
+			layerBG = "linear-gradient(0deg, #021924)"
 			break;
 	    case "bl":
-			layerBG = "#130000ff"
+			layerBG = "linear-gradient(0deg, #130000ff)"
 			break;
 		case "ak": 
 			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
 			break;
 		case "el":
-			layerBG = "#181020"
-			break;
-		case "ak": 
-			layerBG = "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)"
-			break;
-		case "el":
-			layerBG = "#181020"
+			layerBG = "linear-gradient(0deg, #181020)"
 			break;
 		case "pf":
 			layerBG = "linear-gradient(135deg, #202020ff 0%, #000000ff 50%, #202020ff 100%)"
@@ -337,7 +374,7 @@ function updateStyles() {
 			layerBG = "url(resources/gdbg.jpg)"
 			break;
 		case "ev8":
-			layerBG = "#252525"
+			layerBG = "linear-gradient(0deg, #252525)"
 			break;
 		case "ev15":
 			layerBG = "linear-gradient(-45deg, #206060, #40c0c0)"
@@ -345,17 +382,17 @@ function updateStyles() {
 		case "ev16":
 			layerBG = "linear-gradient(0deg, #200020, #400040)"
 			break;
-		case "ep0": case "ep1": case "ep2": case "sp":
-			layerBG = "#7d3f98"
+		case "ep0": case "ep1": case "ep2": case "sp": case "ep3":
+			layerBG = "linear-gradient(0deg, #7d3f98)"
 			break;
 		case "leg":
-			layerBG = "#eed200"
+			layerBG = "linear-gradient(0deg, #eed200)"
 			break;
 		case "gwaTemple":
 			layerBG = "#676742"
 			break
 		default:
-			layerBG = "var(--layerBackground)"
+			layerBG = "linear-gradient(0deg, var(--layerBackground))"
 			break;
 	}
 
@@ -363,7 +400,7 @@ function updateStyles() {
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
-	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || player.tab === "sa" || player.tab === "sh" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
 	    // Add the galaxy background if it doesn't already exist
     	if (!document.getElementById("galaxy-background")) {
 	        const galaxyBackground = document.createElement("div");
@@ -398,6 +435,198 @@ function updateStyles() {
 	        galaxyBackground.remove();
 	    }
 	}
+	if (!options.performanceMode && (player.tab === "cp" || player.tab === "ar" || player.tab === "an" || player.tab === "pr" || player.tab === "rt" || player.tab === "rg" || player.tab === "gs" || player.tab === "fu" || player.tab === "oi" || player.tab === "en")) {
+	    // Add the galaxy background if it doesn't already exist
+    	if (!document.getElementById("rain-background")) {
+	        const rainBackground = document.createElement("canvas");
+        	rainBackground.id = "rain-background";
+        	rainBackground.transitionDuration = "0s";
+    	    rainBackground.style.position = "fixed";
+	        rainBackground.style.top = "0";
+        	rainBackground.style.left = "0";
+    	    rainBackground.style.width = "100%";
+	        rainBackground.style.height = "100%";
+        	rainBackground.style.overflow = "hidden";
+    	    rainBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+			rainBackground.droplets = []
+			rainBackground.initialized = false
+        	document.body.appendChild(rainBackground);
+	    } else {
+			const rainBackground = document.getElementById("rain-background");
+			const rect = rainBackground.getBoundingClientRect()
+			const ctx = rainBackground.getContext('2d')
+    	    rainBackground.width = window.innerWidth;
+	        rainBackground.height = window.innerHeight;
+
+			ctx.clearRect(0, 0, 800, 800)
+			ctx.strokeStyle = "#ffffff0f"
+			ctx.lineWidth = 4
+			ctx.lineJoin = "round"
+			ctx.save()
+    	    // Add droplets
+			while (rainBackground.droplets.length < 256) {
+				let randomSize = Math.random() * 4 + 2
+				let pos = Math.random()
+				let randomX, randomY
+				if (pos < 0.2) {
+					randomX = rainBackground.initialized ? (randomSize * -16) / rainBackground.width : Math.random()
+					randomY = Math.random() + (randomSize * -64) / rainBackground.height
+				} else {
+					randomX = Math.random() + (randomSize * -16) / rainBackground.width
+					randomY = rainBackground.initialized ? (randomSize * -64) / rainBackground.height : Math.random()
+				}
+				rainBackground.droplets.push({
+					x: randomX,
+					y: randomY,
+					size: randomSize,
+				})
+			}
+			rainBackground.initialized = true
+	        for (let i = Math.min(window.innerWidth * window.innerHeight / 100, 256) - 1; i >= 0; i--) {
+				let droplet = rainBackground.droplets[i]
+				ctx.lineWidth = droplet.size
+				let g = ctx.createLinearGradient(droplet.x * rainBackground.width, droplet.y * rainBackground.height, droplet.x * rainBackground.width + (16 * droplet.size), droplet.y * rainBackground.height + 64 * droplet.size)
+				g.addColorStop(0, "rgb(255,255,255,0)")
+				g.addColorStop(1, "rgb(255,255,255," + (droplet.size/96) + ")")
+				ctx.strokeStyle = g
+				//ctx.strokeStyle = "rgb(255,255,255," + (droplet.size/96) + ")"
+				ctx.beginPath()
+            	ctx.moveTo(droplet.x * rainBackground.width, droplet.y * rainBackground.height)
+            	ctx.lineTo(droplet.x * rainBackground.width + (16 * droplet.size), droplet.y * rainBackground.height + 64 * droplet.size)
+				ctx.closePath()
+				ctx.stroke()
+				ctx.restore()
+				droplet.x += (droplet.size * 4) / rainBackground.width
+				droplet.y += (droplet.size * 16) / rainBackground.height
+				if (droplet.x > 1 || droplet.y > 1) rainBackground.droplets.splice(rainBackground.droplets.indexOf(droplet), 1);
+	        }
+		}
+	} else {
+	    // Remove the rain background if the tab is not "au1"
+	    const rainBackground = document.getElementById("rain-background");
+	    if (rainBackground) {
+	        rainBackground.remove();
+	    }
+	}
+
+	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "lightRift") {
+    	let t = Date.now()
+    	t = ((t % 1000) / 1000) * 32
+		// Add the dotted background if it doesn't already exist
+    	if (!document.getElementById("dotted-background")) {
+	        const dottedBackground = document.createElement("div");
+        	dottedBackground.id = "dotted-background";
+        	dottedBackground.className = "instant";
+    	    dottedBackground.style.position = "fixed";
+	        dottedBackground.style.top = "0";
+        	dottedBackground.style.left = "0";
+    	    dottedBackground.style.width = "100%";
+	        dottedBackground.style.height = "100%";
+        	dottedBackground.style.overflow = "hidden";
+    	    dottedBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+        	document.body.appendChild(dottedBackground);
+    	    
+        	dottedBackground.style.overflow = "hidden";
+			dottedBackground.style.backgroundSize = "32px 32px";
+			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
+	    }
+		const el = document.getElementById("dotted-background");
+		if (player.tab === "bum" || player.tab === "cer" || (player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon")) {
+			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
+		} else {
+			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";
+		}
+		el.style.backgroundPosition = `${t}px ${t}px`;
+	} else {
+	    // Remove the dotted background if the tab is not in interspace
+	    const dottedBackground = document.getElementById("dotted-background");
+	    if (dottedBackground) {
+	        dottedBackground.remove();
+	    }
+	}
+	if (player.tab === "wel" || player.tab === "cer") {
+    	let t = Date.now()
+    	t = ((t % 60000) / 60000) * 25
+		// Add the light ray background if it doesn't already exist
+    	if (!document.getElementById("lightRay-background")) {
+	        const lightRayBackground = document.createElement("div");
+        	lightRayBackground.id = "lightRay-background";
+        	lightRayBackground.className = "instant";
+    	    lightRayBackground.style.position = "fixed";
+	        lightRayBackground.style.top = "0";
+        	lightRayBackground.style.left = "0";
+    	    lightRayBackground.style.width = "100%";
+	        lightRayBackground.style.height = "100%";
+        	lightRayBackground.style.overflow = "hidden";
+    	    lightRayBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+        	document.body.appendChild(lightRayBackground);
+    	    
+        	lightRayBackground.style.overflow = "hidden";
+	    }
+		const el = document.getElementById("lightRay-background");
+		if (player.tab === "wel") {
+			el.style.background = "conic-gradient(at 50% -64px, " +
+			"#4d99730f " + (t - 12.5) + "%, #4d99730f " + t + "%," +
+			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+			"#4d99730f " + (t + 12.5) + "%, #4d99730f " + (t + 25) + "%," +
+			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+			"#4d99730f " + (t + 37.5) + "%, #4d99730f " + (t + 50) + "%," +
+			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+			"#4d99730f " + (t + 62.5) + "%, #4d99730f " + (t + 75) + "%," +
+			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+			"#4d99730f " + (t + 87.5) + "%, #4d99730f " + (t + 100) + "%," +
+			"#0000 " + (t + 100) + "%)"
+		} else if (player.tab === "cer") {
+			el.style.background = "conic-gradient(at 50% -64px, " +
+			"#ff80c00f " + (t - 12.5) + "%, #ff80c00f " + t + "%," +
+			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+			"#ff80c00f " + (t + 12.5) + "%, #ff80c00f " + (t + 25) + "%," +
+			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+			"#ff80c00f " + (t + 37.5) + "%, #ff80c00f " + (t + 50) + "%," +
+			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+			"#ff80c00f " + (t + 62.5) + "%, #ff80c00f " + (t + 75) + "%," +
+			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+			"#ff80c00f " + (t + 87.5) + "%, #ff80c00f " + (t + 100) + "%," +
+			"#0000 " + (t + 100) + "%)"
+		}
+	} else {
+	    // Remove the light ray background if the tab is not in the well
+	    const lightRayBackground = document.getElementById("lightRay-background");
+	    if (lightRayBackground) {
+	        lightRayBackground.remove();
+	    }
+	}
+	if (player.tab === "bh" && player.bh.fadeBackground < 4) {
+	    var fadeBackground = document.getElementById("fade-background");
+	    if (fadeBackground) {
+	        fadeBackground.remove();
+	    }
+	    fadeBackground = document.createElement("div");
+        fadeBackground.id = "fade-background";
+    	fadeBackground.style.position = "fixed";
+	    fadeBackground.style.top = "0";
+        fadeBackground.style.left = "0";
+    	fadeBackground.style.width = "100%";
+	    fadeBackground.style.height = "100%";
+        fadeBackground.style.overflow = "hidden";
+    	fadeBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+		if (player.bh.fadeBackground < 0.25) {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, " + (4 * player.bh.fadeBackground) + ")"; // Fade gradient in
+		} else if (player.bh.fadeBackground < 3.75) {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, 1)"; // solid black
+		} else {
+	    	fadeBackground.style.background = "rgba(0, 0, 0, " + (16 - (4 * player.bh.fadeBackground)) + ")"; // Fade gradient out
+		}
+        document.body.appendChild(fadeBackground);
+    // Add the fade background if it doesn't already exist
+	} else {
+	    const fadeBackground = document.getElementById("fade-background");
+	    if (fadeBackground) {
+	        fadeBackground.remove();
+	    }
+	}
+
+
 	if (!options.performanceMode && player.tab == "bh" && (player.bh.currentStage == "depth3" || player.bh.currentStage == "matosLair") && (player.subtabs["bh"]["stuff"] == "battle" || player.subtabs["bh"]["stuff"] == "bullet")) {
 	    if (!document.getElementById("embers-background")) {
     	    // Create embers background container
@@ -669,8 +898,14 @@ function updateStyles() {
 			case "UB":
 				sideBG = "#150e00"
 				break;
+			case "CH":
+            	sideBG = "#0b0129"
+				break;
+			case "UD":
+				sideBG = "linear-gradient(135deg, #2e152e 0%, #384038 100%)"
+				break;
 			case "CB":
-				sideBG = "#010812"
+				sideBG = "#00111a"
 				break;
 			case "DS":
 				sideBG = "radial-gradient(circle, #303030ff, #000000)"
@@ -722,17 +957,17 @@ function updateStyles() {
             player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "sma": case "bh": case "cof": case "sme":
+		case "sma": case "bh": case "cof": case "sme": case "lightRift":
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp":
             player.musuniverse = "D1"
 			break;
-		case "ch":
+		case "ch": case "mm":
             player.musuniverse = "CH"
 			break;
-		case "au2": case "st": case "pl": case "ir": case "se": case "sb":
+		case "au2": case "st": case "pl": case "ir": case "se": case "sb": case "sa": case "sh":
 			player.musuniverse = "A2"
 			break;
 		case "mi":
@@ -741,6 +976,10 @@ function updateStyles() {
 		case "bee": case "fl": case "bpl": case "ne": case "bb":
 		case "ho": case "wa": case "al": case "n": case "tw":
 			player.musuniverse = "UB"
+			break;
+		case "wel": case "pri": case "prj": case "blu": case "bum":
+		case "cer":
+			player.musuniverse = "UD"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
@@ -817,17 +1056,17 @@ function updateStyles() {
 					case "D1":
 						if (!player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
 						if (player.pet.legPetTimers[0].active && !player.ir.inBattle) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && !player.bl.noxFightActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
-			    		if (player.ir.inBattle && player.bl.noxFightActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
+						if (player.ir.inBattle && arena && !arena.bossActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
+			    		if (player.ir.inBattle && arena && arena.bossActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
 					case "CH":
-						if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
+						if (player.tab == "ch" || player.tab == "mm") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
 						//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
 						break;
 					case "A2":
 						if (!player.ir.inBattle) playAndLoopAudio("music/space.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && !player.ir.iriditeFightActive) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
-						if (player.ir.inBattle && player.ir.iriditeFightActive) playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && arena && !(arena.bossActive && player.ir.battleStage == "iriditeZone")) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
+						if (player.ir.inBattle && arena && arena.bossActive && player.ir.battleStage == "iriditeZone") playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
 						break;
 					case "MI":
 						playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
@@ -838,6 +1077,9 @@ function updateStyles() {
 					case "DS":
 						if (!player.ir.inBattle) playAndLoopAudio("music/diceSpace.mp3", options.musicVolume/10)
 			    		if (player.ir.inBattle) playAndLoopAudio("music/ascensionSpirit.mp3", options.musicVolume/10);
+						break;
+					case "UD":
+						playAndLoopAudio("music/interspace.mp3", options.musicVolume/10)
 						break;
 					case "CB":
 						playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
@@ -878,6 +1120,83 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+
+	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
+	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
+		Content:<br>
+			- Added universe δ.<br>
+			- Added the multiverse map.<br>
+			- Revamped the dragon pet.<br>
+			- Revamped space battles.<br>
+			- Added space battle zones. Prior space battle content has been divided into space zone I, space zone II, iridite zone, and space zone III.<br>
+			- Added a pet evolution.<br>
+			- Added more iridite upgrades.<br>
+			- Added three new space dust buyables.<br>
+			- Added four new punchcards.<br>
+			- Added three new check back factors.<br>
+			- Added two new check back blessings.<br>
+			- Added a zar upgrade.<br>
+			- Added cloud upgrades.<br>
+			- Added new booster milestones.<br>
+			- Added new starmetal essence studies.<br>
+			- Added time capsules.<br>
+			- Added stage 13 achievements.<br>
+			- Added a theme.<br>
+		<br>Design and QoL:<br>
+			- Changed many layer node styles for readability and consistency.<br>
+			- Shifted the hue of check back's blue.<br>
+			- Redesigned many check back tab UIs.<br>
+			- Moved evo and para shard pity to below the checkback XP bar.<br>
+			- Added icons beside pet point buttons to indicate which pet corresponds to each button.<br>
+			- Redrew the art of many pet icons.<br>
+			- Redesigned OTF UI.<br>
+			- Added a rain effect to AU1 layers' background.<br>
+			- Redesigned punchcard UI.<br>
+			- Punchcard UI now shows the punchcard XP gained on universe exit.<br>
+			- Changed some punchcard textures.<br>
+			- Added space exploration completion popups.<br>
+			- Added space battle mobile controls.<br>
+			- Changed unarmed ship movement.<br>
+			- Removed the first two blood buyables from eclipse.<br>
+			- Redesigned pylon UI.<br>
+			- Redesigned zar upgrade, coin flip, wheel of fortune, slot machine, check back shrine, and card UI.<br>
+			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
+			- Redesigned enhance point UI.<br>
+			- Made zar perks state that a new singularity upgrade is unlocked, requiring the natural pylon.<br>
+			- Updated credits.<br>
+			- Temporarily removed the savebank tab because it can break your save.<br>
+			- Added a spoiler indicator to the changelog tab.<br>
+		<br>Balancing:<br>
+			- Daily orb time skips no longer affect daily orb cooldown.<br>
+			- Gained stats from daily orbs now scale weaker.<br>
+			- The evolution fragment's pet point button now has a chance to grant fragments.<br>
+			- Nerfed several effects in D1 eclipse.<br>
+			- Increased the scaling of both unavoidable softcaps in D1 eclipse.<br>
+			- Weakened the effect clouds have on eclipse timer tickspeed.<br>
+			- Buffed core fragment effects.<br>
+			- Reduced space teste effect formula.<br>
+			- Changed the formulas of some iridite upgrades.<br>
+			- Nerfed space building 3 through 6 effects.<br>
+			- Reduced sniper ship damage but improved its accuracy.<br>
+			- Reduced stinger ship attack cooldown.<br>
+			- Made astral ship's ship level cap boost exclude itself.<br>
+			- Nerfed ancient and paradox pylon energy gain.<br>
+			- Increased paradox energy factor buyable caps.<br>
+			- Nerfed the second infected infinity effect.<br>
+			- Nerfed the effect SP has on singularity gain after defeating aleph.<br>
+			- Nerfed enhance upgrade "Emotional Enhancer".<br>
+			- Changed the effect and cost scaling of check back factors.<br>
+			- Reduced the diamondsmith evo and diamond dust reset coin dust requirements by /10.<br>
+		<br>Bugfixes:<br>
+			- Fixed the screen flashing white when switching between certain layers.<br>
+			- Fixed a few cases of the word "otherworldly" being mispelled as "otherworldy".<br>
+			- Added a gap between cante perks and tab selection in the cante tab.<br>
+			- Added "the" to the jocus layer tooltip.<br>
+			- Fixed dark universe reset cheese.<br>
+			- Fixed aleph layer UI size inconsistencies.<br>
+			- Fixed the punchcard selection cost being displayed when you don't have a legendary punchcard selected.<br>
+		<br>
+
 	<h3>v1.13.1 - Akash's Mini-Update I: Negative Diamonds</h3><br>
 		Content:<br>
 			- Added page 3 of achievements.<br>
@@ -1095,7 +1414,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Stagnant Synestia.<br>
 			- Added Depth 4.<br>
 			- Added Laboratory.<br>
-			- Added Alephs Chamber.<br>
+			- Added Aleph's Chamber.<br>
 			- Added Grass Jump.<br>
 			- Added Nests.<br>
 			- Added the Natural Pylon.<br><br>
@@ -1860,6 +2179,9 @@ var doNotCallTheseFunctionsEveryTick = [
 	"diamondDustReset",
 	"openChest",
 	"checkAchs",
+	"levelableButtonStyle",
+	"prismReset", "blueshiftReset", "starlightReset", "timeCapsuleReset", "createMultiverseMapConnection", "createClickableConnection",
+	"makeProject", "makeLightWell", "makePrismFountain", "makeWellFountain", "makeStarlightFountain", "getTimeReq", "getTimeCapsuleReq", "getTimeSpeed", "lightGain",
 ]
 
 function getStartPoints(){
@@ -2300,6 +2622,94 @@ function fixOldSave(oldVersion){
 	if (oldVersion < 190.25) {
 		if (player.sme.buyables[135]) player.darkTemple.buyables[1005] = new Decimal(player.sme.buyables[135])
 		if (player.sme.buyables[136]) player.darkTemple.buyables[1007] = new Decimal(player.sme.buyables[136])
+	}
+	if (oldVersion < 11400) {
+
+		if (player.s.singularities.gt(1e9)) player.s.singularities = new Decimal(player.s.singularities).div(1e9).log(10).add(1).mul(1e9);
+		if (player.s.singularityPoints.gt("1e7500")) player.s.singularityPoints = new Decimal(player.s.singularityPoints).div("1e7500").pow(0.1).mul("1e7500");
+		if (player.s.highestSingularityPoints.gt("1e7500")) player.s.highestSingularityPoints = new Decimal(player.s.highestSingularityPoints).div("1e7500").pow(0.1).mul("1e7500");
+		if (player.in.infinityPoints.gt("1e100000")) player.in.infinityPoints = new Decimal(player.in.infinityPoints).div("1e100000").pow(0.1).mul("1e100000");
+		if (player.in.infinities.gt("1e250")) player.in.infinities = new Decimal(player.in.infinities).div("1e250").pow(0.1).mul("1e250");
+		if (player.gh.steel.gt("1e25000")) player.gh.steel = new Decimal(player.gh.steel).div("1e25000").pow(0.1).mul("1e25000");
+		if (player.rf.rocketFuel.gt("1e50000")) player.rf.rocketFuel = new Decimal(player.rf.rocketFuel).div("1e50000").pow(0.1).mul("1e50000");
+		if (player.au2.stars.gt(1e40)) player.au2.stars = new Decimal(player.au2.stars).div(1e40).log(10).add(1).mul(1e40);
+		if (player.ir.spaceRock.gt(1e9)) player.ir.spaceRock = new Decimal(player.ir.spaceRock).div(1e9).log(10).add(1).mul(1e9);
+		if (player.ir.spaceGem.gt(1e5)) player.ir.spaceGem = new Decimal(player.ir.spaceGem).div(1e5).log(10).add(1).mul(1e5);
+		if (player.i.pylonEnergy.gt(1e36)) player.i.pylonEnergy = new Decimal(player.i.pylonEnergy).div(1e36).log(10).add(1).mul(1e36);
+		if (player.in.pylonEnergy.gt(1e240)) player.in.pylonEnergy = new Decimal(player.in.pylonEnergy).div(1e240).log(10).add(1).mul(1e240);
+		player.ep1.buyables[11] = new Decimal(player.ep1.buyables[11]).mul(4).ceil()
+		player.ep1.buyables[12] = new Decimal(player.ep1.buyables[12]).mul(0.4).ceil()
+		player.ep1.buyables[13] = new Decimal(player.ep1.buyables[13]).mul(0.2).ceil()
+
+		if (player.ir.iriditeDefeated) {
+			player.spaceZone1.highestLevel = new Decimal(20)
+			player.spaceZone2.highestLevel = new Decimal(20)
+			player.iriditeZone.highestLevel = new Decimal(20)
+		}
+		if (player.bl.noxDefeated && player.bl.upgrades.indexOf(11) == -1) {
+			player.bl.upgrades.push(11)
+			player.bloodZone1.highestLevel = new Decimal(20)
+		}
+
+		if (player.cs.scraps.point.amount.gt(1e27)) player.cs.scraps.point.amount = new Decimal(player.cs.scraps.point.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.factor.amount.gt(1e27)) player.cs.scraps.factor.amount = new Decimal(player.cs.scraps.factor.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.prestige.amount.gt(1e27)) player.cs.scraps.prestige.amount = new Decimal(player.cs.scraps.prestige.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.tree.amount.gt(1e27)) player.cs.scraps.tree.amount = new Decimal(player.cs.scraps.tree.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grass.amount.gt(1e27)) player.cs.scraps.grass.amount = new Decimal(player.cs.scraps.grass.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grasshopper.amount.gt(1e27)) player.cs.scraps.grasshopper.amount = new Decimal(player.cs.scraps.grasshopper.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.code.amount.gt(1e27)) player.cs.scraps.code.amount = new Decimal(player.cs.scraps.code.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.dice.amount.gt(1e27)) player.cs.scraps.dice.amount = new Decimal(player.cs.scraps.dice.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.rocket.amount.gt(1e27)) player.cs.scraps.rocket.amount = new Decimal(player.cs.scraps.rocket.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.antimatter.amount.gt(1e27)) player.cs.scraps.antimatter.amount = new Decimal(player.cs.scraps.antimatter.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.infinity.amount.gt(1e27)) player.cs.scraps.infinity.amount = new Decimal(player.cs.scraps.infinity.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.checkback.amount.gt(1e27)) player.cs.scraps.checkback.amount = new Decimal(player.cs.scraps.checkback.amount).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.radioactive.amount.gt(1e27)) player.cs.scraps.radioactive.amount = new Decimal(player.cs.scraps.radioactive.amount).div(1e27).log(10).add(1).mul(1e27);
+
+		if (player.cs.scraps.point.gain.gt(1e27)) player.cs.scraps.point.gain = new Decimal(player.cs.scraps.point.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.factor.gain.gt(1e27)) player.cs.scraps.factor.gain = new Decimal(player.cs.scraps.factor.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.prestige.gain.gt(1e27)) player.cs.scraps.prestige.gain = new Decimal(player.cs.scraps.prestige.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.tree.gain.gt(1e27)) player.cs.scraps.tree.gain = new Decimal(player.cs.scraps.tree.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grass.gain.gt(1e27)) player.cs.scraps.grass.gain = new Decimal(player.cs.scraps.grass.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.grasshopper.gain.gt(1e27)) player.cs.scraps.grasshopper.gain = new Decimal(player.cs.scraps.grasshopper.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.code.gain.gt(1e27)) player.cs.scraps.code.gain = new Decimal(player.cs.scraps.code.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.dice.gain.gt(1e27)) player.cs.scraps.dice.gain = new Decimal(player.cs.scraps.dice.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.rocket.gain.gt(1e27)) player.cs.scraps.rocket.gain = new Decimal(player.cs.scraps.rocket.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.antimatter.gain.gt(1e27)) player.cs.scraps.antimatter.gain = new Decimal(player.cs.scraps.antimatter.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.infinity.gain.gt(1e27)) player.cs.scraps.infinity.gain = new Decimal(player.cs.scraps.infinity.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.checkback.gain.gt(1e27)) player.cs.scraps.checkback.gain = new Decimal(player.cs.scraps.checkback.gain).div(1e27).log(10).add(1).mul(1e27);
+		if (player.cs.scraps.radioactive.gain.gt(1e27)) player.cs.scraps.radioactive.gain = new Decimal(player.cs.scraps.radioactive.gain).div(1e27).log(10).add(1).mul(1e27);
+		
+		if (player.ir.levelables[1][0].gt(55)) player.ir.levelables[1][0] = new Decimal(55);
+		if (player.ir.levelables[2][0].gt(55)) player.ir.levelables[2][0] = new Decimal(55);
+		if (player.ir.levelables[3][0].gt(55)) player.ir.levelables[3][0] = new Decimal(55);
+		if (player.ir.levelables[4][0].gt(55)) player.ir.levelables[4][0] = new Decimal(55);
+		if (player.ir.levelables[5][0].gt(55)) player.ir.levelables[5][0] = new Decimal(55);
+		if (player.ir.levelables[6][0].gt(55)) player.ir.levelables[6][0] = new Decimal(55);
+		if (player.ir.levelables[7][0].gt(55)) player.ir.levelables[7][0] = new Decimal(55);
+		if (player.ir.levelables[8][0].gt(50)) player.ir.levelables[8][0] = new Decimal(50);
+		if (player.ir.levelables[9][0].gt(55)) player.ir.levelables[9][0] = new Decimal(55);
+		for (let i = player.ir.upgrades.length - 1; i >= 0; i--) {
+			if (typeof player.ir.upgrades[i] === "string") player.ir.upgrades.splice(i, 1);
+			if (player.ir.upgrades[i] === null) player.ir.upgrades.splice(i, 1);
+		}
+
+		player.bl.buyables[11] =  new Decimal(player.bl.buyables[11]).mul(0.4).ceil()
+		player.bl.buyables[12] =  new Decimal(player.bl.buyables[12]).mul(0.2).ceil()
+		player.bl.buyables[13] =  new Decimal(player.bl.buyables[13]).mul(0.4).ceil()
+		player.bl.buyables[14] =  new Decimal(player.bl.buyables[14]).mul(0.4).ceil()
+		player.bl.buyables[15] =  new Decimal(player.bl.buyables[34]).mul(40/25).ceil()
+		player.bl.buyables[16] =  new Decimal(player.bl.buyables[11]).mul(0.4).ceil()
+
+		player.bl.buyables[101] = new Decimal(player.bl.buyables[31]).mul(30/50).ceil()
+		player.bl.buyables[102] = new Decimal(player.bl.buyables[32]).mul(30/50).ceil()
+		player.bl.buyables[103] = new Decimal(player.bl.buyables[33]).mul(30/25).ceil()
+
+		player.cbs.buyables[101] = new Decimal(player.cbs.buyables[21])
+		player.cbs.buyables[102] = new Decimal(player.cbs.buyables[22])
+		player.cbs.buyables[103] = new Decimal(player.cbs.buyables[23])
+		player.cbs.buyables[21] = new Decimal(0)
+		player.cbs.buyables[22] = new Decimal(0)
+		player.cbs.buyables[23] = new Decimal(0)
 	}
 }
 

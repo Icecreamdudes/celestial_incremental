@@ -35,6 +35,10 @@
         }
     },
     nodeStyle() {
+        return {
+            color: "#0000007f",
+            borderColor: "#0000007f",
+        }
     },
     tooltip: "Repli-Trees",
     branches: ["an"],

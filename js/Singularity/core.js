@@ -1537,10 +1537,9 @@ addLayer("co", {
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked: true,
             onClick() {
-                if (!hasUpgrade("s", 29))
-                {
+                if (!hasUpgrade("s", 29)) {
                     player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
-                } else{
+                } else {
                     player.cof.coreFragments[0] = player.cof.coreFragments[0].add(player.cof.coreFragmentsToGet[0])
                     player.cof.coreFragments[1] = player.cof.coreFragments[1].add(player.cof.coreFragmentsToGet[1])
                     player.cof.coreFragments[2] = player.cof.coreFragments[2].add(player.cof.coreFragmentsToGet[2])

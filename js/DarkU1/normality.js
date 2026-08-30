@@ -4,6 +4,7 @@
     universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    universe: "D1",
     startData() { return {
         unlocked: true,
 
@@ -11,7 +12,7 @@
         normalityEffect: new Decimal(1),
         normalityToGet: new Decimal(0), //based on points
 
-        normalityPause: new Decimal(0),
+        normalityResetSafety: false,
 
         nMax: false,
     }},
@@ -25,9 +26,11 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
+            background: "linear-gradient(180deg, #c1df00 0%, #6a990c 100%)",
+            //background: "linear-gradient(0deg, #2f6608 0%, #86990c 100%)",
             "background-origin": "border-box",
-            "border-color": "#80ff6f",
+            "border-color": "#346608",
+            //"border-color": "#c1df00",
             "color": "#eaf6f7",
         };
     },
@@ -52,19 +55,19 @@
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
-        player.dn.normalityPause = player.dn.normalityPause.sub(1)
-        if (player.dn.normalityPause.gte(1)) layers.dn.normalityReset();
+        player.dn.normalityResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset previous content except grass for normality.<br>(Based on points)" },
-            canClick() { return player.dn.normalityToGet.gte(1) },
+            canClick() { return player.dn.normalityToGet.gte(1) && !player.dn.normalityResetSafety },
             unlocked() { return true },
             onClick() {
-                player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
-                player.dn.normalityPause = new Decimal(10)
+                layers.dn.normalityReset(true)
+                player.dn.normalityResetSafety = true
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #c1df00", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -72,26 +75,14 @@
             }
         },
     },
-    normalityReset() {
-        player.du.points = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
+    normalityReset(isRewarded = false) {
+        if (isRewarded) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet);
 
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
+        layers.dg.generatorReset()
 
         player.dg.generators = new Decimal(0)
-        player.dg.generatorPower = new Decimal(0)
+        player.dg.generatorEffect = new Decimal(0)
+        player.dg.generatorsToGet = new Decimal(0)
 
         player.dg.buyables[11] = new Decimal(0)
         player.dg.buyables[12] = new Decimal(0)
@@ -170,7 +161,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Starmetal Alloyer"
+                return "Normal Starmetal"
             },
             display() {
                 return "which are multiplying total starmetal alloy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -191,7 +182,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         12: {
             costBase() { return new Decimal(500) },
@@ -204,7 +195,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Prestige Generation"
+                return "Normal Passive Prestige"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of prestige points per second.\n\
@@ -225,7 +216,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         13: {
             costBase() { return new Decimal(25000) },
@@ -238,7 +229,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Generator Generation"
+                return "Normal Passive Generators"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of generators per second.\n\
@@ -259,7 +250,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '250px', height: '150px', color: "black" },
         },
         14: {
             costBase() { return new Decimal(1e10) },
@@ -272,7 +263,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Space Spaciator"
+                return "Normal Space Spaciator"
             },
             display() {
                 return "which are boosting length, width, and depth by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -293,7 +284,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '275px', height: '150px', color: "black" },
         },
         15: {
             costBase() { return new Decimal(1e20) },
@@ -306,7 +297,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "General Generation"
+                return "Normal Generation Effect"
             },
             display() {
                 return "which are boosting generator power effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -327,7 +318,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black" }
+            style: { width: '275px', height: '150px', color: "black" },
         },
     },
     milestones: {},

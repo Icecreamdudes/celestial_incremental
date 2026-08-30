@@ -243,14 +243,14 @@
                 }
             },
             style() {
-                let look = {width: "100px", minHeight: "60px", color: "white", fontSize: "12px", borderRadius: "0px",marginLeft: "50px",marginRight: "50px"}
-                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#384166"
+                let look = {width: "100px", minHeight: "100px", color: "white", fontSize: "12px", borderRadius: "10px",marginLeft: "50px",marginRight: "50px", border: "2px solid black"}
+                !this.canClick() ? look.background =  "#361e1e" : look.background = "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)"
                 return look
             }
 
         },
         11: {
-            title() { return "<h3>Reset all previous dice space content (except for check back shrine) for card generators." },
+            title() { return "Reset all previous dice space content (except for check back shrine) for card generators." },
             canClick() { return player.car.cardGeneratorsToGet.gte(1)},
             unlocked() { return true },
             onClick() {
@@ -259,10 +259,10 @@
                 }
                 player.car.cardGenerators = player.car.cardGenerators.add(player.car.cardGeneratorsToGet)
             },
-            style: { width: '400px', "min-height": '100px', color: "white", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
+            style: {width: '300px', minHeight: '100px', color: "white", border: "2px solid #000000bf", borderRadius: "10px", background: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)" },
         },
         12: {
-            title() { return "<h3>Draw a card</h3><br><h3>Cost: " + format(player.car.cardShredReq) + " Card Shreds</h3>" },
+            title() { return "Draw a card<br>Cost: " + format(player.car.cardShredReq) + " Card Shreds" },
             canClick() { return player.car.cardShreds.gte(player.car.cardShredReq) },
             tooltip() { return "Cost is reset on card reset." },
             unlocked() { return true },
@@ -272,7 +272,7 @@
 
                 layers.car.cardDraw(); //tentative to change with multi draw
             },
-            style: { width: '400px', "min-height": '100px', color: "white", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px" },
+            style: {width: '300px', minHeight: '75px', color: "white", border: "2px solid black", borderRadius: "10px", background: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)" },
         },
         21: {
             title() { return player.car.autoDraw.toggle ? "Autodraw: ON" : "Autodraw: OFF" },
@@ -282,9 +282,7 @@
                 if (!player.car.autoDraw.toggle) player.car.autoDraw.toggle = true
                 else player.car.autoDraw.toggle = false
             },
-            style() { 
-                return { width: '250px', "min-height": '75px', borderRadius: "15px 15px 15px 15px", border: "3px solid rgb(94, 6, 6)", backgroundImage: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)", color: "white"}
-            },
+            style: {width: '300px', minHeight: '45px', color: "white", border: "2px solid black", borderRadius: "10px", background: "linear-gradient(180deg, #990909 0%, rgb(94, 6, 6) 50%, #990909 100%)" },
         },
     },
     cardDraw()
@@ -1410,7 +1408,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.65).mul(0.5).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).mul(0.25).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -1524,7 +1522,7 @@
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = getLevelableAmount(this.layer, this.id).pow(1.15).mul(0.8).add(1)
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.5).div(2).add(1)
                 eff[1] = Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).pow(0.7))
                 return eff
             },
@@ -2330,6 +2328,15 @@
     },
     upgrades: {
         11: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Well its not my fault you have bad rng :/",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Always gain 25% of each chip on slot reset.",
@@ -2337,9 +2344,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },    
         12: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "So lazy you can't even spin a wheel...",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Gain 25% of wheel point mult as wheel points per second.",
@@ -2347,9 +2367,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },  
         13: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "It seems like you've maximized laziness out here.",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Gain 100% of heads and tails per second.",
@@ -2357,9 +2390,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },  
         14: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "How can you do research with this stuff?",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Unlock 3 new researches, and shard researches are kept on card reset.",
@@ -2367,9 +2413,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },  
         15: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + "<br>(" + this.effectDisplay() + ")" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Just do that I guess",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Boosts chance point gain based on card generators.",
@@ -2377,13 +2436,26 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
             effect() {
                 return player.car.cardGenerators.pow(1.01).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         }, 
         16: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Okay this ones slightly justifiable",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Gain 5% of each chip every second.",
@@ -2391,9 +2463,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },   
         17: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "So should this be full automation now?",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Automatically purchase all pre-card non-shard researches and wheel buyables.",
@@ -2401,9 +2486,22 @@
             currencyLocation() { return player.car }, 
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },   
         18: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Research upon research",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Unlock 3 more researches.",
@@ -2411,9 +2509,22 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },   
         19: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:rgb(91, 0, 0)'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "The dungeon",
             unlocked() { return player.cbs.shrineReactivated },
             description: "Unlock Zar's dungeon.",
@@ -2421,7 +2532,11 @@
             currencyLocation() { return player.car },
             currencyDisplayName: "Card Generators",
             currencyInternalName: "cardGenerators",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0, 0, 0, 0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '125px', },
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "rgb(182, 0, 0)", outline: "3px solid rgba(182, 0, 0, 0.5)", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#37078f"
+                return look
+            },
         },   
     },
     buyables: {
@@ -2927,10 +3042,14 @@
         101: {
             costBase() { return new Decimal(1e8) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() {
+                let amt = new Decimal(100)
+                if (hasMilestone("db", 107)) amt = amt.add(player.db.bestBoosters);
+                return amt
+            },
             currency() { return player.car.cardGenerators },
             pay(amt) { player.car.cardGenerators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -2970,30 +3089,41 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["style-row", [
-                    ["blank", "25px"],
                     ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["style-row", [
+                            ["blank", "25px"],
+
+                            ["style-column", [
+                                ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardGenerators) + "</h3> card generators. (+" + formatWhole(player.car.cardGeneratorsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "25px"],
+                                ["clickable", 11], 
+                            ], {width: "350px", height: "250px"}],
+                            ["blank", "25px", {width: "44px"}],
+
+                            ["style-column", [
+                                ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                ["blank", "25px"],
+                                ["clickable", 12],
+                            ], {width: "350px", height: "250px"}],
+
+                        ], {width: "800px", height: "250px", background: "#0000007f", borderRadius: "19px 19px 0 0"}],
+                        ["style-row", [], {background: "#990909", width: "800px", height: "3px"}],
+                        ["style-column", [
+
+                            ["style-row", [
+                                    ["upgrade", 11], ["upgrade", 12], ["upgrade", 13],
+                            ],],
+                            ["style-row", [
+                                    ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                            ],],
+                            ["style-row", [
+                                    ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
+                            ],],
+
+                        ], {width: "794px", background: "#000000bf", borderRadius: "0 0 19px 19px", padding: "3px"}],
+                    ], {width: "800px",border: "3px solid #990909", borderRadius: "22px", background: "linear-gradient(60deg, rgb(182, 0, 0) 0%, rgb(24, 24, 24) 50%, rgb(182, 0, 0) 100%)"}],
                     ["blank", "25px"],
-                    ["clickable", 11], 
-                    ]],
-                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
-                    ["style-column", [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.car.cardShreds) + "</h3> card shreds. (+" + formatWhole(player.car.cardShredsPerSecond) + "/s)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "+" + formatWhole(player.car.cardsToGet) + " cards on draw." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["clickable", 12],
-                    ]],
-                    ], {width: "1100px", height: "250px", border: "3px solid rgb(68, 0, 0)", borderRadius: "10px 10px 10px 10px", background: "linear-gradient(180deg, #9e3b3b 0%, rgb(97, 44, 44) 50%, #9e3b3b 100%)"}],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace",}],
-                    ["blank", "25px"],
-                    ["style-row", [
-                            ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
-                    ],],
-                    ["style-row", [
-                            ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
-                    ],],
                 ],         
                             
             },
@@ -3049,7 +3179,7 @@
                                 ["levelable", 411], ["levelable", 412], ["levelable", 413],
                             ], () => {return{width: "1175px", height: "152px", backgroundColor: "#490c0c", padding: "5px"}}],
                         ], {width: "1200px", height: "522px", borderTop: "3px solid white"}],
-                    ], {width: "1200px", height: "700px", border: "3px solid white", backgroundColor: "#1c2033"}],
+                    ], {width: "1200px", height: "700px", border: "3px solid white", borderRadius: "15px 15px 0 0", outline: "3px solid #990909", backgroundColor: "#490c0c"}],
                 ]
             },
             "Suit Points": {

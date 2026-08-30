@@ -87,6 +87,7 @@ addLayer("n", {
             player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(buyableEffect("n", 2))
             player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(buyableEffect("n", 3))
             player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(player.s.pylonEnergyEffect4)
+            player.n.pylonEnergyPerSecond = player.n.pylonEnergyPerSecond.mul(levelableEffect("pu", 309)[1])
 
             player.n.pylonPassiveEffect = player.bee.bees.add(1).log(10).pow(0.05).sub(1).div(5).add(1.1).pow(player.n.pylonTierEffect)
         } else {
@@ -101,11 +102,11 @@ addLayer("n", {
         }
         player.n.pylonEnergy = player.n.pylonEnergy.add(player.n.pylonEnergyPerSecond.mul(Decimal.div(delta, player.uni["UB"].tickspeed)))
         
-        player.n.pylonEnergyEffect = player.n.pylonEnergy.add(1).log(10).div(10).add(1).pow(player.n.pylonTierEffect)
-        player.n.pylonEnergyEffect2 = player.n.pylonEnergy.add(1).log(10).div(20).add(1).pow(player.n.pylonTierEffect)
+        player.n.pylonEnergyEffect = player.n.pylonEnergy.add(1).pow(player.n.pylonTierEffect).log(10).div(10).add(1)
+        player.n.pylonEnergyEffect2 = player.n.pylonEnergy.add(1).pow(player.n.pylonTierEffect).log(10).div(20).add(1)
         player.n.pylonEnergyEffect3 = player.n.pylonEnergy.pow(0.1).add(1).pow(player.n.pylonTierEffect)
 
-        player.n.pylonTierEffect = player.n.pylonTier.sub(1).pow(0.5).div(10).add(1)
+        player.n.pylonTierEffect = player.n.pylonTier.sub(1).div(10).add(1)
     },
     clickables: {
         1: {
@@ -354,7 +355,7 @@ addLayer("n", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C9647f", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
         2: {
             costBase() { return new Decimal(25000) },
@@ -389,7 +390,7 @@ addLayer("n", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C9647f", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
         3: {
             costBase() { return new Decimal(100000) },
@@ -424,7 +425,7 @@ addLayer("n", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#63C9647f", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
         },
 
         41: {
@@ -946,28 +947,28 @@ addLayer("n", {
                 ],
             },
             "Pylon": {
-                buttonStyle: {borderColor: "#E3987A", borderRadius: "15px"},
-                unlocked() {return hasUpgrade("n", 71)},
+                buttonStyle() { return { borderRadius: "15px" } },
+                unlocked() { return hasUpgrade("n", 71) },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [
                         ["tooltip-row", [
                             ["raw-html", "<img src='resources/fragments/naturalFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[1])}, {width: "103px", height: "50px", color: "#458c46", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[1])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                             ["raw-html", "<div class='bottomTooltip'>Natural Core Fragments</div>"],
                         ], {width: "158px", height: "50px",}],
-                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #458c46", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.n.pylonEnergy) + "/" + format(player.n.pylonEnergyMax) +  "</h3> natural pylon energy (" + format(player.n.pylonEnergyPerSecond) + "/s)."}, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Boosts UB tickspeed by x" + format(player.n.pylonEnergyEffect) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Boosts glossary effect base by x" + format(player.n.pylonEnergyEffect2) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Boosts temporal pylon energy by x" + format(player.n.pylonEnergyEffect3) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "Passive effect: Boosts hex power gain by ^" + format(player.n.pylonPassiveEffect) + " (Based on bees)"}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return "Your natural pylon is tier " + formatWhole(player.n.pylonTier) + ", which boosts all pylon effects by ^" + format(player.n.pylonTierEffect) + "."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return "You have <h3>" + format(player.n.pylonEnergy) + "/" + format(player.n.pylonEnergyMax) +  "</h3> natural pylon energy (+" + format(player.n.pylonEnergyPerSecond) + "/s)." }, {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return "Boosts UB tickspeed by x" + format(player.n.pylonEnergyEffect) + "."}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts glossary effect base by x" + format(player.n.pylonEnergyEffect2) + "."}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts temporal pylon energy gain by x" + format(player.n.pylonEnergyEffect3) + "."}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Passive effect: Boosts hex power gain by ^" + format(player.n.pylonPassiveEffect) + " (Based on bees)"}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Your natural pylon is tier " + formatWhole(player.n.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.n.pylonTierEffect) + "."}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 1], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 2], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 3],]], 
+                    ["blank", "10px"],
                     ["clickable", 2],
                 ],
             },

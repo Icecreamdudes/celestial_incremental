@@ -977,19 +977,21 @@ addLayer("zarDungeon", {
                 ["top-column", [
                     ["blank", "5px"],
                     ["style-column", [
-                        ["raw-html", "Perks for defeating Zar", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "Perks for defeating Zar", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "500px", height: "35px", borderBottom: "2px solid var(--regBorder)", marginBottom: "5px"}],
-                    ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", "+1 OTF Slot", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", "Zar Punchcard", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", "Rare Space Pets", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", "Auto Card-Draw", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.lightRift.interspaceUnlocked ? "Interspace" : "Light Rift (In Universe 3)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.n.pylonTier.gte(2) ? "New Singularity Upgrade." : "New Singularity Upgrade.<small> (requires tier 2 natural pylon)" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "+1 OTF Slot", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "Zar Punchcard", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "Rare Space Pets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "Auto Card-Draw", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "10px"],
-                    ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Divide Point Doom Softcap's Scaling Divider by /1.5." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "x1,000 to Chance Points." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "x100 to Wheel Points." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "x10 to all Chips." }, {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Divide Point Doom Softcap's Scaling Divider by /1.5." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x1,000 to Chance Points." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x100 to Wheel Points." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "x10 to all Chips." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
 
                     // Zar punchcard 
                 ], () => {

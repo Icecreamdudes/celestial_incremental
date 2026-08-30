@@ -26,6 +26,10 @@
         }
     },
     nodeStyle() {
+        return {
+            color: "#fff",
+            borderColor: "#0000007f",
+        }
     },
     tooltip: "Perks",
     branches: ["ar"],

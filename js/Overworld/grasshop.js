@@ -209,6 +209,7 @@
         if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
         if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
         if (hasUpgrade("cs", 604)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
+        if (hasUpgrade("ir", 30)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
@@ -224,6 +225,8 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
+        if (hasUpgrade("ir", 20)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("ir", 20))
+        if (hasUpgrade("za", 23)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("za", 23))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
 
         // POWER MODIFIERS

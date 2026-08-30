@@ -191,7 +191,7 @@ addUniverse("A1", {
 addUniverse("A2", {
     name: "Alt-Universe 2<br>Cosmic Cosmos",
     symbol: "A2",
-    tree: [["st"], ["pl", "se"], ["ir"], ["sb"]],
+    tree: [["st"], ["pl", "sh", "se"], ["ir"], ["sb"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
@@ -213,7 +213,7 @@ addUniverse("A2", {
 addUniverse("U3", {
     name: "Universe 3<br>Domain of Singularity",
     symbol: "3",
-    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["bh"]],
+    tree: [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "lightRift", "sme"], ["bh"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
@@ -234,8 +234,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    // tree: [["funify", "le","bl"], ["dr", "dp", "rp"], ["dg", "db", "dgr", "dgj"], ["dn", "dv", "ds"]],
-    tree: [["dr"],["dp"],["dg","dgr","db"],["dn","le","dgj"],["ds","funify","bl","rp","dv"],],
+    tree: [["dr"],["dp"],["dg","dgr","db"],["dn","le","dgj"],["ds","funify","bl","rp","dv", "dt"],],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
@@ -256,7 +255,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ev15", "ev16"], ["ep0", "ep1", "ep2", "sp"]],
+    tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2"], ["ev15", "ev8", "ev16"], ["ep0", "ep1", "ep2"], ["sp", "ep3"]],
     nodeStyle() {
         return {
             background: "#094599",
@@ -264,26 +263,6 @@ addUniverse("CB", {
     },
     uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || hasMilestone("s", 14)},
     disabled() {return !player.startedGame || (!hasUpgrade("i", 19) && !player.in.unlockedInfinity && player.s.highestSingularityPoints.lte(0)) || player.cp.cantepocalypseActive},
-})
-
-addUniverse("CH", {
-    name: "Universe γ<br>Hall of Celestials",
-    symbol: "γ",
-    tree: [["ch"]],
-    nodeStyle() {
-        let style = {
-            background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
-            backgroundOrigin: "border-box",
-            borderColor: "#2e0054",
-        }
-        if (player.universe=="CH") {
-            style.outline = "2px solid white"
-            style.outlineOffset = "-2px"
-            style.borderWidth = "5px"
-        }
-        return style
-    },
-    uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
 })
 
 addUniverse("UB", {
@@ -335,12 +314,33 @@ addUniverse("BH", {
     disabled() {return !player.startedGame || !tmp.pu.levelables[302].canClick}
 })
 
+addUniverse("CH", {
+    name: "Universe γ<br>Hall of Celestials",
+    symbol: "γ",
+    tree: [["ch"], ["mm"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#2e0054",
+            color: "black",
+        }
+        if (player.universe=="CH") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
+})
+
 addUniverse("DS", {
     name() {
         return "Universe ε<br>Dice Space"
     },
     symbol: "ε",
-    tree: [["za",],["cf","wof",], ["sm",], ["cbs","car",], ["zd",]],
+    tree: [["za"], ["cf", "wof"], ["sm"], ["cbs", "car"], ["zd"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #666666ff 0%, #585858ff 100%)",
@@ -358,12 +358,33 @@ addUniverse("DS", {
     disabled() {return false}
 })
 
+addUniverse("UD", {
+    name: "Universe δ<br>Interspace",
+    symbol: "δ",
+    tree: [["wel"], ["pri", "prj", "blu"], ["bum"], ["cer"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(135deg, #dfffdf 0%, #ffa1ff 100%)",
+            backgroundOrigin: "border-box",
+        	borderColor: "#1a6641",
+            color: "#1a6641",
+        }
+        if (player.universe=="UD") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.lightRift.interspaceUnlocked && !player.sma.inStarmetalChallenge},
+})
+
 addUniverse("UZ", {
     name() {
         return "Universe ζ<br>Puzzle World"
     },
     symbol: "ζ",
-    tree: [["pf", "ak", ],["el",]],
+    tree: [["pf", "ak"], ["el"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(135deg, #000000ff 0%, #200010ff 50%, #000000ff 100%)",
@@ -400,4 +421,5 @@ addUniverse("PF", {
         }
         return style
     },
+    uniShown() { return false && !player.sma.inStarmetalChallenge },
 })

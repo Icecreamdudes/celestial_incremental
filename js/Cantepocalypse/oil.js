@@ -47,7 +47,12 @@
             buyBuyable('oi', 24)
         }
     },
-    nodeStyle() {},
+    nodeStyle() {
+        return {
+            color: "rgba(255,255,255,0.8)",
+            borderColor: "#0000007f",
+        }
+    },
     tooltip: "Oil",
     branches: ["an", "cb"],
     color: "#3c3642",
@@ -863,13 +868,26 @@
                 content: [
                     ["layer-proxy", ["ca", [
                         ["blank", "25px"],
-                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> rememberance cores."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "Boosts cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["bar", "bar"],
+                        ["style-row", [
+                            ["style-column", [
+                                ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Energy multiplier: <h3>" + format(player.ca.canteEnergyMult) + "</h3>x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "20px"],
+                                ["raw-html", "Cante energy is gained by clicking on check back buttons.", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ["blank", "10px"],
+                            ], () => {return hasUpgrade("cp", 18) ? {width: "347px", height: "220px", borderRight: "3px solid white"} : {width: "700px", height: "220px"}}],
+                            ["style-column", [
+                                ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> remembrance cores."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "Boosts cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "10px"],
+                                ["raw-html", () => {return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories."}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                                ["blank", "20px"],
+                                ["clickable", 15],
+                            ], () => {return hasUpgrade("cp", 18) ? {width: "350px", height: "220px"} : {display: "none !important"}}],
+                        ], {width: "700px", background: "#086894", border: "3px solid white", borderRadius: "0 0 20px 20px"}],
                         ["blank", "25px"],
-                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["clickable", 15],
+                        ["row", [["clickable", 14]]],
                     ]]],
                 ]
             },

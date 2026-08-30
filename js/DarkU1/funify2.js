@@ -9,6 +9,7 @@ addLayer("funify", {
 
         funify: new Decimal(0),
         funifyReq: new Decimal(1e100),
+        funifyResetSafety: false,
 
         funPoints: new Decimal(0),
         funPointsGain: new Decimal(0),
@@ -47,8 +48,8 @@ addLayer("funify", {
             unlocked() { return true },
             onClick() {
                 player.funify.funify = player.funify.funify.add(1);
-
-                player.le.starmetalAlloyPause = new Decimal(10)
+                layers.le.starmetalReset()
+                player.le.universeResetSafety = true
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

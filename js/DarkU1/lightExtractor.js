@@ -15,6 +15,8 @@
         starmetalAlloyPause: new Decimal(0),
         starmetalAlloyPauseAgain: new Decimal(0),
 
+        universeResetSafety: false,
+
         resetAmount: new Decimal(0),
         highestReset: new Decimal(0),
 
@@ -48,6 +50,7 @@
     },
     nodeStyle() {
         return {
+            //384166
             background: "linear-gradient(15deg, #4cc1c7 0%, #2a79ad 50%, #1a2f78 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#8ca3ff",
@@ -60,10 +63,10 @@
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
-
+        
         if (player.sma.inStarmetalChallenge) {
-            player.le.timeSinceEnter = player.le.timeSinceEnter.add(delta)
-            player.le.timeSinceReset = player.le.timeSinceReset.add(delta)
+            player.le.timeSinceEnter = player.le.timeSinceEnter.add(Decimal.div(delta, player.uni["D1"].tickspeed))
+            player.le.timeSinceReset = player.le.timeSinceReset.add(Decimal.div(delta, player.uni["D1"].tickspeed))
         }
 
         // Starmetal Alloy
@@ -75,6 +78,7 @@
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(buyableEffect("funify", 12))
         if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
+        if (hasMilestone("prj", 107)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.prj.milestone107Effect)
 
 
         if (player.le.starmetalAlloyPause.gte(0)) layers.le.starmetalReset();
@@ -90,11 +94,12 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pu", 302)[1])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("dn", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("sma", 11))
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ep1", 11))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ep1", 13))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pet", 404)[2])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("depth2", 4))
         if (hasUpgrade("sma", 204)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(upgradeEffect("sma", 204))
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
+        if (hasMilestone("db", 108)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("st", 110)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
@@ -103,6 +108,11 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
+        if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
+
+        player.le.starmetalAlloyValue = new Decimal(1)
+        player.le.starmetalAlloyValue = player.le.starmetalAlloyValue.mul(buyableEffect("ep1", 15))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -111,6 +121,7 @@
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
         if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
+        if (hasMilestone("prj", 107)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.prj.milestone107Effect)
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGet
@@ -120,12 +131,19 @@
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("sme", 162))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("dgj", 16))
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("car", 411)[0])
+        if (hasMilestone("db", 102)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
+        if (hasMilestone("db", 108)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
+        if (hasMilestone("prj", 104)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4));
 
         player.le.eclipseShardsValue = new Decimal(5)
-        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11))
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("pu", 211)[1])
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(levelableEffect("st", 310)[0])
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(player.dt.timeEnergyEffect)
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("ep1", 15))
+
+        player.le.eclipseShardsValue = player.le.eclipseShardsValue.floor()
 
         if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.legPetTimers[0].active) {
             player.le.resetAmount = player.le.resetAmount.add(1)
@@ -137,14 +155,18 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
+            player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+            if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
+            if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(7)) completeAchievement("achievements", 1206);
+            if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(7200)) completeAchievement("achievements", 1215);
 
             player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
             player.le.starmetalAlloyPauseAgain = new Decimal(10)
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.floor())
+                    addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.le.starmetalAlloyValue).floor())
                 }
                 setLevelableTier("pu", prop, new Decimal(0))
             }
@@ -163,22 +185,27 @@
 
             layers.pu.generateSelection();
         }
+        player.le.universeResetSafety = false
     },
     bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset everything in this universe for stored starmetal alloy.<br>Req: " + format(player.le.starmetalAlloyReq) + " Points" },
-            canClick() { return player.du.points.gte(player.le.starmetalAlloyReq) },
+            canClick() { return player.du.points.gte(player.le.starmetalAlloyReq) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.le.resetAmount = player.le.resetAmount.add(1)
                 if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
-                player.le.starmetalAlloyPause = new Decimal(10)
 
                 player.pu.storedSelections = player.pu.storedSelections.add(1)
 
                 player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
+
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -190,14 +217,14 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
-                        addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.floor())
+                        addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.le.starmetalAlloyValue).floor())
                     }
                     setLevelableTier("pu", prop, new Decimal(0))
                 }
@@ -214,6 +241,8 @@
                 changeTheme()
 
                 layers.pu.generateSelection();
+
+                player.sma.starmetalExitTime = new Decimal(0)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -223,16 +252,19 @@
         },
         13: {
             title() { return "<h2>Reset everything in this universe for stored eclipse shards.<br>Req: " + format(player.le.eclipseShardsReq) + " Points" },
-            canClick() { return player.du.points.gte(player.le.eclipseShardsReq) },
+            canClick() { return player.du.points.gte(player.le.eclipseShardsReq) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.le.resetAmount = player.le.resetAmount.add(1)
                 if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
-                player.le.starmetalAlloyPause = new Decimal(10)
 
                 player.pu.storedSelections = player.pu.storedSelections.add(1)
 
                 player.le.eclipseShardsToGet = player.le.eclipseShardsToGet.add(player.le.eclipseShardsToGetToGet)
+
+                player.le.universeResetSafety = true
+                
+                layers.le.starmetalReset()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -246,7 +278,12 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+                if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
+                if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(7)) completeAchievement("achievements", 1206);
+                if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(7200)) completeAchievement("achievements", 1215);
+
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
@@ -273,6 +310,8 @@
                 layers.pu.generateSelection();
 
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+
+                player.sma.eclipseExitTime = new Decimal(0)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -468,35 +507,7 @@
     starmetalReset() {
         player.le.timeSinceReset = new Decimal(0)
 
-        player.du.points = new Decimal(0)
-        player.du.pointGain = new Decimal(0)
-        player.dr.rank = new Decimal(0)
-        player.dr.tier = new Decimal(0)
-        player.dr.tetr = new Decimal(0)
-        player.dr.pent = new Decimal(0)
-
-        player.dr.rankPoints = new Decimal(0)
-        player.dr.rankPointsPerSecond = new Decimal(0)
-        player.dr.tierPoints = new Decimal(0)
-        player.dr.tierPointsPerSecond = new Decimal(0)
-        player.dr.tetrPoints = new Decimal(0)
-        player.dr.tetrPointsPerSecond = new Decimal(0)
-        player.dr.pentPoints = new Decimal(0)
-        player.dr.pentPointsPerSecond = new Decimal(0)
-
-        player.dp.prestigePoints = new Decimal(0)
-        player.dp.prestigePointsToGet = new Decimal(0)
-        player.dp.buyables[11] = new Decimal(0)
-        player.dp.buyables[12] = new Decimal(0)
-        player.dp.buyables[13] = new Decimal(0)
-        player.dp.buyables[14] = new Decimal(0)
-        player.dp.buyables[15] = new Decimal(0)
-        player.dp.buyables[16] = new Decimal(0)
-
-        player.dg.generators = new Decimal(0)
-        player.dg.generatorsToGet = new Decimal(0)
-        player.dg.generatorPower = new Decimal(0)
-        player.dg.generatorPowerPerSecond = new Decimal(0)
+        layers.dn.normalityReset()
 
         for (let i = 0; i < player.le.upgrades.length; i++) {
             if (+player.le.upgrades[i] < 102) {
@@ -504,13 +515,6 @@
                 i--;
             }
         }
-
-        player.dg.buyables[11] = new Decimal(0)
-        player.dg.buyables[12] = new Decimal(0)
-        player.dg.buyables[13] = new Decimal(0)
-        player.dg.buyables[14] = new Decimal(0)
-        player.dg.buyables[15] = new Decimal(0)
-        player.dg.buyables[16] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
@@ -580,6 +584,12 @@
             }
         }
         for (let i = 0; i < player.dn.upgrades.length; i++) {
+            if (+player.dn.upgrades[i] < 101) {
+                player.dn.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+        for (let i = 0; i < player.dv.upgrades.length; i++) {
             if (+player.dn.upgrades[i] < 101) {
                 player.dn.upgrades.splice(i, 1);
                 i--;
@@ -663,6 +673,16 @@
         player.dgj.buyables[15] = new Decimal(0)
         player.dgj.buyables[16] = new Decimal(0)
         player.subtabs["dgj"]["stuff"] = "Main"
+        player.dv.upgrades = []
+
+        player.dt.timeCapsules = new Decimal(0)
+        player.dt.timeEnergy = new Decimal(0)
+        player.dt.buyables[11] = new Decimal(0)
+        player.dt.buyables[12] = new Decimal(0)
+        player.dt.buyables[13] = new Decimal(0)
+        player.dt.buyables[14] = new Decimal(0)
+        player.dt.buyables[15] = new Decimal(0)
+        player.dt.buyables[16] = new Decimal(0)
 
         player.bl.blood = new Decimal(0)
         
@@ -670,15 +690,16 @@
         player.bl.buyables[22] = new Decimal(0)
         player.bl.buyables[23] = new Decimal(0)
 
-        if (!player.bl.noxDefeated) {
+        if (!hasMilestone("bloodZone1", 11)) {
             player.bl.buyables[11] = new Decimal(0)
             player.bl.buyables[12] = new Decimal(0)
             player.bl.buyables[13] = new Decimal(0)
             player.bl.buyables[14] = new Decimal(0)
-            player.bl.buyables[31] = new Decimal(0)
-            player.bl.buyables[32] = new Decimal(0)
-            player.bl.buyables[33] = new Decimal(0)
-            player.bl.buyables[34] = new Decimal(0)
+            player.bl.buyables[15] = new Decimal(0)
+            player.bl.buyables[16] = new Decimal(0)
+            player.bl.buyables[101] = new Decimal(0)
+            player.bl.buyables[102] = new Decimal(0)
+            player.bl.buyables[103] = new Decimal(0)
         }
 
         player.bl.bloodDrain = false

@@ -657,7 +657,9 @@ function celestialiteReward(gain) {
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.lustrousUmbrite) + " lustrous umbrite! (You have " + formatWhole(player.depth3.lustrousUmbrite) + ")")
     }
     if (gain.darkEssence) {
-        gain.darkEssence = gain.darkEssence.mul(buyableEffect("darkTemple", 1005)).mul(generalMult).floor()
+        gain.darkEssence = gain.darkEssence.mul(buyableEffect("darkTemple", 1005)).mul(generalMult)
+        if (hasMilestone("spaceZone2", 12)) gain.darkEssence = gain.darkEssence.mul(1.2);
+        gain.darkEssence = gain.darkEssence.floor()
         player.bh.darkEssence = player.bh.darkEssence.add(gain.darkEssence)
         bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.darkEssence) + " dark essence! (You have " + formatWhole(player.bh.darkEssence) + ")")
     }
@@ -699,12 +701,12 @@ function celestialiteReward(gain) {
     if (gain.matosFragment) {
         gain.matosFragment = gain.matosFragment.mul(player.laboratory.matosMult).mul(generalMult).floor()
         player.laboratory.matosFragment = player.laboratory.matosFragment.add(gain.matosFragment)
-        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosFragment) + " matos dust! (You have " + formatWhole(player.laboratory.matosFragment) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosFragment) + " matos fragments! (You have " + formatWhole(player.laboratory.matosFragment) + ")")
     }
     if (gain.matosEssence) {
         gain.matosEssence = gain.matosEssence.mul(player.laboratory.matosMult).mul(generalMult).floor()
         player.laboratory.matosEssence = player.laboratory.matosEssence.add(gain.matosEssence)
-        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos dust! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
+        bhLog("<span style='color: #eed200'>" + str + "You gained " + formatWhole(gain.matosEssence) + " matos essence! (You have " + formatWhole(player.laboratory.matosEssence) + ")")
     }
     if (gain.pips) {
         gain.pips = gain.pips.mul(generalMult).floor()
@@ -1399,5 +1401,11 @@ function navHealEffect(x, y)
             this.height = this.width;
         }
     }, 1, 'normal', {x: x, y: y});
+}
+
+function bumpyUltimateEffect(x, y) {
+    if (typeof options !== 'undefined' && options.toggleParticle === false) return;
+
+    player.bh.fadeBackground = 0
 }
 

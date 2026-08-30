@@ -26,9 +26,9 @@
     nodeStyle() {
         return {
             background: "gray",
-            backgroundOrigin: "border-box",
-            color: "black",
-            borderColor: "white",
+            "background-origin": "border-box",
+            "border-color": "#000000bf",
+            "color": "#000000bf",
         }
     },
     branches() { return !player.zarDungeon.zarDefeated ? "cb" : ["cb", "d", "rf"] },
@@ -692,7 +692,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Ancient CF"
+                return "Ancient CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% ancient core fragments per second.\n\
@@ -713,7 +713,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "black", backgroundColor: "#B8916A", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "black", backgroundColor: "#B8916A7f", background: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%) border-box" },
         },
         302: {
             costBase() { return new Decimal(100000) },
@@ -726,7 +726,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Natural CF"
+                return "Natural CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% natural core fragments per second.\n\
@@ -747,7 +747,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "black", backgroundColor: "#63C964", backgroundImage: "linear-gradient(120deg, #63C964 0%, #007917 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "black", backgroundColor: "#63C9647f", background: "linear-gradient(120deg, #63C964 0%, #007917 100%) border-box" },
         },
         303: {
             costBase() { return new Decimal(100000) },
@@ -760,7 +760,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Technological CF"
+                return "Technological CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% technological core fragments per second.\n\
@@ -781,7 +781,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "black", backgroundColor: "#595A5C", backgroundImage: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "black", backgroundColor: "#595A5C7f", background: "linear-gradient(120deg, #595A5C 0%, rgb(156, 156, 156) 100%) border-box" },
         },
         304: {
             costBase() { return new Decimal(100000) },
@@ -794,7 +794,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox CF"
+                return "Paradox CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% paradox core fragments per second.\n\
@@ -815,7 +815,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "black", backgroundColor: "#20A3C2", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "black", backgroundColor: "#20A3C27f", background: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%) border-box" },
         },
         305: {
             costBase() { return new Decimal(100000) },
@@ -828,7 +828,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Radioactive CF"
+                return "Radioactive CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% radioactive core fragments per second.\n\
@@ -849,7 +849,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "white", backgroundColor: "#8017577f", background: "linear-gradient(120deg, #801757 0%, #D3173A 100%) border-box" },
         },
         306: {
             costBase() { return new Decimal(100000) },
@@ -862,7 +862,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cosmic CF"
+                return "Cosmic CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% cosmic core fragments per second.\n\
@@ -883,7 +883,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "white", backgroundColor: "#5d14827f", background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%) border-box" },
         },
         307: {
             costBase() { return new Decimal(100000) },
@@ -896,7 +896,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Temporal CF"
+                return "Temporal CF Assembler"
             },
             display() {
                 return 'Assembles ' + formatSimple(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '% temporal core fragments per second.\n\
@@ -917,7 +917,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', color: "white", backgroundColor: "#2B6476", backgroundImage: "linear-gradient(120deg, #2B6476 0%, #012454 100%)" }
+            style: { width: '250px', height: '150px', margin: "3px", color: "white", backgroundColor: "#2B64767f", background: "linear-gradient(120deg, #2B6476 0%, #012454 100%) border-box" },
         },
         401: {
             costBase() { return new Decimal("1e10000") },
@@ -1360,9 +1360,14 @@
                 content: [
                     ["blank", "25px"],
                     ["style-row", [
-                        ["ex-buyable", 301], ["ex-buyable", 302], ["ex-buyable", 303], ["ex-buyable", 304],
-                        ["ex-buyable", 305], ["ex-buyable", 306], ["ex-buyable", 307],
-                    ], {maxWidth: "850px"}]
+                        ["rounded-ex-buyable", 301], ["rounded-ex-buyable", 302],
+                    ]],
+                    ["style-row", [
+                        ["rounded-ex-buyable", 303], ["rounded-ex-buyable", 304], ["rounded-ex-buyable", 305],
+                    ]],
+                    ["style-row", [
+                        ["rounded-ex-buyable", 306], ["rounded-ex-buyable", 307],
+                    ]],
                 ]
             },
             "Refinery": {

@@ -171,6 +171,15 @@
     bars: {},
     upgrades: {
         11: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "It begins lmao",
             unlocked() { return player.za.zarUnlocked },
             description: "Earn 1 chance point per second. How lame.",
@@ -178,9 +187,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         12: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Why wait so long?",
             unlocked() { return hasUpgrade("za", 11) },
             description: "Unlock coin flip.",
@@ -188,9 +210,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         13: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Spinny spinny wheel haha",
             unlocked() { return hasUpgrade("za", 12) },
             description: "Unlock the wheel of fortune!!!",
@@ -198,9 +233,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         14: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Damn you're lazy",
             unlocked() { return hasUpgrade("za", 13) },
             description: "Unlock the autoflipper... get a load of this guy.",
@@ -208,9 +256,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         15: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "More buyables cause why not :)",
             unlocked() { return hasUpgrade("za", 14) },
             description: "Unlock more heads and tails buyables.",
@@ -218,9 +279,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         16: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Even more gambling!!!",
             unlocked() { return hasUpgrade("za", 15) },
             description: "Unlock the slot machine.",
@@ -228,9 +302,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         17: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + "<br>(" + this.effectDisplay() + ")" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Finally boosting the other content :/",
             unlocked() { return hasUpgrade("za", 16) },
             description: "Boosts challenge dice points based on chance points.",
@@ -238,13 +325,26 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '150px', "min-height": '100px', },
             effect() {
                 return player.za.chancePoints.plus(1).log10().pow(0.2).div(4).add(1)
             },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id), 3) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },        
         18: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Make life kinda easy",
             unlocked() { return hasUpgrade("za", 17) },
             description: "Flipping the coin doesn't spend any chance points.",
@@ -252,9 +352,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         19: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "I don't know what this is",
             unlocked() { return hasUpgrade("za", 18) },
             description: "Unlock the check back shrine.",
@@ -262,9 +375,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         21: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "Let's play a game.",
             unlocked() { return hasUpgrade("za", 19) },
             description: "Unlock cards.",
@@ -272,9 +398,22 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px"},
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
         22: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + "<br>(" + this.effectDisplay() + ")" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
             title: "I don't like bees but I do like flowers.",
             unlocked() { return hasUpgrade("za", 21) && player.al.show },
             description: "Boosts flower gain based on chance points.",
@@ -282,11 +421,42 @@
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(15, 12, 12, 0.5)", borderRadius: "15px", margin: "2px", width: '150px',},
             effect() {
                 return Decimal.pow(1.5, player.za.chancePoints.add(1).log(10).pow(0.5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
+        },
+        23: {
+            fullDisplay() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description + "<br>(" + this.effectDisplay() + ")" + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Good luck getting this one lmaooooo",
+            unlocked() { return hasUpgrade("za", 22) && player.zarDungeon.zarDefeated },
+            description: "Dice points and rocket fuel boost steel gain.",
+            cost: new Decimal("6.7e670"),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            effect() {
+                return player.d.dicePoints.add(1).log(10).add(1).pow(0.5).sub(1).mul(player.rf.rocketFuel.add(1).log(10).add(1).pow(0.5).sub(1)).pow_base(10).pow(0.1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#0000007f", outline: "3px solid #7f7f7f", width: "252px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#bfbfbf"
+                return look
+            },
         },
     },
     buyables: {},
@@ -317,13 +487,16 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["blank", "5px"],
+                        ["blank", "10px"],
                         ["raw-html", function () { return "My amazing upgrades" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "5px"],
-                        ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],]],
-                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19],["upgrade", 21],["upgrade", 22],]],
-                        ["blank", "5px"],
-                    ], {width: "800px", background: "#313131ff", border: "3px solid #ccc", borderRadius: "15px"}],
+                        ["blank", "10px"],
+                        ["style-row", [], {background: "#ccc", width: "800px", height: "3px"}],
+                        ["blank", "3px"],
+                        ["row", [ ["upgrade", 11],["upgrade", 12],["upgrade", 13]]],
+                        ["row", [ ["upgrade", 14],["upgrade", 15],["upgrade", 16]]],
+                        ["row", [ ["upgrade", 17],["upgrade", 18],["upgrade", 19]]],
+                        ["row", [ ["upgrade", 21],["upgrade", 22],["upgrade", 23]]],
+                    ], {width: "800px", background: "linear-gradient(315deg, #474747ff 0%, #8d8d8dff 100%)", border: "3px solid #ccc", borderRadius: "22px", paddingBottom: "3px"}],
                 ]
             },
         },
@@ -332,6 +505,7 @@
                 ["raw-html", function () { return "You have <h3>" + format(player.za.chancePoints) + "</h3> chance points. (+" + format(player.za.chancePointsPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", () => { return player.za.chancePoints.gte(player.za.chancePointsSoftcapStart) ? "After " + format(player.za.chancePointsSoftcapStart) + " chance points, gain is divided by /" + format(player.za.chancePointsSoftcapEffect) + "." : "Softcap start: " + format(player.za.chancePointsSoftcapStart) + "." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+                    ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && !player.sma.inStarmetalChallenge}
 })

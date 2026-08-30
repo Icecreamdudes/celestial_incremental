@@ -7,6 +7,13 @@ var BHA = {}
 var BHP = {}
 var BHB = {}
 
+// Space battle variables
+var SB_ships = {}
+var SB_zones = {}
+var SB_celestialites = {}
+var SB_projectiles = {}
+var SB_warnings = {}
+
 // Don't change this
 const TMT_VERSION = {
 	tmtNum: "2.7",
@@ -509,7 +516,7 @@ function swarmParticles(particleColor, flashColor) {
   function flashBackground(color) {
 	document.body.style.backgroundColor = color;
 	setTimeout(() => {
-	  document.body.style.backgroundColor = 'white'; // Reset background color
+	  document.body.style.backgroundColor = 'black'; // Reset background color
 	}, 1000);
   }
 

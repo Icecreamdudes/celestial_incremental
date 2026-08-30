@@ -1143,8 +1143,6 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added stage 13 achievements.<br>
 			- Added a theme.<br>
 		<br>Design and QoL:<br>
-			- Temporarily removed the savebank tab because it can break your save.<br>
-			- Added a spoiler indicator to the changelog tab.<br>
 			- Changed many layer node styles for readability and consistency.<br>
 			- Shifted the hue of check back's blue.<br>
 			- Redesigned many check back tab UIs.<br>
@@ -1165,6 +1163,9 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Removed the coin clipper and rewardless dice space reset buttons in favor of buttons that reduce total flips/spins on a cooldown.<br>
 			- Redesigned enhance point UI.<br>
 			- Made zar perks state that a new singularity upgrade is unlocked, requiring the natural pylon.<br>
+			- Updated credits.<br>
+			- Temporarily removed the savebank tab because it can break your save.<br>
+			- Added a spoiler indicator to the changelog tab.<br>
 		<br>Balancing:<br>
 			- Daily orb time skips no longer affect daily orb cooldown.<br>
 			- Gained stats from daily orbs now scale weaker.<br>
@@ -2640,7 +2641,15 @@ function fixOldSave(oldVersion){
 		player.ep1.buyables[12] = new Decimal(player.ep1.buyables[12]).mul(0.4).ceil()
 		player.ep1.buyables[13] = new Decimal(player.ep1.buyables[13]).mul(0.2).ceil()
 
-		if (player.bl.noxDefeated && player.bl.upgrades.indexOf(11) == -1) player.bl.upgrades.push(11)
+		if (player.ir.iriditeDefeated) {
+			player.spaceZone1.highestLevel = new Decimal(20)
+			player.spaceZone2.highestLevel = new Decimal(20)
+			player.iriditeZone.highestLevel = new Decimal(20)
+		}
+		if (player.bl.noxDefeated && player.bl.upgrades.indexOf(11) == -1) {
+			player.bl.upgrades.push(11)
+			player.bloodZone1.highestLevel = new Decimal(20)
+		}
 
 		if (player.cs.scraps.point.amount.gt(1e27)) player.cs.scraps.point.amount = new Decimal(player.cs.scraps.point.amount).div(1e27).log(10).add(1).mul(1e27);
 		if (player.cs.scraps.factor.amount.gt(1e27)) player.cs.scraps.factor.amount = new Decimal(player.cs.scraps.factor.amount).div(1e27).log(10).add(1).mul(1e27);
@@ -2681,6 +2690,7 @@ function fixOldSave(oldVersion){
 		if (player.ir.levelables[9][0].gt(55)) player.ir.levelables[9][0] = new Decimal(55);
 		for (let i = player.ir.upgrades.length - 1; i >= 0; i--) {
 			if (typeof player.ir.upgrades[i] === "string") player.ir.upgrades.splice(i, 1);
+			if (player.ir.upgrades[i] === null) player.ir.upgrades.splice(i, 1);
 		}
 
 		player.bl.buyables[11] =  new Decimal(player.bl.buyables[11]).mul(0.4).ceil()

@@ -3099,7 +3099,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3145,7 +3145,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3191,7 +3191,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3237,7 +3237,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3283,7 +3283,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3329,7 +3329,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3375,7 +3375,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3421,7 +3421,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3467,7 +3467,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3513,7 +3513,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3559,7 +3559,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {
@@ -3605,7 +3605,7 @@ addLayer("ir", {
             canAfford() { return player.ir.shipBattleSaveCurrent != null && player.ir.shipBattleSaveCurrent.slot >= 0},
             unlocked() { return true },
             description() {
-                let amt = player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]]
+                let amt = player.ir.shipBattleSaveCurrent ? player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id-401]] + player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id-401]] : 0
                 return "<i style='color:" + (amt > 0 ? "#ffb366" : "#aaa2f2") + "'>(" + (player.ir.shipBattleSaveCurrent && player.ir.shipBattleSaveCurrent.slot >= 0 ? formatSimple(amt) : "0") + " Owned)</i>" 
             },
             cost() {

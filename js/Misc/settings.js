@@ -697,7 +697,7 @@ addLayer("settings", {
                         ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
                             "Content: Icecreamdude Forwaken Akash Bumpy<br>" +
                             "Ideas: Nova<br>" +
-                            "Art: Jtoh_Sc Lemonsja Akash Bumpy<br>" +
+                            "Art: Jtoh_Sc Lemonsja Akash Vel Bumpy<br>" +
                             "Testing: Nova Piterpicher Vel Bumpy<br>" +
                             "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
                     ], {width: "306px", height: "255px"}],

@@ -5052,7 +5052,7 @@
                 { text: "I might remember.", portrait: "resources/player.png"  },
                 { text: "They produce usable energy from the sun, is that right?", portrait: "resources/player.png"  },
                 { text: "Yep. Prisms do the same thing, but superphysically.", portrait: "resources/characterPortraits/bumpy/smile.png"  },
-                { text: "They are able to convert the superphysical light produced by the wells into usable electricity.", portrait: "resources/characterPortraits/bumpy/smile.png"  },
+                { text: "They are able to convert the superphysical light into usable electricity.", portrait: "resources/characterPortraits/bumpy/smile.png"  },
                 { text: "This electricity is then used to power the city.", portrait: "resources/characterPortraits/bumpy/smile.png"  },
                 { text: "Without the prisms, the city would be a dead place.", portrait: "resources/characterPortraits/bumpy/smile.png"  },
                 { text: "Back then, I had my foresight-user co-founder manually convert light into electricity, and it wasn't very efficient.", portrait: "resources/characterPortraits/bumpy/smile.png"  },

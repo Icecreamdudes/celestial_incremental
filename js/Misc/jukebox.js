@@ -548,7 +548,7 @@ addLayer("jukebox", {
             description: "Developer Flashback",
             img: "resources/music/dev-flashback.png",
             file: "music/devFlashback.mp3",
-            unlocked() {return player.lightRift.interspaceUnlocked},
+            unlocked() {return player.pri.totalPrisms.gt(0) || hasMilestone("prj", 201)},
         },
         "akash": {
             artist: "AkashG23",

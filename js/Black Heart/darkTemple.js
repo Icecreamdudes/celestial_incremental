@@ -341,6 +341,7 @@ addLayer("darkTemple", {
 
         player.darkTemple.byproductMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 8)) player.darkTemple.byproductMult = player.darkTemple.byproductMult.mul(upgradeEffect("darkTemple", 8))
+        if (hasUpgrade("ir", 302)) player.darkTemple.byproductMult = player.darkTemple.byproductMult.mul(1.5)
 
         if (player.darkTemple.byproduct[1]) {
             let eff1 = getBuyableAmount("darkTemple", 1).mul(getBuyableAmount("darkTemple", 101).div(2).add(1))

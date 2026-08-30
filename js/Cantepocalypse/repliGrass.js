@@ -31,7 +31,12 @@ addLayer("rg", {
             buyBuyable('rg', 18)
         }
     },
-    nodeStyle() {},
+    nodeStyle() {
+        return {
+            color: "#0000007f",
+            borderColor: "#0000007f",
+        }
+    },
     tooltip: "Repli-Grass",
     branches: ["rt"],
     color: "#67cc3b",

@@ -50,16 +50,16 @@
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("cof", 29)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("fa", 16)).floor()
+        if (player.ep1.dragonEvolutionIndex >= 4) player.au2.starsToGet = player.au2.starsToGet.mul(3);
 
         //Star Softcap
-        player.au2.starSoftcapStart = new Decimal(1000000)
+        player.au2.starSoftcapStart = new Decimal(1e6)
 
-        let softcapBase = new Decimal(0.4)
-        if (player.alephsChamber.milestone[25] > 0) softcapBase = softcapBase.add(0.1)
-
-        if (player.au2.starsToGet.gte(player.au2.starSoftcapStart)) {
-            player.au2.starSoftcapEffect = softcapBase.div(Decimal.div(player.au2.starsToGet.add(1).log(2).add(100), 100))
-            player.au2.starsToGet = player.au2.starsToGet.div(player.au2.starSoftcapStart).pow(player.au2.starSoftcapEffect).mul(player.au2.starSoftcapStart)
+        if (player.au2.starsToGet.gte(player.au2.starSoftcapStart))
+        {
+            player.au2.starSoftcapEffect = player.au2.starsToGet.add(1).log(10).div(6).pow(0.75).recip()
+            if (player.alephsChamber.milestone[25] > 0) player.au2.starSoftcapEffect = player.au2.starSoftcapEffect.pow(0.8)
+            player.au2.starsToGet = player.au2.starsToGet.div(1e6).pow(player.au2.starSoftcapEffect).mul(1e6)
             player.au2.starSoftcapActive = true  
         } else
         {
@@ -72,6 +72,7 @@
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("stagnantSynestia", 3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
+        if (hasMilestone("spaceZone2", 14)) player.au2.starsToGet = player.au2.starsToGet.mul(1e3);
 
         player.au2.starsToGet = player.au2.starsToGet.pow(levelableEffect("car", 311)[0]).floor()
     },

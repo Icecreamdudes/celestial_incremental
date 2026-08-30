@@ -226,8 +226,9 @@
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("i", 13))
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(player.in.pylonEnergyEffect3)
             player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(buyableEffect("sme", 143))
+            player.i.pylonEnergyPerSecond = player.i.pylonEnergyPerSecond.mul(levelableEffect("pu", 114)[1])
 
-            player.i.pylonPassiveEffect = player.points.pow(0.002).add(1).pow(player.i.pylonTierEffect)
+            player.i.pylonPassiveEffect = player.points.add(1).pow(player.i.pylonTierEffect).log(10).div(200).pow(0.75).pow_base(10).pow(2).add(1)
         } else
         {
             player.i.pylonEnergyPerSecond = new Decimal(0)
@@ -242,11 +243,9 @@
         }
         player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
 
-        player.i.pylonEnergyEffect = player.i.pylonEnergy.pow(4).add(1).pow(player.i.pylonTierEffect)
-        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.pow(0.15).add(1).pow(player.i.pylonTierEffect)
-        if (player.i.pylonEnergyEffect2.gt(10000)) player.i.pylonEnergyEffect2 = player.i.pylonEnergyEffect2.div(10000).pow(0.1).mul(10000)
-        player.i.pylonEnergyEffect3 = player.i.pylonEnergy.pow(0.1).add(1).pow(player.i.pylonTierEffect)
-        if (player.i.pylonEnergyEffect3.gt(1000)) player.i.pylonEnergyEffect3 = player.i.pylonEnergyEffect3.div(1000).pow(0.1).mul(1000)
+        player.i.pylonEnergyEffect = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.8).pow_base(10).sub(1).pow(4).add(1)
+        player.i.pylonEnergyEffect2 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.65).sub(1).pow(3).mul(10).add(1)
+        player.i.pylonEnergyEffect3 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.5).sub(1).pow(1.75).mul(3).add(1)
 
         player.i.pylonTierEffect = player.i.pylonTier.sub(1).pow(0.3).div(10).add(1)
 
@@ -565,7 +564,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A7f", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
         12: {
             costBase() { return new Decimal(250) },
@@ -599,7 +598,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A7f", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
         13: {
             costBase() { return new Decimal(1500) },
@@ -633,7 +632,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#B8916A7f", backgroundImage: "linear-gradient(120deg, #B8916A 0%, #BE8267 100%)" }
         },
     },
     infoboxes: {
@@ -684,37 +683,30 @@
                     ["infobox", "4"],
                 ],
             },
-             "Pylon": {
+            "Pylon": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("s", 28)},
+                unlocked() { return hasUpgrade("s", 28) },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [
                         ["tooltip-row", [
                             ["raw-html", "<img src='resources/fragments/ancientFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "103px", height: "50px", color: "#8B664B", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[0])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                             ["raw-html", "<div class='bottomTooltip'>Ancient Core Fragments</div>"],
                         ], {width: "158px", height: "50px",}],
-                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #8B664B", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 12],
-                    ["raw-html", () => { return player.i.pylonBuilt ? "You have <h3>" + format(player.i.pylonEnergy) + "/" + format(player.i.pylonEnergyMax) +  "</h3> ancient pylon energy (" + format(player.i.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts U1 tickspeed by x" + format(player.i.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["row", [
-                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.i.pylonEnergyEffect2.gt(10000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
-                    ]],
-                    ["row", [
-                        ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.i.pylonEnergyEffect3.gt(1000) ? "<small style='margin-left:10px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
-                    ]],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Passive effect: Boosts IP gain by x" + format(player.i.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.i.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.i.pylonTier) + ", which boosts all pylon effects by ^" + format(player.i.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.i.pylonTier.gte(2) ? "Tier 2 Ancient Pylon unlocks the Universe 2 Pylon" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return player.i.pylonBuilt ? "You have <h3>" + format(player.i.pylonEnergy) + "/" + format(player.i.pylonEnergyMax) +  "</h3> ancient pylon energy (+" + format(player.i.pylonEnergyPerSecond) + "/s)." : "" }, {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts U1 tickspeed by x" + format(player.i.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts pre-otf multiplier by ^" + format(player.i.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.i.pylonBuilt ? "Boosts post-otf multiplier by ^" + format(player.i.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.i.pylonBuilt ? "Passive effect: Boosts infinity point gain by x" + format(player.i.pylonPassiveEffect) + " (based on points)" : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.i.pylonBuilt ? "Your ancient pylon is tier " + formatWhole(player.i.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.i.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 11], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 12], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 13],]], 
+                    ["blank", "10px"],
                     ["clickable", 13],
                 ],
             },

@@ -204,14 +204,15 @@
 
         if (player.in.pylonBuilt)
         {
-            player.in.pylonEnergyPerSecond = new Decimal(1.2)
+            player.in.pylonEnergyPerSecond = new Decimal(1.1)
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.add(levelableEffect("pu", 214)[1])
+            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.add(player.cbs.pylonEnergyEffect4)
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 11))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 12))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(buyableEffect("in", 13))
             player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(levelableEffect("ir", 9)[1])
-            player.in.pylonEnergyPerSecond = player.in.pylonEnergyPerSecond.pow(player.cbs.pylonEnergyEffect4)
 
-            player.in.pylonPassiveEffect = player.in.infinityPoints.pow(0.002).add(1).pow(player.in.pylonTierEffect)
+            player.in.pylonPassiveEffect = player.in.infinityPoints.add(1).pow(player.in.pylonTierEffect).log(10).div(200).pow(0.75).pow_base(10).add(1)
         } else
         {
             player.in.pylonEnergyPerSecond = new Decimal(0)
@@ -226,11 +227,12 @@
         }
         player.in.pylonEnergy = player.in.pylonEnergy.add(player.in.pylonEnergyPerSecond.mul(delta))
 
-        player.in.pylonEnergyEffect = player.in.pylonEnergy.pow(0.5).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.pow(0.25).add(1).pow(player.in.pylonTierEffect)
-        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.pow(0.175).add(1).pow(player.in.pylonTierEffect)
+        player.in.pylonEnergyEffect = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.75).pow_base(10).sub(1).div(10).add(1)
+        player.in.pylonEnergyEffect2 = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.5).pow_base(10).sub(1).div(10).add(1)
+        player.in.pylonEnergyEffect3 = player.in.pylonEnergy.add(1).pow(player.in.pylonTierEffect).log(10).pow(0.4).pow_base(10).sub(1).div(10).pow(2).add(1)
+        
 
-        player.in.pylonTierEffect = player.in.pylonTier.sub(1).pow(0.4).div(10).add(1)
+        player.in.pylonTierEffect = player.in.pylonTier.sub(1).div(10).add(1)
 
         //tickspeed
         player.uni["U2"].tickspeed = new Decimal(1)
@@ -479,15 +481,15 @@
         11: {
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Pylon Power Factor I"
+                return "Paradox Pylon Factor I"
             },
             display() {
                 return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -508,20 +510,20 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20BBBD7f", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
         12: {
             costBase() { return new Decimal(500) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Pylon Power Factor II"
+                return "Paradox Pylon Factor II"
             },
             display() {
                 return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -542,20 +544,20 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20BBBD7f", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
         13: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.cof.coreFragments[3] },
             pay(amt) { player.cof.coreFragments[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).div(5).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(10).add(1)},
             unlocked() { return player.in.pylonBuilt },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Paradox Pylon Power Factor III"
+                return "Paradox Pylon Factor III"
             },
             display() {
                 return 'which are boosting paradox pylon energy by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -576,7 +578,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "black", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
+            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#20BBBD7f", backgroundImage: "linear-gradient(120deg, #20A3C2 0%, #20BBBD 100%)" }
         },
     },
     milestones: {},
@@ -618,22 +620,22 @@
                     ["left-row", [
                         ["tooltip-row", [
                             ["raw-html", "<img src='resources/fragments/paradoxFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "103px", height: "50px", color: "#1FD3B7", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[3])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                             ["raw-html", "<div class='bottomTooltip'>Paradox Core Fragments</div>"],
                         ], {width: "158px", height: "50px",}],
-                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #1FD3B7", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
-                    ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts U2 tickspeed by x" + format(player.in.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts infinities by x" + format(player.in.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts ancient pylon energy by x" + format(player.in.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.in.pylonPassiveEffect) + " (Based on infinity points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts all pylon effects by ^" + format(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return player.in.pylonBuilt ? "You have <h3>" + format(player.in.pylonEnergy) + "/" + format(player.in.pylonEnergyMax) +  "</h3> paradox pylon energy (+" + format(player.in.pylonEnergyPerSecond) + "/s)." : "" }, {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts U2 tickspeed by x" + format(player.in.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts infinities by x" + format(player.in.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Boosts ancient pylon energy gain by x" + format(player.in.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Passive effect: Boosts singularity point gain by x" + format(player.in.pylonPassiveEffect) + " (Based on infinity points)" : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.in.pylonBuilt ? "Your paradox pylon is tier " + formatWhole(player.in.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.in.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 11], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 12], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 13],]], 
+                    ["blank", "10px"],
                     ["clickable", 12],
                 ],
             },

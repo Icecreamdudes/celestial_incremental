@@ -12,7 +12,9 @@
         bloodToGet: new Decimal(1),
 
         bloodStones: new Decimal(0),
+        bloodStonesMult: new Decimal(1),
         bloodGems: new Decimal(0),
+        bloodGemsMult: new Decimal(1),
 
         bloodDrain: false,
         bloodDrainPerSecond: new Decimal(0.1),
@@ -24,19 +26,23 @@
         foughtNox: false,
     }},
     automate() {
-
+        if (hasMilestone("bloodZone1", 14)) {
+            buyBuyable("bl", 21)
+            buyBuyable("bl", 22)
+            buyBuyable("bl", 23)
+        }
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(15deg, #410f2aff 0%, #4f1818ff 50%, #290303ff 100%)",
+            background: "linear-gradient(15deg, #410f2aff 0%, #4f1818 50%, #290303ff 100%)",
             "background-origin": "border-box",
-            "border-color": "#f57171ff",
+            "border-color": "#f57171",
             "color": "#eaf6f7",
         };
     },
     tooltip: "Blood",
-    branches: [["le", "#309"]],
-    color: "#4f1818ff",
+    branches: [["le", "#f57171"]],
+    color: "#4f1818",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -48,7 +54,7 @@
         
         player.bl.bloodToGet = player.bl.blood.pow(2).add(bloodGain).root(2).sub(player.bl.blood)
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 23))
-        player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 32))
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 102))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
@@ -61,47 +67,54 @@
         if (player.bl.bloodDrain && player.bl.blood.gte(0))
         {
             player.bl.bloodDrainPerSecond = Decimal.mul(0.1, player.bl.blood.pow(0.2))
-            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 31)[1])
+            player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.mul(buyableEffect("bl", 101)[1])
             player.bl.bloodDrainPerSecond = player.bl.bloodDrainPerSecond.div(buyableEffect("bl", 12))
         } else
         {
             player.bl.bloodDrain = false
             player.bl.bloodDrainPerSecond = new Decimal(0)
+            if (hasMilestone("bloodZone1", 12) && player.bl.bloodToGet.gte(1)) player.bl.blood = player.bl.blood.add(player.bl.bloodToGet.mul(delta).mul(0.1).div(player.uni.D1.tickspeed));
         }
         if (player.bl.blood.lte(0))
         {
             player.bl.blood = new Decimal(0)
         }
-        player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta))
+        player.bl.blood = player.bl.blood.sub(player.bl.bloodDrainPerSecond.mul(delta).div(player.uni.D1.tickspeed))
 
         player.bl.xpGainPercentage = new Decimal(0.003)
-        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 31)[0])
+        player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 101)[0])
         player.bl.xpGainPercentage = player.bl.xpGainPercentage.mul(buyableEffect("bl", 11))
 
         if (!player.pet.legPetTimers[0].active)
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage.mul(delta).div(player.uni.D1.tickspeed)).floor())
                 }
             }
         } else
         {
             for (let prop in player.pu.levelables) {
                 if (getLevelableTier("pu", prop, true)) {
-                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta)).floor())
+                    if (player.bl.bloodDrain) addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).mul(player.bl.xpGainPercentage.mul(delta).div(player.uni.D1.tickspeed)).floor())
                 }
             }
         }
 
+        // BLOOD STONES
         player.bl.bloodStones = player.bl.bloodStones.floor()
+
+        player.bl.bloodStonesMult = new Decimal(1)
+        player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(buyableEffect("sme", 155))
+        player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(buyableEffect("bl", 15))
+        if (player.bl.noxDefeated) player.bl.bloodStonesMult = player.bl.bloodStonesMult.mul(0.5)
+
+        // BLOOD GEMS
         player.bl.bloodGems = player.bl.bloodGems.floor()
 
-        if (player.ir.battleLevel.gte(20) && !player.bl.foughtNox && player.tab == "bl")
-        {
-            spawnNox();
-            player.bl.foughtNox = true
-        }
+        player.bl.bloodGemsMult = new Decimal(1)
+        player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("sme", 155))
+        player.bl.bloodGemsMult = player.bl.bloodGemsMult.mul(buyableEffect("bl", 15))
     },
     bars: {},
     clickables: {
@@ -123,22 +136,20 @@
                 let regen = 0
                 if (hasUpgrade("ir", 14)) regen += 0.5
                 regen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
-                if (regen > 0) arena.upgradeEffects.hpRegen = regen / 60
-
-                arena.upgradeEffects.attackDamage *= levelableEffect("ir", player.ir.shipType)[2]
+                if (regen > 0) arena.upgradeEffects.healthRegen = regen / 60
                 player.bl.noxFightActive = false
 
             },
             style: { width: '300px', "min-height": '100px', color: "white" },
         },
         12: {
-            title() { return "<h2>Leave Battle" },
+            title() { return "Leave Battle" },
             canClick() { return true },
             unlocked() { return !player.bl.noxFightActive || player.subtabs["bl"]["stuff"] == "Refresh Page :("|| player.subtabs["bl"]["stuff"] == "Lose"},
             onClick() {
                 player.ir.inBattle = false
                 options.fullscreen = false
-                player.subtabs["bl"]['stuff'] = 'Blood Battle'
+                player.subtabs["bl"]['stuff'] = 'stages'
 
                 if (arena) {
                     arena.removeArena();
@@ -149,12 +160,20 @@
                 player.ir.timers[player.ir.shipType].current = player.ir.timers[player.ir.shipType].max
 
                 player.ir.battleXP = new Decimal(0)
-                player.ir.battleLevel = new Decimal(0)
+                player.ir.battleLevel = new Decimal(1)
 
                 player.bl.foughtNox = false
                 player.bl.noxFightActive = false
             },
-            style: {width: "200px", minHeight: '100px', color: "white", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+            style() {
+                let look = {width: "258px", minHeight: "50px", color: "white", border: "3px solid " + "#bf0000", borderRadius: "10px"}
+                if (this.canClick()) {
+                    look.background = "#7f0000"
+                } else {
+                    look.backgroundColor = "#361e1e"
+                }
+                return look
+            },
         },
         13: {
             title() { return player.ir.autoShoot ? "<h2>Auto-Shoot<br>[ENABLED]" : "<h2>Auto-Shoot<br>[DISABLED]" },
@@ -172,15 +191,18 @@
 
         101: {
             title() { return "<h2>Perform a starmetal equivalent reset for blood. (Based on points, decreases with blood)" },
-            canClick() { return player.bl.bloodToGet.gte(1) },
+            canClick() { return player.bl.bloodToGet.gte(1) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 player.bl.blood = player.bl.blood.add(player.bl.bloodToGet)
 
-                player.le.starmetalAlloyPause = new Decimal(10)
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -193,7 +215,7 @@
                 player.bl.bloodDrain = true
             },
             style() {
-                let look = {width: "200px", minHeight: "100px", borderRadius: "15px 0px 0px 15px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "200px", minHeight: "100px", borderRadius: "15px 0px 0px 15px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -206,7 +228,7 @@
                 player.bl.bloodDrain = false
             },
             style() {
-                let look = {width: "200px", minHeight: "100px", borderRadius: "0px 15px 15px 0px", color: "white", border: "2px solid #f57171ff", margin: "1px"}
+                let look = {width: "200px", minHeight: "100px", borderRadius: "0px 15px 15px 0px", color: "white", border: "2px solid #f57171", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -262,23 +284,54 @@
     },
     bloodReset() {
     },
-    upgrades: {},
+    upgrades: {
+        11: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:90px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#ff0000;text-shadow:0 0 8px #ff0000'>" + "Level B1-20 Cleared" + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "The Vampire Knight",
+            unlocked() { return true },
+            description() { return "Unlocks Nox Zone."},
+            canAfford() {return player.bloodZone1.highestLevel.gte(20)},
+            currencyLocation() { return player.ir },
+            currencyDisplayName: "Space Rocks",
+            currencyInternalName: "spaceRock",
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f5b8b8", outline: "3px solid #ff0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
+        },
+    },
     buyables: {
         11: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(8).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Pure Drainage"
+            description() {
+                return "Boosts punchcard XP gained by draining blood by +x0.1.<br>(x" + formatSimple(this.effect()) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Pure Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -295,23 +348,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         12: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() { return new Decimal(15) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).div(10).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Preservation"
+            description() {
+                return "Reduces blood draining speed by +/0.1.<br>(/" + formatSimple(this.effect()) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are dividing blood drain rate by /" + format(tmp[this.layer].buyables[this.id].effect) + "\n\Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Efficient Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -328,24 +392,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         13: {
             costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(50).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Rejuvenation"
+            description() {
+                return "Boosts all forms of ship regen by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are boosting base ship regen AND perks by x" + formatShortSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Rejuvenating Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -362,24 +436,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
         14: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(50) },
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(20) },
             currency() { return player.bl.bloodStones},
             pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Alleviator"
+            description() {
+                return "Reduces the ship battle XP requirement by +/0.02.<br>(/" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Stones",
             display() {
-                return "which are reducing ship battle xp req by /" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Stones"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Allieviating Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -396,7 +480,99 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
+        },
+        15: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Boosts ship battle loot gain by +x0.01.<br>(x" + formatSimple(this.effect(), 2) + ")"
+            },
+            currencyDisplayName: "Blood Stones",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Drill-Tip" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
+        },
+        16: {
+            costBase() { return new Decimal(30) },
+            costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.bl.bloodStones},
+            pay(amt) { player.bl.bloodStones = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.001) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            description() {
+                return "Reduces blood battle level softcap scaling by -0.1%.<br>(-" + formatSimple(this.effect().mul(100), 2) + "%)"
+            },
+            currencyDisplayName: "Blood Stones",
+            display() {
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Decay" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #bf0000", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
 
         //regular blood
@@ -407,7 +583,7 @@
             currency() { return player.bl.blood},
             pay(amt) { player.bl.blood = this.currency().sub(amt) },
             effect(x) { return Decimal.div(1, getBuyableAmount(this.layer, this.id).add(1).pow(0.1)) },
-            unlocked() { return true },
+            unlocked() { return !player.pet.legPetTimers[0].current.gt(0) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -426,12 +602,12 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
         22: {
             costBase() { return new Decimal(4) },
@@ -440,7 +616,7 @@
             currency() { return player.bl.blood},
             pay(amt) { player.bl.blood = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).div(2).pow(0.5).add(1) },
-            unlocked() { return true },
+            unlocked() { return !player.pet.legPetTimers[0].current.gt(0) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -459,12 +635,12 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
         23: {
             costBase() { return new Decimal(15) },
@@ -492,32 +668,37 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171" }
         },
 
         // Blood Gems
-        31: {
+        101: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.05) },
-            purchaseLimit() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.075) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return [getBuyableAmount(this.layer, this.id).pow(0.6).div(4).add(1), getBuyableAmount(this.layer, this.id).pow(0.5).div(6).add(1)] },
+            effect(x) { return [getBuyableAmount(this.layer, this.id).mul(0.1).add(1), getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(0.5)] },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Enhanced Drainage"
+            description() {
+                return "Boosts punchcard XP gained by draining blood by +x0.1. Affects blood draining speed at a square-rooted rate.<br>(x" + formatSimple(this.effect()[0], 2) + ", x" + formatSimple(this.effect()[1], 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting punchcard XP/s by x" + format(tmp[this.layer].buyables[this.id].effect[0]) + ".\n\
-                    also multiplying drain rate by x" + format(tmp[this.layer].buyables[this.id].effect[1]) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Enhanced Drainage" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -534,58 +715,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
-        32: {
+        102: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.05) },
-            purchaseLimit() { return new Decimal(50) },
-            currency() { return player.bl.bloodGems},
-            pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(25).add(1) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Glistening Blood"
-            },
-            display() {
-                return "which are boosting blood gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
-        },
-        33: {
-            costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Fuel"
+            description() {
+                return "Boosts blood gain by +x0.05.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting ship health by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Glistening Blood" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -602,24 +759,34 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
-        34: {
+        103: {
             costBase() { return new Decimal(2) },
-            costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.125) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.bl.bloodGems},
             pay(amt) { player.bl.bloodGems = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Blood Drill-tip"
+            description() {
+                return "Boosts ship health by +x0.01.<br>(x" + formatSimple(this.effect(), 2) + ")"
             },
+            currencyDisplayName: "Blood Gems",
             display() {
-                return "which are boosting ship battle loot gain by x" + formatSimple(tmp[this.layer].buyables[this.id].effect, 2) + "\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Blood Gems"
+                return "<div style='height:40px;display:flex;align-items:center'><div>" +
+                "<h3 style='text-shadow:0 0 8px white'>" + "Blood Fuel" + "<br>(" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(this.purchaseLimit()) + ")</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:75px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(this.cost()) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
             },
             buy(mult) {
                 if (mult != true) {
@@ -636,16 +803,629 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '175px', color: "white", backgroundColor: "#420303ff", borderColor: "#f57171ff" }
+            style() {
+                let look = {borderRadius: "10px", color: "white", borderWidth: "3px", borderColor: "#f57171", outline: "3px solid #f5b8d7", width: "200px", maxHeight: "150px", minHeight: "150px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !this.canAfford() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "#000000"
+                return look
+            },
         },
     },
     milestones: {},
     challenges: {},
     infoboxes: {},
     microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+        shipSelection: {
+            "shipSelectionProgression": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    return [
+                        ["style-row", [
+                            ["category-button", ["Space", "shipSelectionProgression", "space"], {width: player.ir.inBattle ? "398.5px" : "264px", height: "50px", background: "#37078f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "265px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                            ], {display: hasUpgrade("le", 201) ? "none !important" : ""}],
+                            ["style-row", [
+                                ["category-button", ["Blood", "shipSelectionProgression", "blood"], {width: player.ir.inBattle ? "398.5px" : "265px", height: "50px", background: "#4f1818", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ], {display: hasUpgrade("le", 201) ? "" : "none !important"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#f57171", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
+                        ["buttonless-microtabs", "shipSelectionProgression", {borderWidth: "0"}],
+                    ]
+                },
+            },
+            "shipSelectionStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    return [
+                        ["style-row", [], {width: "0", height: "0"}],
+                        ["style-row", [
+                            ["category-button", ["Final Stats", "shipSelectionStats", "finalStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Base Stats", "shipSelectionStats", "baseStats"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Upgrade Effects", "shipSelectionStats", "upgradeEffects"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            ["category-button", ["Upgrade Counts", "shipSelectionStats", "upgradeCounts"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.inBattle ? player.ir.primaryColor : "#f57171"}],
+                            
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.secondaryColor + "7f", borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                            ["style-row", [
+                                ["category-button", ["Salvaged Upgrades", "shipSelectionStats", "salvagedUpgrades"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                        ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#f57171", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
+                        ["buttonless-microtabs", "shipSelectionStats", {borderWidth: "0"}],
+                    ]
+                },
+            },
+        },
+        shipSelectionProgression: {
+            "space": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let maxListWidth = player.ir.inBattle ? 376 : 245
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                for (let [i, v] of Object.entries(SB_zones)) {
+                                    if (!v.location || !v.unlocked() || (v.location && v.location != "space")) continue;
+                                    let element = ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["raw-html", v.nameCap, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: v.secondaryColor, borderBottom: "3px solid" + v.primaryColor, borderRadius: "12px 12px 0 0", width: maxListWidth + "px", height: "25px"}],
+                                            ["style-row", [
+                                            ], {background: "black", borderRadius: "0 0 12px 12px", width: maxListWidth + "px", height: "27.5px"}],
+                                        ], {background: "#37078f", borderRadius: "12px", width: maxListWidth + "px", height: "55.5px"}],
+                                    ], {background: "#151230", border: "3px solid" + v.primaryColor, borderRadius: "15px", width: maxListWidth + "px", height: "55.5px", marginBottom: "6px", marginBottom: "6px", marginRight: "6px"}]
+                                    let len = v.savePoints.length
+                                    for (let i2 = 0; i2 < len; i2++) {
+                                        let corners = "0 0"
+                                        if (i2 == len - 1) corners += " 12px"; else corners += " 0";
+                                        if (i2 == 0) corners += " 12px"; else corners += " 0";
+                                        element[1][0][1][1][1].push(
+                                            ["style-row", [
+                                                ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                        )
+                                    }
+                                    container[0][1].push(element)
+                                }
+                                container.push(["style-column", [
+                                    ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: "repeating-linear-gradient(135deg, #1b0447 0 15px, #150336 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                },
+            },
+            "blood": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let maxListWidth = player.ir.inBattle ? 376 : 245
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = [["style-row", [], {width: player.ir.inBattle ? "782px" : "514px", marginRight: "24px"}]]
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                for (let [i, v] of Object.entries(SB_zones)) {
+                                    if (!v.location || !v.unlocked() || (v.location && v.location != "blood")) continue;
+                                    let element = ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["raw-html", v.nameCap, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: v.secondaryColor, borderBottom: "3px solid" + v.primaryColor, borderRadius: "12px 12px 0 0", width: maxListWidth + "px", height: "25px"}],
+                                            ["style-row", [
+                                            ], {background: "black", borderRadius: "0 0 12px 12px", width: maxListWidth + "px", height: "27.5px"}],
+                                        ], {background: "#37078f", borderRadius: "12px", width: maxListWidth + "px", height: "55.5px"}],
+                                    ], {background: "#151230", border: "3px solid" + v.primaryColor, borderRadius: "15px", width: maxListWidth + "px", height: "55.5px", marginBottom: "6px", marginBottom: "6px", marginRight: "6px"}]
+                                    let len = v.savePoints.length
+                                    for (let i2 = 0; i2 < len; i2++) {
+                                        let corners = "0 0"
+                                        if (i2 == len - 1) corners += " 12px"; else corners += " 0";
+                                        if (i2 == 0) corners += " 12px"; else corners += " 0";
+                                        element[1][0][1][1][1].push(
+                                            ["style-row", [
+                                                ["raw-html", v.savePoints[i2] + 20, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {background: player.ir.shipBattleSaveCurrent && (player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i] && player.ir.shipBattleSaveCurrent.perZoneHighestLevels[i][i2 * 20]) ? v.secondaryColor : "#361e1e", border: "3px solid " + v.primaryColor + "7f", borderRadius: corners, width: ((maxListWidth - len * 6) / len) + "px", height: "21.5px"}],
+                                        )
+                                    }
+                                    container[0][1].push(element)
+                                }
+                                container.push(["style-column", [
+                                    ["raw-html", "Each level can provide upgrades ONLY ONCE per save.<br>Repeated levels instead provide <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>space junk</span>.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "502px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: "repeating-linear-gradient(135deg, #260b0b 0 15px, #1c0808 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                },
+            },
+        },
+        shipSelectionStats: {
+            "finalStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null || player.ir.shipType == 0) return container;
+                                let shipStats = SB_getUpgradedShipStats(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
+                                let baseStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
+                                for (let [i, v] of Object.entries(shipStats)) {
+                                    let statFormat = SHIP_STAT_FORMATTING[i]
+                                    let prefix = statFormat.valuePrefix
+                                    let suffix = statFormat.valueSuffix
+                                    if ((i == "bloodStoneGain" || i == "bloodGemGain") && !hasUpgrade("le", 201)) {
+                                        continue;
+                                    }
+                                    if (i == "healthRegen") {
+                                        v *= 60
+                                    }
+                                    if (i == "attackSpeed") {
+                                        v *= (1000 / baseStats.attackSpeed)
+                                        prefix = ""
+                                        suffix = "/s"
+                                    }
+                                    if (i == "bulletSize") {
+                                        v *= baseStats.bulletRadius
+                                        prefix = ""
+                                    }
+                                    if (i == "moveSpeed") {
+                                        v *= baseStats.moveSpeed
+                                        prefix = ""
+                                    }
+                                    container.push(["style-column", [
+                                        ["style-row", [
+                                            ["left-row", [
+                                                ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                            ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                            ["right-row", [
+                                                ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                    ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                }
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "baseStats": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let shipStats = SB_ships[SB_shipNames[player.ir.shipBattleSaveCurrent.shipType]].baseStats
+                            for (let [i, v] of Object.entries(SB_getDefaultShipStats())) {
+                                v = shipStats[i]
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = statFormat.valuePrefix
+                                let suffix = statFormat.valueSuffix
+                                if ((i == "bloodStoneGain" || i == "bloodGemGain") && !hasUpgrade("le", 201)) {
+                                    continue;
+                                }
+                                if (i == "attackSpeed") {
+                                    v = 1000 / v
+                                    prefix = ""
+                                    suffix = "/s"
+                                }
+                                if (i == "bulletSize") {
+                                    v = shipStats.bulletRadius
+                                    prefix = ""
+                                }
+                                if (i == "moveSpeed") {
+                                    prefix = ""
+                                }
+                                if (i == "spaceRockGain" || i == "spaceGemGain" || i == "bloodStoneGain" || i == "bloodGemGain") {
+                                    prefix = "x"
+                                }
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + suffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: color2, borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "upgradeEffects": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            for (let [i, v] of Object.entries(arena ? SB_getUpgradeMultis(arena.upgrades) : player.ir.shipBattleSaveCurrent.upgradeMultis)) {
+                                let statFormat = SHIP_STAT_FORMATTING[i]
+                                let prefix = "x"
+                                if (i == "healthRegen") {
+                                    v *= 60
+                                    prefix = "+"
+                                }
+                                container.push(["style-column", [
+                                    ["style-row", [
+                                        ["left-row", [
+                                            ["raw-html", statFormat.name, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", prefix + formatSimple(v, 2) + SHIP_STAT_FORMATTING[i].valueSuffix, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                    ], {background: "#00007f", borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#151230", border: "3px solid " + color1, borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "upgradeCounts": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.upgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "salvagedUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content() {
+                    let color1 = player.ir.inBattle ? player.ir.primaryColor : "#5e4ee6"
+                    let color2 = player.ir.inBattle ? player.ir.secondaryColor : "#00007f"
+                    return [
+                        ["always-scroll-column", [
+                            ["top-column", function () {
+                            let container = []
+                            if (player.ir.shipBattleSaveCurrent == null) return container;
+                            let entries = Object.entries(arena ? arena.upgrades : player.ir.shipBattleSaveCurrent.bankedUpgrades)
+                            let entriesIndex = 0
+                            for (let [i, v] of entries) {
+                                entriesIndex++
+                                if (v <= 0) continue;
+                                let upgrade = UPGRADE_POOL[i]
+                                container.push(["style-column", [
+                                    ["tooltip-row", [
+                                        ["left-row", [
+                                            ["raw-html", upgrade.name(), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "328px", height: "35.75px", paddingLeft: "12px"}],
+                                        ["blank", "", {width: player.ir.inBattle ? "268px" : "0px"}],
+                                        ["right-row", [
+                                            ["raw-html", formatWhole(v, 2), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {borderRadius: "12px", width: "150px", height: "35.75px", paddingRight: "12px"}],
+                                        ["raw-html", "<div class='bottomTooltip'>" + upgrade.description() + "</div>"],
+                                    ], {borderRadius: "12px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px"}],
+                                ], {background: "#00007f border-box", border: "3px solid " + UPGRADE_RARITIES[upgrade.rarity].color + "bf", borderRadius: "15px", width: player.ir.inBattle ? "770px" : "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                            }
+                            container.push(["style-column", [
+                                ["raw-html", "Each upgrade stacks additively with others of its exact type, but multiplicatively with all others.", { "color": "#aaa2f2", "font-size": "16px", "font-family": "monospace" }],
+                            ], {width: "502px", height: "35.75px", marginBottom: "6px", marginRight: "24px"}])
+                                return container
+                            } (), {background: player.ir.inBattle ? ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "7f 0 15px, " + player.ir.secondaryColor + "5f 0 30px)") : "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", width: player.ir.inBattle ? "800px" : "532px", minHeight: player.ir.inBattle ? "688px" : "382px", padding: "6px", paddingBottom: "0"}],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+        },
+        ships: {
+            "levelables": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                            ["layer-proxy", ["ir", [["clickable", "newRun"]]]],
+                        ], {width: "535px"}],
+                        ["style-column", [
+                            ["blank", "33px"],
+                            ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                        ], {width: "259px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["always-scroll-column", [
+                        ["top-column", [
+                            ["layer-proxy", ["ir", [["row", [
+                                ["dark-extended-levelable", 1], ["dark-extended-levelable", 2],
+                                ["dark-extended-levelable", 3], ["dark-extended-levelable", 4],
+                                ["dark-extended-levelable", 5], ["dark-extended-levelable", 6],
+                                ["dark-extended-levelable", 7], ["dark-extended-levelable", 8],
+                                ["dark-extended-levelable", 9], ["dark-extended-levelable", 10],
+                            ]]]]],
+                        ], {width: "780px", minHeight: "573px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "3px", marginRight: "20px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+            "saves": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-row", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", () => {return "Ship Selected: <span style='color:#ffff00'>" + (player.ir.shipBattleSaveCurrent == null ? "<span style='color:#aaa2f2'>None" : (layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].title() + " " + (player.ir.shipBattleSaveCurrent.slot === -2 ? "(Latest Run)" : player.ir.shipBattleSaveCurrent.slot === -1 ? "<span style='color:#aaa2f2'>(New Run)" : ("<span style='color:#aaa2f2'>(Slot #" + (player.ir.shipBattleSaveCurrent.slot + 1) + ")"))))}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                            ["layer-proxy", ["ir", [["clickable", "newRun"]]]],
+                        ], {width: "535px"}],
+                        ["style-column", [
+                            ["blank", "33px"],
+                            ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                        ], {width: "259px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["style-row", [
+                        ["top-column", [
+                            ["style-column", () => {
+                                let container = []
+                                if (player.ir.shipBattleSaveCurrent == null) return container;
+                                container.push(
+                                    ["style-column", [
+                                        ["raw-html", "<i>" + layers.ir.levelables[player.ir.shipBattleSaveCurrent.shipType].lore() + "</i>", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "508px"}],
+                                )
+                                return container
+                            }, {background: "#00007f", width: "532px", height: "82px"}],
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["style-row", [
+                                ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: "265px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], {width: "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "shipSelection", {borderWidth: "0"}],
+                        ], {borderRight: "3px solid #f57171", height: "579px"}],
+                        ["always-scroll-column", [
+                            ["top-column", () => {
+                                let container = []
+                                let maxSaves = 3
+                                if (hasUpgrade('ir', 107)) maxSaves++;
+                                if (player.bl.noxDefeated) maxSaves++;
+                                for (let i = 0; i < maxSaves; i++) {
+                                    let save = player.ir.shipBattleSaves[i]
+                                    container.push(["style-column", [
+                                        ["style-column", [
+                                            ["raw-html", "Slot #" + (i + 1), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "25px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["style-column", [
+                                            ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
+                                                layers.ir.levelables[save.shipType].title()
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>Upgrade Count: " + formatSimple(save.upgradeCount, 2)
+                                                + "<br>Upgrade Score: " + formatSimple(save.upgradeScore, 2)
+                                            )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "98px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["layer-proxy", ["ir", [["clickable", "loadShipSave_" + i]]]],
+                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", marginBottom: "6px", width: "232px", height: "179px"}])
+                                }
+                                return container
+                            }, {width: "238px", minHeight: "567px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "6px", paddingBottom: "0", marginRight: "0px"}],
+                        ], {width: "265px", height: "579px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+            "automation": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#361e1e"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["style-column", [
+                        ["style-column", [
+                            ["blank", "5.5px"],
+                            ["raw-html", function () { return "You have <span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(player.ir.spaceRock) + " space rocks</span>, <span style='color:#66e8ff;text-shadow:0 0 8px #66e8ff'>" + formatWhole(player.ir.spaceGem) + " space gems</span>, and <span style='color:#ffb366;text-shadow:0 0 8px #ffb366'>" + formatWhole(player.ir.spaceJunk) + " space junk</span>."  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "8.5px"],
+                        ], {width: "800px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["layer-proxy", ["ir", [["clickable", "gainAutoStats"]]]],
+                            ], {width: "535px"}],
+                            ["style-row", [
+                                ["layer-proxy", ["ir", [["clickable", "toggleMobileControls"]]]],
+                            ], {width: "259px", marginRight: "6px"}],
+                        ], {width: "800px", marginRight: "6px"}],
+                    ], {width: "800px", minHeight: "95px", background: "#00007f"}],
+                    ["style-row", [], {width: "800px", height: "3px", background: "#f57171"}],
+                    ["style-row", [
+                        ["top-column", [
+                            ["style-row", [
+                                ["category-button", ["Space Junk Upgrades", "automation", "spaceJunkUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                ["category-button", [() => {return "Ship Upgrades<br><small>(Reroll in " + formatSimpleTime(player.ir.shipUpgradeRerollTimer) + ")"}, "automation", "shipUpgrades"], {width: "264px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                //["style-row", [], {width: "3px", height: "50px", backgroundColor: "#f57171"}],
+                                /*["style-row", [
+                                    ["style-row", [
+                                        ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                    ], {width: "176px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "none !important" : ""}}],
+                                ["style-row", [
+                                    ["category-button", ["Resource Extraction", "automation", "resourceExtraction"], {width: "176px", height: "50px", background: "#00005f", border: "3px solid #f571717f", borderRadius: "0"}],
+                                ], () => {return {display: hasUpgrade("ir", 302) ? "" : "none !important"}}],*/
+                            ], {}],
+
+                            ["style-row", [], {background: "#f57171", width: "532px", height: "3px"}],
+                            ["buttonless-microtabs", "automation", {borderWidth: "0"}],
+                        ], {background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", borderRight: "3px solid #f57171", width: "532px", height: "579px"}],
+                        
+                        ["always-scroll-column", [
+                            ["top-column", () => {
+                                let container = []
+                                let maxSaves = 3
+                                if (hasUpgrade('ir', 107)) maxSaves++;
+                                if (player.bl.noxDefeated) maxSaves++;
+                                for (let i = 0; i < maxSaves; i++) {
+                                    let save = player.ir.shipBattleSaves[i]
+                                    container.push(["style-column", [
+                                        ["style-column", [
+                                            ["raw-html", "Slot #" + (i + 1), { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "25px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["style-column", [
+                                            ["raw-html", (save == null ? "<span style='color:#aaa2f2'>Empty" : (
+                                                layers.ir.levelables[save.shipType].title()
+                                                + "<br><span style='color:#aaa2f2;font-size:12px'>Upgrade Count: " + formatSimple(save.upgradeCount, 2)
+                                                + "<br>Upgrade Score: " + formatSimple(save.upgradeScore, 2)
+                                            )), { "color": "yellow", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black", "font-size": "16px", "font-family": "monospace" }],
+                                        ], {height: "98px"}],
+                                        ["style-row", [], {background: "#5e4ee6", width: "232px", height: "3px"}],
+                                        ["layer-proxy", ["ir", [["clickable", "loadShipSave_" + i]]]],
+                                    ], {background: "#151230", border: "3px solid #5e4ee6", borderRadius: "15px", marginBottom: "6px", width: "232px", height: "179px"}])
+                                }
+                                return container
+                            }, {width: "238px", minHeight: "567px", background: "repeating-linear-gradient(135deg, #00003f 0 15px, #00002f 0 30px)", padding: "6px", paddingBottom: "0", marginRight: "0px"}],
+                        ], {width: "265px", height: "579px"}],
+                    ], {width: "800px", height: "579px"}],
+                ]
+            },
+        },
+        automation: {
+            "spaceJunkUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [["layer-proxy", ["ir", [
+                    ["blank", "4.5px"],
+                    ["style-row", [
+                        ["buyable", 301], ["buyable", 302],
+                    ]],
+                    ["style-row", [
+                        ["buyable", 303], ["upgrade", 301],
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 302], ["upgrade", 303],
+                    ]],
+                    ["blank", "4.5px"],
+                    ["raw-html", "Gain <span style='color:#ffb366;text-shadow:0 0 6px #ffb366'>space junk</span> in place of ship level-up upgrades you're already obtained.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
+                ]]]],
+            },
+            "shipUpgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [["layer-proxy", ["ir", [
+                    ["blank", "4.5px"],
+                    ["style-column", [
+                        ["style-row", [
+                            ["upgrade", 401], ["upgrade", 402],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 403], ["upgrade", 404],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 405], ["upgrade", 406],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 407], ["upgrade", 408],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 409], ["upgrade", 410],
+                        ]],
+                        ["style-row", [
+                            ["upgrade", 411], ["upgrade", 412],
+                        ]],
+                    ]],
+                    ["blank", "4.5px"],
+                    ["raw-html", "You must have a saved ship selected in order to purchase ship upgrades.", { "color": "#aaa2f2", "font-size": "12px", "font-family": "monospace" }],
+                ]]]],
+            },
+            "resourceExtraction": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
+                unlocked() { return !player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+
+                ],
+            },
+        },
+        stages: {
+            "bloodZone1": {
+                unlocked: true,
+                embedLayer: 'bloodZone1',
+            },
+            "noxZone": {
+                unlocked: true,
+                embedLayer: 'noxZone',
+            },
+        },
+        stuff2: {
+            "Blood": {
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return !player.ir.inBattle },
                 content: [
                     ["blank", "25px"],
@@ -666,111 +1446,291 @@
                     ["row", [["clickable", 101]]],
                     ["blank", "25px"],
                     ["row", [["dark-buyable", 21], ["dark-buyable", 22], ["dark-buyable", 23],]], 
-                    ["blank", "25px"]
-
-                ]
-            },
-            "Blood Draining": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
-                unlocked() { return !player.ir.inBattle },
-                content: [
                     ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.bl.blood) + "</h3> blood."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.bl.bloodToGet) + ")" }, () => {
-                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            player.bl.bloodToGet.gte(1) ? look.color = "white" : look.color = "gray"
-                            return look
-                        }],
-                //        ["raw-html", () => {return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : player.du.points.div(1000).pow(0.25).gte(1e7) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
-                    ]],
                     ["raw-html", () => {return "You are draining " + format(player.bl.bloodDrainPerSecond) + " blood per second."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.pet.legPetTimers[0].current.lte(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.starmetalAlloyToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return player.pet.legPetTimers[0].current.gt(0) ? "You will gain " + format(player.bl.xpGainPercentage.mul(100)) + "% of punchcard XP per second. (+"+ format(player.le.eclipseShardsToGetTrue.mul(player.bl.xpGainPercentage)) +"/s) <br>(Only the currently active ones)" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 102], ["clickable", 103]]],
                     ["blank", "25px"],
-                    ["style-row", [
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderRight: "2px solid #f57171ff"}],
-                            ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],["dark-buyable", 14]]],
-                        ], {width: "408px"}],
-                        ["style-column", [
-                            ["style-column", [
-                                ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                            ], {width: "406px", height: "40px", borderLeft: "2px solid #f57171ff"}],
-                            ["row", [["dark-buyable", 31], ["dark-buyable", 32], ["dark-buyable", 33],["dark-buyable", 34]]],
-                        ], {width: "408px"}],
-                    ], {background: "#1f0000ff", border: "2px solid #f57171ff", padding: "-2px"}],
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", () => {return !player.bl.noxDefeated ? "Blood battle buyables are not kept on dark universe exit." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.bl.noxDefeated ? "Buyables that buff ship battle work outside of DU1." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "550px", height: "30px", background: "#1f0000", border: "2px solid #f57171", borderRadius: "15px"}]
                 ]
             },
             "Blood Battle": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return { border: "2px solid #f57171", borderRadius: "10px" } },
                 unlocked() { return !player.ir.inBattle },
                 content: [
-                ["layer-proxy", ["ir", [
+                    ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+                ]
+            },
+        },
+        stuff: {
+            "ships": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
                     ["blank", "25px"],
                     ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", border: "3px solid #f571717f", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["top-column", [
+                        ["style-row", [
+                            ["category-button", ["Levelables", "ships", "levelables"], {width: "265px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "10"}],
+                            ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "264px", height: "40px", background: "#00003f", borderRadius: "0"}],
+                            ], () => {return {display: hasMilestone("spaceZone1", 11) ? "none !important" : ""}}],
+                            ["style-row", [
+                                ["category-button", ["Saves", "ships", "saves"], {width: "264px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], () => {return {display: hasMilestone("spaceZone1", 11) ? "" : "none !important"}}],
+
+                            ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+
+                            ["style-row", [
+                                ["style-row", [
+                                    ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                ], {width: "265px", height: "40px", background: "#00003f", borderRadius: "0"}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}}],
+                            ["style-row", [
+                                ["category-button", ["Space Junk", "ships", "automation"], {width: "265px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "0"}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}}],
+
+                        ], {width: "800px", height: "40px", borderBottom: "3px solid #f57171", borderRadius: "0"}],
                         ["style-column", [
-                            ["blank", "25px"],
-                            ["layer-proxy", ["bl", [
-                                ["clickable", 11],
-                            ]]],
-                            ["layer-proxy", ["ir", [
-                                ["clickable", 21], //geroa
-                            ]]],
-                            ["blank", "25px"],
-                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                            ["blank", "25px"],
+                            ["buttonless-microtabs", "ships", {borderWidth: "0"}],
+                        ], {width: "800px", height: "677px", borderRadius: "0"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #260b0b 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],
+            },
+            "stages": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["style-row", [
+                        ["style-column", [
                             ["style-column", [
-                                ["levelable-display", [
-                                    ["style-row", [["clickable", 2],], {width: '100px', height: '40px' }],
-                                ]],
-                            ], {width: "550px", height: "175px", backgroundColor: "#2b0a12", border: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff", borderRadius: "2px 2px 0 0"}],
-                            ["top-column", [
-                                ["style-column", [
-                                    ["raw-html", "Ships", {color: "#ff8989ff", fontSize: "20px", fontFamily: "monospace"}],
-                                ], {width: "550px", height: "40px", backgroundColor: "#1f0000ff", borderBottom: "3px solid #ff8989ff", userSelect: "none"}],
-                                ["style-column", [
-                                    ["row", [["levelable", 1], ["levelable", 2],["levelable", 3],["levelable", 4],["levelable", 5],]],
-                                    ["row", [["levelable", 6], ["levelable", 7], ["levelable", 8], ["levelable", 9]]],
-                                ], {width: "540px", height: "270px", backgroundColor: "#2b0a12", padding: "5px"}],
-                            ], {width: "550px", height: "323px", borderBottom: "3px solid #ff8989ff", borderLeft: "3px solid #ff8989ff", borderRight: "3px solid #ff8989ff"}],
-                            ["blank", "25px"],
-                        ], {width: "800px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "800px", border: "3px solid #ff8989ff", backgroundColor: "#290303ff", borderRadius: "15px 15px 15px 15px"}],
-                ]]]
-            ]
+                                ["buttonless-microtabs", "stages", {borderWidth: "0"}],
+                            ], {width: "800px", height: "720px", borderRadius: "0"}],
+                        ], {width: "397px", height: "720px", borderRadius: "0"}],
+                        ["style-column", [
+                            ["centered-draggable-scroll-row", [
+                                ["style-row", [
+
+                                    // Connections
+                                    
+                                    ["style-column", [
+                                        createConnectionComponent(0, 0, 100, 0, "#f57171"),
+                                    ], () => {
+                                        return {display: hasUpgrade("bl", 11) ? "" : "none !important", width: "0", height: "0"}
+                                    }],
+
+                                    // Blood Zone I
+                                    ["tooltip-row", [
+                                        ["category-button", ["I", "stages", "bloodZone1"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#4f1818, black)",
+                                                border: "4px solid #f57171",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                            }
+                                            if (player.subtabs["bl"]["stages"] == "bloodZone1") str.outline = "3px solid #fff"
+                                            return str
+                                        }],
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Blood Zone I</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "0", top: "0"}],
+
+                                    // Nox Zone
+                                    ["tooltip-row", [
+                                        ["category-button", ["🌢", "stages", "noxZone"], () => {
+                                            let str = {
+                                                width: "75px",
+                                                height: "75px",
+                                                background: "radial-gradient(#5e1818, black)",
+                                                border: "4px solid #f5b8b8",
+                                                borderRadius: "50%",
+                                                color: "white",
+                                                fontSize: "32px",
+                                                textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 5px black",
+                                                display: hasUpgrade("bl", 11) ? "" : "none !important",
+                                            }
+                                            if (player.subtabs["bl"]["stages"] == "noxZone") str.outline = "3px solid #fff"
+                                            return str
+                                        }],
+                                        ["raw-html", () => {return "<div class='bottomTooltip'>Nox Zone</div>"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "100px", top: "0"}],
+
+                                ], {width: "1044px", height: "1044px", backgroundImage: "url(resources/ui/spaceBattle/bloodMap.png)"}],
+                            ], {width: "400px", height: "360px", borderLeft: "3px solid #f57171", borderBottom: "3px solid #f57171", flexFlow: "column"}],
+                            ["blank", "357px"],
+                        ], {width: "403px", height: "720px"}],
+                    ], {width: "800px", height: "720px", background: "radial-gradient(circle, #290c0c 0%, #4f1818 200%)", border: "3px solid #f57171", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],
+            },
+            "upgrades": {
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#4f1818"}},
+                unlocked() { return player.ir.iriditeUnlocked && !player.ir.inBattle },
+                content: [
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["category-button", ["Ships", "stuff", "ships"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "13px 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Stages", "stuff", "stages"], {width: "264px", height: "40px", background: "#4f1818", borderRadius: "0 0 0 0"}],
+                        ["style-row", [], {width: "3px", height: "40px", backgroundColor: "#f57171"}],
+                        ["category-button", ["Upgrades", "stuff", "upgrades"], {width: "265px", height: "40px", background: "#4f1818", borderRadius: "0 13px 0 0"}],
+                    ], {width: "800px", height: "40px", border: "3px solid #f57171", borderRadius: "16px 16px 0 0", marginBottom: "-3px"}],
+                    ["top-column", [
+                        ["style-row", [
+                            ["raw-html", function () { return "You have <span style='color:#bf0000;text-shadow:0 0 8px #bf0000'>" + formatWhole(player.bl.bloodStones) + " blood stones</span> and <span style='color:#f5b8d7;text-shadow:0 0 8px #f5b8d7'>" + formatWhole(player.bl.bloodGems) + " blood gems</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            
+                        ], {background: "#4f1818", borderBottom: "3px solid #f57171", width: "800px", height: "40px"}],
+                        ["style-row", [
+                            ["centered-draggable-scroll-row", [
+                                
+                                ["style-row", [
+
+                                    // Zone I Upgrades
+                                    ["style-column", [
+                                        ["style-column", [
+                                            ["style-row", [
+                                                ["buyable", 11],
+                                                ["buyable", 13],
+                                                ["buyable", 15],
+                                            ]],
+                                            ["style-row", [
+                                                ["buyable", 12],
+                                                ["buyable", 14],
+                                                ["buyable", 16],
+                                            ]],
+                                            ["style-row", [
+                                                ["buyable", 101],
+                                                ["buyable", 102],
+                                                ["buyable", 103],
+                                            ]],
+                                        ], {width: "636px", background: "#f571713f", border: "3px solid #f57171", borderRadius: "19px"}],
+                                    ], {width: "0", height: "0", position: "relative", left: "-318px", top: "0"}],
+                                    
+                                    // Zone I -> Nox Zone Connection
+
+                                    ["style-column", [
+                                                ["style-column", [], {"--lyr": "linear-gradient(white)", mask: "var(--lyr) padding-box exclude, var(--lyr)", background: "linear-gradient(90deg, #f57171, #f5b8b8) border-box", border: "3px solid #0000", borderRadius: "0", width: "212px", height: "162px"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "327px", top: "0"}
+                                        look.display = hasMilestone("bloodZone1", 11) ? "" : "none !important"
+                                        return look
+                                    }],
+                                    ["style-column", [
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["upgrade", 11],
+                                            ]],
+                                        ], {width: "218px", background: "linear-gradient(90deg, #f571713f, #f5b8b83f)", borderRadius: "0"}],
+                                    ], () => {
+                                        let look = {width: "0", height: "0", position: "relative", left: "327px", top: "0"}
+                                        look.display = hasMilestone("bloodZone1", 11) ? "" : "none !important"
+                                        return look
+                                    }],
+
+                                ], {width: "4000px", height: "4000px", backgroundImage: "url(resources/ui/spaceBattle/bloodZone1.png)"}],
+                            ], {width: "800px", height: "677px", flexFlow: "column"}]
+                        ]],
+                        /*["style-row", [
+                            ["raw-html", function () { return "You have <span style='color:#bfbfbf;text-shadow:0 0 8px #bfbfbf'>" + formatWhole(player.cb.evolutionShards) + " ES</span> and <span style='color:#796d85;text-shadow:0 0 8px #796d85'>" + formatWhole(player.cb.paragonShards) + " PS</span>."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                            
+                        ], {background: "#4f1818", borderTop: "3px solid #f57171", width: "800px", height: "40px"}],*/
+                    ], {width: "800px", height: "720px", background: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)", border: "3px solid #f57171", borderRadius: "0"}],
+                    ["blank", "25px"],
+                ],
             },
             "Battle": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                buttonStyle() { return {color: "white", borderRadius: "5px", borderColor: "#37078f"}},
                 unlocked() { return false },
-                content: [
-                    ["layer-proxy", ["ir", [
-                        ["raw-html", function () { return "Level: " + formatWhole(player.ir.battleLevel) }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["row", [["bar", "healthBar"], ["bar", "xpBar"],]],
-                        ["blank", "650px"],
-                        ["style-row", [
-                            ["layer-proxy", ["bl", [["clickable", 12]]]],
-                            ["blank", ["100px", "50px"]],
-                            ["style-column", [
-                                ["clickable", 1001],
-                                ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
-                            ], {width: "150px", height: "100px", zIndex: 15000}],
-                            ["blank", ["100px", "50px"]],
-                            ["layer-proxy", ["bl", [["clickable", 13]]]],
-                        ], {position: "fixed", top: "calc(50% + 320px)", left: "calc(50% - 375px)", isolation: "isolate"}],
-                    ]]],
-                ]
+                content() {
+
+                    let container = []
+                    switch (player.ir.menu) {
+                        case 1: { // IN UPGRADE SELECTION
+                            container.push(
+                                ["top-column", [
+                                    ["style-row", [
+                                        ["category-button", ["Level-Up Upgrades", "battleUpgradeSelection", "experience"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
+                                        ["style-row", [
+                                            ["style-row", [
+                                                ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
+                                            ], {width: "398.5px", height: "50px", background: "#00003f", borderRadius: "0"}],
+                                        ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                                        ["style-row", [
+                                            ["category-button", ["Salvaged Upgrades", "battleUpgradeSelection", "salvage"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+                                    ], {background: "black", width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                                    ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
+                                    ["buttonless-microtabs", "battleUpgradeSelection", {borderWidth: "0"}],
+                                ], {background: ("repeating-linear-gradient(135deg, " + player.ir.secondaryColor + "2f 0 15px, " + player.ir.secondaryColor + "3f 0 30px)"), height: "800px"}],
+                            )
+                        break; }
+                        case 2: { // IN STATS
+                            container.push(
+                                ["top-column", [
+                                    ["style-row", [
+                                        ["category-button", ["Progression", "shipSelection", "shipSelectionProgression"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                        ["style-row", [], {width: "3px", height: "50px", backgroundColor: player.ir.primaryColor}],
+                                        ["category-button", ["Stats", "shipSelection", "shipSelectionStats"], {width: "398.5px", height: "50px", background: player.ir.secondaryColor + "bf", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
+                                    ], {width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
+                                    ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
+                                    ["buttonless-microtabs", "shipSelection", {borderWidth: "0"}],
+                                ], {height: "800px"}],
+                            )
+                        break; }
+                        default: { // IN NOTHING
+                        break; };
+                    }
+
+                    return [
+                        ["style-column", [], {height: (arena && arena._fullscreen) ? "10px" : "0"}],
+                        ["style-column", [
+                            ["raw-html", "Level: " + formatWhole(player.ir.battleLevel) + "<span style='font-size:16px'> / " + formatWhole(SB_zones[player.ir.battleStage].levelLimit) + "</span>", { "color": "white", textShadow: "0 0 10px white", "font-size": "24px", "font-family": "monospace", lineHeight: "1" }],
+                            ["style-row", [
+                                ["raw-html", "<small>[SOFTCAP: x" + format(player.ir.levelScalingMult) + " Asteroid and Celestialite Stats]</small>", { "color": "red", textShadow: "0 0 10px red", "font-size": "16px", "font-family": "monospace", marginLeft: "6px", marginRight: "6px" }],
+                            ], {lineHeight: "1", marginLeft: "6px", marginRight: "6px", display: player.ir.battleLevel.gt(player[player.ir.battleStage].levelScalingStart) ? "" : "none !important"}]
+                        ], {width: "800px", height: "50px", background: player.ir.secondaryColor, borderRadius: "13px 13px 0 0", border: "3px solid " + player.ir.primaryColor, borderBottom: "0", display: (arena && arena._fullscreen) ? "none !important" : ""}],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "healthBar"], ["ex-bar", "xpBar"],]]]]],
+                        ["style-column", [
+                        ], {display: player.ir.menu != 0 ? "none !important" : "", border: "3px solid " + player.ir.primaryColor, borderTop: "0", borderBottom: "0", height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [
+                            ["style-column", container, {marginLeft: "-3px", border: "3px solid " + player.ir.primaryColor, background: player.ir.menu != 2 ? "transparent" : "black"}]
+                        ], {display: player.ir.menu == 0 ? "none !important" : "",  height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
+                        ["style-column", [], {background: player.ir.primaryColor, width: (arena && arena._fullscreen) ? "calc(100vw)" : "806px", height: "3px"}],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "bossHealthBar"],]]]]],
+                        ["layer-proxy", ["ir", [["style-column", [
+                            ["blank", "9px", {width: "6px"}],
+                            ["raw-html", "Use W and S to more forwards or backwards, A to D to rotate, and Space or Mouse to shoot.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "9px", {width: "6px"}],
+                            ["row", [
+                                ["clickable", 12], ["blank", "6px", {width: "6px"}], ["clickable", 15], ["blank", "6px", {width: "6px"}], ["clickable", 16],
+                            ]],
+                        ], {width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px", height: "100px", background: player.ir.secondaryColor, borderRadius: (arena && arena._fullscreen) ? "0px" : "0 0 13px 13px", border: "3px solid " + player.ir.primaryColor, borderTop: "0px"}],]]]
+                    ]
+                }
             },
             "Refresh Page :(": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -779,7 +1739,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You baboon. WHY DID YOU REFRESH THE PAGE???" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["clickable", 12],
+                    ["layer-proxy", ["ir", [["clickable", 12]]]],
                 ]
             },
             "Lose": {
@@ -789,37 +1749,65 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You lost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["clickable", 12],
+                    ["layer-proxy", ["ir", [["clickable", 12]]]],
                 ]
             },
-            "Nox, The Vampire Knight": {
-                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
-                unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
-                content: [
-                    ["blank", "25px"],
-                    ["style-column", [
-                        ["raw-html", "Perks for beating Nox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171ff", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
-                    ["style-column", [
-                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "10px"],
-                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
-                ]
+        },
+        battleUpgradeSelection: {
+            "experience": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return false },
+                content() {
+                    return [
+                        ["style-column", [
+                            ["raw-html", "<h2>Choose an Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["style-row", [
+                                ["clickable", "levelUpUpgrade_0"],
+                                ["clickable", "levelUpUpgrade_1"],
+                                ["clickable", "levelUpUpgrade_2"],
+                            ], {width: "800px", background: player.ir.secondaryColor, height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}]]]],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["clickable", "levelUpUpgrade_confirm"]]]],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
+            },
+            "salvage": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return false },
+                content() {
+                    return [
+                        ["style-column", [
+                            ["raw-html", "<h2>Choose a Salvaged Upgrade!", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["blank", "10px"],
+                            ["style-row", [
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 0 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_0"]]]],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 1 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_1"]]]],
+                                ["style-row", [], {background: "#00007f7f", borderRadius: "10px", width: "250px", height: "150px", margin: "6px", display: arena && arena.salvagedUpgradeChoices.length > 2 ? "none !important" : ""}],
+                                ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_2"]]]],
+                            ], {width: "800px", background: "radial-gradient(circle, #ffb366, " + player.ir.secondaryColor + ")", height: "174px", border: "3px solid " + player.ir.primaryColor, borderLeft: "0", borderRight: "0"}],
+                            ["blank", "10px"],
+                            ["layer-proxy", ["ir", [["clickable", "salvagedUpgrade_confirm"]]]],
+                        ], {width: player.ir.inBattle ? "800px" : "532px", height: player.ir.inBattle ? "694px" : "388px"}],
+                    ]
+                }
             },
         },
     },
     tabFormat: [
-        ["raw-html", () => { return !player.ir.inBattle ? "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ["blank", "25px"],
+        ["style-column", [
+            ["raw-html", () => { return !player.ir.inBattle ? "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle ? "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle ? "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle && player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return !player.ir.inBattle && player.pet.legPetTimers[0].current.gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legPetTimers[0].current) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ], () => {
+            return {display: arena ? "none !important" : ""}
+        }],
+        ["microtabs", "stuff2", { 'border-width': '0px' }],
     ],
     layerShown() { return getLevelableTier("pu", 401, true) },
     deactivated() { return !player.sma.inStarmetalChallenge},
@@ -833,1730 +1821,3 @@
         }
 	]
 })
-
-// BloodArena: same as SpaceArena but with a dark red background
-// and no enemies/asteroids (disabled for now). Use this when
-// you want the same ship behavior but an empty, blood-themed arena.
-class BloodArena extends SpaceArena {
-    constructor(width, height) {
-        super(width, height);
-
-        // Ensure we have a writable enemyTypes object and add Blood-themed enemies
-        this.enemyTypes = Object.assign({}, this.enemyTypes || {});
-
-        // Ensure upgradeEffects exist so damage modifiers from `ir` apply correctly
-        if (!this.upgradeEffects) this.upgradeEffects = {};
-        this.upgradeEffects.attackDamage = this.upgradeEffects.attackDamage || 1;
-        this.upgradeEffects.damageReduction = this.upgradeEffects.damageReduction || 1;
-        this.upgradeEffects.xpGain = this.upgradeEffects.xpGain || 1;
-        this.upgradeEffects.lootGain = this.upgradeEffects.lootGain || 1;
-        this.upgradeEffects.gemGain = this.upgradeEffects.gemGain || 1;
-        this.resourceMult = this.resourceMult || 1;
-
-        // Leech: attaches to the ship and deals drain (visualized as segmented worm)
-        this.enemyTypes.leech = {
-            name: "Leech",
-            radius: 14,
-            color: "#7a0000",
-            healthMin: 100,
-            healthMax: 150,
-            damage: 2,
-            wanderSpeed: 1.6,
-            wanderChange: 0.14,
-            xpDrop: [12, 20],
-            // Highly-detailed segmented slither sprite
-            draw: (ctx, enemy) => {
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                let ang = enemy.angle || 0;
-                ctx.rotate(ang);
-                let r = enemy.radius || 14;
-                let len = r * 3.6;
-                if (typeof enemy.wrigglePhase !== 'number') enemy.wrigglePhase = Math.random() * Math.PI * 2;
-                let amp = enemy.attached ? r * 0.5 : r * 1.1;
-                let segs = 9;
-                for (let i = 0; i <= segs; i++) {
-                    let t = i / segs;
-                    let x = -len / 2 + t * len;
-                    let phase = enemy.wrigglePhase + t * Math.PI * 2.6;
-                    let y = Math.sin(phase) * amp * (1 - Math.abs(2 * t - 1) * 0.95);
-                    let segR = r * (0.55 + 0.75 * (1 - Math.abs(2 * t - 1)));
-                    // subtle venation gradient
-                    let grad = ctx.createLinearGradient(x - segR, y - segR, x + segR, y + segR);
-                    grad.addColorStop(0, enemy.attached ? '#ff8b8b' : '#7a0000');
-                    grad.addColorStop(1, '#330000');
-                    ctx.fillStyle = grad;
-                    ctx.beginPath();
-                    ctx.ellipse(x, y, segR, segR * 0.95, Math.sin(t * Math.PI) * 0.1, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                // head with mouth detail
-                ctx.beginPath();
-                ctx.ellipse(len / 2, Math.sin(enemy.wrigglePhase + Math.PI * 1.1) * amp * 0.25, r * 0.95, r * 1.05, 0, 0, Math.PI * 2);
-                ctx.fillStyle = enemy.attached ? '#ff8b8b' : '#8b0000';
-                ctx.fill();
-                // tiny teeth
-                ctx.strokeStyle = '#ffdddd';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(len / 2 - r * 0.2, -r * 0.05);
-                ctx.lineTo(len / 2 + r * 0.1, 0);
-                ctx.lineTo(len / 2 - r * 0.2, r * 0.05);
-                ctx.stroke();
-                ctx.restore();
-            }
-        };
-
-        // Eye: large floating eye that stares and fires bursts, dashes toward ship
-        this.enemyTypes.eye = {
-            name: "Eye",
-            radius: 36,
-            color: "#b30000",
-            healthMin: 450,
-            healthMax: 600,
-            damage: 6,
-            wanderSpeed: 0.6,
-            wanderChange: 0.02,
-            xpDrop: [80, 120],
-            draw: (ctx, enemy) => {
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                // eye always looks at ship
-                let ang = enemy.angle || 0;
-                ctx.rotate(ang);
-                let r = enemy.radius || 36;
-                // sclera
-                ctx.beginPath();
-                ctx.arc(0, 0, r, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffdcdc';
-                ctx.fill();
-                // iris
-                ctx.beginPath();
-                ctx.arc(0, 0, r * 0.45, 0, Math.PI * 2);
-                ctx.fillStyle = '#6b0000';
-                ctx.fill();
-                // pupil
-                ctx.beginPath();
-                ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2);
-                ctx.fillStyle = '#000';
-                ctx.fill();
-                // glossy highlight
-                ctx.beginPath();
-                ctx.arc(-r * 0.18, -r * 0.22, r * 0.08, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255,255,255,0.6)';
-                ctx.fill();
-                ctx.restore();
-            }
-        };
-
-        // Large Leech: big leech that splits into smaller leeches on death
-        this.enemyTypes.largeLeech = {
-            name: "Large Leech",
-            radius: 30,
-            color: "#5a0000",
-            healthMin: 500,
-            healthMax: 800,
-            damage: 4,
-            wanderSpeed: 1.0,
-            wanderChange: 0.08,
-            xpDrop: [120, 180],
-            draw: (ctx, enemy) => {
-                // reuse leech drawing with scaled parameters
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                let ang = enemy.angle || 0;
-                ctx.rotate(ang);
-                let r = enemy.radius || 30;
-                let len = r * 4.2;
-                if (typeof enemy.wrigglePhase !== 'number') enemy.wrigglePhase = Math.random() * Math.PI * 2;
-                let amp = enemy.attached ? r * 0.4 : r * 0.9;
-                let segs = 10;
-                for (let i = 0; i <= segs; i++) {
-                    let t = i / segs;
-                    let x = -len / 2 + t * len;
-                    let phase = enemy.wrigglePhase + t * Math.PI * 2.4;
-                    let y = Math.sin(phase) * amp * (1 - Math.abs(2 * t - 1) * 0.9);
-                    let segR = r * (0.6 + 0.6 * (1 - Math.abs(2 * t - 1)));
-                    let grad = ctx.createLinearGradient(x - segR, y - segR, x + segR, y + segR);
-                    grad.addColorStop(0, enemy.attached ? '#ffb3b3' : '#6a0000');
-                    grad.addColorStop(1, '#2b0000');
-                    ctx.fillStyle = grad;
-                    ctx.beginPath();
-                    ctx.ellipse(x, y, segR, segR * 0.95, Math.sin(t * Math.PI) * 0.08, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.restore();
-            }
-        };
-
-        // Blood Machine removed: replaced by vampire spear mechanics (handled below)
-
-        // BloodBat: fast flittering bat that dashes and deals contact damage
-        this.enemyTypes.bloodBat = {
-            name: "Blood Bat",
-            radius: 18,
-            color: "#6a0011",
-            healthMin: 120,
-            healthMax: 220,
-            damage: 5,
-            wanderSpeed: 2.6,
-            wanderChange: 0.2,
-            xpDrop: [17, 26],
-            draw: (ctx, enemy) => {
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                let flap = (enemy.wrigglePhase || 0) * 6;
-                // body
-                ctx.beginPath();
-                ctx.ellipse(0, 0, enemy.radius * 0.9, enemy.radius * 0.7, 0, 0, Math.PI * 2);
-                let g = ctx.createLinearGradient(-enemy.radius, -enemy.radius, enemy.radius, enemy.radius);
-                g.addColorStop(0, '#8b0019');
-                g.addColorStop(1, '#330002');
-                ctx.fillStyle = g;
-                ctx.fill();
-                // wings (left)
-                ctx.save();
-                ctx.rotate(-0.5 + Math.sin(flap) * 0.25);
-                ctx.beginPath();
-                ctx.moveTo(-6, 0);
-                ctx.quadraticCurveTo(-enemy.radius * 2.2, -enemy.radius * 0.9, -enemy.radius * 1.1, -enemy.radius * 1.5);
-                ctx.quadraticCurveTo(-enemy.radius * 0.4, -enemy.radius * 0.8, -6, 0);
-                ctx.fillStyle = '#4d0006';
-                ctx.fill();
-                ctx.restore();
-                // wings (right)
-                ctx.save();
-                ctx.rotate(0.5 - Math.sin(flap) * 0.25);
-                ctx.beginPath();
-                ctx.moveTo(6, 0);
-                ctx.quadraticCurveTo(enemy.radius * 2.2, -enemy.radius * 0.9, enemy.radius * 1.1, -enemy.radius * 1.5);
-                ctx.quadraticCurveTo(enemy.radius * 0.4, -enemy.radius * 0.8, 6, 0);
-                ctx.fillStyle = '#4d0006';
-                ctx.fill();
-                ctx.restore();
-                // face
-                ctx.beginPath();
-                ctx.fillStyle = '#220000';
-                ctx.ellipse(0, -4, 4, 3, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        };
-
-        // Sanguine Skiff: a small floating ship that fires homing droplets
-        this.enemyTypes.sanguineSkiff = {
-            name: "Sanguine Skiff",
-            radius: 22,
-            color: "#9a001d",
-            healthMin: 260,
-            healthMax: 420,
-            damage: 9,
-            wanderSpeed: 1.1,
-            wanderChange: 0.08,
-            xpDrop: [24, 30],
-            draw: (ctx, enemy) => {
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                let ang = enemy.angle || 0;
-                ctx.rotate(ang);
-                let r = enemy.radius || 22;
-                // hull
-                ctx.beginPath();
-                ctx.moveTo(-r * 0.9, -r * 0.25);
-                ctx.quadraticCurveTo(0, -r * 1.1, r * 0.9, -r * 0.25);
-                ctx.quadraticCurveTo(r * 0.6, r * 0.7, -r * 0.6, r * 0.7);
-                ctx.closePath();
-                let g2 = ctx.createLinearGradient(-r, -r, r, r);
-                g2.addColorStop(0, '#c81b2b');
-                g2.addColorStop(1, '#3a0000');
-                ctx.fillStyle = g2;
-                ctx.fill();
-                // cockpit glass
-                ctx.beginPath();
-                ctx.ellipse(0, -r * 0.05, r * 0.35, r * 0.2, 0, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(30,10,10,0.6)';
-                ctx.fill();
-                // engine glow
-                ctx.beginPath();
-                ctx.ellipse(-r * 0.5, r * 0.25, r * 0.25, r * 0.14, 0, 0, Math.PI * 2);
-                ctx.fillStyle = '#ff6f6f';
-                ctx.fill();
-                ctx.restore();
-            }
-        };
-        // Nox, the Vampire Knight (boss) - animated humanoid vampire that turns into a bat
-        this.enemyTypes.noxBoss = {
-            name: "Nox, the Vampire Knight",
-            radius: 64,
-            color: "#ff3333",
-            healthMin: 125000,
-            healthMax: 125000,
-            damage: 20,
-            wanderSpeed: 0.6,
-            draw: (ctx, enemy) => {
-                ctx.save();
-                ctx.translate(enemy.x, enemy.y);
-                
-                let t = (enemy._pulseTimer || 0);
-                let r = enemy.radius || 64;
-
-                // Check for bat transformation during batCircle attack
-                if (enemy._batTimer > 0) {
-                    // Draw Bat
-                    let flap = Math.sin(t * 0.2) * 0.5;
-                    ctx.fillStyle = "#330000";
-                    
-                    // Wings
-                    ctx.beginPath();
-                    ctx.moveTo(0, 0);
-                    ctx.quadraticCurveTo(-r * 0.8, -r * (0.5 + flap), -r * 1.5, 0);
-                    ctx.quadraticCurveTo(-r * 0.8, r * 0.2, 0, 0);
-                    ctx.fill();
-
-                    ctx.beginPath();
-                    ctx.moveTo(0, 0);
-                    ctx.quadraticCurveTo(r * 0.8, -r * (0.5 + flap), r * 1.5, 0);
-                    ctx.quadraticCurveTo(r * 0.8, r * 0.2, 0, 0);
-                    ctx.fill();
-
-                    // Body
-                    ctx.beginPath();
-                    ctx.ellipse(0, 0, r * 0.4, r * 0.25, 0, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Eyes
-                    ctx.fillStyle = "#ff0000";
-                    ctx.beginPath(); ctx.arc(-r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(r * 0.1, -r * 0.05, 3, 0, Math.PI * 2); ctx.fill();
-                } else {
-                    // Draw Vampire Knight
-                    let bob = Math.sin(t * 0.05) * 10;
-                    ctx.translate(0, bob);
-
-                    // Cape (animated flap)
-                    let flap = Math.sin(t * 0.1) * 5;
-                    ctx.fillStyle = "#6a0000"; // Deeper vampire red
-                    ctx.beginPath();
-                    ctx.moveTo(-r * 0.5, -r * 0.2);
-                    ctx.lineTo(-r * 1.3 - flap, r * 1.3);
-                    ctx.lineTo(0, r * 0.9);
-                    ctx.lineTo(r * 1.3 + flap, r * 1.3);
-                    ctx.lineTo(r * 0.5, -r * 0.2);
-                    ctx.closePath();
-                    ctx.fill();
-
-                    // Shield (as seen in image)
-                    ctx.save();
-                    ctx.translate(r * 0.6, r * 0.2);
-                    ctx.rotate(0.1);
-                    ctx.fillStyle = "#ffffff";
-                    ctx.strokeStyle = "#ff0000";
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.moveTo(0, -r * 0.5);
-                    ctx.lineTo(r * 0.4, -r * 0.3);
-                    ctx.lineTo(r * 0.4, r * 0.4);
-                    ctx.lineTo(0, r * 0.7);
-                    ctx.lineTo(-r * 0.4, r * 0.4);
-                    ctx.lineTo(-r * 0.4, -r * 0.3);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.stroke();
-                    // Shield detail
-                    ctx.strokeStyle = "#ff0000";
-                    ctx.lineWidth = 1.5;
-                    ctx.beginPath(); ctx.moveTo(0, -r * 0.3); ctx.lineTo(0, r * 0.5); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(-r * 0.2, 0); ctx.lineTo(r * 0.2, 0); ctx.stroke();
-                    ctx.restore();
-
-                    // Body/Armor (Red/White/Black armor as in image)
-                    ctx.fillStyle = "#ffffff";
-                    ctx.beginPath();
-                    ctx.moveTo(-r * 0.4, -r * 0.2);
-                    ctx.lineTo(r * 0.4, -r * 0.2);
-                    ctx.lineTo(r * 0.3, r * 0.6);
-                    ctx.lineTo(-r * 0.3, r * 0.6);
-                    ctx.closePath();
-                    ctx.fill();
-                    // Red armor trim
-                    ctx.fillStyle = "#ff0000";
-                    ctx.fillRect(-r * 0.4, -r * 0.2, r * 0.8, r * 0.1);
-                    ctx.fillRect(-r * 0.3, r * 0.4, r * 0.6, r * 0.1);
-
-                    // Red Hair (as seen in image)
-                    ctx.fillStyle = "#d40000";
-                    ctx.beginPath();
-                    ctx.arc(0, -r * 0.55, r * 0.32, Math.PI, 2 * Math.PI);
-                    ctx.fill();
-                    // Hair spikes
-                    ctx.beginPath();
-                    ctx.moveTo(-r * 0.3, -r * 0.6); ctx.lineTo(-r * 0.4, -r * 0.4); ctx.lineTo(-r * 0.2, -r * 0.5);
-                    ctx.moveTo(r * 0.3, -r * 0.6); ctx.lineTo(r * 0.4, -r * 0.4); ctx.lineTo(r * 0.2, -r * 0.5);
-                    ctx.fill();
-
-                    // Head (Pale skin)
-                    ctx.fillStyle = "#fff0f0";
-                    ctx.beginPath();
-                    ctx.arc(0, -r * 0.5, r * 0.25, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Eyes (glowing)
-                    let glow = 0.5 + 0.5 * Math.abs(Math.sin(t * 0.1));
-                    ctx.fillStyle = `rgba(255, 0, 0, ${glow})`;
-                    ctx.beginPath(); ctx.arc(-r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(r * 0.08, -r * 0.55, 4, 0, Math.PI * 2); ctx.fill();
-
-                    // Pulsing Aura
-                    ctx.beginPath();
-                    let auraR = r * (1.2 + 0.1 * Math.sin(t * 0.1));
-                    let grad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, auraR);
-                    grad.addColorStop(0, "rgba(255, 0, 0, 0.2)");
-                    grad.addColorStop(1, "rgba(255, 0, 0, 0)");
-                    ctx.fillStyle = grad;
-                    ctx.arc(0, 0, auraR, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                ctx.restore();
-            }
-        };
-        // Spawn timers / caps
-        this._leechSpawnTimer = 0;
-        // spawn much more infrequently by default (frames at ~60fps)
-        this._leechSpawnInterval = 300; // ~5s
-        this._batSpawnTimer = 0;
-        this._batSpawnInterval = 600; // ~10s
-        this._skiffSpawnTimer = 0;
-        this._skiffSpawnInterval = 900; // ~15s
-        this._maxLeeches = 4;
-        this._maxBats = 5;
-        this._maxSkiffs = 3;
-        // custom loot ranges for BloodArena enemies (bloodStones)
-        this._bloodLootRanges = {
-            leech: [1, 1],
-            bloodBat: [1, 1],
-            sanguineSkiff: [1, 2]
-        };
-        // extend ranges for level-6 enemies
-        this._bloodLootRanges.eye = [2, 4];
-        this._bloodLootRanges.largeLeech = [3, 5];
-        this._bloodGemChances = {
-            leech: 0.01,
-            bloodBat: 0.01,
-            sanguineSkiff: 0.015,
-            eye: 0.02,
-            largeLeech: 0.03,
-        }
-        // bloodMachine loot removed (bloodMachine removed)
-
-        // Level 6+ spawn timers and caps
-        this._eyeSpawnTimer = 0;
-        this._eyeSpawnInterval = 1200; // ~20s
-        this._maxEyes = 2;
-
-        this._largeLeechSpawnTimer = 0;
-        this._largeLeechSpawnInterval = 1500; // ~25s
-        this._maxLargeLeeches = 2;
-
-        // machine spawn timers removed (bloodMachine removed)
-        // Vampire knight support (invisible ally that throws spears)
-        this._vampireTimer = 0;
-        this._vampireInterval = 60; // frames (~1s)
-        this._vampireWarns = []; // {x1,y1,x2,y2,timer}
-        this._vampireBeams = []; // persistent beams created when a spear is fired {x1,y1,x2,y2,timer,maxTimer}
-        this._vampirePrep = 48; // frames of warning before spear thrown
-    }
-
-    spawnArena() {
-        // Create a similar arena div/canvas but sized to the arena's configured width/height
-        // The arena will be expanded to fullscreen only when Nox is spawned.
-        this.arenaDiv = document.createElement('div');
-        this.arenaDiv.id = 'blood-arena';
-        Object.assign(this.arenaDiv.style, {
-            position: 'fixed',
-            left: '50%',
-            top: '50%',
-            width: (this.width || 800) + 'px',
-            height: (this.height || 600) + 'px',
-            transform: `translate(-50%, -50%)`,
-            background: '#2b0000', // dark red
-            border: '3px solid #fff',
-            zIndex: 9999,
-            overflow: 'hidden',
-        });
-        document.body.appendChild(this.arenaDiv);
-
-        this.canvas = document.createElement('canvas');
-        // use numeric width/height matching the configured arena size for drawing math
-        this.canvas.width = this.width || 800;
-        this.canvas.height = this.height || 600;
-        this.arenaDiv.appendChild(this.canvas);
-        this.ctx = this.canvas.getContext('2d');
-
-        window.addEventListener('keydown', this.handleKeyDown);
-        window.addEventListener('keyup', this.handleKeyUp);
-        window.addEventListener('mousedown', this.handleMouseDown);
-        window.addEventListener('mouseup', this.handleMouseUp);
-        window.addEventListener('mousemove', this.handleMouseMove);
-        
-        this.running = true;
-        this.loop = setInterval(() => this.update(), 1000 / 60);
-
-        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
-            this.canvas.addEventListener('click', this.canvasClickListener);
-        }
-    }
-
-    // Allow specific blood-themed enemy spawns (delegates to base SpaceArena spawn)
-    spawnEnemy(typeName) {
-        if (!typeName) return;
-        const allowed = ['leech', 'bloodBat', 'sanguineSkiff', 'eye', 'largeLeech'];
-        if (!allowed.includes(typeName)) return;
-        if (typeof super.spawnEnemy === 'function') {
-            const res = super.spawnEnemy(typeName);
-            // Post-init shim: ensure enemies spawned have numeric health/maxHealth and some AI fields
-            try {
-                for (let i = this.enemies.length - 1; i >= 0; i--) {
-                    let e = this.enemies[i];
-                    if (!e || e._bloodInit) continue;
-                    e._bloodInit = true;
-                    e.type = e.type || typeName;
-                    // Ensure numeric health fields
-                    const t = this.enemyTypes[e.type] || {};
-                    if (typeof e.maxHealth === 'undefined') {
-                        if (t.healthMax != null && t.healthMin != null) {
-                            e.maxHealth = Math.floor(t.healthMin + Math.random() * (t.healthMax - t.healthMin + 1));
-                        } else {
-                            e.maxHealth = (e.health && e.health > 0) ? e.health : 100;
-                        }
-                    }
-                    if (typeof e.health === 'undefined') e.health = e.maxHealth;
-                    // AI defaults
-                    e.wanderAngle = e.wanderAngle || (Math.random() * Math.PI * 2);
-                    e.wrigglePhase = e.wrigglePhase || Math.random() * Math.PI * 2;
-                    e.burstTimer = e.burstTimer || 0;
-                    e.shootCooldown = e.shootCooldown || 0;
-                    e.attached = !!e.attached;
-                    e.drainCooldown = (typeof e.drainCooldown === 'number') ? e.drainCooldown : 0; // ms until next discrete drain
-                }
-            } catch (err) { console.warn('post-init spawnEnemy blood arena', err); }
-            return res;
-        }
-    }
-
-    // Disable asteroid spawning in blood arena for now
-    spawnAsteroid(big = false, x = null, y = null) {
-        // intentionally left blank; asteroids disabled in BloodArena
-    }
-
-    // Spawn Nox boss: clear normal enemies/bullets, expand arena fullscreen and spawn boss
-    spawnNox() {
-        // Prevent duplicate
-        if (this.enemies && this.enemies.some(e => e.type === 'noxBoss' && e.alive)) return;
-
-        // clear normal enemies and bullets for a fresh boss fight
-        if (this.enemies) {
-            for (let e of this.enemies) if (e) e.alive = false;
-        }
-        this.enemies = [];
-        this.bullets = this.bullets.filter(b => b.fromEnemy); // keep only enemy bullets (optional)
-
-        // mark boss active to stop normal spawns and vampire spear scheduling
-        this.bossActive = true;
-        player.bl.noxFightActive = true;
-
-        // expand the arena to fullscreen and make it transparent for the boss fight,
-        // saving previous styles/sizes so we can restore them when the boss ends
-        try {
-            if (!this._savedArenaState && this.arenaDiv) {
-                this._savedArenaState = {
-                    style: {
-                        left: this.arenaDiv.style.left,
-                        top: this.arenaDiv.style.top,
-                        width: this.arenaDiv.style.width,
-                        height: this.arenaDiv.style.height,
-                        transform: this.arenaDiv.style.transform,
-                        background: this.arenaDiv.style.background,
-                        border: this.arenaDiv.style.border,
-                        zIndex: this.arenaDiv.style.zIndex,
-                        overflow: this.arenaDiv.style.overflow
-                    },
-                    canvasWidth: (this.canvas && this.canvas.width) ? this.canvas.width : (this.width || 800),
-                    canvasHeight: (this.canvas && this.canvas.height) ? this.canvas.height : (this.height || 600),
-                    width: this.width,
-                    height: this.height
-                };
-            }
-
-            if (this.arenaDiv) {
-                Object.assign(this.arenaDiv.style, { left: '0', top: '0', width: '100vw', height: '100vh', transform: 'none', background: 'transparent', border: '0' });
-            }
-            if (this.canvas) {
-                this.canvas.width = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : (this.canvas.width || (this.width || 800));
-                this.canvas.height = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : (this.canvas.height || (this.height || 600));
-                this.canvas.style.background = 'transparent';
-            }
-            // update arena logical size
-            this.width = this.canvas ? this.canvas.width : ((typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : this.width);
-            this.height = this.canvas ? this.canvas.height : ((typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : this.height);
-        } catch (e) {}
-
-        // expand arena to fullscreen if available
-        if (typeof this.enterIriditeFullscreen === 'function') this.enterIriditeFullscreen();
-
-        // spawn boss at perimeter (prefer a safe distance)
-        let angle = Math.random() * Math.PI * 2;
-        let dist = Math.max(this.width, this.height) * 0.35;
-        let ex = Math.round(this.width / 2 + Math.cos(angle) * dist);
-        let ey = Math.round(this.height / 2 + Math.sin(angle) * dist);
-
-        // clamp
-        ex = Math.max(80, Math.min(this.width - 80, ex));
-        ey = Math.max(80, Math.min(this.height - 80, ey));
-
-        let t = this.enemyTypes.noxBoss || {};
-        let enemy = {
-            type: 'noxBoss',
-            x: ex, y: ey, vx: 0, vy: 0,
-            radius: t.radius || 64,
-            color: t.color || '#ff3333',
-            health: t.healthMax || t.healthMin || 125000,
-            maxHealth: t.healthMax || t.healthMin || 125000,
-            alive: true,
-            phase: 1,
-            state: 'idle',
-            attackTimer: 60,
-            _pulseTimer: 0,
-        };
-        this.enemies.push(enemy);
-
-        screenFlash("Nox, The Vampire Knight", 1200)
-
-    }
-
-    // Per-frame update: run AI for blood enemies, auto-spawn, then call base update for physics/collisions
-    update(delta) {
-        // normalize delta to milliseconds (fallback to 60fps tick)
-        const dtMs = (typeof delta === 'number') ? delta : (1000 / 60);
-
-        // Pause all enemy AI and spawning while an upgrade choice is active
-        if (this.upgradeChoiceActive) {
-            if (typeof this.draw === 'function') this.draw();
-            return;
-        }
-
-        try {
-            // Pre-update AI: move enemies according to their type
-                    if (this.enemies && this.enemies.length) {
-                for (let enemy of this.enemies) {
-                    if (!enemy.alive) continue;
-                    // apply knockback velocity if present (smooth displacement)
-                    try {
-                        if (enemy._knockbackTimer && (enemy._knockbackVx || enemy._knockbackVy)) {
-                            enemy.x += (enemy._knockbackVx || 0);
-                            enemy.y += (enemy._knockbackVy || 0);
-                            // decay knockback velocity each frame
-                            enemy._knockbackVx = (enemy._knockbackVx || 0) * 0.84;
-                            enemy._knockbackVy = (enemy._knockbackVy || 0) * 0.84;
-                            enemy._knockbackTimer = Math.max(0, (enemy._knockbackTimer || 0) - 1);
-                        }
-                    } catch (err) { /* ignore */ }
-                    const type = enemy.type;
-                    // NOX boss AI (multi-phase)
-                    if (type === 'noxBoss') {
-                        // basic init
-                        if (!enemy._noxInit) {
-                            enemy._noxInit = true;
-                            enemy.phase = 1;
-                            enemy.state = 'idle';
-                            enemy.attackTimer = 60;
-                            enemy._barrageTimer = 0;
-                            enemy._barrageTick = 0;
-                            enemy._chargeTimer = 0;
-                            enemy._fireTimer = 0;
-                            enemy._batTimer = 0;
-                            enemy._pulseTimer = 0;
-                        }
-
-                        // phase progression based on remaining health
-                        let pct = (enemy.health || 0) / Math.max(1, enemy.maxHealth || 1);
-                        let newPhase = pct > 0.66 ? 1 : (pct > 0.33 ? 2 : 3);
-                        if (newPhase !== enemy.phase) {
-                            enemy.phase = newPhase;
-                            enemy.state = 'idle';
-                            enemy.attackTimer = 90;
-                        }
-
-                        // pulse timer for draw
-                        enemy._pulseTimer = (enemy._pulseTimer || 0) + 1;
-
-                        // decrement generic timers
-                        enemy.attackTimer = (typeof enemy.attackTimer === 'number') ? enemy.attackTimer - 1 : 0;
-                        if (enemy._barrageTimer > 0) enemy._barrageTimer--;
-                        if (enemy._chargeTimer > 0) enemy._chargeTimer--;
-                        if (enemy._fireTimer > 0) enemy._fireTimer--;
-                        if (enemy._batTimer > 0) enemy._batTimer--;
-
-                        // Choose actions - phase affects available choices
-                        if (enemy.attackTimer <= 0) {
-                            enemy.attackTimer = 60 + Math.floor(Math.random() * 90);
-                            // choose an attack; more options available in higher phases
-                            let options = ['barrage','charge','fireball'];
-                            if (enemy.phase >= 2) options = options.concat(['burstSpears','spinSword','batCircle']);
-                            if (enemy.phase >= 3) {
-                                // phase 3 can do multiple things at once; pick 2
-                                let a1 = options[Math.floor(Math.random() * options.length)];
-                                let a2 = options[Math.floor(Math.random() * options.length)];
-                                [a1,a2].forEach(a => { if (a === 'barrage') enemy._barrageTimer = 180; if (a === 'charge') enemy._chargeTimer = 90; if (a === 'fireball') enemy._fireTimer = 120; if (a === 'burstSpears') enemy._burstSpears = 1; if (a === 'spinSword') enemy._spinSword = 1; if (a === 'batCircle') enemy._batTimer = 240; });
-                            } else {
-                                let a = options[Math.floor(Math.random() * options.length)];
-                                if (a === 'barrage') enemy._barrageTimer = 180; // 3s barrage
-                                if (a === 'charge') enemy._chargeTimer = 90; // charge duration
-                                if (a === 'fireball') enemy._fireTimer = 120; // fireballs for a while
-                                if (a === 'burstSpears') enemy._burstSpears = 1;
-                                if (a === 'spinSword') enemy._spinSword = 1;
-                                if (a === 'batCircle') enemy._batTimer = 240;
-                            } 
-                        } 
-
-                        // Active behaviors
-                        // Barrage: spawn spears in random directions at ~0.4s intervals
-                        if (enemy._barrageTimer > 0) {
-                            enemy._barrageTick = (enemy._barrageTick || 0) + 1;
-                            if (enemy._barrageTick >= 24) { // ~0.4s
-                                enemy._barrageTick = 0;
-                                // schedule several random vampire spears via warning beams
-                                for (let i = 0; i < 3; i++) {
-                                    let ang = Math.random() * Math.PI * 2;
-                                    let spd = 12;
-                                    let dist = 800;
-                                    this._vampireWarns.push({
-                                        x1: enemy.x,
-                                        y1: enemy.y,
-                                        x2: enemy.x + Math.cos(ang) * dist,
-                                        y2: enemy.y + Math.sin(ang) * dist,
-                                        timer: this._vampirePrep,
-                                        dmg: 18,
-                                        speed: spd,
-                                        fromEnemy: true,
-                                        phase2Plus: enemy.phase >= 2
-                                    });
-                                }
-                            }
-                        }
-
-                        // Charge: move rapidly toward player and leave blood-projectile trail that bursts outward
-                        if (enemy._chargeTimer > 0) {
-                            if (this.ship) {
-                                let dx = this.ship.x - enemy.x, dy = this.ship.y - enemy.y;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                let vx = (dx / dist) * 10; let vy = (dy / dist) * 10;
-                                enemy.x += vx; enemy.y += vy;
-                                // trail spawn: small circular droplets that then radiate
-                                if (Math.random() < 0.28) {
-                                    // spawn a small orb that will immediately explode into outward droplets
-                                    let orbX = enemy.x + (Math.random()-0.5) * 30;
-                                    let orbY = enemy.y + (Math.random()-0.5) * 30;
-                                    // immediate outward droplets
-                                    for (let k = 0; k < 6; k++) {
-                                        let a = Math.random() * Math.PI * 2;
-                                        let s = 3 + Math.random() * 3;
-                                        this.bullets.push({ x: orbX, y: orbY, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 80, damage: 6, pierce: 0, fromEnemy: true });
-                                    }
-                                }
-                            }
-                        }
-
-                        // Fireball: continuous projectile aimed at player
-                        if (enemy._fireTimer > 0 && this.ship) {
-                            if ((enemy._fireTick || 0) <= 0) {
-                                enemy._fireTick = 12;
-                                let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let spd = 9;
-                                // fireball projectile (flagged for special drawing)
-                                this.bullets.push({
-                                    x: enemy.x + Math.cos(ang) * (enemy.radius || 64),
-                                    y: enemy.y + Math.sin(ang) * (enemy.radius || 64),
-                                    vx: Math.cos(ang) * spd,
-                                    vy: Math.sin(ang) * spd,
-                                    life: 240,
-                                    damage: 14,
-                                    pierce: 0,
-                                    fromEnemy: true,
-                                    fireball: true,
-                                    fireRadius: 14 + Math.floor(Math.random() * 6),
-                                    flamePulse: Math.random() * Math.PI * 2
-                                });
-                            } else enemy._fireTick--;
-                        }
-
-                        // Burst spears: fast direct spears toward player
-                        if (enemy._burstSpears) {
-                            // fire a quick volley of vampire spears
-                            if ((enemy._burstTick || 0) <= 0) {
-                                // phase 1: faster and more spears; later phases behave normally or stronger
-                                let burstCount = (enemy.phase === 1) ? 16 : 10;
-                                enemy._burstTick = (enemy.phase === 1) ? 4 : 6; // faster cadence in phase 1
-                                if (this.ship) {
-                                    for (let i = 0; i < burstCount; i++) {
-                                        // burst of vampire spears aimed at the ship via warning beams
-                                        let spread = (i - (burstCount - 1) / 2) * 0.035;
-                                        let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x) + spread;
-                                        let spd = (enemy.phase === 1) ? 18 : 16;
-                                        let dist = 1000;
-                                        this._vampireWarns.push({
-                                            x1: enemy.x,
-                                            y1: enemy.y,
-                                            x2: enemy.x + Math.cos(ang) * dist,
-                                            y2: enemy.y + Math.sin(ang) * dist,
-                                            timer: this._vampirePrep,
-                                            dmg: 22,
-                                            speed: spd,
-                                            fromEnemy: true,
-                                            phase2Plus: enemy.phase >= 2
-                                        });
-                                    }
-                                }
-                                enemy._burstSpears = Math.max(0, (enemy._burstSpears - 1));
-                                if (enemy._burstSpears <= 0) delete enemy._burstSpears;
-                            } else enemy._burstTick--;
-                        }
-
-                        // Spin sword: spawn a large massive sword projectile that bounces and lasts for 10 seconds
-                        if (enemy._spinSword) {
-                            if (!enemy._spinSwordSpawned) {
-                                enemy._spinSwordSpawned = true;
-                                let ang = Math.random() * Math.PI * 2;
-                                let spd = 14;
-                                // massive sword projectile
-                                this.bullets.push({ 
-                                    x: enemy.x + Math.cos(ang) * 40, 
-                                    y: enemy.y + Math.sin(ang) * 40, 
-                                    vx: Math.cos(ang) * spd, 
-                                    vy: Math.sin(ang) * spd, 
-                                    life: 600, // 10 seconds at 60fps
-                                    damage: 40, 
-                                    pierce: 0, 
-                                    fromEnemy: true, 
-                                    massiveSword: true,
-                                    radius: 120,
-                                    rot: 0,
-                                    rotSpd: 0.15
-                                });
-                                // allow another later
-                                setTimeout(() => { try { delete enemy._spinSwordSpawned; delete enemy._spinSword; } catch (e) {} }, 10000);
-                            }
-                        }
-
-                        // Bat circle: fly in a circle while shooting blood droplets
-                        if (enemy._batTimer > 0) {
-                            enemy._batAngle = (enemy._batAngle || 0) + 0.06;
-                            let cx = this.width / 2, cy = this.height / 2;
-                            let r = Math.min(this.width, this.height) * 0.36;
-                            enemy.x = cx + Math.cos(enemy._batAngle) * r;
-                            enemy.y = cy + Math.sin(enemy._batAngle) * r;
-                            // shoot intermittently
-                            if ((enemy._batShootTick || 0) <= 0) {
-                                enemy._batShootTick = 8;
-                                // shoot several droplets toward player
-                                if (this.ship) {
-                                    let ang = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                    for (let i = -1; i <= 1; i++) {
-                                        let a = ang + i * 0.12;
-                                        this.bullets.push({ x: enemy.x, y: enemy.y, vx: Math.cos(a) * 6, vy: Math.sin(a) * 6, life: 160, damage: 10, pierce: 0, fromEnemy: true });
-                                    }
-                                }
-                            } else enemy._batShootTick--;
-                        }
-
-                        // keep boss inside bounds
-                        if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                        if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                        if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                        if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-
-                        // allow other part of loop to continue to subsequent enemy types
-                        continue;
-                    }
-                    // LEECH behavior
-                    if (type === 'leech') {
-                        // seeker toward ship until attached
-                        if (!enemy.attached) {
-                            if (this.ship) {
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                // point toward the player
-                                enemy.angle = Math.atan2(dy, dx);
-                                // slither lateral offset (small)
-                                enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.18;
-                                let amp = (enemy.radius || 14) * 0.9;
-                                let lateral = Math.sin(enemy.wrigglePhase) * amp;
-                                let spd = (enemy.wanderSpeed || 1.6);
-                                // move toward player with a small perpendicular slither
-                                enemy.x += (dx / dist) * spd + (-dy / dist) * lateral * 0.06;
-                                enemy.y += (dy / dist) * spd + (dx / dist) * lateral * 0.06;
-                                if (dist < enemy.radius + (this.ship.radius || 12)) {
-                                    enemy.attached = true;
-                                    enemy.attachOffset = { x: enemy.x - this.ship.x, y: enemy.y - this.ship.y };
-                                }
-                            }
-                        } else {
-                            // follow ship position with offset and slither
-                            if (this.ship) {
-                                enemy.x = this.ship.x + (enemy.attachOffset ? enemy.attachOffset.x : 0);
-                                enemy.y = this.ship.y + (enemy.attachOffset ? enemy.attachOffset.y : 0);
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                enemy.angle = Math.atan2(dy, dx);
-                            }
-                            enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.26;
-                            // Discrete drain: subtract 5 HP once per second using a cooldown (ms)
-                            enemy.drainCooldown = (typeof enemy.drainCooldown === 'number') ? enemy.drainCooldown - dtMs : -dtMs;
-                            while (typeof enemy.drainCooldown === 'number' && enemy.drainCooldown <= 0) {
-                                enemy.drainCooldown += 1000; // schedule next drain in 1s
-                                let drainAmount = (() => { try { return new Decimal(5); } catch (e) { return 5; } })();
-                                if (player.ir.battleLevel.gte(21)) {
-                                    drainAmount = drainAmount * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                                }
-                                try {
-                                    if (player && player.ir && player.ir.shipHealth !== undefined && typeof player.ir.shipHealth.sub === 'function') {
-                                        player.ir.shipHealth = player.ir.shipHealth.sub(drainAmount);
-                                        if (player.ir.shipHealth.lte(0)) this.onShipDeath();
-                                    } else if (player && player.shipHealth !== undefined && typeof player.shipHealth === 'number') {
-                                        let num = (drainAmount.toNumber ? drainAmount.toNumber() : drainAmount);
-                                        player.shipHealth = Math.max(0, player.shipHealth - num);
-                                        if (player.shipHealth <= 0 && typeof this.onShipDeath === 'function') this.onShipDeath();
-                                    }
-                                } catch (e) {
-                                    if (player && typeof player.hp === 'number') {
-                                        let num = (drainAmount.toNumber ? drainAmount.toNumber() : drainAmount);
-                                        player.hp = Math.max(0, player.hp - num);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // BLOODBAT behavior: flit and dash
-                    if (type === 'bloodBat') {
-                        // flap progression
-                        enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.4;
-                        if (!enemy._dashTimer || enemy._dashTimer <= 0) {
-                            // wander normally
-                            if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
-                                enemy.wanderTimer = 30 + Math.floor(Math.random() * 60);
-                                // bias occasionally toward player
-                                if (this.ship && Math.random() < 0.6) {
-                                    let dx = this.ship.x - enemy.x;
-                                    let dy = this.ship.y - enemy.y;
-                                    enemy.wanderAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.6;
-                                } else {
-                                    enemy.wanderAngle += (Math.random() - 0.5) * 1.2;
-                                }
-                            }
-                            enemy.wanderTimer--;
-                            let sp = enemy.wanderSpeed || 2.6;
-                            enemy.x += Math.cos(enemy.wanderAngle) * sp;
-                            enemy.y += Math.sin(enemy.wanderAngle) * sp;
-
-                            // small chance to start dash
-                            if (Math.random() < 0.012 && this.ship) {
-                                enemy._dashTimer = 18 + Math.floor(Math.random() * 12);
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                enemy._dashAngle = Math.atan2(dy, dx);  
-                            }
-                        } else {
-                            // dashing
-                            enemy._dashTimer--;
-                            let dashSpeed = 5.2;
-                            enemy.x += Math.cos(enemy._dashAngle) * dashSpeed;
-                            enemy.y += Math.sin(enemy._dashAngle) * dashSpeed;
-                        }
-                        // keep inside arena by wrapping
-                        if (enemy.x < 0) enemy.x = this.width;
-                        if (enemy.x > this.width) enemy.x = 0;
-                        if (enemy.y < 0) enemy.y = this.height;
-                        if (enemy.y > this.height) enemy.y = 0;
-                    }
-
-                    // EYE behavior: fires bursts and occasionally dashes
-                    if (type === 'eye') {
-                        // face player
-                        if (this.ship) {
-                            let dx = this.ship.x - enemy.x;
-                            let dy = this.ship.y - enemy.y;
-                            enemy.angle = Math.atan2(dy, dx);
-                        }
-                        // slow float movement
-                        enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.02;
-                        let spd = enemy.wanderSpeed || 0.6;
-                        enemy.x += Math.cos((enemy.wanderAngle || 0)) * spd * 0.2;
-                        enemy.y += Math.sin((enemy.wanderAngle || 0)) * spd * 0.2;
-
-                        // burst firing
-                        enemy.burstTimer = (typeof enemy.burstTimer === 'number') ? enemy.burstTimer - 1 : 0;
-                        if (enemy.burstTimer <= 0) {
-                            enemy.burstTimer = 80 + Math.floor(Math.random() * 60);
-                            // fire a short radial burst towards player
-                            if (this.ship) {
-                                let base = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                let pieces = 8;
-                                for (let i = 0; i < pieces; i++) {
-                                    let ang = base + (i - (pieces-1)/2) * 0.18 + (Math.random()-0.5)*0.06;
-                                    let sp = 6;
-                                    this.bullets.push({
-                                        x: enemy.x + Math.cos(ang) * (enemy.radius - 6),
-                                        y: enemy.y + Math.sin(ang) * (enemy.radius - 6),
-                                        vx: Math.cos(ang) * sp,
-                                        vy: Math.sin(ang) * sp,
-                                        life: 160,
-                                        damage: 8 * (this.upgradeEffects.attackDamage || 1),
-                                        pierce: 0,
-                                        fromEnemy: true,
-                                    });
-                                }
-                            }
-                        }
-
-                        // occasional dash
-                        if (!enemy._dashTimer || enemy._dashTimer <= 0) {
-                            if (Math.random() < 0.008 && this.ship) {
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                enemy._dashAngle = Math.atan2(dy, dx);
-                                enemy._dashTimer = 22 + Math.floor(Math.random() * 18);
-                            }
-                        } else {
-                            enemy._dashTimer--;
-                            let dashSpeed = 8;
-                            enemy.x += Math.cos(enemy._dashAngle) * dashSpeed;
-                            enemy.y += Math.sin(enemy._dashAngle) * dashSpeed;
-                        }
-                        // clamp inside arena
-                        if (enemy.x < enemy.radius) enemy.x = enemy.radius;
-                        if (enemy.x > this.width - enemy.radius) enemy.x = this.width - enemy.radius;
-                        if (enemy.y < enemy.radius) enemy.y = enemy.radius;
-                        if (enemy.y > this.height - enemy.radius) enemy.y = this.height - enemy.radius;
-                    }
-
-                    // LARGE LEECH behavior: similar to leech but slower and tougher
-                    if (type === 'largeLeech') {
-                        if (!enemy.attached) {
-                            if (this.ship) {
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                enemy.angle = Math.atan2(dy, dx);
-                                enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.12;
-                                let amp = (enemy.radius || 30) * 0.7;
-                                let lateral = Math.sin(enemy.wrigglePhase) * amp;
-                                let spd2 = (enemy.wanderSpeed || 1.0);
-                                enemy.x += (dx / dist) * spd2 + (-dy / dist) * lateral * 0.04;
-                                enemy.y += (dy / dist) * spd2 + (dx / dist) * lateral * 0.04;
-                                if (dist < enemy.radius + (this.ship.radius || 12)) {
-                                    enemy.attached = true;
-                                    enemy.attachOffset = { x: enemy.x - this.ship.x, y: enemy.y - this.ship.y };
-                                }
-                            }
-                        } else {
-                            if (this.ship) {
-                                enemy.x = this.ship.x + (enemy.attachOffset ? enemy.attachOffset.x : 0);
-                                enemy.y = this.ship.y + (enemy.attachOffset ? enemy.attachOffset.y : 0);
-                                let dx = this.ship.x - enemy.x;
-                                let dy = this.ship.y - enemy.y;
-                                enemy.angle = Math.atan2(dy, dx);
-                            }
-                            enemy.wrigglePhase = (enemy.wrigglePhase || 0) + 0.14;
-                            // slower drain: 8 HP per second
-                            enemy.drainCooldown = (typeof enemy.drainCooldown === 'number') ? enemy.drainCooldown - dtMs : -dtMs;
-                            while (typeof enemy.drainCooldown === 'number' && enemy.drainCooldown <= 0) {
-                                let dmg = 8
-                                if (player.ir.battleLevel.gte(21)) {
-                                    dmg = dmg * Decimal.pow(1.1, player.ir.battleLevel.sub(20)).toNumber()
-                                }
-                                enemy.drainCooldown += 1000;
-                                try { this.applyShipDamage(new Decimal(dmg)); } catch (e) { this.applyShipDamage(dmg); }
-                            }
-                        }
-                    }
-
-                    // (Formerly Blood Machine behavior removed.)
-
-                    // SANGUINE SKIFF: follow and shoot homing droplets
-                    if (type === 'sanguineSkiff') {
-                        if (this.ship) {
-                            let dx = this.ship.x - enemy.x;
-                            let dy = this.ship.y - enemy.y;
-                            let dist = Math.hypot(dx, dy) || 1;
-                            let ang = Math.atan2(dy, dx);
-                            enemy.angle = ang;
-                            // gentle follow
-                            let sp = enemy.wanderSpeed || 1.1;
-                            enemy.x += Math.cos(ang) * sp;
-                            enemy.y += Math.sin(ang) * sp;
-                        }
-                        // shooting
-                        enemy.shootCooldown = (typeof enemy.shootCooldown === 'number') ? enemy.shootCooldown - 1 : 0;
-                        if (enemy.shootCooldown <= 0) {
-                            enemy.shootCooldown = 90 + Math.floor(Math.random() * 60);
-                            // fire a homing droplet (represented as an enemy bullet)
-                            if (this.ship) {
-                                let speed = 2.6;
-                                let angle = Math.atan2(this.ship.y - enemy.y, this.ship.x - enemy.x);
-                                this.bullets.push({
-                                    x: enemy.x + Math.cos(angle) * enemy.radius,
-                                    y: enemy.y + Math.sin(angle) * enemy.radius,
-                                    vx: Math.cos(angle) * speed,
-                                    vy: Math.sin(angle) * speed,
-                                    life: 300,
-                                    damage: (this.enemyTypes.sanguineSkiff.damage || 10) * (this.upgradeEffects.attackDamage || 1),
-                                    pierce: 0,
-                                    piercedAsteroids: [],
-                                    fromEnemy: true,
-                                });
-                            }
-                        }
-                    }
-
-                }
-            }
-        } catch (e) { console.warn('BloodArena AI error', e); }
-
-        // Auto-spawn logic (simple): only when not a boss fight
-        try {
-            if (!this.bossActive) {
-                let leeches = (this.enemies || []).filter(e => e && e.type === 'leech' && e.alive).length;
-                let bats = (this.enemies || []).filter(e => e && e.type === 'bloodBat' && e.alive).length;
-                let skiffs = (this.enemies || []).filter(e => e && e.type === 'sanguineSkiff' && e.alive).length;
-
-                if (leeches < this._maxLeeches) {
-                    this._leechSpawnTimer++;
-                    if (this._leechSpawnTimer >= this._leechSpawnInterval) {
-                        this._leechSpawnTimer = 0;
-                        this.spawnEnemy('leech');
-                    }
-                } else this._leechSpawnTimer = Math.min(this._leechSpawnTimer, this._leechSpawnInterval - 1);
-
-                if (bats < this._maxBats) {
-                    this._batSpawnTimer++;
-                    if (this._batSpawnTimer >= this._batSpawnInterval) {
-                        this._batSpawnTimer = 0;
-                        this.spawnEnemy('bloodBat');
-                    }
-                } else this._batSpawnTimer = Math.min(this._batSpawnTimer, this._batSpawnInterval - 1);
-
-                if (skiffs < this._maxSkiffs) {
-                    this._skiffSpawnTimer++;
-                    if (this._skiffSpawnTimer >= this._skiffSpawnInterval) {
-                        this._skiffSpawnTimer = 0;
-                        this.spawnEnemy('sanguineSkiff');
-                    }
-                } else this._skiffSpawnTimer = Math.min(this._skiffSpawnTimer, this._skiffSpawnInterval - 1);
-                // Level 6+ stronger enemies
-                try {
-                    const level6 = player && player.ir && typeof player.ir.battleLevel !== 'undefined' && player.ir.battleLevel.gte && player.ir.battleLevel.gte(6);
-                    if (level6) {
-                        let eyes = (this.enemies || []).filter(e => e && e.type === 'eye' && e.alive).length;
-                        if (eyes < this._maxEyes) {
-                            this._eyeSpawnTimer++;
-                            if (this._eyeSpawnTimer >= this._eyeSpawnInterval) {
-                                this._eyeSpawnTimer = 0;
-                                this.spawnEnemy('eye');
-                            }
-                        } else this._eyeSpawnTimer = Math.min(this._eyeSpawnTimer, this._eyeSpawnInterval - 1);
-
-                        let large = (this.enemies || []).filter(e => e && e.type === 'largeLeech' && e.alive).length;
-                        if (large < this._maxLargeLeeches) {
-                            this._largeLeechSpawnTimer++;
-                            if (this._largeLeechSpawnTimer >= this._largeLeechSpawnInterval) {
-                                this._largeLeechSpawnTimer = 0;
-                                this.spawnEnemy('largeLeech');
-                            }
-                        } else this._largeLeechSpawnTimer = Math.min(this._largeLeechSpawnTimer, this._largeLeechSpawnInterval - 1);
-
-                        // bloodMachine spawns removed
-                        // Level 12: vampire knight throws spears (invisible ally)
-                        try {
-                            const level12 = player && player.ir && typeof player.ir.battleLevel !== 'undefined' && player.ir.battleLevel.gte && player.ir.battleLevel.gte(12);
-                            if (level12) {
-                                this._vampireTimer++;
-                                if (this._vampireTimer >= this._vampireInterval) {
-                                    this._vampireTimer = 0;
-                                    
-                                    let boss = (this.enemies || []).find(e => e && e.alive && e.type === 'noxBoss');
-                                    let target = null;
-                                    
-                                    if (boss && boss.phase >= 2) {
-                                        // phase 2+ betrayal: target the player
-                                        target = this.ship;
-                                    } else {
-                                        // pick a random alive enemy to target (normal behavior)
-                                        let alive = (this.enemies || []).filter(e => e && e.alive && e.type !== 'noxBoss');
-                                        if (alive.length > 0) {
-                                            target = alive[Math.floor(Math.random() * alive.length)];
-                                        }
-                                    }
-                                    
-                                    if (target) {
-                                        // choose an origin offscreen from a random side
-                                        let side = Math.floor(Math.random() * 4);
-                                        let ox = 0, oy = 0;
-                                        if (side === 0) { ox = Math.random() * this.width; oy = -48; }
-                                        if (side === 1) { ox = this.width + 48; oy = Math.random() * this.height; }
-                                        if (side === 2) { ox = Math.random() * this.width; oy = this.height + 48; }
-                                        if (side === 3) { ox = -48; oy = Math.random() * this.height; }
-                                        // schedule a warning line from origin to the target's current position
-                                        this._vampireWarns.push({ 
-                                            x1: ox, y1: oy, x2: target.x, y2: target.y, 
-                                            timer: this._vampirePrep, dmg: 18, speed: 14, 
-                                            fromEnemy: (boss && boss.phase >= 2),
-                                            phase2Plus: (boss && boss.phase >= 2)
-                                        });
-                                    }
-                                }
-                            }
-                        } catch (e) {}
-                    }
-                } catch (e) {}
-            }
-        } catch (e) { console.warn('BloodArena spawn error', e); }
-
-        // Call base update to handle bullets, collisions and draw
-        if (typeof super.update === 'function') super.update();
-
-        // Handle returning vampire spears in Phase 2+
-        try {
-            if (this.bullets && this.bullets.length) {
-                for (let b of this.bullets) {
-                    if (b.vampireSpear && b.phase2Plus && !b.hasReturned) {
-                        // When life reaches half, it "returns" toward the ship (player)
-                        if (b.life <= (b.initialLife || 100) / 2) {
-                            b.hasReturned = true;
-                            if (this.ship) {
-                                let dx = this.ship.x - b.x;
-                                let dy = this.ship.y - b.y;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                let spd = Math.hypot(b.vx || 0, b.vy || 0) || 12;
-                                b.vx = (dx / dist) * spd;
-                                b.vy = (dy / dist) * spd;
-                                b.rot = Math.atan2(b.vy, b.vx);
-                                // ensure it has enough life to reach the player
-                                b.life = Math.max(b.life, Math.floor(dist / spd) + 20);
-                                // once returning, it MUST be fromEnemy to hurt the player
-                                b.fromEnemy = true;
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e) {}
-
-        // After base update, convert any loot that would have been space rocks
-        // into `player.bl.bloodStones`. We only award once per-dead-enemy.
-        try {
-            if (!player.bl) player.bl = player.bl || {};
-            for (let enemy of (this.enemies || [])) {
-                if (!enemy) continue;
-                if (!enemy.alive && !enemy._bloodLootHandled) {
-                    // If Nox, the Vampire Knight died, set the defeat flag
-                    try {
-                        if (enemy.type === 'noxBoss') {
-                            player.bl.noxDefeated = true;
-                            player.ir.battleLevel = player.ir.battleLevel.add(1)
-                            let noxStone = 75
-                            noxStone = noxStone * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
-                            noxStone = noxStone * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
-                            noxStone = noxStone * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
-                            noxStone = Math.max(0, Math.floor(noxStone))
-                            try {
-                                if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
-                                    player.bl.bloodStones = player.bl.bloodStones.add(noxStone);
-                                    if (player.ir && player.ir.levelables && player.ir.levelables[player.ir.shipType]) player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(noxStone*5)
-                                } else if (player.bl) {
-                                    player.bl.bloodStones = (player.bl.bloodStones || 0) + noxStone;
-                                }
-                            } catch (e) {
-                                // fallback numeric
-                                try { player.bl.bloodStones = (player.bl.bloodStones || 0) + noxStone; } catch (e2) {}
-                            }
-
-                            // optional loot flash if arena supports it
-                            try {
-                                if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                                    this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(noxStone)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
-                                }
-                            } catch (e) {}
-                            let noxChance = 5 * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
-                            let noxGuarantee = 0
-                            if (noxChance >= 1) {
-                                noxGuarantee = Math.floor(noxChance)
-                                noxChance = noxChance % 1
-                            }
-                            if (Math.random() < noxChance) noxGuarantee += 1
-                            try {
-                                if (player.bl && player.bl.bloodGems !== undefined && typeof player.bl.bloodGems.add === 'function') {
-                                    player.bl.bloodGems = player.bl.bloodGems.add(noxGuarantee);
-                                } else if (player.bl) {
-                                    player.bl.bloodGems = (player.bl.bloodGems || 0) + noxGuarantee;
-                                }
-                            } catch (e) {
-                                try {player.bl.bloodGems = (player.bl.bloodGems || 0) + noxGuarantee; } catch (e2) {}
-                            }
-
-                            try {
-                                if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                                    this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(noxGuarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
-                                }
-                            } catch (e) {}
-                            arena.showUpgradeChoice(true);
-                            arena.upgradeChoiceActive = true
-                        }
-                    } catch (e) {}
-                    // If a Large Leech died, spawn several small leeches at its position
-                    try {
-                        if (enemy.type === 'largeLeech' && !enemy._bloodSplitDone) {
-                            enemy._bloodSplitDone = true;
-                            // spawn 3-4 smaller leeches clustered around the death point
-                            let count = 3 + Math.floor(Math.random() * 2);
-                            for (let i = 0; i < count; i++) {
-                                // use spawnEnemy then place at enemy coords
-                                this.spawnEnemy('leech');
-                                try {
-                                    let ne = this.enemies && this.enemies.length ? this.enemies[this.enemies.length - 1] : null;
-                                    if (ne) {
-                                        let ang = Math.random() * Math.PI * 2;
-                                        let dist = (enemy.radius || 30) * (0.6 + Math.random() * 0.6);
-                                        ne.x = (enemy.x || 0) + Math.cos(ang) * dist;
-                                        ne.y = (enemy.y || 0) + Math.sin(ang) * dist;
-                                    }
-                                } catch (e) {}
-                            }
-                        }
-                    } catch (e) {}
-                    enemy._bloodLootHandled = true;
-                    const rng = this._bloodLootRanges && this._bloodLootRanges[enemy.type];
-                    if (!rng) continue;
-                    let minR = rng[0], maxR = rng[1];
-                    let amt = Math.floor(Math.random() * (maxR - minR + 1)) + minR;
-                    // apply loot multipliers similar to SpaceArena logic
-                    try {
-                        amt = amt * (this.upgradeEffects.lootGain || 1) * (this.resourceMult || 1)
-                        amt = amt * (getBuyableAmount("bl", 34).div(100).add(1).toNumber() || 1)
-                        amt = amt * (getBuyableAmount("sme", 155).div(10).add(1).toNumber() || 1)
-                        amt = Math.max(0, Math.floor(amt))
-                    } catch (e) {}
-                    //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pet", 502)[1])); } catch (e) {}
-                    //try { amt = Math.max(0, Math.floor(amt * levelableEffect("pu", 212)[1])); } catch (e) {}
-
-                    // award as Decimal if available
-                    try {
-                        if (player.bl && player.bl.bloodStones !== undefined && typeof player.bl.bloodStones.add === 'function') {
-                            player.bl.bloodStones = player.bl.bloodStones.add(amt);
-                            if (player.ir && player.ir.levelables && player.ir.levelables[player.ir.shipType]) player.ir.levelables[player.ir.shipType][1] = player.ir.levelables[player.ir.shipType][1].add(amt*5)
-                        } else if (player.bl) {
-                            player.bl.bloodStones = (player.bl.bloodStones || 0) + amt;
-                        }
-                    } catch (e) {
-                        // fallback numeric
-                        try { player.bl.bloodStones = (player.bl.bloodStones || 0) + amt; } catch (e2) {}
-                    }
-
-                    // optional loot flash if arena supports it
-                    try {
-                        if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                            this.lootFlashes.push({ x: enemy.x, y: enemy.y, text: `+${formatWhole(amt)} blood stones`, timer: 120, color: "#ff6b6b", style: "18px monospace" });
-                        }
-                    } catch (e) {}
-
-                    let chance = this._bloodGemChances && this._bloodGemChances[enemy.type];
-                    if (!chance) continue;
-                    chance = chance * this.upgradeEffects.gemGain * this.resourceMult * (getBuyableAmount("sme", 156).div(20).add(1).toNumber() || 1)
-                    let guarantee = 0
-                    if (chance >= 1) {
-                        guarantee = Math.floor(chance)
-                        chance = chance % 1
-                    }
-                    if (Math.random() < chance) guarantee += 1
-                    if (guarantee > 0) {
-                        try {
-                            if (player.bl && player.bl.bloodGems !== undefined && typeof player.bl.bloodGems.add === 'function') {
-                                player.bl.bloodGems = player.bl.bloodGems.add(guarantee);
-                            } else if (player.bl) {
-                                player.bl.bloodGems = (player.bl.bloodGems || 0) + guarantee;
-                            }
-                        } catch (e) {
-                            try {player.bl.bloodGems = (player.bl.bloodGems || 0) + guarantee; } catch (e2) {}
-                        }
-
-                        try {
-                            if (this.lootFlashes && Array.isArray(this.lootFlashes)) {
-                                this.lootFlashes.push({ x: enemy.x, y: enemy.y + 12, text: `+${formatWhole(guarantee)} blood gems`, timer: 240, color: "#E0115F", style: "24px monospace" });
-                            }
-                        } catch (e) {}
-                    }
-                }
-            }
-        } catch (e) { console.warn('BloodArena loot conversion error', e); }
-
-        // If boss fight ended, restore arena visuals, sizes and flags
-        try {
-            if (this.bossActive) {
-                let aliveBoss = (this.enemies || []).some(e => e && e.alive && e.type === 'noxBoss');
-                if (!aliveBoss) {
-                    this.bossActive = false;
-                    try { if (player && player.bl) player.bl.noxFightActive = false; } catch (e) {}
-                    try {
-                        if (this._savedArenaState) {
-                            let s = this._savedArenaState;
-                            if (this.arenaDiv && s.style) {
-                                Object.assign(this.arenaDiv.style, s.style);
-                            }
-                            if (this.canvas) {
-                                this.canvas.width = s.canvasWidth || s.width || (this.canvas.width || 800);
-                                this.canvas.height = s.canvasHeight || s.height || (this.canvas.height || 600);
-                                this.canvas.style.background = '';
-                            }
-                            this.width = s.width || (this.canvas ? this.canvas.width : this.width);
-                            this.height = s.height || (this.canvas ? this.canvas.height : this.height);
-                            delete this._savedArenaState;
-                        } else {
-                            if (this.arenaDiv) this.arenaDiv.style.background = '#2b0000';
-                            if (this.canvas) this.canvas.style.background = '';
-                        }
-                    } catch (e) {}
-                }
-            }
-        } catch (e) {}
-
-        // Draw health bars overlay (consistent with iridite.js style)
-        try {
-            if (!this.ctx) return;
-            for (let enemy of this.enemies) {
-                if (!enemy.alive) continue;
-                let type = this.enemyTypes[enemy.type];
-                // compute numeric health fractions safely
-                let h = Number(enemy.health || 0);
-                let mh = Number(enemy.maxHealth || enemy.health || 1);
-                let pct = Math.max(0, Math.min(1, mh > 0 ? h / mh : 0));
-                let barWidth = (enemy.radius || 12) * 2 * pct;
-                this.ctx.save();
-                this.ctx.fillStyle = '#ff4444';
-                this.ctx.fillRect(enemy.x - (enemy.radius || 12), enemy.y - (enemy.radius || 12) - 18, barWidth, 6);
-                this.ctx.font = '14px monospace';
-                this.ctx.fillStyle = '#fff';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(formatWhole(Math.max(0, Math.floor(h))) + '/' + formatWhole(Math.floor(mh)), enemy.x, enemy.y - (enemy.radius || 12) - 6);
-                this.ctx.restore();
-            }
-            // draw vampire knight warnings (red aiming lines) and decrement timers
-            try {
-                if (this._vampireWarns && this._vampireWarns.length) {
-                    for (let i = this._vampireWarns.length - 1; i >= 0; i--) {
-                        let w = this._vampireWarns[i];
-                        // draw an animated laser-style warning beam for the vampire spear
-                        try {
-                            this.ctx.save();
-                            // direction and slight extension beyond target for visual punch
-                            let angWarn = Math.atan2(w.y2 - w.y1, w.x2 - w.x1);
-                            let ux = Math.cos(angWarn), uy = Math.sin(angWarn);
-                            // ensure beam endpoints are well outside the arena for entire duration
-                            const arenaW = this.width || (typeof window !== 'undefined' ? window.innerWidth : 800);
-                            const arenaH = this.height || (typeof window !== 'undefined' ? window.innerHeight : 600);
-                            const bw = Math.hypot(arenaW, arenaH) * 2 + 800;
-                            let sx = w.x1 - ux * bw, sy = w.y1 - uy * bw;
-                            let ex = w.x1 + ux * bw, ey = w.y1 + uy * bw;
-                            // progress 0..1 (0=just started, 1=about to fire)
-                            let prog = Math.max(0, Math.min(1, 1 - (w.timer / (this._vampirePrep || 1))));
-                            // beam widths and alpha scale with progress (pulse toward fire)
-                            let beamW = 3 + 6 * prog; // thinner beams
-
-                            // outer glow (thinner)
-                            this.ctx.strokeStyle = `rgba(255,90,90,${0.12 + 0.28 * prog})`;
-                            this.ctx.lineWidth = Math.max(6, beamW + 8);
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(sx, sy);
-                            this.ctx.lineTo(ex, ey);
-                            this.ctx.stroke();
-
-                            // mid gradient streak
-                            let g = this.ctx.createLinearGradient(sx, sy, ex, ey);
-                            g.addColorStop(0, `rgba(255,120,120,${0.18 + 0.22 * prog})`);
-                            g.addColorStop(0.6, `rgba(255,50,50,${0.5 * prog})`);
-                            g.addColorStop(1, `rgba(255,10,10,0)`);
-                            this.ctx.strokeStyle = g;
-                            this.ctx.lineWidth = beamW;
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(sx, sy);
-                            this.ctx.lineTo(ex, ey);
-                            this.ctx.stroke();
-
-                            // bright core (thinner)
-                            this.ctx.strokeStyle = `rgba(255,220,220,${0.65 * prog})`;
-                            this.ctx.lineWidth = Math.max(1, beamW * 0.28);
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(sx, sy);
-                            this.ctx.lineTo(ex, ey);
-                            this.ctx.stroke();
-
-                            // origin charge pulse
-                            this.ctx.fillStyle = `rgba(255,160,160,${0.5 * prog})`;
-                            this.ctx.beginPath();
-                            this.ctx.arc(w.x1, w.y1, 6 + 10 * prog, 0, Math.PI * 2);
-                            this.ctx.fill();
-
-                            // target flare
-                            this.ctx.fillStyle = `rgba(255,80,80,${0.9 * prog})`;
-                            this.ctx.beginPath();
-                            this.ctx.arc(w.x2, w.y2, 3 + 8 * prog, 0, Math.PI * 2);
-                            this.ctx.fill();
-
-                            this.ctx.restore();
-                        } catch (err) {
-                            // fallback: simple line
-                            this.ctx.save();
-                            this.ctx.strokeStyle = 'rgba(255,60,60,0.65)';
-                            this.ctx.lineWidth = 3;
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(w.x1, w.y1);
-                            this.ctx.lineTo(w.x2, w.y2);
-                            this.ctx.stroke();
-                            this.ctx.restore();
-                        }
-                        // decrement timer
-                        w.timer--;
-                        if (w.timer <= 0) {
-                            // spawn spear projectile from x1,y1 toward x2,y2
-                            try {
-                                let dx = w.x2 - w.x1, dy = w.y2 - w.y1;
-                                let dist = Math.hypot(dx, dy) || 1;
-                                let ang = Math.atan2(dy, dx);
-                                let spd = w.speed || 12;
-                                // compute spear life (frames) and create a persistent beam that lasts slightly longer
-                                let spearLife = Math.floor(dist / spd) + 60;
-                                let beamExtra = 30; // beam persists this many frames after spear expires
-                                try {
-                                    // beam endpoints: extend far beyond the arena bounds in both directions
-                                    let bw = Math.hypot(this.width || 800, this.height || 600) * 2 + 800;
-                                    let nx = Math.cos(ang), ny = Math.sin(ang);
-                                    let sx = w.x1 - nx * bw, sy = w.y1 - ny * bw;
-                                    let ex = w.x1 + nx * bw, ey = w.y1 + ny * bw;
-                                    this._vampireBeams.push({ x1: sx, y1: sy, x2: ex, y2: ey, timer: spearLife + beamExtra, maxTimer: spearLife + beamExtra });
-                                } catch (err) { /* ignore beam creation errors */ }
-
-                                this.bullets.push({
-                                    x: w.x1,
-                                    y: w.y1,
-                                    vx: Math.cos(ang) * spd,
-                                    vy: Math.sin(ang) * spd,
-                                    life: spearLife,
-                                    initialLife: spearLife,
-                                    damage: w.dmg || 18,
-                                    pierce: 3,
-                                    radius: 10,
-                                    fromEnemy: w.fromEnemy || false,
-                                    vampireSpear: true,
-                                    spear: true,
-                                    rot: ang,
-                                    // visual tuning for a more realistic spear (no spin)
-                                    shaftLen: 56,
-                                    shaftW: 6,
-                                    tipLen: 18,
-                                    // knockback strength applied to enemies on hit
-                                    knockback: 12,
-                                    originX: w.x1,
-                                    originY: w.y1,
-                                    phase2Plus: w.phase2Plus || false
-                                });
-                            } catch (e) {}
-                            this._vampireWarns.splice(i, 1);
-                        }
-                    }
-                }
-            } catch (e) { console.warn('Vampire warns draw/spawn error', e); }
-            // draw persistent vampire beams (created when spears fire) and decrement timers
-            try {
-                if (this._vampireBeams && this._vampireBeams.length) {
-                    for (let bi = this._vampireBeams.length - 1; bi >= 0; bi--) {
-                        let B = this._vampireBeams[bi];
-                        try {
-                            let prog = (B.timer / (B.maxTimer || 1));
-                            let fade = Math.max(0, Math.min(1, prog));
-                            this.ctx.save();
-                            // draw a thinner outer glow
-                            this.ctx.strokeStyle = `rgba(255,80,80,${0.12 * fade})`;
-                            this.ctx.lineWidth = 10 * (0.5 + 0.5 * fade);
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(B.x1, B.y1);
-                            this.ctx.lineTo(B.x2, B.y2);
-                            this.ctx.stroke();
-                            // bright core (smaller)
-                            this.ctx.strokeStyle = `rgba(255,180,180,${0.8 * fade})`;
-                            this.ctx.lineWidth = 4 * (0.5 + 0.6 * fade);
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(B.x1, B.y1);
-                            this.ctx.lineTo(B.x2, B.y2);
-                            this.ctx.stroke();
-                            this.ctx.restore();
-                        } catch (err) {}
-                        B.timer -= 1;
-                        if (B.timer <= 0) this._vampireBeams.splice(bi, 1);
-                    }
-                }
-            } catch (e) { console.warn('Vampire beams draw error', e); }
-
-            // draw Nox fireballs with a fiery gradient (special visuals)
-            try {
-                for (let fb of (this.bullets || [])) {
-                    if (!fb || !fb.fireball) continue;
-                    try {
-                        let r = fb.fireRadius || 12;
-                        // flame pulse for flicker
-                        let pulse = 0.8 + 0.2 * Math.sin((fb.flamePulse || 0) + (fb.life || 0) * 0.12);
-                        let grd = this.ctx.createRadialGradient(fb.x, fb.y, 0, fb.x, fb.y, r * 2);
-                        grd.addColorStop(0, `rgba(255,255,200,${0.95 * pulse})`);
-                        grd.addColorStop(0.3, `rgba(255,140,40,${0.9 * pulse})`);
-                        grd.addColorStop(0.6, `rgba(200,40,20,${0.7 * pulse})`);
-                        grd.addColorStop(1, `rgba(60,10,10,0)`);
-                        this.ctx.save();
-                        this.ctx.fillStyle = grd;
-                        this.ctx.beginPath();
-                        this.ctx.arc(fb.x, fb.y, r * (1 + 0.18 * Math.sin((fb.flamePulse || 0) + (fb.life || 0) * 0.08)), 0, Math.PI * 2);
-                        this.ctx.fill();
-                        // small core
-                        this.ctx.fillStyle = 'rgba(255,240,200,0.85)';
-                        this.ctx.beginPath();
-                        this.ctx.arc(fb.x, fb.y, Math.max(3, r * 0.28), 0, Math.PI * 2);
-                        this.ctx.fill();
-                        this.ctx.restore();
-                    } catch (err) {}
-                }
-            } catch (e) { console.warn('Fireball draw error', e); }
-
-            // draw vampire spears (special bullets)
-            try {
-                for (let b of (this.bullets || [])) {
-                    if (!b || !b.vampireSpear) continue;
-                    let x = b.x, y = b.y;
-                    // compute angle; allow rot to be animated by spin
-                    let ang = b.rot !== undefined ? b.rot : Math.atan2(b.vy || 0, b.vx || 1);
-                    // keep the spear rotation fixed (no spin)
-                    ang = b.rot !== undefined ? b.rot : Math.atan2(b.vy || 0, b.vx || 1);
-                    this.ctx.save();
-                    this.ctx.translate(x, y);
-                    this.ctx.rotate(ang);
-
-                    // spear geometry
-                    let shaftLen = b.shaftLen || 56;
-                    let shaftW = b.shaftW || 6;
-                    let tipLen = b.tipLen || 18;
-
-                    // shaft: subtle wood/blood gradient
-                    try {
-                        let g = this.ctx.createLinearGradient(-12, 0, shaftLen, 0);
-                        g.addColorStop(0, '#3a1f1f');
-                        g.addColorStop(0.5, '#8b3b3b');
-                        g.addColorStop(1, '#2b0d0d');
-                        this.ctx.fillStyle = g;
-                        this.ctx.beginPath();
-                        this.ctx.rect(-12, -shaftW / 2, shaftLen + 12, shaftW);
-                        this.ctx.fill();
-
-                        // light highlight along the shaft
-                        this.ctx.strokeStyle = 'rgba(255,180,180,0.18)';
-                        this.ctx.lineWidth = 1;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(-8, -shaftW / 4);
-                        this.ctx.lineTo(shaftLen, -shaftW / 4);
-                        this.ctx.stroke();
-
-                        // fletching / small vanes near the butt of the spear
-                        for (let f = 0; f < 3; f++) {
-                            let fx = -6 - f * 6;
-                            this.ctx.beginPath();
-                            this.ctx.fillStyle = f % 2 ? '#331515' : '#4a1a1a';
-                            this.ctx.moveTo(fx, 0);
-                            this.ctx.lineTo(fx - 8, -4 - f * 0.5);
-                            this.ctx.lineTo(fx - 8, 4 + f * 0.5);
-                            this.ctx.closePath();
-                            this.ctx.fill();
-                        }
-
-                        // spear head: metallic gradient, polygon with a small tang
-                        let gh = this.ctx.createLinearGradient(shaftLen - tipLen, 0, shaftLen + tipLen, 0);
-                        gh.addColorStop(0, '#e8e8e8');
-                        gh.addColorStop(0.5, '#cccccc');
-                        gh.addColorStop(1, '#666666');
-                        this.ctx.fillStyle = gh;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(shaftLen, 0);
-                        this.ctx.lineTo(shaftLen - tipLen, -tipLen * 0.6);
-                        this.ctx.lineTo(shaftLen - tipLen * 0.6, 0);
-                        this.ctx.lineTo(shaftLen - tipLen, tipLen * 0.6);
-                        this.ctx.closePath();
-                        this.ctx.fill();
-
-                        // subtle edge highlight on head
-                        this.ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-                        this.ctx.lineWidth = 0.8;
-                        this.ctx.stroke();
-
-                        // small blood smear near the tip for visual feedback
-                        this.ctx.fillStyle = 'rgba(180,30,30,0.85)';
-                        this.ctx.beginPath();
-                        this.ctx.ellipse(shaftLen - tipLen * 0.15, 0, Math.max(2, shaftW / 2), Math.max(2, shaftW / 3), 0, 0, Math.PI * 2);
-                        this.ctx.fill();
-                    } catch (err) {
-                        // fallback simple spear if gradient calls fail
-                        this.ctx.strokeStyle = '#ff3b3b';
-                        this.ctx.lineWidth = shaftW;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(-12, 0);
-                        this.ctx.lineTo(shaftLen, 0);
-                        this.ctx.stroke();
-                        this.ctx.beginPath();
-                        this.ctx.fillStyle = '#ff0000';
-                        this.ctx.moveTo(shaftLen, 0);
-                        this.ctx.lineTo(shaftLen - tipLen, -tipLen * 0.5);
-                        this.ctx.lineTo(shaftLen - tipLen, tipLen * 0.5);
-                        this.ctx.closePath();
-                        this.ctx.fill();
-                    }
-
-                    this.ctx.restore();
-                }
-            } catch (e) { console.warn('Vampire spear draw error', e); }
-        } catch (e) { console.warn('BloodArena draw overlay error', e); }
-    }
-}
-
-// Global helper to summon Nox from anywhere (console or UI).
-// If a BloodArena is already active, it calls its spawnNox(), otherwise
-// it creates a BloodArena, opens it and then summons Nox.
-function spawnNox() {
-    try {
-        if (typeof arena !== 'undefined' && arena && arena.constructor && arena.constructor.name === 'BloodArena') {
-            if (typeof arena.spawnNox === 'function') {
-                arena.spawnNox();
-                return;
-            }
-        }
-    } catch (e) {
-        // fallthrough to create arena
-    }
-    screenFlash("- Nox, The Vampire Knight -", 1200);
-    // Create a new BloodArena sized to the window and spawn Nox
-    try {
-        const w = (typeof window !== 'undefined' && window.innerWidth) ? window.innerWidth : 1200;
-        const h = (typeof window !== 'undefined' && window.innerHeight) ? window.innerHeight : 600;
-        arena = new BloodArena(w, h);
-        arena.spawnArena();
-        if (typeof arena.spawnNox === 'function') arena.spawnNox();
-    } catch (err) {
-        console.warn('spawnNox failed:', err);
-    }
-}
-
-// expose on window for convenience in some environments
-try { if (typeof window !== 'undefined') window.spawnNox = spawnNox; } catch (e) {}

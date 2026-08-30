@@ -116,6 +116,12 @@ const fragShopBase = {
         1: new Decimal(2000),
         2: new Decimal(1000),
     },
+    10: {
+        name: "Anti-Singularity Fragment",
+        0: new Decimal(2e3),
+        1: new Decimal(2e3),
+        2: new Decimal(2e3),
+    },
 }
 let blinkTime = 0
 addLayer("pet", {
@@ -162,6 +168,7 @@ addLayer("pet", {
         dicePetPointsGain: new Decimal(0),
 
         singularityFragments: new Decimal(0),
+        antiSingularityFragments: new Decimal(0),
 
         // FRAGMENTATION
         bannerIndex: 0,
@@ -266,6 +273,10 @@ addLayer("pet", {
             9: {
                 current: new Decimal(0),
                 max: new Decimal(21600),
+            },
+            10: {
+                current: new Decimal(0),
+                max: new Decimal(3600),
             },
         },
 
@@ -528,6 +539,10 @@ addLayer("pet", {
             },
         },
         eclipsePity: 0,
+        
+
+        eclipseTimerTickspeedDivisor: new Decimal(1),
+        eclipseTimerTickspeedMultiplier: new Decimal(1),
     }},
     nodeStyle() {},
     tooltip: "Pets",
@@ -555,6 +570,9 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
         if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
         if (hasUpgrade("stagnantSynestia", 6)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 21))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 22))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cbs", 23))
         player.pet.petPointMult = player.pet.petPointMult.mul(player.cbs.pylonEnergyEffect2)
         if (hasUpgrade("gwaTemple", 17)) player.pet.petPointMult = player.pet.petPointMult.mul(player.gwaTemple.gwaPointsEffect)
 
@@ -735,18 +753,32 @@ addLayer("pet", {
 
         if (getLevelableTier("pu", 303, true)) player.pet.legPetTimers[0].max = player.pet.legPetTimers[0].max.mul(levelableEffect("pu", 303)[0])
         
-        let abilityTimeDecrease = new Decimal(1)
-        abilityTimeDecrease = abilityTimeDecrease.mul(player.dv.timeDrainRate)
-        if (getLevelableTier("pu", 303, true)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
-        if (hasMilestone("dgj", 16)) abilityTimeDecrease = abilityTimeDecrease.div(player.dgj.milestone3Effect)
-        if (hasUpgrade("sma", 206)) abilityTimeDecrease = abilityTimeDecrease.div(1.2)
-        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(abilityTimeDecrease.mul(delta))
-        abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("st", 309)[0])
+        player.pet.eclipseTimerTickspeedDivisor = new Decimal(1)
+        if (getLevelableTier("pu", 303, true)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("pu", 303)[0])
+        if (hasMilestone("dgj", 16)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(player.dgj.milestone3Effect)
+        if (hasUpgrade("sma", 206)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(1.2)
+        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(buyableEffect("dt", 13))
+        if (hasMilestone("db", 17)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(2)
+        if (hasMilestone("db", 18)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(player.db.milestone8Effect)
+        if (hasMilestone("db", 106)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(2)
+        if (hasMilestone("prj", 109)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(1.5)
+        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("st", 309)[0])
+
+        player.pet.eclipseTimerTickspeedMultiplier = new Decimal(1)
+        player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(player.dv.timeDrainRate)
+
+        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(player.pet.eclipseTimerTickspeedMultiplier.div(player.pet.eclipseTimerTickspeedDivisor).mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
 
         if (player.pet.legPetTimers[0].current.lte(0) && player.pet.legPetTimers[0].active) {
             player.pet.legPetTimers[0].active = false
+
+            player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+            if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
+            if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(7)) completeAchievement("achievements", 1206);
+            if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(7200)) completeAchievement("achievements", 1215);
+
             player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
             player.le.starmetalAlloyPauseAgain = new Decimal(10)
             for (let prop in player.pu.levelables) {
@@ -768,7 +800,7 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
-            pauseUniverseAll(["D1", "U3", "A2"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
 
             layers.pu.generateSelection();
         }
@@ -815,7 +847,7 @@ addLayer("pet", {
             },
         },
         3: {
-            title() { return "<h3>Sell<br>one"},
+            title() { return "<h3>Sell one"},
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1)},
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4]},
             tooltip() {
@@ -831,13 +863,13 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: '50px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
+                let look = {width: '100px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
         4: {
-            title() {return "<h3>Sell<br>all" },
+            title() {return "<h3>Sell all" },
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1) },
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4] },
             tooltip() {
@@ -854,7 +886,7 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: '50px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
+                let look = {width: '100px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -896,7 +928,7 @@ addLayer("pet", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
-                this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -909,12 +941,12 @@ addLayer("pet", {
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
-                this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
         7: {
-            title() { return "<h3>Ascend<br>Pet"},
+            title() { return "<h3>Ascend Pet"},
             canClick() {
                 if (tmp.pet.levelables[layers.pet.levelables.index].levelLimit == undefined) {
                     return false
@@ -956,7 +988,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["content"] = "Pets"
             },
-            style: {width: "125px", minHeight: "60px", backgroundColor: "#094599", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
+            style: {width: "172px", minHeight: "50px", backgroundColor: "#4e7cff", color: "black", borderRadius: "0px", border: "3px solid #0000003f"},
         },
         12: {
             title() { return "Evolved Pets" },
@@ -965,7 +997,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["content"] = "Evolved Pets"
             },
-            style: {width: "125px", minHeight: "60px", background: "linear-gradient(90deg, #d487fd, #4b79ff)", color: "#1500bf", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
+            style: {width: "172px", minHeight: "50px", background: "linear-gradient(90deg, #d487fd, #4b79ff)", color: "#1500bf", borderRadius: "0px", border: "3px solid #1500bf"},
         },
         13: {
             title() { return "Pet Shop" },
@@ -974,7 +1006,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["content"] = "Pet Shop"
             },
-            style: {width: "125px", minHeight: "60px", backgroundColor: "#4e7cff", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
+            style: {width: "172px", minHeight: "50px", backgroundColor: "#4e7cff", color: "black", borderRadius: "0px", border: "3px solid #0000003f"},
         },
         14: {
             title() { return "Fragmentation" },
@@ -983,7 +1015,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["content"] = "Fragmentation"
             },
-            style: {width: "125px", minHeight: "60px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
+            style: {width: "172px", minHeight: "50px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "3px solid #0000003f"},
         },
         15: {
             title() { return "Legendary Gems" },
@@ -992,7 +1024,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["content"] = "Legendary Gems"
             },
-            style: {width: "125px", minHeight: "60px", backgroundColor: "#eed200", color: "#fe6d00", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"}, 
+            style: {width: "172px", minHeight: "50px", backgroundColor: "#eed200", color: "#bf3000", borderRadius: "0px", border: "3px solid #bf30007f"}, 
         },
         // EVOLVED PET BUTTONS
         21: {
@@ -1055,9 +1087,9 @@ addLayer("pet", {
                 layers.pu.generateSelection();
 
                 player.subtabs.le["stuff"] = "Shards"
-                player.subtabs.pu["stuff"] = "Selection"   
+                player.subtabs.pu["stuff"] = "Selection"            
                 
-                pauseUniverseAll(["D1", "U3", "A2"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -1273,7 +1305,7 @@ addLayer("pet", {
             },
         },
         113: {
-            title() { return "Shop"},
+            title() { return "Fragments and Pets"},
             canClick() {return player.subtabs["pet"]["frags"] != "Shop"},
             unlocked: true,
             onClick() {
@@ -1359,6 +1391,10 @@ addLayer("pet", {
                         if (!hasAchievement("achievements", 922)) completeAchievement("achievements", 922)
                         addLevelableXP("pet", 503, new Decimal(player.pet.fragShopBulk))
                         doPopup("none", "Vespasian mutates further", "Pet Obtained!", 5, "#eed200", "resources/Pets/vespasianLegendaryPet.png")
+                        break;
+                    case 10:
+                        player.pet.antiSingularityFragments = player.pet.antiSingularityFragments.add(player.pet.fragShopBulk)
+                        doPopup("none", "+" + formatSimple(player.pet.fragShopBulk) + " Anti-Singularity Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/antiSingularityEpicPetFragmentFull.png")
                         break;
                 }
             },
@@ -1458,9 +1494,18 @@ addLayer("pet", {
             },
             style: {width: "75px", minHeight: "75px", background: "#eed200", border: "5px solid #776900", borderRadius: "0px", padding: "0px"},
         },
+        141: {
+            title() { return "<img src='resources/antiSingularityEpicPetFragmentFull.png'style='width:65px;height:65px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick: true,
+            unlocked() { return hasUpgrade("bum", 13) },
+            onClick() {
+                player.pet.fragShopIndex = 10
+            },
+            style: {width: "75px", minHeight: "75px", background: "#d487fd", border: "5px solid #6600A6", borderRadius: "0px", padding: "0px"},
+        },
         // LEGENDARY GEMS
         201: {
-            title() { return player.pet.legendaryGemTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.legendaryGemTimer) + "." : "Reset for legendary gems."},
+            title() { return player.pet.legendaryGemTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.legendaryGemTimer) + "." : "<h3>+" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + " of each legendary gem."},
             canClick() { return player.pet.legendaryGemTimer.lt(0) },
             unlocked() { return true },
             onClick() {
@@ -1483,12 +1528,13 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#fe9400" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "396px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px"}
+                this.canClick() ? look.backgroundColor = "#f78400" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
-        202: {
+        
+        210: {
             title() { return player.pet.summonTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.summonTimer) + "." : "SUMMON."},
             canClick() { return player.pet.summonTimer.lte(0) && player.cb.legendaryPetGems[0].gte(player.pet.summonReqs[0]) && player.cb.legendaryPetGems[1].gte(player.pet.summonReqs[1]) && player.cb.legendaryPetGems[2].gte(player.pet.summonReqs[2]) && player.cb.evolutionShards.gte(player.pet.summonReqs[3]) && player.cb.paragonShards.gte(player.pet.summonReqs[4]) },
             unlocked() { return true },
@@ -1512,15 +1558,15 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#fe9400" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "396px", minHeight: "46px", fontSize: "12px", borderRadius: "10px 10px 0px 0px"}
+                this.canClick() ? look.backgroundColor = "#f78400" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
 
         // legendary pet selection
         301: {
-            title() { return "<img src='resources/Pets/eclipseLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
+            title() { return "<img src='resources/Pets/eclipseLegendaryPet.png' style='width:88px;height:88px;margin-top:2px;border:2px solid #0000003f'></img>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -1528,13 +1574,13 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px"}
-                player.pet.summonIndex.eq(0) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
+                player.pet.summonIndex.eq(0) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
                 return look
             },
         },
         302: {
-            title() { return "<img src='resources/Pets/geroaLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
+            title() { return "<img src='resources/Pets/geroaLegendaryPet.png' style='width:88px;height:88px;margin-top:2px;border:2px solid #0000003f'></img>" },
             canClick() { return true },
             unlocked() { return hasUpgrade("ir", 16) },
             onClick() {
@@ -1542,13 +1588,13 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px"}
-                player.pet.summonIndex.eq(1) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
+                player.pet.summonIndex.eq(1) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
                 return look
             },
         },
         303: {
-            title() { return "<img src='resources/Pets/vespasianLegendaryPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" },
+            title() { return "<img src='resources/Pets/vespasianLegendaryPet.png' style='width:88px;height:88px;margin-top:2px;border:2px solid #0000003f'></img>" },
             canClick() { return true },
             unlocked() { return hasUpgrade("depth4", 6) },
             onClick() {
@@ -1556,8 +1602,8 @@ addLayer("pet", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "100px"}
-                player.pet.summonIndex.eq(2) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                let look = {width: "100px", minHeight: "100px", maxHeight: "100px", border: "2px solid #0000003f", borderRadius: "0px", padding: "0px"}
+                player.pet.summonIndex.eq(2) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#f78400"
                 return look
             },
         },
@@ -1687,7 +1733,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["shopTabs"] = "Misc."
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "grey", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+            style: {width: "162.5px", minHeight: "47px", backgroundColor: "grey", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid #2e3c99"},
         },
         1005: {
             title() { return "Common"},
@@ -1696,7 +1742,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["shopTabs"] = "Common"
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#9bedff", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+            style: {width: "162.5px", minHeight: "47px", backgroundColor: "#9bedff", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid #2e3c99"},
         },
         1006: {
             title() { return "Uncommon"},
@@ -1705,7 +1751,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["shopTabs"] = "Uncommon"
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#88e688", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+            style: {width: "162.5px", minHeight: "47px", backgroundColor: "#88e688", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid #2e3c99"},
         },
         1007: {
             title() { return "Rare"},
@@ -1714,16 +1760,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["shopTabs"] = "Rare"
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#4e7cff", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
-        },
-        1008: {
-            title() { return "Epic"},
-            canClick() { return true },
-            unlocked() { return false },
-            onClick() {
-                player.subtabs["pet"]["shopTabs"] = "Epic"
-            },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+            style: {width: "162.5px", minHeight: "47px", backgroundColor: "#4e7cff", color: "black", borderRadius: "0px", border: "0px"},
         },
         // MISC SELECTION
         1011: {
@@ -2030,15 +2067,6 @@ addLayer("pet", {
             unlocked() { return true },
             onClick() {
                 player.pet.shopIndex = 306
-            },
-            style: {width: "100px", minHeight: "100px", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
-        },
-        1307: {
-            title() { return "<img src='resources/Pets/grassSquareRarePet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.pet.shopIndex = 307
             },
             style: {width: "100px", minHeight: "100px", border: "5px solid #0031BF", borderRadius: "0px", padding: "0px"},
         },
@@ -3488,8 +3516,23 @@ addLayer("pet", {
             },
             pointCooldown() { return new Decimal(300).div(player.pet.petCooldownDiv).mul(Decimal.pow(1.5, getLevelableTier(this.layer, this.id)))},
             canteBase() { return new Decimal(0.4)},
-            pointTooltip() { return "" },
+            pointTooltip() { return "10% chance for " + formatSimple(getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))) + " random fragmentation fragments." },
             pointClick() {
+                let gain = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                let random = getRandomInt(10)
+                    if (random == 1) {
+                        let random2 = getRandomInt(3)
+                        if (random2 == 1) {
+                            player.pet.lesserFragments = player.pet.lesserFragments.add(gain)
+                            doPopup("none", "+" + formatSimple(gain) + " Lesser Fragment", "Fragment Obtained!", 5, "#9bedff", "resources/checkback/lesser_fragment.png")
+                        } else if (random2 == 2) {
+                            player.pet.basicFragments = player.pet.basicFragments.add(gain)
+                            doPopup("none", "+" + formatSimple(gain) + " Basic Fragment", "Fragment Obtained!", 5, "#88e688", "resources/checkback/basic_fragment.png")
+                        } else {
+                            player.pet.greaterFragments = player.pet.greaterFragments.add(gain)
+                            doPopup("none", "+" + formatSimple(gain) + " Greater Fragment", "Fragment Obtained!", 5, "#4e7cff", "resources/checkback/greater_fragment.png")
+                        }
+                    }
                 return this.pointValue()
             },
             // CLICK CODE
@@ -3813,6 +3856,55 @@ addLayer("pet", {
                 }
             },
             currency() { return player.pet.singularityFragments },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+        407: {
+            image() { return this.canClick() ? "resources/Pets/goobertEpicPet.png" : "resources/secret.png"},
+            title() { return "Goobert" },
+            lore() { return "A starlight-infused house cat that freely roams the pyramid. It gives a superphysical presence similar to that of a celestialite." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to light <small>(based on stars)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to starlight <small>(based on star power)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to rare pet button yield and cooldown <small>(based on project speed)</small>."
+            }, 
+            levelLimit() { return getLevelableTier(this.layer, this.id).mul(5).add(10).min(50) },
+            effect() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
+                return [
+                    player.au2.stars.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.5)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
+                    player.st.starPower.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.25).div(3)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
+                    player.prj.projectSpeed.log(10).add(1).pow(amt.pow(0.5)).div(20).pow(Decimal.pow(1.25, getLevelableTier(this.layer, this.id))).add(1) // Rare pet button yield (Based on Project Speed)
+                ]
+            },
+            sellValue() { return new Decimal(500)},
+            shopLayer() { return "sp" },
+            // CLICK CODE
+            unlocked() { return hasUpgrade("bum", 13) },
+            canClick() { return player.pet.antiSingularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.pet.antiSingularityFragments = player.pet.antiSingularityFragments.sub(amt) },
+            canAfford() { return player.pet.antiSingularityFragments.gte(this.xpReq()) },
+            xpReq() {
+                let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(2).min(16))
+                if (amt.eq(0)) {
+                    return new Decimal(1)
+                } else {
+                    return amt.add(1).pow(1.3).pow(Decimal.pow(1.4, getLevelableTier(this.layer, this.id))).floor()
+                }
+            },
+            currency() { return player.pet.antiSingularityFragments },
             buy() {
                 this.pay(this.xpReq())
                 setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
@@ -4471,6 +4563,54 @@ addLayer("pet", {
                 return look
             } 
         },
+        1209: {
+            image() { return this.canClick() ? "resources/Pets/captainEvoPet.png" : "resources/secret.png"},
+            title() { return "Captain" },
+            lore() { return "John Captain, the greatest pilot in the Cosmic Cosmos, or at least out of the four of you on the spaceship." }, 
+            description() {
+                return "x" + format(this.effect()[0], 3) + " to ship damage.<br>" +
+                    "x" + format(this.effect()[1]) + " to activated fuel.<br>" +
+                    "^" + format(this.effect()[2]) + " to space dust.<br>"
+            },
+            levelLimit() { return getBuyableAmount("sme", 115).gt(0) ? new Decimal(10).add(buyableEffect("sme", 115)) : new Decimal(10) },
+            effect() { 
+                return [
+                    getLevelableAmount(this.layer, this.id).div(75).add(1), // All ship damage
+                    getLevelableAmount(this.layer, this.id).mul(1.5).pow(1.5).add(1), // Rocket parts
+                    getLevelableAmount(this.layer, this.id).mul(0.02).add(1), // Space dust
+                ]
+            },
+            levelTooltip() { return "Costs Paragon Shards." },
+            evoCan() { return true },
+            evoTooltip() { return ""},
+            evoClick() {
+                player.tab = "ir"
+                player.subtabs["ir"].stuff = "ships"
+                player.subtabs["ir"].ships = "automation"
+            },
+            // CLICK CODE
+            unlocked() { return player.ir.unlocked},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.cb.paragonShards = player.cb.paragonShards.sub(amt) },
+            canAfford() { return player.cb.paragonShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(2).mul(2).add(5).floor() },
+            currency() { return player.cb.paragonShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#4C64FF"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#bF7Fff" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         1302: {
             image() { return this.canClick() ? "resources/Pets/d20EvoPet.png" : "resources/secret.png"},
             title() { return "d20" },
@@ -4596,10 +4736,10 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            barStyle() { return {backgroundColor: "#5cafbf"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
-                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#222222"
+                this.canClick() ? look.backgroundColor = "#bf2fbf" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
             } 
@@ -4794,7 +4934,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}}, // #7aecff for smth darker if needed
+            barStyle() { return {backgroundColor: "#5cafbf"}}, // #7aecff for smth darker if needed
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#00ffff" : look.backgroundColor = "#222222"
@@ -4841,7 +4981,7 @@ addLayer("pet", {
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#c6f7ff"}},
+            barStyle() { return {backgroundColor: "#5cafbf"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#200000" : look.backgroundColor = "#222222"
@@ -4959,18 +5099,18 @@ addLayer("pet", {
         summonPity: {
             unlocked: true,
             direction: RIGHT,
-            width: 300,
-            height: 50,
+            width: 392,
+            height: 25,
             progress() {
                 return new Decimal(player.pet.eclipsePity / 5)
             },
-            borderStyle: {border: "2px solid white", borderRadius: "15px"},
-            baseStyle: {backgroundColor: "#2f2a00"},
+            borderStyle: {border: "2px solid #bf3000", borderRadius: "0px 0px 10px 10px"},
+            baseStyle: {backgroundColor: "#260a00"},
             fillStyle: {
-                "background-color": "#776900",
+                "background-color": "#995200",
             },
             display() {
-                return "<h5>" + player.pet.eclipsePity + "/5<br>Legendary Summon Pity</h5>";
+                return "<h5>" + player.pet.eclipsePity + "/5 Pity until guaranteed Legendary Summon</h5>";
             },
         },
     },
@@ -5225,55 +5365,55 @@ addLayer("pet", {
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
                                 ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 33], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 7]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 3], ["clickable", 4]], {width: '100px', height: '40px'}],
-                            ]],
-                        ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
+                                ["style-row", [["clickable", 3], ["clickable", 4]], {width: '200px', height: '40px'}],
+                            ], {width: "650px"}],
+                        ], {width: "650px", height: "175px", borderBottom: "3px solid #2e3c99"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Common", {color: "#9bedff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#1f2f33", borderBottom: "3px solid #9bedff", userSelect: "none"}],
+                                ["raw-html", "Common", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#45BDD7", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104], ["levelable", 105]]],
-                                ["row", [["levelable", 106], ["levelable", 107], ["levelable", 108], ["levelable", 109], ["levelable", 110]]],
-                            ], {width: "525px", backgroundColor: "#0f1719", padding: "5px"}],
+                                ["row", [["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104], ["levelable", 105], ["levelable", 106]]],
+                                ["row", [["levelable", 107], ["levelable", 108], ["levelable", 109], ["levelable", 110]]],
+                            ], {width: "630px", background: "repeating-linear-gradient(-45deg, #235F6C 0 15px, #2B7686 0 30px)", padding: "2px"}],
             
                             ["style-column", [
-                                ["raw-html", "Uncommon", {color: "#88e688", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#1b2e1b", borderTop: "3px solid #88e688", borderBottom: "3px solid #88e688", userSelect: "none"}],
+                                ["raw-html", "Uncommon", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "629px", height: "40px", backgroundColor: "#008300", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
-                                ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
+                                ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205], ["levelable", 206]]],
+                                ["row", [["levelable", 207], ["levelable", 208], ["levelable", 209], ["levelable", 210]]],
                             ], () => {
-                                let look = {width: "525px", backgroundColor: "#0d170d", padding: "5px"}
+                                let look = {width: "630px", background: "repeating-linear-gradient(-45deg, #004100 0 15px, #004f00 0 30px)", padding: "2px"}
                                 if (player.cb.highestLevel.lt(25)) look.borderBottom = "3px solid #88e688"
                                 return look
                             }],
 
                             ["style-column", [
-                                ["raw-html", "Rare", {color: "#4e7cff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(25) ? {width: "535px", height: "40px", backgroundColor: "#0f1833", borderTop: "3px solid #4e7cff", borderBottom: "3px solid #4e7cff", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Rare", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cb.highestLevel.gte(25) ? {width: "629px", height: "40px", backgroundColor: "#0031BF", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
-                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
-                            ], () => { return player.cb.highestLevel.gte(25) ? {width: "525px", backgroundColor: "#070c19", padding: "5px"} : {display: "none !important"}}],
+                                ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305], ["levelable", 306]]],
+                                ["row", [["levelable", 307], ["levelable", 308], ["levelable", 309], ["levelable", 310]]],
+                            ], () => { return player.cb.highestLevel.gte(25) ? {width: "630px", background: "repeating-linear-gradient(-45deg, #001960 0 15px, #001F77 0 30px)", padding: "2px"} : {display: "none !important"}}],
             
                             ["style-column", [
-                                ["raw-html", "Epic", {color: "#cb79ed", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(1500) ? {width: "535px", height: "40px", backgroundColor: "#28182f", borderTop: "3px solid #cb79ed", borderBottom: "3px solid #cb79ed", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Epic", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cb.highestLevel.gte(1500) ? {width: "629px", height: "40px", backgroundColor: "#6600A6", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 401], ["levelable", 402], ["levelable", 403], ["levelable", 404], ["levelable", 405]]],
-                                ["row", [["levelable", 406]]],
-                            ], () => { return player.cb.highestLevel.gte(1500) ? {width: "525px", backgroundColor: "#140c17", padding: "5px"} : {display: "none !important"}}],
+                                ["row", [["levelable", 401], ["levelable", 402], ["levelable", 403], ["levelable", 404], ["levelable", 405], ["levelable", 406]]],
+                                ["row", [["levelable", 407]]],
+                            ], () => { return player.cb.highestLevel.gte(1500) ? {width: "630px", background: "repeating-linear-gradient(-45deg, #330053 0 15px, #400068 0 30px)", padding: "2px"} : {display: "none !important"}}],
 
                             ["style-column", [
-                                ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Legendary", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "629px", height: "40px", backgroundColor: "#eed200", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 501], ["levelable", 502], ["levelable", 503]]],
-                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "630px", background: "repeating-linear-gradient(-45deg, #786a00 0 15px, #998700 0 30px)", padding: "5px"} : {display: "none !important"}}],
 
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
+                        ], {width: "650px", height: "522px"}],
+                    ], {width: "650px", height: "700px", backgroundColor: "#060917"}],
                 ],
             },
             "Evolved Pets": {
@@ -5286,42 +5426,42 @@ addLayer("pet", {
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
                                 ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 33], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 7]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 3], ["clickable", 4]], {width: '100px', height: '40px'}],
-                            ]],
-                        ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
+                                ["style-row", [["clickable", 3], ["clickable", 4]], {width: '200px', height: '40px'}],
+                            ], {width: "650px"}],
+                        ], {width: "650px", height: "175px", borderBottom: "3px solid #2e3c99"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Evolution Shards", {color: "#d487fd", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#2a1b32", borderBottom: "3px solid #d487fd", userSelect: "none"}],
+                                ["raw-html", "Evolution Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "631px", height: "40px", backgroundColor: "#d487fd", border: "2px solid #0000007f", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206]]],
-                                ["row", [["levelable", 1104], ["levelable", 1107], ["levelable", 1102]]],
+                                ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206], ["levelable", 1104]]],
+                                ["row", [["levelable", 1107], ["levelable", 1102]]],
                             ], () => {
-                                let look = {width: "525px", backgroundColor: "#150d19", padding: "5px"}
+                                let look = {width: "631px", background: "repeating-linear-gradient(-45deg, #6A447F 0 15px, #85549E 0 30px)", padding: "2px"}
                                 if (player.cb.highestLevel.lt(250)) look.borderBottom = "3px solid #d487fd"
                                 return look
                             }],
 
                             ["style-column", [
-                                ["raw-html", "Paragon Shards", {color: "#4c64ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "535px", height: "40px", backgroundColor: "#0f1433", borderTop: "3px solid #4c64ff", borderBottom: "3px solid #4c64ff", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Paragon Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "631px", height: "40px", backgroundColor: "#4c64ff", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106]]],
-                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
-                           ["style-column", [
-                                ["raw-html", "Shards of Ascension", {color: "#c6f7ff", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.d.diceSpaceUnlocked ? {width: "535px", height: "40px", backgroundColor: "#273132", borderTop: "3px solid #c6f7ff", borderBottom: "3px solid #c6f7ff", userSelect: "none"} : {display: "none !important"}}],
+                                ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106], ["levelable", 1209]]],
+                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "635px", background: "repeating-linear-gradient(-45deg, #263280 0 15px, #303F9F 0 30px)", padding: "2px"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["raw-html", "Ascension Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.cbs.shrineReactivated ? {width: "631px", height: "40px", backgroundColor: "#c6f7ff", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 1401], ["levelable", 2103],]],
-                            ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#131819", padding: "5px"} : {display: "none !important"}}],
+                            ], () => { return player.cbs.shrineReactivated ? {width: "635px", background: "repeating-linear-gradient(-45deg, #637c80 0 15px, #7a999e 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],
+                                ["raw-html", "Chocolate Shards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.ep2.obtainedShards ? {width: "631px", height: "40px", backgroundColor: "#86562E", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 2001], ["levelable", 2002], ["levelable", 2003], ["levelable", 2004]]],
-                            ], () => { return player.ep2.obtainedShards ? {width: "525px", backgroundColor: "#0d0804", padding: "5px"} : {display: "none !important"}}],
-                        ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
+                            ], () => { return player.ep2.obtainedShards ? {width: "630px", background: "repeating-linear-gradient(-45deg, #432B17 0 15px, #54361D 0 30px)", padding: "2px"} : {display: "none !important"}}],
+                        ], {width: "650px", height: "522px"}],
+                    ], {width: "650px", height: "700px", backgroundColor: "#060917"}],
                 ],
             },
             "Pet Shop": {
@@ -5333,28 +5473,28 @@ addLayer("pet", {
                             ["clickable", 1002],
                             ["clickable", 1003],
                             ["tooltip-row", [
-                                ["text-input", "shopInput", {width: "177px", height: "48px", backgroundColor: "#333", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
+                                ["text-input", "shopInput", {width: "177px", height: "48px", backgroundColor: "#131e4d", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
                                 ["raw-html", "<div class='bottomTooltip'>Bulk Buy Amount<hr><small>Bulk buying increases costs by:<br>base*(amt*0.05+0.95)*amt</small></div>"],
-                            ], {width: "197px", height: "48px", borderTop: "2px solid white"}],
+                            ], {width: "197px", height: "48px", borderTop: "2px solid #2e3c99"}],
                         ], {width: "197px"}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", () => { return player.pet.shopIndex > 0 && player.pet.shopIndex < 11 ? petShopShardName[player.pet.shopIndex - 1] : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => { return player.pet.shopIndex > 10 && player.pet.shopIndex < 101 ? petShopCrateName[player.pet.shopIndex - 11] : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],        
                                 ["raw-html", () => { return player.pet.shopIndex > 100 ? run(layers.pet.levelables[player.pet.shopIndex].title, layers.pet.levelables[player.pet.shopIndex]) + "<br>(" + player.pet.levelables[player.pet.shopIndex][1] + "/" + tmp.pet.levelables[player.pet.shopIndex].xpReq + ")" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "350px", height: "72px", borderBottom: "2px solid white"}],
+                            ], {width: "450px", height: "72px", borderBottom: "2px solid #2e3c99"}],
                             ["style-row", [
                                 ["raw-html", () => { return player.pet.shopIndex > 0 && player.pet.shopIndex < 11 ? "Costs " + formatWhole(player.pet.shop.shard[player.pet.shopIndex-1].cost) + " Pet Points" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => { return player.pet.shopIndex > 10 && player.pet.shopIndex < 101 ? "Costs " + formatWhole(player.pet.shop.crate[player.pet.shopIndex-11].cost) + " Pet Points" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => { return player.pet.shopIndex > 100 && player.pet.shopIndex < 201 ? "Costs " + formatWhole(player.pet.shop.common[player.pet.shopIndex-101].cost) + " Pet Points" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => { return player.pet.shopIndex > 200 && player.pet.shopIndex < 301 ? "Costs " + formatWhole(player.pet.shop.uncommon[player.pet.shopIndex-201].cost) + " Pet Points" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["raw-html", () => { return player.pet.shopIndex > 300 && player.pet.shopIndex < 401 ? "Costs " + formatWhole(player.pet.shop.rare[player.pet.shopIndex-301].cost) + " Pet Points" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "350px", height: "48px"}],
-                        ], {width: "350px", height: "122px", borderLeft: "3px solid white"}],
-                    ], {width: "550px", height: "122px", borderBottom: "3px solid white", backgroundColor: "#161616"}],
+                            ], {width: "450px", height: "48px"}],
+                        ], {width: "450px", height: "122px", borderLeft: "3px solid #2e3c99"}],
+                    ], {width: "650px", height: "122px", borderBottom: "3px solid #2e3c99", backgroundColor: "#060917"}],
                     ["left-row", [
                         ["hoverless-clickable", 1004], ["hoverless-clickable", 1005], ["hoverless-clickable", 1006], ["hoverless-clickable", 1007], ["hoverless-clickable", 1008]
-                    ], {width: "550px", height: "47px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderBottom: "3px solid white"}],
+                    ], {width: "650px", height: "47px", background: "repeating-linear-gradient(-45deg, #060917 0 15px, #04060f 0 30px)", borderBottom: "3px solid #2e3c99"}],
                     ["buttonless-microtabs", "shopTabs", { 'border-width': '0px' }],
                 ],
             },
@@ -5362,143 +5502,181 @@ addLayer("pet", {
                 buttonStyle() { return {color: "#cb79ed"}},
                 unlocked() { return true },
                 content: [
-                    ["top-column", [
+                    ["always-scroll-column", [
+                        ["blank", "20px"],
                         ["left-row", [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return player.pet.lesserFragmentsPS.gt(0) ? formatShortSimple(player.pet.lesserFragments) + "<br>+" + formatShortSimple(player.pet.lesserFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.lesserFragments)}, {width: "126px", height: "50px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => { return "<div class='bottomTooltip'>Lesser Fragments</div>"}],
-                            ], {width: "181px", height: "50px", borderRight: "3px solid white"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.lesserFragments)}, {width: "93px", height: "50px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Lesser Fragments</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid #572c6a"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return player.pet.basicFragmentsPS.gt(0) ? formatShortSimple(player.pet.basicFragments) + "<br>+" + formatShortSimple(player.pet.basicFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.basicFragments)}, {width: "127px", height: "50px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => { return "<div class='bottomTooltip'>Basic Fragments</div>"}],
-                            ], {width: "182px", height: "50px", borderRight: "3px solid white"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.basicFragments)}, {width: "93px", height: "50px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Basic Fragments</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid #572c6a"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return player.pet.greaterFragmentsPS.gt(0) ? formatShortSimple(player.pet.greaterFragments) + "<br>+" + formatShortSimple(player.pet.greaterFragmentsPS.mul(3600), 2) + "/h" : formatShortSimple(player.pet.greaterFragments)}, {width: "126px", height: "50px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ["raw-html", () => { return "<div class='bottomTooltip'>Greater Fragments</div>"}],
-                            ], {width: "181px", height: "50px"}],
-                        ], {width: "550px", height: "50px", backgroundColor: "black", borderBottom: "3px solid white", userSelect: "none"}],
+                                ["raw-html", () => { return formatShortSimple(player.pet.greaterFragments)}, {width: "95px", height: "50px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Greater Fragments</small></div>"}],
+                            ], {width: "150px", height: "50px"}],
+                        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid #572c6a", borderRadius: "10px", userSelect: "none"}],
+                        ["blank", "20px"],
                         ["style-column", [
-                            ["raw-html", () => { return "Selections re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#572c6a", borderBottom: "3px solid #190c1e"}],
-                        ["style-row", [
+                            ["raw-html", "Fragment Buttons", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["h-line", "580px"],
+                            ["blank", "10px"],
+                            ["raw-html", () => { return "Selections re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["blank", "10px"],
                             ["style-column", [
-                                ["raw-html", () => { return "Currently selecting: " + run(layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id].title, layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id)) + " of this pet."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {width: "347px", height: "54px", borderRight: "3px solid #190c1e"}],
-                            ["style-column", [
-                                ["clickable", 100],
-                            ], {width: "200px", height: "54px"}],
-                        ], {width: "550px", height: "54px", borderBottom: "3px solid #190c1e"}],
-                        ["style-row", [
+
                             ["style-row", [
                                 ["style-column", [
-                                    ["clickable", 101],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[0].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
-                                    ["clickable", 102],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[1].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
-                                ], {width: "100px", height: "253px", backgroundColor: "#2e474c", borderRight: "3px solid #190c1e"}],
+                                    ["raw-html", () => { return "Currently selecting: " + run(layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id].title, layers.pet.levelables[player.pet.banners[player.pet.bannerIndex].id])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.banners[player.pet.bannerIndex].id)) + " of this pet."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                ], {backgroundColor: "#7d3f98", width: "347px", height: "54px", borderRight: "3px solid #190c1e"}],
                                 ["style-column", [
-                                    ["clickable", 103],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[2].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
-                                    ["clickable", 104],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[3].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
-                                ], {width: "100px", height: "253px", backgroundColor: "#284528", borderRight: "3px solid #190c1e"}],
+                                    ["clickable", 100],
+                                ], {width: "200px", height: "54px"}],
+                            ], {width: "550px", height: "54px", borderBottom: "3px solid #190c1e"}],
+                            ["style-row", [
+                                ["style-row", [
+                                    ["style-column", [
+                                        ["clickable", 101],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[0].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                        ["clickable", 102],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[1].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                    ], {width: "100px", height: "253px", backgroundColor: "#2e474c", borderRight: "3px solid #190c1e"}],
+                                    ["style-column", [
+                                        ["clickable", 103],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[2].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                        ["clickable", 104],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[3].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                    ], {width: "100px", height: "253px", backgroundColor: "#284528", borderRight: "3px solid #190c1e"}],
+                                    ["style-column", [
+                                        ["clickable", 105],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[4].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
+                                        ["clickable", 106],
+                                        ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[5].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
+                                    ], {width: "100px", height: "253px", backgroundColor: "#17254c"}],
+                                ], {width: "306px", height: "253px", borderRight: "3px solid #190c1e"}],
                                 ["style-column", [
-                                    ["clickable", 105],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[4].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e", borderBottom: "3px solid #190c1e"}],
-                                    ["clickable", 106],
-                                    ["style-column", [["raw-html", () => {return formatWhole(player.pet.banners[5].val)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}]], {width: "100px", height: "22px", borderTop: "3px solid #190c1e"}],
-                                ], {width: "100px", height: "253px", backgroundColor: "#17254c"}],
-                            ], {width: "306px", height: "253px", borderRight: "3px solid #190c1e"}],
+                                    ["style-column", [
+                                        ["style-row", [["raw-html", "Evo-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
+                                        ["text-input", "evoInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
+                                        ["clickable", 111],
+                                    ], {width: "241px", height: "125px", borderBottom: "3px solid #190c1e"}],
+                                    ["style-column", [
+                                        ["style-row", [["raw-html", "Para-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
+                                        ["text-input", "paraInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
+                                        ["clickable", 112],
+                                    ], {width: "241px", height: "125px"}],
+                                ], () => {return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) ? {width: "241px", height: "253px", backgroundColor: "#7d3f98"} : {display: "none !important"}}],
+                            ], {width: "550px", height: "253px", backgroundColor: "#190c1e"}],
+
+                            ], {width: "550px", border: "3px solid #190c1e"}]
+                        ], {width: "600px", border: "3px solid #572c6a", background: "linear-gradient(0deg, #00000000 -100%, #190c1e 100%)", padding: "10px", borderRadius: "15px"}],
+                        ["blank", "20px"],
+
+                        
+                        ["style-column", [
+                            ["raw-html", "Fragment Shop", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["h-line", "580px"],
+                            ["blank", "10px"],
+
                             ["style-column", [
-                                ["style-column", [
-                                    ["style-row", [["raw-html", "Evo-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
-                                    ["text-input", "evoInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
-                                    ["clickable", 111],
-                                ], {width: "241px", height: "125px", borderBottom: "3px solid #190c1e"}],
-                                ["style-column", [
-                                    ["style-row", [["raw-html", "Para-Shards", {color: "white", fontSize: "20px", fontFamily: "monospace"}]], {width: "241px", height: "32px"}],
-                                    ["text-input", "paraInput", {width: "221px", height: "40px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "20px", border: "0px", padding: "0px 10px"}],
-                                    ["clickable", 112],
-                                ], {width: "241px", height: "125px"}],
-                            ], () => {return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) ? {width: "241px", height: "253px", backgroundColor: "#3e1f4c"} : {display: "none !important"}}],
-                        ], {width: "550px", height: "253px", backgroundColor: "#190c1e"}],
-                        ["style-row", [
-                            ["clickable", 113], ["style-row", [], {width: "3px", height: "35px", background: "white"}], ["clickable", 114],
-                        ], {width: "550px", height: "35px", borderTop: "3px solid white", borderBottom: "3px solid white"}],
-                        ["buttonless-microtabs", "frags", { 'border-width': '0px' }],
-                    ], {width: "550px", height: "700px", backgroundColor: "#7d3f98"}],
+
+                            ["style-row", [
+                                ["clickable", 113], ["style-row", [], {width: "3px", height: "35px", background: "#190c1e"}], ["clickable", 114],
+                            ], {width: "550px", height: "35px", borderBottom: "3px solid #190c1e"}],
+                            ["buttonless-microtabs", "frags", { 'border-width': '0px' }],
+
+                            ], {width: "550px", border: "3px solid #190c1e"}]
+
+                        ], {width: "600px", border: "3px solid #572c6a", background: "linear-gradient(0deg, #190c1e 0%, #00000000 200%)", padding: "10px", borderRadius: "15px"}],
+                        ["blank", "20px"]
+                    ], {width: "650px", height: "700px", background: "repeating-linear-gradient(-45deg, #7d3f98 0 15px, #8844a6 0 30px)"}],
                 ],
             },
             "Legendary Gems": {
                 buttonStyle() { return {color: "#222222"}},
                 unlocked() { return true },
                 content: [
-                    ["top-column", [
+                    ["always-scroll-column", [
                         ["blank", "20px"],
                         ["left-row", [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                 ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Red Legendary Gem<hr><small>x" + format(player.pet.gemEffects[0]) + " XP</small></div>"}],
-                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid #bf3000"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                 ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Purple Legendary Gem<hr><small>x" + format(player.pet.gemEffects[1]) + " Pet Points</small></div>"}],
-                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid #bf3000"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                 ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Green Legendary Gem<hr><small>x" + format(player.pet.gemEffects[2]) + " XPBoost</small></div>"}],
                             ], {width: "150px", height: "50px"}],
-                        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid #bf3000", borderRadius: "10px", userSelect: "none"}],
                         ["blank", "20px"],
-                        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + "</h3> of each gem on reset. <h4>(based on XPBoost)" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 201]]],
-                        ["blank", "25px"],
                         ["style-column", [
-                            ["raw-html", "Summoning Altar", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", "(Gems requirements are dependent on the current time of day)", {color: "black", fontSize: "14px", fontFamily: "monospace"}],
+                            ["raw-html", "Legendary Gems", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["h-line", "380px"],
+                            ["blank", "5px"],
+                            ["raw-html", "Reset everything XPBoost does as well as XPBoost to gain legendary gems, which boost various checkback stats and can be used to summon legendary pets.", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ], {width: "400px", padding: "10px", border: "3px solid #bf3000", borderRadius: "15px", backgroundColor: "#1a0600"}],
+                        ["blank", "10px"],
+                        ["raw-html", "Legendary Gem gain is based on XPBoost.", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
+                        ["row", [["clickable", 201]]],
+                        ["blank", "10px"],
+                        ["style-column", [
+                            ["raw-html", "Summoning Altar", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
+                            ["h-line", "580px"],
                             ["blank", "10px"],
-                            ["raw-html", "Current Requirements:", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", "Current requirements:", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", "(based on the current time of day)", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ["blank", "10px"],
                             ["left-row", [
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[0])}, {width: "93px", height: "50px", color: "red", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "148px", height: "50px", borderRight: "2px solid #bf3000"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[1])}, {width: "93px", height: "50px", color: "purple", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "148px", height: "50px", borderRight: "2px solid #bf3000"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[2])}, {width: "95px", height: "50px", color: "green", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
-                            ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "150px", height: "50px", borderRight: "2px solid #bf3000"}],
+                            ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid #bf3000", borderRadius: "10px", userSelect: "none"}],
                             ["left-row", [
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                     ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[3])}, {width: "95px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
+                                ], {width: "150px", height: "50px", borderRight: "2px solid #bf3000"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                                     ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[4]) }, {width: "95px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "150px", height: "50px"}],
-                            ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid white", borderRight: "2px solid white", borderBottom: "2px solid white", borderRadius: "0 0 10px 10px", userSelect: "none"}],
+                            ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid #bf3000", borderRight: "2px solid #bf3000", borderBottom: "2px solid #bf3000", borderRadius: "0 0 10px 10px", userSelect: "none"}],
                             ["blank", "15px"],
-                            ["row", [["bt-clickable", 202]]],
-                            ["blank", "10px"],
+                            ["row", [["bt-clickable", 210]]],
                             ["bar", "summonPity"],
                             ["blank", "10px"],
-                            ["raw-html", "Select Pet to Summon", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", "Select a pet to summon:", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["blank", "5px"],
                             ["row", [["clickable", 301], ["clickable", 302], ["clickable", 303]]],
-                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "10px", borderRadius: "15px"} : {display: "none !important"}}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
+                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "600px", border: "3px solid #bf3000", background: "linear-gradient(0deg, #1a060000 -100%, #1a0600 100%)", padding: "10px", borderRadius: "15px"} : {display: "none !important"}}],
+                        ["blank", "20px"],
+                    ], {width: "650px", height: "700px", background: "repeating-linear-gradient(-45deg, #eed200 0 15px, #edbe00 0 30px)"}],
                 ],
             },
             "???": {
@@ -5517,13 +5695,13 @@ addLayer("pet", {
                 unlocked() { return true },
                 content: [
                     ["scroll-column", [
-                        ["style-column", [
-                            ["raw-html", "Common Pets", {color: "#9bedff", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#1f2f33", borderBottom: "3px solid #9bedff", userSelect: "none"}],
+                            ["style-column", [
+                                ["raw-html", "Common Pets", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "646px", height: "40px", backgroundColor: "#45BDD7", border: "2px solid #0000007f", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["clickable", 1101], ["clickable", 1102], ["clickable", 1103], ["clickable", 1104], ["clickable", 1105]]],
                         ["row", [["clickable", 1106], ["clickable", 1107], ["clickable", 1108], ["clickable", 1109]]],
-                    ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                    ], {width: "650px", height: "525px", background: "repeating-linear-gradient(-45deg, #235F6C 0 15px, #2B7686 0 30px)"}],
                 ],
             },
             "Uncommon": {
@@ -5531,13 +5709,13 @@ addLayer("pet", {
                 unlocked() { return true },
                 content: [
                     ["scroll-column", [
-                        ["style-column", [
-                            ["raw-html", "Uncommon Pets", {color: "#88e688", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#1b2e1b", borderBottom: "3px solid #88e688", userSelect: "none"}],
+                            ["style-column", [
+                                ["raw-html", "Uncommon Pets", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "646px", height: "40px", backgroundColor: "#008300", border: "2px solid #0000007f", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["clickable", 1201], ["clickable", 1202], ["clickable", 1203], ["clickable", 1204], ["clickable", 1205]]],
                         ["row", [["clickable", 1206], ["clickable", 1207], ["clickable", 1208], ["clickable", 1209]]],
-                    ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                    ], {width: "650px", height: "525px", background: "repeating-linear-gradient(-45deg, #004100 0 15px, #004f00 0 30px)"}],
                 ],
             },
             "Rare": {
@@ -5545,13 +5723,13 @@ addLayer("pet", {
                 unlocked() { return player.cb.highestLevel.gte(3000) },
                 content: [
                     ["scroll-column", [
-                        ["style-column", [
-                            ["raw-html", "Rare Pets", {color: "#4e7cff", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#0f1833", borderBottom: "3px solid #4e7cff", userSelect: "none"}],
+                            ["style-column", [
+                                ["raw-html", "Rare Pets", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "646px", height: "40px", backgroundColor: "#0031BF", border: "2px solid #0000007f", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["clickable", 1301], ["clickable", 1302], ["clickable", 1303], ["clickable", 1304], ["clickable", 1305]]],
                         ["row", [["clickable", 1306], ["clickable", 1307]]],
-                    ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                    ], {width: "650px", height: "525px", background: "repeating-linear-gradient(-45deg, #001960 0 15px, #001F77 0 30px)"}],
                 ],
             },
             "Epic": {
@@ -5561,10 +5739,10 @@ addLayer("pet", {
                     ["scroll-column", [
                         ["style-column", [
                             ["raw-html", "Epic Pets", {color: "#cb79ed", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#28182f", borderBottom: "3px solid #cb79ed", userSelect: "none"}],
+                        ], {width: "650px", height: "40px", backgroundColor: "#28182f", borderBottom: "3px solid #cb79ed", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["clickable", 1401], ["clickable", 1402], ["clickable", 1403], ["clickable", 1404]]],
-                    ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                    ], {width: "650px", height: "525px", backgroundColor: "#161616"}],
                 ],
             },
             "Misc.": {
@@ -5572,19 +5750,19 @@ addLayer("pet", {
                 unlocked() { return player.cb.highestLevel.gte(65) },
                 content: [
                     ["top-column", [
-                        ["style-row", [
-                            ["raw-html", "Shards", {color: "#d487fd", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "40px", backgroundColor: "#2a1b32", borderBottom: "3px solid #d487fd", userSelect: "none"}],
+                        ["style-column", [
+                            ["raw-html", "Shards", {color: "#1500bf", fontSize: "20px", fontFamily: "monospace"}],
+                        ], {width: "646px", height: "40px", background: "linear-gradient(90deg, #d487fd, #4b79ff)", border: "2px solid #1500bf", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["clickable", 1011], ["clickable", 1012]]],
                         ["blank", "5px"],
-                        ["style-row", [
-                            ["raw-html", "Crates<br><small>(Ignores crate roll chance)</small>", {color: "#4e7cff", lineHeight: "0.7", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "550px", height: "45px", backgroundColor: "#0f1833", borderTop: "3px solid #4e7cff", borderBottom: "3px solid #4e7cff", userSelect: "none"}],
+                        ["style-column", [
+                            ["raw-html", "Crates<small> (ignores CRC)</small>", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                        ], {width: "646px", height: "40px", backgroundColor: "#4b79ff", border: "2px solid #0000007f", userSelect: "none"}],
                         ["blank", "5px"],
                         ["row", [["bt-clickable", 1021], ["bt-clickable", 1022], ["bt-clickable", 1023], ["bt-clickable", 1024], ["bt-clickable", 1025]]],
                         ["row", [["bt-clickable", 1026]]],
-                    ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                    ], {width: "650px", height: "525px", background: "repeating-linear-gradient(-45deg, #263D80 0 15px, #2F4C9F 0 30px)"}],
                 ],
             },
             "Buyables": {
@@ -5606,9 +5784,9 @@ addLayer("pet", {
                         ["style-column", [
                             ["clickable", 121],
                             ["tooltip-row", [
-                                ["text-input", "fragShopInput", {width: "177px", height: "46px", backgroundColor: "#333", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
+                                ["text-input", "fragShopInput", {width: "177px", height: "46px", backgroundColor: "#572c6a", color: "white", fontSize: "24px", border: "0px", padding: "0px 10px"}],
                                 ["raw-html", () => {return "<div class='bottomTooltip'>Bulk Buy Amount<hr><small>Bulk buying increases costs by:<br>base*(amt*" + commaFormat(Decimal.sub(0.05, buyableEffect("pet", 3)), 3) + "+" + commaFormat(Decimal.add(0.95, buyableEffect("pet", 3)), 3) +  ")*amt</small></div>"}],
-                            ], {width: "197px", height: "46px", borderTop: "2px solid white"}],
+                            ], {width: "197px", height: "46px", borderTop: "2px solid #190c1e"}],
                         ], {width: "197px", height: "98px"}],
                         ["style-column", [
                             ["style-column", [
@@ -5631,42 +5809,44 @@ addLayer("pet", {
                                             return "(" + player.pet.levelables[502][1] + "/" + tmp.pet.levelables[502].xpReq + ")"
                                         case 9:
                                             return "(" + player.pet.levelables[503][1] + "/" + tmp.pet.levelables[503].xpReq + ")"
+                                        case 10:
+                                            return "(" + formatWhole(player.pet.antiSingularityFragments) + ")"
                                         default:
                                             return ""
                                     }
                                 }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ], {width: "350px", height: "50px", borderBottom: "2px solid white"}],
+                            ], {width: "350px", height: "50px", borderBottom: "2px solid #190c1e"}],
                             ["left-row", [
                                 ["tooltip-row", [
-                                    ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", "<img src='resources/checkback/lesser_fragment.png'style='width:36px;height:36px;margin:3px'></img>", {width: "42px", height: "42px", display: "block"}],
                                     ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost1)}, {width: "64px", height: "46px", fontSize: "14px", color: "#9bedff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "115px", height: "46px", borderRight: "2px solid white"}],
+                                ], {width: "115px", height: "46px", borderRight: "2px solid #7d3f98"}],
                                 ["tooltip-row", [
-                                    ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", "<img src='resources/checkback/basic_fragment.png'style='width:36px;height:36px;margin:3px'></img>", {width: "42px", height: "42px", display: "block"}],
                                     ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost2)}, {width: "65px", height: "46px", fontSize: "14px", color: "#88e688", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "116px", height: "46px", borderRight: "2px solid white"}],
+                                ], {width: "116px", height: "46px", borderRight: "2px solid #7d3f98"}],
                                 ["tooltip-row", [
-                                    ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:40px;height:40px;margin:3px'></img>", {width: "46px", height: "46px", display: "block"}],
+                                    ["raw-html", "<img src='resources/checkback/greater_fragment.png'style='width:36px;height:36px;margin:3px'></img>", {width: "42px", height: "42px", display: "block"}],
                                     ["raw-html", () => { return formatShortSimple(player.pet.fragShopCost3)}, {width: "64px", height: "46px", fontSize: "14px", color: "#4e7cff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                                ], {width: "115px", height: "46px", borderRight: "2px solid white"}],
-                            ], {width: "350px", height: "46px", backgroundColor: "black", userSelect: "none"}],
-                        ], {width: "350px", height: "98px", borderLeft: "3px solid white"}],
-                    ], {width: "550px", height: "98px", borderBottom: "3px solid white", backgroundColor: "#161616"}],
+                                ], {width: "115px", height: "46px",}],
+                            ], {width: "346px", height: "42px", backgroundColor: "black", userSelect: "none", border: "2px solid #7d3f98"}],
+                        ], {width: "350px", height: "98px", borderLeft: "3px solid #190c1e"}],
+                    ], {width: "550px", height: "98px", borderBottom: "3px solid #190c1e", backgroundColor: "#7d3f98"}],
                     ["always-scroll-column", [
                         ["style-row", [
-                            ["style-row", [["hoverless-clickable", 131]], {width: "75px", height: "75px", borderLeft: "1px solid white", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 132]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 133]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 134]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 135]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 136]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [["hoverless-clickable", 137]], {width: "74px", height: "75px", borderRight: "1px solid white"}],
-                        ], {height: "75px", borderBottom: "2px solid white"}],
+                            ["style-row", [["hoverless-clickable", 131]], {width: "75px", height: "75px", borderLeft: "1px solid #190c1e", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 132]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 133]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 134]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 135]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 136]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
+                            ["style-row", [["hoverless-clickable", 137]], {width: "74px", height: "75px", borderRight: "1px solid #190c1e"}],
+                        ], {height: "75px", borderBottom: "2px solid #190c1e"}],
                         ["style-row", [
                             ["style-row", [["hoverless-clickable", 138]], {width: "75px", height: "75px", borderLeft: "1px solid white", borderRight: "1px solid white"}],
                             ["style-row", [["hoverless-clickable", 139]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [["hoverless-clickable", 140]], {width: "75px", height: "75px", borderRight: "1px solid white"}],
-                            ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
+                            ["style-row", [["hoverless-clickable", 141]], {width: "75px", height: "75px", borderRight: "1px solid #190c1e"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "75px", height: "75px", borderRight: "1px solid white"}],
                             ["style-row", [], {width: "74px", height: "75px", borderRight: "1px solid white"}],
@@ -5681,7 +5861,7 @@ addLayer("pet", {
                     ["style-column", [
                         ["row", [["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]]],
                         ["row", [["buyable", 5], ["buyable", 6], ["buyable", 7], ["buyable", 8]]],
-                    ], {width: "550px", height: "254px", background: "linear-gradient(0deg, #3e1f4c, #190c1e, #3e1f4c)"}]
+                    ], {width: "550px", height: "254px", backgroundColor: "#190c1e"}]
                 ],
             },
         },
@@ -5701,9 +5881,9 @@ addLayer("pet", {
         ["style-row", [
             ["scroll-column", [
                 ["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15]
-            ], {width: "125px", height: "700px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderRight: "3px solid white"}],
+            ], {width: "172px", height: "700px", background: "repeating-linear-gradient(-45deg, #060917 0 15px, #04060f 0 30px)", borderRight: "3px solid #2e3c99"}],
             ["buttonless-microtabs", "content", { 'border-width': '0px' }],
-        ], {border: "3px solid white"}],
+        ], {border: "3px solid #2e3c99"}],
     ],
     deactivated() {return player.pet.paused},
     layerShown() {return player.startedGame == true },

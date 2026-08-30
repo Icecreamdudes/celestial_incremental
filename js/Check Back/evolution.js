@@ -27,7 +27,7 @@
         11 - Blob
         12 - Egg Man
         13 - Enhance Dust
-        14 - ???
+        14 - John
         15 - Goldsmith
         16 - Insane Face
         */
@@ -184,6 +184,16 @@
                 player.ev.evolutionDisplayIndex = new Decimal(12)
             },
             style: { width: "100px", minHeight: "100px", border: "5px solid #2F2F2F", borderRadius: "0px", padding: "0px" },
+        },
+        113: {
+            title() { return "<img src='resources/Pets/captainEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[209].canClick && !player.ev.evolutionsUnlocked[13] && player.ir.unlocked},
+            tooltip() { return "██████ buttons ███ █████ battle █████████" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(13)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #3F007F", borderRadius: "0px", padding: "0px" },
         },
         115: {
             title() { return "<img src='resources/Pets/diamondsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>"
@@ -669,6 +679,34 @@
                 setLevelableAmount("pet", 1102, new Decimal(1))
             }
         },
+        13: {
+            title() { return "Captain" },
+            description() {
+                return "<div class='evoContainer'><h3>Costs:</h3>" +
+                "<br>"  + formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/12 Paragon Shards" +
+                "<br>"  + formatWhole(player.stagnantSynestia.temporalShard) + "/24 Temporal Shards" +
+                "</div>" +
+                "<div class='evoContainer'><h3>Requires:</h3>" +
+                "<br>"  + formatWhole(player.au2.stars) + "/5e10 Stars" +
+                "<br>"  + formatWhole(player.oi.oil) + "/1e500 Oil" +
+                "</div>"
+            },
+            canClick() {
+                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(12) && player.stagnantSynestia.temporalShard.gte(12)
+                && player.au2.stars.gte("5e10") && player.oi.oil.gte("1e500"))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(60)
+                player.cb.paragonShards = player.cb.paragonShards.sub(12)
+                player.stagnantSynestia.temporalShard = player.stagnantSynestia.temporalShard.sub(24)
+
+                player.ev.evolutionsUnlocked[13] = true
+                setLevelableAmount("pet", 1209, new Decimal(1))
+            }
+        },
         15: {
             title() { return "Diamondsmith"},
             description() {
@@ -681,7 +719,7 @@
                     "<br>"  + formatWhole(getLevelableTier("pet", 103)) + "/3 Unsmith Ascensions" +
                     "<br>"  + formatWhole(getLevelableTier("pet", 110)) + "/1 Coin Fragment Ascensions" +
                      "<br>"  + formatWhole(getLevelableAmount("pet", 1103)) + "/15 Eff. Goldsmith Level" + 
-                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e11 Coin Dust" +
+                     "<br>" + formatWhole(player.ev0.coinDust) + "/1.00e10 Coin Dust" +
                     "</div>"
                     
             }, // placeholder reqs
@@ -693,7 +731,7 @@
                     && getLevelableTier("pet", 103).gte(3)
                     && getLevelableTier("pet", 110).gte(1) 
                     && getLevelableAmount("pet", 1103).gte(15)
-                    && player.ev0.coinDust.gte(1e11)
+                    && player.ev0.coinDust.gte(1e10)
                 )
             },
             onClick() {
@@ -898,40 +936,7 @@
             }
         },
     },
-    bars: {
-        pityEvoBar: {
-            unlocked() { return true },
-            direction: RIGHT,
-            width: 325,
-            height: 50,
-            progress() {
-                return player.cb.pityEvoCurrent.div(player.cb.pityMax)
-            },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {
-                "background-color": "#d487fd",
-            },
-            display() {
-                return "<h5>" + format(player.cb.pityEvoCurrent) + "/" + formatWhole(player.cb.pityMax) + "<h5> Pity until Evolution Shard.</h5>";
-            },
-        },
-        pityParaBar: {
-            unlocked() { return player.cb.highestLevel.gte(250) },
-            direction: RIGHT,
-            width: 325,
-            height: 50,
-            progress() {
-                return player.cb.pityParaCurrent.div(player.cb.pityMax)
-            },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {
-                "background-color": "#4C64FF",
-            },
-            display() {
-                return "<h5>" + format(player.cb.pityParaCurrent) + "/" + formatWhole(player.cb.pityMax) + "<h5> Pity until Paragon Shard.</h5>";
-            },
-        },
-    },
+    bars: {},
     upgrades: {},
     buyables: {},
     milestones: {},
@@ -939,21 +944,6 @@
     infoboxes: {},
     microtabs: {},
     tabFormat: [
-        ["blank", "10px"],
-        ["style-row", [
-            ["style-column", [
-                ["row", [["bar", "pityEvoBar"]]],
-                ["blank", "5px"],
-                ["raw-html", "<h5>Gained from failing to obtain Evo Shards.", { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
-                ["raw-html", "<h5>Reset when you gain uncertain Evo Shards.", { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],        
-            ], {padding: "5px"}],
-            ["style-column", [
-                ["row", [["bar", "pityParaBar"]]],
-                ["blank", "5px"],
-                ["raw-html", "<h5>Gained from failing to obtain Para Shards.", { "color": "#4C64FF", "font-size": "16px", "font-family": "monospace" }],
-                ["raw-html", "<h5>Reset when you gain uncertain Para Shards.", { "color": "#4C64FF", "font-size": "16px", "font-family": "monospace" }],
-            ], () => { return player.cb.highestLevel.gte(250) ? {padding: "5px", borderLeft: "2px solid white"} : {display: "none !important"}}],
-        ], () => { return player.cb.highestLevel.gte(250) ? {width: "682px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} : {width: "340px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} }],
         ["blank", "10px"],
         ["style-column", [
             ["scroll-column", [
@@ -970,7 +960,7 @@
 
                         ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203], ["bt-clickable", 204],
 
-                        ["bt-clickable", 301]
+                        ["bt-clickable", 301],
                     ]],
                 ], {width: "620px", background: "rgba(0,0,0,0.4)", paddingBottom: "10px", borderRadius: "15px"}],
                 ["blank", "5px"],
@@ -1078,7 +1068,7 @@ addLayer("ev8", {
 
         ESCMult = ESCMult.mul(levelableEffect("pet", 1102)[1])
         ESCMult = ESCMult.mul(levelableEffect("ir", 9)[0])
-        if (hasUpgrade("cbs", 102)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 102))
+        if (hasUpgrade("cbs", 19)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 19))
 
         ESCMult = ESCMult.sub(1).mul(buyableEffect("sme", 117).sub(1)).add(1)
 
@@ -1128,7 +1118,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.evoTimers[0].base) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
             title() { return player.ev8.evoTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[1].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[1].base) + " Evo Shards."},
@@ -1140,7 +1134,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.evoTimers[1].base) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() { return player.ev8.evoTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[2].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[2].base) + " Evo Shards."},
@@ -1152,7 +1150,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.evoTimers[2].base) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         14: {
             title() { return player.ev8.evoTimers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[3].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[3].base) + " Evo Shards."},
@@ -1164,7 +1166,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.evoTimers[3].base) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
 
         99: {
@@ -1180,8 +1186,8 @@ addLayer("ev8", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1196,7 +1202,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.paraTimers[0].base) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         102: {
             title() { return player.ev8.paraTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[1].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[1].base) + " Paragon Shards."},
@@ -1208,7 +1218,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.paraTimers[1].base) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         103: {
             title() { return player.ev8.paraTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[2].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[2].base) + " Paragon Shards."},
@@ -1220,7 +1234,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.paraTimers[2].base) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         104: {
             title() { return player.ev8.paraTimers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[3].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[3].base) + " Paragon Shards."},
@@ -1232,7 +1250,11 @@ addLayer("ev8", {
                 doPopup("none", "+" + formatWhole(player.ev8.paraTimers[3].base) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#4b79ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
 
         199: {
@@ -1249,8 +1271,8 @@ addLayer("ev8", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1481,13 +1503,13 @@ addLayer("ev8", {
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+            ], {width: "148px", height: "50px", borderRight: "2px solid #7f7f7f"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], {width: "150px", height: "50px"}],
-        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid #7f7f7f", borderRadius: "10px", userSelect: "none"}],
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

@@ -141,7 +141,6 @@
         if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))
         if (!hasUpgrade("depth2", 103)) player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
-        if (hasUpgrade("ep1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep1", 11))
         if (hasUpgrade("ep2", 4)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep2", 4))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))

@@ -3,6 +3,7 @@
     symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    universe: "D1",
     startData() { return {
         unlocked: true,
 
@@ -60,10 +61,23 @@
         if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
+
         if (player.pet.legPetTimers[0].active) player.du.pointGain = player.du.pointGain.pow(0.7)
         if (getLevelableTier("pu", 305, true)) player.du.pointGain = player.du.pointGain.pow(levelableEffect("pu", 305)[1])
 
-        // =-- SOFTCAP 2 --=
+        // SOFTCAP
+        if (player.du.points.lte(1e10)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).add(1)
+        if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1)
+        if (player.du.pointSoftcap.gt(Infinity)) player.du.pointSoftcap = player.du.pointSoftcap.div(Infinity).pow(player.du.pointSoftcap.add(1).log(Infinity)).mul(Infinity)
+        if (getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.pointSoftcap.sub(1).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0])
+        if (player.pet.legPetTimers[0].active) {
+            player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.25).pow_base(10)
+        }
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("st", 201)[0])
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(buyableEffect("rp", 12))
+
+        // SOFTCAP 2
         player.du.pointSoftcap2 = new Decimal(0.1)
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP2 BEFORE SCALING
@@ -78,22 +92,19 @@
 
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
-
         // POST SOFTCAP MULTIPLIERS
         if (getLevelableTier("pu", 100, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 100)[1])
 
+        //tickspeed
+        player.uni["D1"].tickspeed = new Decimal(1)
+        if (hasMilestone("db", 19)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.db.milestone9Effect)
+        player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(player.dt.timeCapsuleEffect)
+        player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(buyableEffect("dt", 14))
+        if (getLevelableTier("pu", 309, true)) player.uni["D1"].tickspeed = player.uni["D1"].tickspeed.mul(levelableEffect("pu", 309)[0])
+            
         if (player.sma.inStarmetalChallenge) {
             player.du.points = player.du.points.add(player.du.pointGain.mul(delta))
         }
-
-        // SOFTCAP
-        if (player.du.points.lte(1e10)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).add(1)
-        if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1)
-        if (player.du.pointSoftcap.gt(Infinity)) player.du.pointSoftcap = player.du.pointSoftcap.div(Infinity).pow(player.du.pointSoftcap.add(1).log(Infinity)).mul(Infinity)
-        if (getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.pointSoftcap.sub(1).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0])
-        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("st", 201)[0])
-        player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
-        player.du.pointSoftcap = player.du.pointSoftcap.pow(buyableEffect("rp", 12))
 
         //Conditions for aniciffo unlock (very secret)
         if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && player.pet.legPetTimers[0].current.lte(30)) {
@@ -102,6 +113,7 @@
         {
             player.du.aniciffoSummon = false
         }
+
     },
     bars: {},
     upgrades: {},

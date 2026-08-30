@@ -240,7 +240,7 @@ addLayer("tad", {
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+            background: "linear-gradient(150deg, #b2d8d8 -25%, #094242 100%)",
             backgroundOrigin: "border-box",
             borderColor: "#b2d8d8",
             color: "#b2d8d8",
@@ -570,7 +570,7 @@ addLayer("tad", {
         if (player.tad.altInfinities.infected.milestone.gte(3)) player.tad.altInfinities.distorted.effect2 = new Decimal(1e10).pow(player.tad.altInfinities.distorted.effect2)
 
         player.tad.altInfinities.infected.effect1 = amt7.pow(0.7).add(1)
-        player.tad.altInfinities.infected.effect2 = amt7.add(1).log(10).div(20).add(1)
+        player.tad.altInfinities.infected.effect2 = amt7.add(1).log(10).add(1).pow(0.75).sub(1).div(20).add(1).pow(0.75)
 
         player.tad.altInfinities.infested.effect1 = amt8.add(1).log(10).div(2).add(1).pow(2)
         if (player.tad.altInfinities.infested.effect1.gt(100)) player.tad.altInfinities.infested.effect1 = player.tad.altInfinities.infested.effect1.div(100).pow(0.2).mul(100)

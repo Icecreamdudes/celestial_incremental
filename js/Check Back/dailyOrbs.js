@@ -54,12 +54,15 @@ addLayer("ev2", {
         doubleTime: new Decimal(4),
         doubleCurrent: new Decimal(0),
 
+        purchaseExponent: new Decimal(0.8),
+
         orbAssign: 1
     }},
     nodeStyle: {
-        background: "#106ccc",
+        color: "#004099",
+        background: "radial-gradient(circle, #fff 0%, #4bdec3 75%)",
 		backgroundOrigin: "border-box",
-		borderColor: "black",
+		borderColor: "#004099",
     },
     tooltip: "Daily Orbs",
     color: "#96DED1",
@@ -84,12 +87,18 @@ addLayer("ev2", {
         // DAY EFFECT
         player.ev2.dayEffect = player.ev2.day.add(1).log(Decimal.div(10, buyableEffect("ev2", 13))).add(1)
 
+        // PURCHASE EXPONENT
+
+        player.ev2.purchaseExponent = new Decimal(0.8)
+        if (hasUpgrade("ep1", 303)) player.ev2.purchaseExponent = player.ev2.purchaseExponent.add(0.05);
+
         // XP PURCHASE
         player.ev2.xpTime = new Decimal(6).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
         player.ev2.xpGain = new Decimal(0)
         for (let i = 0; i < 8; i++) {
             player.ev2.xpGain = player.ev2.xpGain.add(player.cb.xpTimers[i].average.mul(player.ev2.xpTime.mul(60)))
         }
+        player.ev2.xpGain = player.ev2.xpGain.pow(player.ev2.purchaseExponent)
 
         // PET POINT PURCHASE
         player.ev2.pointTime = new Decimal(4).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
@@ -97,9 +106,11 @@ addLayer("ev2", {
         for (let i = 0; i < 9; i++) {
             player.ev2.pointGain = player.ev2.pointGain.add(player.pet.petAverage[i].mul(player.ev2.pointTime.mul(60)))
         }
+        player.ev2.pointGain = player.ev2.pointGain.pow(player.ev2.purchaseExponent)
 
         // SKIP TIME PURCHASE
         player.ev2.skipTime = new Decimal(2).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
+        player.ev2.skipTime = player.ev2.skipTime.pow(player.ev2.purchaseExponent)
 
         // XP BOOST PURCHASE
         player.ev2.boostTime = new Decimal(5).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
@@ -107,9 +118,11 @@ addLayer("ev2", {
         for (let i = 0; i < 2; i++) {
             player.ev2.boostGain = player.ev2.boostGain.add(player.cb.boostTimers[i].average.mul(player.ev2.boostTime.mul(60)))
         }
+        player.ev2.boostGain = player.ev2.boostGain.pow(player.ev2.purchaseExponent)
 
         // PET PURCHASE
         player.ev2.petTime = new Decimal(6).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
+        player.ev2.petTime = player.ev2.petTime.pow(player.ev2.purchaseExponent)
 
         // DOUBLE TIME
         player.ev2.doubleTime = new Decimal(4).mul(player.ev2.dayEffect).mul(buyableEffect("ev2", 23))
@@ -147,7 +160,11 @@ addLayer("ev2", {
                 player.ev2.day = player.ev2.day.add(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[0].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
             title() {return player.ev2.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[1].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[1].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
@@ -159,7 +176,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[1].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() {return player.ev2.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[2].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[2].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
@@ -171,7 +192,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[2].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         14: {
             title() {return player.ev2.timers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.timers[3].current) + "." : "<h3>+" + formatSimple(player.ev2.timers[3].base.mul(levelableEffect("pet", 2203)[1])) + " Orb"},
@@ -183,7 +208,11 @@ addLayer("ev2", {
                 player.ev2.shardBoost = new Decimal(1)
                 doPopup("none", "+" + formatSimple(player.ev2.timers[3].base) + " orbs!", "Resource Obtained!", 5, "#96DED1", "resources/orbs.png")
             },
-            style: {width: '200px', minHeight: '50px', borderRadius: "30px / 15px"},
+            style() {
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "23px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#96DED1" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         21: {
             title() {
@@ -228,7 +257,7 @@ addLayer("ev2", {
             onClick() {
                 player.ev2.orbs = player.ev2.orbs.sub(player.ev2.orbAssign)
 
-                layers.cb.instantProduction(player.ev2.skipTime.mul(player.ev2.orbAssign).mul(60))
+                layers.cb.instantProduction(player.ev2.skipTime.mul(player.ev2.orbAssign).mul(60), false, false)
             },
             style: {width: "250px", minHeight: "60px", fontSize: "9px", borderRadius: "30px", margin: "5px"},
         },
@@ -750,12 +779,12 @@ addLayer("ev2", {
                 ["raw-html", "<img src='resources/orbs.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatSimple(player.ev2.orbs, 1)}, {width: "68px", height: "50px", color: "#96DED1", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Orbs<hr><small>(Gained from Daily Buttons)</small></div>"],
-            ], {width: "123px", height: "50px", borderRight: "2px solid white"}],
+            ], {width: "123px", height: "50px", borderRight: "2px solid #54a89a"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "68px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
+            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid #54a89a"} : {display: "none !important"}}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "68px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],

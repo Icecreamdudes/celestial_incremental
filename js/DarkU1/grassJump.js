@@ -64,13 +64,14 @@ addLayer("dgj", {
                 if (player.pet.legPetTimers[0].current.lte(0)) return "Reset previous content for<br>grass jumps<br>[ONLY OBTAINABLE IN ECLIPSE]"
                 return "Reset previous content for<br>grass jumps<br>Req: " + format(player.dgj.grassJumpReq) + " dark grass"
             },
-            canClick() { return player.pet.legPetTimers[0].current.gt(0) && player.dgr.grass.gte(player.dgj.grassJumpReq) },
+            canClick() { return player.pet.legPetTimers[0].current.gt(0) && player.dgr.grass.gte(player.dgj.grassJumpReq) && !player.le.universeResetSafety },
             unlocked() { return true },
             onClick() {
                 false ? player.dgj.grassJump = player.dgj.grassJump.add(player.dgj.grassJumpGain) : player.dgj.grassJump = player.dgj.grassJump.add(1);
-                player.dgr.grass = player.dgr.grass.sub(player.dgj.grassJumpReq)
 
-                player.le.starmetalAlloyPause = new Decimal(10)
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

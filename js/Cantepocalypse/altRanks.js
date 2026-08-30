@@ -26,6 +26,10 @@
     automate() {
     },
     nodeStyle() {
+        return {
+            color: "#0000007f",
+            borderColor: "#0000007f",
+        }
     },
     tooltip: "Alternate Ranks",
     color: "#1486ff",

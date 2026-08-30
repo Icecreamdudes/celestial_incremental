@@ -1123,6 +1123,7 @@ let changelog = `<h1>Changelog:</h1><br>
 
 	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
 	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
+	
 		Content:<br>
 			- Added universe δ.<br>
 			- Added the multiverse map.<br>

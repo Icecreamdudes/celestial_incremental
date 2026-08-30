@@ -324,7 +324,7 @@ SB_celestialites.ritualSpirit = {
         arena.gammaTrails = []
         arena.bossActive = false
 
-        player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
+        player.cbs.ascensionShards = ritualDuration < 90 ? player.cbs.ascensionShards.add(2) : player.cbs.ascensionShards.add(1)
         player.ir.battleXP = player.ir.battleXPReq
 
         screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)

@@ -1739,7 +1739,6 @@ class SpaceArena {
                 this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
                 if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {
                     this.ship.lastRollClick = now;
-                    let rect = this.canvas.getBoundingClientRect();
                     let mx = this.mouseX - (this.canvasWidth / 2);
                     let my = this.mouseY - (this.canvasHeight / 2);
                     this.ship.rollingAng = Math.atan2(my, mx);
@@ -1767,13 +1766,9 @@ class SpaceArena {
             if (player.ir.autoShoot) {
                 let now = Date.now();
                 this.dashCooldown = 1000 / this.shipStats.attackSpeed
-                if (now - this.lastDashClick >= this.dashCooldown) {
+                if (now - this.lastDashClick >= this.dashCooldown && this.mouseX != undefined && this.mouseY != undefined) {
                     this.lastDashClick = now;
-                    let rect = this.canvas.getBoundingClientRect();
-                    this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
-                    if (this.ship.dashTarget.x == undefined) {
-                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
-                    }
+                    this.ship.dashTarget = { x: this.mouseX + this.ship.x - this.canvasWidth / 2, y: this.mouseY + this.ship.y - this.canvasHeight / 2 };
                 }
             }
 

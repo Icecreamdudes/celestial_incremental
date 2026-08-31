@@ -23,13 +23,6 @@
             buyUpgrade("dn", 13, false)
             buyUpgrade("dn", 14, false)
         }
-        if (hasUpgrade("ani", 18)) {
-            buyBuyable("dn", 11)
-            buyBuyable("dn", 12)
-            buyBuyable("dn", 13)
-            buyBuyable("dn", 14)
-            buyBuyable("dn", 15)
-        }
     },
     nodeStyle() {
         return {
@@ -54,8 +47,6 @@
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ds", 104))
         if (getLevelableTier("pu", 110, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("pu", 110)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("car", 407)[0])
-        if (getLevelableTier("pu", 403, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(player.sr.radiation.effect)
-        if (getLevelableTier("pu", 403, true)) player.dn.normalityToGet = player.dn.normalityToGet.mul(player.dec.dysprosium154Effect)
 
         //normality softcap
         if (player.dn.normalityToGet.gte(1e120)) player.dn.normalityToGet = player.dn.normalityToGet.div(1e120).pow(0.5).mul(1e120)
@@ -63,7 +54,6 @@
         if (hasUpgrade("sma", 208) && player.pet.legPetTimers[0].current.lte(0)) player.dn.normality = player.dn.normality.add(player.dn.normalityToGet.mul(0.01).mul(delta))
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
-        if (getLevelableTier("pu", 403, true)) player.dn.normalityEffect = player.dn.normalityEffect.pow(buyableEffect("ani", 23))
 
         player.dn.normalityResetSafety = false
     },
@@ -178,7 +168,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Normality"
             },
             buy(mult) {
-                if (!mult && (!hasUpgrade("ani", 18))) {
+                if (!mult) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -187,7 +177,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ani", 18)) this.pay(cost)
+                    this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -212,7 +202,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Normality"
             },
             buy(mult) {
-                if (!mult && (!hasUpgrade("ani", 18))) {
+                if (!mult) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -221,7 +211,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ani", 18)) this.pay(cost)
+                    this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -246,7 +236,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Normality"
             },
             buy(mult) {
-                if (!mult && (!hasUpgrade("ani", 18))) {
+                if (!mult) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -255,7 +245,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ani", 18)) this.pay(cost)
+                    this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -280,7 +270,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Normality"
             },
             buy(mult) {
-                if (!mult && (!hasUpgrade("ani", 18))) {
+                if (!mult) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -289,7 +279,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ani", 18)) this.pay(cost)
+                    this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -314,7 +304,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Normality"
             },
             buy(mult) {
-                if (!mult && (!hasUpgrade("ani", 18))) {
+                if (!mult) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -323,7 +313,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("ani", 18)) this.pay(cost)
+                    this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

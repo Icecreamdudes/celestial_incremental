@@ -87,8 +87,6 @@ addLayer("cbs", {
             player.subtabs["cbs"]['stuff'] = "Refresh Page :(";
         }
 
-        player.cbs.ascensionShards = player.cbs.ascensionShards.floor()
-
         if (cutsceneActive && player.tab == "cbs")
         {
             player.ir.shipHealth = player.ir.shipHealthMax
@@ -98,7 +96,6 @@ addLayer("cbs", {
         player.cbs.ritualCosts[1] = player.cbs.ascensionShards.min(100).pow(0.5).pow_base(2.5).mul(15).floor()
 
         player.cbs.ritualSpiritCooldownMax = new Decimal(21600)
-        if (hasAchievement("achievements", 1013)) player.cbs.ritualSpiritCooldownMax = player.cbs.ritualSpiritCooldownMax.div(1.5)
         player.cbs.ritualSpiritCooldown = player.cbs.ritualSpiritCooldown.sub(delta)
 
         //pylon

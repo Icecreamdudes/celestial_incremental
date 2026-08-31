@@ -74,12 +74,7 @@ BHP.eclipse = {
     name: "Eclipse",
     color: "#b68c18",
     icon: "resources/eclipse.png",
-    health() { 
-        let health = new Decimal(80)
-        if (hasUpgrade("sma", 226)) health = health.add(20)
-        if (hasUpgrade("anl", 31)) health = health.add(10)
-        return health.mul(player.bh.baseMult)
-    },
+    health() {return hasUpgrade("sma", 225) ? new Decimal(100).mul(player.bh.baseMult) : new Decimal(80).mul(player.bh.baseMult)},
     damage() {return hasUpgrade("sma", 226) ? new Decimal(12).mul(player.bh.baseMult) : new Decimal(10).mul(player.bh.baseMult)},
     defense() {return hasUpgrade("sma", 225) ? new Decimal(10).mul(player.bh.baseMult) : new Decimal(5).mul(player.bh.baseMult)},
     regen() {return hasUpgrade("depth2", 101) ? new Decimal(0.1).mul(player.bh.baseMult) : new Decimal(0)},
@@ -123,11 +118,11 @@ BHP.creation = {
     name: "The Creation",
     color: "#8a76b0", //linear-gradient(90deg, #7a97b9, #8a76b0)
     icon: "resources/player.png",
-    health() {return new Decimal(125).mul(player.bh.baseMult)},
-    damage() {return new Decimal(5).mul(player.bh.baseMult)},
-    defense() {return new Decimal(15).mul(player.bh.baseMult)},
-    regen() {return new Decimal(0.4).mul(player.bh.baseMult)},
-    agility() {return new Decimal(5).mul(player.bh.baseMult)},
+    health: new Decimal(125),
+    damage: new Decimal(5),
+    defense: new Decimal(15),
+    regen: new Decimal(0.4),
+    agility: new Decimal(5),
     luck: new Decimal(2.5),
     mending() {return new Decimal(5).mul(player.bh.baseMult)},
     potency() {return new Decimal(5).mul(player.bh.baseMult)},
@@ -136,31 +131,16 @@ BHP.diceFive = {
     name() {return player.zarDungeon.zarDefeated ? "Dice Five's Husk" : "Dice Five"},
     color: "#a3a3a3", 
     icon() {return player.zarDungeon.zarDefeated ? "resources/diceFiveFHusk.png" : "resources/diceFiveF.png"},
+    health: new Decimal(75),
+    damage: new Decimal(3),
+    defense: new Decimal(5),
+    regen: new Decimal(0),
+    agility: new Decimal(5),
     luck: new Decimal(50),
-    health() {return new Decimal(75).mul(player.bh.baseMult)},
-    damage() {return new Decimal(3).mul(player.bh.baseMult)},
-    defense() {return new Decimal(5).mul(player.bh.baseMult)},
-    regen() {return new Decimal(0).mul(player.bh.baseMult)},
-    agility() {return new Decimal(5).mul(player.bh.baseMult)},
     mending: new Decimal(5),
     potency: new Decimal(5),
     mending() {return new Decimal(5).mul(player.bh.baseMult)},
     potency() {return new Decimal(5).mul(player.bh.baseMult)},
-}
-BHP.nox = {
-    name() {return "Nox"},
-    color: "#540212", 
-    icon() {return player.bh.characterData["nox"].batActive ? "resources/noxBat.png" : "resources/nox.png"},
-    health() {return new Decimal(200).mul(player.bh.baseMult)},
-    damage() {return new Decimal(3).mul(player.bh.baseMult)},
-    defense() {return new Decimal(6).mul(player.bh.baseMult)},
-    regen() {return new Decimal(0.5).mul(player.bh.baseMult)},
-    agility() {return new Decimal(8).mul(player.bh.baseMult)},
-    luck: new Decimal(0),
-    mending: new Decimal(10),
-    potency: new Decimal(0),
-    mending() {return new Decimal(10).mul(player.bh.baseMult)},
-    potency() {return new Decimal(0).mul(player.bh.baseMult)},
 }
 BHP.bumpy = {
     name: "Bumpy",

@@ -89,8 +89,6 @@
         // SINGULARITY RAISERS
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
 
-        if (hasUpgrade("s", 32)) player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet.mul(Decimal.mul(delta, Decimal.div(1, 1e12))))
-
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints)) {
             player.s.highestSingularityPoints = player.s.singularityPoints
         }
@@ -112,9 +110,8 @@
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 1))
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 2))
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 3))
-            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(levelableEffect("pu", 403)[1])
 
-            player.s.pylonPassiveEffect = player.points.pow(0.0001).add(1).pow(player.s.pylonTierEffect).pow(buyableEffect("fu", 106))
+            player.s.pylonPassiveEffect = player.points.pow(0.0001).add(1).pow(player.s.pylonTierEffect)
         } else {
             player.s.pylonEnergyPerSecond = new Decimal(0)
 
@@ -386,32 +383,6 @@
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
             style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        32: {
-            title: "Singularity Upgrade XXII",
-            unlocked() { return player.zarDungeon.zarDefeated && player.n.pylonTier.gte(2)},
-            description: "Gain 10^-10% of singularity points per second.",  
-            cost: new Decimal("1e10000"),
-            currencyLocation() { return player.s },
-            currencyDisplayName: "Singularity Points",
-            currencyInternalName: "singularityPoints",
-            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-
-        },
-        33: {
-            title: "Singularity Upgrade XXIII",
-            unlocked() { return true},
-            description: "Steel extends all non-point pre-OTF doom softcaps.",
-            cost: new Decimal("1e20000"),
-            currencyLocation() { return player.s },
-            currencyDisplayName: "Singularity Points",
-            currencyInternalName: "singularityPoints",
-            effect() {
-                return player.gh.steel.pow(0.8).add(1)
-            },
-            effectDisplay() { return formatShort(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
-            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-
         },
     },
     buyables: {
@@ -871,14 +842,6 @@
                 clickClickable("co",1000)
             },
             global:true
-        },
-        {
-            key: "f",
-            description: "View Flipsides",
-            onPress() {
-                if (player.bh.currentStage == "none") player.bh.flipside = true
-            },
-            unlocked() { return player.anl.clearedRooms.roomTemple},
         }
 	]
 })

@@ -398,7 +398,6 @@
     },
     tabFormat: [
         ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", () => {return hasMilestone("hor", 11) ? "Raises point doom softcap's starting point by ^" + format(player.cp.replicantiPointEffect) + "." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

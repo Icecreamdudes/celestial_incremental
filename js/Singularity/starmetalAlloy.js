@@ -119,7 +119,7 @@
             player.subtabs["le"]["stuff"] = "Main"
             player.subtabs.pu["stuff"] = "Selection"
 
-            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "pause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
@@ -149,7 +149,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -174,7 +174,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -1048,36 +1048,6 @@
                             ["upgrade", 226], ["upgrade", 227]]],
                         ["blank", "5px"],
                     ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
-                ]
-            },
-            "Radiation Stones": {
-                buttonStyle() { return { border: "2px solid #74ff8f", borderRadius: "10px" } },
-                unlocked() { return hasUpgrade("ani", 22) },
-                content: [
-                                        ["blank", "25px"],
-                    ["raw-html", () => { return "Both radiation stone types are gained based on dark universe 1 resets and claimed on leaving dark universe 1." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Dark universe 1 reset amount must be greater than amount required for unlocking Aniciffo punchcard." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["style-row", [
-                    ["style-column", [
-                    ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.temporal.amount) + "</h3> temporal radiation stones. (+" + format(player.ani.stones.temporal.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Boosts eclipse shard gain by x" + format(player.ani.stones.temporal.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["layer-proxy", ["ani", [
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22],]],
-                    ["row", [["ex-buyable", 23], ["ex-buyable", 24]]],
-                    ]]],
-                    ], () => {return true ? {width: "700px", height: "400px",}: {display: "none !important"}}],
-                    ["style-column", [
-                    ["raw-html", () => { return "You have <h3>" + format(player.ani.stones.cosmic.amount) + "</h3> cosmic radiation stones. (+" + format(player.ani.stones.cosmic.toGet) + ")" }, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Boosts SMA gain by x" + format(player.ani.stones.cosmic.effect) + "." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["layer-proxy", ["ani", [
-                    ["row", [["ex-buyable", 31], ["ex-buyable", 32],]],
-                    ["row", [["ex-buyable", 33], ["ex-buyable", 34]]],
-                    ]]],
-                    ], () => {return true ? {width: "700px", height: "400px",}: {display: "none !important"}}],
-                    ], () => {return true ? {width: "1400px", height: "400px",}: {display: "none !important"}}],
                 ]
             },
         },

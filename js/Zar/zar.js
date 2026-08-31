@@ -47,8 +47,6 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 109))
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 116))
-        if (hasAchievement("achievements", 1003)) player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(1.2)
-        if (hasAchievement("achievements", 1016)) player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(5)
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {
@@ -57,7 +55,6 @@
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(buyableEffect("sm", 102))
             if (hasUpgrade("cbs", 14)) player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(upgradeEffect("cbs", 14))
             player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(levelableEffect("car", 203)[0])
-            if (hasAchievement("achievements", 1008)) player.za.chancePointsSoftcapEffect = player.za.chancePointsSoftcapEffect.pow(0.95)
         } else
         {
             player.za.chancePointsSoftcapEffect = new Decimal(1)
@@ -76,8 +73,6 @@
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(buyableEffect("zd", 11))
         if (hasUpgrade("car", 15)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(upgradeEffect("car", 15))
         if (player.zarDungeon.zarDefeated) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1000)
-        if (hasAchievement("achievements", 1002)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(1.25)
-        if (hasAchievement("achievements", 1010)) player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.mul(2)
 
         player.za.chancePointsPerSecond = player.za.chancePointsPerSecond.pow(buyableEffect("sm", 115))
         

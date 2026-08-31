@@ -26,7 +26,6 @@
         let onepersec = new Decimal(1)
 
         player.sb.sseEffect = player.sb.storedSpaceEnergy.add(1).log(10).pow(0.5).div(10).add(1)
-        player.sb.sseEffect = player.sb.sseEffect.add(buyableEffect("ani", 32))
     },
     buyables: {
         12: {

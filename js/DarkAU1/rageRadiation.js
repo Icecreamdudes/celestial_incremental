@@ -233,7 +233,7 @@
         },
         14: {
             requirementDescription: "5 Rage Essence",
-            effectDescription() { return "Gain 1% of time radiation per second." },
+            effectDescription() { return "Gain 1% of time radiation per second and ALWAYS autobuy dark grass buyables." },
             done() { return player.rar.essence.amount.gte(5) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #ba4ad3", borderTop: "0px", borderRadius: "0px"}

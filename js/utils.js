@@ -358,8 +358,8 @@ document.onkeydown = function (e) {
 	if(e.target.tagName == "INPUT") return;
 	if(player.ir.inBattle) return; //no hotkeys in battle
 
-	if (!player.bh.bulletHell)
-	{
+	
+
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey
 	if (tmp.gameEnded && !player.keepGoing) return;
@@ -380,7 +380,6 @@ document.onkeydown = function (e) {
 			&& readData(k.unlocked) !== false && !tmp[k.layer].hotkeys[k.id].isAutomated
 		)
 			k.onPress()
-	}
 	}
 }
 

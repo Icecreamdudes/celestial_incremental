@@ -713,16 +713,6 @@ function celestialiteReward(gain) {
         player.zd.pips = player.zd.pips.add(gain.pips)
         bhLog("<span style='color: #a3a3a3'>" + str + "You gained " + formatWhole(gain.pips) + " dice pips! (You have " + formatWhole(player.zd.pips) + ")")
     }
-    if (gain.celestialRadiation) {
-        gain.celestialRadiation = gain.celestialRadiation.mul(generalMult).floor()
-        player.anl.celestialRadiation = player.anl.celestialRadiation.add(gain.celestialRadiation)
-        bhLog("<span style='color: #6491e6'>" + str + "You gained " + formatWhole(gain.celestialRadiation) + " celestial radiation! (You have " + formatWhole(player.anl.celestialRadiation) + ")")
-    }
-    if (gain.ascensionShards) {
-        gain.ascensionShards = gain.ascensionShards.mul(generalMult).floor()
-        player.cbs.ascensionShards = player.cbs.ascensionShards.add(gain.ascensionShards)
-        bhLog("<span style='color: #c6f7ff'>" + str + "WOW! You gained " + formatWhole(gain.ascensionShards) + " shards of ascension! (You have " + formatWhole(player.cbs.ascensionShards) + ")")
-    }
 }
 
 function celestialiteDeath() {
@@ -784,43 +774,7 @@ function celestialiteDeath() {
                     player.bh.characters[i].skills[j].variables = {}
                 }
             }
-            if (player.bh.currentStage == "roomA") 
-            {
-                player.anl.clearedRooms.roomA = true
-                if (inChallenge("anl", 13)) player.anl.challenges[13] = 1
-            }
-            if (player.bh.currentStage == "roomB") 
-            {
-                player.anl.clearedRooms.roomB = true
-            }
-            if (player.bh.currentStage == "roomC") 
-            {
-                player.anl.clearedRooms.roomC = true
-            }
-            if (player.bh.currentStage == "roomTemple") 
-            {
-                player.anl.clearedRooms.roomTemple = true
-            }
-            if (player.bh.currentStage == "roomD") 
-            {
-                player.anl.clearedRooms.roomD = true
-            }
-            if (player.bh.currentStage == "roomE") 
-            {
-                player.anl.clearedRooms.roomE = true
-            }
-            if (player.bh.currentStage == "roomF") 
-            {
-                player.anl.clearedRooms.roomF = true
-            }
-            if (player.bh.currentStage == "roomG") 
-            {
-                player.anl.clearedRooms.roomG = true
-            }
-            if (player.bh.currentStage == "roomH") 
-            {
-                player.anl.clearedRooms.roomH = true
-            } //lazy code but who cares
+
             player.bh.currentStage = "none"
             player.bh.combo = new Decimal(0)
             player.bh.celestialite.id = "none"
@@ -830,23 +784,12 @@ function celestialiteDeath() {
             if (player.bh.characters[0].id == "creation") { //change when there is a formal unlock for the creation
                 player.bh.characters[0].id = "none"
                 player.bh.characterData[player.bh.characterSelection].selected = true
-                player.bh.characterData["creation"].selected = false
                 for (let i = 0; i < 4; i++) {
                     player.bh.characters[0].skills[i].id = "none"
                 }
             }
-            if (player.bh.characters[2].id == "nox") { //change when there is a formal unlock for the creation
-                player.bh.characters[2].id = "none"
-                player.bh.characterData[player.bh.characterSelection].selected = true
-                for (let i = 0; i < 4; i++) {
-                    player.bh.characters[2].skills[i].id = "none"
-                }
-                player.bh.characterData["nox"].selected = false
-            }
             player.zarDungeon.reachedZar = false
             player.zarDungeon.reachedZar2 = false
-
-            player.bh.flipside = false
         }
     }
 
@@ -1155,7 +1098,6 @@ function screenFlash(message, duration) {
     }, duration);
 }
 
-
 function stagnantUpdate(time) {
     let delta = time/5
     for (let z = 0; z < 5; z++) {
@@ -1317,10 +1259,8 @@ function stagnantUpdate(time) {
 
 
 const navHealSound = new Audio('music/navHeal.mp3');
-const heartbeatSound = new Audio('music/heartbeat.mp3');
 function navHealEffect(x, y)
 {
-    navHealSound.volume = options.musicVolume / 10;
     if (options.musicToggle) navHealSound.play();
     if (typeof options !== 'undefined' && options.toggleParticle === false) return;
 
@@ -1463,324 +1403,6 @@ function navHealEffect(x, y)
     }, 1, 'normal', {x: x, y: y});
 }
 
-const ZAWARUDOOO = new Audio('music/zaowlrd.mp3');
-const ZAWARUDOOOR = new Audio('music/zawarudoresume.mp3');
-
-let frozenElements = [];
-let activeEffectId = null;
-
-function launchZaWarudoDOMEffect(startX, startY, durationMs) {
-    // Dynamically sync volume right before playing
-    ZAWARUDOOO.volume = options.musicVolume / 10;
-    ZAWARUDOOOR.volume = options.musicVolume / 10;
-
-    // Play sound
-    if (options.musicToggle) ZAWARUDOOO.play();
-
-    // 1. Create a unique ID so we can clean up easily later
-    const effectId = 'za-warudo-' + Date.now();
-
-    // 2. Generate and inject the CSS animations dynamically
-    const style = document.createElement('style');
-    style.id = effectId + '-style';
-    style.textContent = `
-        @keyframes zw-ripple {
-            0% {
-                width: 0px;
-                height: 0px;
-                opacity: 1;
-                filter: invert(100%) contrast(200%);
-            }
-            100% {
-                width: 300vmax;
-                height: 300vmax;
-                opacity: 0.3;
-                filter: invert(100%) contrast(100%);
-            }
-        }
-        @keyframes zw-freeze {
-            0% { filter: none; }
-            100% { filter: grayscale(100%) contrast(130%) brightness(85%); } /* Settle into deep frozen gray */
-        }
-        .zw-overlay-container {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 999999;
-            overflow: hidden;
-        }
-        .zw-ripple-wave {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.22);
-            box-shadow: 0 0 50px 20px rgba(255, 255, 255, 0.6), inset 0 0 30px rgba(255,255,255,0.8);
-            backdrop-filter: invert(100%) grayscale(100%);
-            -webkit-backdrop-filter: invert(100%) grayscale(100%);
-            animation: zw-ripple 4000ms cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
-        }
-        .zw-frozen-world {
-            animation: zw-freeze 3200ms ease-out forwards;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // 3. Create the full-screen visual wrapper
-    const container = document.createElement('div');
-    container.id = effectId;
-    container.className = 'zw-overlay-container';
-
-    // 4. Create the expanding wave element centered at the starting point
-    const ripple = document.createElement('div');
-    ripple.className = 'zw-ripple-wave';
-    ripple.style.left = `${startX}px`;
-    ripple.style.top = `${startY}px`;
-    container.appendChild(ripple);
-    document.body.appendChild(container);
-
-    // 5. Freeze the rest of the web page behind the wave
-    const targetsToFreeze = Array.from(document.body.children).filter(el => el !== container && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE');
-    targetsToFreeze.forEach(el => el.classList.add('zw-frozen-world'));
-
-    // 6. Clean up everything once the duration ends so the world unfreezes
-    setTimeout(() => {
-        // Remove the freeze filter from the elements
-        targetsToFreeze.forEach(el => el.classList.remove('zw-frozen-world'));
-
-        //play resume sound
-        if (options.musicToggle) ZAWARUDOOOR.play();
-
-        // Wipe out the injected elements and styles entirely
-        container.remove();
-        style.remove();
-    }, durationMs);
-}
-function resumeZaWarudoTime() {
-    // Sync resume sound volume
-    ZAWARUDOOOR.volume = options.musicVolume / 10;
-
-    // Play resume sound
-    if (options.musicToggle) ZAWARUDOOOR.play();
-
-    // No global variables needed: query the DOM directly for any frozen element
-    const frozenElements = document.querySelectorAll('.zw-frozen-world');
-    frozenElements.forEach(el => el.classList.remove('zw-frozen-world'));
-
-    // Wipe out the remaining DOM overlay and injected styles entirely
-    const effectId = 'za-warudo-effect';
-    const container = document.getElementById(effectId);
-    const style = document.getElementById(effectId + '-style');
-    
-    if (container) container.remove();
-    if (style) style.remove();
-}
-
-function bloodGlow(duration) {
-    // Remove any existing blood glow
-    heartbeatSound.volume = options.musicVolume / 10;
-    if (options.musicToggle) heartbeatSound.play();
-    const old = document.getElementById("blood-glow-overlay");
-    if (old) {
-        clearInterval(old._pulseInterval);
-        clearTimeout(old._removeTimeout);
-        old.remove();
-    }
-
-    const overlay = document.createElement("div");
-    overlay.id = "blood-glow-overlay";
-    overlay.style.position = "fixed";
-    overlay.style.left = "0";
-    overlay.style.top = "0";
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.pointerEvents = "none";
-    overlay.style.zIndex = "99998";
-    overlay.style.background = "transparent";
-    overlay.style.transition = "box-shadow 0.50s ease-in-out";
-
-    // Use inset box-shadow to paint only the edges
-    const intense   = "inset 0 0 120px 60px rgba(114, 2, 2, 0.85), inset 0 0 60px 20px rgba(114, 2, 2, 0.55)";
-    const dim       = "inset 0 0 80px 30px rgba(44, 1, 1, 0.55), inset 0 0 40px 10px rgba(44, 1, 1, 0.35)";
-    let bright = false;
-
-    overlay.style.boxShadow = dim;
-    document.body.appendChild(overlay);
-
-    // Pulse between dim and intense
-    const pulseInterval = setInterval(() => {
-        bright = !bright;
-        overlay.style.boxShadow = bright ? intense : dim;
-    }, 500);
-
-    overlay._pulseInterval = pulseInterval;
-
-    // Fade out over the last 400ms then remove
-    const removeTimeout = setTimeout(() => {
-        clearInterval(pulseInterval);
-        overlay.style.transition = "box-shadow 0.4s ease-out, opacity 0.4s ease-out";
-        overlay.style.opacity = "0";
-        setTimeout(() => { if (overlay.parentNode) overlay.remove(); }, 400);
-        heartbeatSound.pause();
-    }, duration - 400);
-
-    overlay._removeTimeout = removeTimeout;
-}
-
-const navNecromanceSound = new Audio('music/necromance.mp3');
-function navNecromanceEffect(x, y)
-{
-    navNecromanceSound.volume = options.musicVolume / 10;
-    if (options.musicToggle) navNecromanceSound.play(); // Assuming a corresponding sound exists
-    if (typeof options !== 'undefined' && options.toggleParticle === false) return;
-
-    // create a small skull SVG generator used for particle images
-    const skullSvg = (size, color) => {
-        const s = Math.max(8, Math.round(size));
-        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + s + "' height='" + s + "' viewBox='0 0 100 100'>" +
-            "<path d='M50,10 C30,10 10,30 10,50 C10,70 30,90 50,90 C70,90 90,70 90,50 C90,30 70,10 50,10 Z M35,40 C38,40 40,42 40,45 C40,48 38,50 35,50 C32,50 30,48 30,45 C30,42 32,40 35,40 Z M65,40 C68,40 70,42 70,45 C70,48 68,50 65,50 C62,50 60,48 60,45 C60,42 62,40 65,40 Z M50,60 C55,60 60,65 60,70 L40,70 C40,65 45,60 50,60 Z' fill='" + color + "'/>" +
-            "</svg>";
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-    };
-
-    // helper: create a white-circle SVG data URI to use as mask (no external images)
-    const circleMask = (size) => {
-        const s = Math.max(4, Math.round(size));
-        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + s + "' height='" + s + "' viewBox='0 0 " + s + " " + s + "'><circle cx='" + (s/2) + "' cy='" + (s/2) + "' r='" + (s/2) + "' fill='white' /></svg>";
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-    };
-
-    const ellipseMask = (w, h) => {
-        const ww = Math.max(4, Math.round(w));
-        const hh = Math.max(4, Math.round(h));
-        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + ww + "' height='" + hh + "' viewBox='0 0 " + ww + " " + hh + "'><ellipse cx='" + (ww/2) + "' cy='" + (hh/2) + "' rx='" + (ww/2) + "' ry='" + (hh/2) + "' fill='white' /></svg>";
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-    };
-
-    // determine a screen-centered origin (fallback to provided x,y)
-    const screenInfo = (function(){
-        if (typeof tmp !== 'undefined' && tmp.other && tmp.other.screenWidth && tmp.other.screenHeight) return {x: tmp.other.screenWidth/2, y: tmp.other.screenHeight/2, w: tmp.other.screenWidth, h: tmp.other.screenHeight};
-        if (typeof window !== 'undefined' && window.innerWidth && window.innerHeight) return {x: window.innerWidth/2, y: window.innerHeight/2, w: window.innerWidth, h: window.innerHeight};
-        return {x: x, y: y, w: 1024, h: 768};
-    })();
-
-    // Create a main controller particle that spawns the full-screen aura and skull particles
-    makeParticles({
-        time: 6,
-        x: screenInfo.x,
-        y: screenInfo.y,
-        width: 48,
-        height: 48,
-        image: circleMask(12),
-        angle: 0,
-        spread: 0,
-        offset: 0,
-        speed: 0,
-        rotation: 0,
-        gravity: 0,
-        fadeOutTime: 3,
-        fadeInTime: 0.3,
-        update() {
-            if (!this._init) {
-                this._init = true;
-                this._total = this.time;
-                this._start = this.width;
-
-                // full-screen muted green aura
-                const auraSize = Math.max(screenInfo.w, screenInfo.h) * 1.6;
-                makeParticles({
-                    time: 6,
-                    x: screenInfo.x,
-                    y: screenInfo.y,
-                    width: auraSize,
-                    height: auraSize,
-                    image: circleMask(auraSize),
-                    color: 'rgba(100, 150, 100, 0.12)', // Muted green
-                    angle: 0,
-                    spread: 0,
-                    offset: 0,
-                    speed: 0,
-                    rotation: 0,
-                    gravity: 0,
-                    fadeOutTime: 3,
-                    fadeInTime: 0.3,
-                }, 1, 'normal', {x: screenInfo.x, y: screenInfo.y});
-
-                // spawn many skull particles across the screen
-                const skullCount = 80;
-                for (let i = 0; i < skullCount; i++) {
-                    const px = Math.random() * screenInfo.w;
-                    const py = Math.random() * screenInfo.h;
-                    const psize = 8 + Math.random() * 28;
-                    const hue = Math.random() > 0.5 ? 260 + Math.random() * 40 : 100 + Math.random() * 40; // Muted purple or muted green
-                    const color = `hsla(${hue}, 50%, 50%, ${0.9 - Math.random() * 0.6})`; // Muted tones
-                    makeParticles({
-                        time: 2 + Math.random() * 4,
-                        x: px,
-                        y: py,
-                        width: psize,
-                        height: psize,
-                        image: skullSvg(psize, color),
-                        color: color,
-                        angle: Math.random() * 360,
-                        spread: 0,
-                        offset: 0,
-                        speed: Math.random() * 6,
-                        rotation: (Math.random() - 0.5) * 6,
-                        gravity: 0,
-                        fadeOutTime: 1 + Math.random() * 2,
-                        fadeInTime: 0.05,
-                    }, 1, 'normal', {x: px, y: py});
-                }
-
-                // small energetic sparks (muted colors)
-                const sparks = 60;
-                for (let i = 0; i < sparks; i++) {
-                    const px = Math.random() * screenInfo.w;
-                    const py = Math.random() * screenInfo.h;
-                    const psize = 4 + Math.random() * 10;
-                    const hue = Math.random() > 0.5 ? 260 + Math.random() * 40 : 100 + Math.random() * 40; // Muted purple or muted green
-                    const col = `hsla(${hue}, 40%, 40%, ${0.8 - Math.random() * 0.6})`; // Muted tones
-                    makeParticles({
-                        time: 1 + Math.random() * 3,
-                        x: px,
-                        y: py,
-                        width: psize,
-                        height: psize,
-                        image: circleMask(psize),
-                        color: col,
-                        angle: Math.random() * 360,
-                        spread: 360,
-                        offset: 0,
-                        speed: 12 + Math.random() * 28,
-                        rotation: (Math.random() - 0.5) * 6,
-                        gravity: 0.02,
-                        fadeOutTime: 1 + Math.random() * 2,
-                        fadeInTime: 0.02,
-                    }, 1, 'normal', {x: px, y: py});
-                }
-            }
-
-            // pulse the controller particle for a subtle scaling effect
-            const prog = 1 - (this.time / this._total);
-            const pulse = 1 + Math.sin(prog * Math.PI * 2) * 0.06;
-            this.width = this._start * (pulse + prog * 6);
-            this.height = this.width;
-        }
-    }, 1, 'normal', {x: x, y: y});
-}
-
-const flipsideSound = new Audio('music/flipside.wav');
-function tempInvertColors(durationInSeconds = 4) {
-    flipsideSound.volume = options.musicVolume / 10;
-    if (options.musicToggle) flipsideSound.play();
-	// Apply the CSS filter to invert colors on the root html element
-	document.documentElement.style.filter = 'invert(100%) hue-rotate(180deg)';
-	document.documentElement.style.transition = 'filter 2s ease';
-  
-	// Set a timer to revert the styles back to normal after the duration
-	setTimeout(() => {
-	  document.documentElement.style.filter = '';
-	}, durationInSeconds * 1000);
-}
 function bumpyUltimateEffect(x, y) {
     if (typeof options !== 'undefined' && options.toggleParticle === false) return;
 

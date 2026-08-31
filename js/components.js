@@ -1330,7 +1330,6 @@ function loadVue() {
 		</div>
 	`
 	})
-	
 
 	// data = id of clickable
 	Vue.component('clickable', {
@@ -1372,7 +1371,7 @@ function loadVue() {
 			},
 		},
 	})
-	
+
 	// data = id of clickable
 	Vue.component('bt-clickable', {
 		props: ['layer', 'data'],
@@ -1964,7 +1963,6 @@ function loadVue() {
 				<button v-bind:class="{can: true, bhSkill: true, selected: player.bh.skillData[name].selected[0] != 'none', outline: player.bh.skillSelection == name}" v-bind:style="[{background: BHP[value.char].color, filter: (value.char == 'general' || value.char == player.bh.characters[Math.floor(player.bh.inputSkillSelection/4)].id) ? '' : 'brightness(25%)'}, BHA[name].style ? run(BHA[name].style, BHA[name]) : {}]" v-on:click="player.bh.skillSelection = name"
 				v-html="value.name + '<br><small>[Lv ' + formatWhole(player.bh.skillData[name].level.add(1)) + '/' + formatWhole(player.bh.skillData[name].maxLevel.add(1)) + ']'"></button>
 			</div>
-
 		</div>
 		`,
 	})

@@ -37,13 +37,7 @@ addLayer("bpl", {
                 amount: new Decimal(0),
                 gain: new Decimal(0),
                 effect: new Decimal(1),
-            },
-            mutated: {
-                amount: new Decimal(0),
-                gain: new Decimal(0),
-                effect: new Decimal(1),
-                effect2: new Decimal(1),
-            },
+            }
         },
     }},
     automate() {
@@ -89,12 +83,10 @@ addLayer("bpl", {
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.ho.effects.pollen.effect)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bee.preAlephMult)
         player.bpl.pollenGain = player.bpl.pollenGain.mul(buyableEffect("tw", 33))
-        if (hasUpgrade("ne", 603)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("ne", 603))
 
         // POWER MODIFIERS
         if (hasUpgrade("al", 126)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.01)
         player.bpl.pollenGain = player.bpl.pollenGain.pow(buyableEffect("n", 52))
-        if (hasUpgrade("n", 82)) player.bpl.pollenGain = player.bpl.pollenGain.pow(1.2)
 
         // SOFTCAP
         let softcap = 0.3
@@ -136,16 +128,12 @@ addLayer("bpl", {
             player.bpl.roles.worker.gain = player.bpl.pollen.div(100).mul(eff)
             player.bpl.roles.queen.gain = player.bpl.pollen.div(5000).mul(eff)
             player.bpl.roles.empress.gain = player.bpl.pollen.div(1e175).mul(eff).pow(0.2)
-            player.bpl.roles.mutated.gain = player.bpl.pollen.div(1e300).mul(eff).pow(0.1).div(1e5)
         } else {
             player.bpl.roles.drone.gain = player.bpl.pollen.pow(0.5).div(125).mul(eff)
             player.bpl.roles.worker.gain = player.bpl.pollen.pow(0.5).div(1e6).mul(eff)
             player.bpl.roles.queen.gain = player.bpl.pollen.pow(0.5).div(1.25e10).mul(eff)
             player.bpl.roles.empress.gain = player.bpl.pollen.div("1e525").mul(eff).pow(0.1)
-            player.bpl.roles.mutated.gain = player.bpl.pollen.div("1e1500").mul(eff).pow(0.08).div(1e5)
         }
-
-        if (hasUpgrade("ne", 601)) player.bpl.roles.mutated.gain = player.bpl.roles.mutated.gain.mul(upgradeEffect("ne", 601))
 
         // Bee Role Effect Calculations
         if (player.bpl.roles.drone.amount.gte(1e100)) {
@@ -166,15 +154,11 @@ addLayer("bpl", {
         if (hasUpgrade("al", 104)) player.bpl.roles.queen.effect = player.bpl.roles.queen.effect.add(player.bpl.roles.queen.amount.pow(0.15))
         player.bpl.roles.empress.effect = player.bpl.roles.empress.amount.add(1).log(10).div(4).add(1)
 
-        player.bpl.roles.mutated.effect = player.bpl.roles.mutated.amount.mul(10).pow(1.75).add(1)
-        player.bpl.roles.mutated.effect2 = player.bpl.roles.mutated.amount.pow(0.4).div(3).add(1)
-
         // Bee Role Automation
         if (hasUpgrade("al", 103)) player.bpl.roles.drone.amount = player.bpl.roles.drone.amount.add(player.bpl.roles.drone.gain.mul(delta))
         if (hasUpgrade("al", 106) && hasUpgrade("bpl", 13)) player.bpl.roles.worker.amount = player.bpl.roles.worker.amount.add(player.bpl.roles.worker.gain.div(2).mul(delta))
         if (hasUpgrade("al", 109) && hasUpgrade("bpl", 16)) player.bpl.roles.queen.amount = player.bpl.roles.queen.amount.add(player.bpl.roles.queen.gain.div(4).mul(delta))
         if (hasUpgrade("al", 124)) player.bpl.roles.empress.amount = player.bpl.roles.empress.amount.add(player.bpl.roles.empress.gain.div(10).mul(delta))
-        if (hasUpgrade("n", 92)) player.bpl.roles.mutated.amount = player.bpl.roles.mutated.amount.add(player.bpl.roles.mutated.gain.mul(delta))
     },
     clickables: {
         11: {
@@ -221,17 +205,6 @@ addLayer("bpl", {
                 player.bpl.pollen = new Decimal(0)
             },
             style: { width: '175px', minHeight: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px' },
-        },
-        15: {
-            title: "Convert your Pollen into Mutated Bees",
-            tooltip() {return "+" + formatSimple(player.bpl.roles.mutated.gain, 1) + "<br>On Conversion"},
-            canClick() { return player.bpl.roles.mutated.gain.gte(0.01)},
-            unlocked: true,
-            onClick() {
-                player.bpl.roles.mutated.amount = player.bpl.roles.mutated.amount.add(player.bpl.roles.mutated.gain)
-                player.bpl.pollen = new Decimal(0)
-            },
-            style: { width: '175px', minHeight: '85px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px' },
         },
     },
     bars: {
@@ -461,16 +434,6 @@ addLayer("bpl", {
                 ["style-row", [], {width: "4px", height: "60px", background: "white"}],
                 ["clickable", 14],
             ], () => { return hasUpgrade("al", 120) ? {borderBottom: "4px solid white"} : {display: "none !important"} }],
-            ["style-row", [
-                ["style-column", [
-                    ["raw-html", () => { return "You have " + format(player.bpl.roles.mutated.amount) + " Mutated Bees."}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", () => { return "(Kept on pre-nest resets)"}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                    ["raw-html", () => { return "Which boosts bee bread/s gain by x" + format(player.bpl.roles.mutated.effect)}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                    ["raw-html", () => { return "and dark radiation gain by x" + format(player.bpl.roles.mutated.effect2)}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                ], {width: "525px"}],
-                ["style-row", [], {width: "4px", height: "85px", background: "white"}],
-                ["clickable", 15],
-            ], () => { return hasMilestone("rar", 11) ? {borderBottom: "4px solid white"} : {display: "none !important"} }],
         ], {userSelect: "none", backgroundColor: "#332a1f", borderLeft: "4px solid white", borderRight: "4px solid white", borderTop: "4px solid white"}],
     ],
     layerShown() { return player.startedGame && (player.bee.totalResearch.gte(25) && player.bee.path != 2) || (player.tad.hiveExpand && player.bee.totalResearch.gte(120) && player.bee.path == 2)},

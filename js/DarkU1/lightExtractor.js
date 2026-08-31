@@ -77,12 +77,7 @@
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(buyableEffect("funify", 12))
         if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
-        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.tr.radiation.effect)
-        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.sr.spaceDecayEffect)
-        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(upgradeEffect("mr", 14))
-
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
-        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(player.dec.electronsEffect)
         if (hasMilestone("prj", 107)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.prj.milestone107Effect)
 
 
@@ -113,10 +108,6 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ani.stones.cosmic.effect)
-        if (hasAchievement("achievements", 1001)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.5)
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("anl", 12))
-    
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
         if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
 
@@ -130,11 +121,6 @@
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
         if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
-        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.tr.radiation.effect)
-        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.sr.spaceDecayEffect)
-        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("mr", 14))
-            
-        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.pow(player.dec.electronsEffect)
         if (hasMilestone("prj", 107)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.prj.milestone107Effect)
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
@@ -148,7 +134,6 @@
         if (hasMilestone("db", 102)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
         if (hasMilestone("db", 108)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
-        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.ani.stones.temporal.effect)
         if (hasMilestone("prj", 104)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4));
 
         player.le.eclipseShardsValue = new Decimal(5)
@@ -170,7 +155,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
             player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
             if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
@@ -232,13 +217,10 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
-
-                player.ani.stones.cosmic.amount = player.ani.stones.cosmic.amount.add(player.ani.stones.cosmic.toGet)
-
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -296,12 +278,13 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+                if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
+                if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(7)) completeAchievement("achievements", 1206);
+                if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(7200)) completeAchievement("achievements", 1215);
 
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
-
-                player.ani.stones.temporal.amount = player.ani.stones.temporal.amount.add(player.ani.stones.temporal.toGet)
-
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -740,57 +723,6 @@
         player.funify.buyables[16] = new Decimal(0)
 
         player.du.noPunchcards = true
-
-        if (player.pu.selectedPunchcards[3] == 403) {
-            player.pu.selectedPunchcards[3] = 0
-            player.pu.legendarySelectionActive = false
-        }
-
-        //decay
-        player.dec.decay = new Decimal(0)
-        player.dec.stability = new Decimal(0)
-        player.dec.carbon14 = new Decimal(0)
-        player.dec.nitrogen14 = new Decimal(0)
-        player.dec.magnesium28 = new Decimal(0)
-        player.dec.aluminum28 = new Decimal(0)
-        player.dec.silicon28 = new Decimal(0)
-
-        player.dec.dysprosium154 = new Decimal(0)
-        player.dec.gadolinium150 = new Decimal(0)
-        player.dec.samarium146 = new Decimal(0)
-        player.dec.neodymium142 = new Decimal(0)
-
-        player.subtabs["dec"]["stuff"] = "Main"
-
-        player.dec.buyables[31] = new Decimal(0)
-        player.dec.buyables[32] = new Decimal(0)
-        player.dec.buyables[33] = new Decimal(0)
-        player.dec.buyables[34] = new Decimal(0)
-        player.dec.buyables[35] = new Decimal(0)
-        player.dec.buyables[36] = new Decimal(0)
-
-        player.dec.electrons = new Decimal(0)
-        player.dec.alphaParticles = new Decimal(0)
-
-        player.dec.buyables[41] = new Decimal(0)
-        player.dec.buyables[42] = new Decimal(0)
-        player.dec.buyables[43] = new Decimal(0)
-        player.dec.buyables[44] = new Decimal(0)
-        player.dec.buyables[45] = new Decimal(0)
-        player.dec.buyables[46] = new Decimal(0)
-        player.dec.buyables[47] = new Decimal(0)
-        player.dec.buyables[48] = new Decimal(0)
-        player.dec.buyables[49] = new Decimal(0)
-        player.dec.buyables[51] = new Decimal(0)
-        player.dec.buyables[52] = new Decimal(0)
-        player.dec.buyables[53] = new Decimal(0)
-        player.dec.buyables[54] = new Decimal(0)
-        player.dec.buyables[55] = new Decimal(0)
-        player.dec.buyables[56] = new Decimal(0)
-        player.dec.buyables[57] = new Decimal(0)
-        player.dec.buyables[58] = new Decimal(0)
-        player.dec.buyables[59] = new Decimal(0)
-
     },
     upgrades: {
         11: {

@@ -59,12 +59,6 @@
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("car", 401)[0])
         if (hasUpgrade("darkTemple", 2)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("darkTemple", 2))
         if (getLevelableTier("pu", 200, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 200)[0])
-        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 403)[0])
-        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.mr.radiation.effect)
-        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.hr.radiation.effect)
-        if (getLevelableTier("pu", 403, true) && hasUpgrade("hr", 14)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("hr", 14))
-        if (getLevelableTier("pu", 403, true)) player.du.pointGain = player.du.pointGain.mul(player.dec.alphaParticlesEffect)
-        if (getLevelableTier("pu", 403, true) && hasUpgrade("hr", 19)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("hr", 19))
 
         player.du.pointGain = player.du.pointGain.div(player.du.pointSoftcap)
 
@@ -95,8 +89,6 @@
         player.du.secondSoftcapStart = new Decimal(1.79e308)
         player.du.secondSoftcapStart = player.du.secondSoftcapStart.pow(player.ds.spaceEnergyEffect)
         if (getLevelableTier("pu", 306, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(levelableEffect("pu", 306)[1])
-        if (getLevelableTier("pu", 403, true)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(buyableEffect("tr", 19))
-        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 19)) player.du.secondSoftcapStart = player.du.secondSoftcapStart.mul(upgradeEffect("mr", 19))
 
         // =-- SOFTCAP 2 END --=
         if (player.du.pointGain.gte(player.du.secondSoftcapStart)) player.du.pointGain = player.du.pointGain.div(player.du.secondSoftcapStart).pow(player.du.pointSoftcap2).mul(player.du.secondSoftcapStart)
@@ -115,10 +107,7 @@
         }
 
         //Conditions for aniciffo unlock (very secret)
-        if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && (player.pet.legPetTimers[0].current.lte(30) || hasUpgrade("ani", 18)) && player.bl.noxDefeated && player.pet.legPetTimers[0].active) {
-            player.du.aniciffoSummon = true
-        } else if (player.le.resetAmount.gte(10) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && !player.pet.legPetTimers[0].active && hasUpgrade("ani", 16)) 
-        {
+        if (player.le.resetAmount.gte(8) && player.du.noPunchcards && player.s.pylonBuilt && player.pet.legPetTimers[0].current.lte(30)) {
             player.du.aniciffoSummon = true
         } else
         {

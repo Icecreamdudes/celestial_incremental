@@ -109,6 +109,7 @@
         {
             player.cf.headsSoftcapEffect = player.cf.heads.sub(player.cf.headsSoftcapStart).pow(0.35).add(1)
             if (hasUpgrade("cbs", 16)) player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(upgradeEffect("cbs", 16)[0])
+            player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(levelableEffect("car", 205)[0])
             if (hasAchievement("achievements", 1011)) player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(0.95)
         } else
         {
@@ -130,6 +131,7 @@
         {
             player.cf.tailsSoftcapEffect = player.cf.tails.sub(player.cf.tailsSoftcapStart).pow(0.35).add(1)
             if (hasUpgrade("cbs", 16)) player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(upgradeEffect("cbs", 16)[1])
+            player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(levelableEffect("car", 207)[0])
             if (hasAchievement("achievements", 1011)) player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(0.95)
         } else
         {

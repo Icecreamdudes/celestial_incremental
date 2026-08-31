@@ -27,6 +27,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     info.subSpeed = values.subSpeed || 2.5
     info.subMove = values.subMove || "bounce"
     info.moveWithSub = values.moveWithSub || true
+    info.blindness = values.blindness || false  // radius of visibility around player; false = disabled
     info.active = true;
     if (info.values.saveContent) {
         let storedInfo = localStorage.getItem('bhState')
@@ -527,6 +528,83 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         })
     }
 
+    info.spawnDarkKnife = (id) => {
+        // Pick a random edge and a random point on that edge
+        const edge = Math.floor(Math.random() * 4); // 0=top, 1=right, 2=bottom, 3=left
+        let bx, by, angle;
+        if (edge === 0) { // top
+            bx = Math.random() * info.width;
+            by = -info.actions[id].knifeLength;
+            angle = Math.random() * Math.PI + Math.PI / 2; // downwards, but can be angled
+        } else if (edge === 1) { // right
+            bx = info.width + info.actions[id].knifeLength;
+            by = Math.random() * info.height;
+            angle = Math.random() * Math.PI + Math.PI; // leftwards
+        } else if (edge === 2) { // bottom
+            bx = Math.random() * info.width;
+            by = info.height + info.actions[id].knifeLength;
+            angle = Math.random() * Math.PI - Math.PI / 2; // upwards
+        } else { // left
+            bx = -info.actions[id].knifeLength;
+            by = Math.random() * info.height;
+            angle = Math.random() * Math.PI; // rightwards
+        }
+        // Optionally, bias angle toward player
+        if (Math.random() < 1) {
+            let dx = info.px - bx;
+            let dy = info.py - by;
+            if (info.subArena && info.moveWithSub) {
+                dx += info.subx
+                dy += info.suby
+            }
+            angle = Math.atan2(dy, dx);
+        }
+        // Store initial spawn for path line
+        let bname = "knife"
+        if (info.actions[id].knifeLength >= 100 || info.actions[id].knifeWidth >= 25) bname = "bigKnife"
+        info.bullets.push({
+            name: bname,
+            boxRender: true, // RENDER IN BOX
+            x: bx,
+            y: by,
+            angle: angle,
+            r: info.actions[id].knifeLength,
+            width: info.actions[id].knifeWidth,
+            vx: Math.cos(angle) * info.actions[id].enemySpeed,
+            vy: Math.sin(angle) * info.actions[id].enemySpeed,
+            draw(b, bossCtx) {
+                // Draw path line (red, thin)
+                bossCtx.save();
+                bossCtx.strokeStyle = 'rgba(136, 136, 255, 0.1)';
+                bossCtx.lineWidth = 16;
+                bossCtx.beginPath();
+                bossCtx.moveTo(b.x, b.y);
+                // Draw line in the direction of the knife, long enough to cross the arena
+                let farX = b.x + Math.cos(b.angle) * (info.width + info.height);
+                let farY = b.y + Math.sin(b.angle) * (info.width + info.height);
+                bossCtx.lineTo(farX, farY);
+                if (!options.performanceMode) bossCtx.shadowColor = '#88f';
+                if (!options.performanceMode) bossCtx.shadowBlur = 16;
+                bossCtx.stroke();
+                bossCtx.restore();
+                // Draw knife
+                bossCtx.save();
+                bossCtx.translate(b.x, b.y);
+                bossCtx.rotate(b.angle);
+                bossCtx.beginPath();
+                bossCtx.moveTo(-b.r / 2, -b.width / 2);
+                bossCtx.lineTo(b.r / 2, 0);
+                bossCtx.lineTo(-b.r / 2, b.width / 2);
+                bossCtx.closePath();
+                bossCtx.fillStyle = '#88f';
+                if (!options.performanceMode) bossCtx.shadowColor = '#88f';
+                if (!options.performanceMode) bossCtx.shadowBlur = 16;
+                bossCtx.fill();
+                bossCtx.restore();
+            }
+        })
+    }
+
     // Fire aimed knife burst
     info.fireKnifeBurst = (id) => {
         // Knives are thrown from far outside the arena, all aimed at the current player position
@@ -687,8 +765,21 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         return true;
     }
 
-    function animate(ts) {
+function animate(ts) {
         if (!info.active) return;
+        
+        // Calculate real time vs animation time for time stop logic
+        let nowReal = Date.now();
+        if (!info.lastRealTime) info.lastRealTime = nowReal;
+        let dtReal = nowReal - info.lastRealTime;
+        info.lastRealTime = nowReal;
+
+        if (!info.lastTs) info.lastTs = ts;
+        let dtTs = ts - info.lastTs;
+        info.lastTs = ts;
+
+        let isTimeStopped = typeof player !== 'undefined' && player?.anl?.marcelTimeStop;
+
         // End early if celestialite is dead
         if (player.bh.celestialite.id == "none" || (player.bh.celestialite.health.lte(0) && !BHC[player.bh.celestialite.id].immortal)) {
             info.exitAction()
@@ -711,7 +802,10 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             player.universe = "U3"
             options.fullscreen = info.full;
             localStorage.setItem('bhState', JSON.stringify(info));
+            if (bhState.timer) clearTimeout(bhState.timer)
+            return;
         }
+        
         // End early if all characters are dead
         if (info.allCharactersDead()) {
             info.exitAction()
@@ -740,14 +834,74 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             return;
         }
 
+        // --- TIME STOP LOGIC ---
+        // Shift timestamps if time is stopped so attacks don't skip ahead or expire instantly
+        if (isTimeStopped) {
+            info.endTime += dtReal;
+            info.startTime += dtReal;
+            
+            for (let i in info.actions) {
+                let act = info.actions[i];
+                if (typeof act.startTime === 'number') act.startTime += dtReal;
+                if (typeof act.lastTime === 'number') act.lastTime += dtTs;
+                if (typeof act._seqStart === 'number') act._seqStart += dtReal;
+                if (typeof act.lastLaserTime === 'number') act.lastLaserTime += dtTs;
+                if (typeof act.lastKatanaTime === 'number') act.lastKatanaTime += dtTs;
+                if (typeof act.lastTick === 'number') act.lastTick += dtTs;
+                if (typeof act.lastRain === 'number') act.lastRain += dtReal;
+                if (typeof act.lastCircleLaser === 'number') act.lastCircleLaser += dtReal;
+                if (typeof act.lastRadialKatana === 'number') act.lastRadialKatana += dtReal;
+                if (typeof act.lastSpikeDamageTime === 'number') act.lastSpikeDamageTime += dtReal;
+            }
+
+            for (let b of info.bullets) {
+                if (typeof b.spawnTime === 'number') b.spawnTime += dtReal;
+                if (typeof b.lastShotTime === 'number') b.lastShotTime += dtTs;
+                if (typeof b.lastBurstTime === 'number') b.lastBurstTime += dtReal;
+                if (typeof b.explodeTime === 'number') b.explodeTime += dtReal;
+                if (typeof b._lastBounce === 'number') b._lastBounce += dtTs;
+                if (typeof b.timer === 'number') b.timer += dtReal;
+            }
+        }
+
+        // Check if duration has ended
+        if (Date.now() >= info.endTime) {
+            info.exitAction()
+            if (!options.bhKeyboard) {
+                window.removeEventListener("mousemove", mouseHandler);
+                window.removeEventListener("touchmove", touchHandler);
+                window.removeEventListener("click", clickHandler);
+            } else {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+                window.removeEventListener("click", clickHandler);
+            }
+            if (info.greenMode && !options.bhKeyboard) {
+                window.removeEventListener("keydown", keydownHandler);
+                window.removeEventListener("keyup", keyupHandler);
+            }
+            if (overlay.parentNode) overlay.remove();
+            bhState.active = false;
+            info.active = false;
+            player.subtabs["bh"]["stuff"] = "battle";
+            pauseUniverseAll(["BH"], "unpause", true)
+            player.universe = "U3"
+            options.fullscreen = info.full;
+            if (info.timed) bhAttack(Decimal.mul(player.bh.celestialite.damage, 3), 3, 0, "allPlayer")
+            localStorage.setItem('bhState', JSON.stringify(info));
+            return;
+        }
+
         // Move sub-arena (with DVD bounce logic)
-        if (info.subArena) {
-            info.subx += info.subvx;
-            info.suby += info.subvy;
-            if (info.subx <= 0) { info.subx = 0; info.subvx = Math.abs(info.subvx); }
-            if (info.subx >= info.width - info.subWidth) { info.subx = info.width - info.subWidth; info.subvx = -Math.abs(info.subvx); }
-            if (info.suby <= 0) { info.suby = 0; info.subvy = Math.abs(info.subvy); }
-            if (info.suby >= info.height - info.subHeight) { info.suby = info.height - info.subHeight; info.subvy = -Math.abs(info.subvy); }
+        if (!isTimeStopped) {
+            if (info.subArena) {
+                info.subx += info.subvx;
+                info.suby += info.subvy;
+                if (info.subx <= 0) { info.subx = 0; info.subvx = Math.abs(info.subvx); }
+                if (info.subx >= info.width - info.subWidth) { info.subx = info.width - info.subWidth; info.subvx = -Math.abs(info.subvx); }
+                if (info.suby <= 0) { info.suby = 0; info.subvy = Math.abs(info.subvy); }
+                if (info.suby >= info.height - info.subHeight) { info.suby = info.height - info.subHeight; info.subvy = -Math.abs(info.subvy); }
+            }
         }
 
         // Move Player (normal or blue-mode platformer; skipped in greenMode — player is locked)
@@ -847,6 +1001,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Check for reaching goal
         if (info.goalType) {
+            // (existing goal logic...)
             if (info.goalType == "cell") {
                 info.distToGoal = Math.sqrt((info.px - (info.goal.x * info.goal.d + info.goal.d / 2)) ** 2 + (info.py - (info.goal.y * info.goal.d + info.goal.d / 2)) ** 2);
             } else {
@@ -885,15 +1040,18 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             }
         }
 
-        // Bullet movement/spawn code
-        for (let i in info.actions) {
-            if (info.actions[i].moveFunc && (!info.actions[i].duration || Date.now() < info.startTime + (info.actions[i].duration*1000))) info = info.actions[i].moveFunc(info, ts, i)
-        }
+        // Make bullets stop moving if time is stopped
+        if (!isTimeStopped) {
+            // Bullet movement/spawn code
+            for (let i in info.actions) {
+                if (info.actions[i].moveFunc && (!info.actions[i].duration || Date.now() < info.startTime + (info.actions[i].duration*1000))) info = info.actions[i].moveFunc(info, ts, i)
+            }
 
-        // Move bullets
-        for (let b of info.bullets) {
-            b.x += b.vx;
-            b.y += b.vy;
+            // Move bullets
+            for (let b of info.bullets) {
+                if (b.vx !== undefined) b.x += b.vx;
+                if (b.vy !== undefined) b.y += b.vy;
+            }
         }
 
         // Remove bullets that go off screen
@@ -916,14 +1074,66 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Draw bullets (white circles) on bossCanvas
         info.bossCtx.clearRect(0, 0, bossCanvas.width, bossCanvas.height);
-        info.bossCtx.save();
-        if (!options.performanceMode) info.bossCtx.shadowColor = "#fff";
-        if (!options.performanceMode) info.bossCtx.shadowBlur = 8;
-        for (let b of info.bullets) {
-            if (b.boxRender) continue
-            b.draw(b, info.bossCtx)
+
+        if (info.blindness) {
+            const gameRect = gameCanvas.getBoundingClientRect();
+            const drawX = (info.subArena && info.moveWithSub) ? info.subx + info.px : info.px;
+            const drawY = (info.subArena && info.moveWithSub) ? info.suby + info.py : info.py;
+            const screenX = gameRect.left + drawX;
+            const screenY = gameRect.top + drawY;
+            const radius = info.blindness;
+
+            // Step 1: draw bullets onto an offscreen canvas
+            const offscreen = document.createElement("canvas");
+            offscreen.width = bossCanvas.width;
+            offscreen.height = bossCanvas.height;
+            const offCtx = offscreen.getContext("2d");
+            if (!options.performanceMode) offCtx.shadowColor = "#fff";
+            if (!options.performanceMode) offCtx.shadowBlur = 8;
+            for (let b of info.bullets) {
+                if (b.boxRender) continue;
+                b.draw(b, offCtx);
+            }
+
+            // Step 2: clip offscreen to the visible circle, stamp onto bossCanvas
+            info.bossCtx.save();
+            info.bossCtx.beginPath();
+            info.bossCtx.arc(screenX, screenY, radius, 0, Math.PI * 2);
+            info.bossCtx.clip();
+            info.bossCtx.drawImage(offscreen, 0, 0);
+            info.bossCtx.restore();
+
+            // Step 3: draw the black surround as a donut — fill rect, re-open the circle with destination-out
+            // Use a second offscreen so destination-out doesn't touch the bullets already on bossCanvas
+            const darkCanvas = document.createElement("canvas");
+            darkCanvas.width = bossCanvas.width;
+            darkCanvas.height = bossCanvas.height;
+            const darkCtx = darkCanvas.getContext("2d");
+
+            darkCtx.fillStyle = "black";
+            darkCtx.fillRect(0, 0, darkCanvas.width, darkCanvas.height);
+
+            darkCtx.globalCompositeOperation = "destination-out";
+            const gradient = darkCtx.createRadialGradient(screenX, screenY, radius * 0.65, screenX, screenY, radius);
+            gradient.addColorStop(0, "rgba(0,0,0,1)");
+            gradient.addColorStop(1, "rgba(0,0,0,0)");
+            darkCtx.beginPath();
+            darkCtx.arc(screenX, screenY, radius, 0, Math.PI * 2);
+            darkCtx.fillStyle = gradient;
+            darkCtx.fill();
+
+            // Stamp the darkness on top of bossCanvas — bullets inside the hole show through
+            info.bossCtx.drawImage(darkCanvas, 0, 0);
+        } else {
+            info.bossCtx.save();
+            if (!options.performanceMode) info.bossCtx.shadowColor = "#fff";
+            if (!options.performanceMode) info.bossCtx.shadowBlur = 8;
+            for (let b of info.bullets) {
+                if (b.boxRender) continue;
+                b.draw(b, info.bossCtx);
+            }
+            info.bossCtx.restore();
         }
-        info.bossCtx.restore();
 
         // Only call takeDamage once per frame if hit
         let playerHit = false;
@@ -931,6 +1141,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
         // Check collision between player and each bullet
         for (let b of info.bullets) {
+            // Yellow spears that are still approaching or orbiting cannot hit the player yet
+            if (b.yellow && b._yellowState !== "striking") continue;
             let playerX = info.px
             let playerY = info.py
             if (info.subArena) {playerX += info.subx; playerY += info.suby}
@@ -1013,6 +1225,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
             for (let b of info.bullets) {
                 if (b._greenDeflected) continue;
+                // Yellow spears orbiting the shield are not yet striking – skip shield check
+                if (b.yellow && b._yellowState !== "striking") continue;
 
                 // Build spear segment endpoints in arena coords.
                 const halfLen = (b.r ?? 40) * 0.45;
@@ -1039,6 +1253,13 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 const dy = closestY - info.py;
                 const dist = Math.sqrt(dx*dx + dy*dy);
 
+                // Blue spear parry range: flag for visual pulse. Window is 4× tolerance wide so
+                // the player has a generous amount of time to react before the spear hits the shield.
+                if (b.blue) {
+                    b._inParryRange = (dist >= shieldR - (spearHalf + shieldHalf) * 4 &&
+                                       dist <= shieldR + (spearHalf + shieldHalf) * 4);
+                }
+
                 // Distance must be within the shield ring
                 const tolerance = spearHalf + shieldHalf;
                 if (dist < shieldR - tolerance || dist > shieldR + tolerance) continue;
@@ -1048,22 +1269,55 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
 
                 // Check if this angle is within the shield arc
                 if (Math.abs(angDiff(pointAngle, shieldCenterAngle)) <= halfArc) {
-                    b._greenDeflected = true;
                     if (b.red) {
                         // Red spear hits shield → deal damage and disappear
+                        b._greenDeflected = true;
                         b._hitPlayer = true;
                         redShieldHit = true;
+                    } else if (b.blue) {
+                        // Blue spear at the shield ring:
+                        //   • parry input pending → consume it, vanish the spear, no damage
+                        //   • no input → let it pass through (keep moving toward the player body)
+                        if (info._parryPressed) {
+                            info._parryPressed = false; // consume press for this one spear only
+                            b._greenDeflected = true;
+                            b._blueParried = true;      // skip damage in the body-hit strip below
+                            b._hitPlayer = true;        // flag for removal
+                        }
+                        // If not parried: do NOT set _greenDeflected — spear keeps moving
                     } else {
-                        // Green spear hits shield → deflect back
+                        // Green or yellow spear hits shield → deflect back
+                        b._greenDeflected = true;
                         b.vx *= -1;
                         b.vy *= -1;
                         if (b.angle != null) b.angle = Math.atan2(b.vy, b.vx);
+                        if (b.yellow) b._yellowState = "striking";
                     }
                 }
             }
 
+            // If a parry press is still unused (player clicked early, before the spear reached
+            // the shield ring), apply it to the nearest in-range blue spear.
+            if (info._parryPressed) {
+                let closest = null, closestDist = Infinity;
+                for (let b of info.bullets) {
+                    if (!b.blue || b._greenDeflected) continue;
+                    if (!b._inParryRange) continue;
+                    const dx = b.x - info.px, dy = b.y - info.py;
+                    const d = Math.sqrt(dx*dx + dy*dy);
+                    if (d < closestDist) { closestDist = d; closest = b; }
+                }
+                if (closest) {
+                    closest._greenDeflected = true;
+                    closest._blueParried = true;
+                    closest._hitPlayer = true;
+                }
+                info._parryPressed = false;
+            }
+
             // Strip playerHit for spears deflected before reaching the diamond.
             // Red spears that reach the player body bounce back with no damage.
+            // Yellow spears that reach the player body deal damage (like green).
             if (playerHit) {
                 playerHit = false;
                 for (let b of info.bullets) {
@@ -1078,7 +1332,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                             b.vy *= -1;
                             if (b.angle != null) b.angle = Math.atan2(b.vy, b.vx);
                         } else {
-                            // Green spear hits player body → deal damage and disappear
+                            // Green, yellow, or blue spear hits player body → deal damage and disappear
                             playerHit = true;
                             b._hitPlayer = true;
                         }
@@ -1087,8 +1341,11 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
                 }
             }
 
-            // Red shield hit deals damage regardless of the strip above
+            // Red/yellow shield hit deals damage regardless of the strip above
             if (redShieldHit) playerHit = true;
+
+            // Parry input is consumed per-spear above; clear any remainder here as a safety net
+            info._parryPressed = false;
         }
 
         // Take damage (only when in a BH stage)
@@ -1098,7 +1355,9 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
             if (typeof window.lastDamageTime !== "number") window.lastDamageTime = Date.now();
                 if (now - window.lastDamageTime > 100) {
                     window.lastDamageTime = now;
-                    bhAttack(player.bh.celestialite.damage.mul(0.25), 3, 0, "randomPlayer")
+                    if (!info.greenMode && !info.blueMode) bhAttack(player.bh.celestialite.damage.mul(0.666), 3, 0, "randomPlayer")
+                    if (info.blueMode) bhAttack(player.bh.celestialite.damage.mul(0.333), 3, 0, "randomPlayer")
+                    if (info.greenMode) bhAttack(player.bh.celestialite.damage.mul(2), 3, 0, "randomPlayer")
                 }
         }
 
@@ -1131,6 +1390,7 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         if (info.cellSize) {
             info.ctx.save();
             info.ctx.strokeStyle = "#fff";
+            if (player.bh.currentStage == "roomTemple") info.ctx.strokeStyle = "#88f"
             info.ctx.lineWidth = 3;
             for (let y = 0; y < info.rows; y++) {
                 for (let x = 0; x < info.cols; x++) {
@@ -1334,6 +1594,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
     }
     function keydownHandler(e) {
         updateKeys(e, true);
+        // Blue-spear parry: any keypress counts as a parry attempt in greenMode
+        if (info.greenMode) info._parryPressed = true;
         // If blueMode and space pressed, jump
         if (info.blueMode && (e.code === 'Space' || e.key === ' ' || e.key === 'Spacebar')) {
             if (info.onGround) {
@@ -1353,6 +1615,8 @@ function bulletHell(actions, values = {}, exitAction = () => {}) {
         e.preventDefault();
     }
     function clickHandler(e) {
+        // Blue-spear parry: any click counts as a parry attempt in greenMode
+        if (info.greenMode) info._parryPressed = true;
         // Green-mode: clicking sets the shield direction to whichever of the 8 sectors was clicked
         if (info.greenMode) {
             const cr = gameCanvas.getBoundingClientRect();
@@ -3814,8 +4078,13 @@ BHB.greenSpearRain = {
         const wid      = act.spearWidth  ?? 12;
         const speed    = act.spearSpeed  ?? 5;
         const perSec   = act.spearPerSec ?? act.bulletPerSec ?? 2;
-        const redChance = act.redChance  ?? 0; // 0–1 probability of a spear being red
+        const redChance    = act.redChance    ?? 0; // 0–1 probability of a spear being red
+        const yellowChance = act.yellowChance ?? 0; // 0–1 probability of a spear being yellow
+        const blueChance   = act.blueChance   ?? 0; // 0–1 probability of a spear being blue (parry)
+        const orbitTriggerDist = act.orbitTriggerDist ?? 120;
+        const orbitSpeed       = act.orbitSpeed       ?? 0.055;
         const fourDir = act.fourDir ?? false;
+        const noRepeatDir = act.noRepeatDir ?? false; // if true, consecutive spears never share a direction
 
         if (!act.lastTime) act.lastTime = ticks;
         const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * perSec);
@@ -3823,9 +4092,20 @@ BHB.greenSpearRain = {
         const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
 
         for (let i = 0; i < toSpawn; i++) {
-            const isRed = Math.random() < redChance;
-            var dirIdx = Math.floor(Math.random() * 8);
-            if (fourDir) dirIdx = Math.floor(Math.random() * 4) * 2;
+            const roll = Math.random();
+            const isYellow = roll < yellowChance;
+            const isBlue   = !isYellow && roll < yellowChance + blueChance;
+            const isRed    = !isYellow && !isBlue && roll < yellowChance + blueChance + redChance;
+            const dirCount = fourDir ? 4 : 8;
+            let dirIdx;
+            if (noRepeatDir && dirCount > 1) {
+                do { dirIdx = Math.floor(Math.random() * dirCount); } while (dirIdx === act._lastDirIdx);
+                if (fourDir) dirIdx *= 2;
+            } else {
+                dirIdx = Math.floor(Math.random() * dirCount);
+                if (fourDir) dirIdx *= 2;
+            }
+            act._lastDirIdx = fourDir ? dirIdx / 2 : dirIdx;
             const inboundAngle = DIR_ANGLES[dirIdx] + Math.PI;
             const vx = Math.cos(inboundAngle) * speed;
             const vy = Math.sin(inboundAngle) * speed;
@@ -3835,6 +4115,7 @@ BHB.greenSpearRain = {
             const bx = cx + Math.cos(DIR_ANGLES[dirIdx]) * (Math.max(info.width, info.height) * 0.75 + margin);
             const by = cy + Math.sin(DIR_ANGLES[dirIdx]) * (Math.max(info.width, info.height) * 0.75 + margin);
             const angle = Math.atan2(vy, vx);
+            const outAngle = DIR_ANGLES[dirIdx];
             info.bullets.push({
                 name: "greenSpear",
                 boxRender: true,
@@ -3844,15 +4125,28 @@ BHB.greenSpearRain = {
                 width: wid,
                 angle,
                 red: isRed,
+                yellow: isYellow,
+                blue: isBlue,
+                _yellowState: isYellow ? "approaching" : undefined,
+                _orbitAngle:  isYellow ? outAngle : undefined,
+                _orbitTarget: isYellow ? (outAngle + Math.PI) : undefined,
+                _orbitDir:    isYellow ? 1 : undefined,
+                _orbitRadius: isYellow ? orbitTriggerDist : undefined,
+                _orbitTriggerDist: isYellow ? orbitTriggerDist : undefined,
+                _orbitSpeed:  isYellow ? orbitSpeed : undefined,
+                _strikeSpeed: isYellow ? speed : undefined,
+                _yellowDeflected: false,
                 _greenDeflected: false,
                 draw(b, ctx) {
                     ctx.save();
                     ctx.translate(b.x, b.y);
                     ctx.rotate(b.angle);
-                    const shaftColor  = b.red ? "#f44" : "#0f0";
-                    const shaftFade   = b.red ? "rgba(255,40,40,0)" : "rgba(0,255,80,0)";
-                    const tipColor    = b.red ? "#f88" : "#4f4";
-                    const glowColor   = b.red ? "#f44" : "#0f0";
+                    // Blue spears pulse white when in parry range (visual cue to press key/click)
+                    const parryPulse = b.blue && b._inParryRange && (Math.floor(Date.now() / 80) % 2 === 0);
+                    const shaftColor  = b.yellow ? "#ff0"               : b.red ? "#f44"            : b.blue ? (parryPulse ? "#fff" : "#44f")  : "#0f0";
+                    const shaftFade   = b.yellow ? "rgba(255,255,0,0)"  : b.red ? "rgba(255,40,40,0)": b.blue ? (parryPulse ? "rgba(255,255,255,0)" : "rgba(40,40,255,0)") : "rgba(0,255,80,0)";
+                    const tipColor    = b.yellow ? "#ffe566"             : b.red ? "#f88"            : b.blue ? (parryPulse ? "#fff" : "#88f")  : "#4f4";
+                    const glowColor   = b.yellow ? "#ffcc00"             : b.red ? "#f44"            : b.blue ? (parryPulse ? "#fff" : "#44f")  : "#0f0";
                     const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
                     grad.addColorStop(0,   shaftFade);
                     grad.addColorStop(0.3, shaftColor);
@@ -3862,7 +4156,7 @@ BHB.greenSpearRain = {
                     ctx.lineTo( b.r * 0.4, 0);
                     ctx.lineWidth   = b.width;
                     ctx.strokeStyle = grad;
-                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 10; }
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 20 : 10; }
                     ctx.stroke();
                     ctx.beginPath();
                     ctx.moveTo(b.r * 0.65, 0);
@@ -3870,13 +4164,62 @@ BHB.greenSpearRain = {
                     ctx.lineTo(b.r * 0.3,  b.width * 0.7);
                     ctx.closePath();
                     ctx.fillStyle = tipColor;
-                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 16; }
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 24 : 16; }
                     ctx.fill();
                     ctx.restore();
                 }
             });
         }
         if (toSpawn > 0) act.lastTime = ticks;
+
+        // ── Update yellow spear orbit state for spears spawned by this action ──
+        // _orbitTick guard prevents double-processing when multiple actions run the same loop.
+        for (let b of info.bullets) {
+            if (!b.yellow || b._yellowDeflected || b._yellowState === "striking") continue;
+            if (b._orbitTick === ticks) continue;
+            b._orbitTick = ticks;
+            const px   = info.px;
+            const py   = info.py;
+            const dx   = b.x - px;
+            const dy   = b.y - py;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const trigDist = b._orbitTriggerDist ?? 120;
+            const orbitSpd = b._orbitSpeed ?? 0.055;
+
+            if (b._yellowState === "approaching" && dist <= trigDist) {
+                b._yellowState = "orbiting";
+                b._orbitAngle  = Math.atan2(dy, dx);
+                b._orbitTarget = b._orbitAngle + Math.PI;
+                b._orbitDir    = 1;
+                b._orbitRadius = dist;
+                b.vx = 0;
+                b.vy = 0;
+            } else if (b._yellowState === "orbiting") {
+                b._orbitAngle += orbitSpd * b._orbitDir;
+                b._orbitAngle  = ((b._orbitAngle + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                const orbitR   = b._orbitRadius ?? trigDist;
+                b.x = px + Math.cos(b._orbitAngle) * orbitR;
+                b.y = py + Math.sin(b._orbitAngle) * orbitR;
+                const tangent  = b._orbitAngle + (b._orbitDir > 0 ? Math.PI / 2 : -Math.PI / 2);
+                b.angle = tangent;
+                b.vx = 0;
+                b.vy = 0;
+                let targetNorm = ((b._orbitTarget + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                let diff = Math.abs(((b._orbitAngle - targetNorm + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
+                if (diff < orbitSpd * 1.5) {
+                    b._yellowState = "striking";
+                    b._orbitAngle  = targetNorm;
+                    b.x = px + Math.cos(targetNorm) * orbitR;
+                    b.y = py + Math.sin(targetNorm) * orbitR;
+                    const strikeAngle = targetNorm + Math.PI;
+                    const spd = b._strikeSpeed ?? speed;
+                    b.vx  = Math.cos(strikeAngle) * spd;
+                    b.vy  = Math.sin(strikeAngle) * spd;
+                    b.angle = Math.atan2(b.vy, b.vx);
+                }
+            }
+        }
+
         return info;
     },
 }
@@ -3944,8 +4287,19 @@ BHB.greenSpearChoreography = {
             const speed  = entry.speed  ?? 5;
             const len    = entry.length ?? 80;
             const wid    = entry.width  ?? 12;
-            // red: true/false directly, OR redChance: 0–1 probability
-            const isRed  = entry.red ?? (Math.random() < (entry.redChance ?? 0));
+            // red/yellow/blue: true/false directly, OR redChance/yellowChance/blueChance: 0–1 probability
+            // yellow takes priority over blue, blue over red
+            const rollChoreo  = Math.random();
+            const yChance     = entry.yellowChance ?? 0;
+            const bChance     = entry.blueChance   ?? 0;
+            const rChance     = entry.redChance    ?? 0;
+            const isYellow    = entry.yellow ?? (rollChoreo < yChance);
+            const isBlue      = !isYellow && (entry.blue ?? (rollChoreo < yChance + bChance));
+            const isRed       = !isYellow && !isBlue && (entry.red ?? (rollChoreo < yChance + bChance + rChance));
+
+            // Orbit params for yellow spears
+            const orbitTriggerDist = entry.orbitTriggerDist ?? 120;
+            const orbitSpeed       = entry.orbitSpeed       ?? 0.055;
 
             // Spear travels inward (opposite of outAngle)
             const inboundAngle = outAngle + Math.PI;
@@ -3968,15 +4322,28 @@ BHB.greenSpearChoreography = {
                 width: wid,
                 angle,
                 red: isRed,
+                yellow: isYellow,
+                blue: isBlue,
+                _yellowState: isYellow ? "approaching" : undefined,
+                _orbitAngle:  isYellow ? outAngle : undefined,
+                _orbitTarget: isYellow ? (outAngle + Math.PI) : undefined,
+                _orbitDir:    isYellow ? 1 : undefined,
+                _orbitRadius: isYellow ? orbitTriggerDist : undefined,
+                _orbitTriggerDist: isYellow ? orbitTriggerDist : undefined,
+                _orbitSpeed:  isYellow ? orbitSpeed : undefined,
+                _strikeSpeed: isYellow ? speed : undefined,
+                _yellowDeflected: false,
                 _greenDeflected: false,
                 draw(b, ctx) {
                     ctx.save();
                     ctx.translate(b.x, b.y);
                     ctx.rotate(b.angle);
-                    const shaftColor = b.red ? "#f44" : "#0f0";
-                    const shaftFade  = b.red ? "rgba(255,40,40,0)" : "rgba(0,255,80,0)";
-                    const tipColor   = b.red ? "#f88" : "#4f4";
-                    const glowColor  = b.red ? "#f44" : "#0f0";
+                    // Blue spears pulse white when in parry range (visual cue to press key/click)
+                    const parryPulse = b.blue && b._inParryRange && (Math.floor(Date.now() / 80) % 2 === 0);
+                    const shaftColor  = b.yellow ? "#ff0"               : b.red ? "#f44"             : b.blue ? (parryPulse ? "#fff" : "#44f")  : "#0f0";
+                    const shaftFade   = b.yellow ? "rgba(255,255,0,0)"  : b.red ? "rgba(255,40,40,0)" : b.blue ? (parryPulse ? "rgba(255,255,255,0)" : "rgba(40,40,255,0)") : "rgba(0,255,80,0)";
+                    const tipColor    = b.yellow ? "#ffe566"             : b.red ? "#f88"             : b.blue ? (parryPulse ? "#fff" : "#88f")  : "#4f4";
+                    const glowColor   = b.yellow ? "#ffcc00"             : b.red ? "#f44"             : b.blue ? (parryPulse ? "#fff" : "#44f")  : "#0f0";
                     const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
                     grad.addColorStop(0,   shaftFade);
                     grad.addColorStop(0.3, shaftColor);
@@ -3986,7 +4353,7 @@ BHB.greenSpearChoreography = {
                     ctx.lineTo( b.r * 0.4, 0);
                     ctx.lineWidth   = b.width;
                     ctx.strokeStyle = grad;
-                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 10; }
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 20 : 10; }
                     ctx.stroke();
                     ctx.beginPath();
                     ctx.moveTo(b.r * 0.65, 0);
@@ -3994,7 +4361,445 @@ BHB.greenSpearChoreography = {
                     ctx.lineTo(b.r * 0.3,  b.width * 0.7);
                     ctx.closePath();
                     ctx.fillStyle = tipColor;
-                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = 16; }
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 24 : 16; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+
+            act._seqIndex++;
+        }
+
+        // Loop: restart the sequence when all entries have fired
+        const loop = act.loop ?? act.sequence[act.sequence.length - 1]?.loop ?? false;
+        if (loop && act._seqIndex >= act.sequence.length) {
+            act._seqStart = Date.now();
+            act._seqIndex = 0;
+        }
+
+        // ── Update yellow spear orbit state for spears spawned by this action ──
+        // _orbitTick guard prevents double-processing when multiple actions run the same loop.
+        for (let b of info.bullets) {
+            if (!b.yellow || b._yellowDeflected || b._yellowState === "striking") continue;
+            if (b._orbitTick === ticks) continue;
+            b._orbitTick = ticks;
+            const px   = info.px;
+            const py   = info.py;
+            const dx   = b.x - px;
+            const dy   = b.y - py;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const trigDist = b._orbitTriggerDist ?? 120;
+            const orbitSpd = b._orbitSpeed ?? 0.055;
+
+            if (b._yellowState === "approaching" && dist <= trigDist) {
+                b._yellowState = "orbiting";
+                b._orbitAngle  = Math.atan2(dy, dx);
+                b._orbitTarget = b._orbitAngle + Math.PI;
+                b._orbitDir    = 1;
+                b._orbitRadius = dist;
+                b.vx = 0;
+                b.vy = 0;
+            } else if (b._yellowState === "orbiting") {
+                b._orbitAngle += orbitSpd * b._orbitDir;
+                b._orbitAngle  = ((b._orbitAngle + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                const orbitR   = b._orbitRadius ?? trigDist;
+                b.x = px + Math.cos(b._orbitAngle) * orbitR;
+                b.y = py + Math.sin(b._orbitAngle) * orbitR;
+                const tangent  = b._orbitAngle + (b._orbitDir > 0 ? Math.PI / 2 : -Math.PI / 2);
+                b.angle = tangent;
+                b.vx = 0;
+                b.vy = 0;
+                let targetNorm = ((b._orbitTarget + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                let diff = Math.abs(((b._orbitAngle - targetNorm + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
+                if (diff < orbitSpd * 1.5) {
+                    b._yellowState = "striking";
+                    b._orbitAngle  = targetNorm;
+                    b.x = px + Math.cos(targetNorm) * orbitR;
+                    b.y = py + Math.sin(targetNorm) * orbitR;
+                    const strikeAngle = targetNorm + Math.PI;
+                    // Retrieve original speed stored at spawn time
+                    const spd = b._strikeSpeed ?? 5;
+                    b.vx  = Math.cos(strikeAngle) * spd;
+                    b.vy  = Math.sin(strikeAngle) * spd;
+                    b.angle = Math.atan2(b.vy, b.vx);
+                }
+            }
+        }
+
+        return info;
+    },
+}
+
+//	direction index (0=E, 1=SE, 2=S, 3=SW, 4=W, 5=NW, 6=N, 7=NE
+/*
+bulletHellGreen({
+    "greenSpearChoreography": {
+        loop: true,
+        sequence: [
+            { delay: 300, dir: 6, speed: 4, loop: true, red: false },                                                                                                                                              
+            { delay: 400, dir: 5, speed: 4, loop: true, red: false },             
+            { delay: 600, dir: 4, speed: 4, loop: true, red: false },             
+            { delay: 700, dir: 3, speed: 4, loop: true, red: false },             
+            { delay: 900, dir: 2, speed: 4, loop: true, red: false },                                                                                                                                              
+            { delay: 1000, dir: 1, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
+            { delay: 1200, dir: 0, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
+            { delay: 1300, dir: 7, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
+        ]
+    }
+}, { width: 500, height: 500, duration: 18 }) 
+
+
+*/
+
+
+// ── BHB action: yellow spear rain ─────────────────────────────────────────────
+// Yellow spears approach the shield from a cardinal/diagonal direction.
+// When they reach a trigger distance from the player (orbitTriggerDist), they
+// smoothly orbit around the shield circumference to the exact opposite side
+// (N→S, NE→SW, etc.), then launch straight at the player.
+//
+// Yellow spears behave like red spears when they hit the shield (damage + disappear).
+// If they somehow reach the player body without hitting the shield, they also deal damage.
+//
+// Usage:
+//   bulletHellGreen({
+//     "yellowSpearRain": {
+//       spearPerSec: 1.5, spearSpeed: 4, spearLength: 80, spearWidth: 12,
+//       orbitTriggerDist: 120,   // distance from player center where orbit begins
+//       orbitSpeed: 0.06,        // radians per frame for orbiting
+//     }
+//   }, { width: 500, height: 500, duration: 15 })
+BHB.yellowSpearRain = {
+    moveFunc(info, ticks, id) {
+        const act       = info.actions[id];
+        const len       = act.spearLength      ?? 80;
+        const wid       = act.spearWidth       ?? 12;
+        const speed     = act.spearSpeed       ?? 4;
+        const perSec    = act.spearPerSec      ?? act.bulletPerSec ?? 1.5;
+        const trigDist  = act.orbitTriggerDist ?? 120;
+        const orbitSpd  = act.orbitSpeed       ?? 0.055;
+        const fourDir   = act.fourDir          ?? false;
+        const noRepeatDir = act.noRepeatDir ?? false;
+
+        if (!act.lastTime) act.lastTime = ticks;
+        const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * perSec);
+
+        const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+
+        for (let i = 0; i < toSpawn; i++) {
+            const dirCount = fourDir ? 4 : 8;
+            let dirIdx;
+            if (noRepeatDir && dirCount > 1) {
+                do { dirIdx = Math.floor(Math.random() * dirCount); } while (dirIdx === act._lastDirIdx);
+                if (fourDir) dirIdx *= 2;
+            } else {
+                dirIdx = Math.floor(Math.random() * dirCount);
+                if (fourDir) dirIdx *= 2;
+            }
+            act._lastDirIdx = fourDir ? dirIdx / 2 : dirIdx;
+
+            const outAngle     = DIR_ANGLES[dirIdx];
+            const inboundAngle = outAngle + Math.PI;
+            const vx = Math.cos(inboundAngle) * speed;
+            const vy = Math.sin(inboundAngle) * speed;
+            const margin = len + 16;
+            const cx = info.subArena && info.moveWithSub ? info.subx + info.px : info.px;
+            const cy = info.subArena && info.moveWithSub ? info.suby + info.py : info.py;
+            const bx = cx + Math.cos(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const by = cy + Math.sin(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+
+            info.bullets.push({
+                name: "greenSpear",
+                boxRender: true,
+                x: bx, y: by,
+                vx, vy,
+                r: len,
+                width: wid,
+                angle: Math.atan2(vy, vx),
+                yellow: true,
+                _yellowState: "approaching",
+                _orbitAngle:       outAngle,
+                _orbitTarget:      outAngle + Math.PI,
+                _orbitDir:         1,
+                _orbitRadius:      trigDist,
+                _orbitTriggerDist: trigDist,
+                _orbitSpeed:       orbitSpd,
+                _strikeSpeed:      speed,
+                _yellowDeflected:  false,
+                _greenDeflected:   false,
+                draw(b, ctx) {
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
+                    grad.addColorStop(0,   "rgba(255,255,0,0)");
+                    grad.addColorStop(0.3, "#ff0");
+                    grad.addColorStop(1,   "#fff");
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.5, 0);
+                    ctx.lineTo( b.r * 0.4, 0);
+                    ctx.lineWidth   = b.width;
+                    ctx.strokeStyle = grad;
+                    if (!options.performanceMode) { ctx.shadowColor = "#ffcc00"; ctx.shadowBlur = 12; }
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(b.r * 0.65, 0);
+                    ctx.lineTo(b.r * 0.3, -b.width * 0.7);
+                    ctx.lineTo(b.r * 0.3,  b.width * 0.7);
+                    ctx.closePath();
+                    ctx.fillStyle = "#ffe566";
+                    if (!options.performanceMode) { ctx.shadowColor = "#ffcc00"; ctx.shadowBlur = 16; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawn > 0) act.lastTime = ticks;
+
+        // ── Update yellow spear orbit state ───────────────────────────────────
+        // _orbitTick guard prevents double-processing when multiple actions run the same loop.
+        for (let b of info.bullets) {
+            if (!b.yellow || b._yellowDeflected || b._yellowState === "striking") continue;
+            if (b._orbitTick === ticks) continue;
+            b._orbitTick = ticks;
+            const px   = info.px;
+            const py   = info.py;
+            const dx   = b.x - px;
+            const dy   = b.y - py;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const td   = b._orbitTriggerDist ?? trigDist;
+            const oSpd = b._orbitSpeed       ?? orbitSpd;
+
+            if (b._yellowState === "approaching" && dist <= td) {
+                b._yellowState = "orbiting";
+                b._orbitAngle  = Math.atan2(dy, dx);
+                b._orbitTarget = b._orbitAngle + Math.PI;
+                b._orbitDir    = 1;
+                b._orbitRadius = dist;
+                b.vx = 0;
+                b.vy = 0;
+            } else if (b._yellowState === "orbiting") {
+                b._orbitAngle += oSpd * b._orbitDir;
+                b._orbitAngle  = ((b._orbitAngle + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                const orbitR   = b._orbitRadius ?? td;
+                b.x = px + Math.cos(b._orbitAngle) * orbitR;
+                b.y = py + Math.sin(b._orbitAngle) * orbitR;
+                b.angle = b._orbitAngle + (b._orbitDir > 0 ? Math.PI / 2 : -Math.PI / 2);
+                b.vx = 0;
+                b.vy = 0;
+                const targetNorm = ((b._orbitTarget + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                const diff = Math.abs(((b._orbitAngle - targetNorm + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI);
+                if (diff < oSpd * 1.5) {
+                    b._yellowState = "striking";
+                    b.x = px + Math.cos(targetNorm) * orbitR;
+                    b.y = py + Math.sin(targetNorm) * orbitR;
+                    const strikeAngle = targetNorm + Math.PI;
+                    const spd = b._strikeSpeed ?? speed;
+                    b.vx   = Math.cos(strikeAngle) * spd;
+                    b.vy   = Math.sin(strikeAngle) * spd;
+                    b.angle = Math.atan2(b.vy, b.vx);
+                }
+            }
+        }
+
+        return info;
+    },
+}
+
+// ── Blue spear shield/player interaction (handled in greenMode collision) ───
+// blueSpears that reach the shield arc → parry window opens (spear pulses white).
+//   • If player presses any arrow key, WASD, or clicks while the spear is in the shield arc
+//     → successful parry: spear vanishes, no damage.
+//   • If player does NOT input in time → spear passes through the shield and deals damage.
+// blueSpears that reach the player body (without hitting the shield) → deal damage.
+// This is wired into the greenMode collision block via the `blue: true` property and
+// the `_parryPressed` / `_inParryRange` / `_blueParryMissed` flags.
+
+
+// ── BHB action: blue spear rain ───────────────────────────────────────────────
+// Like greenSpearRain but every spear requires a timed parry (key press or click)
+// when it reaches the shield arc. Miss the parry and it passes through for damage.
+//
+// Usage: bulletHellGreen({"blueSpearRain": {spearPerSec: 1.5, spearSpeed: 5, spearLength: 80, spearWidth: 12}}, {width:500, height:500, duration:15})
+BHB.blueSpearRain = {
+    moveFunc(info, ticks, id) {
+        const act    = info.actions[id];
+        const len    = act.spearLength ?? 80;
+        const wid    = act.spearWidth  ?? 12;
+        const speed  = act.spearSpeed  ?? 5;
+        const perSec = act.spearPerSec ?? act.bulletPerSec ?? 1.5;
+        const fourDir     = act.fourDir     ?? false;
+        const noRepeatDir = act.noRepeatDir ?? false;
+
+        if (!act.lastTime) act.lastTime = ticks;
+        const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * perSec);
+
+        const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4, Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+
+        for (let i = 0; i < toSpawn; i++) {
+            const dirCount = fourDir ? 4 : 8;
+            let dirIdx;
+            if (noRepeatDir && dirCount > 1) {
+                do { dirIdx = Math.floor(Math.random() * dirCount); } while (dirIdx === act._lastDirIdx);
+                if (fourDir) dirIdx *= 2;
+            } else {
+                dirIdx = Math.floor(Math.random() * dirCount);
+                if (fourDir) dirIdx *= 2;
+            }
+            act._lastDirIdx = fourDir ? dirIdx / 2 : dirIdx;
+
+            const outAngle     = DIR_ANGLES[dirIdx];
+            const inboundAngle = outAngle + Math.PI;
+            const vx = Math.cos(inboundAngle) * speed;
+            const vy = Math.sin(inboundAngle) * speed;
+            const margin = len + 16;
+            const cx = info.subArena && info.moveWithSub ? info.subx + info.px : info.px;
+            const cy = info.subArena && info.moveWithSub ? info.suby + info.py : info.py;
+            const bx = cx + Math.cos(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const by = cy + Math.sin(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+
+            info.bullets.push({
+                name: "greenSpear",
+                boxRender: true,
+                x: bx, y: by,
+                vx, vy,
+                r: len,
+                width: wid,
+                angle: Math.atan2(vy, vx),
+                blue: true,
+                _greenDeflected: false,
+                draw(b, ctx) {
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    const parryPulse = b._inParryRange && (Math.floor(Date.now() / 80) % 2 === 0);
+                    const shaftColor = parryPulse ? "#fff" : "#44f";
+                    const shaftFade  = parryPulse ? "rgba(255,255,255,0)" : "rgba(40,40,255,0)";
+                    const tipColor   = parryPulse ? "#fff" : "#88f";
+                    const glowColor  = parryPulse ? "#fff" : "#44f";
+                    const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
+                    grad.addColorStop(0,   shaftFade);
+                    grad.addColorStop(0.3, shaftColor);
+                    grad.addColorStop(1,   "#fff");
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.5, 0);
+                    ctx.lineTo( b.r * 0.4, 0);
+                    ctx.lineWidth   = b.width;
+                    ctx.strokeStyle = grad;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 20 : 10; }
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(b.r * 0.65, 0);
+                    ctx.lineTo(b.r * 0.3, -b.width * 0.7);
+                    ctx.lineTo(b.r * 0.3,  b.width * 0.7);
+                    ctx.closePath();
+                    ctx.fillStyle = tipColor;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 24 : 16; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawn > 0) act.lastTime = ticks;
+
+        return info;
+    },
+}
+
+// ── BHB action: blue spear choreography ──────────────────────────────────────
+// Scripted sequence of blue spears (parry-required). Same structure as
+// greenSpearChoreography but every spear is blue by default.
+//
+// Each entry supports:
+//   delay, dir (0–7 or raw radian), speed, length, width, loop
+//
+// Usage:
+//   bulletHellGreen({
+//     "blueSpearChoreography": {
+//       sequence: [
+//         { delay: 0,   dir: 6, speed: 5, length: 80, width: 12 },
+//         { delay: 800, dir: 2, speed: 5, length: 80, width: 12 },
+//       ],
+//       loop: true
+//     }
+//   }, { width: 500, height: 500, duration: 20 })
+BHB.blueSpearChoreography = {
+    codeFunc(info, id) {
+        const act      = info.actions[id];
+        act._seqStart  = Date.now();
+        act._seqIndex  = 0;
+        return info;
+    },
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        if (!act.sequence || act.sequence.length === 0) return info;
+
+        if (!act._seqStart) act._seqStart = Date.now();
+        if (act._seqIndex == null) act._seqIndex = 0;
+
+        const elapsed = Date.now() - act._seqStart;
+
+        while (act._seqIndex < act.sequence.length) {
+            const entry = act.sequence[act._seqIndex];
+            if (elapsed < (entry.delay ?? 0)) break;
+
+            const DIR_ANGLES = [0, Math.PI/4, Math.PI/2, 3*Math.PI/4,
+                                 Math.PI, 5*Math.PI/4, 3*Math.PI/2, 7*Math.PI/4];
+            const dirIdx   = entry.dir ?? 6;
+            const outAngle = (Number.isInteger(dirIdx) && dirIdx >= 0 && dirIdx <= 7)
+                ? DIR_ANGLES[dirIdx] : dirIdx;
+
+            const speed = entry.speed  ?? 5;
+            const len   = entry.length ?? 80;
+            const wid   = entry.width  ?? 12;
+
+            const inboundAngle = outAngle + Math.PI;
+            const vx = Math.cos(inboundAngle) * speed;
+            const vy = Math.sin(inboundAngle) * speed;
+
+            const margin = len + 16;
+            const cx = info.subArena && info.moveWithSub ? info.subx + info.px : info.px;
+            const cy = info.subArena && info.moveWithSub ? info.suby + info.py : info.py;
+            const bx = cx + Math.cos(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+            const by = cy + Math.sin(outAngle) * (Math.max(info.width, info.height) * 0.75 + margin);
+
+            info.bullets.push({
+                name: "greenSpear",
+                boxRender: true,
+                x: bx, y: by,
+                vx, vy,
+                r: len,
+                width: wid,
+                angle: Math.atan2(vy, vx),
+                blue: true,
+                _greenDeflected: false,
+                draw(b, ctx) {
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    const parryPulse = b._inParryRange && (Math.floor(Date.now() / 80) % 2 === 0);
+                    const shaftColor = parryPulse ? "#fff" : "#44f";
+                    const shaftFade  = parryPulse ? "rgba(255,255,255,0)" : "rgba(40,40,255,0)";
+                    const tipColor   = parryPulse ? "#fff" : "#88f";
+                    const glowColor  = parryPulse ? "#fff" : "#44f";
+                    const grad = ctx.createLinearGradient(-b.r * 0.5, 0, b.r * 0.5, 0);
+                    grad.addColorStop(0,   shaftFade);
+                    grad.addColorStop(0.3, shaftColor);
+                    grad.addColorStop(1,   "#fff");
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.5, 0);
+                    ctx.lineTo( b.r * 0.4, 0);
+                    ctx.lineWidth   = b.width;
+                    ctx.strokeStyle = grad;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 20 : 10; }
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(b.r * 0.65, 0);
+                    ctx.lineTo(b.r * 0.3, -b.width * 0.7);
+                    ctx.lineTo(b.r * 0.3,  b.width * 0.7);
+                    ctx.closePath();
+                    ctx.fillStyle = tipColor;
+                    if (!options.performanceMode) { ctx.shadowColor = glowColor; ctx.shadowBlur = parryPulse ? 24 : 16; }
                     ctx.fill();
                     ctx.restore();
                 }
@@ -4014,21 +4819,1240 @@ BHB.greenSpearChoreography = {
     },
 }
 
-//	direction index (0=E, 1=SE, 2=S, 3=SW, 4=W, 5=NW, 6=N, 7=NE
-/*
-bulletHellGreen({
-    "greenSpearChoreography": {
-        loop: true,
-        sequence: [
-            { delay: 500, dir: 6, speed: 4, loop: true, red: false },                                                                                                                                              
-            { delay: 600, dir: 5, speed: 4, loop: true, red: false },             
-            { delay: 900, dir: 4, speed: 4, loop: true, red: false },             
-            { delay: 1000, dir: 2, speed: 4, loop: true, red: false },                                                                                                                                              
-            { delay: 1100, dir: 1, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
-            { delay: 1400, dir: 0, speed: 4, loop: true, red: false },                                                                                                                                                                                                                                                                                     
-        ]
+
+
+
+BHB.darkKnifeThrow = {
+    // Usage: bulletHell({"darkKnifeThrow": {katanaLength: 90, katanaWidth: 12, knivesPerThrow: 2, enemySpeed: 14, knifePerSec: 2, aimTime: 600}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, blindness: 200})
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        if (!act.lastTime) act.lastTime = ticks;
+        
+        const knivesToSpawn = Math.floor(((ticks - act.lastTime) / 1000) * (act.knifePerSec || 2));
+        
+        for (let i = 0; i < knivesToSpawn; i++) {
+            for (let j = 0; j < (act.knivesPerThrow || 2); j++) {
+                
+                let length = act.katanaLength || 80;
+                let edge = Math.floor(Math.random() * 4);
+                let bx, by;
+                
+                // Spawn exactly 1 pixel inside the strict culling boundaries
+                if (edge === 0) { bx = Math.random() * info.width; by = -length + 1; } // Top
+                else if (edge === 1) { bx = info.width + length - 1; by = Math.random() * info.height; } // Right
+                else if (edge === 2) { bx = Math.random() * info.width; by = info.height + length - 1; } // Bottom
+                else { bx = -length + 1; by = Math.random() * info.height; } // Left
+
+                info.bullets.push({
+                    name: "katanaTelegraph", // Harmless while aiming
+                    boxRender: true,
+                    x: bx,
+                    y: by,
+                    r: length,
+                    width: act.katanaWidth || 20,
+                    angle: 0,
+                    vx: 0,
+                    vy: 0,
+                    spawnTime: Date.now(),
+                    state: "aiming",
+                    draw(b, ctx) {
+                        let age = Date.now() - b.spawnTime;
+                        let aimTime = act.aimTime || 600;
+
+                        ctx.save();
+                        ctx.translate(b.x, b.y);
+
+                        // 1. Handle Aiming & Telegraph Line
+                        if (b.state === "aiming") {
+                            // Continuously track player local coordinates
+                            let playerLocalX = info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+                            let playerLocalY = info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+                            b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+
+                            let opacity = Math.min(1, age / aimTime);
+                            ctx.rotate(b.angle);
+
+                            // Dashed Telegraph Line
+                            ctx.beginPath();
+                            ctx.moveTo(0, 0);
+                            ctx.lineTo(4000, 0); // Project far across the screen
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`; // #88f
+                            ctx.setLineDash([10, 15]);
+                            ctx.stroke();
+                            ctx.setLineDash([]);
+                        } else {
+                            // Lock rotation when firing
+                            ctx.rotate(b.angle); 
+                        }
+
+                        // 2. Draw the Katana (Always visible)
+                        // Katana Hilt (Dark Navy)
+                        ctx.fillStyle = "#226";
+                        ctx.fillRect(-b.r, -b.width / 2, b.r * 0.4, b.width);
+
+                        // Tsuba / Guard (Bright Blue)
+                        ctx.fillStyle = "#88f";
+                        ctx.fillRect(-b.r * 0.6, -b.width, b.r * 0.06, b.width * 2);
+
+                        // Katana Blade (White with bright blue aura)
+                        ctx.beginPath();
+                        ctx.moveTo(-b.r * 0.54, -b.width / 2);
+                        ctx.lineTo(b.r - 8, -b.width / 2); 
+                        ctx.lineTo(b.r, 0); 
+                        ctx.quadraticCurveTo(b.r - 8, b.width / 2, -b.r * 0.54, b.width / 2); 
+                        ctx.closePath();
+
+                        ctx.fillStyle = "#fff";
+                        if (!options.performanceMode) {
+                            ctx.shadowColor = "#88f";
+                            ctx.shadowBlur = 12;
+                        }
+                        ctx.fill();
+
+                        ctx.restore();
+                    }
+                });
+            }
+        }
+        
+        if (knivesToSpawn > 0) act.lastTime = ticks;
+
+        // Update Physics & Transition States
+        const aimTime = act.aimTime || 600;
+        for (let b of info.bullets) {
+            // Apply logic only to this attack's specific bullets
+            if (b.spawnTime && (b.name === "katanaTelegraph" || b.name === "knife")) {
+                let age = Date.now() - b.spawnTime;
+                
+                if (b.state === "aiming" && age >= aimTime) {
+                    // Fire!
+                    b.state = "firing";
+                    
+                    // Changing name to "knife" engages your engine's OBB collision instantly
+                    b.name = "knife"; 
+                    
+                    let speed = act.enemySpeed || 14;
+                    b.vx = Math.cos(b.angle) * speed;
+                    b.vy = Math.sin(b.angle) * speed;
+                }
+            }
+        }
+
+        return info;
     }
-}, { width: 500, height: 500, duration: 18 })
+}
+BHB.darkRain = {
+    moveFunc(info, ticks, id) {
+        // Rain Bullets
+        //bulletHell({"darkRain": {bulletPerSec: 7}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, blindness: 200})
+        const bulletRadius = info.actions[id].bulletRadius ?? 12;
+        const bulletSpeed = info.actions[id].bulletSpeed ?? 2;
+        if (!info.actions[id].lastTime) info.actions[id].lastTime = ticks;
+        const bulletsToSpawn = Math.floor(((ticks - info.actions[id].lastTime) / 1000) * info.actions[id].bulletPerSec); // LAST NUMBER IS AMOUNT OF BULLETS PER SECOND
+        for (let i = 0; i < bulletsToSpawn; i++) {
+            let bx = Math.random() * info.width + info.boxLeft;
+            let by = -bulletRadius;
+            let bul = {x: bx, y: by, vx: bulletSpeed, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul);
+            let bx2 = Math.random() * info.width + info.boxLeft;
+            let by2 = window.innerHeight + bulletRadius;
+            let bul2 = {x: bx2, y: by2, vx: bulletSpeed, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul2);
+            let bx3 = window.innerWidth + bulletRadius;
+            let by3 = Math.random() * info.height + info.boxTop
+            let bul3 = {x: bx3, y: by3, vx: -bulletSpeed, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul3);
+            let bx4 = 0;
+            let by4 = Math.random() * info.height + info.boxTop;
+            let bul4 = {x: bx4, y: by4, vx: -bulletSpeed, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul4);
+            let bx5 = Math.random() * info.width + info.boxLeft;
+            let by5 = -bulletRadius;
+            let bul5 = {x: bx5, y: by5, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul5);
+            let bx6 = Math.random() * info.width + info.boxLeft;
+            let by6 = window.innerHeight + bulletRadius;
+            let bul6 = {x: bx6, y: by6, vx: 0, vy: -bulletSpeed,r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul6);
+            let bx7 = window.innerWidth + bulletRadius;
+            let by7 = Math.random() * info.height + info.boxTop
+            let bul7 = {x: bx7, y: by7, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul7);
+            let bx8 = 0;
+            let by8 = Math.random() * info.height + info.boxTop;
+            let bul8 = {x: bx8, y: by8, vx: 0, vy: -bulletSpeed, r: bulletRadius, draw(b, bossCtx) {bossCtx.beginPath();bossCtx.arc(b.x, b.y, b.r, 0, 2 * Math.PI);bossCtx.fillStyle = "#88f";bossCtx.fill()}}
+            info.bullets.push(bul8);
+        }
+        if (bulletsToSpawn > 0) info.actions[id].lastTime = ticks;        // Rain Bullets
+        return info
+    },
+}
+//bulletHell({"darkKnifeThrow": {knifeLength: 80, knifeWidth: 20, knivesPerThrow: 1, enemySpeed: 9, knifePerSec: 2}}, {width: window.innerWidth,height: window.innerHeight, duration: 50, timed: true, cellSize: 75, start: "cell", goal: "cell", blindness: 150})
+BHB.delayHomingSwarm = {
+    // Usage: bulletHell({"delayHomingSwarm": {spawnPerSec: 4, driftTime: 1200, lockTime: 600, fireSpeed: 12, radius: 16}}, {width: window.innerWidth,height: window.innerHeight, duration: 15, blindness: 800})
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        // 1. Spawn the drifting orbs
+        if (!act.lastTime) act.lastTime = ticks;
+        const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * (act.spawnPerSec || 3));
+        
+        for (let i = 0; i < toSpawn; i++) {
+            let bx, by, distToPlayer;
+            
+            // Get the precise global coordinates of the player to calculate the safe zone
+            let playerGlobalX = info.boxLeft + info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+            let playerGlobalY = info.boxTop + info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+            
+            // Randomly spawn anywhere in or slightly around the arena
+            // The loop ensures they never spawn directly on top of the player
+            do {
+                bx = info.boxLeft - 30 + Math.random() * (info.width + 60);
+                by = info.boxTop - 30 + Math.random() * (info.height + 60);
+                distToPlayer = Math.hypot(playerGlobalX - bx, playerGlobalY - by);
+            } while (distToPlayer < 80); // 80px safe zone
+            
+            info.bullets.push({
+                name: "hunterOrb",
+                x: bx,
+                y: by,
+                vx: (Math.random() - 0.5) * 4, // Lazy drift velocity
+                vy: (Math.random() - 0.5) * 4,
+                r: act.radius || 15,
+                spawnTime: ticks,
+                state: "drifting", // State machine: drifting -> locked -> firing
+                draw(b, bossCtx) {
+                    bossCtx.save();
+                    bossCtx.beginPath();
+                    bossCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                    
+                    if (b.state === "locked") {
+                        // Warning state: Stop moving and glow intensely
+                        bossCtx.fillStyle = "#f88";
+                        if (!options.performanceMode) { bossCtx.shadowColor = "#f44"; bossCtx.shadowBlur = 16; }
+                    } else if (b.state === "firing") {
+                        // Attack state: Solid red, flying fast
+                        bossCtx.fillStyle = "#f22";
+                        if (!options.performanceMode) { bossCtx.shadowColor = "#f22"; bossCtx.shadowBlur = 12; }
+                    } else {
+                        // Drifting state: Harmless white glow
+                        bossCtx.fillStyle = "#88f"; 
+                        if (!options.performanceMode) { bossCtx.shadowColor = "#88f"; bossCtx.shadowBlur = 8; }
+                    }
+                    
+                    bossCtx.fill();
+                    bossCtx.restore();
+                }
+            });
+        }
+        if (toSpawn > 0) act.lastTime = ticks;
+
+        // 2. Update the state machine for each orb
+        const driftTime = act.driftTime || 1200;
+        const lockTime = act.lockTime || 600;
+        const fireSpeed = act.fireSpeed || 12;
+
+        for (let b of info.bullets) {
+            if (b.name === "hunterOrb") {
+                let age = ticks - b.spawnTime;
+                
+                if (b.state === "drifting" && age > driftTime) {
+                    // Lock onto player position and stop drifting
+                    b.state = "locked";
+                    b.vx = 0; 
+                    b.vy = 0;
+                } 
+                else if (b.state === "locked" && age > driftTime + lockTime) {
+                    // Fire directly at the player
+                    b.state = "firing";
+                    
+                    let playerGlobalX = info.boxLeft + info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+                    let playerGlobalY = info.boxTop + info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+                    
+                    let dx = playerGlobalX - b.x;
+                    let dy = playerGlobalY - b.y;
+                    let dist = Math.hypot(dx, dy) || 1;
+                    
+                    b.vx = (dx / dist) * fireSpeed;
+                    b.vy = (dy / dist) * fireSpeed;
+                }
+            }
+        }
+        return info;
+    }
+}
+BHB.abyssalCrossfire = {
+    // Usage: bulletHell({"abyssalCrossfire": {laserPerSec: 0.8, katanaPerSec: 1.5, laserCharge: 1200, katanaAim: 800, katanaSpeed: 14}}, {width: window.innerWidth, height: window.innerHeight, duration: 20})
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        // Initialize separate timers for independent spawn rates
+        if (!act.lastLaserTime) act.lastLaserTime = ticks;
+        if (!act.lastKatanaTime) act.lastKatanaTime = ticks;
+        
+        const toSpawnLasers = Math.floor(((ticks - act.lastLaserTime) / 1000) * (act.laserPerSec || 0.8));
+        const toSpawnKatanas = Math.floor(((ticks - act.lastKatanaTime) / 1000) * (act.katanaPerSec || 1.5));
+        
+        // ==========================================
+        // 1. SPAWN LASERS (Area Denial)
+        // ==========================================
+        for (let i = 0; i < toSpawnLasers; i++) {
+            let edge = Math.floor(Math.random() * 4);
+            let bx, by;
+            if (edge === 0) { bx = Math.random() * info.width; by = 10; } 
+            else if (edge === 1) { bx = info.width - 10; by = Math.random() * info.height; } 
+            else if (edge === 2) { bx = Math.random() * info.width; by = info.height - 10; } 
+            else { bx = 10; by = Math.random() * info.height; } 
+            
+            info.bullets.push({
+                attackType: "laser",
+                name: "crossfireTelegraph", // Harmless name
+                boxRender: true,
+                x: bx, y: by,
+                r: 1, // Prevent 0-radius culling
+                width: 0, angle: 0, vx: 0, vy: 0,
+                spawnTime: Date.now(), 
+                state: "charging", 
+                draw(b, ctx) {
+                    let age = Date.now() - b.spawnTime; 
+                    let chargeTime = act.laserCharge || 1200;
+                    let fireTime = act.laserFire || 400;
+                    
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    
+                    if (b.state === "charging" || b.state === "locked") {
+                        let opacity = Math.min(1, age / chargeTime);
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(-4000, 0); 
+                        ctx.lineTo(4000, 0);
+                        
+                        if (b.state === "charging") {
+                            ctx.lineWidth = 2;
+                            ctx.setLineDash([10, 10]);
+                        } else {
+                            ctx.lineWidth = 3;
+                            ctx.setLineDash([]);
+                        }
+                        
+                        ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`;
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        
+                        ctx.beginPath();
+                        ctx.arc(0, 0, 16 * opacity, 0, Math.PI * 2);
+                        ctx.fillStyle = b.state === "locked" ? "#fff" : "#88f";
+                        ctx.fill();
+                        
+                    } else if (b.state === "firing") {
+                        let fireProgress = (age - chargeTime) / fireTime;
+                        let beamThickness = b.width * Math.sin(fireProgress * Math.PI);
+                        
+                        if (beamThickness > 0) {
+                            ctx.beginPath();
+                            ctx.moveTo(-4000, 0);
+                            ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness + 12;
+                            ctx.strokeStyle = "rgba(34, 34, 102, 0.7)"; 
+                            if (!options.performanceMode) { ctx.shadowColor = "#88f"; ctx.shadowBlur = 20; }
+                            ctx.stroke();
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(-4000, 0);
+                            ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness;
+                            ctx.strokeStyle = "#88f"; 
+                            if (!options.performanceMode) ctx.shadowBlur = 0;
+                            ctx.stroke();
+                        }
+                    }
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawnLasers > 0) act.lastLaserTime = ticks;
+
+        // ==========================================
+        // 2. SPAWN KATANAS (Targeted Pressure)
+        // ==========================================
+        for (let i = 0; i < toSpawnKatanas; i++) {
+            let length = act.katanaLength || 80;
+            let edge = Math.floor(Math.random() * 4);
+            let bx, by;
+            
+            if (edge === 0) { bx = Math.random() * info.width; by = -length + 1; } 
+            else if (edge === 1) { bx = info.width + length - 1; by = Math.random() * info.height; } 
+            else if (edge === 2) { bx = Math.random() * info.width; by = info.height + length - 1; } 
+            else { bx = -length + 1; by = Math.random() * info.height; } 
+
+            info.bullets.push({
+                attackType: "katana",
+                name: "crossfireTelegraph", // Harmless name
+                boxRender: true,
+                x: bx, y: by,
+                r: length, width: act.katanaWidth || 20,
+                angle: 0, vx: 0, vy: 0,
+                spawnTime: Date.now(),
+                state: "aiming",
+                draw(b, ctx) {
+                    let age = Date.now() - b.spawnTime;
+                    let aimTime = act.katanaAim || 800;
+
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+
+                    if (b.state === "aiming") {
+                        let opacity = Math.min(1, age / aimTime);
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(4000, 0);
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`;
+                        ctx.setLineDash([10, 15]);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
+
+                    // Hilt
+                    ctx.fillStyle = "#226";
+                    ctx.fillRect(-b.r, -b.width / 2, b.r * 0.4, b.width);
+                    // Guard
+                    ctx.fillStyle = "#88f";
+                    ctx.fillRect(-b.r * 0.6, -b.width, b.r * 0.06, b.width * 2);
+
+                    // Blade
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.54, -b.width / 2);
+                    ctx.lineTo(b.r - 8, -b.width / 2); 
+                    ctx.lineTo(b.r, 0); 
+                    ctx.quadraticCurveTo(b.r - 8, b.width / 2, -b.r * 0.54, b.width / 2); 
+                    ctx.closePath();
+
+                    ctx.fillStyle = "#fff";
+                    if (!options.performanceMode) { ctx.shadowColor = "#88f"; ctx.shadowBlur = 12; }
+                    ctx.fill();
+
+                    // Fuller
+                    ctx.beginPath();
+                    ctx.moveTo(-b.r * 0.54, 0);
+                    ctx.lineTo(b.r - 12, 0);
+                    ctx.strokeStyle = "#88f";
+                    ctx.lineWidth = 2;
+                    if (!options.performanceMode) ctx.shadowBlur = 0;
+                    ctx.stroke();
+
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawnKatanas > 0) act.lastKatanaTime = ticks;
+
+        // ==========================================
+        // 3. PHYSICS & STATE MACHINES
+        // ==========================================
+        const laserCharge = act.laserCharge || 1200;
+        const laserLock = act.laserLock || 300;
+        const laserFire = act.laserFire || 400;
+        const katanaAim = act.katanaAim || 800;
+        
+        let playerLocalX = info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+        let playerLocalY = info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+
+        for (let b of info.bullets) {
+            if (!b.attackType) continue; // Skip generic bullets if any exist
+            let age = Date.now() - b.spawnTime;
+            
+            // --- LASER LOGIC ---
+            if (b.attackType === "laser") {
+                if (b.state === "charging") {
+                    b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+                    if (age >= laserCharge - laserLock) b.state = "locked";
+                } 
+                else if (b.state === "locked") {
+                    if (age >= laserCharge) {
+                        b.state = "firing";
+                        b.name = "knife"; // OBB Collision ON
+                        b.r = 8000; 
+                        b.width = act.laserWidth || 36; 
+                    }
+                } 
+                else if (b.state === "firing") {
+                    let fireProgress = (age - laserCharge) / laserFire;
+                    b.width = (act.laserWidth || 36) * Math.max(0, Math.sin(fireProgress * Math.PI));
+                    if (age >= laserCharge + laserFire) b._dead = true;
+                }
+            } 
+            
+            // --- KATANA LOGIC ---
+            else if (b.attackType === "katana") {
+                if (b.state === "aiming") {
+                    b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+                    if (age >= katanaAim) {
+                        b.state = "firing";
+                        b.name = "knife"; // OBB Collision ON
+                        let speed = act.katanaSpeed || 14;
+                        b.vx = Math.cos(b.angle) * speed;
+                        b.vy = Math.sin(b.angle) * speed;
+                    }
+                } 
+                else if (b.state === "firing") {
+                    // Manual Garbage Collection for standard projectiles
+                    let isOffScreen = b.x < -200 || b.x > info.width + 200 || b.y < -200 || b.y > info.height + 200;
+                    if (isOffScreen) b._dead = true;
+                }
+            }
+        }
+        
+        // 4. CLEANUP
+        info.bullets = info.bullets.filter(b => !b._dead);
+        
+        return info;
+    }
+}
+BHB.abyssalLasers = {
+    // Usage: bulletHell({"abyssalLasers": {laserPerSec: 2.5, chargeTime: 1200, lockDelay: 300, fireTime: 400, beamWidth: 24}}, {width: window.innerWidth, height: window.innerHeight, duration: 15, blindness: 500})
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        if (!act.lastTime) act.lastTime = ticks;
+        const toSpawn = Math.floor(((ticks - act.lastTime) / 1000) * (act.laserPerSec || 1.5));
+        
+        for (let i = 0; i < toSpawn; i++) {
+            let edge = Math.floor(Math.random() * 4);
+            let bx, by;
+            if (edge === 0) { bx = Math.random() * info.width; by = 10; } // top
+            else if (edge === 1) { bx = info.width - 10; by = Math.random() * info.height; } // right
+            else if (edge === 2) { bx = Math.random() * info.width; by = info.height - 10; } // bottom
+            else { bx = 10; by = Math.random() * info.height; } // left
+            
+            info.bullets.push({
+                name: "laserTelegraph",
+                boxRender: true,
+                x: bx,
+                y: by,
+                r: 1, 
+                width: 0,
+                angle: 0,
+                vx: 0,
+                vy: 0,
+                spawnTime: Date.now(), 
+                state: "charging", // States: charging -> locked -> firing
+                draw(b, ctx) {
+                    let age = Date.now() - b.spawnTime; 
+                    let chargeTime = act.chargeTime || 1200;
+                    let fireTime = act.fireTime || 400;
+                    
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    
+                    if (b.state === "charging" || b.state === "locked") {
+                        let opacity = Math.min(1, age / chargeTime);
+                        
+                        // Telegraph Line
+                        ctx.beginPath();
+                        ctx.moveTo(-4000, 0); 
+                        ctx.lineTo(4000, 0);
+                        
+                        if (b.state === "charging") {
+                            ctx.lineWidth = 2;
+                            ctx.setLineDash([10, 10]); // Dashed while tracking
+                        } else {
+                            ctx.lineWidth = 3;
+                            ctx.setLineDash([]); // Solid and thicker when locked
+                        }
+                        
+                        ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`; // #88f
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        
+                        // Source Orb
+                        ctx.beginPath();
+                        ctx.arc(0, 0, 16 * opacity, 0, Math.PI * 2);
+                        ctx.fillStyle = b.state === "locked" ? "#fff" : "#88f"; // Flash white when locked
+                        ctx.fill();
+                        
+                    } else if (b.state === "firing") {
+                        let fireProgress = (age - chargeTime) / fireTime;
+                        let beamThickness = b.width * Math.sin(fireProgress * Math.PI);
+                        
+                        if (beamThickness > 0) {
+                            // Outer dark aura
+                            ctx.beginPath();
+                            ctx.moveTo(-4000, 0);
+                            ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness + 12;
+                            ctx.strokeStyle = "rgba(34, 34, 102, 0.7)"; // #226
+                            if (!options.performanceMode) { 
+                                ctx.shadowColor = "#88f"; 
+                                ctx.shadowBlur = 20; 
+                            }
+                            ctx.stroke();
+                            
+                            // Inner bright core
+                            ctx.beginPath();
+                            ctx.moveTo(-4000, 0);
+                            ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness;
+                            ctx.strokeStyle = "#88f"; 
+                            if (!options.performanceMode) ctx.shadowBlur = 0;
+                            ctx.stroke();
+                        }
+                    }
+                    
+                    ctx.restore();
+                }
+            });
+        }
+        if (toSpawn > 0) act.lastTime = ticks;
+
+        const chargeTime = act.chargeTime || 1200;
+        const lockDelay = act.lockDelay || 300; // How long it freezes before firing
+        const fireTime = act.fireTime || 400;
+        
+        for (let b of info.bullets) {
+            if (b.name === "laserTelegraph" || b.name === "knife") {
+                let age = Date.now() - b.spawnTime;
+                
+                if (b.state === "charging") {
+                    // Track player position while charging
+                    let playerLocalX = info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+                    let playerLocalY = info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+                    b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+                    
+                    // Transition to locked state right before firing
+                    if (age >= chargeTime - lockDelay) {
+                        b.state = "locked";
+                    }
+                } else if (b.state === "locked") {
+                    // Angle tracking stops here. Just wait for chargeTime to finish.
+                    if (age >= chargeTime) {
+                        b.state = "firing";
+                        b.name = "knife"; 
+                        b.r = 8000; 
+                        b.width = act.beamWidth || 36; 
+                    }
+                } else if (b.state === "firing") {
+                    let fireProgress = (age - chargeTime) / fireTime;
+                    b.width = (act.beamWidth || 36) * Math.max(0, Math.sin(fireProgress * Math.PI));
+                    
+                    if (age >= chargeTime + fireTime) {
+                        b._dead = true;
+                    }
+                }
+            }
+        }
+        
+        info.bullets = info.bullets.filter(b => !b._dead);
+        
+        return info;
+    }
+}
+BHB.spinningKatanaGrid = {
+    // Usage: bulletHell({"spinningKatanaGrid": {spacing: 150, speed: 1.5, spinSpeed: 0.02, katanaLength: 70, katanaWidth: 14}}, {width: window.innerWidth, height: window.innerHeight, transparent: true, duration: 15, blindness: 300})
+    codeFunc(info, id) {
+        const act = info.actions[id];
+        
+        act.spacing = act.spacing || 150;
+        act.katanaLength = act.katanaLength || 60;
+        act.spinSpeed = act.spinSpeed || 0.04;
+        act.speed = act.speed || 4;
+
+        // Calculate grid dimensions to cover the screen plus a buffer
+        act.cols = Math.ceil(info.width / act.spacing) + 20;
+        act.rows = Math.ceil(info.height / act.spacing) + 20;
+        act.gridWidth = act.cols * act.spacing;
+        act.gridHeight = act.rows * act.spacing;
+
+        // Pick a random diagonal direction
+        act.vx = (Math.random() < 0.5 ? 1 : -1) * act.speed;
+        act.vy = (Math.random() < 0.5 ? 1 : -1) * act.speed;
+
+        // Spawn the infinite grid once
+        for (let r = 0; r < act.rows; r++) {
+            for (let c = 0; c < act.cols; c++) {
+                let bx = c * act.spacing - act.spacing;
+                let by = r * act.spacing - act.spacing;
 
 
-*/
+                let currentSpin = (r + c) % 2 === 0 ? act.spinSpeed : act.spinSpeed;
+
+                info.bullets.push({
+                    name: "knife", 
+                    boxRender: true,
+                    x: bx,
+                    y: by,
+                    r: 4000, // Giant radius to survive culling
+                    visualR: act.katanaLength,
+                    width: -1000, // Mathematically impossible OBB collision
+                    visualWidth: act.katanaWidth || 14,
+                    vx: act.vx,
+                    vy: act.vy,
+                    angle: 0,
+                    spinSpeed: currentSpin,
+                    draw(b, ctx) {
+                        b.angle += b.spinSpeed;
+                        
+                        ctx.save();
+                        ctx.translate(b.x, b.y);
+                        ctx.rotate(b.angle);
+
+                        // Use the visual variables for drawing so it doesn't render the crazy hitbox sizes
+                        let drawR = b.visualR;
+                        let drawW = b.visualWidth;
+
+                        // Katana Hilt
+                        ctx.fillStyle = "#226";
+                        ctx.fillRect(-drawR, -drawW / 2, drawR * 0.4, drawW);
+
+                        // Tsuba / Guard
+                        ctx.fillStyle = "#88f";
+                        ctx.fillRect(-drawR * 0.6, -drawW, drawR * 0.06, drawW * 2);
+
+                        // Katana Blade
+                        ctx.beginPath();
+                        ctx.moveTo(-drawR * 0.54, -drawW / 2);
+                        ctx.lineTo(drawR - 8, -drawW / 2);
+                        ctx.lineTo(drawR, 0);
+                        ctx.quadraticCurveTo(drawR - 8, drawW / 2, -drawR * 0.54, drawW / 2);
+                        ctx.closePath();
+
+                        ctx.fillStyle = "#fff";
+                        if (!options.performanceMode) {
+                            ctx.shadowColor = "#88f";
+                            ctx.shadowBlur = 12;
+                        }
+                        ctx.fill();
+
+
+                        ctx.restore();
+                    }
+                });
+            }
+        }
+        return info;
+    },
+    
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        for (let b of info.bullets) {
+            // Target only the grid katanas using the custom visualR property
+            if (b.visualR !== undefined) {
+                
+                // Wrap-around logic to create the infinite scrolling illusion
+                if (b.vx > 0 && b.x > info.width + act.spacing) {
+                    b.x -= act.gridWidth;
+                } else if (b.vx < 0 && b.x < -act.spacing) {
+                    b.x += act.gridWidth;
+                }
+
+                if (b.vy > 0 && b.y > info.height + act.spacing) {
+                    b.y -= act.gridHeight;
+                } else if (b.vy < 0 && b.y < -act.spacing) {
+                    b.y += act.gridHeight;
+                }
+
+                // Dynamically toggle hitbox status based on screen visibility
+                let insideX = b.x >= -b.visualR && b.x <= info.width + b.visualR;
+                let insideY = b.y >= -b.visualR && b.y <= info.height + b.visualR;
+                
+                if (insideX && insideY) {
+                    b.r = b.visualR;         // Normal length
+                    b.width = b.visualWidth; // Normal thickness (Collision turns ON)
+                } else {
+                    b.r = 4000;      // Survive engine off-screen culling
+                    b.width = -1000; // Impossible negative width (Collision turns OFF)
+                }
+            }
+        }
+        return info;
+    }
+}
+BHB.safeZoneLasers = {
+    // Usage: bulletHell({"safeZoneLasers": {interval: 2000, safeWidth: 120, chargeTime: 1000, fireTime: 500}}, {width: window.innerWidth, transparent: true, height: window.innerHeight, duration: 20, blindness: 300})
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        
+        if (!act.lastTime) act.lastTime = ticks;
+        
+        if (ticks - act.lastTime > (act.interval || 5000)) {
+            let safeWidth = act.safeWidth || 120; 
+            
+            // Pick a random point somewhat near the center of the arena
+            let safeX = (info.width / 2) + (Math.random() - 0.5) * (info.width * 0.5);
+            let safeY = (info.height / 2) + (Math.random() - 0.5) * (info.height * 0.5);
+            
+            // Pick any random angle for the safe strip
+            let angle = Math.random() * Math.PI; 
+            let perpAngle = angle + Math.PI / 2;
+
+            // Massive widths to cover the screen regardless of rotation
+            let dangerWidth = 6000; 
+            let offsetDistance = (safeWidth / 2) + (dangerWidth / 2);
+
+            const createZone = (bx, by, bAngle) => {
+                info.bullets.push({
+                    name: "knife", // MUST remain "knife" to use the OBB math!
+                    boxRender: true,
+                    x: bx,
+                    y: by,
+                    r: 8000, 
+                    width: -1000, // Mathematically impossible to hit while charging
+                    targetWidth: dangerWidth,
+                    angle: bAngle,
+                    vx: 0, vy: 0,
+                    spawnTime: Date.now(),
+                    state: "charging",
+                    draw(b, ctx) {
+                        let age = Date.now() - b.spawnTime;
+                        let chargeTime = act.chargeTime || 1500;
+                        
+                        ctx.save();
+                        ctx.translate(b.x, b.y);
+                        ctx.rotate(b.angle);
+                        
+                        if (b.state === "charging") {
+                            // Flashing translucent blue warning
+                            let flash = Math.floor(age / 150) % 2 === 0 ? 0.25 : 0.5;
+                            ctx.fillStyle = `rgba(136, 136, 255, ${flash})`; // #88f
+                            ctx.fillRect(-b.r, -b.targetWidth / 2, b.r * 2, b.targetWidth);
+                            
+                            // Solid blue line marking the safe zone edge
+                            ctx.strokeStyle = "#88f";
+                            ctx.lineWidth = 3;
+                            ctx.beginPath();
+                            ctx.moveTo(-b.r, -b.targetWidth / 2);
+                            ctx.lineTo(b.r, -b.targetWidth / 2);
+                            ctx.moveTo(-b.r, b.targetWidth / 2);
+                            ctx.lineTo(b.r, b.targetWidth / 2);
+                            ctx.stroke();
+                            
+                        } else if (b.state === "firing") {
+                            // Active Lethal Laser Background
+                            ctx.fillStyle = "rgba(34, 34, 102, 0.9)"; // #226
+                            if (!options.performanceMode) {
+                                ctx.shadowColor = "#88f";
+                                ctx.shadowBlur = 20;
+                            }
+                            ctx.fillRect(-b.r, -b.targetWidth / 2, b.r * 2, b.targetWidth);
+                            
+                            // Bright borders bordering the safe zone
+                            ctx.strokeStyle = "#88f";
+                            ctx.lineWidth = 6;
+                            if (!options.performanceMode) ctx.shadowBlur = 0;
+                            ctx.beginPath();
+                            ctx.moveTo(-b.r, -b.targetWidth / 2);
+                            ctx.lineTo(b.r, -b.targetWidth / 2);
+                            ctx.moveTo(-b.r, b.targetWidth / 2);
+                            ctx.lineTo(b.r, b.targetWidth / 2);
+                            ctx.stroke();
+                        }
+                        
+                        ctx.restore();
+                    }
+                });
+            };
+
+            // Danger Zone 1
+            let dz1x = safeX + Math.cos(perpAngle) * offsetDistance;
+            let dz1y = safeY + Math.sin(perpAngle) * offsetDistance;
+            createZone(dz1x, dz1y, angle);
+
+            // Danger Zone 2
+            let dz2x = safeX - Math.cos(perpAngle) * offsetDistance;
+            let dz2y = safeY - Math.sin(perpAngle) * offsetDistance;
+            createZone(dz2x, dz2y, angle);
+            
+            act.lastTime = ticks;
+        }
+
+        const chargeTime = act.chargeTime || 1500;
+        const fireTime = act.fireTime || 500;
+        
+        for (let b of info.bullets) {
+            // Target the wipes using targetWidth instead of name, since name is now "knife"
+            if (b.targetWidth !== undefined) {
+                let age = Date.now() - b.spawnTime;
+                
+                if (b.state === "charging" && age >= chargeTime) {
+                    b.state = "firing";
+                    b.width = b.targetWidth; // Enables the massive lethal hitbox instantly
+                } 
+                else if (b.state === "firing" && age >= chargeTime + fireTime) {
+                    b._dead = true;
+                }
+            }
+        }
+        
+        info.bullets = info.bullets.filter(b => !b._dead);
+        
+        return info;
+    }
+}
+BHB.abyssalSanctuary = {
+    // Usage: bulletHell({"abyssalSanctuary": {}}, {width: window.innerWidth, height: window.innerHeight,transparent: true, duration: 32, blindness: })
+    codeFunc(info, id) {
+        const act = info.actions[id];
+        act.startTime = Date.now();
+
+        // 1. Spawn the Background Temple 
+        info.bullets.push({
+            attackType: "temple",
+            name: "knife", // MUST be "knife" to bypass the engine's generic circular collision
+            boxRender: true,
+            x: info.width / 2,
+            y: info.height / 2,
+            r: 16000, 
+            width: -1000, // Mathematically impossible to collide with
+            angle: 0, 
+            vx: 0, 
+            vy: 0, 
+            draw(b, ctx) {
+                ctx.save();
+                ctx.translate(b.x, b.y);
+                
+                // Keep it in the background
+                ctx.globalAlpha = 0.25; 
+                ctx.scale(1.2, 1.2); 
+
+                // Outer Octagon 
+                ctx.beginPath();
+                for (let i = 0; i <= 8; i++) {
+                    let a = i * Math.PI / 4 + Math.PI / 8;
+                    ctx.lineTo(Math.cos(a) * 440, Math.sin(a) * 440);
+                }
+                ctx.strokeStyle = "#226";
+                ctx.lineWidth = 14;
+                ctx.stroke();
+
+                // Inner Octagon 
+                ctx.beginPath();
+                for (let i = 0; i <= 8; i++) {
+                    let a = i * Math.PI / 4 + Math.PI / 8;
+                    ctx.lineTo(Math.cos(a) * 380, Math.sin(a) * 380);
+                }
+                ctx.lineWidth = 5;
+                ctx.stroke();
+
+                // Torii Gate 
+                ctx.fillStyle = "#88f";
+                ctx.fillRect(-140, -40, 48, 280); // Left Pillar
+                ctx.fillRect(92, -40, 48, 280);  // Right Pillar
+                ctx.fillRect(-180, 20, 360, 32);  // Lower Bar
+                ctx.fillRect(-30, -50, 60, 70);  // Center Block
+                
+                // Curved Roof
+                ctx.beginPath();
+                ctx.moveTo(-220, -120);
+                ctx.quadraticCurveTo(0, -70, 220, -120);
+                ctx.lineTo(180, -50);
+                ctx.lineTo(-180, -50);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+            }
+        });
+
+        return info;
+    },
+
+    moveFunc(info, ticks, id) {
+        const act = info.actions[id];
+        const now = Date.now();
+        let elapsed = now - act.startTime;
+
+        let playerLocalX = info.px + (info.subArena && info.moveWithSub ? info.subx : 0);
+        let playerLocalY = info.py + (info.subArena && info.moveWithSub ? info.suby : 0);
+
+        // ==========================================
+        // SPAWN HELPERS
+        // ==========================================
+        const spawnRandomLaser = () => {
+            let edge = Math.floor(Math.random() * 4);
+            let bx, by;
+            if (edge === 0) { bx = Math.random() * info.width; by = 10; } 
+            else if (edge === 1) { bx = info.width - 10; by = Math.random() * info.height; } 
+            else if (edge === 2) { bx = Math.random() * info.width; by = info.height - 10; } 
+            else { bx = 10; by = Math.random() * info.height; } 
+
+            info.bullets.push({
+                attackType: "randomLaser",
+                name: "knife", 
+                boxRender: true,
+                x: bx, y: by, r: 8000, 
+                width: -1000, // Safe while charging
+                targetWidth: 32, 
+                angle: 0, 
+                vx: 0, vy: 0, 
+                spawnTime: now,
+                state: "charging",
+                draw(b, ctx) {
+                    let age = Date.now() - b.spawnTime; 
+                    let chargeTime = 1200;
+                    let fireTime = 400;
+                    
+                    ctx.save();
+                    ctx.translate(b.x, b.y);
+                    ctx.rotate(b.angle);
+                    
+                    if (b.state === "charging" || b.state === "locked") {
+                        let opacity = Math.min(1, age / chargeTime);
+                        ctx.beginPath(); ctx.moveTo(-4000, 0); ctx.lineTo(4000, 0);
+                        ctx.lineWidth = b.state === "charging" ? 2 : 3;
+                        ctx.setLineDash(b.state === "charging" ? [10, 10] : []);
+                        ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`;
+                        ctx.stroke(); ctx.setLineDash([]);
+                        
+                        ctx.beginPath(); ctx.arc(0, 0, 16 * opacity, 0, Math.PI * 2);
+                        ctx.fillStyle = b.state === "locked" ? "#fff" : "#88f";
+                        ctx.fill();
+                    } else if (b.state === "firing") {
+                        let fireProgress = (age - chargeTime) / fireTime;
+                        let beamThickness = b.targetWidth * Math.max(0, Math.sin(fireProgress * Math.PI));
+                        if (beamThickness > 0) {
+                            ctx.beginPath(); ctx.moveTo(-4000, 0); ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness + 12; ctx.strokeStyle = "rgba(34, 34, 102, 0.7)"; 
+                            if (!options.performanceMode) { ctx.shadowColor = "#88f"; ctx.shadowBlur = 20; }
+                            ctx.stroke();
+                            
+                            ctx.beginPath(); ctx.moveTo(-4000, 0); ctx.lineTo(4000, 0);
+                            ctx.lineWidth = beamThickness; ctx.strokeStyle = "#88f"; 
+                            if (!options.performanceMode) ctx.shadowBlur = 0;
+                            ctx.stroke();
+                        }
+                    }
+                    ctx.restore();
+                }
+            });
+        };
+
+        const spawnUltKatana = () => {
+            let length = 80;
+            let edge = Math.floor(Math.random() * 4);
+            let bx, by;
+            if (edge === 0) { bx = Math.random() * info.width; by = -length + 1; } 
+            else if (edge === 1) { bx = info.width + length - 1; by = Math.random() * info.height; } 
+            else if (edge === 2) { bx = Math.random() * info.width; by = info.height + length - 1; } 
+            else { bx = -length + 1; by = Math.random() * info.height; } 
+
+            info.bullets.push({
+                attackType: "katana",
+                name: "knife",
+                boxRender: true,
+                x: bx, y: by, r: length, 
+                width: -1000, // Safe while aiming
+                targetWidth: 20,
+                angle: 0, vx: 0, vy: 0,
+                spawnTime: now,
+                state: "aiming",
+                draw(b, ctx) {
+                    let age = Date.now() - b.spawnTime;
+                    ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.angle);
+                    if (b.state === "aiming") {
+                        let opacity = Math.min(1, age / 800);
+                        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4000, 0);
+                        ctx.lineWidth = 2; ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`;
+                        ctx.setLineDash([10, 15]); ctx.stroke(); ctx.setLineDash([]);
+                    }
+                    ctx.fillStyle = "#226"; ctx.fillRect(-b.r, -10, b.r * 0.4, 20);
+                    ctx.fillStyle = "#88f"; ctx.fillRect(-b.r * 0.6, -20, b.r * 0.06, 40);
+                    ctx.beginPath(); ctx.moveTo(-b.r * 0.54, -10); ctx.lineTo(b.r - 8, -10); 
+                    ctx.lineTo(b.r, 0); ctx.quadraticCurveTo(b.r - 8, 10, -b.r * 0.54, 10); ctx.closePath();
+                    ctx.fillStyle = "#fff";
+                    if (!options.performanceMode) { ctx.shadowColor = "#88f"; ctx.shadowBlur = 12; }
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+        };
+
+        // ==========================================
+        // TIMELINE CONTROLLER
+        // ==========================================
+        
+        // PHASES 1 & 2: Dark Rain & Lasers (0s - 20s)
+        if (elapsed < 20000) {
+            
+            // 1. Dark Rain
+            let bulletRadius = 12;
+            let bulletSpeed = 2; 
+            if (!act.lastRain) act.lastRain = now;
+            let bulletsToSpawn = Math.floor(((now - act.lastRain) / 1000) * 2); 
+            
+            for (let i = 0; i < bulletsToSpawn; i++) {
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: Math.random() * info.width, y: -bulletRadius, vx: bulletSpeed, vy: bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: Math.random() * info.width, y: info.height + bulletRadius, vx: bulletSpeed, vy: -bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: info.width + bulletRadius, y: Math.random() * info.height, vx: -bulletSpeed, vy: bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: -bulletRadius, y: Math.random() * info.height, vx: -bulletSpeed, vy: -bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: Math.random() * info.width, y: -bulletRadius, vx: 0, vy: bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: Math.random() * info.width, y: info.height + bulletRadius, vx: 0, vy: -bulletSpeed, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: info.width + bulletRadius, y: Math.random() * info.height, vx: -bulletSpeed, vy: 0, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+                info.bullets.push({ name: "ultOrb", boxRender: true, x: -bulletRadius, y: Math.random() * info.height, vx: bulletSpeed, vy: 0, r: bulletRadius, draw(b, ctx) { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 2 * Math.PI); ctx.fillStyle = "#88f"; ctx.fill() } });
+            }
+            if (bulletsToSpawn > 0) act.lastRain = now;
+
+            // 2. Abyssal Lasers
+            if (!act.lastLaser || now - act.lastLaser > 1000) {
+                spawnRandomLaser();
+                act.lastLaser = now;
+            }
+        }
+        
+        // PHASE 2 ONLY (10s - 20s): Katanas
+        if (elapsed >= 10000 && elapsed < 20000) {
+            if (!act.lastKatana || now - act.lastKatana > 1200) {
+                spawnUltKatana(); 
+                act.lastKatana = now;
+            }
+        }
+        
+        // PHASE 3 (20s - 32s): Sans-Style Sequential Circle Lasers
+        if (elapsed >= 20000 && elapsed < 32000) {
+            // Spawn a new blaster slightly further along the circle every 80ms
+            if (!act.lastCircleLaser || now - act.lastCircleLaser > 80) { 
+                act.circleAngle = (act.circleAngle || 0) + 0.22; // Rotates perfectly around the arena
+                
+                let cx = info.width / 2;
+                let cy = info.height / 2;
+                let R = Math.max(info.width, info.height) * 0.65;
+                
+                let bx = cx + Math.cos(act.circleAngle) * R;
+                let by = cy + Math.sin(act.circleAngle) * R;
+                let aimAngle = act.circleAngle + Math.PI; // Aim directly at the center
+                
+                info.bullets.push({
+                    attackType: "circleLaser",
+                    name: "knife",
+                    boxRender: true,
+                    x: bx, y: by, r: 8000, 
+                    width: -1000, // Safe while charging
+                    targetWidth: 46, // Extremely thick beams
+                    angle: aimAngle,
+                    vx: 0, vy: 0,
+                    spawnTime: now,
+                    state: "charging",
+                    draw(b, ctx) {
+                        let age = Date.now() - b.spawnTime;
+                        let charge = 900; // Extremely fast charge to force continuous running
+                        let fire = 400;
+
+                        ctx.save();
+                        ctx.translate(b.x, b.y);
+                        ctx.rotate(b.angle);
+
+                        if (b.state === "charging") {
+                            let opacity = Math.min(1, age / charge);
+                            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4000, 0);
+                            ctx.lineWidth = 3; ctx.strokeStyle = `rgba(136, 136, 255, ${opacity})`;
+                            ctx.setLineDash([10, 15]); ctx.stroke(); ctx.setLineDash([]);
+                            
+                            ctx.beginPath(); ctx.arc(0, 0, 24 * opacity, 0, Math.PI * 2);
+                            ctx.fillStyle = "#88f"; ctx.fill();
+                            ctx.beginPath(); ctx.arc(0, 0, 10 * opacity, 0, Math.PI * 2);
+                            ctx.fillStyle = "#fff"; ctx.fill();
+                            
+                        } else if (b.state === "firing") {
+                            let prog = (age - charge) / fire;
+                            let beamThickness = b.targetWidth * Math.max(0, Math.sin(prog * Math.PI));
+                            
+                            if (beamThickness > 0) {
+                                ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4000, 0);
+                                ctx.lineWidth = beamThickness + 16;
+                                ctx.strokeStyle = "rgba(34, 34, 102, 0.9)"; 
+                                if (!options.performanceMode) { ctx.shadowColor = "#88f"; ctx.shadowBlur = 25; }
+                                ctx.stroke();
+                                
+                                ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(4000, 0);
+                                ctx.lineWidth = beamThickness;
+                                ctx.strokeStyle = "#fff"; 
+                                if (!options.performanceMode) ctx.shadowBlur = 0;
+                                ctx.stroke();
+                            }
+                        }
+                        ctx.restore();
+                    }
+                });
+                act.lastCircleLaser = now;
+            }
+            
+            // Keep the occasional Katana pressure going during the circle attack
+            if (!act.lastRadialKatana || now - act.lastRadialKatana > 1500) {
+                spawnUltKatana(); 
+                act.lastRadialKatana = now;
+            }
+        }
+
+        // ==========================================
+        // PHYSICS & STATE MACHINE UPDATES
+        // ==========================================
+        for (let b of info.bullets) {
+            if (!b.attackType) continue; 
+            let age = now - b.spawnTime;
+
+            if (b.attackType === "randomLaser") {
+                let chargeTime = 1200;
+                let lockDelay = 300;
+                let fireTime = 400;
+
+                if (b.state === "charging") {
+                    b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+                    if (age >= chargeTime - lockDelay) b.state = "locked"; 
+                } else if (b.state === "locked") {
+                    if (age >= chargeTime) {
+                        b.state = "firing";
+                        b.width = b.targetWidth; 
+                    }
+                } else if (b.state === "firing") {
+                    let prog = (age - chargeTime) / fireTime;
+                    b.width = b.targetWidth * Math.max(0, Math.sin(prog * Math.PI));
+                    if (age >= chargeTime + fireTime) b._dead = true;
+                }
+            } 
+            
+            else if (b.attackType === "katana") {
+                if (b.state === "aiming") {
+                    b.angle = Math.atan2(playerLocalY - b.y, playerLocalX - b.x);
+                    if (age >= 800) { 
+                        b.state = "firing";
+                        b.width = b.targetWidth; 
+                        let speed = 15;
+                        b.vx = Math.cos(b.angle) * speed;
+                        b.vy = Math.sin(b.angle) * speed;
+                    }
+                } else if (b.state === "firing") {
+                    let isOffScreen = b.x < -300 || b.x > info.width + 300 || b.y < -300 || b.y > info.height + 300;
+                    if (isOffScreen) b._dead = true;
+                }
+            }
+
+            else if (b.attackType === "circleLaser") {
+                let charge = 900;
+                let fire = 400;
+                if (b.state === "charging" && age >= charge) {
+                    b.state = "firing";
+                    b.width = b.targetWidth;
+                } else if (b.state === "firing") {
+                    let prog = (age - charge) / fire;
+                    b.width = b.targetWidth * Math.max(0, Math.sin(prog * Math.PI));
+                    if (age >= charge + fire) b._dead = true;
+                }
+            }
+            
+            else if (b.name === "ultOrb") {
+                let isOffScreen = b.x < -100 || b.x > info.width + 100 || b.y < -100 || b.y > info.height + 100;
+                if (isOffScreen) b._dead = true;
+            }
+        }
+
+        info.bullets = info.bullets.filter(b => !b._dead);
+
+        return info;
+    }
+};

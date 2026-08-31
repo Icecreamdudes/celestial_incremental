@@ -13,6 +13,13 @@
 
         radiationSoftcapEffect: new Decimal(1),
         radiationSoftcapStart: new Decimal(10000),
+
+        //mastery
+        masterySlotsMax: new Decimal(1),
+        masterySlotsUsed: new Decimal(0),
+
+        masteryScore: new Decimal(1),
+        masteryScoreEffect: new Decimal(1),
     }},
     automate() {},
     nodeStyle() {
@@ -47,6 +54,10 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("sme", 141))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("ir", 7)[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.s.pylonEnergyEffect2)
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 17))
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 18))
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.ra.masteryScoreEffect)
+        if (player.anl.clearedRooms.roomF) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(10000)
 
         // POWER MODIFIERS
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.pow(player.se.starsExploreEffect[1][1])
@@ -67,8 +78,19 @@
             if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.mul(10)
             if (hasUpgrade("s", 29)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(0.02)
         }
+
+        player.ra.masteryScore = player.ra.buyables[21].add(1)
+        player.ra.masteryScore = player.ra.masteryScore.mul(player.ra.buyables[22].add(1))
+        player.ra.masteryScore = player.ra.masteryScore.mul(player.ra.buyables[23].add(1))
+        player.ra.masteryScore = player.ra.masteryScore.mul(player.ra.buyables[24].add(1))
+        player.ra.masteryScore = player.ra.masteryScore.mul(player.ra.buyables[25].add(1))
+        player.ra.masteryScore = player.ra.masteryScore.mul(player.ra.buyables[26].add(1))
+        if (player.anl.clearedRooms.roomF) player.ra.masteryScore = player.ra.masteryScore.pow(1.1)
+
+        player.ra.masteryScoreEffect = player.ra.masteryScore.pow(1.2).add(1) //kinda lazy code but whatever
     },
-    clickables: {},
+    clickables: {
+    },
     bars: {},
     upgrades: {},
     buyables: {
@@ -138,7 +160,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px',}
         },
         13: {
             costBase() { return new Decimal(10000) },
@@ -276,6 +298,282 @@
             },
             style: { width: '275px', height: '150px', }
         },
+
+        //new buyables
+        17: {
+            costBase() { return new Decimal("1e100000") },
+            costGrowth() { return new Decimal("1e1000") },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.s.singularityPoints},
+            pay(amt) { player.s.singularityPoints = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.4, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomA },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Singularity Radiatior"
+            },
+            display() {
+                return 'which are boosting radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Singularity Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        18: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ani.darkRadiation},
+            pay(amt) { player.ani.darkRadiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.4, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomA },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Darkness Radiatior"
+            },
+            display() {
+                return 'which are boosting radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dark Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+
+        //Mastery
+        21: {
+            costBase() { return new Decimal(1e50) },
+            costGrowth() { return new Decimal(75) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Dark Mastery"
+            },
+            display() {
+                return 'which are boosting dark radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)" }
+        },
+        22: {
+            costBase() { return new Decimal(1e55) },
+            costGrowth() { return new Decimal(90) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.45, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Color Mastery"
+            },
+            display() {
+                return 'which are boosting colored radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "linear-gradient(90deg,#5c3a3a, #5c4a3a, #565c3a, #3a5c43, #3a4f5c, #433a5c, #523a5c)", color: "white" }
+        },
+        23: {
+            costBase() { return new Decimal(1e60) },
+            costGrowth() { return new Decimal(110) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.4, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Time Mastery"
+            },
+            display() {
+                return 'which are boosting time radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "#b70d0e"}
+        },
+        24: {
+            costBase() { return new Decimal(1e65) },
+            costGrowth() { return new Decimal(125) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.4, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Space Mastery"
+            },
+            display() {
+                return 'which are boosting space radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "#000000", color: "white"}
+        },
+        25: {
+            costBase() { return new Decimal(1e80) },
+            costGrowth() { return new Decimal(200) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.375, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Heart Mastery"
+            },
+            display() {
+                return 'which are boosting heart radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "#55142a"}
+        },
+        26: {
+            costBase() { return new Decimal(1e85) },
+            costGrowth() { return new Decimal(225) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.ra.radiation},
+            pay(amt) { player.ra.radiation = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.375, getBuyableAmount(this.layer, this.id))},
+            unlocked() { return player.anl.clearedRooms.roomB },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Mind Mastery"
+            },
+            display() {
+                return 'which are boosting mind radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', background: "#00923d" }
+        },
     },
     milestones: {},
     challenges: {},
@@ -294,10 +592,30 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
-                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],
+                        ["ex-buyable", 17], ["ex-buyable", 18],
                     ], {maxWidth: "840px"}],
                     ["blank", "25px"],
                     ["raw-html", () => { return player.matosLair.milestone[25] == 0 ? "Radiation gain is based on core progress." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                ],
+            },
+            "Radiation Mastery": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.anl.clearedRooms.roomB },
+                content: [
+                    ["blank", "10px"],
+                    ["raw-html", function () { return "You have " + format(player.ra.radiation) + " radiation. <small>(" + format(player.ra.radiationPerSecond) + "/s)</small>" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "(Stored radiation: " + format(player.ra.storedRadiation) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                        ["raw-html", () => {return "After " + format(player.ra.radiationSoftcapStart) + " radiation, radiation gain is divided by /" + format(player.ra.radiationSoftcapEffect)},
+                        () => {return player.ra.radiation.gte(player.ra.radiationSoftcapStart) ? {color: "red", fontSize: "20px", fontFamily: "monospace"} : {color: "gray", fontSize: "16px", fontFamily: "monospace"}}],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Mastery Score: " + format(player.ra.masteryScore) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Boosts radiation gain by x" + format(player.ra.masteryScoreEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "25px"],
+                     ["style-row", [
+                        ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23],
+                        ["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26],
+                    ], {maxWidth: "840px"}],
                 ],
             },
         },

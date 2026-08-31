@@ -86,6 +86,10 @@
                 effect: new Decimal(1),
             },
         },
+
+        passiveGeneration: true, 
+        hover: false, 
+        deadlyRadiationTimer: new Decimal(0),
     }},
     automate() {
         if (hasUpgrade("ani", 23)) {
@@ -107,22 +111,36 @@
     branches: [["tr", "#74ff8f"], ["sr", "#74ff8f"]],
     color: "black",
     update(delta) {
+        player.ani.passiveGeneration = true
+        if (inChallenge("anl", 11) || inChallenge("anl", 12)) player.ani.passiveGeneration = false
+
         player.ani.timer.max = new Decimal(3)
         player.ani.timer.max = player.ani.timer.max.div(buyableEffect("ani", 13))
+        player.ani.timer.max = player.ani.timer.max.div(buyableEffect("anl", 32))
 
-        player.ani.darkRadiationToGet = new Decimal(1)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.ani.radiation.red.effect)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("ani", 11))
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.tr.radiation.effect2)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.sr.radiation.effect2)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("ani", 21))
-        if (hasUpgrade("hr", 12)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(upgradeEffect("hr", 12))
-        if (getLevelableAmount("pu", 501).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 501)[1])
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(buyableEffect("dec", 11))
-        if (getLevelableAmount("pu", 502).gte(1)) player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(levelableEffect("pu", 502)[1])
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.fu.hopeEffect2)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.ne.zeta.effect2)
-        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(player.bpl.roles.mutated.effect2)
+        if (!inChallenge("anl", 14)) player.ani.darkRadiationToGet = new Decimal(1)
+        if (inChallenge("anl", 14)) player.ani.darkRadiationToGet = player.dec.decay.pow(0.5)
+
+        let mult = new Decimal(1)
+        mult = mult.mul(player.ani.radiation.red.effect)
+        mult = mult.mul(buyableEffect("ani", 11))
+        mult = mult.mul(player.tr.radiation.effect2)
+        mult = mult.mul(player.sr.radiation.effect2)
+        mult = mult.mul(buyableEffect("ani", 21))
+        if (hasUpgrade("hr", 12)) mult = mult.mul(upgradeEffect("hr", 12))
+        if (getLevelableAmount("pu", 501).gte(1)) mult = mult.mul(levelableEffect("pu", 501)[1])
+        mult = mult.mul(buyableEffect("dec", 11))
+        if (getLevelableAmount("pu", 502).gte(1)) mult = mult.mul(levelableEffect("pu", 502)[1])
+        mult = mult.mul(player.fu.hopeEffect2)
+        mult = mult.mul(player.ne.zeta.effect2)
+        mult = mult.mul(player.bpl.roles.mutated.effect2)
+        mult = mult.mul(buyableEffect("ra", 21))
+
+        if (inChallenge("anl", 14)) mult = mult.pow(0.1)
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(mult)
+
+        //POWER MODIFIERS
+        player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.pow(buyableEffect("anl", 21))
 
         if (player.ani.darkRadiation.div(3).pow(0.65).add(1).lte(1e6))
         {
@@ -136,7 +154,16 @@
         player.ani.darkRadiationEffect2 = player.ani.darkRadiation.pow(0.35).add(1) //space
 
         if (player.ani.timer.current.lt(0)) {
-            makeShinies(darkRadiation, new Decimal(1))
+            let ascensionChance = new Decimal(0)
+            if (hasUpgrade("anl", 22)) ascensionChance = new Decimal(0.0001)
+            if (hasUpgrade("anl", 23)) ascensionChance = new Decimal(0.0002)
+            let random = Math.random()
+            if (random > ascensionChance) {
+                makeShinies(darkRadiation, new Decimal(1))
+                player.ani.timer.current = player.ani.timer.max
+            } else if (random < ascensionChance) {
+                makeShinies(ascendedRadiation, new Decimal(1))
+            }
             player.ani.timer.current = player.ani.timer.max
         }
 
@@ -261,12 +288,18 @@
         player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(buyableEffect("dec", 21))
         if (getLevelableAmount("pu", 503).gte(1)) player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(levelableEffect("pu", 503)[2])
         player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(buyableEffect("fu", 103))
+        player.ani.radiation.violet.toGet = player.ani.radiation.violet.toGet.mul(buyableEffect("anl", 33))
 
         player.ani.radiation.violet.max = new Decimal(20)
 
         if (player.ani.radiation.violet.current.lt(0)) {
             makeShinies(violetRadiation, new Decimal(1))
             player.ani.radiation.violet.current = player.ani.radiation.violet.max
+        }
+
+        for (let prop in player.ani.radiation) {
+            //dunno why i didnt do this earlier
+            player.ani.radiation[prop].toGet = player.ani.radiation[prop].toGet.mul(buyableEffect("ra", 22))
         }
 
         if (player.musuniverse == "AD1") {
@@ -279,7 +312,7 @@
             if (hasMilestone("rar", 13) && player.ani.radiation.violet.toggle) player.ani.radiation.violet.current = player.ani.radiation.violet.current.sub(delta)
         }
 
-        if (hasMilestone("rar", 12) && player.musuniverse == "AD1") {
+        if (hasMilestone("rar", 12) && player.musuniverse == "AD1" && player.ani.passiveGeneration) {
             player.ani.radiation.red.amount = player.ani.radiation.red.amount.add(player.ani.radiation.red.toGet.mul(Decimal.mul(0.1, delta)))
             player.ani.radiation.orange.amount = player.ani.radiation.orange.amount.add(player.ani.radiation.orange.toGet.mul(Decimal.mul(0.1, delta)))
             player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.add(player.ani.radiation.yellow.toGet.mul(Decimal.mul(0.1, delta)))
@@ -311,7 +344,7 @@
 
 
         //passive generation
-        if (hasMilestone("hor", 12))
+        if (hasMilestone("hor", 12) && player.ani.passiveGeneration)
         {
             player.ani.darkRadiation = player.ani.darkRadiation.add(player.ani.darkRadiationToGet.mul(Decimal.mul(0.1, delta)))
 
@@ -321,9 +354,35 @@
                 player.sr.generators.amount[i] = player.sr.generators.amount[i].add(player.sr.generators.perClick[i].mul(Decimal.mul(0.1, delta)))
             }
         }
+
+        if (inChallenge("anl", 12) && player.musuniverse == "AD1")
+        {
+            player.ani.deadlyRadiationTimer = player.ani.deadlyRadiationTimer.add(delta)
+            if (player.ani.deadlyRadiationTimer.gte(0.6))
+            {
+                makeShinies(deadlyRadiation2, 1)
+                player.ani.deadlyRadiationTimer = new Decimal(0)
+            }
+        }
     },
     bars: {},
     clickables: {
+        1: {
+            title() { return player.ani.hover ? "<h4>Hover<br>On</h3>" : "<h4>Hover<br>Off</h3>" },
+            canClick() { return true },
+            unlocked() { return challengeCompletions("anl", 13) >= 1 },
+            onClick() {
+                if (player.ani.hover)
+                { 
+                    player.ani.hover = false
+                }
+                else 
+                {
+                    player.ani.hover = true
+                }
+            },
+            style: { width: "100px", minHeight: "100px", borderRadius: "15px", color: "#fff", backgroundColor: "#1d901a"},
+        },
         11: {
             title() { return player.ani.darkRadiationToggle ? "<h4>Dark Radiation<br>On</h3>" : "<h4>Dark Radiation<br>Off</h3>" },
             canClick() { return true },
@@ -1080,7 +1139,7 @@
             currency() { return player.ani.stones.cosmic.amount},
             pay(amt) { player.ani.stones.cosmic.amount = this.currency().sub(amt) },
             effect(x) {
-                let eff = Decimal.pow(1.5, getBuyableAmount(this.layer, this.id))
+                let eff = Decimal.pow(1.75, getBuyableAmount(this.layer, this.id))
                 return eff
             },
             unlocked() { return true },
@@ -1246,6 +1305,8 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
+                    ["row", [["clickable", 1], ]],
+                    ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 21],["clickable", 24], ]],
                     ["row", [ ["clickable", 16], ["clickable", 17],["clickable", 18], ["clickable", 19],["clickable", 22], ["clickable", 23],]],
                 ]
@@ -1362,6 +1423,26 @@ const darkRadiation = {
         Vue.delete(particles, this.id)
         makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.darkRadiationToGet) + " Dark Radiation</small>"})
     },
+    onHover() {
+        if (player.ani.hover) {
+                    player.ani.darkRadiation = player.ani.darkRadiation.add(player.ani.darkRadiationToGet)
+
+        player.sr.spaceDecay = player.sr.spaceDecay.add(player.sr.spaceDecayPerClick)
+
+        for (let i = 0; i < player.sr.generators.amount.length; i++) {
+            player.sr.generators.amount[i] = player.sr.generators.amount[i].add(player.sr.generators.perClick[i])
+        }
+
+        if (hasUpgrade("hr", 17)) {
+            if (getLevelableTier("pu", 501, true)) player.dec.carbon14 = player.dec.carbon14.add(player.dec.carbon14ToGet.mul(0.1))
+            if (getLevelableTier("pu", 502, true)) player.dec.magnesium28 = player.dec.magnesium28.add(player.dec.magnesium28ToGet.mul(0.1))
+            if (getLevelableTier("pu", 504, true)) player.dec.dysprosium154 = player.dec.dysprosium154.add(player.dec.dysprosium154ToGet.mul(0.1))
+        }
+        
+        Vue.delete(particles, this.id)
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.darkRadiationToGet) + " Dark Radiation</small>"})
+        }
+    }
 }
 const redRadiation = {
     image: "resources/radiation/redRadiation.png",
@@ -1383,7 +1464,29 @@ const redRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(1)
+        }
     },
+        onHover() {
+            if (player.ani.hover) {
+        if (player.ani.darkRadiation.gte(player.ani.radiation.red.cost)) {
+            player.ani.radiation.red.amount = player.ani.radiation.red.amount.add(player.ani.radiation.red.toGet)
+            player.ani.darkRadiation = player.ani.darkRadiation.sub(player.ani.radiation.red.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.red.toGet) + " Red Radiation<br>-" + format(player.ani.radiation.red.cost) + " Dark Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(1)
+        }
+    }
+    }
 }
 const orangeRadiation = {
     image: "resources/radiation/orangeRadiation.png",
@@ -1405,7 +1508,31 @@ const orangeRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+        }
     },
+            onHover() {
+                if (player.ani.hover) {
+        if (player.ani.radiation.red.amount.gte(player.ani.radiation.orange.cost)) {
+            player.ani.radiation.orange.amount = player.ani.radiation.orange.amount.add(player.ani.radiation.orange.toGet)
+            player.ani.radiation.red.amount = player.ani.radiation.red.amount.sub(player.ani.radiation.orange.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.orange.toGet) + " Orange Radiation<br>-" + format(player.ani.radiation.orange.cost) + " Red Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+        }
+    }
+    }
 }
 const yellowRadiation = {
     image: "resources/radiation/yellowRadiation.png",
@@ -1427,7 +1554,33 @@ const yellowRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+        }
     },
+                onHover() {
+                    if (player.ani.hover) {
+        if (player.ani.radiation.orange.amount.gte(player.ani.radiation.yellow.cost)) {
+            player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.add(player.ani.radiation.yellow.toGet)
+            player.ani.radiation.orange.amount = player.ani.radiation.orange.amount.sub(player.ani.radiation.yellow.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.yellow.toGet) + " Yellow Radiation<br>-" + format(player.ani.radiation.yellow.cost) + " Orange Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+        }
+    }
+    }
 }
 const greenRadiation = {
     image: "resources/radiation/greenRadiation.png",
@@ -1449,7 +1602,35 @@ const greenRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+        }
     },
+                    onHover() {
+                        if (player.ani.hover) {
+        if (player.ani.radiation.yellow.amount.gte(player.ani.radiation.green.cost)) {
+            player.ani.radiation.green.amount = player.ani.radiation.green.amount.add(player.ani.radiation.green.toGet)
+            player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.sub(player.ani.radiation.green.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.green.toGet) + " Green Radiation<br>-" + format(player.ani.radiation.green.cost) + " Yellow Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+        }
+    }
+    }
 }
 const blueRadiation = {
     image: "resources/radiation/blueRadiation.png",
@@ -1471,7 +1652,37 @@ const blueRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+            player.ani.radiation.green.amount = new Decimal(0)
+        }
     },
+                        onHover() {
+                            if (player.ani.hover) {
+        if (player.ani.radiation.green.amount.gte(player.ani.radiation.blue.cost)) {
+            player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.add(player.ani.radiation.blue.toGet)
+            player.ani.radiation.green.amount = player.ani.radiation.green.amount.sub(player.ani.radiation.blue.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.blue.toGet) + " Blue Radiation<br>-" + format(player.ani.radiation.blue.cost) + " Green Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+            player.ani.radiation.green.amount = new Decimal(0)
+        }
+    }
+    }
 }
 const violetRadiation = {
     image: "resources/radiation/violetRadiation.png",
@@ -1493,7 +1704,39 @@ const violetRadiation = {
             Vue.delete(particles, this.id)
             makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
         }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+            player.ani.radiation.green.amount = new Decimal(0)
+            player.ani.radiation.blue.amount = new Decimal(0)
+        }
     },
+                            onHover() {
+                                if (player.ani.hover) {
+        if (player.ani.radiation.blue.amount.gte(player.ani.radiation.violet.cost)) {
+            player.ani.radiation.violet.amount = player.ani.radiation.violet.amount.add(player.ani.radiation.violet.toGet)
+            player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.sub(player.ani.radiation.violet.cost)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.ani.radiation.violet.toGet) + " Violet Radiation<br>-" + format(player.ani.radiation.violet.cost) + " Blue Radiation</small>"})
+        } else
+        {
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Can't afford!</small>"})
+        }
+        if (inChallenge("anl", 11))
+        {
+            player.ani.darkRadiation = new Decimal(0)
+            player.ani.radiation.red.amount = new Decimal(0)
+            player.ani.radiation.orange.amount = new Decimal(0)
+            player.ani.radiation.yellow.amount = new Decimal(0)
+            player.ani.radiation.green.amount = new Decimal(0)
+            player.ani.radiation.blue.amount = new Decimal(0)
+        }
+    }
+    }
 }
 const radiationText = {
     image: "",
@@ -1502,3 +1745,60 @@ const radiationText = {
     fadeOutTime: 1,
     class: "bigCookieNumbers",
 }
+const ascendedRadiation = {
+    image: "resources/radiation/ascendedRadiation.png",
+    time() {
+        let time = new Decimal(12) //subject to change
+        return time
+    },
+    fadeInTime: 2,
+    fadeOutTime: 4,
+    height: 124,
+    width: 124,
+    class: "goldenCookie",
+    onClick(index, slot) {
+        player.cbs.ascensionShards = player.cbs.ascensionShards.add(1)
+
+        player.sr.spaceDecay = player.sr.spaceDecay.add(player.sr.spaceDecayPerClick)
+
+        for (let i = 0; i < player.sr.generators.amount.length; i++) {
+            player.sr.generators.amount[i] = player.sr.generators.amount[i].add(player.sr.generators.perClick[i])
+        }
+
+        if (hasUpgrade("hr", 17)) {
+            if (getLevelableTier("pu", 501, true)) player.dec.carbon14 = player.dec.carbon14.add(player.dec.carbon14ToGet.mul(0.1))
+            if (getLevelableTier("pu", 502, true)) player.dec.magnesium28 = player.dec.magnesium28.add(player.dec.magnesium28ToGet.mul(0.1))
+            if (getLevelableTier("pu", 504, true)) player.dec.dysprosium154 = player.dec.dysprosium154.add(player.dec.dysprosium154ToGet.mul(0.1))
+        }
+        
+        Vue.delete(particles, this.id)
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>HOLY MOLY YOU GAINED A SHARD OF ASCENSION!!!</small>"})
+    },
+}
+const deadlyRadiation2 = {
+    image: "resources/radiation/deadlyRadiation.png",
+    time() {
+        let time = new Decimal(4) //subject to change
+        return time
+    },
+    fadeInTime: 2,
+    fadeOutTime: 4,
+    class: "goldenCookie",
+    onHover() {
+        player.ani.darkRadiation = player.ani.darkRadiation.div(10)
+        player.ani.radiation.red.amount = player.ani.radiation.red.amount.div(10)
+        player.ani.radiation.orange.amount = player.ani.radiation.orange.amount.div(10)
+        player.ani.radiation.yellow.amount = player.ani.radiation.yellow.amount.div(10)
+        player.ani.radiation.green.amount = player.ani.radiation.green.amount.div(10)
+        player.ani.radiation.blue.amount = player.ani.radiation.blue.amount.div(10)
+        player.ani.radiation.violet.amount = player.ani.radiation.violet.amount.div(10)
+        player.tr.radiation.amount = player.tr.radiation.amount.div(10)
+        player.sr.radiation.amount = player.sr.radiation.amount.div(10)
+        player.sr.spaceDecay = player.sr.spaceDecay.div(10)
+        player.mr.radiation.amount = player.mr.radiation.amount.div(10)
+        player.hr.radiation.amount = player.hr.radiation.amount.div(10)
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>/10 to radiation resources</small>"})
+        Vue.delete(particles, this.id)
+    },
+}
+                                                                         

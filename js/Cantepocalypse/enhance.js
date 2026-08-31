@@ -87,9 +87,9 @@
         if (hasUpgrade("en", 21)) player.en.enhancersUnlocked[5] = true
 
         player.en.enhancersEffect[0] = player.en.enhancerLevels[0].pow(0.75).add(1)
-        player.en.enhancersEffect[1] = player.en.enhancerLevels[1].pow(0.8).div(50).add(1)
+        player.en.enhancersEffect[1] = player.en.enhancerLevels[1].pow(0.5).div(250).add(1)
         player.en.enhancersEffect[2] = player.en.enhancerLevels[2].pow(2).add(1)
-        player.en.enhancersEffect[3] = player.en.enhancerLevels[3].pow(0.35).div(2).add(1)
+        player.en.enhancersEffect[3] = player.en.enhancerLevels[3].pow(0.15).add(1)
         player.en.enhancersEffect[4] = player.en.enhancerLevels[4].pow(0.5).add(1)
         player.en.enhancersEffect[5] = player.en.enhancerLevels[5].mul(5).pow(1.15).add(1)
     },
@@ -645,7 +645,9 @@
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
             effect() {
-                return player.fu.fear.pow(0.1).div(4).add(1)
+                let eff = player.fu.fear.pow(0.1).div(4).add(1)
+                let eff2 = eff.div(50).pow(0.3).mul(50)
+                return eff.gt(50) ? eff2 : eff
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: "150px"},

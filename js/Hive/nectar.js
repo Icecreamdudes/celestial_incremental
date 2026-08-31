@@ -540,7 +540,7 @@ addLayer("ne", {
             currencyDisplayName: "Nectar ζ",
             currencyInternalName: "amount",
             effect() {
-                return player.ani.darkRadiation.log10().pow(0.5).div(150).add(1)
+                return player.ani.darkRadiation.plus(1).log10().pow(0.5).div(150).add(1)
             },
             effectDisplay() { return "^" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},

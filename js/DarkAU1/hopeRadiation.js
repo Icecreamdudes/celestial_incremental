@@ -62,7 +62,7 @@
         }
 
         //essence
-        player.hor.essence.req = Decimal.mul("1e100000", Decimal.pow("1e100000", player.hor.essence.amount.mul(2.5)))
+        player.hor.essence.req = Decimal.mul("1e100000", Decimal.pow("1e75000", player.hor.essence.amount.mul(2.25)))
         player.hor.essence.req2 = player.hor.essence.amount.add(1).pow(Decimal.add(10, player.hor.essence.amount.mul(4))).mul("1e60")
 
         player.hor.essence.effect = player.hor.essence.amount.mul(2).pow(3).add(1)
@@ -163,11 +163,14 @@
         player.ani.radiation.yellow.amount = new Decimal(0)
         player.ani.radiation.green.amount = new Decimal(0)
         player.ani.radiation.blue.amount = new Decimal(0)
+        player.ani.radiation.violet.amount = new Decimal(0)
 
         player.ani.buyables[11] = new Decimal(0)
         player.ani.buyables[12] = new Decimal(0)
         player.ani.buyables[13] = new Decimal(0)
         player.ani.buyables[14] = new Decimal(0)
+
+        layers.le.starmetalReset();
     },
     bars: {},
     clickables: {
@@ -257,6 +260,16 @@
                 return look
             },
         },
+        17: {
+            requirementDescription: "14 Hope Essence",
+            effectDescription() { return "Autobuy all funify buyables (Doesn't require Aniciffo)." },
+            done() { return player.hor.essence.amount.gte(14) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #ffde55", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("hor", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#685a21"}
+                return look
+            },
+        },
     },
     challenges: {},
     infoboxes: {
@@ -329,6 +342,12 @@
                         ["titleless-milestone", 16],
                     ]],
                     ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "14", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#685a21", border: "3px solid #ffde55", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 17],
+                    ]],
+                    ["style-row", [
                     ], {backgroundColor: "#685a21", border: "3px solid #ffde55", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "10px"}],
                 ]
             },
@@ -372,4 +391,24 @@ const hopeRadiation = {
         }
         Vue.delete(particles, this.id)
     },
+        onHover(){
+        if (player.ani.hover) {
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.hor.radiation.toGet) + " Hope Radiation<br>Reset Complete!</small>"})
+        player.hor.radiation.amount = player.hor.radiation.amount.add(player.hor.radiation.toGet)
+        for (let i = 0; i < 60; i++) {
+            layers.le.starmetalReset();
+
+            player.funify.funify = new Decimal(0)
+            player.funify.funPoints = new Decimal(0)
+
+            player.funify.buyables[11] = new Decimal(0)
+            player.funify.buyables[12] = new Decimal(0)
+            player.funify.buyables[13] = new Decimal(0)
+            player.funify.buyables[14] = new Decimal(0)
+            player.funify.buyables[15] = new Decimal(0)
+            player.funify.buyables[16] = new Decimal(0)
+        }
+        Vue.delete(particles, this.id)
+        }
+    }
 }

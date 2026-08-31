@@ -45,8 +45,10 @@
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("dec", 23))
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("tr", 18))
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("n", 83))
+        player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("ra", 26))
+        player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("anl", 22))
 
-        if (hasMilestone("rar", 15)) player.mr.radiation.amount = player.mr.radiation.amount.add(player.mr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+        if (hasMilestone("rar", 15) && player.ani.passiveGeneration) player.mr.radiation.amount = player.mr.radiation.amount.add(player.mr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
         player.mr.radiation.max = new Decimal(2)
 
@@ -317,7 +319,7 @@ const mindRadiation = {
         Vue.delete(particles, this.id)
     },
     y() {
-        return (Math.random() + 1) * -400
+        return (Math.random() + 1) * -20
     },
     spread: 100,
     dir() {
@@ -326,4 +328,12 @@ const mindRadiation = {
     speed() { // Randomize speed a bit
         return (Math.random() + 2) * 4
     },
+            onHover(){
+        if (player.ani.hover) {
+        player.mr.particleClick = player.mr.particleClick.add(1)
+        if (player.mr.particleClick.lt(player.mr.particleClickReq)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>" + formatWhole(player.mr.particleClick) + "/" + formatWhole(player.mr.particleClickReq) + " Clicked!</small>"})
+        if (player.mr.particleClick.eq(player.mr.particleClickReq)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.mr.radiation.toGet) + " Mind Radiation<br>Reset Complete!</small>"})
+        Vue.delete(particles, this.id)
+        }
+    }
 }

@@ -48,6 +48,7 @@
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(levelableEffect("car", 202)[0])
         player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.pow(buyableEffect("sm", 116))
         if (hasAchievement("achievements", 1003)) player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(1.2)
+        if (hasAchievement("achievements", 1016)) player.za.chancePointsSoftcapStart = player.za.chancePointsSoftcapStart.mul(5)
 
         if (player.za.chancePoints.add(player.za.chancePointsPerSecond).gte(player.za.chancePointsSoftcapStart))
         {

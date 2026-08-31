@@ -62,12 +62,116 @@
 
         //essence
         player.rar.essence.req = Decimal.mul("1e500", Decimal.pow(1e50, player.rar.essence.amount))
+        player.rar.essence.req = player.rar.essence.req.pow(buyableEffect("anl", 41))
         player.rar.essence.req2 = player.rar.essence.amount.add(1).pow(Decimal.add(10, player.rar.essence.amount.mul(4))).mul("1e60")
 
         player.rar.essence.effect = player.rar.essence.amount.mul(3).pow(3).add(1)
         player.rar.essence.effect2 = player.rar.essence.amount.pow(0.4).mul(2).add(1)
     },
     rageEssenceReset() {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                layers.al.prestigeReset(true)
+            }, 100*i)
+        }
+        player.sr.particleClick = new Decimal(0)
+
+        player.tr.radiation.amount = new Decimal(0)
+        player.tr.buyables[11] = new Decimal(0)
+        player.tr.buyables[12] = new Decimal(0)
+        player.tr.buyables[13] = new Decimal(0)
+        player.tr.buyables[14] = new Decimal(0)
+        player.tr.buyables[15] = new Decimal(0)
+        player.tr.buyables[16] = new Decimal(0)
+        player.tr.buyables[17] = new Decimal(0)
+        player.tr.buyables[18] = new Decimal(0)
+        player.tr.buyables[19] = new Decimal(0)
+
+        player.sr.radiation.amount = new Decimal(0)
+        player.sr.spaceDecay = new Decimal(0)
+        player.sr.generators.amount[0] = new Decimal(0)
+        player.sr.generators.amount[1] = new Decimal(0)
+        player.sr.generators.amount[2] = new Decimal(0)
+        player.sr.generators.amount[3] = new Decimal(0)
+        player.sr.buyables[1] = new Decimal(0)
+        player.sr.buyables[2] = new Decimal(0)
+        player.sr.buyables[3] = new Decimal(0)
+        player.sr.buyables[4] = new Decimal(0)
+
+        for (let i = 0; i < player.sr.generators.amount.length; i++) {
+            player.sr.generators.amount[i] = new Decimal(0)
+        }
+
+        player.mr.radiation.amount = new Decimal(0)
+        player.mr.particleClick = new Decimal(0)
+
+        player.hr.radiation.amount = new Decimal(0)
+        player.hr.particleClick = new Decimal(0)
+
+        player.dec.decay = new Decimal(0)
+        player.dec.stability = new Decimal(0)
+        player.dec.carbon14 = new Decimal(0)
+        player.dec.nitrogen14 = new Decimal(0)
+        player.dec.magnesium28 = new Decimal(0)
+        player.dec.aluminum28 = new Decimal(0)
+        player.dec.silicon28 = new Decimal(0)
+
+        player.dec.dysprosium154 = new Decimal(0)
+        player.dec.gadolinium150 = new Decimal(0)
+        player.dec.samarium146 = new Decimal(0)
+        player.dec.neodymium142 = new Decimal(0)
+
+        player.subtabs["dec"]["stuff"] = "Main"
+
+        player.dec.buyables[11] = new Decimal(0)
+        player.dec.buyables[12] = new Decimal(0)
+        player.dec.buyables[13] = new Decimal(0)
+        player.dec.buyables[14] = new Decimal(0)
+        player.dec.buyables[21] = new Decimal(0)
+        player.dec.buyables[22] = new Decimal(0)
+        player.dec.buyables[23] = new Decimal(0)
+        player.dec.buyables[24] = new Decimal(0)
+        player.dec.buyables[31] = new Decimal(0)
+        player.dec.buyables[32] = new Decimal(0)
+        player.dec.buyables[33] = new Decimal(0)
+        player.dec.buyables[34] = new Decimal(0)
+        player.dec.buyables[35] = new Decimal(0)
+        player.dec.buyables[36] = new Decimal(0)
+
+        player.dec.electrons = new Decimal(0)
+        player.dec.alphaParticles = new Decimal(0)
+
+        player.dec.buyables[41] = new Decimal(0)
+        player.dec.buyables[42] = new Decimal(0)
+        player.dec.buyables[43] = new Decimal(0)
+        player.dec.buyables[44] = new Decimal(0)
+        player.dec.buyables[45] = new Decimal(0)
+        player.dec.buyables[46] = new Decimal(0)
+        player.dec.buyables[47] = new Decimal(0)
+        player.dec.buyables[48] = new Decimal(0)
+        player.dec.buyables[49] = new Decimal(0)
+        player.dec.buyables[51] = new Decimal(0)
+        player.dec.buyables[52] = new Decimal(0)
+        player.dec.buyables[53] = new Decimal(0)
+        player.dec.buyables[54] = new Decimal(0)
+        player.dec.buyables[55] = new Decimal(0)
+        player.dec.buyables[56] = new Decimal(0)
+        player.dec.buyables[57] = new Decimal(0)
+        player.dec.buyables[58] = new Decimal(0)
+        player.dec.buyables[59] = new Decimal(0)
+
+        player.ani.darkRadiation = new Decimal(0)
+        player.ani.radiation.red.amount = new Decimal(0)
+        player.ani.radiation.orange.amount = new Decimal(0)
+        player.ani.radiation.yellow.amount = new Decimal(0)
+        player.ani.radiation.green.amount = new Decimal(0)
+        player.ani.radiation.blue.amount = new Decimal(0)
+        player.ani.radiation.violet.amount = new Decimal(0)
+
+        player.ani.buyables[11] = new Decimal(0)
+        player.ani.buyables[12] = new Decimal(0)
+        player.ani.buyables[13] = new Decimal(0)
+        player.ani.buyables[14] = new Decimal(0)
     },
     bars: {},
     clickables: {
@@ -79,7 +183,7 @@
                 player.rar.essence.amount = player.rar.essence.amount.add(1)
                 for (let i = 0; i < 5; i++) {
                     setTimeout(() => {
-                        layers.al.prestigeReset(true)
+                        layers.rar.rageEssenceReset()
                     }, 100*i)
                 }
             },
@@ -151,6 +255,16 @@
             requirementDescription: "10 Rage Essence",
             effectDescription() { return "Unlock Aniciffo's labyrinth (also requires the hope milestone)." },
             done() { return player.rar.essence.amount.gte(10) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #ba4ad3", borderTop: "0px", borderRadius: "0px"}
+                if (hasMilestone("rar", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#520c61"}
+                return look
+            },
+        },
+        17: {
+            requirementDescription: "14 Rage Essence",
+            effectDescription() { return "Autobuy all grassjumper buyables (Doesn't require Aniciffo)." },
+            done() { return player.rar.essence.amount.gte(14) },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "black", border: "3px solid #ba4ad3", borderTop: "0px", borderRadius: "0px"}
                 if (hasMilestone("rar", this.id)) {look.backgroundColor = "#77bf5f"} else {look.backgroundColor = "#520c61"}
@@ -229,6 +343,12 @@
                         ["titleless-milestone", 16],
                     ]],
                     ["style-row", [
+                        ["style-column", [
+                            ["raw-html", "14", {color: "rgba(0,0,0,0.6)", fontSize: "32px", fontFamily: "monospace"}],
+                        ], {backgroundColor: "#520c61", border: "3px solid #ba4ad3", borderRight: "0px", borderTop: "0px", borderRadius: "0px", width: "75px", height: "75px"}],
+                        ["titleless-milestone", 17],
+                    ]],
+                    ["style-row", [
                     ], {backgroundColor: "#520c61", border: "3px solid #ba4ad3", borderTop: "0px", borderRadius: "0px 0px 13px 13px", width: "588px", height: "10px"}],
                 ]
             },
@@ -270,4 +390,22 @@ const rageRadiation = {
         }
         Vue.delete(particles, this.id)
     },
+        onHover(){
+        if (player.ani.hover) {
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.rar.radiation.toGet) + " Rage Radiation<br>Reset Complete!</small>"})
+        player.rar.radiation.amount = player.rar.radiation.amount.add(player.rar.radiation.toGet)
+        for (let i = 0; i < 60; i++) {
+            layers.le.starmetalReset();
+
+            player.dgj.grassJumpers = new Decimal(0)
+            player.dgj.buyables[11] = new Decimal(0)
+            player.dgj.buyables[12] = new Decimal(0)
+            player.dgj.buyables[13] = new Decimal(0)
+            player.dgj.buyables[14] = new Decimal(0)
+            player.dgj.buyables[15] = new Decimal(0)
+            player.dgj.buyables[16] = new Decimal(0)
+        }
+        Vue.delete(particles, this.id)
+        }
+    }
 }

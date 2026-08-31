@@ -111,6 +111,7 @@
         if (getLevelableTier("pu", 503, true)) player.dec.decayPerSecond = player.dec.decayPerSecond.mul(levelableEffect("pu", 503)[0])
         if (getLevelableTier("pu", 501, true)) player.dec.decayPerSecond = player.dec.decayPerSecond.mul(levelableEffect("pu", 501)[0])
         player.dec.decayPerSecond = player.dec.decayPerSecond.mul(player.hor.radiation.effect2)
+        player.dec.decayPerSecond = player.dec.decayPerSecond.mul(buyableEffect("anl", 31))
 
         player.dec.decay = player.dec.decay.add(player.dec.decayPerSecond.mul(delta))
 
@@ -132,6 +133,7 @@
         if (getLevelableTier("pu", 502, true)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(levelableEffect("pu", 502)[0])
         if (getLevelableTier("pu", 503, true)) player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(levelableEffect("pu", 503)[1])
         player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(player.rar.radiation.effect2)
+        player.dec.stabilityPerSecond = player.dec.stabilityPerSecond.mul(buyableEffect("anl", 31))
             
         player.dec.stability = player.dec.stability.add(player.dec.stabilityPerSecond.mul(delta))
 
@@ -467,7 +469,7 @@
             currency() { return player.dec.decay},
             pay(amt) { player.dec.decay = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -504,7 +506,7 @@
             currency() { return player.dec.decay},
             pay(amt) { player.dec.decay = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(1.1)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(1.1).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -541,7 +543,7 @@
             currency() { return player.dec.decay},
             pay(amt) { player.dec.decay = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.9)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.9).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -617,7 +619,7 @@
             currency() { return player.dec.stability},
             pay(amt) { player.dec.stability = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(1.15)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(1.15).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -654,7 +656,7 @@
             currency() { return player.dec.stability},
             pay(amt) { player.dec.stability = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1).pow(1.1)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1).pow(1.1).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -691,7 +693,7 @@
             currency() { return player.dec.stability},
             pay(amt) { player.dec.stability = this.currency().sub(amt) },
             effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.9)
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.9).pow(challengeEffect("anl", 14))
                 return eff
             },
             unlocked() { return true },
@@ -1348,7 +1350,7 @@
                     ], () => {return true ? {width: "500px", height: "100px",}: {display: "none !important"}}],
                     ], () => {return true ? {width: "1000px", height: "100px",}: {display: "none !important"}}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "Permanent Buyables" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "<i>Permanent</i> Buyables" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13], ["dark-buyable", 14]]],
                     ["row", [["dark-buyable", 21], ["dark-buyable", 22], ["dark-buyable", 23], ["dark-buyable", 24]]],

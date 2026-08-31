@@ -54,11 +54,13 @@
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("dec", 12))
         if (getLevelableAmount("pu", 505).gte(1)) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(levelableEffect("pu", 505)[1])
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(player.rar.essence.effect)
-
-        if (hasMilestone("rar", 14)) player.tr.radiation.amount = player.tr.radiation.amount.add(player.tr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+        player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("ra", 23))
+        player.tr.radiation.toGet = player.tr.radiation.toGet.mul(challengeEffect("anl", 12))
 
         if (!player.pet.legPetTimers[0].active) player.tr.radiation.toGet = new Decimal(0)
 
+        if (hasMilestone("rar", 14) && player.ani.passiveGeneration) player.tr.radiation.amount = player.tr.radiation.amount.add(player.tr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+            
         player.tr.radiation.max = new Decimal(30)
         if (hasMilestone("hor", 12)) player.tr.radiation.max = player.tr.radiation.max.div(2)
 
@@ -496,6 +498,13 @@ const timeRadiation1 = {
         makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>1/3 Clicked!</small>"})
         Vue.delete(particles, this.id)
     },
+    onHover(){
+        if (player.ani.hover) {
+        player.tr.particleClick = new Decimal(1)
+        makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>1/3 Clicked!</small>"})
+        Vue.delete(particles, this.id)
+        }
+    }
 }
 const timeRadiation2 = {
     image: "resources/radiation/time2.png",
@@ -519,6 +528,21 @@ const timeRadiation2 = {
             Vue.delete(particles, this.id)
         }
     },
+        onHover(){
+        if (player.ani.hover) {
+        if (player.tr.particleClick.eq(1))
+        {
+            player.tr.particleClick = new Decimal(2)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>2/3 Clicked!</small>"})
+            Vue.delete(particles, this.id)
+        } else
+        {
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Reset Failed!</small>"})
+            player.tr.particleClick = new Decimal(0)
+            Vue.delete(particles, this.id)
+        }
+        }
+    }
 }
 const timeRadiation3 = {
     image: "resources/radiation/time3.png",
@@ -542,4 +566,19 @@ const timeRadiation3 = {
             player.tr.particleClick = new Decimal(0)
         }
     },
+            onHover(){
+        if (player.ani.hover) {
+        if (player.tr.particleClick.eq(2))
+        {
+            player.tr.particleClick = new Decimal(3)
+            Vue.delete(particles, this.id)
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.tr.radiation.toGet) + " Time Radiation<br>Reset Complete!</small>"})
+        } else
+        {
+            makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>Reset Failed!</small>"})
+            Vue.delete(particles, this.id)
+            player.tr.particleClick = new Decimal(0)
+        }
+    }
+    }
 }

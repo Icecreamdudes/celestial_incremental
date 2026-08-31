@@ -497,9 +497,14 @@
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             effect() {
-                return player.ta.highestRocketFuel.pow(0.1).mul(0.015).add(1)
+                let eff = player.ta.highestRocketFuel.pow(0.1).mul(0.015).add(1)
+                if (eff.gte("1e1000")) eff = eff.div("1e1000").log(10).add(1).pow(0.75).sub(1).pow_base(10).mul("1e1000");
+                return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).gte("1e1000")) return format(upgradeEffect(this.layer, this.id))+"x <small style='color:red'>[SOFTCAPPED]"
+                return format(upgradeEffect(this.layer, this.id))+"x"
+            }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         108: {

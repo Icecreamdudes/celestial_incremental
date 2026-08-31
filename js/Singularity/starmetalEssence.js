@@ -71,6 +71,8 @@
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pu", 305)[2])
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("depth4", 4))
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("st", 306)[0])
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("ep1", 16))
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(player.prj.modules[3].completionEffect)
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i])) {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)
@@ -1548,7 +1550,7 @@
             },
             display() {
                 return "<h3>SME-F3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
-                    Gain a chance to gain another visit on space exploration\n\
+                    Gain a chance to gain double visits on space exploration\n\
                     Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
                     Cost:<br>" + formatShortWhole(player.pl.planets) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Planets\n\
                     " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
@@ -1673,7 +1675,7 @@
         161: {
             costBase() { return [new Decimal(20), new Decimal(1e6)] },
             costGrowth() { return [new Decimal(2), new Decimal(3)] },
-            purchaseLimit() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(3) },
             currency() { return [player.sma.eclipseShards, player.sme.starmetalEssence]},
             pay(amt, amt2) {
                 player.sma.eclipseShards = this.currency()[0].sub(amt)
@@ -2164,6 +2166,144 @@
                 return look
             },
         },
+        191: {
+            costBase() { return [new Decimal(10), new Decimal(2e8)] },
+            costGrowth() { return [new Decimal(8), new Decimal(1.5)] },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return [player.prj.storedTimeCapsules, player.sme.starmetalEssence]},
+            pay(amt, amt2) {
+                player.prj.storedTimeCapsules = this.currency()[0].sub(amt)
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked() {return hasMilestone("prj", 108)},
+            branches: [[105, "#3d996b"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 105).gt(0)
+            },
+            display() {
+                return "<h3>SME-J1</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Increase project speed by +5%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost:<br>" + formatShortWhole(player.prj.storedTimeCapsules) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Stored Time Capsules\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[0], this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "480px", top: "1280px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
+        192: {
+            costBase() { return [new Decimal(1e26), new Decimal(4e8)] },
+            costGrowth() { return [new Decimal(1e4), new Decimal(1.75)] },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return [player.sb.storedSpaceEnergy, player.sme.starmetalEssence]},
+            pay(amt, amt2) {
+                player.sb.storedSpaceEnergy = this.currency()[0].sub(amt)
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(50).add(1)},
+            unlocked() {return hasMilestone("prj", 108)},
+            branches: [[191, "#3d996b"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 191).gt(0)
+            },
+            display() {
+                return "<h3>SME-J2</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Increase all well speeds by +2%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost:<br>" + formatShortWhole(player.sb.storedSpaceEnergy) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Stored Space Energy\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[0], this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "640px", top: "1280px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
+        193: {
+            costBase() { return [new Decimal(2), new Decimal(1e9)] },
+            costGrowth() { return [new Decimal(1.5), new Decimal(2.5)] },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return [player.blu.totalBlueshifts, player.sme.starmetalEssence]},
+            pay(amt2) {
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(5).add(1)},
+            unlocked() {return hasMilestone("prj", 108)},
+            branches: [[191, "#3d996b"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 191).gt(0)
+            },
+            display() {
+                return "<h3>SME-J3</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    Increase D1 exit timer tickspeed by +20%.\n\
+                    Currently: +" + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + "%\n\ \n\
+                    Cost:<br>" + formatShortWhole(player.blu.totalBlueshifts) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " Blueshifts\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "480px", top: "1420px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
+        194: {
+            costBase() { return [new Decimal(3600), new Decimal(4e9)] },
+            costGrowth() { return [new Decimal(10), new Decimal(3)] },
+            purchaseLimit() { return new Decimal(5) },
+            currency() { return [player.prj.projectSpeed, player.sme.starmetalEssence]},
+            pay(amt2) {
+                player.sme.starmetalEssence = this.currency()[1].sub(amt2)
+            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).div(20).add(1)},
+            unlocked() {return hasMilestone("prj", 108)},
+            branches: [[192, "#3d996b"]],
+            cost(x) {
+                return [this.costGrowth()[0].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[0]).floor(), this.costGrowth()[1].pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()[1]).floor()]
+            },
+            canAfford() {
+                return this.currency()[0].gte(this.cost()[0]) && this.currency()[1].gte(this.cost()[1]) && getBuyableAmount("sme", 192).gt(0)
+            },
+            display() {
+                return "<h3>SME-J4</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    Improve floor 1 project effects by +^0.05.\n\
+                    Currently: ^" + formatWhole(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Cost:<br>" + formatShortWhole(player.prj.projectSpeed) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[0]) + " PRJ Speed\n\
+                    " + formatShortWhole(player.sme.starmetalEssence) + "/" + formatShortWhole(tmp[this.layer].buyables[this.id].cost[1]) + " SME"
+            },
+            buy() {
+                this.pay(this.cost()[0], this.cost()[1])
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {position: "absolute", left: "640px", top: "1420px", width: "140px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid #282363", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)"
+                return look
+            },
+        },
     },
     milestones: {},
     challenges: {},
@@ -2204,10 +2344,12 @@
                         ["buyable", 161], ["buyable", 162], ["buyable", 163], ["buyable", 164],
                         ["buyable", 171], ["buyable", 172], ["buyable", 173], ["buyable", 174], ["buyable", 175], ["buyable", 176],
                         ["buyable", 181], ["buyable", 182], ["buyable", 183], ["buyable", 184],
+                        ["buyable", 191], ["buyable", 192], ["buyable", 193], ["buyable", 194],
                     ], () => {
                         let look = {position: "relative", width: "800px", height: "780px", background: "rgba(0,0,0,0.3)", border: "3px solid #d460eb", borderRadius: "0 0 30px 30px"}
                         if (player.ir.iriditeDefeated) look.height = "1340px"
-                        if (player.alephsChamber.milestone[25] > 0) look.height = "1420px"
+                        if (player.alephsChamber.milestone[25] > 0 || player.lightRift.interspaceUnlocked) look.height = "1420px"
+                        if (player.lightRift.interspaceUnlocked || false) look.height = "1560px"
                         return look
                     }],
                 ]

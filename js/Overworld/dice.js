@@ -119,10 +119,11 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+            background: "linear-gradient(0deg, #0061ff -100%, white 100%)",
             "background-origin": "border-box",
             "border-color": "#0061ff",
-        };
+            "color": "black",
+        }
     },
     color: "white",
     tooltip: "Dice",
@@ -733,7 +734,7 @@
                 player.universe = "DS"
                 player.uni.DS.paused = false
             },
-            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
+            style: {width: "600px", minHeight: "200px", color: "#1b110eff", backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", border: "3px solid #0061ff", borderRadius: "15px"},
         },
     },
     addDiceEffect() {
@@ -989,7 +990,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         13: {
             costBase() { return new Decimal(500) },
@@ -1023,7 +1024,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         14: {
             costBase() { return new Decimal(1000) },
@@ -1057,7 +1058,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         15: {
             costBase() { return new Decimal(2000) },
@@ -1091,7 +1092,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
 
         //challenge dice
@@ -1137,7 +1138,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         22: {
             costBase() { return new Decimal(1000) },
@@ -1171,7 +1172,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         23: {
             costBase() { return new Decimal(100000) },
@@ -1205,7 +1206,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
         24: {
             costBase() { return new Decimal(1e7) },
@@ -1240,7 +1241,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #0061ff -100%, white 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {},

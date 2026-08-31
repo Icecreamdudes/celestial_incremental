@@ -1,4 +1,5 @@
-﻿addLayer("rf", {
+﻿
+addLayer("rf", {
     name: "Rocket Fuel", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RF", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U1",
@@ -33,30 +34,11 @@
         }
     },
     nodeStyle() {
-        function degreesToRadians(degrees) {
-            return (degrees * Math.PI) / 180;
-        }
-
-        // Define the base hue value for dark blue (between 0 and 360 degrees)
-        const darkBlueHue = 210;
-
-        // Define the base lightness values for dark blue and light gray (between 0 and 100%)
-        const darkBlueLightness = 20; // Adjust for darker blue
-        const lightGrayLightness = 80; // Adjust for lighter gray
-
-        // Calculate the current lightness value based on time (smoothly oscillating between dark blue and light gray)
-        const currentTime = new Date().getTime();
-        const lightnessOffset = (Math.sin(currentTime / 400) + 1) / 9; // Adjust the divisor to change oscillation speed
-        const lightness1 = darkBlueLightness + (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-        const lightness2 = lightGrayLightness - (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-
-        // Create the gradient string using the HSL colors
-        const gradient = `linear-gradient(to right, hsl(${darkBlueHue}, 80%, ${lightness1}%), hsl(${darkBlueHue}, 80%, ${lightness2}%))`;
-
         return {
-            background: gradient,
+            background: "linear-gradient(0deg, #119B35 -100%, #2a65a8 100%)",
             "background-origin": "border-box",
             "border-color": "#119B35",
+            "color": "white",
         }
     },
     tooltip: "Rocket Fuel",

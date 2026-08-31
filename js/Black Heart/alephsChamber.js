@@ -98,7 +98,7 @@ addLayer("alephsChamber", {
                 ["top-column", [
                     ["style-column", [
                         ["raw-html", "3 Characters", {color: "rgba(0,0,0,0.5)", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", "Unlock Alephs Perks", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
+                        ["raw-html", "Unlock Aleph's Perks", {color: "rgba(0,0,0,0.5)", fontSize: "14px", fontFamily: "monospace"}],
                     ], () => {
                         let look = {width: "232px", height: "58px", padding: "0 5px", background: "#bf8f8f", border: "4px solid rgba(0, 0, 0, 0.125)", cursor: "default", userSelect: "none"}
                         if (player.alephsChamber.milestone[25] >= 1) look.background = "#77bf5f"

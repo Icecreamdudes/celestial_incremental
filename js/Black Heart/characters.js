@@ -162,3 +162,16 @@ BHP.nox = {
     mending() {return new Decimal(10).mul(player.bh.baseMult)},
     potency() {return new Decimal(0).mul(player.bh.baseMult)},
 }
+BHP.bumpy = {
+    name: "Bumpy",
+    color: "#bf6090",
+    icon: "resources/bumpyFighting.png",
+    health: new Decimal(48),
+    damage: new Decimal(12),
+    defense: new Decimal(24),
+    regen: new Decimal(1),
+    agility: new Decimal(4),
+    luck: new Decimal(0),
+    mending: new Decimal(4),
+    potency: new Decimal(4),
+}

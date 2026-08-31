@@ -1,6 +1,6 @@
 ﻿addLayer("fu", {
     name() {
-        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
+        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, the Celestial of Fun"
     }, // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
         return !player.fu.jocusCelestialActivate ? "Fu" : "☻"
@@ -180,7 +180,7 @@
         };
     },
     tooltip() {
-        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
+        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, the Celestial of Fun"
     },
     color: "#fcff04",
     branches: ["oi", 'gs'],
@@ -285,8 +285,8 @@
         player.fu.fearPerSecond = buyableEffect("fu", 61)
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("fu", 71))
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(buyableEffect("ep1", 12))
-        player.fu.fearPerSecond = player.fu.fearPerSecond.div(player.fu.fearEffect)
         if (hasUpgrade("fu", 115)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(upgradeEffect("fu", 115))
+        player.fu.fearPerSecond = player.fu.fearPerSecond.div(player.fu.fearEffect)
         if (player.alephsChamber.milestone[25] > 0) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(10)
         player.fu.fearPerSecond = player.fu.fearPerSecond.mul(player.en.enhancersEffect[2])
         if (hasChallenge("fu", 11)) player.fu.fearPerSecond = player.fu.fearPerSecond.mul(2)
@@ -3654,7 +3654,7 @@
                     ["row", [["challenge", 12]]],
                     ["blank", "10px"],
                     ["row", [
-                        ["raw-html", () => { return player.fu.enterNumb ? "You have <h3>" + formatSimple(player.fu.apathy) + "</h3> apathy" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return player.fu.enterNumb ? "You have <h3>" + formatSimple(player.fu.apathy) + "</h3> apathy." : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return inChallenge("fu", 12) ? "(+" + formatSimple(player.fu.apathyToGet) + ")" : "" }, () => {
                             let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                             player.fu.apathyToGet.gte(1) ? look.color = "white" : look.color = "gray"
@@ -3690,7 +3690,7 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", "Perks for killing Jocus", {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", "Perks for defeating Jocus", {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "800px", border: "3px solid #5e8503", backgroundImage: "linear-gradient(120deg, #fcff04 0%, #befa32 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-column", [
                         ["raw-html", "<u>Unlocks</u>", {color: "rgba(0,0,0,0.6)", fontSize: "20px", fontFamily: "monospace"}],

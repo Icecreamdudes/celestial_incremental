@@ -21,7 +21,7 @@ addLayer("savebank", {
         4: {
             title() { return "Savebank<br><small style='color:#f44'>[HEAVILY WIP]</small>" },
             canClick: true,
-            unlocked: true,
+            unlocked: false,
             onClick() {
                 player.tab = "savebank"
             },
@@ -133,7 +133,7 @@ addLayer("savebank", {
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Matos-CBF"
             },
-            style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
+            style: { width: '200px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         22: {
             title() { return "Iridite<br>Hive" },

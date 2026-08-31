@@ -58,6 +58,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 18))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.ra.masteryScoreEffect)
         if (player.anl.clearedRooms.roomF) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(10000)
+        if (player.ep1.dragonEvolutionIndex >= 1) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(3);
 
         // POWER MODIFIERS
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.pow(player.se.starsExploreEffect[1][1])
@@ -76,7 +77,7 @@
             if (hasUpgrade("cs", 1303)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.45).log(player.ra.radiationSoftcapStart).add(1))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
             if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.mul(10)
-            if (hasUpgrade("s", 29)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(0.02)
+            if (hasUpgrade("s", 29)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(0.05)
         }
 
         player.ra.masteryScore = player.ra.buyables[21].add(1)
@@ -165,7 +166,7 @@
         13: {
             costBase() { return new Decimal(10000) },
             costGrowth() { return new Decimal(1000) },
-            purchaseLimit() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.ra.radiation},
             pay(amt) { player.ra.radiation = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id))},
@@ -267,7 +268,7 @@
         16: {
             costBase() { return new Decimal(12000) },
             costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(375) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.ra.radiation},
             pay(amt) { player.ra.radiation = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(3, getBuyableAmount(this.layer, this.id))},

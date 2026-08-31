@@ -570,23 +570,23 @@ addLayer("ev0", {
                     }
                 }, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
                 ["raw-html", () => { return "<div class='bottomTooltip'>Coin Dust<hr><small>x" + formatShort(player.ev0.coinDustEffect) + " Check Back XP</small></div>"}],
-            ], () => {return !player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px"} : {width: "148px", height: "50px", borderRight: "2px solid white"} }],
+            ], () => {return !player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px"} : {width: "148px", height: "50px", borderRight: "2px solid #655421"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/coinShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShort(player.ev0.coinShards) + "<br>" + formatShort(player.ev0.coinShardsPerSecond) + "/s"}, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
                 ["raw-html", () => { return "<div class='bottomTooltip'>Coin Shards<hr><small>x" + format(player.ev0.coinShardEffect) + " Coin Dust</small></div>"}],
-            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid #655421"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid #655421"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => {return player.cb.highestLevel.gte(250) ? {width: "150px", height: "50px"} : {display: "none !important"}}],
-        ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
+        ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid #655421", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid #655421", borderRadius: "10px", userSelect: "none"} }],
         ["blank", "25px"],
         ["style-row", [
             ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],

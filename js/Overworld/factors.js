@@ -107,7 +107,6 @@
         // SOFTCAP START
         player.f.doomSoftcapStart = new Decimal("1e2000000")
         player.f.doomSoftcapStart = player.f.doomSoftcapStart.pow(buyableEffect("fa", 406))
-        if (hasUpgrade("s", 33)) player.f.doomSoftcapStart = player.f.doomSoftcapStart.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)

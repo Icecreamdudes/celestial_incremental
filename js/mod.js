@@ -30,8 +30,6 @@
 		"Black Heart/depth2.js", "Black Heart/depth3.js", "Black Heart/matosLair.js", "Black Heart/darkTemple.js", "Black Heart/bulletHell.js",
 		"Black Heart/stagnantSynestia.js", "Black Heart/depth4.js", "Black Heart/alephsChamber.js", "Black Heart/laboratory.js", "DarkU1/grassJump.js",
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
-		"DarkAU1/aniciffo.js", "DarkAU1/timeRadiation.js", "DarkAU1/spaceRadiation.js", "DarkAU1/mindRadiation.js", "DarkAU1/heartRadiation.js",
-		"DarkAU1/decay.js", "DarkAU1/hopeRadiation.js", "DarkAU1/rageRadiation.js", "DarkAU1/labyrinth.js",
 		"Check Back/diamondDust.js", "Check Back/treasureRoom.js",
 
 		"Singularity/lightRift.js",
@@ -294,33 +292,6 @@ function updateStyles() {
 			    case "zarDungeon":
 					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
 					break;
-				case "roomA":
-					layerBG = "linear-gradient(180deg, #10220c 0%, #1f240f 100%)"
-					break;
-				case "roomB":
-					layerBG = "linear-gradient(160deg, #102b0b 0%, #2b3311 100%)"
-					break;
-				case "roomC":
-					layerBG = "linear-gradient(160deg, #1d2b0b 0%, #22331d 100%)"
-					break;
-				case "roomTemple":
-					layerBG = "radial-gradient(#113, black)"
-					break;
-				case "roomD":
-					layerBG = "linear-gradient(90deg, #0c2218 0%, #0b1f0e 100%)"
-					break;
-				case "roomE":
-					layerBG = "linear-gradient(120deg, #0c2122 0%, #0b1f16 100%)"
-					break;
-				case "roomF":
-					layerBG = "linear-gradient(135deg, #0e252b 0%, #12312b 100%)"
-					break;
-				case "roomG":
-					layerBG = "linear-gradient(115deg, #051425 0%, #123128 100%)"
-					break; //linear-gradient(45deg, #1a265f 0%, #153242 100%)
-				case "roomH":
-					layerBG = "linear-gradient(45deg, #0d132e 0%, #0b1a22 100%)"
-					break; 
 				default: 
 					layerBG = "linear-gradient(0deg, black)"
 					break;
@@ -329,14 +300,6 @@ function updateStyles() {
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
 			layerBG = "linear-gradient(0deg, #000)"
-			break;
-		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "anl":
-			if (player.sma.inStarmetalChallenge) layerBG = "url(resources/ad1bg.png)"
-			if (!player.sma.inStarmetalChallenge && player.tab == "hor") layerBG = "#454726"
-			if (!player.sma.inStarmetalChallenge && player.tab == "rar") layerBG = "#520c61"
-			break;
-		case "dec":
-			layerBG = "url(resources/ad1bg2.png)"
 			break;
 		case "ch": case "mm":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
@@ -722,9 +685,9 @@ function updateStyles() {
 		let lay = document.getElementById("layerHolder");
 		if (lay) lay.style.filter = "brightness(100%)"
 	}
-	
+
 	// Solar Eclipse Effect (moving sun/moon)
-	if (!options.performanceMode && player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active && player.musuniverse == "D1") {
+	if (!options.performanceMode && player.sma.inStarmetalChallenge && player.pet.legPetTimers[0].active) {
 	    if (!document.getElementById("solar-eclipse-bg")) {
     	    // Create the eclipse overlay
 	        const eclipse = document.createElement("div");
@@ -997,14 +960,9 @@ function updateStyles() {
 		case "sma": case "bh": case "cof": case "sme": case "lightRift":
             player.musuniverse = "U3"
 			break;
-		case "du": case "le": case "dr": case "dp": case "dg": case "db":
-		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp": case "funify":
+		case "du": case "le": case "dr": case "dp": case "dg":
+		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp":
             player.musuniverse = "D1"
-			break;
-		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "dec": case "anl":
-            if (player.sma.inStarmetalChallenge) player.musuniverse = "AD1"
-			if (!player.sma.inStarmetalChallenge && player.tab == "hor") player.musuniverse = "A1"
-			if (!player.sma.inStarmetalChallenge && player.tab == "rar") player.musuniverse = "UB"
 			break;
 		case "ch": case "mm":
             player.musuniverse = "CH"
@@ -1101,8 +1059,6 @@ function updateStyles() {
 						if (player.ir.inBattle && arena && !arena.bossActive) playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10);
 			    		if (player.ir.inBattle && arena && arena.bossActive) playAndLoopAudio("music/nox.mp3", options.musicVolume/10);
 						break;
-					case "AD1":
-						playAndLoopAudio("music/dau1.mp3", options.musicVolume/10)
 					case "CH":
 						if (player.tab == "ch" || player.tab == "mm") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
 						//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
@@ -2220,10 +2176,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
-	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation", "timeRadiationReset", "spaceRadiationReset",
+	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
 	"diamondDustReset",
-	"hopeEssenceReset", "rageEssenceReset",
-	"mindRadiationReset", "heartRadiationReset", "hopeRageLevelReset",
 	"openChest",
 	"checkAchs",
 	"levelableButtonStyle",

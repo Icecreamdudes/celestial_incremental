@@ -278,9 +278,6 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 11))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
-            if (hasUpgrade("cbs", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 101))
-            player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("ani", 22))
-
             if (hasUpgrade("cbs", 18)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 18))
             if (player.ep1.dragonEvolutionIndex >= 4) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(3);
                 

@@ -1,4 +1,4 @@
-﻿addLayer("ev", {
+﻿﻿addLayer("ev", {
     name: "Evolution", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "E", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "CB",
@@ -1072,6 +1072,50 @@ addLayer("ev8", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
+        let ESCMult = levelableEffect("pet", 1107)[1]
+        ESCMult = ESCMult.add(buyableEffect("ev2", 31).sub(1))
+        ESCMult = ESCMult.add(buyableEffect("depth1", 4).sub(1))
+
+        ESCMult = ESCMult.mul(levelableEffect("pet", 1102)[1])
+        ESCMult = ESCMult.mul(levelableEffect("ir", 9)[0])
+        if (hasUpgrade("cbs", 102)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 102))
+        if (hasAchievement("achievements", 1012)) ESCMult = ESCMult.mul(1.2)
+
+        ESCMult = ESCMult.sub(1).mul(buyableEffect("sme", 117).sub(1)).add(1)
+
+        player.ev8.evoTimers[0].base = new Decimal(1)
+        player.ev8.evoTimers[0].max = new Decimal(18000)
+        player.ev8.evoTimers[1].base = new Decimal(2)
+        player.ev8.evoTimers[1].max = new Decimal(54000)
+        player.ev8.evoTimers[2].base = new Decimal(4)
+        player.ev8.evoTimers[2].max = new Decimal(108000)
+        player.ev8.evoTimers[3].base = new Decimal(9)
+        player.ev8.evoTimers[3].max = new Decimal(324000)
+        for (let thing in player.ev8.evoTimers) {
+            if (hasUpgrade("ev8", 27)) {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult.pow(1.5)).floor()
+            } else {
+                player.ev8.evoTimers[thing].base = player.ev8.evoTimers[thing].base.mul(ESCMult).floor()
+            }
+            if (hasUpgrade("ev8", 11)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.1)
+            
+            player.ev8.evoTimers[thing].current = player.ev8.evoTimers[thing].current.sub(onepersec.mul(delta))
+        }
+
+        player.ev8.paraTimers[0].base = new Decimal(1)
+        player.ev8.paraTimers[0].max = new Decimal(180000)
+        player.ev8.paraTimers[1].base = new Decimal(3)
+        player.ev8.paraTimers[1].max = new Decimal(450000)
+        player.ev8.paraTimers[2].base = new Decimal(5)
+        player.ev8.paraTimers[2].max = new Decimal(864000)
+        player.ev8.paraTimers[3].base = new Decimal(12)
+        player.ev8.paraTimers[3].max = new Decimal(2592000)
+        for (let thing in player.ev8.paraTimers) {
+            player.ev8.paraTimers[thing].base = player.ev8.paraTimers[thing].base.mul(ESCMult)
+            if (hasUpgrade("ev8", 11)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.1)
+
+            player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
+        }
     },
     clickables: {
         //evo

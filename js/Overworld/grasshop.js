@@ -101,7 +101,6 @@
         // SOFTCAP START
         player.gh.doomSoftcapStart = new Decimal("1e1000000")
         player.gh.doomSoftcapStart = player.gh.doomSoftcapStart.pow(buyableEffect("fa", 407))
-        if (hasUpgrade("s", 33)) player.gh.doomSoftcapStart = player.gh.doomSoftcapStart.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)
@@ -180,7 +179,6 @@
         // SOFTCAP START
         player.gh.doomSoftcap2Start = new Decimal("1e2000000")
         player.gh.doomSoftcap2Start = player.gh.doomSoftcap2Start.pow(buyableEffect("fa", 408))
-        if (hasUpgrade("s", 33)) player.gh.doomSoftcap2Start = player.gh.doomSoftcap2Start.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken2 = new Decimal(1)

@@ -46,7 +46,6 @@
     update(delta) {
         player.car.cardGeneratorsToGet = player.za.chancePoints.pow(0.075).div(16).floor()
         player.car.cardGeneratorsToGet = player.car.cardGeneratorsToGet.mul(buyableEffect("sm", 114))
-        if (hasAchievement("achievements", 1018)) player.car.cardGeneratorsToGet = player.car.cardGeneratorsToGet.mul(1.25)
 
         player.car.cardShreds = player.car.cardShreds.add(player.car.cardShredsPerSecond.mul(delta))
         player.car.cardShredsPerSecond = player.car.cardGenerators.pow(2)
@@ -54,7 +53,6 @@
         player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 23))
         player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 33))
         player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(buyableEffect("car", 43))
-        if (hasAchievement("achievements", 1017)) player.car.cardShredsPerSecond = player.car.cardShredsPerSecond.mul(1.25)
 
         player.car.cardShredReq = new Decimal(1000)
         if (player.car.cardDrawAmount.lte(50)) player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(4).add(1))

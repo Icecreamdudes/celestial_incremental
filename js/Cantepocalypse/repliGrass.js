@@ -20,7 +20,7 @@ addLayer("rg", {
         repliGrassSoftcapStart: new Decimal(1000),
     }},
     automate() {
-        if (hasMilestone("s", 16) && !inChallenge("fu", 11) && (!inChallenge("fu", 12) || hasUpgrade("en", 18))) {
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11) && !inChallenge("fu", 12)) {
             buyBuyable('rg', 11)
             buyBuyable('rg', 12)
             buyBuyable('rg', 13)
@@ -92,7 +92,7 @@ addLayer("rg", {
             } else if (getGridData("rg", val).lt(player.rg.repliGrassMult.mul(player.rg.repliGrassCap))) {
                 setGridData("rg", val, getGridData("rg", val).add(player.rg.repliGrassMult).min(player.rg.repliGrassMult.mul(player.rg.repliGrassCap)))
             }
-            if (!inChallenge("fu", 11) && (!inChallenge("fu", 12) || hasUpgrade("en", 18))) {
+            if (!inChallenge("fu", 11) && !inChallenge("fu", 12)) {
                 let mult = player.rg.repliGrassMult.sub(1)
                 if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart)) {
                     mult = mult.div(player.rg.repliGrassSoftcapEffect)

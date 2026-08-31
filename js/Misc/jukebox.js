@@ -72,15 +72,15 @@ addLayer("jukebox", {
             },
         },
         13: {
-            title: "Battle",
+            title: "Black Heart",
             canClick: true,
             unlocked() {return player.bh.unlockConditions.done},
             onClick() {
-                player.subtabs["jukebox"]["stuff"] = "Battle"
+                player.subtabs["jukebox"]["stuff"] = "Black Heart"
             },
             style() {
                 let look = {width: "200px", minHeight: "40px", fontSize: "14px", color: "var(--textColor)", background: "var(--miscButton)", border: "3px solid var(--miscButtonDisable)", borderRadius: "0"}
-                if (player.subtabs["jukebox"]["stuff"] == "Battle") look.borderColor = "var(--selected)"
+                if (player.subtabs["jukebox"]["stuff"] == "Black Heart") look.borderColor = "var(--selected)"
                 return look
             },
         },
@@ -594,17 +594,15 @@ addLayer("jukebox", {
                     ["blank", "2px"],
                 ],
             },
-            "Battle": {
+            "Black Heart": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked: true,
                 content: [
                     ["blank", "2px"],
                     ["row", [
                         ["jukebox", "none"], ["jukebox", "black-heart"], ["jukebox", "depth-1"], ["jukebox", "depth-2"],
-                        ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "space-battle"],
-                        ["jukebox", "iridite-fight"], ["jukebox", "stagnant-synestia"],
-                        ["jukebox", "depth-4"], ["jukebox", "laboratory"], ["jukebox", "aleph-fight"], ["jukebox", "casino"],
-                        ["jukebox", "negative-depth-1"],["jukebox", "zar-fight"],
+                        ["jukebox", "depth-3"], ["jukebox", "matos-lair"], ["jukebox", "matos-fight"], ["jukebox", "stagnant-synestia"],
+                        ["jukebox", "depth-4"], ["jukebox", "laboratory"], ["jukebox", "aleph-fight"],
                     ]],
                     ["blank", "2px"],
                 ],

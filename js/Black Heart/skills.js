@@ -15,23 +15,12 @@ BHA.none = {
 
 // General Skills
 BHA.general_slap = {
-    get name() { 
-        return player.bh.flipside ? "Punch" : "Slap";
-    },
+    name: "Slap",
     description(char) {
-        if (!player.bh.flipside)
-        {
         if (hasUpgrade("depth1", 106)) {
             return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage, with a " + formatSimple(Decimal.mul(10, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to hit twice, and soft-stuns the celestialite for a second."
         }
         return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["general_slap"].level.mul(15))) + "% physical damage and soft-stuns the celestialite for a second."
-        } else
-        {
-            if (hasUpgrade("depth1", 106)) {
-                return "Deals " + formatWhole(new Decimal(150).add(player.bh.skillData["general_slap"].level.mul(25))) + "% physical damage but soft-stuns self for a second, with a " + formatSimple(Decimal.mul(10, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to hit twice, and soft-stuns the celestialite for a second."
-            }
-            return "Deals " + formatWhole(new Decimal(150).add(player.bh.skillData["general_slap"].level.mul(25))) + "% physical damage but soft-stuns self for a second."
-        }
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["general_slap"].maxLevel.div(5)) + " DMG"},
     char: "general",
@@ -42,48 +31,23 @@ BHA.general_slap = {
     unlocked() {return hasUpgrade("depth1", 4)},
 
     instant: true,
+    type: "damage",
     target: "celestialite",
-    get type() { 
-        return "function"
-    },
+    method: "physical",
     properties: {
-    "multi-hit"(char) {
-        let luckMult = Decimal.div(Decimal.add(100, char.luck), 100)
-        if (hasUpgrade("depth1", 106) && Decimal.lt(Math.random(), luckMult.div(10))) {
-            return [2, 200]
-        } else {
-            return [1, 200]
-        }
-        }, 
+        "stun": [new Decimal(1), "soft", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+        "multi-hit"(char) {
+            let luckMult = Decimal.div(Decimal.add(100, char.luck), 100)
+            if (hasUpgrade("depth1", 106) && Decimal.lt(Math.random(), luckMult.div(10))) {
+                return [2, 200]
+            } else {
+                return [1, 200]
+            }
+        },
     },
-    onTrigger(index, slot, target, method)
-    {
-        if (player.bh.flipside)
-        {
-        let baseDmg = new Decimal(1.5).add(player.bh.skillData["general_slap"].level.mul(0.25))
-        let dmg = baseDmg.mul(player.bh.characters[index].damage)
-        bhAttack(dmg, index, slot, "celestialite", "", "physical")
-        player.bh.characters[index].stun = ["soft", new Decimal(1)]
-        } else
-        {
-            let baseDmg = new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))
-            let dmg = baseDmg.mul(player.bh.characters[index].damage)
-            bhAttack(dmg, index, slot, "celestialite", "", "physical")
-            player.bh.celestialite.stun = ["soft", new Decimal(1)]
-        }
-    },
+    value() {return new Decimal(0.75).add(player.bh.skillData["general_slap"].level.mul(0.15))},
     cooldown: new Decimal(10),
     cooldownCap: new Decimal(4),
-    style() {
-        return player.bh.flipside ? {
-            background: "#333",
-            color: "#fff",
-            borderColor: "#666",
-        } : {
-            background: "#666",
-    
-        }
-    },
 }
 BHA.general_bandage = {
     name: "Bandage",
@@ -274,10 +238,8 @@ BHA.general_rest = {
 
 // Kres Skills
 BHA.kres_chop = {
-    get name() { 
-        return player.bh.flipside ? "Axe Throw" : "Chop";
-    },
-    description(char) {return player.bh.flipside ? "Throws an axe, dealing " + formatWhole(new Decimal(150).add(player.bh.skillData["kres_chop"].level.mul(30))) + "% ranged damage, but have a " + formatSimple(Decimal.div(50, Decimal.div(Decimal.add(100, char.luck), 100))) + "% chance to miss" : "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["kres_chop"].level.mul(20))) + "% physical damage"},
+    name: "Chop",
+    description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["kres_chop"].level.mul(20))) + "% physical damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_chop"].maxLevel.div(5)) + " DMG"},
     char: "kres",
     spCost: new Decimal(4),
@@ -287,25 +249,12 @@ BHA.kres_chop = {
     unlocked: true,
 
     instant: true,
-    get properties() {
-        return player.bh.flipside ? { "miss": 0.5 } : {};
-    },
     type: "damage",
     target: "celestialite",
-    method() { return player.bh.flipside ? "ranged" : "physical" },
-    value() {return player.bh.flipside ? new Decimal(1.5).add(player.bh.skillData["kres_chop"].level.mul(0.3)) : new Decimal(1).add(player.bh.skillData["kres_chop"].level.mul(0.2))},
+    method: "physical",
+    value() {return new Decimal(1).add(player.bh.skillData["kres_chop"].level.mul(0.2))},
     cooldown: new Decimal(8),
     cooldownCap: new Decimal(2),
-    style() {
-        return player.bh.flipside ? {
-            background: "#ba6375",
-            color: "#000",
-            borderColor: "#910a27",
-        } : {
-            background: "#910a27",
-    
-        }
-    },
 }
 BHA.kres_bigAttack = {
     name: "Big Attack",
@@ -330,14 +279,11 @@ BHA.kres_bigAttack = {
     cooldownCap: new Decimal(4),
 }
 BHA.kres_battleCry = {
-    get name() { 
-        return player.bh.flipside ? "Viking Rage" : "Battle Cry";
-    },
+    name: "Battle Cry",
     description(char) {
         let effect = new Decimal(50).add(player.bh.skillData["kres_battleCry"].level.mul(10))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        if (player.bh.flipside) effect = effect
-        return player.bh.flipside ? "Boosts the entire team's agility by +" + formatSimple(effect) + "% for 9s" : "Boosts the entire team's damage by +" + formatSimple(effect) + "% for 9s"
+        return "Boosts the entire team's damage by +" + formatSimple(effect) + "% for 9s"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["kres_battleCry"].maxLevel.div(5)) + " DMG"},
     char: "kres",
@@ -351,22 +297,11 @@ BHA.kres_battleCry = {
     constantType: "effect",
     constantTarget: "allPlayer",
     effects: {
-        "damageMult"() {return !player.bh.flipside ? new Decimal(1.5).add(player.bh.skillData["kres_battleCry"].level.mul(0.1)) : new Decimal(1)}, // Multiplicative Effect
-        "agilityMult"() {return player.bh.flipside ? new Decimal(1.5).add(player.bh.skillData["kres_battleCry"].level.mul(0.1)) : new Decimal(1)}, // Multiplicative Effect
+        "damageMult"() {return new Decimal(1.5).add(player.bh.skillData["kres_battleCry"].level.mul(0.1))}, // Multiplicative Effect
     },
     cooldown: new Decimal(25),
     duration: new Decimal(9),
     cooldownCap: new Decimal(4.5),
-    style() {
-        return player.bh.flipside ? {
-            background: "#ba6375",
-            color: "#000",
-            borderColor: "#910a27",
-        } : {
-            background: "#910a27",
-    
-        }
-    },
 }
 BHA.kres_decapitate = {
     name: "Decapitate",
@@ -424,18 +359,10 @@ BHA.kres_berserker = {
 
 // Nav Skills
 BHA.nav_magicMissle = {
-    get name() { 
-        return player.bh.flipside ? "Forbidden Magic" : "Magic Missile";
-    },
+    name: "Magic Missile",
     description() {
-        if (!player.bh.flipside)
-        {
-            if (hasUpgrade("sp", 22)) return "Shoots 2 missiles, dealing " + formatWhole(new Decimal(60).add(player.bh.skillData["nav_magicMissle"].level.mul(12))) + "% magic damage each"
-            return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nav_magicMissle"].level.mul(20))) + "% magic damage"
-        } else {
-            if (hasUpgrade("sp", 22)) return "Shoots 2 forbidden magic missiles, dealing " + formatWhole(new Decimal(90).add(player.bh.skillData["nav_magicMissle"].level.mul(18))) + "% magic damage each, but 10% of the damage is self inflicted."
-            return "Deals " + formatWhole(new Decimal(150).add(player.bh.skillData["nav_magicMissle"].level.mul(30))) + "% magic damage, but 20% of the damage is self inflicted."
-        }
+        if (hasUpgrade("sp", 22)) return "Shoots 2 missiles, dealing " + formatWhole(new Decimal(60).add(player.bh.skillData["nav_magicMissle"].level.mul(12))) + "% magic damage each"
+        return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nav_magicMissle"].level.mul(20))) + "% magic damage"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_magicMissle"].maxLevel.div(5)) + " DMG"},
     char: "nav",
@@ -449,35 +376,18 @@ BHA.nav_magicMissle = {
     type: "damage",
     target: "celestialite",
     method: "magic",
-    get properties() {
-        return player.bh.flipside ? { "backfire": [new Decimal(1), new Decimal(0.2)], "multi-hit"() {
+    properties: {
+        "multi-hit"() {
             if (hasUpgrade("sp", 22)) return [2, 100]
             return [1, 200]
-        },} : {             "multi-hit"() {
-            if (hasUpgrade("sp", 22)) return [2, 100]
-            return [1, 200]
-        },};
+        }, // Amount / Delay
     },
     value() {
-        if (!player.bh.flipside)
-        {
-            if (hasUpgrade("sp", 22)) return new Decimal(0.60).add(player.bh.skillData["nav_magicMissle"].level.mul(0.12))
-            return new Decimal(1).add(player.bh.skillData["nav_magicMissle"].level.mul(0.2))
-        } else {
-            return new Decimal(1.5).add(player.bh.skillData["nav_magicMissle"].level.mul(0.3))
-        }
+        if (hasUpgrade("sp", 22)) return new Decimal(0.60).add(player.bh.skillData["nav_magicMissle"].level.mul(0.12))
+        return new Decimal(1).add(player.bh.skillData["nav_magicMissle"].level.mul(0.2))
     },
     cooldown: new Decimal(6),
     cooldownCap: new Decimal(1.5),
-    style() {
-        return player.bh.flipside ? {
-            background: "#240b2b",
-            color: "#fff",
-            borderColor: "#d645ff",
-        } : {
-            background: "#710a91",
-        }
-    },
 }
 BHA.nav_healSpell = {
     name: "Heal Spell",
@@ -572,20 +482,11 @@ BHA.nav_soulShred = {
 }
 
 BHA.nav_violetResonance = {
-    get name() { 
-        return player.bh.flipside ? "Necromance" : "Violet Resonance";
-    },
+    name: "Violet Resonance",
     description(char) {
-        if (!player.bh.flipside)
-        {
-            let heal = new Decimal(30).add(player.bh.skillData["nav_violetResonance"].level.mul(5))
-            if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
-            return "Heals the entire party by " + formatWhole(heal) + " health."
-        } else
-        {
-            return "Revives a dead party member to 50% HP at the cost of 50% of Nav's HP. (Can only be used twice)"
-        }
-    },
+        let heal = new Decimal(30).add(player.bh.skillData["nav_violetResonance"].level.mul(5))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        return "Heals the entire party by " + formatWhole(heal) + " health."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["nav_violetResonance"].maxLevel) + " MND"},
     char: "nav",
     spCost: new Decimal(25),
@@ -594,14 +495,10 @@ BHA.nav_violetResonance = {
     currency: "paragonShards",
     unlocked() {return player.zarDungeon.navMilestone }, //make this something eventually
     style() {
-        return !player.bh.flipside ? {
+        return {
             background: "linear-gradient(90deg, #7f0083, #5500de)",
             color: "white",
             borderColor: "rgb(197, 144, 228)",
-        } : {
-            background: "linear-gradient(90deg, #3a1c42, #224a25)",
-            color: "white",
-            borderColor: "black",
         }
     },
 
@@ -613,37 +510,15 @@ BHA.nav_violetResonance = {
     cooldownCap: new Decimal(50),
     onTrigger(index, slot, target, method, char)
     {
-        if (!player.bh.flipside) {
-            let heal = new Decimal(30).add(player.bh.skillData["nav_violetResonance"].level.mul(5))
-            bhHeal(heal, index, slot, "allPlayer", "")
-    
-            navHealEffect();
-    
-            options.musicVolume = Math.round(options.musicVolume * 0.2)
-            setTimeout(() => {
-                options.musicVolume = Math.round(options.musicVolume * 5)
-            }, 5000);
-        } else {
-            player.bh.characters[index].health = player.bh.characters[index].health.sub(player.bh.characters[index].maxHealth.mul(0.5))
-            navNecromanceEffect()
-            //revive a dead person
-            for (let i = 0; i<3; i++)
-            {
-                if (player.bh.characters[i].health.lte(0))
-                {
-                    player.bh.characters[i].health = player.bh.characters[i].maxHealth.mul(0.5)
-                    break;
-                }
-            }
-            options.musicVolume = Math.round(options.musicVolume * 0.2)
-            setTimeout(() => {
-                options.musicVolume = Math.round(options.musicVolume * 5)
-            }, 4000);
-            player.bh.necromanceUses = player.bh.necromanceUses.sub(1)
-        }
-    },
-    conditional(index, slot) {
-        return player.bh.flipside ? player.bh.characters[index].health.gte(player.bh.characters[index].maxHealth.mul(0.5)) && player.bh.characterDead && player.bh.necromanceUses.gt(0) : true
+        let heal = new Decimal(30).add(player.bh.skillData["nav_violetResonance"].level.mul(5))
+        bhHeal(heal, index, slot, "allPlayer", "")
+
+        navHealEffect();
+
+        options.musicVolume = options.musicVolume * 0.2
+        setTimeout(() => {
+            options.musicVolume = options.musicVolume * 5
+        }, 5000);
     },
 }
 
@@ -651,18 +526,8 @@ BHA.nav_violetResonance = {
 
 // Sel Skills
 BHA.sel_singleShot = {
-    get name() { 
-        return player.bh.flipside ? "Speed Shot" : "Single Shot";
-    },
-    description(char) {
-        if (!player.bh.flipside)
-        {
-            return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["sel_singleShot"].level.mul(15))) + "% ranged damage"
-        } else
-        {
-            return "Deals " + formatWhole(new Decimal(50).add(player.bh.skillData["sel_singleShot"].level.mul(10))) + "% ranged damage"     
-        }
-    },
+    name: "Single Shot",
+    description() {return "Deals " + formatWhole(new Decimal(75).add(player.bh.skillData["sel_singleShot"].level.mul(15))) + "% ranged damage"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_singleShot"].maxLevel.div(2)) + " AGI"},
     char: "sel",
     spCost: new Decimal(4),
@@ -670,22 +535,14 @@ BHA.sel_singleShot = {
     curCostScale: new Decimal(4),
     currency: "gloomingUmbrite",
     unlocked: true,
-    style() {
-        return player.bh.flipside ? {
-            background: "#6dfc8c",
-            color: "#000",
-            borderColor: "#065c19",
-        } : {
-            background: "#065c19",
-        }
-    },
+
     instant: true,
     type: "damage",
     target: "celestialite",
     method: "ranged",
-    value() {return player.bh.flipside ? new Decimal(0.5).add(player.bh.skillData["sel_singleShot"].level.mul(0.1)) : new Decimal(0.75).add(player.bh.skillData["sel_singleShot"].level.mul(0.15))},
-    get cooldown() { return player.bh.flipside ? new Decimal(2) : new Decimal(4) },
-    get cooldownCap() { return player.bh.flipside ? new Decimal(0.5) : new Decimal(1)  },
+    value() {return new Decimal(0.75).add(player.bh.skillData["sel_singleShot"].level.mul(0.15))},
+    cooldown: new Decimal(4),
+    cooldownCap: new Decimal(1),
 }
 BHA.sel_turret = {
     name: "Turret",
@@ -719,7 +576,7 @@ BHA.sel_turret = {
 }
 BHA.sel_energyBoost = {
     name: "Energy Boost",
-    description() {return "Reduces a random characters cooldowns by " + formatTime(new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2)))},
+    description() {return "Reduces a random character's cooldowns by " + formatTime(new Decimal(6).add(player.bh.skillData["sel_energyBoost"].level.mul(1.2)))},
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_energyBoost"].maxLevel.div(2)) + " AGI"},
     char: "sel",
     spCost: new Decimal(8),
@@ -759,21 +616,11 @@ BHA.sel_arrowBarrage = {
     cooldownCap: new Decimal(2),
 }
 BHA.sel_scavenger = {
-    get name() { 
-        return player.bh.flipside ? "Embezzle" : "Scavenger";
-    },
+    name: "Scavenger",
     description(char) {
-        if (!player.bh.flipside)
-        {
-            let effect = new Decimal(10).add(player.bh.skillData["sel_scavenger"].level.mul(2))
-            if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-            return "Gain a +" + formatSimple(effect) + "% chance to double celestialite rewards"
-        } else
-        {
-            let effect = new Decimal(30).add(player.bh.skillData["sel_scavenger"].level.mul(6))
-            if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-            return "Gain a +" + formatSimple(effect) + "% chance to double celestialite rewards at the cost of nullifying Sel's regen."
-        }
+        let effect = new Decimal(10).add(player.bh.skillData["sel_scavenger"].level.mul(2))
+        if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
+        return "Gain a +" + formatSimple(effect) + "% chance to double celestialite rewards"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["sel_scavenger"].maxLevel.div(2)) + " LUCK"},
     char: "sel",
@@ -782,37 +629,22 @@ BHA.sel_scavenger = {
     curCostScale: new Decimal(2),
     currency: "temporalShard",
     unlocked() {return hasUpgrade("stagnantSynestia", 3)},
+
     passive: true,
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "curAdd"() {
-            return player.bh.flipside ? new Decimal(0.3).add(player.bh.skillData["sel_scavenger"].level.mul(0.06)) : new Decimal(0.1).add(player.bh.skillData["sel_scavenger"].level.mul(0.02))
-        }, // Multiplicative Effect
+        "curAdd"() {return new Decimal(0.1).add(player.bh.skillData["sel_scavenger"].level.mul(0.02))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
-    style() {
-        return player.bh.flipside ? {
-            background: "#6dfc8c",
-            color: "#000",
-            borderColor: "#065c19",
-        } : {
-            background: "#065c19",
-        }
-    },
 }
 
 // Add a passive version of turret (Likely called mini-turret)
 
 // Eclipse Skills
 BHA.eclipse_drain = {
-    get name() { 
-        return player.bh.flipside ? "Replenish" : "Drain";
-    },
-    description() {return player.bh.flipside ? "Heal all players by " + formatWhole(new Decimal(0.1).add(player.bh.skillData["eclipse_drain"].level.mul(0.5))) + "% of Eclipse's damage per second." :
-        "Deal " + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% spirit damage per second"
-
-    },
+    name: "Drain",
+    description() {return "Deal " + formatWhole(new Decimal(10).add(player.bh.skillData["eclipse_drain"].level.mul(2))) + "% spirit damage per second"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_drain"].maxLevel.div(5)) + " DMG"},
     char: "eclipse",
     spCost: new Decimal(6),
@@ -823,30 +655,13 @@ BHA.eclipse_drain = {
 
     passive: true,
     constantType: "effect",
-    get constantTarget() {return player.bh.flipside ? "allPlayer" : "celestialite"},
+    constantTarget: "celestialite",
     effects: {
         "regenAdd"(char) {
-            if (player.bh.flipside)
-            {
-                let heal = char.damage.mul(player.bh.skillData["eclipse_drain"].level.mul(0.001).add(0.005))
-                return heal
-            } else
-            {
-                damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))
-                damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
-                return damage
-            }
+            let damage = char.damage.mul(Decimal.sub(-0.1, player.bh.skillData["eclipse_drain"].level.mul(0.02)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
         }, // Multiplicative Effect
-    },
-    style() {
-        return player.bh.flipside ? {
-            background: "#eed695",
-            color: "black",
-            borderColor: "#f1cd6a",
-        } : {
-            background: "#b68c18",
-    
-        }
     },
     cooldown: new Decimal(Infinity),
 }
@@ -893,21 +708,12 @@ BHA.eclipse_motivation = {
     cooldownCap: new Decimal(1),
 }
 BHA.eclipse_lightBarrier = {
-    get name() { 
-        return player.bh.flipside ? "Lunar Bind" : "Light Barrier";
-        },
+    name: "Light Barrier",
     description() {
-        if (!player.bh.flipside)
-        {
-            let time = "time"
-            if (new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor()).neq(1)) time = "times"
-            let str = "Soft-stuns you for " + formatTime(new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
-            return str
-        } else
-        {
-            let str = "Soft-stuns the celestialite for " + formatTime(new Decimal(3).add(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(3))) + ", but shield the celestialite 4 times."
-            return str
-        }
+        let time = "time"
+        if (new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor()).neq(1)) time = "times"
+        let str = "Soft-stuns you for " + formatTime(new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2))) + ", then shield all players " + formatWhole(new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())) + " " + time
+        return str
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_lightBarrier"].maxLevel.div(2)) + " DEF"},
     char: "eclipse",
@@ -918,31 +724,12 @@ BHA.eclipse_lightBarrier = {
     unlocked() {return hasUpgrade("sma", 222)},
 
     instant: true,
-    get type() { return player.bh.flipside ? "function" : "shield" },
-    onTrigger() {
-        if (player.bh.flipside)
-        {
-            player.bh.celestialite.shield = player.bh.celestialite.shield.add(4)
-            player.bh.celestialite.stun = ["soft", new Decimal(3).add(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(3))]
-        }
-    },
-    get target() {
-        return player.bh.flipside ? "celestialite" : "allPlayer"
-    },
-    value() {return player.bh.flipside ? new Decimal(4) : new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())},
-    stun() {return  player.bh.flipside ? ["soft", new Decimal(0)] : ["soft", new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
+    type: "shield",
+    target: "allPlayer",
+    value() {return new Decimal(1).add(player.bh.skillData["eclipse_lightBarrier"].level.mul(0.2).floor())},
+    stun() {return ["soft", new Decimal(6).sub(player.bh.skillData["eclipse_lightBarrier"].level.modulo(5).div(2)), player.bh.skillData["eclipse_lightBarrier"].selected[1]]},
     cooldown: new Decimal(20),
     cooldownCap: new Decimal(5),
-        style() {
-        return player.bh.flipside ? {
-            background: "#eed695",
-            color: "black",
-            borderColor: "#f1cd6a",
-        } : {
-            background: "#b68c18",
-    
-        }
-    },
 }
 BHA.eclipse_solarRetinopathy = {
     name: "Solar Retinopathy",
@@ -971,15 +758,12 @@ BHA.eclipse_solarRetinopathy = {
     cooldownCap: new Decimal(6),
 }
 BHA.eclipse_syzygy = {
-    get name() { 
-    return player.bh.flipside ? "Astral Divergence" : "Syzygy";
-    },
+    name: "Syzygy",
     description(char) {
         let effect = new Decimal(25).add(player.bh.skillData["eclipse_syzygy"].level.mul(5))
-        if (player.bh.flipside) effect = new Decimal(10).add(player.bh.skillData["eclipse_syzygy"].level.mul(3))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
         if (hasUpgrade("sma", 227)) return "Speed up time by +" + formatSimple(effect) + "%, and increase eclipse's agility by +" + formatSimple(effect) + "%"
-        return player.bh.flipside ? "Slow down time by " + formatSimple(effect) + "%, and increase eclipse's damage by +" + formatSimple(effect.mul(2.5)) + "%" : "Speed up time by +" + formatSimple(effect) + "%"
+        return "Speed up time by +" + formatSimple(effect) + "%"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_syzygy"].maxLevel.div(2)) + " AGI"},
     char: "eclipse",
@@ -997,60 +781,11 @@ BHA.eclipse_syzygy = {
             if (hasUpgrade("sma", 227)) return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))
             return new Decimal(1)
         },
-        "timeMult"() {return player.bh.flipside ? new Decimal(0.9).sub(player.bh.skillData["eclipse_syzygy"].level.mul(0.03)) : new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))}, // Multiplicative Effect
-        "damageMult"() {return player.bh.flipside ? new Decimal(1).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.03).add(0.1)) : new Decimal(1)}, // Multiplicative Effect
-    },
-    style() {
-        return player.bh.flipside ? {
-            background: "#eed695",
-            color: "black",
-            borderColor: "#f1cd6a",
-        } : {
-            background: "#b68c18",
-    
-        }
+        "timeMult"() {return new Decimal(1.25).add(player.bh.skillData["eclipse_syzygy"].level.mul(0.05))}, // Multiplicative Effect
     },
     cooldown: new Decimal(Infinity),
 }
-//flipside
-BHA.eclipse_flipside = {
-    name: "Flipside",
-    description(char) {
-        return 'Flips some skills to alternate versions. Activate the skill again to flip back. (Hold F to view flipside skill info)'
-    
-    },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["eclipse_flipside"].maxLevel.div(5)) + " AGI"},
-    char: "eclipse",
-    spCost: new Decimal(18),
-    curCostBase: new Decimal(250),
-    curCostScale: new Decimal(3),
-    currency: "paragonShards",
-    unlocked() {return player.anl.clearedRooms.roomTemple},
-    instant: true,
-    type: "function",
-    onTrigger(index, slot, target, method)
-    {
-        if (player.bh.flipside)
-        {
-            player.bh.flipside = false
-            bhLog("<span style='color: #b68c18'>" + "Eclipse reverted some skills!</span>")
-        } else
-        {
-            player.bh.flipside = true
-            bhLog("<span style='color: #b68c18'>" + "Eclipse flipped some skills!</span>")
-        }
-        tempInvertColors()
-    },
-    cooldown: new Decimal(50),
-    cooldownCap: new Decimal(20),
-    style() {
-        return {
-            background: "linear-gradient(145deg, #b68c18, #e0c579)",
-            color: "black",
-            borderColor: "#ba6317",
-        }
-    },
-}
+
 // Geroa Skills
 BHA.geroa_radioactiveMissile = {
     name: "Radioactive Missile",
@@ -1075,18 +810,12 @@ BHA.geroa_radioactiveMissile = {
     cooldownCap: new Decimal(1.5),
 }
 BHA.geroa_selfRepair = {
-    get name() { return player.bh.flipside ? "Sandevistan" : "Self Repair"},
+    name: "Self Repair",
     description(char) {
-        if (!player.bh.flipside) {
-            let heal = new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
-            if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
-            if (hasUpgrade("ir", 207)) return "If under 50% health, heal yourself for " + formatSimple(heal.mul(1.2)) + " health"
-            return "If under 25% health, heal yourself for " + formatSimple(heal) + " health"
-        } else
-        {
-            let effect = new Decimal(150).add(player.bh.skillData["geroa_selfRepair"].level.mul(30))
-            return "Reverse regen but increase agility by +" + formatWhole(effect) + "% for 5 seconds."
-        }
+        let heal = new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
+        if (player.matosLair.milestone[25] >= 2) heal = heal.mul(char.mending.div(10).add(1))
+        if (hasUpgrade("ir", 207)) return "If under 50% health, heal yourself for " + formatSimple(heal.mul(1.2)) + " health"
+        return "If under 25% health, heal yourself for " + formatSimple(heal) + " health"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_selfRepair"].maxLevel) + " HP"},
     char: "geroa",
@@ -1095,46 +824,21 @@ BHA.geroa_selfRepair = {
     curCostScale: new Decimal(2),
     currency: "spaceGem",
     unlocked() {return hasUpgrade("ir", 201)},
-    get type() { return player.bh.flipside ? null : "heal" },
-    get constantType() { return player.bh.flipside ? "effect" : null },
-    get target() { return player.bh.flipside ? null : "self" },
-    get constantTarget() { return player.bh.flipside ? "self" : null },
-    get active() { return player.bh.flipside ? true : null },
-    get instant() { return player.bh.flipside ? null : true },
+
+    instant: true,
+    type: "heal",
+    target: "self",
     value() {
         if (hasUpgrade("ir", 207)) return new Decimal(30).add(player.bh.skillData["geroa_selfRepair"].level.mul(6))
         return new Decimal(25).add(player.bh.skillData["geroa_selfRepair"].level.mul(5))
     },
-    effects: {
-        "regenMult"(char) {
-            return player.bh.flipside ? new Decimal(-1) : new Decimal(1)
-        },
-        "agilityMult"(char) {
-            return player.bh.flipside ? new Decimal(150).add(player.bh.skillData["geroa_selfRepair"].level.mul(30)) : new Decimal(1)
-        }
-    },
-    style() {
-        return player.bh.flipside ? {
-            background: "#140929",
-            color: "#b48dfc",
-            borderColor: "#536bdb",
-        } : {
-            background: "#536bdb",
-    
-        }
-    },
-    cooldown: new Decimal(24),
-    cooldownCap: new Decimal(8),
-    get duration() { return player.bh.flipside ? new Decimal(5) : null},
     conditional(index, slot) {
-        if (player.bh.flipside)
-        {
-            return true;
-        }
         if (index == 3) {console.log("what");return false}
         if (hasUpgrade("ir", 207)) return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(2))
         return player.bh.characters[index].health.lte(player.bh.characters[index].maxHealth.div(4))
     },
+    cooldown: new Decimal(24),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_cosmicRay = {
     name: "Cosmic Ray",
@@ -1162,10 +866,8 @@ BHA.geroa_cosmicRay = {
     cooldownCap: new Decimal(5),
 }
 BHA.geroa_orbitalCannon = {
-    get name() { return player.bh.flipside ? "Celestial Wayfare" : "Orbital Cannon"},
-    description() {return player.bh.flipside ? "Adds +1 to the current combo. (Cooldown increases with combo)" :
-        "Hard-stuns Geroa for 5 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 2 seconds"
-    },
+    name: "Orbital Cannon",
+    description() {return "Hard-stuns Geroa for 5 seconds, then deals x" + formatWhole(new Decimal(10).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(2))) + " ranged damage split into 10 hits, and hard-stuns the celestialite for 2 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5)) + " DMG"},
     char: "geroa",
     spCost: new Decimal(14),
@@ -1174,36 +876,18 @@ BHA.geroa_orbitalCannon = {
     currency: "spaceGem", // Temp, probably something else
     unlocked() {return hasUpgrade("ir", 203)},
 
-    get method() {return player.bh.flipside ? null : "ranged"},
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "ranged",
     properties: {
-        "stun"() { player.bh.flipside ? [new Decimal(0), "hard", new Decimal(2)] : [new Decimal(1), "hard", new Decimal(2)]}, // Chance / Stun-Type / Stun-Time
-        "multi-hit"() { return player.bh.flipside ? [1, 0] : [10, 100] }, // Amount / Delay
+        "stun": [new Decimal(1), "hard", new Decimal(2)], // Chance / Stun-Type / Stun-Time
+        "multi-hit": [10, 100], // Amount / Delay
     },
     value() {return new Decimal(1).add(player.bh.skillData["geroa_orbitalCannon"].level.mul(0.2))},
-    stun() {return player.bh.flipside ?  ["hard", new Decimal(0),] : ["hard", new Decimal(5), player.bh.skillData["geroa_orbitalCannon"].selected[1]]},
-    get cooldown() { return player.bh.flipside ? new Decimal(60).add(player.bh.combo.abs().div(5)) : new Decimal(40)},
-    get cooldownCap() { return player.bh.flipside ? new Decimal(20) : new Decimal(8)},
-
-
-
-    instant: true,
-    get type() { return player.bh.flipside ? "function" : "damage" },
-    target: "celestialite",
-    onTrigger(index, slot, target, method)
-    {
-        if (player.bh.combo.gt(0)) player.bh.combo = player.bh.combo.add(1)
-        if (player.bh.combo.lt(0)) player.bh.combo = player.bh.combo.sub(1)
-    },
-    style() {
-        return player.bh.flipside ? {
-            background: "#140929",
-            color: "#b48dfc",
-            borderColor: "#536bdb",
-        } : {
-            background: "#536bdb",
-    
-        }
-    },
+    stun() {return ["hard", new Decimal(5), player.bh.skillData["geroa_orbitalCannon"].selected[1]]},
+    cooldown: new Decimal(40),
+    cooldownCap: new Decimal(8),
 }
 BHA.geroa_defenseSatellites = {
     name: "Defense Satellites",
@@ -1265,10 +949,8 @@ BHA.vespasian_poisonStinger = {
 }
 
 BHA.vespasian_paralyticBite = {
-    get name() { return player.bh.flipside ? "Rabid Bite" : "Paralytic Bite"},
-    description() {return player.bh.flipside ? "Bite the enemy for " + formatSimple(new Decimal(150).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(25))) + "% physical damage, then increase the celestialites agility and defense by " + formatSimple(new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))) + " for 5 seconds" :
-        "Bite the enemy for " + formatSimple(new Decimal(75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(15))) + "% physical damage, then reduce the celestialites agility and defense by " + formatSimple(new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))) + " for 5 seconds"
-    },
+    name: "Paralytic Bite",
+    description() {return "Bite the enemy for " + formatSimple(new Decimal(75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(15))) + "% physical damage, then reduce the celestialites agility and defense by " + formatSimple(new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))) + " for 5 seconds"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2)) + " AGI"},
     char: "vespasian",
     spCost: new Decimal(12),
@@ -1281,28 +963,18 @@ BHA.vespasian_paralyticBite = {
     type: "damage",
     target: "celestialite",
     method: "physical",
-    value() {return player.bh.flipside ? new Decimal(1.5).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(0.25)) : new Decimal(0.75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(0.15))},
+    value() {return new Decimal(0.75).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(0.05))},
 
     active: true,
     constantType: "effect",
     constantTarget: "celestialite",
     effects: {
-        "defenseAdd"() {return player.bh.flipside ? new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3)) : new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
-        "agilityAdd"() {return player.bh.flipside ? new Decimal(15).add(player.bh.skillData["vespasian_paralyticBite"].level.mul(3)) : new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
+        "defenseAdd"() {return new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
+        "agilityAdd"() {return new Decimal(-15).sub(player.bh.skillData["vespasian_paralyticBite"].level.mul(3))},
     },
     duration: new Decimal(5),
     cooldown: new Decimal(12),
     cooldownCap: new Decimal(2),
-    style() {
-        return player.bh.flipside ? {
-            background: "#c5b985",
-            color: "#000000",
-            borderColor: "#7f6b4e",
-        } : {
-            background: "#7f6b4e",
-    
-        }
-    },
 }
 
 BHA.vespasian_overdrive = {
@@ -1310,7 +982,7 @@ BHA.vespasian_overdrive = {
     description(char) {
         let effect = new Decimal(new Decimal(50).add(player.bh.skillData["vespasian_overdrive"].level.mul(10)))
         if (player.alephsChamber.milestone[25] >= 2) effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Buff Vespasians damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
+        return "Buff Vespasian's damage and agility by " + formatSimple(effect) + "%, reduce defense by " + formatSimple(new Decimal(25).add(player.bh.skillData["vespasian_overdrive"].level.mul(5))) + ", and nullify regen for 8 seconds"
     },
     passiveText() {return "+" + formatSimple(player.bh.skillData["vespasian_overdrive"].maxLevel.div(2)) + " DEF"},
     char: "vespasian",
@@ -1462,11 +1134,9 @@ BHA.diceFive_luckyLift = {
     cooldownCap: new Decimal(4.5),
 }
 BHA.diceFive_coinToss = {
-    get name() { 
-        return player.bh.flipside ? "Celestialite Recombination" : "Coin Toss";
-    },
+    name: "Coin Toss",
     description() {
-        return player.bh.flipside ? "Rerolls the celestialite, then deals " + formatWhole(new Decimal(1500).add(player.bh.skillData["diceFive_coinToss"].level.mul(300))) + "% ranged damage. (HIGHLY DON'T RECOMMEND FOR BOSSES)" : "Either deals " + formatWhole(new Decimal(1500).add(player.bh.skillData["diceFive_coinToss"].level.mul(300))) + "% ranged damage or soft-stuns Dice Five for 5 seconds. (Unaffected by luck)"},
+        return "Either deals " + formatWhole(new Decimal(1500).add(player.bh.skillData["diceFive_coinToss"].level.mul(300))) + "% ranged damage or soft-stuns Dice Five for 5 seconds. (Unaffected by luck)"},
     passiveText() {return "+" + formatSimple(player.bh.skillData["diceFive_coinToss"].maxLevel.div(2)) + " LUCK"},
     char: "diceFive",
     spCost: new Decimal(14),
@@ -1483,48 +1153,15 @@ BHA.diceFive_coinToss = {
     method: "ranged",
     onTrigger(index, slot, target, method)
     {
+        let baseDmg = new Decimal(15).add(player.bh.skillData["diceFive_coinToss"].level.mul(3))
+        let dmg = baseDmg.mul(player.bh.characters[index].damage)
 
-        if (player.bh.flipside) {
-            player.bh.celestialite = layers.bh.startData().celestialite
-
-            startPersistentWait(1, () => {
-                    let baseDmg = new Decimal(15).add(player.bh.skillData["diceFive_coinToss"].level.mul(3))
-                    let dmg = baseDmg.mul(player.bh.characters[index].damage)
-        
-                    bhAttack(dmg, index, slot, "celestialite", "", "ranged")
-            });
-        } else {
-            let baseDmg = new Decimal(15).add(player.bh.skillData["diceFive_coinToss"].level.mul(3))
-            let dmg = baseDmg.mul(player.bh.characters[index].damage)
-    
-            let random = getRandomInt(2)
-            if (random == 0) {
-                bhAttack(dmg, index, slot, "celestialite", "", "ranged")
-            } else
-            {
-                player.bh.characters[index].stun = ["soft", new Decimal(5)]
-            }  
-        }
-    },
-    style() {
-        return player.bh.flipside ? {
-            background: "#fff",
-            color: "#000",
-            borderColor: "#a3a3a3",
-            fontSize: "7.5px",           // Shrunk slightly so 8 letters can fit on one line
-            letterSpacing: "-0.2px",     // Squeezes the text horizontally to save space
-            lineHeight: "1",             // Maximum vertical squish
-            textAlign: "center",
-            whiteSpace: "normal",
-            wordBreak: "normal",         // Tells the browser: "Stop chopping words unnecessarily"
-            overflowWrap: "break-word",  // Tells the browser: "Only chop a word if it's too big to fit on its own line" (like "Transformation")
-            display: "-webkit-box",
-            WebkitLineClamp: "3",        // Ensures it never bleeds out the bottom
-            WebkitBoxOrient: "vertical",
-            padding: "1px"               // Minimizes wasted edge space
-        } : {
-            background: "#a3a3a3",
-    
+        let random = getRandomInt(2)
+        if (random == 0) {
+            bhAttack(dmg, index, slot, "celestialite", "", "ranged")
+        } else
+        {
+            player.bh.characters[index].stun = ["soft", new Decimal(5)]
         }
     },
 }
@@ -1562,7 +1199,7 @@ BHA.diceFive_snakeEyes = {
 const bhTarget = {
     image: "resources/bhTarget.png",
     time() {
-        let time = new Decimal(5)
+        let time = new Decimal(20).add(player.bh.skillData["diceFive_snakeEyes"].level.mul(2))
         return time
     },
     fadeInTime: 2,
@@ -1592,7 +1229,7 @@ BHA.creation_increment = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1618,7 +1255,7 @@ BHA.creation_upgrade = {
     curCostBase: new Decimal(750),
     curCostScale: new Decimal(3.5),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1626,7 +1263,7 @@ BHA.creation_upgrade = {
     method: "physical",
     value() {return new Decimal(1).add(player.bh.skillData["creation_upgrade"].level.mul(0.25))},
     cooldown: new Decimal(20),
-    cooldownCap: new Decimal(4),
+    cooldownCap: new Decimal(8),
     onTrigger(index, slot, target)
     {
         player.creation.incrementalEnergy = player.creation.incrementalEnergy.sub(player.creation.upgradeCost)
@@ -1648,7 +1285,7 @@ BHA.creation_prestige = {
     curCostBase: new Decimal(2500),
     curCostScale: new Decimal(5),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1656,7 +1293,7 @@ BHA.creation_prestige = {
     method: "physical",
     value() {return new Decimal(1).add(player.bh.skillData["creation_prestige"].level.mul(0.25))},
     cooldown: new Decimal(60),
-    cooldownCap: new Decimal(10),
+    cooldownCap: new Decimal(30),
     onTrigger(index, slot, target)
     {
         player.creation.incrementalEnergy = new Decimal(0)
@@ -1679,7 +1316,7 @@ BHA.creation_mend = {
     curCostBase: new Decimal(1000),
     curCostScale: new Decimal(4),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1840,205 +1477,5 @@ BHA.bumpy_deltaRayBurst = {
         setTimeout(() => {
             options.musicVolume = options.musicVolume * 5
         }, 4000 / player.bh.timeSpeed.toNumber());
-    },
-}
-BHA.nox_bloodthirstySpear = {
-    name: "Bloodthirsty Spear",
-    description(char) {
-        let heal = new Decimal(5).add(player.bh.skillData["nox_bloodthirstySpear"].level.mul(1))
-        if (player.matosLair.milestone[25] >= 2) {
-            heal = heal.mul(char.mending.div(10).add(1))
-        }
-        return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["nox_bloodthirstySpear"].level.mul(20))) + "% physical damage (affected by incremental energy), heals self by " + formatWhole(heal) + 
-        " HP, but spends " + format(Decimal.mul(player.bh.skillData["nox_bloodthirstySpear"].level.mul(0.2).add(1), player.creation.incrementalEnergyMult.pow(0.8))) + " incremental energy."
-    
-    },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["nox_bloodthirstySpear"].maxLevel.div(5)) + " DMG"},
-    char: "nox",
-    spCost: new Decimal(15),
-    curCostBase: new Decimal(250),
-    curCostScale: new Decimal(3),
-    currency: "paragonShards",
-    unlocked() {return true},
-
-    instant: true,
-    type: "function",
-    target: "celestialite",
-    method: "physical",
-    value() {return new Decimal.mul(new Decimal(1).add(Decimal.mul(0.5, player.bh.skillData["nox_bloodthirstySpear"])), player.creation.incrementalEnergyMult)},
-    cooldown: new Decimal(3),
-    cooldownCap: new Decimal(1),
-    onTrigger(index, slot, target)
-    {
-        let decrease = new Decimal.mul(player.bh.skillData["nox_bloodthirstySpear"].level.mul(0.2).add(1), player.creation.incrementalEnergyMult.pow(0.8))
-        let baseDamage = new Decimal.mul(player.bh.skillData["nox_bloodthirstySpear"].level.mul(0.2).add(1), player.creation.incrementalEnergy.pow(0.5))
-        let damage = baseDamage.mul(player.bh.characters[index].damage)
-        let heal = new Decimal(5).add(player.bh.skillData["nox_bloodthirstySpear"].level.mul(1))
-        player.creation.incrementalEnergy = player.creation.incrementalEnergy.sub(decrease)
-        bhAttack(damage, index, slot, "celestialite", "", "physical")
-        bhHeal(heal, index, slot, "self", "")
-    },
-    conditional(index, slot) {
-        return player.creation.incrementalEnergy.gte(new Decimal.mul(player.bh.skillData["nox_bloodthirstySpear"].level.mul(0.2).add(1), player.creation.incrementalEnergyMult))
-    },
-    style() {
-        return {
-            fontSize: "9.5px",          
-            letterSpacing: "-0.2px",  
-            lineHeight: "1",           
-            textAlign: "center",
-            whiteSpace: "normal",
-            wordBreak: "normal",       
-            overflowWrap: "break-word",  
-            display: "-webkit-box",
-            WebkitLineClamp: "3",    
-            WebkitBoxOrient: "vertical",
-            padding: "1px"              
-        }
-    },
-}
-BHA.nox_bloodDrain = {
-    get name() { 
-    return player.bh.flipside ? "Blood Synthesis" : "Blood Drain";
-    },
-    description(char) {
-        return player.bh.flipside ? "Heals self by " + formatWhole(new Decimal(20).add(player.bh.skillData["nox_bloodDrain"].level.mul(4))) + "% spirit damage, but drains " + format(Decimal.mul(0.1, player.creation.incrementalEnergyMult.mul(player.bh.skillData["nox_bloodDrain"].level.mul(0.25).add(1)))) + " incremental energy per second." 
-        : "Deals " + formatWhole(new Decimal(20).add(player.bh.skillData["nox_bloodDrain"].level.mul(4))) + "% self spirit damage, but gain " + format(Decimal.mul(0.6, player.creation.incrementalEnergyMult.mul(player.bh.skillData["nox_bloodDrain"].level.mul(0.25).add(1)))) + " incremental energy per second."
-    
-    },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["nox_bloodDrain"].maxLevel.div(5)) + " DMG"},
-    char: "nox",
-    spCost: new Decimal(18),
-    curCostBase: new Decimal(250),
-    curCostScale: new Decimal(3),
-    currency: "paragonShards",
-    unlocked() {return true},
-    passive: true,
-    constantType: "effect",
-    constantTarget: "self",
-    effects: {
-        "regenAdd"(char) {
-            let damage = char.damage.mul(Decimal.sub(-0.2, player.bh.skillData["nox_bloodDrain"].level.mul(0.04)))
-            if (player.bh.flipside) damage = char.damage.mul(Decimal.sub(0.2, player.bh.skillData["nox_bloodDrain"].level.mul(0.04)))
-            damage = damage.mul(Decimal.div(100, Decimal.add(100, char.defense)))
-            return damage
-        }, // Multiplicative Effect
-    },
-    cooldown: new Decimal(Infinity),
-    style() {
-        return player.bh.flipside ? {
-            background: "#d43f5d",
-            color: "white",
-            borderColor: "#540212",
-        } : {
-            background: "#540212",
-    
-        }
-    },
-    conditional(index, slot) {
-        return player.creation.incrementalEnergy.gt(0) || !player.bh.flipside
-    },
-}
-BHA.nox_vampiricTransformation = {
-    name: "Vampiric<br>Transformation",
-    description(char) {
-        let effect = new Decimal(3).add(player.bh.skillData["nox_vampiricTransformation"].level.mul(0.5))
-        effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Turns into a bat for " + formatWhole(new Decimal(10).add(player.bh.skillData["nox_vampiricTransformation"].level.mul(2))) + " seconds, gaining an 85% air attribute, as well as a x" + format(effect) + " boost to incremental energy and agility."
-    
-    },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["nox_vampiricTransformation"].maxLevel.div(5)) + " DMG"},
-    char: "nox",
-    spCost: new Decimal(18),
-    curCostBase: new Decimal(250),
-    curCostScale: new Decimal(3),
-    currency: "paragonShards",
-    unlocked() {return true},
-    instant: true,
-    active: true,
-    constantType: "effect",
-    constantTarget: "self",
-    effects: {
-        "agilityMult"(char) {return player.bh.skillData["nox_vampiricTransformation"].level.mul(0.5).add(3).mul(Decimal.div(char.potency.add(100), 100))}, // Multiplicative Effect
-        "attributes"() {
-            player.bh.characterData["nox"].batActive = true
-            startPersistentWait(BHA.nox_vampiricTransformation.duration.div(player.bh.timeSpeed), () => {
-            player.bh.characterData["nox"].batActive = false
-            });
-            return {"air": new Decimal(0.15)}
-        },
-    },
-    cooldown: new Decimal(80),
-    duration: new Decimal(10),
-    cooldownCap: new Decimal(20),
-    style() {
-        return {
-            fontSize: "7.5px",      
-            letterSpacing: "-0.2px", 
-            lineHeight: "1",            
-            textAlign: "center",
-            whiteSpace: "normal",
-            wordBreak: "normal",        
-            overflowWrap: "break-word",  
-            display: "-webkit-box",
-            WebkitLineClamp: "3",      
-            WebkitBoxOrient: "vertical",
-            padding: "1px"         
-        }
-    },
-}
-BHA.nox_lastChance = {
-    name: "Last Chance",
-    description(char) {
-        let effect = new Decimal(3).add(player.bh.skillData["nox_vampiricTransformation"].level.mul(0.5))
-        effect = effect.mul(Decimal.div(char.potency.add(100), 100))
-        return "Takes 50% of health as damage, but deal "+ formatWhole(player.bh.skillData["nox_lastChance"].maxLevel.mul(500).add(2000)) +"% physical damage, and boosts regen by +" + formatWhole(player.bh.skillData["nox_lastChance"].maxLevel.mul(10).add(50)) + " and damage by x" + format(effect) + " and gain +" + format(Decimal.mul(player.creation.incrementalEnergyMult, player.bh.skillData["nox_lastChance"].level.mul(1).add(6))) + " incremental energy."
-    
-    },
-    passiveText() {return "+" + formatSimple(player.bh.skillData["nox_lastChance"].maxLevel.div(5)) + " DMG"},
-    char: "nox",
-    spCost: new Decimal(18),
-    curCostBase: new Decimal(250),
-    curCostScale: new Decimal(3),
-    currency: "paragonShards",
-    unlocked() {return true},
-    instant: true,
-    active: true,
-    constantType: "effect",
-    constantTarget: "self",
-    type: "function",
-    target: "celestialite",
-    method: "physical",
-    onTrigger(index, slot, target, char)
-    {
-        player.bh.characters[index].health = player.bh.characters[index].health.sub(player.bh.characters[index].maxHealth.mul(0.5))
-        bloodGlow(BHA.nox_lastChance.duration.div(player.bh.timeSpeed).mul(1000)) 
-        let baseDamage = player.bh.skillData["nox_lastChance"].maxLevel.mul(5).add(20)
-        let damage = baseDamage.mul(player.bh.characters[index].damage)
-        bhAttack(damage, index, slot, "celestialite", "", "physical")
-
-        player.creation.incrementalEnergy = player.creation.incrementalEnergy.add(Decimal.mul(player.creation.incrementalEnergyMult, player.bh.skillData["nox_lastChance"].level.mul(1).add(6)))
-    },
-    effects: {
-        
-        "damageMult"(char) {return player.bh.skillData["nox_lastChance"].level.mul(0.5).add(3).mul(Decimal.div(char.potency.add(100), 100))}, // Multiplicative Effect
-        "regenAdd"(char) {            
-            let regen = player.bh.skillData["nox_lastChance"].level.mul(10).add(50)
-            let damage = char.damage.mul(Decimal.sub(0.2, player.bh.skillData["nox_bloodDrain"].level.mul(0.04)))
-            damage = damage.mul(Decimal.div(100, Decimal.add(100, char.defense)))
-            return player.bh.flipside ? regen : damage.add(regen)}, // Multiplicative Effect
-    },
-    cooldown: new Decimal(150),
-    duration: new Decimal(16),
-    cooldownCap: new Decimal(60),
-    conditional(index, slot) {
-        return player.bh.characters[index].health.gte(player.bh.characters[index].maxHealth.mul(0.5))
-    },
-    style() {
-        return {
-            background: "linear-gradient(145deg, #720e22, #992d6c)",
-            color: "white",
-            borderColor: "#540212",
-        }
     },
 }

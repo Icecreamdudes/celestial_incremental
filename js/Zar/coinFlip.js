@@ -111,8 +111,6 @@
         {
             player.cf.headsSoftcapEffect = player.cf.heads.sub(player.cf.headsSoftcapStart).pow(0.35).add(1)
             if (hasUpgrade("cbs", 16)) player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(upgradeEffect("cbs", 16)[0])
-            player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(levelableEffect("car", 205)[0])
-            if (hasAchievement("achievements", 1011)) player.cf.headsSoftcapEffect = player.cf.headsSoftcapEffect.pow(0.95)
         } else
         {
             player.cf.headsSoftcapEffect = new Decimal(1)
@@ -133,8 +131,6 @@
         {
             player.cf.tailsSoftcapEffect = player.cf.tails.sub(player.cf.tailsSoftcapStart).pow(0.35).add(1)
             if (hasUpgrade("cbs", 16)) player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(upgradeEffect("cbs", 16)[1])
-            player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(levelableEffect("car", 207)[0])
-            if (hasAchievement("achievements", 1011)) player.cf.tailsSoftcapEffect = player.cf.tailsSoftcapEffect.pow(0.95)
         } else
         {
             player.cf.tailsSoftcapEffect = new Decimal(1)
@@ -151,7 +147,6 @@
         player.cf.headsToGet = player.cf.headsToGet.mul(levelableEffect("car", 204)[0])
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("sme", 182))
         player.cf.headsToGet = player.cf.headsToGet.mul(buyableEffect("car", 22))
-        if (hasAchievement("achievements", 1006)) player.cf.headsToGet = player.cf.headsToGet.mul(1.5)
         
         player.cf.headsToGet = player.cf.headsToGet.div(player.cf.headsSoftcapEffect)
 
@@ -170,7 +165,6 @@
         player.cf.tailsToGet = player.cf.tailsToGet.mul(levelableEffect("car", 206)[0])
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("sme", 182))
         player.cf.tailsToGet = player.cf.tailsToGet.mul(buyableEffect("car", 22))
-        if (hasAchievement("achievements", 1006)) player.cf.tailsToGet = player.cf.tailsToGet.mul(1.5)
 
         player.cf.tailsToGet = player.cf.tailsToGet.div(player.cf.tailsSoftcapEffect)
 

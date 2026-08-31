@@ -115,7 +115,7 @@
             player.subtabs["le"]["stuff"] = "Main"
             player.subtabs.pu["stuff"] = "Selection"
 
-            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "pause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH"], "pause", true)
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
@@ -138,7 +138,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -162,7 +162,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}

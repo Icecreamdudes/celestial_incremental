@@ -635,3 +635,46 @@ function rowShown(arr) {
 	}
 	return val
 }
+function startPersistentWait(durationInSeconds, callback) {
+    const STORAGE_KEY = 'wait_target_time';
+    let targetTime = localStorage.getItem(STORAGE_KEY);
+
+    // If no timer exists, create one
+    if (!targetTime) {
+        targetTime = Date.now() + (durationInSeconds * 1000);
+        localStorage.setItem(STORAGE_KEY, targetTime);
+    } else {
+        targetTime = parseInt(targetTime, 10);
+    }
+
+    const remainingTime = targetTime - Date.now();
+
+    // If time already ran out while the page was refreshed/closed
+    if (remainingTime <= 0) {
+        localStorage.removeItem(STORAGE_KEY);
+        callback();
+        return;
+    }
+
+    // Otherwise, set a timeout for the exact remaining duration
+    // (This avoids unnecessary ticking every 1 second)
+    setTimeout(() => {
+        // Double-check real-time accuracy upon expiration
+        const finalCheck = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+        if (finalCheck && Date.now() >= finalCheck) {
+            localStorage.removeItem(STORAGE_KEY);
+            callback();
+        }
+    }, remainingTime);
+}
+
+function tempInvertColors(durationInSeconds = 4) {
+	// Apply the CSS filter to invert colors on the root html element
+	document.documentElement.style.filter = 'invert(100%) hue-rotate(180deg)';
+	document.documentElement.style.transition = 'filter 2s ease';
+  
+	// Set a timer to revert the styles back to normal after the duration
+	setTimeout(() => {
+	  document.documentElement.style.filter = '';
+	}, durationInSeconds * 1000);
+  }

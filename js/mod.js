@@ -273,6 +273,33 @@ function updateStyles() {
 			    case "zarDungeon":
 					layerBG = "linear-gradient(0deg, rgb(187, 187, 187) 0%, rgba(83,83,83,1) 100%)"
 					break;
+				case "roomA":
+					layerBG = "linear-gradient(180deg, #10220c 0%, #1f240f 100%)"
+					break;
+				case "roomB":
+					layerBG = "linear-gradient(160deg, #102b0b 0%, #2b3311 100%)"
+					break;
+				case "roomC":
+					layerBG = "linear-gradient(160deg, #1d2b0b 0%, #22331d 100%)"
+					break;
+				case "roomTemple":
+					layerBG = "radial-gradient(#113, black)"
+					break;
+				case "roomD":
+					layerBG = "linear-gradient(90deg, #0c2218 0%, #0b1f0e 100%)"
+					break;
+				case "roomE":
+					layerBG = "linear-gradient(120deg, #0c2122 0%, #0b1f16 100%)"
+					break;
+				case "roomF":
+					layerBG = "linear-gradient(135deg, #0e252b 0%, #12312b 100%)"
+					break;
+				case "roomG":
+					layerBG = "linear-gradient(115deg, #051425 0%, #123128 100%)"
+					break; //linear-gradient(45deg, #1a265f 0%, #153242 100%)
+				case "roomH":
+					layerBG = "linear-gradient(45deg, #0d132e 0%, #0b1a22 100%)"
+					break; 
 				default: 
 					layerBG = "black"
 					break;
@@ -282,7 +309,7 @@ function updateStyles() {
 		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu": case "rp":
 			layerBG = "black"
 			break;
-		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "rl":
+		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "anl":
 			if (player.sma.inStarmetalChallenge) layerBG = "url(resources/ad1bg.png)"
 			if (!player.sma.inStarmetalChallenge && player.tab == "hor") layerBG = "#454726"
 			if (!player.sma.inStarmetalChallenge && player.tab == "rar") layerBG = "#520c61"
@@ -739,7 +766,7 @@ function updateStyles() {
 		case "dgr": case "dn": case "ds": case "dv": case "bl": case "rp": case "funify":
             player.musuniverse = "D1"
 			break;
-		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "dec": case "rl":
+		case "ani": case "tr": case "sr": case "mr": case "hr": case "hor": case "rar": case "dec": case "anl":
             if (player.sma.inStarmetalChallenge) player.musuniverse = "AD1"
 			if (!player.sma.inStarmetalChallenge && player.tab == "hor") player.musuniverse = "A1"
 			if (!player.sma.inStarmetalChallenge && player.tab == "rar") player.musuniverse = "UB"
@@ -1876,7 +1903,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation", "timeRadiationReset", "spaceRadiationReset",
 	"diamondDustReset",
 	"openChest", "hopeEssenceReset", "rageEssenceReset",
-	"checkAchs", "mindRadiationReset", "heartRadiationReset",
+	"checkAchs", "mindRadiationReset", "heartRadiationReset", "hopeRageLevelReset"
 ]
 
 function getStartPoints(){

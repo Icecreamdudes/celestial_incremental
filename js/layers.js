@@ -188,6 +188,8 @@
         player.i.doomSoftcapStart = new Decimal("1e2000000")
         player.i.doomSoftcapStart = player.i.doomSoftcapStart.mul(levelableEffect("car", 313)[0])
         player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(buyableEffect("fa", 405))
+        if (hasUpgrade("anl", 41)) player.i.doomSoftcapStart = player.i.doomSoftcapStart.mul("1e150000")
+
         if (hasMilestone("hor", 11)) player.i.doomSoftcapStart = player.i.doomSoftcapStart.pow(player.cp.replicantiPointEffect)
 
         // SOFTCAP WEAKENER

@@ -39,6 +39,12 @@ addLayer("hk", {
                     keyTable('U3').length > 0
                 }
             },
+            'BH': {
+                content: [["column",() => keyTable('BH')]],
+                unlocked() {
+                    keyTable('BH').length > 0
+                }
+            },
             'A1': {
                 content: [["column",() => keyTable('A1')]],
                 unlocked() {

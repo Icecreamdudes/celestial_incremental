@@ -45,8 +45,10 @@
         player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("dec", 13))
         player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("tr", 18))
         player.hr.radiation.toGet = player.hr.radiation.toGet.mul(player.en.enhancersEffect[5])
+        player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("ra", 25))
+        player.hr.radiation.toGet = player.hr.radiation.toGet.mul(buyableEffect("anl", 23))
 
-        if (hasMilestone("hor", 15)) player.hr.radiation.amount = player.hr.radiation.amount.add(player.hr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+        if (hasMilestone("hor", 15) && player.ani.passiveGeneration) player.hr.radiation.amount = player.hr.radiation.amount.add(player.hr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
         player.hr.radiation.max = new Decimal(2)
 
@@ -309,4 +311,12 @@ const heartRadiation = {
     speed() { // Randomize speed a bit
         return (Math.random() + 2) * -4
     },
+    onHover(){
+        if (player.ani.hover) {
+                    player.hr.particleClick = player.hr.particleClick.add(1)
+        if (player.hr.particleClick.lt(player.hr.particleClickReq)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>" + formatWhole(player.hr.particleClick) + "/" + formatWhole(player.hr.particleClickReq) + " Clicked!</small>"})
+        if (player.hr.particleClick.eq(player.hr.particleClickReq)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.hr.radiation.toGet) + " Heart Radiation<br>Reset Complete!</small>"})
+        Vue.delete(particles, this.id)
+        }
+    }
 }

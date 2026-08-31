@@ -847,6 +847,14 @@
                 clickClickable("co",1000)
             },
             global:true
+        },
+        {
+            key: "f",
+            description: "View Flipsides",
+            onPress() {
+                if (player.bh.currentStage == "none") player.bh.flipside = true
+            },
+            unlocked() { return player.anl.clearedRooms.roomTemple},
         }
 	]
 })

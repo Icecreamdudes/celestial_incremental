@@ -110,6 +110,7 @@
         player.sm.totalChipMult = player.sm.totalChipMult.mul(buyableEffect("car", 42))
         if (player.zarDungeon.zarDefeated) player.sm.totalChipMult = player.sm.totalChipMult.mul(10)
         if (hasAchievement("achievements", 1009)) player.sm.totalChipMult = player.sm.totalChipMult.mul(1.25)
+        if (hasAchievement("achievements", 1012)) player.sm.totalChipMult = player.sm.totalChipMult.mul(1.25)
 
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(buyableEffect("sm", 11))
         player.sm.chipsToGet[0] = player.sm.chipsToGet[0].mul(player.sm.totalChipMult)

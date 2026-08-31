@@ -58,10 +58,12 @@
         player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("tr", 17))
         if (getLevelableAmount("pu", 506).gte(1)) player.sr.radiation.toGet = player.sr.radiation.toGet.mul(levelableEffect("pu", 506)[1])
         player.sr.radiation.toGet = player.sr.radiation.toGet.mul(player.hor.essence.effect)
+        player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("ra", 24))
+        player.sr.radiation.toGet = player.sr.radiation.toGet.mul(challengeEffect("anl", 12))
 
         if (player.pet.legPetTimers[0].active) player.sr.radiation.toGet = new Decimal(0)
 
-        if (hasMilestone("hor", 14)) player.sr.radiation.amount = player.sr.radiation.amount.add(player.sr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
+        if (hasMilestone("hor", 14) && player.ani.passiveGeneration) player.sr.radiation.amount = player.sr.radiation.amount.add(player.sr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
         player.sr.radiation.max = new Decimal(45)
         if (hasMilestone("hor", 12)) player.sr.radiation.max = player.sr.radiation.max.div(2)
@@ -96,10 +98,12 @@
         player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(buyableEffect("sr", 1))
         if (hasUpgrade("mr", 16)) player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(upgradeEffect("mr", 16))
         if (getLevelableAmount("pu", 504).gte(1)) player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(levelableEffect("pu", 504)[1])
+            player.sr.spaceDecayPerClick = player.sr.spaceDecayPerClick.mul(challengeEffect("anl", 11))
 
         for (let i = 0; i < player.sr.generators.amount.length-1; i++) {
 
             player.sr.generators.perClick[i] = player.sr.generators.amount[i+1].pow(0.5).mul(0.01)
+            player.sr.generators.perClick[i] = player.sr.generators.perClick[i].mul(challengeEffect("anl", 11))
         }
 
         //to lazy to do this in the for loop
@@ -375,4 +379,12 @@ const spaceRadiation = {
         if (player.sr.particleClick.eq(10)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.sr.radiation.toGet) + " Space Radiation<br>Reset Complete!</small>"})
         Vue.delete(particles, this.id)
     },
+            onHover(){
+        if (player.ani.hover) {
+        player.sr.particleClick = player.sr.particleClick.add(1)
+        if (player.sr.particleClick.lt(10)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>" + formatWhole(player.sr.particleClick) + "/10 Clicked!</small>"})
+        if (player.sr.particleClick.eq(10)) makeShinies(radiationText, 1, {x: this.x - 125, y: this.y - 100, text: "<small>+" + format(player.sr.radiation.toGet) + " Space Radiation<br>Reset Complete!</small>"})
+        Vue.delete(particles, this.id)
+        }
+    }
 }

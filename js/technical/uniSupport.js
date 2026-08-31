@@ -256,7 +256,7 @@ addUniverse("D1", {
 addUniverse("AD1", {
     name: "Alt-Dark Universe 1<br>The Decay Horizon",
     symbol: "AD1",
-    tree: [["dec"],["mr", "hor"], ["sr", "ani", "tr"], ["rar", "hr"], ["rl"]],
+    tree: [["dec"],["mr", "hor"], ["sr", "ani", "tr"], ["rar", "hr"], ["anl"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)",
@@ -338,6 +338,7 @@ addUniverse("BH", {
     symbol: "♥",
     tree: [["darkTemple", "depth1", "depth2"], ["matosLair", "depth3"], ["laboratory", "depth4", "alephsChamber"]],
     tree2: [["stagnantSynestia"]],
+    treeL: [["roomA",], ["roomB",], ["roomC", "roomTemple"], ["roomD",], ["roomE",], ["roomF",],["roomG",], ["roomH",], ],
     nodeStyle() {
         let style = {
             background: "black",

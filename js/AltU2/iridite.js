@@ -489,7 +489,7 @@ addLayer("ir", {
         }
 
         player.ir.sendGain = SB_AUTO_DATA[player.ir.shipType].getFinalMult(SB_AUTO_DATA[player.ir.shipType].getBaseStatMult())
-        if (hasUpgrade("ir", 302)) player.ir.sendGain = player.ir.sendGainult.mul(1.5)
+        if (hasUpgrade("ir", 302)) player.ir.sendGain = player.ir.sendGain.mul(1.5)
         player.ir.shipUpgradeRerollTimer = player.ir.shipUpgradeRerollTimer.sub(delta)
         if (player.ir.shipUpgradeShop.length == 0 || player.ir.shipUpgradeRerollTimer.lte(0)) {
             rerollBuyableShipUpgrades(0)
@@ -523,7 +523,7 @@ addLayer("ir", {
                     arena.enhanced = false;
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
-                } else if (arena && !showUpgrades) {
+                } else if (arena && !showUpgrades && player.ev.evolutionsUnlocked[14]) {
                     let amt = player.ir.spaceJunkMult.mul(zoneRef.xpReqMult).mul(Math.random() + 1).floor();
                     amt = amt.max(1)
                     player.ir.spaceJunk = player.ir.spaceJunk.add(amt);

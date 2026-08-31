@@ -377,7 +377,7 @@
             if (player.wel.fountains[i].isFocused) {
                 player.wel.fountains[i].focusTimer = player.wel.fountains[i].focusTimer.sub(delta)
                 if (player.wel.light.gte(module.lightReq) && module.timeSpeed.gt(0)) module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
-                if (player.wel.fountains[i].focusTimer.lte(0) && !hasUpgrade("wel", 33)) {
+                if (player.wel.fountains[i].focusTimer.lte(0) && !hasUpgrade("wel", 34)) {
                     player.wel.fountains[i].isFocused = false
                     player.wel.fountains[i].focusTimer = player.wel.fountains[i].focusTimerMax
                     player.prj.focused = player.prj.focused.sub(1)
@@ -1594,7 +1594,7 @@
             },
         },
         3001: {
-            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 34) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1625,7 +1625,7 @@
             },
         },
         3002: {
-            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 34) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1651,7 +1651,7 @@
             },
         },
         3003: {
-            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 34) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1677,7 +1677,7 @@
             },
         },
         3004: {
-            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 34) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -2438,7 +2438,7 @@
                                     ["raw-html", "<small>Base fountain focus duration is " + formatSimpleTime(player.prj.lightFountainFocusExtension.mul(4), 1) + ", reduced for each consecutive fountain.</small>", {color: "#dfffdf", fontSize: "18px", fontFamily: "monospace"}],
                                     ["raw-html", "<div class='bottomTooltip'>2 * (Project Speed)<sup>0.75</div>"],
                                 ], {}],
-                            ], {display: hasMilestone("prj", 201) && !hasUpgrade("wel", 33) ? "" : "none !important"}],
+                            ], {display: hasMilestone("prj", 201) && !hasUpgrade("wel", 34) ? "" : "none !important"}],
                             ["blank", "10px"],
                         ]],
                         ["style-row", [

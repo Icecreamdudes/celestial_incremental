@@ -357,13 +357,7 @@
         });
         player.pri.totalFountainCycles = new Decimal(player.pri.totalFountainCycles)
     },
-    /*
-    player.pri.fountains[1].completions = new Decimal(0); player.pri.fountains[2].completions = new Decimal(0);
-player.pri.fountains[3].completions = new Decimal(0); player.pri.fountains[4].completions = new Decimal(0);
-player.pri.fountains[5].completions = new Decimal(0); player.pri.fountains[6].completions = new Decimal(0);
-player.pri.fountains[7].completions = new Decimal(0); player.pri.fountains[8].completions = new Decimal(0);
-player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].completions = new Decimal(0);
- */
+    
     prismReset(isRewarded) {
         if (isRewarded) {
             player.pri.prisms = player.pri.prisms.add(player.pri.prismsToGet)
@@ -374,6 +368,7 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
 
         player.wel.light = new Decimal(0)
         player.wel.bestLight = new Decimal(0)
+        player.wel.lightGain = new Decimal(1)
 
         player.wel.modules[1].time = player.wel.modules[1].maxTime
         player.wel.modules[1].timeSpeed = new Decimal(0)
@@ -384,6 +379,9 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
         player.wel.modules[3].time = player.wel.modules[3].maxTime
         player.wel.modules[3].timeSpeed = new Decimal(0)
         player.wel.modules[3].completions = new Decimal(0)
+        player.wel.modules[4].time = player.wel.modules[4].maxTime
+        player.wel.modules[4].timeSpeed = new Decimal(0)
+        player.wel.modules[4].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
         player.wel.fountains[1].time = new Decimal(0)

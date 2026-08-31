@@ -27,9 +27,7 @@
     }
     },
     automate() {
-    },
-    nodeStyle() {
-        if (hasMilestone("s", 16) && (!inChallenge("fu", 11)) && (!inChallenge("fu", 12) || hasUpgrade("en", 18)))
+        if (hasMilestone("s", 16) && (!inChallenge("fu", 11) && !hasUpgrade("en", 12)) && !inChallenge("fu", 12))
         {
             buyBuyable('gs', 11)
             buyBuyable('gs', 12)
@@ -39,6 +37,12 @@
             buyBuyable('gs', 16)
             buyBuyable('gs', 17)
             buyBuyable('gs', 18)
+        }
+    },
+    nodeStyle() {
+        return {
+            color: "#0000007f",
+            borderColor: "#0000007f",
         }
     },
     tooltip: "Grass-Skip",

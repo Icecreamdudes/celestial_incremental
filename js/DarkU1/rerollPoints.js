@@ -36,13 +36,16 @@
     clickables: {
         11: {
             title() { return "<h2>Perform a starmetal equivalent reset for reroll points.<br>(Based on points, decreases with reroll points)" },
-            canClick() { return player.rp.rerollPointsToGet.gte(1) },
+            canClick() { return player.rp.rerollPointsToGet.gte(1) && !player.le.universeResetSafety},
             unlocked() { return true },
             onClick() {
                 player.rp.rerollPoints = player.rp.rerollPoints.add(player.rp.rerollPointsToGet)
 
-                player.le.starmetalAlloyPause = new Decimal(10)
+                player.le.universeResetSafety = true
+
+                layers.le.starmetalReset()
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "7px", background: "linear-gradient(15deg, #abbfc0 0%, #758691 50%, #52555e 100%)", borderRadius: "15px", color: "black", border: "2px solid #d4ddff", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"

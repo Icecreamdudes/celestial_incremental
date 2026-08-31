@@ -29,7 +29,7 @@
     automate() {},
     nodeStyle() {
         return {
-            background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
+            background: "linear-gradient(120deg, #852828 0%, #9c1313 100%)",
             "background-origin": "border-box",
             "border-color": "#3d1616",
             "color": "#3d1616",

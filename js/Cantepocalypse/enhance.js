@@ -31,6 +31,10 @@
     automate() {
     },
     nodeStyle() {
+        return {
+            color: "white",
+            borderColor: "#0000007f",
+        }
     },
     tooltip: "Enhance",
     branches: ["fu"],
@@ -302,7 +306,7 @@
     },
     clickables: {
         11: {
-            title() { return "<h2>Reset ALL AU1 content for enhance points.</h3>" },
+            title() { return "<h2>Reset ALL AU1 content for enhance points.</h3><br>(based on apathy)" },
             canClick() { return player.en.enhancePointsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
@@ -312,7 +316,7 @@
                     layers.en.enhanceReset();
                 } 
             },
-            style: { width: "400px", minHeight: "100px", borderRadius: "15px", color: "#fff"},
+            style: { width: "400px", minHeight: "100px", borderRadius: "15px", color: "#fff", border: "3px solid #0000007f"},
         },
         12: {
             title() { return "<h2>1%" },
@@ -321,7 +325,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.01)
             },
-            style: { width: "100px", minHeight: "50px", borderRadius: "15px", color: "#fff", "border-radius": "0px 0px 0px 15px", border: "3px solid #ccc", "borderRight": "0px"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 9px", border: "3px solid #5c185e"},
         },
         13: {
             title() { return "<h2>10%" },
@@ -330,7 +334,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.1)
             },
-            style: { width: "100px", minHeight: "50px", borderRadius: "15px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "3px solid #ccc", "borderLeft": "0px", "borderRight": "0px"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
         },
         14: {
             title() { return "<h2>50%" },
@@ -339,7 +343,7 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints.mul(0.5)
             },
-            style: { width: "100px", minHeight: "50px", borderRadius: "15px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "3px solid #ccc", "borderLeft": "0px", "borderRight": "0px"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 0px 0px", border: "3px solid #5c185e"},
         },
         15: {
             title() { return "<h2>100%" },
@@ -348,19 +352,23 @@
             onClick() {
                 player.en.enhancePointsToAllocate = player.en.enhancePoints
             },
-            style: { width: "100px", minHeight: "50px", borderRadius: "15px", color: "#fff", "border-radius": "0px 0px 15px 0px", border: "3px solid #ccc", "borderLeft": "0px"},
+            style: { width: "92.5px", minHeight: "51px", borderRadius: "15px", color: "#fff", borderRadius: "0px 0px 9px 0px", border: "3px solid #5c185e"},
         },
 
         //allocation buttons
         21: {
             title() { return "<h3>Allocate</h3>" },
-            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) },
+            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) && player.en.enhancePointsToAllocate.gt(0) },
             unlocked() { return player.en.enhancersUnlocked[0] },
             onClick() {
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[0] = player.en.enhancerAllocated[0].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "81px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "3px solid #ccc", borderLeft: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         22: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -370,18 +378,26 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[0])
                 player.en.enhancerAllocated[0] = player.en.enhancerAllocated[0].sub(player.en.enhancerAllocated[0])
             },
-            style: { width: "80px", minHeight: "81px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 15px 0px 0px", border: "3px solid #ccc", borderLeft: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 9px 0", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
 
         23: {
             title() { return "<h3>Allocate</h3>" },
-            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) },
+            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) && player.en.enhancePointsToAllocate.gt(0) },
             unlocked() { return player.en.enhancersUnlocked[1] },
             onClick() {
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[1] = player.en.enhancerAllocated[1].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         24: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -391,18 +407,26 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[1])
                 player.en.enhancerAllocated[1] = player.en.enhancerAllocated[1].sub(player.en.enhancerAllocated[1])
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 9px 0", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
 
         25: {
             title() { return "<h3>Allocate</h3>" },
-            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) },
+            canClick() { return player.en.enhancePoints.gte(player.en.enhancePointsToAllocate) && player.en.enhancePointsToAllocate.gt(0) },
             unlocked() { return player.en.enhancersUnlocked[2] },
             onClick() {
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[2] = player.en.enhancerAllocated[2].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         26: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -412,7 +436,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[2])
                 player.en.enhancerAllocated[2] = player.en.enhancerAllocated[2].sub(player.en.enhancerAllocated[2])
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 9px 0", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
 
         27: {
@@ -423,7 +451,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[3] = player.en.enhancerAllocated[3].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         28: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -433,7 +465,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[3])
                 player.en.enhancerAllocated[3] = player.en.enhancerAllocated[3].sub(player.en.enhancerAllocated[3])
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
 
         31: {
@@ -444,7 +480,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[4] = player.en.enhancerAllocated[4].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         32: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -454,7 +494,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[4])
                 player.en.enhancerAllocated[4] = player.en.enhancerAllocated[4].sub(player.en.enhancerAllocated[4])
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
 
         33: {
@@ -465,7 +509,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.sub(player.en.enhancePointsToAllocate)
                 player.en.enhancerAllocated[5] = player.en.enhancerAllocated[5].add(player.en.enhancePointsToAllocate)
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
         34: {
             title() { return "<h3>Un-Allocate</h3>" },
@@ -475,7 +523,11 @@
                 player.en.enhancePoints = player.en.enhancePoints.add(player.en.enhancerAllocated[5])
                 player.en.enhancerAllocated[5] = player.en.enhancerAllocated[5].sub(player.en.enhancerAllocated[5])
             },
-            style: { width: "80px", minHeight: "80px", borderRadius: "15px", fontSize: "8px", color: "#fff", "border-radius": "0px 0px 0px 0px", border: "2px solid #ccc", borderLeft: "0px", borderTop: "0px"},
+            style() {
+                let look = { width: "191px", minHeight: "57px", borderRadius: "15px", fontSize: "9px", color: "#fff", borderRadius: "0 0 0 9px", border: "3px solid #5c185e"}
+                look.background = this.canClick() ? "#b82fbd" : "#5c185e"
+                return look
+            },
         },
     },
     bars: {
@@ -504,55 +556,59 @@
         enhancer1Bar: {
             unlocked() { return player.en.enhancersUnlocked[0] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[0].div(player.en.enhancerXPReq[0])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px",},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
-                return "XP: " + format(player.en.enhancerXP[0]) + "/" + format(player.en.enhancerXPReq[0]) + "\n+" + format(player.en.enhancerXPPerSecond[0]) + " XP/s";
+                return "XP: " + format(player.en.enhancerXP[0]) + "/" + format(player.en.enhancerXPReq[0]) + "<br>(+" + format(player.en.enhancerXPPerSecond[0]) + "/s)";
             },
         },
         enhancer2Bar: {
             unlocked() { return player.en.enhancersUnlocked[1] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[1].div(player.en.enhancerXPReq[1])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px"},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
-                return "XP: " + format(player.en.enhancerXP[1]) + "/" + format(player.en.enhancerXPReq[1]) + "\n+" + format(player.en.enhancerXPPerSecond[1]) + " XP/s";
+                return "XP: " + format(player.en.enhancerXP[1]) + "/" + format(player.en.enhancerXPReq[1]) + "<br>(+" + format(player.en.enhancerXPPerSecond[1]) + "/s)";
             },
         },
         enhancer3Bar: {
             unlocked() { return player.en.enhancersUnlocked[2] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[2].div(player.en.enhancerXPReq[2])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px"},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
-                return "XP: " + format(player.en.enhancerXP[2]) + "/" + format(player.en.enhancerXPReq[2]) + "\n+" + format(player.en.enhancerXPPerSecond[2]) + " XP/s";
+                return "XP: " + format(player.en.enhancerXP[2]) + "/" + format(player.en.enhancerXPReq[2]) + "<br>(+" + format(player.en.enhancerXPPerSecond[2]) + "/s)";
             },
         },
         enhancer4Bar: {
             unlocked() { return player.en.enhancersUnlocked[3] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[3].div(player.en.enhancerXPReq[3])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px"},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
                 return "XP: " + format(player.en.enhancerXP[3]) + "/" + format(player.en.enhancerXPReq[3]) + "\n+" + format(player.en.enhancerXPPerSecond[3]) + " XP/s";
             },
@@ -560,13 +616,14 @@
         enhancer5Bar: {
             unlocked() { return player.en.enhancersUnlocked[4] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[4].div(player.en.enhancerXPReq[4])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px"},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
                 return "XP: " + format(player.en.enhancerXP[4]) + "/" + format(player.en.enhancerXPReq[4]) + "\n+" + format(player.en.enhancerXPPerSecond[4]) + " XP/s";
             },
@@ -574,13 +631,14 @@
         enhancer6Bar: {
             unlocked() { return player.en.enhancersUnlocked[5] },
             direction: RIGHT,
-            width: 400,
-            height: 76,
+            width: 382,
+            height: 58,
             progress() {
                 return player.en.enhancerXP[5].div(player.en.enhancerXPReq[5])
             },
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)", "border-radius": "0px 0px 0px 0px"},
-            fillStyle: {backgroundColor: "#b82fbd"},
+            baseStyle: {backgroundColor: "#5c185e", borderRadius: "0"},
+            fillStyle: {backgroundColor: "#b82fbd", borderRadius: "0"},
+            borderStyle: {border: "3px solid #5c185e", borderRadius: "0"},
             display() {
                 return "XP: " + format(player.en.enhancerXP[5]) + "/" + format(player.en.enhancerXPReq[5]) + "\n+" + format(player.en.enhancerXPPerSecond[5]) + " XP/s";
             },
@@ -645,9 +703,7 @@
             currencyDisplayName: "Enhance Points",
             currencyInternalName: "enhancePoints",
             effect() {
-                let eff = player.fu.fear.pow(0.1).div(4).add(1)
-                let eff2 = eff.div(50).pow(0.3).mul(50)
-                return eff.gt(50) ? eff2 : eff
+                return player.fu.fear.add(1).log10().div(20).add(1).pow(1.5)
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: "150px"},
@@ -739,66 +795,180 @@
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", () => {return "Enhance Points To Allocate: " + format(player.en.enhancePointsToAllocate) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "394px", height: "40px", backgroundColor: "#b82fbd", "border-radius": "15px 15px 0px 0px", border: "3px solid #ccc", borderBottom: "0px"}],
-                    ["text-input", "enhancePointsToAllocate", {width: "344px", height: "25px", backgroundColor: "#232b2b", color: "white", fontSize: "24px", textAlign: "left", border: "0px", padding: "0px 25px", "border-radius": "0px 0px 0px 0px", border: "3px solid #ccc", borderBottom: "0px",}],
-                    ["row", [
-                    ["clickable", 12],["clickable", 13],["clickable", 14],["clickable", 15],
-                    ]],
+                        ["blank", "10px"],
+                        ["raw-html", "Enhance Points To Allocate:", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return formatSimple(player.en.enhancePointsToAllocate)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                    ], {width: "400px", backgroundColor: "#b82fbd", borderRadius: "67px 67px 0 0", border: "3px solid #5c185e", borderBottom: "0px"}],
+                    ["text-input", "enhancePointsToAllocate", {width: "388px", height: "25px", backgroundColor: "#2d0c2e", color: "white", fontSize: "24px", textAlign: "left", border: "0px", padding: "0 6px", borderRadius: "0 0 0 0", border: "3px solid #5c185e",}],
+                    ["style-row", [
+                        ["clickable", 12],
+                        ["blank", "0", {width: "6px"}],
+                        ["clickable", 13],
+                        ["blank", "0", {width: "6px"}],
+                        ["clickable", 14],
+                        ["blank", "0", {width: "6px"}],
+                        ["clickable", 15],
+                    ], {width: "400px", padding: "6px 0", backgroundColor: "#b82fbd", borderRadius: "0 0 15px 15px", border: "3px solid #5c185e", borderTop: "0px"}],
                     ["blank", "25px"],
                     ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[0] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:15px 0px 0px 0px;border:3px solid #ccc;border-right:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[0]) + " Replicanti Point Enhancer<br><h5>Boosts post-softcap and challenge replicanti point mult by x" + format(player.en.enhancersEffect[0]) + ".</h5>Allocated " + format(player.en.enhancerAllocated[0]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer1Bar"],
-                    ["clickable", 21],
-                    ["clickable", 22],
-                    ],],
-                    ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[1] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:0px 0px 0px 0px;border:3px solid #ccc;border-right:0px;border-top:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[1]) + " Replicanti Hardcap Enhancer<br>Raises replicanti point hardcap by ^" + format(player.en.enhancersEffect[1]) + ".<br>Allocated " + format(player.en.enhancerAllocated[1]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer2Bar"],
-                    ["clickable", 23],
-                    ["clickable", 24],
-                    ],],
-                    ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[2] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:0px 0px 0px 0px;border:3px solid #ccc;border-right:0px;border-top:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[2]) + " Emotional Enhancer<br>Boosts all emotion gain by x" + format(player.en.enhancersEffect[2]) + ".<br>Allocated " + format(player.en.enhancerAllocated[2]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer3Bar"],
-                    ["clickable", 25],
-                    ["clickable", 26],
-                    ],],
-                    ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[3] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:0px 0px 0px 0px;border:3px solid #ccc;border-right:0px;border-top:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[3]) + " Linked Enhancer<br>Raises all linking power effects by ^" + format(player.en.enhancersEffect[3]) + ".<br>Allocated " + format(player.en.enhancerAllocated[3]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer4Bar"],
-                    ["clickable", 27],
-                    ["clickable", 28],
-                    ],],
-                    ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[4] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:0px 0px 0px 0px;border:3px solid #ccc;border-right:0px;border-top:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[4]) + " Hopeful Enhancer<br>Boosts hope gain by x" + format(player.en.enhancersEffect[4]) + ".<br>Allocated " + format(player.en.enhancerAllocated[4]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer5Bar"],
-                    ["clickable", 31],
-                    ["clickable", 32],
-                    ],],
-                    ["style-row", [
-                    ["raw-html", () => { return player.en.enhancersUnlocked[5] ? "<div style='width:500px;min-height:80px;background-color:#b82fbd;border-radius:0px 0px 0px 0px;border:3px solid #ccc;border-right:0px;border-top:0px;color:white;font-size:12px;padding:16px;box-sizing:border-box;'>" +
-                        "Level " + formatWhole(player.en.enhancerLevels[5]) + " Heartful Enhancer<br>Boosts heart radiation gain by x" + format(player.en.enhancersEffect[5]) + ".<br>Allocated " + format(player.en.enhancerAllocated[5]) + " enhance points." +
-                        "</div>" : "" }, {width: "500px"}],
-                    ["bar", "enhancer6Bar"],
-                    ["clickable", 33],
-                    ["clickable", 34],
-                    ],],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Replicanti Points", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[0]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts the post-softcap and challenge replicanti point multipliers by x" + format(player.en.enhancersEffect[0]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[0]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer1Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 21],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 22],
+                            ]],
+                            ["blank", "6px"],
+                        ], {width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Replicanti Point Cap", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[1]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts the replicanti point hardcap by ^" + format(player.en.enhancersEffect[1]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100% - 12px)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[1]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer2Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 23],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 24],
+                            ]],
+                            ["blank", "6px"],
+                        ], () => {
+                            return {display: hasUpgrade("en", 13) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Emotions", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[2]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts all emotion gain by x" + format(player.en.enhancersEffect[2]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[2]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer3Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 25],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 26],
+                            ]],
+                            ["blank", "6px"],
+                        ], () => {
+                            return {display: hasUpgrade("en", 15) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Linking Power", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[3]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts all linking power effects by ^" + format(player.en.enhancersEffect[3]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[3]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer4Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 27],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 28],
+                            ]],
+                            ["blank", "6px"],
+                        ], () => {
+                            return {display: hasUpgrade("en", 17) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Hope", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[4]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts hope gain by x" + format(player.en.enhancersEffect[4]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[4]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer5Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 31],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 32],
+                            ]],
+                            ["blank", "6px"],
+                        ], () => {
+                            return {display: hasUpgrade("en", 19) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                        ["style-column", [
+                            ["blank", "10px"],
+                            ["raw-html", "Heart Radiation", {color: "white", fontSize: "24px"}],
+                            ["raw-html", () => {return "(Level " + formatWhole(player.en.enhancerLevels[5]) + ")"}, {color: "white", fontSize: "16px"}],
+                            ["blank", "10px"],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["style-column", [
+                                ["raw-html", () => {return "Boosts heart radiation gain by x" + format(player.en.enhancersEffect[5]) + "."}, {color: "white", fontSize: "16px"}],
+                            ], {width: "calc(100% - 24px)", height: "100px"}],
+                            ["style-column", [], {background: "#5c185e", width: "calc(100%)", height: "3px"}],
+                            ["blank", "6px"],
+                            ["raw-html", () => {return "Allocated " + format(player.en.enhancerAllocated[5]) + " enhance points."}, {color: "white", fontSize: "16px"}],
+                            ["blank", "6px"],
+                            ["bar", "enhancer6Bar"],
+                            ["blank", "6px"],
+                            ["style-row", [
+                                ["clickable", 33],
+                                ["blank", "0", {width: "6px"}],
+                                ["clickable", 34],
+                            ]],
+                            ["blank", "6px"],
+                        ], () => {
+                            return {display: hasUpgrade("en", 21) ? "" : "none !important", width: "400px", background: "#b82fbd", border: "3px solid #0000007f", borderRadius: "67px 67px 15px 15px", margin: "3px"}
+                        }],
+                    ], {maxWidth: "850px"}],
+                    ["blank", "25px"],
                 ]
             },
         },
     },
     tabFormat: [
+        ["row", [
+            ["raw-html", () => { return player.fu.enterNumb ? "You have " + formatSimple(player.fu.apathy) + " apathy." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => { return inChallenge("fu", 12) ? "(+" + formatSimple(player.fu.apathyToGet) + ")" : "" }, () => {
+                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                player.fu.apathyToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.en.enhancePoints) + "</h3> enhance points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + format(player.en.enhancePointsToGet) + ")" }, () => {
@@ -808,7 +978,6 @@
                 }],
             ]],
         ["raw-html", () => {return "Divides replicanti point cooldown by <h3>/" + format(player.en.enhancePointsEffect) + "</h3>."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", () => {return "(Based on Apathy)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

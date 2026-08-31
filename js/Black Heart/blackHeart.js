@@ -584,6 +584,24 @@ addLayer("bh", {
                 batActive: false,
                 index: 0,
             },
+            "bumpy": {
+                selected: false,
+                skills: {
+                    0: "bumpy_starbeam",
+                    1: "none",
+                    2: "none",
+                    3: "none",
+                },
+                usedSP: new Decimal(16),
+                health: new Decimal(48),
+                damage: new Decimal(12),
+                defense: new Decimal(12),
+                regen: new Decimal(0.8),
+                agility: new Decimal(8),
+                luck: new Decimal(8),
+                mending: new Decimal(8),
+                potency: new Decimal(8),
+            },
         },
 
         // Saved Skill Stats
@@ -658,6 +676,11 @@ addLayer("bh", {
             "nox_bloodDrain": {selected: ["nox", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nox_vampiricTransformation": {selected: ["nox", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
             "nox_lastChance": {selected: ["nox", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            // BUMPY
+            "bumpy_starbeam": {selected: ["bumpy", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_flashbang": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_tunnelVision": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
+            "bumpy_deltaRayBurst": {selected: ["none", 0], level: new Decimal(0), maxLevel: new Decimal(0)},
         },
 
         //Stagnant Timer
@@ -696,6 +719,10 @@ addLayer("bh", {
         // General Currencies
         darkEssence: new Decimal(0),
         darkEther: new Decimal(0),
+
+        // Misc
+
+        fadeBackground: 4,
     }},
     automate() {},
     nodeStyle() {
@@ -1325,6 +1352,10 @@ addLayer("bh", {
                     celestialiteSpawn()
                 }
             }
+
+            // Misc
+
+            player.bh.fadeBackground += delta.toNumber()
         }
 
         // =-- Calculate celestialite stats --=
@@ -1426,6 +1457,7 @@ addLayer("bh", {
         player.bh.baseMult = new Decimal(1)
         if (hasUpgrade("depth1", 101)) player.bh.baseMult = player.bh.baseMult.mul(1.05)
         player.bh.baseMult = player.bh.baseMult.mul(buyableEffect("darkTemple", 1011))
+        if (player.ep1.dragonEvolutionIndex >= 3) player.bh.baseMult = player.bh.baseMult.mul(1.05);
 
 
         // =-- HEALTH STUFF --= //
@@ -1467,6 +1499,10 @@ addLayer("bh", {
         damageAdd = damageAdd.add(player.bh.skillData["geroa_cosmicRay"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_orbitalCannon"].maxLevel.div(5))
         damageAdd = damageAdd.add(player.bh.skillData["geroa_defenseSatellites"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_starbeam"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_flashbang"].maxLevel.div(5))
+        damageAdd = damageAdd.add(player.bh.skillData["bumpy_tunnelVision"].maxLevel.div(5))
+
         damageAdd = damageAdd.add(levelableEffect("car", 103)[0])
         if (hasAchievement("achievements", 922)) damageAdd = damageAdd.add(1)
         if (hasAchievement("achievements", 1004)) damageAdd = damageAdd.add(1)
@@ -1926,8 +1962,8 @@ addLayer("bh", {
                 player.bh.stagnantTimer = new Decimal(10)
             },
             style() {
-                let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021124"}
-                this.canClick() ? look.background = "linear-gradient(to right, #094394, #052653)" : look.background = "#bf8f8f",
+                let look = {width: "196px", minHeight: "46px", fontSize: "9px", borderRadius: "10px", border: "4px solid #021924"}
+                this.canClick() ? look.background = "linear-gradient(to right, #094394, #053a54)" : look.background = "#bf8f8f",
                 this.canClick() ? look.color = "#ccd8ff" : look.color = "black"
                 return look
             },
@@ -1944,7 +1980,7 @@ addLayer("bh", {
                 }
             },
             style() {
-                let look = {width: "46px", minHeight: "46px", background: "linear-gradient(to right, #094394, #052653)", color: "#ccd8ff", fontSize: "8px", border: "4px solid #021124", borderRadius: "10px", marginLeft: "-4px"}
+                let look = {width: "46px", minHeight: "46px", background: "linear-gradient(to right, #094394, #053a54)", color: "#ccd8ff", fontSize: "8px", border: "4px solid #021924", borderRadius: "10px", marginLeft: "-4px"}
                 if (!player.bh.stagnantAuto) look.filter = "brightness(50%)"
                 return look
             },
@@ -3180,6 +3216,18 @@ addLayer("bh", {
             style() {
                 let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
                 if (player.bh.characterData.nox.selected) look.filter = "brightness(50%)"
+            },
+        },
+        "Char-Bumpy": {
+            title() {return "<img src='" + run(BHP["bumpy"].icon, BHP["bumpy"]) + "'style='width:90px;height:90px;margin-left:-2px;margin-bottom:-4px'></img>"},
+            canClick: true,
+            unlocked() {return false /*|| true*/},
+            onClick() {
+                player.bh.characterSelection = "bumpy"
+            },
+            style() {
+                let look = {width: "90px", minHeight: "90px", color: "white", background: "transparent", padding: "0", borderRadius: "0", margin: "2px"}
+                if (player.bh.characterData.bumpy.selected) look.filter = "brightness(50%)"
                 return look
             },
         },
@@ -3322,7 +3370,7 @@ addLayer("bh", {
                 player.bh.currentTree = 1
             },
             style() {
-                let look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#094394, #052653)", border: "6px solid #021124", color: "#0091DC", borderRadius: "0"}
+                let look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#094394, #053a54)", border: "6px solid #021924", color: "#0091DC", borderRadius: "0"}
                 if (!this.canClick()) look = {width: "100px", minHeight: "97px", fontSize: "30px", background: "radial-gradient(#222, #000)", border: "6px solid #333", color: "#666", borderRadius: "0"}
                 if (player.bh.currentTree == 1) {look.outline = "2px solid #ccc", look.outlineOffset = "-2px"}
                 return look
@@ -4453,7 +4501,7 @@ addLayer("bh", {
                             ["blank", "2px"],
                             ["row", [
                                 ["clickable", "Char-Kres"], ["clickable", "Char-Nav"], ["clickable", "Char-Sel"], ["clickable", "Char-Eclipse"], ["clickable", "Char-Geroa"], ["clickable", "Char-Vespasian"], ["clickable", "Char-Creation"], ["clickable", "Char-DiceFive"],
-                                ["clickable", "Char-Nox"]
+                                ["clickable", "Char-Nox"], ["clickable", "Char-Bumpy"]
                             ]],
                         ], {width: "497px", height: "480px"}],
                     ], {width: "497px", height: "677px"}],
@@ -4943,6 +4991,30 @@ addLayer("bh", {
                         ["style-column", [
                             ["style-row", [], () => {return BHS[player.bh.currentStage].timeStagnation ? {height: "66px"} : {display: "none !important"}}],
                             ["clickable", "Celestialite-Icon"],
+                            ["style-column", [
+                                ["style-column", [
+
+                                ], () => {
+                                    let look = {width: "0", height: "0", position: "absolute", top: "0", zIndex: "-2002"}
+                                    if (player.bh.fadeBackground < 4) {
+                                        look.background = "linear-gradient(90deg, #802050 6.25%, #bf6090 0 12.5%, #ffe0f0 0 87.5%, #bf6090 0 93.75%, #802050 0 100%)"
+                                        if (player.bh.fadeBackground < 0.25) {
+                                            look.width = (Math.pow(player.bh.fadeBackground * 4, 0.5) * 250) + "px"
+                                            look.transform = "translate(-" + (Math.pow(player.bh.fadeBackground * 4, 0.5) * 125) + "px)"
+                                        } else if (player.bh.fadeBackground < 3.75) {
+                                            look.width = "250px" 
+                                            look.transform = "translate(-125px)"
+                                        } else {
+                                            look.width = (Math.pow(16 - (player.bh.fadeBackground * 4), 2) * 250) + "px" 
+                                            look.transform = "translate(-" + (Math.pow(16 - (player.bh.fadeBackground * 4), 2) * 125) + "px)"
+                                        }
+                                        look.height = "100%"
+                                    }
+                                    return look
+                                }]
+                            ], () => {
+                                return player.bh.fadeBackground < 4 ? {width: "250px", height: "0"} : {width: "0", height: "0"}
+                            }],
                             ["style-row", [
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.air ? "≋<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Has " + formatSimple(Decimal.sub(1, player.bh.celestialite.attributes.air).mul(100)) + "% resistance to<br>melee attacks.</div>" : ""}, {color: "#ccc", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],
                                 ["tooltip-row", [["raw-html", () => {return player.bh.celestialite.attributes.warded ? "⬢<div class='bottomTooltip' style='margin-top:0px'>Warded<hr>Has " + formatSimple(Decimal.sub(1, player.bh.celestialite.attributes.warded).mul(100)) + "% resistance to<br>magic attacks.</div>" : ""}, {color: "#ccccff", fontSize: "30px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}]]],

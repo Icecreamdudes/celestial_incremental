@@ -78,6 +78,8 @@ addLayer("bee", {
         player.bee.bps = player.bee.bps.mul(buyableEffect("tw", 23))
         player.bee.bps = player.bee.bps.mul(buyableEffect("fu", 104))
 
+        if (hasUpgrade("ir", 27)) player.bee.bps = player.bee.bps.mul(upgradeEffect("ir", 27))
+
         // POWER MODIFIERS
         player.bee.bps = player.bee.bps.pow(buyableEffect("bee", 15))
         player.bee.bps = player.bee.bps.pow(buyableEffect("sme", 175))

@@ -138,6 +138,14 @@ td {
 	max-width: 100%;
 	margin: 0 auto;
 }
+.upgRightTable {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: end;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
 
 .upgScrollRowTable {
 	display: flex !important;
@@ -184,6 +192,19 @@ td {
 
 .upgAlwaysScrollRow {
 	overflow-x: scroll !important;
+}
+
+.upgDraggableScrollRow {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	cursor: grab;
+  	touch-action: none;
+  	user-select: none;
+  	-webkit-user-select: none;  
+}
+
+.upgDraggableScrollRow.active {
+	cursor: grabbing;
 }
 
 .upgAlign {
@@ -320,9 +341,19 @@ h1, h2, h3, b, input {
 	opacity: 0.7;
 	transition-duration: 0.2s;
 }
+.customBuyableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0%;
+	height: 100%;
+	background-color: #053311;
+	opacity: 1;
+	transition-duration: 0.2s;
+}
 
 .darkBuyableButton1 {
-	width: calc(50% - 2px);
+	width: calc(50% - 1.5px);
 	height: 100%;
 	border: 0px;
 	border-right: 2px solid;
@@ -331,10 +362,33 @@ h1, h2, h3, b, input {
 }
 
 .darkBuyableButton2 {
-	width: 50%;
+	width: calc(50% - 1.5px);
 	height: 100%;
 	border: 0px;
 	color: white;
+}
+
+.exUpgradeButton {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	border-radius: 0 0 10px 10px;
+	color: white;
+}
+
+.exUpgradeInfo {
+	width: 100%;
+	min-height: calc(80% - 43px);
+	display: flex;
+	flex: 1;
+	vertical-align: center;
+	border-bottom: 3px solid;
+	border-color: inherit;
+}
+
+.exUpgradeInfo2 {
+	margin: auto;
+	padding: 1px 6px 1px 6px;
 }
 
 .jinxTitle {
@@ -602,6 +656,187 @@ h1, h2, h3, b, input {
 	padding: 0px;
 	margin: 0px;
 	position: relative;
+}
+
+.extendedLevelableHolder {
+	width: 100px;
+	padding: 0px;
+	border-color: rgba(0, 0, 0, 0.5);
+	border-width: 3px;
+	border-style: solid;
+	border: 0;
+	margin: 2.5px;
+	color: white;
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.extendedLevelableTop {
+	width: calc(100% - 6px);
+	height: 25px;
+	border-radius: 15px 15px 0 0;
+	border-color: inherit;
+	border-width: 3px;
+	border-style: solid;
+	border-bottom: 0;
+	color: white;
+	background: black padding-box;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+}
+
+.extendedLevelableBarText {
+	position: absolute;
+	width: 100%;
+	height: 14px;
+	font-size: 14px;
+	text-shadow:
+    1px 1px 1px black,
+    -1px 1px 1px black,
+    -1px -1px 1px black,
+    1px -1px 1px black;
+	z-index: 3;
+}
+
+.extendedLevelableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0;
+	height: 25px;
+	background: #0B6623;
+	transition-duration: 0.2s;
+}
+.extendedLevelableBarOutline {
+	z-index: 2;
+	position: absolute;
+	overflow: hidden;
+	width: calc(100% - 12px);
+	height: 19px;
+	margin: 0;
+	border-radius: 12px 12px 0 0;
+	border-color: black;
+	border-width: 3px;
+	border-style: solid;
+	background: transparent;
+	transition-duration: 0.2s;
+}
+
+.extendedLevelableMiddle {
+	min-height: calc(100% - 77px);
+	border-color: inherit;
+	border-width: 3px;
+	border-style: solid;
+	display: flex;
+	flex-direction: row;
+}
+
+.extendedLevelableImageContainer {
+	width: 96px;
+	height: 96px;
+	border-color: inherit;
+	border-width: 3px;
+	border-style: solid;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	display: flex;
+	flex-direction: column;
+}
+
+.extendedLevelableImage {
+	width: 100%;
+	height: 100%;
+}
+
+.extendedLevelableTextContainer {
+	width: calc(100% - 108px);
+	min-height: calc(100%);
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.extendedLevelableText {
+	width: calc(100% - 6px);
+	position: relative;
+	color: white;
+	font-size: 12px;
+	text-shadow:
+    1px 1px 1px black,
+    -1px 1px 1px black,
+    -1px -1px 1px black,
+    1px -1px 1px black;
+	text-align: center;
+}
+.extendedLevelableImageText {
+	position: absolute;
+	width: 100%;
+	height: 20%;
+	color: yellow;
+	font-size: 14px;
+	padding-left: 3px;
+	text-shadow:
+    1px 1px 1px black,
+    -1px 1px 1px black,
+    -1px -1px 1px black,
+    1px -1px 1px black;
+	text-align: left;
+}
+
+.extendedLevelableBottom {
+	width: calc(100% - 6px);
+	min-height: 40px;
+	border-radius: 0 0 15px 15px;
+	border-color: inherit;
+	border-width: 3px;
+	border-style: solid;
+	border-top: 0;
+	color: white;
+	background: black padding-box;
+	display: flex;
+	flex-direction: row;
+}
+
+.extendedLevelableButtonSingle {
+	width: calc(100% + 6px);
+	height: 40px;
+	border-radius: 0 0 12px 12px;
+	border: 3px solid rgba(0, 0, 0, 0.25);
+	color: black;
+	background: #ccc;
+	font-size: 14px;
+}
+.extendedLevelableButtonLeftmost {
+	width: 100%;
+	height: 40px;
+	border-radius: 0 0 0 12px;
+	border: 3px solid rgba(0, 0, 0, 0.25);
+	color: black;
+	background: #ccc;
+	font-size: 14px;
+}
+.extendedLevelableButtonRightmost {
+	width: 100%;
+	height: 40px;
+	border-radius: 0 0 12px 0;
+	border: 3px solid rgba(0, 0, 0, 0.25);
+	color: black;
+	background: #ccc;
+	font-size: 14px;
+}
+.extendedLevelableButton {
+	width: 100%;
+	height: 40px;
+	border-radius: 0;
+	border: 3px solid rgba(0, 0, 0, 0.25);
+	color: black;
+	background: #ccc;
+	font-size: 14px;
 }
 
 @keyframes dimFlash {

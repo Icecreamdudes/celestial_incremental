@@ -4589,7 +4589,7 @@ addLayer("pet", {
                 player.subtabs["ir"].ships = "automation"
             },
             // CLICK CODE
-            unlocked() { return player.ir.unlocked},
+            unlocked() { return player.ir.iriditeUnlocked},
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE

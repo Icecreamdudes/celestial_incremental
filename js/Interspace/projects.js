@@ -1016,7 +1016,7 @@
             //effectDescription() { return "<small>x1.1 light gain per starshine done. (x" + format(player.prj.milestone210Effect) + ", caps at x100)</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 2 },
-            unlocked() { return true || hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}

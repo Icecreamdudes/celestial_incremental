@@ -1192,11 +1192,11 @@ addLayer("cbs", {
                             ["style-row", [
                                 ["style-row", [
                                     ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
-                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.secondaryColor + "7f", borderRadius: "0"}],
-                            ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? player.ir.secondaryColor + "7f" : "#00002f", borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[14] ? "none !important" : ""}],
                             ["style-row", [
                                 ["category-button", ["Salvaged Upgrades", "shipSelectionStats", "salvagedUpgrades"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#3383ab7f"), borderRadius: "0"}],
-                            ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+                            ], {display: player.ev.evolutionsUnlocked[14] ? "" : "none !important"}],
 
                         ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
                         ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#3383ab", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
@@ -1899,10 +1899,10 @@ addLayer("cbs", {
                                 ["style-row", [
                                     ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
                                 ], {width: "265px", height: "40px", background: "#00003f", borderRadius: "0"}],
-                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[14] ? "none !important" : ""}}],
                             ["style-row", [
                                 ["category-button", ["Space Junk", "ships", "automation"], {width: "265px", height: "40px", background: "#05354d", border: "3px solid #3383ab7f", borderRadius: "0"}],
-                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[14] ? "" : "none !important"}}],
 
                         ], {width: "800px", height: "40px", borderBottom: "3px solid #3383ab", borderRadius: "0"}],
                         ["style-column", [

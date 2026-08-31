@@ -595,7 +595,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
@@ -628,7 +628,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
@@ -661,7 +661,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {

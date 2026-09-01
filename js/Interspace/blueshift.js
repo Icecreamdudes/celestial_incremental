@@ -364,72 +364,7 @@
     bars: {},
     upgrades: {},
     buyables: {},
-    milestones: {
-        11: {
-            requirementDescription: "1 Blueshift",
-            effectDescription() { return "+x0.1 prism gain per OoM of light, per α blueshift. (x" + format(player.blu.milestone11Effect, 1) + ")" },
-            done() { return player.blu.totalBlueshifts.gte(1) },
-            style() {
-                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
-                if (hasMilestone("blu", this.id)) {
-                    look.backgroundColor = "#2f2f80"
-                    look.border = "3px solid #4242b3"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        12: {
-            requirementDescription: "2 Blueshifts",
-            effectDescription() { return "+x0.2 effective pyramid ↻, per β blueshift. (x" + format(player.blu.milestone12Effect, 1) + ")" },
-            done() { return player.blu.totalBlueshifts.gte(2) },
-            style() {
-                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
-                if (hasMilestone("blu", this.id)) {
-                    look.backgroundColor = "#2f2f80"
-                    look.border = "3px solid #4242b3"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        13: {
-            requirementDescription: "3 Blueshifts",
-            effectDescription() { return "+x0.2 to the blueshift effect base, per γ blueshift. (x" + format(player.blu.milestone13Effect, 1) + ")" },
-            done() { return player.blu.totalBlueshifts.gte(3) },
-            style() {
-                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
-                if (hasMilestone("blu", this.id)) {
-                    look.backgroundColor = "#2f2f80"
-                    look.border = "3px solid #4242b3"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-        14: {
-            requirementDescription: "4 Blueshifts",
-            effectDescription() { return "+/0.25 light well speed and duration per blueshift. (/" + format(player.blu.milestone14Effect, 2) + ")" },
-            done() { return player.blu.totalBlueshifts.gte(4) },
-            style() {
-                let look = {width: "506px", minHeight: "69px", maxHeight: "69px", marginLeft: "3px", marginRight: "3px", color: "white", outline: "3px solid #2f2f80", borderRadius: "0px"}
-                if (hasMilestone("blu", this.id)) {
-                    look.backgroundColor = "#2f2f80"
-                    look.border = "3px solid #4242b3"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                }
-                return look
-            },
-        },
-    },
+    milestones: {},
     challenges: {},
     infoboxes: {},
     microtabs: {

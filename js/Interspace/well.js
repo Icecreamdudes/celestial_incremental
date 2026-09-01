@@ -1,77 +1,4 @@
-﻿const createPourClickable = function (layer, id, data = {}) {
-    if (!data.primaryColor) data.primaryColor = "#999999"
-    if (!data.secondaryColor) data.secondaryColor = "#666666"
-    if (!data.progressFrontColor) data.progressFrontColor = "#ffffff"
-    if (!data.textColor) data.textColor = "#ffffff"
-    let clickable = {
-        title() { return "<h3>Pour</h3>" },
-        canClick() {
-            let fountain = layers[layer].fountains[id]
-            return player.prj.focused.lt(player.prj.maxFocused) && fountain.currencyLocation()[fountain.currencyInternalName].gte(player[layer].fountains[id].statReq) && !player[layer].fountains[id].focused
-        },
-        unlocked() { return true },
-        onClick() {
-            let fountain = layers[layer].fountains[id]
-            fountain.currencyLocation()[fountain.currencyInternalName] = fountain.currencyLocation()[fountain.currencyInternalName].sub(player[layer].fountains[id].statReq)
-            player.prj.focused = player.prj.focused.add(1)
-            player[layer].fountains[id].focused = true
-        },
-        style() {
-            let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
-            if (player[layer].fountains[id].focused || player[layer].fountains[id].isFocused) {
-                look.backgroundColor = data.secondaryColor
-                look.border = "3px solid " + data.primaryColor
-                look.color = "white"
-            } else if (this.canClick()) {
-                look.backgroundColor = data.progressFrontColor
-                look.border = "3px solid " + data.secondaryColor + "7f"
-                look.color = "black"
-            } else {
-                look.background = "#361e1e"
-                look.border = "3px solid " + data.secondaryColor + "7f"
-                look.color = "white"
-            }
-            return look
-        },
-    }
-    return clickable
-}
-const createFountainFocusClickable = function (layer, id, data = {}) {
-    if (!data.primaryColor) data.primaryColor = "#999999"
-    if (!data.secondaryColor) data.secondaryColor = "#666666"
-    if (!data.textColor) data.textColor = "#ffffff"
-    let clickable = {
-        title() { return layers[layer].fountains[id].canAuto() ? "<h3>Focus</h3>" : "" },
-        canClick() {
-            return player.prj.focused.lt(player.prj.maxFocused) && !player[layer].fountains[id].isFocused
-        },
-        unlocked() { return true },
-        onClick() {
-            player[layer].fountains[id].isFocused = true
-            player.prj.focused = player.prj.focused.add(1)
-        },
-        style() {
-            let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
-            if (player[layer].fountains[id].focused || player[layer].fountains[id].isFocused) {
-                look.backgroundColor = data.secondaryColor
-                look.border = "3px solid " + data.primaryColor
-                look.color = "white"
-            } else if (this.canClick()) {
-                look.backgroundColor = "#dfffdf"
-                look.border = "3px solid " + data.secondaryColor + "7f"
-                look.color = "black"
-            } else {
-                look.background = "#361e1e"
-                look.border = "3px solid " + data.secondaryColor + "7f"
-                look.color = "white"
-            }
-            return look
-        },
-    }
-    return clickable
-}
-
-addLayer("wel", {
+﻿addLayer("wel", {
     name: "Wells of Light",
     symbol: "WE",
     universe: "UD",
@@ -221,7 +148,7 @@ addLayer("wel", {
                 time: new Decimal(0),
                 timeReq: new Decimal(60),
                 timeSpeed: new Decimal(1),
-                statReq: new Decimal(5),
+                lightReq: new Decimal(5),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
@@ -238,7 +165,7 @@ addLayer("wel", {
                 time: new Decimal(0),
                 timeReq: new Decimal(2.7e4),
                 timeSpeed: new Decimal(1),
-                statReq: new Decimal(1.5e3),
+                lightReq: new Decimal(1.5e3),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
@@ -255,7 +182,7 @@ addLayer("wel", {
                 time: new Decimal(0),
                 timeReq: new Decimal(6e6),
                 timeSpeed: new Decimal(1),
-                statReq: new Decimal(5e4),
+                lightReq: new Decimal(5e4),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
@@ -272,7 +199,7 @@ addLayer("wel", {
                 time: new Decimal(0),
                 timeReq: new Decimal(5e8),
                 timeSpeed: new Decimal(1),
-                statReq: new Decimal(1.5e6),
+                lightReq: new Decimal(1.5e6),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
@@ -443,14 +370,14 @@ addLayer("wel", {
             let fountain = layers.wel.fountains[i]
             module.timeSpeed = fountain.getTimeSpeed()
             module.timeReq = fountain.getTimeReq()
-            module.statReq = fountain.getstatReq()
+            module.lightReq = fountain.getLightReq()
             module.completionEffect = fountain.getCompletionEffect()
 
             player.wel.fountains[i].focusTimerMax = player.prj.lightFountainFocusExtension.mul(4).div(Math.pow(2, i - 1))
             if (player.wel.fountains[i].isFocused) {
                 player.wel.fountains[i].focusTimer = player.wel.fountains[i].focusTimer.sub(delta)
-                if (player.wel.light.gte(module.statReq) && module.timeSpeed.gt(0)) module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.statReq)).mul(delta));
-                if (player.wel.fountains[i].focusTimer.lte(0) && !hasUpgrade("wel", 34)) {
+                if (player.wel.light.gte(module.lightReq) && module.timeSpeed.gt(0)) module.time = module.time.add(module.timeSpeed.div(player.wel.light).mul(player.wel.light.sub(module.lightReq)).mul(delta));
+                if (player.wel.fountains[i].focusTimer.lte(0) && !hasUpgrade("wel", 33)) {
                     player.wel.fountains[i].isFocused = false
                     player.wel.fountains[i].focusTimer = player.wel.fountains[i].focusTimerMax
                     player.prj.focused = player.prj.focused.sub(1)
@@ -972,7 +899,7 @@ addLayer("wel", {
                 }
                 return s
             },
-            cost: new Decimal(1e45),
+            cost: new Decimal(1e38),
             currencyLocation() { return player.wel },
             currencyDisplayName: "Light",
             currencyInternalName: "light",
@@ -1390,7 +1317,7 @@ addLayer("wel", {
             },
         },
         "lightFountains_respecFocus": {
-            title() { return "<h3>Respec Focus</h3><br><small>(you won't get your poured light back!)</small>" },
+            title() { return "<h3>Respec Focus</h3><br><small>(you won't get your light back!)</small>" },
             canClick() {
                 for (let v in player.wel.fountains) {
                     if (player.wel.fountains[v].focused || player.wel.fountains[v].isFocused) return true;
@@ -1411,7 +1338,7 @@ addLayer("wel", {
                 });
             },
             style() {
-                let look = {width: "536px", minHeight: "75px", maxHeight: "75px", borderRadius: "25px", margin: "3px"}
+                let look = {width: "400px", minHeight: "75px", maxHeight: "75px", borderRadius: "10px"}
                 if (this.canClick()) {
                     look.backgroundColor = "#dfffdf"
                     look.border = "3px solid #0000003f"
@@ -1558,52 +1485,116 @@ addLayer("wel", {
                 return look
             },
         },
-        "fountainPour_1": createPourClickable("wel", 1, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            progressFrontColor: "#ffdfdf",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_1": createFountainFocusClickable("wel", 1, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            textColor: "#ffffff",
-        }),
-        "fountainPour_2": createPourClickable("wel", 2, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            progressFrontColor: "#ffdfdf",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_2": createFountainFocusClickable("wel", 2, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            textColor: "#ffffff",
-        }),
-        "fountainPour_3": createPourClickable("wel", 3, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            progressFrontColor: "#ffdfdf",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_3": createFountainFocusClickable("wel", 3, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            textColor: "#ffffff",
-        }),
-        "fountainPour_4": createPourClickable("wel", 4, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            progressFrontColor: "#ffdfdf",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_4": createFountainFocusClickable("wel", 4, {
-            primaryColor: "#4d9973",
-            secondaryColor: "#336659",
-            textColor: "#ffffff",
-        }),
+        2001: {
+            title() { return "<h3>Pour</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 2000].lightReq) && !player.wel.fountains[this.id - 2000].focused && !player.wel.fountains[this.id - 2000].isFocused},
+            unlocked() { return true },
+            onClick() {
+                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 2000].lightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.wel.fountains[this.id - 2000].focused = true
+            },
+            style() {
+                let look = {width: layers.wel.fountains[this.id - 2000].canAuto() ? "108px" : "219px", minHeight: "45px", borderRadius: "0px"}
+                if (player.wel.fountains[this.id - 2000].focused || player.wel.fountains[this.id - 2000].isFocused) {
+                    look.backgroundColor = "#336659"
+                    look.border = "3px solid #4d9973"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffd3"
+                    look.border = "3px solid #3366597f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #3366597f"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        2002: {
+            title() { return "<h3>Pour</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 2000].lightReq) && !player.wel.fountains[this.id - 2000].focused && !player.wel.fountains[this.id - 2000].isFocused},
+            unlocked() { return true },
+            onClick() {
+                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 2000].lightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.wel.fountains[this.id - 2000].focused = true
+            },
+            style() {
+                let look = {width: layers.wel.fountains[this.id - 2000].canAuto() ? "108px" : "219px", minHeight: "45px", borderRadius: "0px"}
+                if (player.wel.fountains[this.id - 2000].focused || player.wel.fountains[this.id - 2000].isFocused) {
+                    look.backgroundColor = "#336659"
+                    look.border = "3px solid #4d9973"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffd3"
+                    look.border = "3px solid #3366597f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #3366597f"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        2003: {
+            title() { return "<h3>Pour</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 2000].lightReq) && !player.wel.fountains[this.id - 2000].focused && !player.wel.fountains[this.id - 2000].isFocused},
+            unlocked() { return true },
+            onClick() {
+                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 2000].lightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.wel.fountains[this.id - 2000].focused = true
+            },
+            style() {
+                let look = {width: layers.wel.fountains[this.id - 2000].canAuto() ? "108px" : "219px", minHeight: "45px", borderRadius: "0px"}
+                if (player.wel.fountains[this.id - 2000].focused || player.wel.fountains[this.id - 2000].isFocused) {
+                    look.backgroundColor = "#336659"
+                    look.border = "3px solid #4d9973"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffd3"
+                    look.border = "3px solid #3366597f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #3366597f"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
+        2004: {
+            title() { return "<h3>Pour</h3>" },
+            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.wel.light.gte(player.wel.fountains[this.id - 2000].lightReq) && !player.wel.fountains[this.id - 2000].focused && !player.wel.fountains[this.id - 2000].isFocused},
+            unlocked() { return true },
+            onClick() {
+                player.wel.light = player.wel.light.sub(player.wel.fountains[this.id - 2000].lightReq)
+                player.prj.focused = player.prj.focused.add(1)
+                player.wel.fountains[this.id - 2000].focused = true
+            },
+            style() {
+                let look = {width: layers.wel.fountains[this.id - 2000].canAuto() ? "108px" : "219px", minHeight: "45px", borderRadius: "0px"}
+                if (player.wel.fountains[this.id - 2000].focused || player.wel.fountains[this.id - 2000].isFocused) {
+                    look.backgroundColor = "#336659"
+                    look.border = "3px solid #4d9973"
+                    look.color = "white"
+                } else if (this.canClick()) {
+                    look.backgroundColor = "#a8ffd3"
+                    look.border = "3px solid #3366597f"
+                    look.color = "black"
+                } else {
+                    look.background = "#361e1e"
+                    look.border = "3px solid #3366597f"
+                    look.color = "white"
+                }
+                return look
+            },
+        },
         3001: {
-            title() { return "<h3>Focus</h3>" },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1616,7 +1607,7 @@ addLayer("wel", {
                 }
             },
             style() {
-                let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
+                let look = {width: "108px", minHeight: "45px", borderRadius: "0px"}
                 if (player.wel.fountains[this.id - 3000].isFocused) {
                     look.backgroundColor = "#336659"
                     look.border = "3px solid #4d9973"
@@ -1634,7 +1625,7 @@ addLayer("wel", {
             },
         },
         3002: {
-            title() { return "<h3>Focus</h3>" },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1642,7 +1633,7 @@ addLayer("wel", {
                 player.wel.fountains[this.id - 3000].isFocused = true
             },
             style() {
-                let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
+                let look = {width: "108px", minHeight: "45px", borderRadius: "0px"}
                 if (player.wel.fountains[this.id - 3000].isFocused) {
                     look.backgroundColor = "#336659"
                     look.border = "3px solid #4d9973"
@@ -1660,7 +1651,7 @@ addLayer("wel", {
             },
         },
         3003: {
-            title() { return "<h3>Focus</h3>" },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1668,7 +1659,7 @@ addLayer("wel", {
                 player.wel.fountains[this.id - 3000].isFocused = true
             },
             style() {
-                let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
+                let look = {width: "108px", minHeight: "45px", borderRadius: "0px"}
                 if (player.wel.fountains[this.id - 3000].isFocused) {
                     look.backgroundColor = "#336659"
                     look.border = "3px solid #4d9973"
@@ -1686,7 +1677,7 @@ addLayer("wel", {
             },
         },
         3004: {
-            title() { return "<h3>Focus</h3>" },
+            title() { return "<h3>Focus</h3>" + (hasUpgrade("wel", 33) ? "" : ("<br><small>(" + formatSimpleTime(player.wel.fountains[this.id - 3000].focusTimer, 1) + ")")) },
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.wel.fountains[this.id - 3000].isFocused },
             unlocked() { return layers.wel.fountains[this.id - 3000].canAuto() },
             onClick() {
@@ -1694,7 +1685,7 @@ addLayer("wel", {
                 player.wel.fountains[this.id - 3000].isFocused = true
             },
             style() {
-                let look = {width: "75px", minHeight: "30px", borderRadius: "0px"}
+                let look = {width: "108px", minHeight: "45px", borderRadius: "0px"}
                 if (player.wel.fountains[this.id - 3000].isFocused) {
                     look.backgroundColor = "#336659"
                     look.border = "3px solid #4d9973"
@@ -1715,15 +1706,13 @@ addLayer("wel", {
     fountains: {
         1: {
             title: "Light Fountain",
-            unlocked() { return true },
-            conditionDisplay() { return "This should always be unlocked... why are you seeing this??"},
-            condition() { return true },
-            canAuto() { return player.pri.totalPrisms.gte(1) },
-            infiniteAuto() { return hasUpgrade("wel", 34) },
-            effectDisplay() { return "Boosts light gain by x" + formatSimple(layers.wel.fountains[1].getCompletionEffect(), 2)},
-            currencyLocation() { return player.wel },
-            currencyInternalName: "light",
-            currencyDisplayName: "Light",
+            completionEffectStat: "Light",
+            condition() {
+                return true
+            },
+            canAuto() {
+                return player.pri.totalPrisms.gte(1)
+            },
             getCompletionEffect() {
                 let completions = player.wel.fountains[1].completions.pow(0.9)
 
@@ -1751,7 +1740,7 @@ addLayer("wel", {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
             },
-            getstatReq() {
+            getLightReq() {
                 let completions = player.wel.fountains[1].completions
                 let s = new Decimal(5)
 
@@ -1782,16 +1771,13 @@ addLayer("wel", {
         },
         2: {
             title: "Light Fountain II",
-            completionEffectStat: "light gain",
-            unlocked() { return true },
-            conditionDisplay() { return "1,500 Light"},
-            condition() { return player.wel.bestLight.gte(1.5e3) || hasMilestone('prj', 204) },
-            canAuto() { return player.pri.totalPrisms.gte(2) },
-            infiniteAuto() { return hasUpgrade("wel", 34) },
-            effectDisplay() { return "Boosts light gain by x" + formatSimple(layers.wel.fountains[2].getCompletionEffect(), 2)},
-            currencyLocation() { return player.wel },
-            currencyInternalName: "light",
-            currencyDisplayName: "Light",
+            completionEffectStat: "Light",
+            condition() {
+                return player.wel.bestLight.gte(1.5e3) || hasMilestone('prj', 204)
+            },
+            canAuto() {
+                return player.pri.totalPrisms.gte(2)
+            },
             getCompletionEffect() {
                 let completions = player.wel.fountains[2].completions.pow(0.9)
 
@@ -1819,7 +1805,7 @@ addLayer("wel", {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
             },
-            getstatReq() {
+            getLightReq() {
                 let completions = player.wel.fountains[2].completions
                 let s = new Decimal(1.5e3)
 
@@ -1850,15 +1836,13 @@ addLayer("wel", {
         },
         3: {
             title: "Cycle Fountain",
-            unlocked() { return layers.wel.fountains[2].condition() },
-            conditionDisplay() { return "50,000 Light"},
-            condition() { return player.wel.bestLight.gte(5e4) || hasMilestone('prj', 204) },
-            canAuto() { return player.pri.totalPrisms.gte(3) },
-            infiniteAuto() { return hasUpgrade("wel", 34) },
-            effectDisplay() { return "Boosts light well ↻ gain by x" + formatSimple(layers.wel.fountains[3].getCompletionEffect(), 2)},
-            currencyLocation() { return player.wel },
-            currencyInternalName: "light",
-            currencyDisplayName: "Light",
+            completionEffectStat: "Light Well ↻",
+            condition() {
+                return player.wel.bestLight.gte(5e4) || hasMilestone('prj', 204)
+            },
+            canAuto() {
+                return player.pri.totalPrisms.gte(3)
+            },
             getCompletionEffect() {
                 let completions = player.wel.fountains[3].completions
 
@@ -1886,7 +1870,7 @@ addLayer("wel", {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
             },
-            getstatReq() {
+            getLightReq() {
                 let completions = player.wel.fountains[3].completions
                 let s = new Decimal(5e4)
 
@@ -1917,15 +1901,13 @@ addLayer("wel", {
         },
         4: {
             title: "Speed Fountain",
-            unlocked() { return layers.wel.fountains[3].condition() },
-            conditionDisplay() { return "1,500,000 Light"},
-            condition() { return player.wel.bestLight.gte(1.5e6) || hasMilestone('prj', 204) },
-            canAuto() { return player.pri.totalPrisms.gte(4) },
-            infiniteAuto() { return hasUpgrade("wel", 34) },
-            effectDisplay() { return "Boosts light well speed by x" + formatSimple(layers.wel.fountains[4].getCompletionEffect(), 2)},
-            currencyLocation() { return player.wel },
-            currencyInternalName: "light",
-            currencyDisplayName: "Light",
+            completionEffectStat: "Light Well Speed",
+            condition() {
+                return player.wel.bestLight.gte(1.5e6) || hasMilestone('prj', 204)
+            },
+            canAuto() {
+                return player.pri.totalPrisms.gte(4)
+            },
             getCompletionEffect() {
                 let completions = player.wel.fountains[4].completions
 
@@ -1953,7 +1935,7 @@ addLayer("wel", {
                     return unscaledBulk.mul(400).pow(0.5).floor()
                 } else return unscaledBulk.floor()
             },
-            getstatReq() {
+            getLightReq() {
                 let completions = player.wel.fountains[4].completions
                 let s = new Decimal(1.5e6)
 
@@ -1982,14 +1964,6 @@ addLayer("wel", {
                 return s
             },
         },
-        /*
-            primaryColor: "#999999",
-            secondaryColor: "#666666",
-            progressFrontColor: "#ffffff",
-            progressBackColor: "#171717",
-            textColor: "#ffffff",
-            unaffordableTextColor: "#ffff00",
-        */
     },
     microtabs: {
         stuff: {
@@ -2450,64 +2424,81 @@ addLayer("wel", {
                 unlocked() { return hasUpgrade("wel", 12) },
                 content() {
                     let look = [
-                        ["blank", "25px"],
-                        ["raw-html", "Light fountains operate at <h3>x" + formatWhole(player.wel.light.mul(player.prj.projectSpeed)) + "</h3> speed.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Light speeds up light fountains by x" + formatSimple(player.wel.light) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["style-column", [
-                            ["raw-html", "<small>Fountain requirements are reduced by /" + formatSimple(player.wel.lightFountainReqDivisor, 2) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ], {display: player.wel.lightFountainReqDivisor.gt(1) ? "" : "none !important"}],
-                        ["style-column", [
-                            ["tooltip-row", [
-                                ["raw-html", "<small>Base fountain focus duration is " + formatSimpleTime(player.prj.lightFountainFocusExtension.mul(4), 1) + ", reduced for each consecutive fountain.</small>", {color: "#dfffdf", fontSize: "18px", fontFamily: "monospace"}],
-                                ["raw-html", "<div class='bottomTooltip'>2 * (Project Speed)<sup>0.75</div>"],
-                            ], {}],
-                        ], {display: hasMilestone("prj", 201) && !hasUpgrade("wel", 34) ? "" : "none !important"}],
-                        ["blank", "10px"],
-                        ["style-row", [
-                            component_fountain("wel", 1, {
-                                primaryColor: "#4d9973",
-                                secondaryColor: "#336659",
-                                progressFrontColor: "#ffdfdf",
-                                progressBackColor: "#1a332d",
-                                textColor: "#ffffff",
-                                rightAdjacent: true,
-                                bottomAdjacent: layers.wel.fountains[3].unlocked(),
-                            }),
-                            component_fountain("wel", 2, {
-                                primaryColor: "#4d9973",
-                                secondaryColor: "#336659",
-                                progressFrontColor: "#ffdfdf",
-                                progressBackColor: "#1a332d",
-                                textColor: "#ffffff",
-                                leftAdjacent: true,
-                                bottomAdjacent: layers.wel.fountains[4].unlocked(),
-                            }),
+                            ["blank", "25px"],
+                            ["raw-html", "You are gaining <h3>" + formatWhole(player.wel.light.mul(player.prj.projectSpeed)) + "</h3> fountain progress /s.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["raw-html", "<small>Light gives a base progress rate of " + formatWhole(player.wel.light) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["blank", "25px"],
+                            ["raw-html", "You are using " + formatWhole(player.prj.focused) + "/" + formatWhole(player.prj.maxFocused) + " focus.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ["style-column", [
+                                ["raw-html", "<small>Fountain requirements are reduced by /" + formatSimple(player.wel.lightFountainReqDivisor, 2) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                            ], {display: player.wel.lightFountainReqDivisor.gt(1) ? "" : "none !important"}],
+                            ["style-column", [
+                                ["tooltip-row", [
+                                    ["raw-html", "<small>Base fountain focus duration is " + formatSimpleTime(player.prj.lightFountainFocusExtension.mul(4), 1) + ", reduced for each consecutive fountain.</small>", {color: "#dfffdf", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["raw-html", "<div class='bottomTooltip'>2 * (Project Speed)<sup>0.75</div>"],
+                                ], {}],
+                            ], {display: hasMilestone("prj", 201) && !hasUpgrade("wel", 33) ? "" : "none !important"}],
+                            ["blank", "10px"],
                         ]],
                         ["style-row", [
-                            component_fountain("wel", 3, {
-                                primaryColor: "#4d9973",
-                                secondaryColor: "#336659",
-                                progressFrontColor: "#ffdfdf",
-                                progressBackColor: "#1a332d",
-                                textColor: "#ffffff",
-                                rightAdjacent: layers.wel.fountains[4].unlocked(),
-                                topAdjacent: true,
-                            }),
-                            component_fountain("wel", 4, {
-                                primaryColor: "#4d9973",
-                                secondaryColor: "#336659",
-                                progressFrontColor: "#ffdfdf",
-                                progressBackColor: "#1a332d",
-                                textColor: "#ffffff",
-                                leftAdjacent: layers.wel.fountains[3].unlocked(),
-                                topAdjacent: true,
-                            }),
+
                         ]],
+                        ["blank", "6px"],
+                        ["style-row", [
+
+                        ]],
+                        ["blank", "25px"],
                         ["clickable", "lightFountains_respecFocus"],
                         ["blank", "25px"],
                     ]
+                    if (hasUpgrade("wel", 12)) {
+                        look[1][1].push(
+                            makeWellFountain(1, true)
+                        )
+                        if (layers.wel.fountains[2].condition()) {
+                            look[1][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                makeWellFountain(2, true)
+                            )
+                        } else {
+                            look[1][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Light Fountain II<br><small>Req: 1,500 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
+                            )
+                        }
+                        if (layers.wel.fountains[2].condition()) {
+                            if (layers.wel.fountains[3].condition()) {
+                                look[3][1].push(
+                                    makeWellFountain(3, true)
+                                )
+                            } else {
+                                look[3][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Cycle Fountain<br><small>Req: 50,000 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
+                                )
+                            }
+                        }
+                        if (layers.wel.fountains[3].condition()) {
+                            if (layers.wel.fountains[4].condition()) {
+                                look[3][1].push(
+                                    ["blank", "6px", {width: "6px"}],
+                                    makeWellFountain(4, false)
+                                )
+                            } else {
+                                look[3][1].push(
+                                ["blank", "6px", {width: "6px"}],
+                                ["style-column", [
+                                    ["raw-html", "Speed Fountain<br><small>Req: 1,500,000 Light</small>", {color: "white", fontSize: "16px"}],
+                                ], {background: "black", border: "3px solid #663737", width: "253px", height: "216px", borderRadius: "10px", lineHeight: "1"}],
+                                )
+                            }
+                        }
+                    }
                     return look
                 }
             }
@@ -2553,6 +2544,56 @@ addLayer("wel", {
 	]
 })
 
+const makeWellFountain = function (id, effectIsWhole) {
+    let thisFountain =
+        ["style-row", [
+            ["style-column", [
+                ["style-column", [
+                    ["style-column", [
+                        ["style-column", [
+                            ["style-column", [
+                            ], {background: "#ffdfdf", borderRadius: "0", width: "25px", height: (format(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(207))) + "px", marginTop: (format(new Decimal(207).sub(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).min(1).max(0).mul(207)))) + "px"}],
+                        ], {background: "#0b1711", borderRadius: "10px 0 0 10px", width: "31px", height: "207px"}],
+                    ], {width: "31px", height: "0"}],
+                    ["style-column", [
+                        ["style-column", [
+                        ], {border: "3px solid #4d9973", borderRadius: "10px 0 0 10px", width: "25px", height: "207px"}],
+                    ], {width: "31px", height: "0"}],
+                ], {background: "#4d9973", borderRadius: "10px 0 0 10px", width: "31px", height: "213px"}],
+            ], {background: "#336659", border: "3px solid #336659", borderRadius: "10px 0 0 10px", borderRight: "0", width: "31px", height: "213px"}],
+            ["style-column", [
+                ["style-column", [
+                    ["blank", "10px"],
+                    ["raw-html", layers.wel.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", (player.wel.fountains[id].timeSpeed.lte(0) || player.wel.light.sub((player.wel.fountains[id].focused ? new Decimal(0) : player.wel.fountains[id].lightReq)).eq(0)) ? "<span style='color:#ffff00'>Can't Complete w/o Light!</span>" : (player.wel.fountains[id].focused ? formatSimpleTime(player.wel.fountains[id].timeReq.sub(player.wel.fountains[id].time).div(player.wel.fountains[id].timeSpeed), 2) : player.wel.light.lte(player.wel.fountains[id].lightReq) ? "<span style='color:#ffff00'>Can't afford!</span>" : (formatSimpleTime(player.wel.fountains[id].timeReq.div(player.wel.fountains[id].timeSpeed.mul(player.wel.light.sub(player.wel.fountains[id].lightReq).div(player.wel.light))).mul(player.wel.fountains[id].time.div(player.wel.fountains[id].timeReq).neg().add(1)), 2)) + " CD"), {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["raw-html", "<small>(" + format(player.wel.fountains[id].time, 1) + "/" + format(player.wel.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", "-" + formatWhole(player.wel.fountains[id].lightReq) + " Light", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                    ], {background: "#4d9973", borderRadius: "0 10px 0px 0px", width: "219px", height:"25px"}],
+                    ["blank", "3px"],
+                    ["style-row", [
+                        ["hoverless-clickable", id + 2000],
+                        ["style-row", [
+                            ["blank", "3px", {width: "3px"}],
+                        ], {display: layers.wel.fountains[id].canAuto() ? "" : "none !important"}],
+                        ["hoverless-clickable", id + 3000],
+                    ], {height: "45px"}]
+                ], {background: "#336659", border: "3px solid #336659", borderRadius: "0 10px 0px 0px", width: "219px", height: "150px"}],
+                ["style-column", [
+                    ["style-column", [
+                        ["tooltip-row", [
+                            ["raw-html", formatWhole(player.wel.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
+                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.wel.fountains[id].bestCompletions) + " " + layers.wel.fountains[id].title + " ↻</div>"],
+                        ], {}],
+                        ["raw-html", "<small>(x" + formatSimple(layers.wel.fountains[id].getCompletionEffect(), 2) + " " + layers.wel.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block", lineHeight: "1"}],
+                    ], {background: "#336659", border: "3px solid #4d9973", borderRadius: "0px 0px 7px 0px", width: "216px", height: "54px"}],
+                ], {background: "#4d9973", border: "3px solid #336659", borderRadius: "0px 0px 10px 0px", borderTop: "0px", borderLeft: "0px", height: "60px"}],
+            ], {width: "225px"}]
+        ]]
+    return thisFountain
+}
+
 const tickProjects = function (time) {
     Object.keys(layers.prj.projects).forEach(i => {
         let module = player.prj.modules[i]
@@ -2566,127 +2607,4 @@ const tickProjects = function (time) {
             }
         }
     });
-}
-
-const component_fountain = function (layer, id, data = {}) {
-    if (!data.primaryColor) data.primaryColor = "#999999"
-    if (!data.secondaryColor) data.secondaryColor = "#666666"
-    if (!data.progressFrontColor) data.progressFrontColor = "#ffffff"
-    if (!data.progressBackColor) data.progressBackColor = "#171717"
-    if (!data.textColor) data.textColor = "#ffffff"
-    if (!data.unaffordableTextColor) data.unaffordableTextColor = "#ffff00"
-    if (!data.topAdjacent) data.topAdjacent = false
-    if (!data.rightAdjacent) data.rightAdjacent = false
-    if (!data.bottomAdjacent) data.bottomAdjacent = false
-    if (!data.leftAdjacent) data.leftAdjacent = false
-
-    let layerFountain = layers[layer].fountains[id]
-    let playerFountain = player[layer].fountains[id]
-    let container
-
-    if (layerFountain.unlocked()) {
-        if (layerFountain.condition()) {
-            let currencyLocation = layerFountain.currencyLocation()
-            let currency = currencyLocation[layerFountain.currencyInternalName]
-
-            let pourBarText = (playerFountain.timeSpeed.lte(0) || currency.sub((playerFountain.focused ? new Decimal(0) : playerFountain.statReq)).eq(0)) ? "<span style='color:" + data.unaffordableTextColor + "'>Can't complete!</span>" : (playerFountain.focused ? formatSimpleTime(playerFountain.timeReq.sub(playerFountain.time).div(playerFountain.timeSpeed), 2) : currency.lte(playerFountain.statReq) ? "<span style='color:#ffff00'>Can't afford!</span>" : (formatSimpleTime(playerFountain.timeReq.div(playerFountain.timeSpeed.mul(currency.sub(playerFountain.statReq).div(currency))).mul(playerFountain.time.div(playerFountain.timeReq).neg().add(1)), 2)) + " CD")
-            let pourBarTextUnaffordable = (playerFountain.timeSpeed.lte(0) || currency.sub((playerFountain.focused ? new Decimal(0) : playerFountain.statReq)).eq(0)) ? "Can't complete!" : (playerFountain.focused ? formatSimpleTime(playerFountain.timeReq.sub(playerFountain.time).div(playerFountain.timeSpeed), 2) : currency.lte(playerFountain.statReq) ? "Can't afford!" : (formatSimpleTime(playerFountain.timeReq.div(playerFountain.timeSpeed.mul(currency.sub(playerFountain.statReq).div(currency))).mul(playerFountain.time.div(playerFountain.timeReq).neg().add(1)), 2)) + " CD")
-            let focusBarText = layerFountain.infiniteAuto() ? "<h2>∞" : formatSimpleTime(playerFountain.focusTimer)
-            container = ["style-row", [
-                ["style-column", [
-                    ["style-column", [
-                        ["blank", "6px"],
-                        ["raw-html", layerFountain.title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", , {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                        ["tooltip-row", [
-                            ["raw-html", formatWhole(playerFountain.completions) + " ↻", {color: "white", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(playerFountain.bestCompletions) + " ↻</div>"],
-                        ]],
-                        ["blank", "6px"],
-                        ["style-column", [
-                            ["raw-html", "-" + formatWhole(playerFountain.statReq) + " " + layerFountain.currencyDisplayName, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                        ], {background: data.primaryColor, borderRadius: (data.leftAdjacent ? "0" : "25px") + " " + (data.rightAdjacent ? "0" : "25px") + " 0 0", width: "259px", height: "25px"}],
-                        ["blank", "3px"],
-                        ["style-column", [
-                            ["style-row", [
-                                ["hoverless-clickable", "fountainPour_" + id],
-                                ["blank", "3px", {width: "3px"}],
-                                ["tooltip-row", [
-                                    ["style-column", [
-                                        ["style-column", [
-                                            ["left-row", [
-                                                ["left-row", [
-                                                ], {background: data.progressFrontColor, borderRadius: "0", width: (playerFountain.time.div(playerFountain.timeReq).min(1).max(0).mul(175).toNumber()) + "px", height: "24px", marginLeft: "3px"}],
-                                            ], {background: data.progressBackColor, borderRadius: "0", width: "181px", height: "30px"}],
-                                        ], {width: "181px", height: "0"}],
-                                        ["style-column", [
-                                            ["left-row", [
-                                            ], {border: "3px solid " + data.primaryColor, borderRadius: "0", width: "175px", height: "24px"}],
-                                        ], {width: "181px", height: "0"}],
-                                        ["left-row", [
-                                            ["style-row", [
-                                                ["raw-html", pourBarText, {color: data.progressFrontColor, fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block", marginLeft: "3px"}],
-                                            ], {width: "175px"}],
-                                        ], {width: "175px", height: "0"}],
-                                        ["left-row", [
-                                            ["left-row", [
-                                                ["style-row", [
-                                                    ["raw-html", pourBarTextUnaffordable, {color: data.progressBackColor, fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block", marginLeft: "3px"}],
-                                                ], {width: "175px"}],
-                                            ], {width: (playerFountain.time.div(playerFountain.timeReq).min(1).max(0).mul(175).toNumber()) + "px", overflow: "hidden"}],
-                                        ], {width: "175px", height: "0"}],
-                                    ], {height: "30px"}],
-                                    ["raw-html", "<div class='bottomTooltip'>" + (playerFountain.focused ? "/ " + formatSimpleTime(playerFountain.timeReq.div(playerFountain.timeSpeed), 2) + "<br>" : "") + "<small>(" + format(playerFountain.time, 1) + " / " + format(playerFountain.timeReq, 1) + ")</div>"],
-                                ]],
-                            ]],
-                            ["style-row", [
-                                ["blank", "3px", {width: "3px"}],
-                            ], {display: layerFountain.canAuto() ? "" : "none !important"}],
-                            ["style-row", [
-                                ["hoverless-clickable", "fountainFocus_" + id],
-                                ["blank", "3px", {width: "3px"}],
-                                ["style-column", [
-                                    ["style-column", [
-                                        ["left-row", [
-                                            ["left-row", [
-                                            ], {background: "#dfffdf", borderRadius: "0", width: (layerFountain.infiniteAuto() ? "175" : playerFountain.focusTimer.div(playerFountain.focusTimerMax).min(1).max(0).mul(175)) + "px", height: "24px", marginLeft: "3px"}],
-                                        ], {background: data.progressBackColor, borderRadius: "0", width: "181px", height: "30px"}],
-                                    ], {width: "181px", height: "0"}],
-                                    ["style-column", [
-                                        ["left-row", [
-                                        ], {border: "3px solid " + data.primaryColor, borderRadius: "0", width: "175px", height: "24px"}],
-                                    ], {width: "181px", height: "0"}],
-                                    ["left-row", [
-                                        ["style-row", [
-                                            ["raw-html", focusBarText, {color: "#dfffdf", fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block", marginLeft: "3px"}],
-                                        ], {width: "175px"}],
-                                    ], {width: "175px", height: "0"}],
-                                    ["left-row", [
-                                        ["left-row", [
-                                            ["style-row", [
-                                                ["raw-html", focusBarText, {color: data.progressBackColor, fontSize: "16px", fontFamily: "monospace", lineHeight: "18px", display: "block", marginLeft: "3px"}],
-                                            ], {width: "175px"}],
-                                        ], {width: (layerFountain.infiniteAuto() ? "175" : playerFountain.focusTimer.div(playerFountain.focusTimerMax).min(1).max(0).mul(175).toNumber()) + "px", overflow: "hidden"}],
-                                    ], {width: "175px", height: "0"}],
-                                ]],
-                            ], {display: layerFountain.canAuto() ? "" : "none !important"}],
-                        ], {}]
-                    ], {background: data.secondaryColor, border: "3px solid " + data.secondaryColor, borderRadius: (data.topAdjacent || data.leftAdjacent ? "0" : "25px") + " " + (data.topAdjacent || data.rightAdjacent ? "0" : "25px") + " 0 0", width: "259px"}],
-                    ["style-column", [
-                        ["style-column", [
-                            ["raw-html", layerFountain.effectDisplay(), {color: "white", fontSize: "14px", fontFamily: "monospace", display: "block", lineHeight: "1"}],
-                        ], {background: data.secondaryColor, border: "3px solid " + data.primaryColor, borderRadius: "0 0 " + (data.bottomAdjacent || data.rightAdjacent ? "0" : "22px") + " " + (data.bottomAdjacent || data.leftAdjacent ? "0" : "22px"), width: "241px", height: "44px", paddingLeft: "6px", paddingRight: "6px"}],
-                    ], {background: data.primaryColor, border: "3px solid " + data.secondaryColor, borderRadius: "0 0 " + (data.bottomAdjacent || data.rightAdjacent ? "0" : "25px") + " " + (data.bottomAdjacent || data.leftAdjacent ? "0" : "25px"), borderTop: "0", height: "50px"}],
-                ], {width: "265px", margin: "3px"}]
-            ]]
-        } else {
-            container = ["style-column", [
-                ["raw-html", layerFountain.title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                ["raw-html", "<small>Req: " + layerFountain.conditionDisplay(), {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ], {background: "black", border: "3px solid #663737", borderRadius: (data.topAdjacent || data.leftAdjacent ? "0" : "25px") + " " + (data.topAdjacent || data.rightAdjacent ? "0" : "25px") + " " + (data.bottomAdjacent || data.rightAdjacent ? "0" : "25px") + " " + (data.bottomAdjacent || data.leftAdjacent ? "0" : "25px"), height: "160px", width: "265px", margin: "3px"}]
-        }
-    } else {
-        container = ["style-row", []]
-    }
-    return container
 }

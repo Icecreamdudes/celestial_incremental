@@ -201,39 +201,6 @@
                 return look
             },
         },
-        "fountainPour_1": createPourClickable("pri", 1, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            progressFrontColor: "#ffd6ff",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_1": createFountainFocusClickable("pri", 1, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            textColor: "#ffffff",
-        }),
-        "fountainPour_2": createPourClickable("pri", 2, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            progressFrontColor: "#ffd6ff",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_2": createFountainFocusClickable("pri", 2, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            textColor: "#ffffff",
-        }),
-        "fountainPour_3": createPourClickable("pri", 3, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            progressFrontColor: "#ffd6ff",
-            textColor: "#ffffff",
-        }),
-        "fountainFocus_3": createFountainFocusClickable("pri", 3, {
-            primaryColor: "#806080",
-            secondaryColor: "#4d394d",
-            textColor: "#ffffff",
-        }),
         11: {
             title() { return "<h2>BU</h2>" },
             canClick() { return false},
@@ -1227,34 +1194,6 @@
                     let look = [
                         ["blank", "25px"],
                         ["style-row", [
-                            component_fountain("bum", 1, {
-                                primaryColor: "#806080",
-                                secondaryColor: "#4d394d",
-                                progressFrontColor: "#ffd6ff",
-                                progressBackColor: "#332633",
-                                textColor: "#ffffff",
-                                rightAdjacent: true,
-                                bottomAdjacent: false,
-                            }),
-                            component_fountain("bum", 2, {
-                                primaryColor: "#806080",
-                                secondaryColor: "#4d394d",
-                                progressFrontColor: "#ffd6ff",
-                                progressBackColor: "#332633",
-                                textColor: "#ffffff",
-                                rightAdjacent: true,
-                                bottomAdjacent: false,
-                                leftAdjacent: true,
-                            }),
-                            component_fountain("bum", 3, {
-                                primaryColor: "#806080",
-                                secondaryColor: "#4d394d",
-                                progressFrontColor: "#ffd6ff",
-                                progressBackColor: "#332633",
-                                textColor: "#ffffff",
-                                bottomAdjacent: false,
-                                leftAdjacent: true,
-                            }),
                         ]],
                         ["style-row", [
                         ]],

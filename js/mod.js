@@ -36,8 +36,6 @@
 		"Singularity/lightRift.js",
 		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
 		"DarkU1/timeCapsules.js", "Check Back/dragon.js",
-		"Interspace/starmetalEnhancement.js",
-		"InterspaceCycle/beaconsOfBlacklight.js", "InterspaceCycle/foraging.js", "InterspaceCycle/planetarium.js", "InterspaceCycle/masterpieceResearch.js", "InterspaceCycle/astrolabe.js",
 		
 		"Puzzle World/akash.js", "Puzzle World/elements.js", 
 		"Puzzle World/Puzzle Fighting/puzzleFighting.js",
@@ -345,27 +343,6 @@ function updateStyles() {
 		case "cer":
 			layerBG = "linear-gradient(0deg, #402030 0%, #1f0812 100%)"
 			break;
-		case "smn":
-			layerBG = "linear-gradient(120deg, #807350 0%, #996b7d 50%, #916b99 100%)"
-			break;
-		case "ans":
-			layerBG = "linear-gradient(0deg, #dfffdf -700%, #1f4040 100%)"
-			break;
-		case "bea":
-			layerBG = "linear-gradient(180deg, #1d172e 0%, #170f1f 100%)"
-			break;
-		case "for":
-			layerBG = "linear-gradient(180deg, #172e22 0%, #170f1f 100%)"
-			break;
-		case "plt":
-			layerBG = "linear-gradient(180deg, #0c0c2e 0%, #0e081f 100%)"
-			break;
-		case "ast":
-			layerBG = "linear-gradient(180deg, #2e172e 0%, #13081f 100%)"
-			break;
-		case "mre":
-			layerBG = "linear-gradient(90deg, #204040 0%, #354035 100%)"
-			break;
 		case "n":
 			if (player.subtabs["n"]["Tabs"] == "Pylon") {
 				layerBG = "linear-gradient(90deg, #458c46, #005410)"
@@ -624,8 +601,7 @@ function updateStyles() {
 	    }
 	}
 
-	if (!options.performanceMode && (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "smn"  || player.tab === "lightRift"
-		|| player.tab === "bea" || player.tab === "for" || player.tab === "plt" || player.tab === "ast" || player.tab === "mre")
+	if (!options.performanceMode && (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "lightRift")
     	) {
 		let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
@@ -1024,9 +1000,6 @@ function updateStyles() {
 			case "UD":
 				sideBG = "linear-gradient(135deg, #2e152e 0%, #384038 100%)"
 				break;
-			case "UD_C":
-				sideBG = "linear-gradient(-45deg, #2e1522 0%, #374040 100%)"
-				break;
 			case "CB":
 				sideBG = "#00111a"
 				break;
@@ -1103,9 +1076,6 @@ function updateStyles() {
 		case "wel": case "pri": case "prj": case "blu": case "bum":
 		case "cer": case "smn":
 			player.musuniverse = "UD"
-			break;
-		case "bea": case "for": case "plt": case "ast": case "mre":
-			player.musuniverse = "UD_C"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
@@ -1248,19 +1218,6 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 
 	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
-	<h3>v1.14.1 - Still Changing Space</h3><br>
-	
-		Content:<br>
-			- Extended interspace content.<br>
-			- Added evolution field.<br>
-			- Added four new ships.<br>
-		<br>Design and QoL:<br>
-			- Changed interspace fountain UI.<br>
-		<br>Balancing:<br>
-			- ???<br>
-		<br>Bugfixes:<br>
-			- ???<br>
-		<br>
 
 	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
 	
@@ -2861,7 +2818,16 @@ function fixOldSave(oldVersion){
 		player.sdim.dimensionPower = player.st.dimensionPower
 		player.sdim.dimensionPowerEffects = player.st.dimensionPowerEffects
 		player.sdim.dimensionPowerPerSecond = player.st.dimensionPowerPerSecond
-		player.sdim.dimMax = new Decimal(player.st.dimMax)
+		player.sdim.dimMax = player.st.dimMax
+		player.sdim.buyables[1] = new Decimal(player.st.buyables[1])
+		player.sdim.buyables[11] = new Decimal(player.st.buyables[11])
+		player.sdim.buyables[12] = new Decimal(player.st.buyables[12])
+		player.sdim.buyables[13] = new Decimal(player.st.buyables[13])
+		player.sdim.buyables[14] = new Decimal(player.st.buyables[14])
+		player.sdim.buyables[15] = new Decimal(player.st.buyables[15])
+		player.sdim.buyables[16] = new Decimal(player.st.buyables[16])
+		player.sdim.buyables[17] = new Decimal(player.st.buyables[17])
+		player.sdim.buyables[18] = new Decimal(player.st.buyables[18])
 
 		player.spet.levelables = player.st.levelables
 	}

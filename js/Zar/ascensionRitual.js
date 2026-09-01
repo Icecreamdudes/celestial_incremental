@@ -595,7 +595,7 @@ SB_celestialites.ritualMinion = {
     color: "#ffffe0",
     health: new Decimal(500),
     damage: new Decimal(5),
-    bodyDamage: new Decimal(2),
+    bodyDamage: new Decimal(1),
     regen: new Decimal(-5),
     reward() {
         let gain = {}

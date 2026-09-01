@@ -9,7 +9,7 @@ function shipBattleSkip(level = new Decimal(0), upgEffect = {}) {
         arena.spawnArena();
         localStorage.setItem('arenaActive', 'true');
 
-        pauseUniverseAll(["U3", "A2", "SB", "DS", "D1"], "pause", true)
+        pauseUniverseAll(["U3", "A2", "DS", "D1"], "pause", true)
     } else {
         player.subtabs["bl"]['stuff'] = 'Battle'
 
@@ -611,7 +611,7 @@ addLayer("ir", {
                 return "x" + format(this.effect()[0]) + " to stars. <small>(Ignoring Softcap)</small><br>x" + format(this.effect()[1]) + " to singularity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "This ship should always be unlocked. Why are you seeing this???"
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "This ship should always be unlocked. Why are you seeing this???"
             },
             lore() {
                 return "Fast, slim, and rapid-firing bullets. Pretty average ship ngl."
@@ -656,8 +656,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -673,8 +673,8 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
                 return look
             },
@@ -686,7 +686,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to points.<br>x" + format(this.effect()[1]) + " to infinities.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with an Iridite upgrade."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with an Iridite upgrade."
             },
             lore() {
                 return "Bigger, slower, but larger and more powerful bullets."
@@ -731,8 +731,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -748,8 +748,8 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
                 return look
             },
@@ -761,7 +761,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to antimatter dimensions.<br>x" + format(this.effect()[1]) + " to core scraps.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks at Cruiser and Impact level 10."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks at Cruiser and Impact level 10."
             },
             lore() {
                 return "Don't underestimate the goat."
@@ -806,8 +806,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -823,9 +823,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -836,7 +843,7 @@ addLayer("ir", {
                 return "x" + format(this.effect()[0]) + " to space energy.<br>^" + format(this.effect()[1], 3) + " to infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks at 3 space building cap."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks at 3 space building cap."
             },
             lore() {
                 return "Shoots extremely fast piercing bullets with precision. Automatically aims at cosmic celestialites, might affect movement."
@@ -881,8 +888,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -898,9 +905,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -911,7 +925,7 @@ addLayer("ir", {
                 return "x" + format(this.effect()[0]) + " to xpboost.<br>x" + format(this.effect()[1]) + " to legendary gems.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with a legendary pet."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with a legendary pet."
             },
             lore() {
                 return "Has omnidirectional movement and shoots shotgun-like bursts towards the mouse."
@@ -952,13 +966,6 @@ addLayer("ir", {
                     },
                 },
             ],
-            levelableButtonStyle(i) {
-                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
-                let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
-                return look
-            },
             // BUY CODE
             pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
@@ -972,9 +979,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -985,7 +999,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to mastery point effects.<br>^" + format(this.effect()[1], 3) + " to negative infinity points.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with a progression tree update (in stars)."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with a progression tree update (in stars)."
             },
             lore() {
                 return "Shoots very fast streams of bullets, but with slow movement speed."
@@ -1030,8 +1044,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1047,9 +1061,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1060,7 +1081,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to pollinators.<br>x" + format(this.effect()[1]) + " to radiation.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with a hive progression upgrade."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with a hive progression upgrade."
             },
             lore() {
                 return "Lacks a gun, but makes up for it with spikes."
@@ -1105,8 +1126,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             onClick() {
@@ -1126,9 +1147,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1139,7 +1167,7 @@ addLayer("ir", {
                 return "x" + format(this.effect()[0]) + " to space rocks.<br>+" + formatWhole(this.effect()[1]) + " to max ship level (excluding itself).<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks by defeating Iridite without taking damage."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks by defeating Iridite without taking damage."
             },
             lore() {
                 return "A simulated version of Iridite, the Astral Celestial. Moves omnidirectionally and fires Iridite's lasers."
@@ -1184,8 +1212,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             onClick() {
@@ -1205,9 +1233,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },
@@ -1219,7 +1254,7 @@ addLayer("ir", {
 
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with a shard research upgrade."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with a shard research upgrade."
             },
             lore() { return "An experimental vessel that fractures its projectiles into multiple seeking fragments." },
             levelLimit() { return Decimal.add(25, levelableEffect("ir", 8)[1])},
@@ -1262,8 +1297,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1279,11 +1314,18 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
                 return look
             },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
+                return look
+            }
         },
         10: {
             image() { return tmp[this.layer].levelables[this.id].condition ? "resources/ships/cruiser.png" : "resources/secret.png"},
@@ -1292,7 +1334,7 @@ addLayer("ir", {
                 return "^" + format(this.effect()[0], 3) + " to dark celestial points.<br>x" + format(this.effect()[1]) + " to light.<br>x" + format(this.effect()[2]) + " to ship damage.<br>x" + format(this.effect()[3]) + " to ship health.<br>"
             },
             display() {
-                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:" + player.shipBattle.theme.secondaryTextColor + "'>" + this.description() : "Unlocks with an Iridite upgrade."
+                return this.condition() ? "<h2>" + this.title() + "</h2><br><span style='color:#aaa2f2'>" + this.description() : "Unlocks with an Iridite upgrade."
             },
             lore() {
                 return "A superphysical energy cannon powered by starlight."
@@ -1337,8 +1379,8 @@ addLayer("ir", {
             levelableButtonStyle(i) {
                 let button = layers[this.layer].levelables[this.id].levelableButtons[i]
                 let look = {}
-                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? player.shipBattle.theme.secondaryColor : "#402424"
-                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : player.shipBattle.theme.primaryColor + "7f"
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
             // BUY CODE
@@ -1354,9 +1396,16 @@ addLayer("ir", {
             barStyle() { return {backgroundColor: getLevelableAmount(this.layer, this.id).gte(this.levelLimit()) ? "#7f7f00" : "#0000bf"}},
             style() {
                 let look = {width: "384px", minHeight: "150px", borderRadius: "15px", margin: "3px"}
-                look.backgroundColor = this.condition() ? player.shipBattle.theme.backgroundColor : "#222222"
-                look.borderColor = this.condition() ? player.shipBattle.theme.primaryColor : "#444444"
+                look.backgroundColor = this.condition() ? "#151230" : "#222222"
+                look.borderColor = this.condition() ? "#5e4ee6" : "#444444"
                 layers[this.layer].levelables.index == this.id ? look.outline = "3px solid white" : look.outline = "0px solid white"
+                return look
+            },
+            levelableButtonStyle(i) {
+                let button = layers[this.layer].levelables[this.id].levelableButtons[i]
+                let look = {}
+                look.background = i == 1 ? button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#545400" : "#402424" : button.complete.apply(tmp[this.layer].levelables[this.id], []) ? "#1a3b0f" : button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#37078f" : "#402424"
+                look.borderColor = i == 1 && button.canClick.apply(tmp[this.layer].levelables[this.id], []) ? "#7f7f00" : "#5e4ee67f"
                 return look
             },
         },

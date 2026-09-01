@@ -624,9 +624,7 @@ function updateStyles() {
 			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
 	    }
 		const el = document.getElementById("dotted-background");
-		if ((player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon") || player.tab === "bum" || player.tab === "cer" || player.tab === "smn"
-			|| player.tab === "mre"
-		) {
+		if ((player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon") || player.tab === "bum" || player.tab === "cer") {
 			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
 		} else {
 			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";

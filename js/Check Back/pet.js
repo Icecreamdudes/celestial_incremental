@@ -762,7 +762,7 @@ addLayer("pet", {
         if (hasMilestone("db", 18)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(player.db.milestone8Effect)
         if (hasMilestone("db", 106)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(2)
         if (hasMilestone("prj", 109)) player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(1.5)
-        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("spet", 309)[0])
+        player.pet.eclipseTimerTickspeedDivisor = player.pet.eclipseTimerTickspeedDivisor.mul(levelableEffect("st", 309)[0])
 
         player.pet.eclipseTimerTickspeedMultiplier = new Decimal(1)
         player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(player.dv.timeDrainRate)
@@ -800,7 +800,7 @@ addLayer("pet", {
             player.subtabs.pu["stuff"] = "Collection"
             changeTheme()
 
-            pauseUniverseAll(["D1", "U3", "A2", "SB", "DS"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
 
             layers.pu.generateSelection();
         }
@@ -1089,7 +1089,7 @@ addLayer("pet", {
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"            
                 
-                pauseUniverseAll(["D1", "U3", "A2", "SB", "DS"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -3883,7 +3883,7 @@ addLayer("pet", {
                 let amt = getLevelableAmount(this.layer, this.id).add(getLevelableTier(this.layer, this.id).mul(5).min(40))
                 return [
                     player.au2.stars.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.5)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
-                    player.sdim.starPower.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.25).div(3)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
+                    player.st.starPower.div(1e25).add(1).log(10).add(1).pow(amt.pow(0.25).div(3)).pow(Decimal.pow(2, getLevelableTier(this.layer, this.id))), // Light (Based on Stars)
                     player.prj.projectSpeed.log(10).add(1).pow(amt.pow(0.5)).div(20).pow(Decimal.pow(1.25, getLevelableTier(this.layer, this.id))).add(1) // Rare pet button yield (Based on Project Speed)
                 ]
             },

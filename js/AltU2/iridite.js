@@ -1957,7 +1957,7 @@ addLayer("ir", {
                 "<span style='color:#ffe066;text-shadow:0 0 8px #ffe066'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
             },
             title: "Civilization",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
             description() { return "Unlocks a normality upgrade in the dark universe."},
             cost: new Decimal(2000),
             currencyLocation() { return player.ir },

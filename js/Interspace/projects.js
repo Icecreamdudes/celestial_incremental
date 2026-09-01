@@ -746,7 +746,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -766,7 +766,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -786,7 +786,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(15) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -805,7 +805,7 @@
             effectDescription() { return "<small>Automate cloud buyables.</small>" },
             cycleReq() { return new Decimal(16) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -824,7 +824,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(20) },
             projectId() { return 1 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -879,7 +879,7 @@
         },
         203: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>Improve the spiral and arrow prismatic fountains. x2 Prism gain.</small>" },
+            effectDescription() { return "<small>Improve the spiral and arrow prismatic fountains. x2 prism gain.</small>" },
             cycleReq() { return new Decimal(3) },
             projectId() { return 2 },
             unlocked() { return true },
@@ -917,7 +917,7 @@
         },
         205: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>Increase focus cap by +1 and x2 stored time capsules.</small>" },
+            effectDescription() { return "<small>x2 stored time capsule gain.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 2 },
             unlocked() { return hasMilestone(this.layer, this.id - 3) },
@@ -958,7 +958,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -977,7 +977,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -996,7 +996,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1016,7 +1016,7 @@
             //effectDescription() { return "<small>x1.1 light gain per starshine done. (x" + format(player.prj.milestone210Effect) + ", caps at x100)</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 301) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1035,7 +1035,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(11) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1054,7 +1054,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(13) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1073,7 +1073,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(15) },
             projectId() { return 2 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) && hasMilestone("prj", 401) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1109,7 +1109,7 @@
         },
         302: {
             requirementDescription() {return formatWhole(this.cycleReq()) + " " + layers.prj.projects[this.projectId()].title + " Project ↻"},
-            effectDescription() { return "<small>Unlock the fourth row of the pyramid. Increase focus cap by +1.</small>" },
+            effectDescription() { return "<small>Unlock the fourth row of the pyramid.</small>" },
             cycleReq() { return new Decimal(2) },
             projectId() { return 3 },
             unlocked() { return true },
@@ -1151,7 +1151,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(4) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1171,7 +1171,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(5) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1191,7 +1191,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(6) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1210,7 +1210,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(7) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1229,7 +1229,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(8) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1248,7 +1248,7 @@
             effectDescription() { return "<small>COMING SOON.</small>" },
             cycleReq() { return new Decimal(9) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}
@@ -1267,7 +1267,7 @@
             effectDescription() { return "<small>Unlock blueshifts for prism wells.</small>" },
             cycleReq() { return new Decimal(10) },
             projectId() { return 3 },
-            unlocked() { return hasMilestone(this.layer, this.id - 3) },
+            unlocked() { return false && hasMilestone(this.layer, this.id - 3) },
             done() { return player.prj.modules[this.projectId()].completions.gte(this.cycleReq()) },
             style() {
                 let look = {border: "0px", borderRadius: "0px", width: "285px", height: "46px", margin: "0px"}

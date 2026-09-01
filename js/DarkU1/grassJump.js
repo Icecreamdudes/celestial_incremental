@@ -39,7 +39,7 @@ addLayer("dgj", {
         let grassJumpDiv = new Decimal(1)
         if (getLevelableTier("pu", 113, true)) grassJumpDiv = grassJumpDiv.mul(levelableEffect("pu", 113)[0])
         if (getLevelableTier("pu", 213, true)) grassJumpDiv = grassJumpDiv.mul(levelableEffect("pu", 213)[0])
-        grassJumpDiv = grassJumpDiv.mul(levelableEffect("st", 305)[0])
+        grassJumpDiv = grassJumpDiv.mul(levelableEffect("spet", 305)[0])
         
         player.dgj.grassJumpReq = Decimal.pow(1e10, player.dgj.grassJump).mul(1e20).div(grassJumpDiv)
         
@@ -48,7 +48,7 @@ addLayer("dgj", {
         player.dgj.milestone1Effect = Decimal.pow(1.5, player.dgj.grassJump)
         player.dgj.milestone2Effect = Decimal.pow(2, player.dgj.grassJump)
         player.dgj.milestone3Effect = Decimal.pow(1.05, player.dgj.grassJump)
-        player.dgj.milestone5Effect = buyableEffect("dgr", 13).mul(levelableEffect("st", 206)[0]).mul(buyableEffect("st", 102))
+        player.dgj.milestone5Effect = buyableEffect("dgr", 13).mul(levelableEffect("spet", 206)[0]).mul(buyableEffect("st", 102))
         player.dgj.milestone6Effect = Decimal.pow(1.01, player.dgj.grassJump.sub(11).max(0))
         player.dgj.milestone7Effect = Decimal.pow(1.05, player.dgj.grassJump.sub(15).max(0))
 

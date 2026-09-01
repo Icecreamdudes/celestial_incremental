@@ -768,6 +768,19 @@
                 return look
             }
         },
+        404: {
+            title() {return player.uni.SB.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("SB")},
+            onClick() {
+                pauseUniverse("SB")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.SB.paused) {look.backgroundColor = "#00007f"} else {look.backgroundColor = "#453aab"}
+                return look
+            }
+        },
         501: {
             title() {return player.uni.UD.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
             canClick: true,
@@ -920,6 +933,12 @@
                             ], () => {return uniShown("BH") ? {width: "200px", height: "100px", background: "black", border: "3px solid #8A0E79", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                         ]],
                         ["row", [
+                            ["style-column", [
+                                ["style-column", [
+                                    ["raw-html", "Ship Battle", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "200px", height: "47px", borderBottom: "3px solid #5e4ee6"}],
+                                ["clickable", 404],
+                            ], () => {return uniShown("BH") ? {width: "200px", height: "100px", background: "#00003f", border: "3px solid #5e4ee6", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["style-column", [
                                     ["raw-html", "Universe δ", {color: "black", fontSize: "20px", fontFamily: "monospace"}],

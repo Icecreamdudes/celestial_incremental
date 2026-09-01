@@ -45,7 +45,7 @@
         if (getLevelableTier("pu", 106, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 106)[0])
         if (getLevelableTier("pu", 106, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
         if (getLevelableTier("pu", 301, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
-        player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
+        player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("spet", 106)[0])
         if (getLevelableTier("pu", 210, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 210)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("car", 404)[0])
         
@@ -62,7 +62,7 @@
         if (getLevelableTier("pu", 107, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 107)[0])
         if (getLevelableTier("pu", 107, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(buyableEffect("dg", 15))
         if (getLevelableTier("pu", 301, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 301)[0])
-        player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("st", 107)[0])
+        player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("spet", 107)[0])
 
         // GENERATOR POWER SOFTCAP
         if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.2).mul(1e250)

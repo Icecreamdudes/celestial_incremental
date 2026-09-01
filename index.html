@@ -36,7 +36,7 @@
 	<script src="js/utils/options.js"></script>
 	<script src="js/utils/save.js"></script>
 	<script src="js/utils/themes.js"></script>
-	<script src="js/AltU2/shipBattle.js"></script>
+	<script src="js/ShipBattle/shipBattleArena.js"></script>
 
 </head>
 <body onload="load()" onmousemove="updateMouse(event)">
@@ -53,6 +53,7 @@
  				<button class="uniButton" v-if="uniShown('D1')" v-bind:style="universes.D1.nodeStyle()" onclick="player.universe='D1'"><span class="buttonText">D1</span></button>
 				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
 				<button class="uniButton" v-if="uniShown('UD')" v-bind:style="universes.UD.nodeStyle()" :disabled="uniPaused('UD')" onclick="player.universe='UD'"><span class="buttonText">δ</span></button>
+				<button class="uniButton" v-if="uniShown('UD_C')" v-bind:style="universes.UD_C.nodeStyle()" :disabled="uniPaused('UD_C')" onclick="player.universe='UD_C'"><span class="buttonText">ƍ</span></button>
 				<button class="uniButton" v-if="uniShown('DS')" v-bind:style="universes.DS.nodeStyle()" :disabled="uniPaused('DS')" onclick="player.universe='DS'"><span class="buttonText">ε</span></button>
 				<button class="uniButton" v-if="uniShown('UZ')" v-bind:style="universes.UZ.nodeStyle()" :disabled="uniPaused('UZ')" onclick="player.universe='UZ'"><span class="buttonText">ζ</span></button>
 			</div>

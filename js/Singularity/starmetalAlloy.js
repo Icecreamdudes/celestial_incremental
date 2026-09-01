@@ -119,7 +119,7 @@
             player.subtabs["le"]["stuff"] = "Main"
             player.subtabs.pu["stuff"] = "Selection"
 
-            pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "SB", "DS"], "pause", true)
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
@@ -149,7 +149,7 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
 
-                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "SB", "DS"], "pause", true)
             },
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
@@ -174,7 +174,7 @@
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"   
                 
-                pauseUniverseAll(["D1", "U3", "A2", "DS"], "pause", true)
+                pauseUniverseAll(["D1", "U3", "A2", "SB", "DS"], "pause", true)
             },
             style() {
                 let look = {width: "600px", minHeight: "200px", color: "#ffe066", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -695,7 +695,7 @@
             effect() {
                 let eff = new Decimal(1)
                 eff = eff.mul(player.dn.normalityEffect)
-                eff = eff.mul(levelableEffect("st", 208)[0])
+                eff = eff.mul(levelableEffect("spet", 208)[0])
                 eff = eff.pow(0.1)
                 return eff
             },

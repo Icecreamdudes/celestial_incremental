@@ -1,3 +1,7 @@
+function SB_registerMap(mapId, data = {}) {
+    
+}
+
 // CELESTIALITES AND ASTEROIDS
 
 function SB_spawnCelestialite(celId, properties = {}) {
@@ -203,6 +207,8 @@ function SB_spawnWarning(warnId, celestialite, properties = {}) {
     arena.warnings.push(warning)
 }
 
+// SHIP STATS
+
 function SB_getDefaultShipStats() {
     let base = {
         attackDamage: 1,
@@ -392,6 +398,8 @@ function SB_getUpgradedShipStats(upgrades) {
     return shipStats
 }
 
+// RUN SAVING / EXITING
+
 function SB_saveRun() {
     if (!arena) return;
     player.ir.savedRun = true
@@ -420,14 +428,14 @@ function SB_exitRun() {
 
     if (player.tab == "ir") {
         player.subtabs["ir"]['stuff'] = 'stages'
-        pauseUniverseAll(["A2"], "unpause", true)
+        pauseUniverseAll(["A2", "SB"], "unpause", true)
     }
     if (player.tab == "bl") {
         player.subtabs["bl"]['stuff'] = 'stages'
     }
     if (player.tab == "cbs") {
         player.subtabs["cbs"]['stuff'] = 'Ritual'
-        pauseUniverseAll(["A2", "DS"], "unpause", true)
+        pauseUniverseAll(["A2", "SB", "DS"], "unpause", true)
     }
 
     if (arena) {
@@ -437,7 +445,7 @@ function SB_exitRun() {
     localStorage.setItem('arenaActive', 'false');
 }
 
-function SB_enterRun(zoneId) {
+function SB_enterRun(zoneId, data = {}) {
     player.ir.inBattle = true
     options.fullscreen = true
     player.ir.battleStage = zoneId
@@ -447,14 +455,14 @@ function SB_enterRun(zoneId) {
 
     if (player.tab == "ir") {
         player.subtabs["ir"]['stuff'] = 'Battle'
-        pauseUniverseAll(["A2"], "pause", true)
+        pauseUniverseAll(["A2", "SB"], "pause", true)
     }
     if (player.tab == "bl") {
         player.subtabs["bl"]['stuff'] = 'Battle'
     }
     if (player.tab == "cbs") {
         player.subtabs["cbs"]['stuff'] = 'Battle'
-        pauseUniverseAll(["A2", "DS"], "pause", true)
+        pauseUniverseAll(["A2", "SB", "DS"], "pause", true)
     }
     
     player.ir.primaryColor = SB_zones[zoneId].primaryColor

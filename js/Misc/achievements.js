@@ -1676,12 +1676,14 @@ addLayer("achievements", {
                     ["category-button", ["~ 16 ~<br><h6>Late Tera</h6>", "stars", 16], {width: "155px", height: "40px", color: "#c0c0c0", background: "#606060", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[16].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 */
+               /*
                 ["style-row", [
                     ["category-button", ["~ 17 ~<br><h6>Early Cycle</h6>", "stars", 17], {width: "155px", height: "40px", color: "#e0ffff", background: "#402030", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[17].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 ["style-row", [
                     ["category-button", ["~ 19 ~<br><h6>Late Cycle</h6>", "stars", 19], {width: "155px", height: "40px", color: "#ffe0f0", background: "#5e2441", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[19].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
+                */
             ], {width: "170px", height: "415px"}],
             ["style-column", [
                 ["buttonless-microtabs", "stars", {borderWidth: "0"}],

@@ -53,7 +53,7 @@
                 .mul(buyableEffect("fu", 54))
                 .mul(buyableEffect("sma", 14))
                 .mul(levelableEffect("pet", 308)[1])
-                .mul(player.st.starPowerEffect3) 
+                .mul(player.sdim.starPowerEffect3) 
                 .pow(buyableEffect("cof", 25))
 
             // Singularity Power Softcap
@@ -72,7 +72,7 @@
                 .mul(buyableEffect("fu", 53))
                 .mul(buyableEffect("sma", 14))
                 .mul(player.co.cores.radioactive.effect[2])
-                .mul(player.st.starPowerEffect3) 
+                .mul(player.sdim.starPowerEffect3) 
 
                 // Dimension Softcap
                 if (player.sd.dimensionsPerSecond[i].gt(1e300)) player.sd.dimensionsPerSecond[i] = player.sd.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)

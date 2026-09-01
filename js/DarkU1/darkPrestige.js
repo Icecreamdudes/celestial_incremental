@@ -46,7 +46,7 @@
         if (getLevelableTier("pu", 301, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
         if (getLevelableTier("pu", 307, true)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 307)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
-        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("spet", 105)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dv", 14))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgj", 12))
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("car", 403)[0])

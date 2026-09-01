@@ -174,7 +174,7 @@
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.pow(player.co.cores.point.effect[1])
         player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
-        player.gain = player.gain.pow(player.st.starPowerEffect)
+        player.gain = player.gain.pow(player.sdim.starPowerEffect)
         player.gain = player.gain.pow(player.se.starsExploreEffect[0][1])
         player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])

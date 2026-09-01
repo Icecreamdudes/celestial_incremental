@@ -63,7 +63,7 @@
         if (getLevelableTier("pu", 307, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 307)[0])
         if (hasMilestone("db", 14)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.db.milestone4Effect)
         if (getLevelableTier("pu", 211, true)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 211)[0])
-        player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("spet", 109)[0])
         if (hasMilestone("dgj", 11)) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.dgj.milestone1Effect)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgj", 14))
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("car", 406)[0])
@@ -86,7 +86,7 @@
         if (getLevelableTier("pu", 307, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 307)[0])
         if (hasMilestone("db", 14)) player.dgr.grassValue = player.dgr.grassValue.mul(player.db.milestone4Effect)
         if (getLevelableTier("pu", 211, true)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 211)[0])
-        player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
+        player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("spet", 108)[0])
         if (hasMilestone("dgj", 11)) player.dgr.grassValue = player.dgr.grassValue.mul(player.dgj.milestone1Effect)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgj", 14))
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("car", 406)[0])
@@ -107,7 +107,7 @@
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(5)
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("dgr", 13))
-        player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(levelableEffect("st", 206)[0])
+        player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(levelableEffect("spet", 206)[0])
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("st", 102))
         if (player.dgr.grassTimer.gte(player.dgr.grassTimerReq)) {
             layers.dgr.addGrass();

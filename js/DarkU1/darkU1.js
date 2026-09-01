@@ -51,7 +51,7 @@
         if (getLevelableTier("pu", 301, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 301)[0])
         if (getLevelableTier("pu", 307, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 307)[0])
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgr", 14))
-        player.du.pointGain = player.du.pointGain.mul(levelableEffect("st", 101)[0])
+        player.du.pointGain = player.du.pointGain.mul(levelableEffect("spet", 101)[0])
         player.du.pointGain = player.du.pointGain.mul(player.db.boosterEffect)
         if (hasMilestone("db", 12)) player.du.pointGain = player.du.pointGain.mul(player.db.milestone2Effect)
         if (hasMilestone("dgj", 12)) player.du.pointGain = player.du.pointGain.mul(player.dgj.milestone2Effect)
@@ -73,7 +73,7 @@
         if (player.pet.legPetTimers[0].active) {
             player.du.pointSoftcap = player.du.pointSoftcap.log(10).pow(1.25).pow_base(10)
         }
-        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("st", 201)[0])
+        player.du.pointSoftcap = player.du.pointSoftcap.pow(levelableEffect("spet", 201)[0])
         player.du.pointSoftcap = player.du.pointSoftcap.pow(player.dv.cloudEffect)
         player.du.pointSoftcap = player.du.pointSoftcap.pow(buyableEffect("rp", 12))
 

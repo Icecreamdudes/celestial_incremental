@@ -1090,7 +1090,7 @@ addLayer("achievements", {
             complete() {return false},
             unlocked: true,
             marked: true,
-        },
+        },/*
         1216: {
             name: "Ultraviolet",
             image: "resources/achievements/12_16.png",
@@ -1168,7 +1168,7 @@ addLayer("achievements", {
             color: "#994d99",
             complete() {return false},
             unlocked: true,
-        },
+        },*/
         // Row 1: Wells of Light
         // Row 2: Prisms to Light Well Delta
         // Row 3: Light Well Delta to Wells of Prismatic

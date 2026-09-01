@@ -81,7 +81,7 @@ addLayer("cbs", {
     color: "#c6f7ff",
     branches: ["sm",],
     update(delta) {
-        player.cbs.ritualDuration += delta
+        player.cbs.ritualDuration += delta.toNumber()
 
         if (arena == null && player.subtabs["cbs"]['stuff'] == 'Battle') {
             player.subtabs["cbs"]['stuff'] = "Refresh Page :(";

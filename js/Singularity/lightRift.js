@@ -1,7 +1,7 @@
 ﻿addLayer("lightRift", {
     name: "Light Rift",
     symbol: "LR",
-    universe: "U1",
+    universe: "U3",
     row: 4,
     position: 0,
     startData() { return {

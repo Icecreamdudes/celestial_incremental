@@ -199,9 +199,11 @@ addLayer("ep2", {
         }
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep0", 13))
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("pet", 5))
-        if (hasUpgrade("ep1", 13)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(upgradeEffect("ep1", 13))
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sp", 33))
+        if (hasUpgrade("ev8", 21)) player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(1.4)
         player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("sme", 113))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep1", 17))
+        player.ep2.cookiesPerSecond = player.ep2.cookiesPerSecond.mul(buyableEffect("ep1", 104))
 
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
 
@@ -481,7 +483,7 @@ addLayer("ep2", {
             img: "resources/currencies/fertilizer.png",
             unlocked() {return getBuyableAmount("ep2", 10).gte(15)},
             title: "<span style='color:#3A812Bcc'>Unfortunate Connection</span>",
-            description() {return "Fertilizer buildings multiply dragon points.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
+            description() {return "Fertilizer buildings multiply gold.<br>Currently: x" + formatSimple(upgradeEffect(this.layer, this.id), 2)},
             cost: new Decimal(4e13),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",

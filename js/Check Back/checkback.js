@@ -141,6 +141,7 @@ addLayer("cb", {
         //red purple green
 
         evolutionShards: new Decimal(0),
+        baseESC: new Decimal(1),
         IC7shardCount: 0,
 
         //xpboost
@@ -170,6 +171,7 @@ addLayer("cb", {
 
         //paragon
         paragonShards: new Decimal(0),
+        basePSC: new Decimal(1),
 
         //pity system
         pityEvoCurrent: new Decimal(0),
@@ -177,7 +179,13 @@ addLayer("cb", {
         pityMax: new Decimal(200),
     }},
     tooltip: "Check Back",
-    color: "#094599",
+    nodeStyle: {
+		color: "#cceaf9",
+        background: "#006699",
+		backgroundOrigin: "border-box",
+		borderColor: "#0000007f"
+    },
+    color: "#006699",
     update(delta) {
         let onepersec = new Decimal(1)
         onepersec = onepersec.mul(player.cb.cbTickspeed)
@@ -192,6 +200,7 @@ addLayer("cb", {
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("cbs", 19))
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.cbs.pylonEnergyEffect)
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.stagnantSynestia.negComboEffect)
+        if (hasUpgrade("ir", 28)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(1.05)
 
         if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
@@ -269,8 +278,9 @@ addLayer("cb", {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 11))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 12))
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("cbs", 13))
-            if (hasUpgrade("cbs", 101)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 101))
-
+            if (hasUpgrade("cbs", 18)) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(upgradeEffect("cbs", 18))
+            if (player.ep1.dragonEvolutionIndex >= 4) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(3);
+                
             // ABNORMAL MODIFIERS
             if (player.po.halter.xp.enabled == 1) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.div(player.po.halter.xp.halt)
             if (player.po.halter.xp.enabled == 2 && player.cb.xpTimers[i].base.gt(player.po.halter.xp.halt)) player.cb.xpTimers[i].base = player.po.halter.xp.halt
@@ -316,16 +326,15 @@ addLayer("cb", {
         player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
         player.cb.xpTimers[8].esc = new Decimal(500).mul(buyableEffect("ev1", 184))
 
-        let mult = new Decimal(1)
-        mult = mult.add(levelableEffect("pet", 1107)[1].sub(1))
-        mult = mult.add(buyableEffect("ev2", 31).sub(1))
-        mult = mult.add(buyableEffect("depth1", 4).sub(1))
+        player.cb.baseESC = new Decimal(1)
+        player.cb.baseESC = player.cb.baseESC.add(levelableEffect("pet", 1107)[1].sub(1))
+        player.cb.baseESC = player.cb.baseESC.add(buyableEffect("ev2", 31).sub(1))
+        player.cb.baseESC = player.cb.baseESC.add(buyableEffect("depth1", 4).sub(1))
+        player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("pet", 1102)[1])
+        player.cb.baseESC = player.cb.baseESC.mul(levelableEffect("ir", 9)[0])
+        if (hasUpgrade("cbs", 19)) player.cb.baseESC = player.cb.baseESC.mul(upgradeEffect("cbs", 19))
         for (let i in player.cb.xpTimers) {
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(mult)
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1102)[1])
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
-            if (hasUpgrade("cbs", 102)) player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(upgradeEffect("cbs", 102))
-            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("ir", 9)[0])
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(player.cb.baseESC)
         }
 
         player.cb.crateTimers[0].base = buyableEffect("ev1", 201).mul(buyableEffect("ev1", 204))
@@ -488,7 +497,7 @@ addLayer("cb", {
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
-    instantProduction(time, offline = false) {
+    instantProduction(time, offline = false, affectOrbs = true) {
         if (player.ev2.doubleCurrent.gt(0)) {
             if (time.gte(player.ev2.doubleCurrent)) {
                 time = time.add(player.ev2.doubleCurrent)
@@ -505,7 +514,7 @@ addLayer("cb", {
         layers.ep2.update(time)
         layers.ev0.update(time)
         layers.ev1.update(time)
-        layers.ev2.update(time)
+        if (affectOrbs) layers.ev2.update(time);
         layers.ev8.update(time)
         layers.sp.update(time)
         if (offline) layers.cbs.update(time)
@@ -546,8 +555,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -585,8 +595,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -624,8 +635,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -663,8 +675,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -702,8 +715,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -740,8 +754,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -777,8 +792,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -816,15 +832,16 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
         19: {
             title() { return player.cb.xpTimers[8].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[8].current) + "." : "<h3>+" + format(player.cb.xpTimers[8].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[8].current.lt(0) && this.unlocked() },
-            unlocked() { return hasUpgrade("cbs", 103) },
+            unlocked() { return hasUpgrade("cbs", 20) },
             tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[8].esc) + "%"},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[8].base.mul(player.cb.xpMult))
@@ -855,8 +872,9 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#006699" : look.backgroundColor = "#bf8f8f",
+                this.canClick() ? look.color = "#cceaf9" : look.color = "black"
                 return look
             },
         },
@@ -880,8 +898,8 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1034,8 +1052,8 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1060,7 +1078,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1085,7 +1103,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1110,7 +1128,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1135,7 +1153,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1160,7 +1178,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1185,7 +1203,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1210,7 +1228,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1235,7 +1253,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1260,7 +1278,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1285,7 +1303,7 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "0px 10px 10px 0px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1312,8 +1330,8 @@ addLayer("cb", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
+                let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
+                this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1343,7 +1361,7 @@ addLayer("cb", {
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][0].mul(player.ca.canteEnergyMult))
             },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#00B229" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1372,7 +1390,7 @@ addLayer("cb", {
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][1].mul(player.ca.canteEnergyMult))
             },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#00B229" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1401,7 +1419,7 @@ addLayer("cb", {
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][2].mul(player.ca.canteEnergyMult))
             },
             style() {
-                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                let look = {width: "196px", minHeight: "46px", marginTop: "2px", marginBottom: "2px", fontSize: "9px", borderRadius: "10px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#00B229" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -1955,21 +1973,67 @@ addLayer("cb", {
                 return player.cb.xp.div(player.cb.req)
             },
             baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#094599"},
+            fillStyle: {backgroundColor: "#006699"},
             borderStyle: {
                 borderTop: "0px",
-                borderRadius: "0px 0px 10px 10px",
+                borderRadius: "0px",
+                borderColor: "#004c72",
             },
             display() {
                 if (player.cb.level.lt(1000)) {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + "<h5> XP to level up.</h5>"
+                    return "<h4 style='color:#cceaf9'>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + " XP to level up.</h4>"
                 } else if (player.cb.level.lt(10000)) {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED]</b></h6>"
+                    return "<h4 style='color:#cceaf9'>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + " XP to level up.<h5><b style='color:red'>[SOFTCAPPED]</b></h5>"
                 } else if (player.cb.level.lt(100000)) {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED<sup>2</sup>]</b></h6>"
+                    return "<h4 style='color:#cceaf9'>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + " XP to level up.<h5><b style='color:red'>[SOFTCAPPED<sup>2</sup>]</b></h5>"
                 } else {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED<sup>3</sup>]</b></h6>"
+                    return "<h4 style='color:#cceaf9'>" + format(player.cb.xp) + "/" + formatSimple(player.cb.req) + " XP to level up.<h5><b style='color:red'>[SOFTCAPPED<sup>3</sup>]</b></h5>"
                 }
+            },
+        },
+        pityEvoBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width() {
+                return player.cb.highestLevel.gte(250) ? 412 : 825
+            },
+            height: 25,
+            progress() {
+                return player.cb.pityEvoCurrent.div(player.cb.pityMax)
+            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {
+                "background-color": "#6b4480",
+            },
+            borderStyle: {
+                borderTop: "0px",
+                borderRadius: "0px 0px 0px 10px",
+                borderColor: "#004c72",
+            },
+            display() {
+                return "<h5>" + format(player.cb.pityEvoCurrent) + "/" + formatWhole(player.cb.pityMax) + " Pity until Evolution Shard.</h5>";
+            },
+        },
+        pityParaBar: {
+            unlocked() { return player.cb.highestLevel.gte(250) },
+            direction: RIGHT,
+            width: 411,
+            height: 25,
+            progress() {
+                return player.cb.pityParaCurrent.div(player.cb.pityMax)
+            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {
+                "background-color": "#263280",
+            },
+            borderStyle: {
+                borderTop: "0px",
+                borderLeft: "0px",
+                borderRadius: "0px 0px 10px 0px",
+                borderColor: "#004c72",
+            },
+            display() {
+                return "<h5>" + format(player.cb.pityParaCurrent) + "/" + formatWhole(player.cb.pityMax) + " Pity until Paragon Shard.</h5>";
             },
         },
     },
@@ -2015,7 +2079,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
         12: {
             costBase() { return new Decimal(950).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2057,7 +2121,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
         13: {
             costBase() { return new Decimal(2750).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2099,7 +2163,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
         14: {
             costBase() { return new Decimal(7500).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2141,7 +2205,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
         15: {
             costBase() { return new Decimal(1850).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2183,7 +2247,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
         16: {
             costBase() { return new Decimal(10000).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2225,7 +2289,7 @@ addLayer("cb", {
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#006699', color: "#cceaf9"}
         },
     },
     infoboxes: {
@@ -2243,14 +2307,14 @@ addLayer("cb", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return {color: "#006699", borderColor: "#006699", borderRadius: "5px"}},
                 unlocked() { return true },
                 content: [
                     ["microtabs", "buttons", { 'border-width': '0px' }],
                 ]
             },
             "Lore": {
-                buttonStyle() { return { color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return { color: "#006699", borderColor: "#006699", borderRadius: "5px"}},
                 unlocked() { return hasUpgrade("s", 23) },
                 content: [
                     ["blank", "25px"],
@@ -2261,12 +2325,12 @@ addLayer("cb", {
                 ]
             },
             "Pets": {
-                buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return {color: "#006699", borderColor: "#006699", borderRadius: "5px"}},
                 unlocked() { return player.cb.highestLevel.gte(10) },
                 embedLayer: 'pet',
             },
             "Buyables": {
-                buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return {color: "#006699", borderColor: "#006699", borderRadius: "5px"}},
                 unlocked() { return (hasChallenge("ip", 17) || hasMilestone("s", 14)) },
                 content: [
                     ["blank", "25px"],
@@ -2274,8 +2338,8 @@ addLayer("cb", {
                         ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 16]], {maxWidth: "900px"}],
                     ["blank", "20px"],
                     ["style-column", [
-                        ["raw-html", "Buyable costs are based on total xp", {color: "black", fontSize: "16px", fontFamily: "monospace"}],
-                    ], {width: "350px", height: "30px", background: "#094599", borderRadius: "20px"}],
+                        ["raw-html", "Buyable costs are based on total xp", {color: "#cceaf9", fontSize: "16px", fontFamily: "monospace"}],
+                    ], {width: "350px", height: "30px", background: "#006699", borderRadius: "20px"}],
                 ]
             },
             "Evolution": {
@@ -2286,7 +2350,7 @@ addLayer("cb", {
         },
         buttons: {
             "XP": {
-                buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return {color: "#006699", borderColor: "#006699", borderRadius: "5px"}},
                 unlocked() { return true },
                 content: [
                     ["blank", "10px"],
@@ -2321,7 +2385,7 @@ addLayer("cb", {
                         ["h-line", "380px"],
                         ["blank", "5px"],
                         ["raw-html", "Reset Levels and XP to gain XPBoost,<br>which boosts XP gain.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "400px", padding: "10px", border: "3px solid white", borderRadius: "15px", backgroundColor: "#001903"}],
+                    ], {width: "400px", padding: "10px", border: "3px solid #00B229", borderRadius: "15px", backgroundColor: "#001903"}],
                     ["blank", "10px"],
                     ["column", [
                         ["clickable", 301], ["clickable", 302], ["clickable", 303],
@@ -2331,17 +2395,76 @@ addLayer("cb", {
             "Pet Points": {
                 buttonStyle() { return {color: "#A2D800", borderColor: "#A2D800", borderRadius: "5px"}},
                 unlocked() { return player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) },
-                content: [
-                    ["blank", "10px"],
-                    ["row", [
-                        ["column", [
-                            ["clickable", 201], ["clickable", 202], ["clickable", 203], ["clickable", 204],
-                            ["clickable", 205], ["clickable", 206], ["clickable", 207], ["clickable", 208],
-                            ["clickable", 209], ["clickable", 210],
-                            ["clickable", 299],
+                content() {
+                    let look = [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["column", []],
                         ]],
-                    ]],
-                ]
+                    ]
+                    if (layers.cb.clickables[201].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/novaRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 201]
+                        ]]
+                    );
+                    if (layers.cb.clickables[202].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/diceRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 202]
+                        ]]
+                    );
+                    if (layers.cb.clickables[203].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/ufoRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 203]
+                        ]]
+                    );
+                    if (layers.cb.clickables[204].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/goofyAhhThingRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 204]
+                        ]]
+                    );
+                    if (layers.cb.clickables[205].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/antimatterRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 205]
+                        ]]
+                    );
+                    if (layers.cb.clickables[206].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/hexShadowRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 206]
+                        ]]
+                    );
+                    if (layers.cb.clickables[207].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/grassSquareRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 207]
+                        ]]
+                    );
+                    if (layers.cb.clickables[208].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/impossibleTriangleRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 208]
+                        ]]
+                    );
+                    if (layers.cb.clickables[209].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/forbiddenCoreRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 209]
+                        ]]
+                    );
+                    if (layers.cb.clickables[210].unlocked()) look[1][1][0][1].push(
+                        ["row", [
+                            ["raw-html", "<img src='resources/Pets/evolutionFragmentRarePet.png'style='width:42px;height:42px;margin:2px;border:2px solid #0031BF'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["clickable", 210]
+                        ]]
+                    );
+                    look[1][1][0][1].push(["clickable", 299]);
+                    return look
+                }
             },
         },
     },
@@ -2349,7 +2472,7 @@ addLayer("cb", {
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/level.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatShortWhole(player.cb.level)}, {width: "93px", height: "50px", color: "#0098E5", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.level)}, {width: "93px", height: "50px", color: "#0091d9", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
                     if ((player.points.gte(1e100) || hasMilestone("ip", 24)) && !inChallenge("ip", 13)) {
                         return "<div class='bottomTooltip'>Levels<hr><small>x" + formatShort(player.cb.levelEffect) + " Celestial Points<br>(Highest level: " + formatShortWhole(player.cb.highestLevel) + ")</small></div>"
@@ -2359,7 +2482,7 @@ addLayer("cb", {
                         return "<div class='bottomTooltip'>Levels<hr><small>[Reach 1e100 points for effect]<br>(Highest level: " + formatShortWhole(player.cb.highestLevel) + ")</small></div>"
                     }
                 }],
-            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+            ], {width: "148px", height: "50px", borderRight: "2px solid #004c72"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/XPBoost.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShort(player.cb.XPBoost)}, {width: "93px", height: "50px", color: "#00B229", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
@@ -2370,22 +2493,22 @@ addLayer("cb", {
                         return "<div class='bottomTooltip'>XPBoost<hr><small>x" + formatShort(player.cb.XPBoostEffect) + " XP<br>[SOFTCAPPED]</small></div>"
                     }
                 }],
-            ], () => { return (player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14))) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => { return (player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14))) ? {width: "148px", height: "50px", borderRight: "2px solid #004c72"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShort(player.cb.petPoints)}, {width: "93px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Pet Points<hr><small>(Gained from rare pet buttons)</small></div>"],
-            ], () => { return player.cb.highestLevel.gte(25) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
+            ], () => { return player.cb.highestLevel.gte(25) ? {width: "148px", height: "50px", borderRight: "2px solid #004c72"} : {display: "none !important"}}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "68px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
+            ], () => { return player.cb.highestLevel.gte(35) ? {width: "123px", height: "50px", borderRight: "2px solid #004c72"} : {display: "none !important"}}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "68px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], () => { return player.cb.highestLevel.gte(250) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
+            ], () => { return player.cb.highestLevel.gte(250) ? {width: "123px", height: "50px", borderRight: "2px solid #004c72"} : {display: "none !important"}}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/cbTickspeed.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return "x" + formatSimple(player.cb.cbTickspeed, 2)}, {width: "70px", height: "50px", color: "#0098E5", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
@@ -2393,8 +2516,18 @@ addLayer("cb", {
                     return "<div class='bottomTooltip'>Checkback Tickspeed<hr><small>Multiplies the speed of<br>most checkback content.</small></div>"
                 }],
             ], () => { return player.cb.cbTickspeed.gt(1) ? {width: "125px", height: "50px"} : {display: "none !important"}}],
-        ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
+        ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid #004c72", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
         ["row", [["bar", "xpbar"]]],
+        ["row", [
+            ["tooltip-row", [
+                ["bar", "pityEvoBar", () => {if (!player.cb.highestLevel.gte(35)) return {display: "none !important"}}],
+                ["raw-html", "<div class='bottomTooltip'>Gained from failing to obtain Evo Shards.<br>Reset when you gain uncertain Evo Shards.</div>"],
+            ]],
+            ["tooltip-row", [
+                ["bar", "pityParaBar", () => {if (!player.cb.highestLevel.gte(250)) return {display: "none !important"}}],
+                ["raw-html", "<div class='bottomTooltip'>Gained from failing to obtain Para Shards.<br>Reset when you gain uncertain Para Shards.</div>"],
+            ]],
+        ]],
         ["blank", "10px"],
         ["raw-html", () => { return player.cb.highestLevel.lt(3) ?  "You will unlock something at level 3! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.cb.highestLevel.lt(6) && player.cb.highestLevel.gte(3) ?  "You will unlock something at level 6! <small>[XP TAB]</small>" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],

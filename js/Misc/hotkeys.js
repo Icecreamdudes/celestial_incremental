@@ -69,6 +69,12 @@ addLayer("hk", {
                     keyTable('UB').length > 0
                 }
             },
+            'δ': {
+                content: [["column",() => keyTable('UD')]],
+                unlocked() {
+                    keyTable('UD').length > 0
+                }
+            },
             'ε': {
                 content: [["column",() => keyTable('DS')]],
                 unlocked() {
@@ -104,9 +110,9 @@ function keyTable(uniID) {
             hk = knownHotkeys.global[k]
             if(hk.layer == "settings")
                 table.push(["row",[
-                    formatKey(hk,layers[hk.layer]),
+                    formatKey(hk.key,layers[hk.layer]),
                             ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                    ],{'border-style':'solid'}
+                    ],{'border-style':'solid','border-top':''}
                 ])            
         }
         for(u in universes){ //sort other global hotkeys by universe
@@ -114,68 +120,65 @@ function keyTable(uniID) {
                 hk = knownHotkeys.global[k]
                 if(hk.uni == u)
                     table.push(["row",[
-                        formatKey(hk,layers[hk.layer]),
+                        formatKey(hk.key,layers[hk.layer]),
                                 ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                        ],{'border-style':'solid'}
+                        ],{'border-style':'solid','border-top':''}
                     ])            
             }
         }
     }
-    else for(r in universes[uniID].tree) { //sort hotkeys by row order in universe
-        for(node of universes[uniID].tree[r]) {
-            if(layers[node].hotkeys)
-                for(hk of layers[node].hotkeys) {
-                        if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                            formatKey(hk,layers[node]),
-                            ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                        ],{'border-style':'solid'}
-                    ])
-                }
-            if(layers[node].innerNodes) {
-               for(innerRow in layers[node].innerNodes){
-                    for(innerNodeIndex in layers[node].innerNodes[innerRow]){
-                        let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
-                        if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
-                                if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                                    formatKey(hk,layers[innerNode]),
-                                    ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                                ],{'border-style':'solid'}
-                            ])
-                        }
+    else {
+        for(r in universes[uniID].tree) { //sort hotkeys by row order in universe
+            for(node of universes[uniID].tree[r]) {
+                if(layers[node].hotkeys)
+                    for(hk of layers[node].hotkeys) {
+                            if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
+                                formatKey(hk.key,layers[node]),
+                                ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                            ],{'border-style':'solid','border-top':''}
+                        ])
                     }
-               }
+                if(layers[node].innerNodes) {
+                   for(innerRow in layers[node].innerNodes){
+                        for(innerNodeIndex in layers[node].innerNodes[innerRow]){
+                            let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
+                            if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
+                                    if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
+                                        formatKey(hk.key,layers[innerNode]),
+                                        ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                                    ],{'border-style':'solid','border-top':''}
+                                ])
+                            }
+                        }
+                   }
+                }
             }
         }
     }
+    if (table.length > 0) table.unshift(["row",[],{'border-top':'3px solid white'}])
     return table
 }
 
 
-function formatKey(hk, layer) {
+function formatKey(keyStr, layer) {
+
     let basicKeyStyle = {'font-family':'monospace','font-size':'16px','display':'block','width':'24px','height':'24px','color':'black','align-content':'center','border-style':'solid','margin':'4px','border-color':'rgba(0, 0, 0, 0.3)'}
     let keyStyle = layer.nodeStyle ? 
         {...basicKeyStyle,'background-color': layer.color,...readData(layer.nodeStyle)} :
         {...basicKeyStyle,'background-color': layer.color}
-    if(hk.color) keyStyle = {...keyStyle, 'background-color': hk.color}
-    if(hk.style) keyStyle = {...keyStyle, ...hk.style}
-    keyStyle['border-radius'] = '0px'
+    let keyIcons = []
+
     keyStyle.transform = ''
 
-
-    
-    let keyIcons = []
-    let keyStr = hk.key
     if(keyStr.startsWith('ctrl+'))
     {
-        keyIcons.push(["display-text","Ctrl", {...keyStyle, 'width': '48px'}])
-        keyStr = keyStr.slice(5)
+        keyIcons.push(["display-text","Ctrl", keyStyle])
     }
 
     if(keyStr.toLowerCase() !== keyStr)
     {
         keyIcons.push(["display-text","⇧", keyStyle])   
     }
-    keyIcons.push(["display-text",keyStr.toUpperCase(), keyStyle])
+    keyIcons.push(["display-text",hk.key.toUpperCase(), keyStyle])
     return ["row",keyIcons]
 }
-

@@ -50,7 +50,7 @@
 
         player.s.singularitiesToGet = new Decimal(1)
         if (hasUpgrade("depth3", 5)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
-        if (player.alephsChamber.milestone[25] > 0) player.s.singularitiesToGet = Decimal.pow(2, player.s.singularityPointsToGet.add(1).log(1e100))
+        if (player.alephsChamber.milestone[25] > 0) player.s.singularitiesToGet = player.s.singularitiesToGet.mul(Decimal.pow(2, player.s.singularityPointsToGet.add(1).log("1e100").pow(0.5)))
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
@@ -124,12 +124,12 @@
         }
         player.s.pylonEnergy = player.s.pylonEnergy.add(player.s.pylonEnergyPerSecond.mul(Decimal.div(delta, player.uni["U3"].tickspeed)))
         
-        player.s.pylonEnergyEffect = player.s.pylonEnergy.add(1).log(10).div(6).add(1).pow(player.s.pylonTierEffect)
-        player.s.pylonEnergyEffect2 = player.s.pylonEnergy.add(1).pow(0.3).add(1).pow(player.s.pylonTierEffect)
-        player.s.pylonEnergyEffect3 = player.s.pylonEnergy.add(1).pow(0.25).add(1).pow(player.s.pylonTierEffect)
+        player.s.pylonEnergyEffect = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).log(10).div(6).add(1)
+        player.s.pylonEnergyEffect2 = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).pow(0.3).add(1)
+        player.s.pylonEnergyEffect3 = player.s.pylonEnergy.add(1).pow(player.s.pylonTierEffect).pow(0.25).add(1)
         player.s.pylonEnergyEffect4 = player.s.pylonEnergy.pow(0.1).add(1).pow(player.s.pylonTierEffect)
 
-        player.s.pylonTierEffect = player.s.pylonTier.sub(1).pow(0.5).div(10).add(1)
+        player.s.pylonTierEffect = player.s.pylonTier.sub(1).div(10).add(1)
 
         player.uni["U3"].tickspeed = new Decimal(1)
         player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(player.s.pylonEnergyEffect)
@@ -168,7 +168,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Singularity Upgrade II",
@@ -178,7 +178,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {width: "160px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Singularity Upgrade III",
@@ -188,7 +188,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {width: "134px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Singularity Upgrade IV",
@@ -202,7 +202,7 @@
                 return player.s.singularityPoints.add(1).log(10).pow(5).add(1)
             },
             effectDisplay() { return formatShort(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
-            style: {width: "160px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Singularity Upgrade V",
@@ -212,7 +212,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Singularity Upgrade VI",
@@ -222,7 +222,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Singularity Upgrade VII",
@@ -232,7 +232,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Singularity Upgrade VIII",
@@ -242,7 +242,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Singularity Upgrade IX",
@@ -252,7 +252,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", lineHeight: "1", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         20: {
             title: "Singularity Upgrade X",
@@ -262,7 +262,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Singularity Upgrade XI",
@@ -272,7 +272,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Singularity Upgrade XII",
@@ -282,7 +282,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Singularity Upgrade XIII",
@@ -292,7 +292,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
             title: "Singularity Upgrade XIV",
@@ -302,7 +302,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         25: {
             title: "Singularity Upgrade XV",
@@ -312,7 +312,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {
             title: "Singularity Upgrade XVI",
@@ -322,7 +322,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         27: {
             title: "Singularity Upgrade XVII",
@@ -332,7 +332,7 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         28: {
             title: "Singularity Upgrade XVIII",
@@ -342,7 +342,17 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        28: {
+            title: "Singularity Upgrade XVIII",
+            unlocked() { return player.ir.iriditeDefeated},
+            description: "Unlock universe 1's pylon (in the universe's main layer).",  
+            cost: new Decimal("1e450"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         29: {
             title: "Singularity Upgrade XIX",
@@ -362,17 +372,17 @@
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         31: {
             title: "Singularity Upgrade XXI",
             unlocked() { return player.zarDungeon.zarDefeated && player.n.pylonTier.gte(2)},
             description: "Unlock radioactive pylon.",  
-            cost: new Decimal("1e7500"),
+            cost: new Decimal("1e3500"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -409,7 +419,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         2: {
             costBase() { return new Decimal(1e7) },
@@ -444,7 +454,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         3: {
             costBase() { return new Decimal(1e8) },
@@ -479,7 +489,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "black", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
         11: {
             costBase() { return new Decimal(1000) },
@@ -705,11 +715,23 @@
                 content: [
                     ["blank", "25px"],
                     ["style-row", [
-                        ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
-                        ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
-                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27],["upgrade", 28],["upgrade", 29], ["upgrade", 30],
-                        ["upgrade", 31],
-                    ], {maxWidth: "800px"}],
+                        ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 15],["upgrade", 16],["upgrade", 17],["upgrade", 18]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 23],["upgrade", 24],["upgrade", 25],["upgrade", 26]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 27],["upgrade", 28],["upgrade", 29],["upgrade", 30]
+                    ]],
+                    ["style-row", [
+                        ["upgrade", 31],["upgrade", 32],["upgrade", 33],["upgrade", 34]
+                    ]],
                 ]
             },
             "Milestones": {
@@ -761,32 +783,32 @@
                 ]
             },
             "Pylon": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                buttonStyle() { return { borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("s", 31) },
                 content: [
                     ["blank", "25px"],
                     ["left-row", [
                         ["tooltip-row", [
                             ["raw-html", "<img src='resources/fragments/radioactiveFragment.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[4])}, {width: "103px", height: "50px", color: "#D3173A", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                            ["raw-html", () => { return formatWhole(player.cof.coreFragments[4])}, {width: "103px", height: "50px", color: "white", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                             ["raw-html", "<div class='bottomTooltip'>Radioactive Core Fragments</div>"],
                         ], {width: "158px", height: "50px",}],
-                    ], {width: "158px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                    ], {width: "158px", height: "50px", background: "black", border: "2px solid #D3173A", borderRadius: "10px", userSelect: "none"}],
                     ["blank", "25px"],
                     ["clickable", 11],
-                    ["raw-html", () => { return player.s.pylonBuilt ? "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (" + format(player.s.pylonEnergyPerSecond) + "/s)." : "" }, {color: "#000000ff", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts core scraps x" + format(player.s.pylonEnergyEffect3) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts natural pylon energy by x" + format(player.s.pylonEnergyEffect4) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Passive effect: Boosts SP gain by x" + format(player.s.pylonPassiveEffect) + " (Based on points)" : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3],]], 
-                    ["blank", "25px"],
-                    ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts all pylon effects by ^" + format(player.s.pylonTierEffect) + "." : ""}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return player.s.pylonBuilt ? "You have <h3>" + format(player.s.pylonEnergy) + "/" + format(player.s.pylonEnergyMax) +  "</h3> radioactive pylon energy (+" + format(player.s.pylonEnergyPerSecond) + "/s)." : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts U3 tickspeed by x" + format(player.s.pylonEnergyEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts radiation gain by x" + format(player.s.pylonEnergyEffect2) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts core scrap gain by x" + format(player.s.pylonEnergyEffect3) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Boosts natural pylon energy gain by x" + format(player.s.pylonEnergyEffect4) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Passive effect: Boosts singularity point gain by x" + format(player.s.pylonPassiveEffect) + " (based on points)" : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.s.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 1], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 2], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 3],]], 
+                    ["blank", "10px"],
                     ["clickable", 12],
-                ]
+                ],
             },
         },
     },

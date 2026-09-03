@@ -44,8 +44,8 @@
         return {
             background: "linear-gradient(120deg,rgb(128, 24, 11) 0%,rgb(136, 6, 82) 100%)",
             backgroundOrigin: "border-box",
-            borderColor: "#000000",
-            color: "#000000",
+            borderColor: "#2e011b",
+            color: "#2e011b",
         };
     },
     tooltip: "Core Fragments",
@@ -120,20 +120,28 @@
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("fu", 91))
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("depth4", 3))
+            if (hasUpgrade("ir", 26)) player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(upgradeEffect("ir", 26));
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(player.depth4.negComboEffect)
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(player.prj.modules[2].completionEffect)
 
             player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()
         }
 
         //Todo: Apply the effects of the core fragments
-        player.cof.coreFragmentEffects[0] = player.cof.coreFragments[0].pow(0.125).div(40).add(1).min(1.25)
-        player.cof.coreFragmentEffects[1] = player.cof.coreFragments[1].pow(10).add(1)
-        player.cof.coreFragmentEffects[2] = player.cof.coreFragments[2].pow(0.1).div(30).add(1).min(1.2)
-        player.cof.coreFragmentEffects[3] = player.cof.coreFragments[3].pow(0.1).div(30).add(1).min(1.2)
-        player.cof.coreFragmentEffects[4] = player.cof.coreFragments[4].mul(5).pow(3.5).add(1)
-        player.cof.coreFragmentEffects[5] = player.cof.coreFragments[5].pow(1.5).add(1)
-        player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].pow(0.25).div(5).add(1)
+        player.cof.coreFragmentEffects[0] = player.cof.coreFragments[0].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[1] = player.cof.coreFragments[1].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(10)
+        player.cof.coreFragmentEffects[2] = player.cof.coreFragments[2].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[3] = player.cof.coreFragments[3].add(1).log(10).div(20).add(1).pow(0.75)
+        player.cof.coreFragmentEffects[4] = player.cof.coreFragments[4].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(3.5)
+        player.cof.coreFragmentEffects[5] = player.cof.coreFragments[5].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(0.5)
+        player.cof.coreFragmentEffects[6] = player.cof.coreFragments[6].add(1).log(10).add(1).pow(1.5).sub(1).pow_base(10).pow(0.075)
+
+        if (!hasUpgrade("ir", 109)) {
+            player.cof.coreFragmentEffects[0] = player.cof.coreFragmentEffects[0].min(1.25)
+            player.cof.coreFragmentEffects[2] = player.cof.coreFragmentEffects[2].min(1.25)
+            player.cof.coreFragmentEffects[3] = player.cof.coreFragmentEffects[3].min(1.25)
+        }
 
         player.subtabs["cof"]["buyables"] = player.cof.fragmentIndex
 
@@ -772,7 +780,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" }
         },
         28: {
             costBase() { return new Decimal(3) },
@@ -806,7 +814,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" }
         },
         29: {
             costBase() { return new Decimal(5) },
@@ -840,7 +848,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(120deg, #0F0D25 0%, #0E0921 100%)" }
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#0F0D25", backgroundImage: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)" }
         },
         31: {
             costBase() { return new Decimal(2) },

@@ -203,7 +203,6 @@
         player.ad.tickspeedMult = new Decimal(1.13)
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ad", 3))
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
-        if (hasUpgrade("ep1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ep1", 12))
         player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.co.cores.antimatter.effect[2])
 
         //----------------------------------------

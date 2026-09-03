@@ -94,6 +94,7 @@
 
         player.ro.activatedFuelToGet = player.ro.activatedFuelContributions[0].mul(player.ro.activatedFuelContributions[1]).mul(player.ro.activatedFuelContributions[2]).mul(player.ro.activatedFuelContributions[3])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 501)[1])
+        player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(levelableEffect("pet", 1209)[1])
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("sme", 151))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
@@ -208,6 +209,7 @@
             layers.ro.starReset();
         }
 
+        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
 
         player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
 
@@ -402,15 +404,15 @@
             onClick() {
                 player.au2.stars = player.au2.stars.add(player.au2.starsToGet)
                 for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
-                    player.st.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1] = player.st.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1].add(player.ro.commonXPToGet[i])
+                    player.spet.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1] = player.spet.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][1].add(player.ro.commonXPToGet[i])
                 }
 
                 for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
-                    player.st.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1] = player.st.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1].add(player.ro.uncommonXPToGet[i])
+                    player.spet.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1] = player.spet.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][1].add(player.ro.uncommonXPToGet[i])
                 }
 
                 for (let i = 0; i < player.ro.selectedPassengersRare.length; i++) {
-                    player.st.levelables[Decimal.add(300, Decimal.add(1, player.ro.selectedPassengersRare[i]))][1] = player.st.levelables[Decimal.add(300, Decimal.add(1, player.ro.selectedPassengersRare[i]))][1].add(player.ro.rareXPToGet[i])
+                    player.spet.levelables[Decimal.add(300, Decimal.add(1, player.ro.selectedPassengersRare[i]))][1] = player.spet.levelables[Decimal.add(300, Decimal.add(1, player.ro.selectedPassengersRare[i]))][1].add(player.ro.rareXPToGet[i])
                 }
 
                 player.ro.starPause = new Decimal(8)

@@ -1333,3 +1333,149 @@ BHA.creation_mend = {
         player.bh.characters[player.creation.creationIndex].shield = player.bh.characters[player.creation.creationIndex].shield.add(3)
     },
 }
+
+// Bumpy Skills
+BHA.bumpy_starbeam = {
+    name: "Starbeam",
+    description() {return "Deals " + formatWhole(new Decimal(100).add(player.bh.skillData["bumpy_starbeam"].level.mul(20))) + "% magic damage, " + formatWhole(new Decimal(10).add(player.bh.skillData["bumpy_starbeam"].level.mul(2))) + "% spirit damage per second for 4 seconds, and invert " + formatSimple(new Decimal(200).add(player.bh.skillData["bumpy_starbeam"].level.mul(40))) + "% of the celestialite's regen for 4 seconds"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_starbeam"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(16),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return false /*|| true*/},
+
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "magic",
+
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    value() {return new Decimal(1).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.2))},
+    effects: {
+        "regenAdd"(char) {
+            return new Decimal(2).add(player.bh.skillData["bumpy_starbeam"].level.mul(0.4)).add(1).mul(BHC[player.bh.celestialite.id].regen).add(char.damage.mul(0.1)).div(-1)
+        },
+    },
+    duration: new Decimal(4),
+    cooldown: new Decimal(16),
+    cooldownCap: new Decimal(4),
+}
+
+BHA.bumpy_flashbang = {
+    name: "Flashbang",
+    description() {return "Deals " + formatWhole(new Decimal(60).add(player.bh.skillData["bumpy_flashbang"].level.mul(12))) + "% spirit damage and hard-stuns the celestialite for 1 second"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_flashbang"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(12),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return false /*|| true*/},
+    instant: true,
+    type: "damage",
+    target: "celestialite",
+    method: "true",
+    properties: {
+        "stun": [new Decimal(1), "hard", new Decimal(1)], // Chance / Stun-Type / Stun-Time
+    },
+    value() {return new Decimal(0.6).add(player.bh.skillData["bumpy_flashbang"].level.mul(0.12))},
+    duration: new Decimal(1),
+    cooldown: new Decimal(12),
+    cooldownCap: new Decimal(4),
+}
+
+BHA.bumpy_tunnelVision = {
+    name: "Tunnel Vision",
+    description(char) {
+        let eff = false
+        let index
+        let slot
+        for (let i = 0; i < 3; i++) {
+            if (player.bh.characters[i].id == "bumpy") {
+                index = i
+                for (let j = 0; j < 4; j++) {
+                    if (player.bh.characters[i].skills[j].id == "bumpy_tunnelVision") {
+                        slot = j
+                        if (player.bh.characters[i].skills[j].variables["damageMult"]) eff = true
+                    }
+                }
+            }
+        }
+        let effectBase = new Decimal(new Decimal(0.5).add(player.bh.skillData["bumpy_tunnelVision"].level.mul(0.1)))
+        let effectiveSkillPoints = player.bh.maxSkillPoints.sub(player.bh.characterData["bumpy"].usedSP)
+        if (effectiveSkillPoints.gte(100)) effectiveSkillPoints = effectiveSkillPoints.sub(100).pow(0.75).div(2).add(100); 
+        if (player.alephsChamber.milestone[25] >= 2) effectBase = effectBase.mul(Decimal.div(char.potency.add(100), 100))
+        let effect = effectBase.mul(effectiveSkillPoints)
+        if (!eff) {
+            return "Boosts damage by " + formatSimple(effectBase) + "% per leftover skill point (harshly softcapped beyond " + formatSimple(effectBase.mul(100)) + "%)<br><small>[Currently: +" + formatSimple(effect) + "% DMG]"
+        }
+    },
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_tunnelVision"].maxLevel.div(5)) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(24),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosShard",
+    unlocked() {return false /*|| true*/},
+
+    passive: true,
+    constantType: "effect",
+    constantTarget: "self",
+    effects: {
+        "damageMult"(char) {
+            let effectBase = new Decimal(new Decimal(1).add(player.bh.skillData["bumpy_tunnelVision"].level.mul(0.2)))
+            let effectiveSkillPoints = player.bh.maxSkillPoints.sub(player.bh.characterData["bumpy"].usedSP)
+            if (effectiveSkillPoints.gte(50)) effectiveSkillPoints = effectiveSkillPoints.sub(50).pow(0.5).div(2).add(50); 
+            if (player.alephsChamber.milestone[25] >= 2) effectBase = effectBase.mul(Decimal.div(char.potency.add(100), 100))
+            return effectBase.mul(effectiveSkillPoints).div(100).add(1)
+        },
+    },
+    cooldown: new Decimal(Infinity)
+}
+
+BHA.bumpy_deltaRayBurst = {
+    name: "Delta Ray Burst",
+    description() {return "Deals " + formatWhole(new Decimal(4000).add(player.bh.skillData["bumpy_deltaRayBurst"].level.mul(1000))) + "% spirit damage and prevents ████ from █████████ █████"},
+    passiveText() {return "+" + formatSimple(player.bh.skillData["bumpy_deltaRayBurst"].maxLevel) + " DMG"},
+    char: "bumpy",
+    spCost: new Decimal(44),
+    curCostBase: new Decimal(18),
+    curCostScale: new Decimal(6),
+    currency: "matosDust",
+    unlocked() {return false /*|| true*/},
+    active: true,
+    constantType: "effect",
+    constantTarget: "celestialite",
+    duration: new Decimal(4),
+    cooldown: new Decimal(120),
+    cooldownCap: new Decimal(40),
+    instant: true,
+    type: "function",
+    target: "allPlayer",
+    style() {
+        return {
+            background: "linear-gradient(90deg, #bf6090, #ffe0f0, #ffe0f0, #bf6090)",
+            color: "#802050",
+            borderColor: "#802050",
+        }
+    },
+    effects: {
+        "regenAdd"(char) {
+            let damage = char.damage.mul(Decimal.add(-10, player.bh.skillData["bumpy_starbeam"].level.mul(-2.5)))
+            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            return damage
+        },
+    },
+    onTrigger(index, slot, target, method, char) {
+        bumpyUltimateEffect();
+
+        options.musicVolume = options.musicVolume * 0.2
+        setTimeout(() => {
+            options.musicVolume = options.musicVolume * 5
+        }, 4000 / player.bh.timeSpeed.toNumber());
+    },
+}

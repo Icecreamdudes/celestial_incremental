@@ -22,7 +22,7 @@
         return {
             background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)",
             backgroundOrigin: "border-box",
-            borderColor: "#59c2ff",
+            borderColor: "#99daff",
             color: "#eaf6f7",
         };
     },
@@ -45,13 +45,17 @@
 
         player.pl.spaceDustCapacity = new Decimal(100)
         player.pl.spaceDustCapacity = player.pl.spaceDustCapacity.mul(buyableEffect("pl", 11))
+        if (hasUpgrade("ir", 303)) player.pl.spaceDustCapacity = player.pl.spaceDustCapacity.mul(100);
 
         player.pl.spaceDust = player.pl.spaceDust.add(player.pl.spaceDustPerSecond.mul(delta))
         if (player.pl.spaceDust.gt(player.pl.spaceDustCapacity)) {
             player.pl.spaceDust = player.pl.spaceDustCapacity
         }
 
-        player.pl.spaceDustPerSecond = player.pl.planets.mul(0.01).mul(player.pl.planets.pow(0.5).mul(0.1))
+        player.pl.spaceDustPerSecond = player.pl.planets.mul(0.01).mul(player.pl.planets.pow(0.75).mul(0.1))
+        if (hasMilestone("spaceZone1", 11)) player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.mul(3);
+        if (hasUpgrade("ir", 303)) player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.mul(100);
+        player.pl.spaceDustPerSecond = player.pl.spaceDustPerSecond.pow(levelableEffect("pet", 1209)[2])
     },
     bars: {},
     clickables: {
@@ -105,10 +109,10 @@
         11: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(1250) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(1.12, getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(1.11, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -134,15 +138,16 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#411bb3", borderColor: "rgb(149, 243, 255)" }
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
         },
         12: {
             costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -168,15 +173,16 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#411bb3", borderColor: "rgb(149, 243, 255)" }
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
         },
         13: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.375) },
-            purchaseLimit() { return new Decimal(35) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -202,12 +208,13 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#411bb3", borderColor: "rgb(149, 243, 255)" }
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
         },
         14: {
             costBase() { return new Decimal(15) },
-            costGrowth() { return new Decimal(1.45) },
-            purchaseLimit() { return new Decimal(30) },
+            costGrowth() { return new Decimal(1.75) },
+            purchaseLimit() { return new Decimal(150) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
@@ -236,7 +243,113 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#411bb3", borderColor: "rgb(149, 243, 255)" }
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
+        },
+        15: {
+            costBase() { return new Decimal(1e6) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.pl.spaceDust},
+            pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            unlocked() { return hasMilestone("spaceZone1", 11) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Rock Increaser"
+            },
+            display() {
+                return "which are boosting space rock gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Dust"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
+        },
+        16: {
+            costBase() { return new Decimal(2e6) },
+            costGrowth() { return new Decimal(7) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.pl.spaceDust},
+            pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            unlocked() { return hasMilestone("spaceZone1", 11) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Loot Increaser"
+            },
+            display() {
+                return "which are boosting space rock and space gem gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Dust"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
+        },
+        17: {
+            costBase() { return new Decimal(5e6) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.pl.spaceDust},
+            pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.001) },
+            unlocked() { return hasMilestone("spaceZone1", 11) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Level Descaler"
+            },
+            display() {
+                return "which are reducing space battle level softcap scaling by -" + formatSimple(tmp[this.layer].buyables[this.id].effect.mul(100)) + "%.\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Space Dust"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "black", background: "#279ccf" },
+            progressColor: "#279ccf7f",
         },
     },
     milestones: {},
@@ -271,19 +384,25 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.pl.spaceDust) + "/" + format(player.pl.spaceDustCapacity) + "</h3> space dust." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.pl.spaceDustPerSecond) + "</h3> space dust per second. (based on planets)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["style-column", [
-                        ["style-column", [
-                            ["raw-html", function () { return "Buyables (That mostly boost check back stuff)" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
-                        ], {width: "1000px", height: "100px", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", border: "3px solid rgb(149, 243, 255)", borderBottom: "0px", borderRadius: "10px 10px 0px 0px"}],
+                    ["row", [
+                        ["rounded-ex-buyable", 11], 
                     ]],
-                    ["style-column", [
-                        ["row", [
-                            ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], 
-                        ]],
-                        ["row", [
-                            ["ex-buyable", 11], 
-                        ]],
-                    ], {width: "1000px", height: "400px", background: "linear-gradient(15deg, #411bb3 0%, #279ccf 50%, #34eb86 100%)", border: "3px solid rgb(149, 243, 255)", borderRadius: "0px 0px 10px 10px"}],
+                    ["blank", "25px"],
+                    ["row", [
+                        ["rounded-ex-buyable", 12],
+                        ["style-row", [], {width: "3px"}],
+                        ["rounded-ex-buyable", 13],
+                        ["style-row", [], {width: "3px"}],
+                        ["rounded-ex-buyable", 14], 
+                    ]],
+                    ["style-row", [], {height: "3px"}],
+                    ["row", [
+                        ["rounded-ex-buyable", 15],
+                        ["style-row", [], {width: "3px"}],
+                        ["rounded-ex-buyable", 16],
+                        ["style-row", [], {width: "3px"}],
+                        ["rounded-ex-buyable", 17], 
+                    ]],
                 ]
             },
         },

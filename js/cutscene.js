@@ -4586,7 +4586,7 @@
             background: "linear-gradient(0deg, #6d6d6d 0%, #464646 100%)",
             trigger() {return player.zarDungeon.zarDefeated }, //eventually make a trigger for when the cutscene before is finished
             dialogue: [
-                { text: "Before he takes his final breath, Nav lies the killing strike against Zar."  },
+                { text: "Before he takes his final breath, Nav lays the killing strike against Zar."  },
                 { text: "Zar falls down to the ground, and looks at Nav with pure regret."  },
                 { text: "Iridite... No, Illira... I'm sorry.", portrait: "resources/zar.png"  },
                 { text: "Now you regret what you've done? Only now???", portrait: "resources/nav.png"  },
@@ -4651,7 +4651,7 @@
                 { text: "As you proceed to leave, you feel an insurmountable presence surround you."  },
                 { text: "You look all around you, and you see a being too great to even describe physically."  },
                 { text: "If you were to describe this being, it would be a pair of floating eyes with two large hands and two wings."  },
-                { text: "However, its presence when presented towards you seems almost psychidelic, as if it existed along more than three dimensions."  },
+                { text: "However, its presence when presented towards you seems almost psychedelic, as if it existed along more than three dimensions."  },
                 { text: "At first, it appears to be an angel. But as you look closer, you see that it is not an angel."  },
                 { text: "It is a GOD. A being of immeasurable power and eternal wisdom."  },
                 { text: "The GOD begins to speak."  },

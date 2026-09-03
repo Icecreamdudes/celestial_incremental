@@ -4738,7 +4738,7 @@
                 { text: "You want me to go check it out?", portrait: "resources/player.png"  },
                 { text: "Yeah.", portrait: "resources/kres.png"  },
                 { text: "Strange. I'm not strong enough yet to enter it, but it seems like a rift back to another universe.", portrait: "resources/player.png"  },
-                { text: "It must be a message for you then, Mr.Foresight.", portrait: "resources/nav.png"  },
+                { text: "It must be a message for you then, Mr. Foresight.", portrait: "resources/nav.png"  },
                 { text: "So they aren't rescuing us...", portrait: "resources/kres.png"  },
                 { text: "The only way out of here is by defeating Nova.", portrait: "resources/nav.png"  },
                 { text: "The corporation must have something for me then.", portrait: "resources/player.png"  },

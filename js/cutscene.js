@@ -4657,7 +4657,7 @@
                 { text: "The GOD begins to speak."  },
                 { text: "I am the low-ranking GOD that controls this region of the dimensional realm.", portrait: "resources/lowGod.png"  },
                 { text: "This interaction will be wiped off from your memory.", portrait: "resources/lowGod.png"  },
-                { text: "It seems that there are no higher power governing this specific universe.", portrait: "resources/lowGod.png"  },
+                { text: "It seems that there are no higher powers governing this specific universe.", portrait: "resources/lowGod.png"  },
                 { text: "Ownership of this universe will be transferred towards you.", portrait: "resources/lowGod.png"  },
                 { text: "Do you accept this offer? Being the righteous owner of a universe is a great honor and should be taken seriously.", portrait: "resources/lowGod.png"  },
                 { text: "It seems like a no-brainer. Of course you are going to accept this offer."  },

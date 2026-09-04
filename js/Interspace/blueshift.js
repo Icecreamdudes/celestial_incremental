@@ -15,48 +15,56 @@
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(10),
+                resetSafety: false,
             },
             2: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(20),
+                resetSafety: false,
             },
             3: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(40),
+                resetSafety: false,
             },
             4: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(1e3),
+                resetSafety: false,
             },
             5: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(6),
+                resetSafety: false,
             },
             6: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(12),
+                resetSafety: false,
             },
             7: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(24),
+                resetSafety: false,
             },
             8: {
                 amount: new Decimal(0),
                 cycleGainMul: new Decimal(1),
                 cycleSpeedRoot: new Decimal(1),
                 shiftBase: new Decimal(96),
+                resetSafety: false,
             },
         },
         /*
@@ -105,26 +113,22 @@
         for (let i = 1; i < Object.keys(player.blu.blueshifts).length + 1; i++) {
             let blueshift = player.blu.blueshifts[i]
 
+            blueshift.resetSafety = false
             blueshift.cycleGainMul = blueshift.shiftBase.pow(blueshift.amount)
             blueshift.cycleSpeedRoot = blueshift.amount.add(1)
             player.blu.totalBlueshifts = player.blu.totalBlueshifts.add(blueshift.amount)
         }
         if (player.blu.bestBlueshifts.lt(player.blu.totalBlueshifts)) player.blu.bestBlueshifts = player.blu.totalBlueshifts;
-
-        player.blu.milestone11Effect = player.blu.blueshifts[1].amount.mul(0.1).add(1)
-        player.blu.milestone12Effect = player.blu.blueshifts[2].amount.mul(0.2).add(1)
-        player.blu.milestone13Effect = player.blu.blueshifts[3].amount.mul(0.2).add(1)
-        player.blu.milestone14Effect = player.blu.blueshifts[4].amount.mul(0.25).add(1)
     },
     blueshiftReset(isRewarded, id) {
+        if (!player.wel.modules[id].maxTime.div(player.wel.modules[id].timeSpeed).lte(0.1)) return;
         if (isRewarded) {
             player.blu.blueshifts[id].amount = player.blu.blueshifts[id].amount.add(1)
             if (!hasAchievement("achievements", 1211)) completeAchievement("achievements", 1211);
         }
         layers.pri.prismReset(false)
-
         player.wel.modules[4].time = player.wel.modules[4].maxTime
-        player.wel.modules[4].timeSpeed = new Decimal(0)
+        player.wel.modules[4].timeSpeed = new Decimal(1)
         player.wel.modules[4].completions = new Decimal(0)
 
         if (player.wel.fountains[1].focused) {
@@ -268,7 +272,7 @@
         player.pri.totalPrisms = new Decimal(4)
         player.pri.bestPrismsInOneReset = new Decimal(0)
         
-        for (let i = 1; i < Object.keys(player.wel.modules).length + 1; i++) {
+        for (let i = 1; i <= 4; i++) {
             player.wel.modules[i].bestCompletions = new Decimal(0)
         }
 
@@ -281,6 +285,8 @@
             canClick() { return player.wel.modules[1].maxTime.div(player.wel.modules[1].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                if (player.blu.blueshifts[1].resetSafety) return;
+                player.blu.blueshifts[1].resetSafety = true
                 layers.blu.blueshiftReset(true, 1)
             },
             style() {
@@ -302,6 +308,8 @@
             canClick() { return player.wel.modules[2].maxTime.div(player.wel.modules[2].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                if (player.blu.blueshifts[2].resetSafety) return;
+                player.blu.blueshifts[2].resetSafety = true
                 layers.blu.blueshiftReset(true, 2)
             },
             style() {
@@ -323,6 +331,8 @@
             canClick() { return player.wel.modules[3].maxTime.div(player.wel.modules[3].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                if (player.blu.blueshifts[3].resetSafety) return;
+                player.blu.blueshifts[3].resetSafety = true
                 layers.blu.blueshiftReset(true, 3)
             },
             style() {
@@ -344,6 +354,8 @@
             canClick() { return player.wel.modules[4].maxTime.div(player.wel.modules[4].timeSpeed).lte(0.1)},
             unlocked() { return true },
             onClick() {
+                if (player.blu.blueshifts[4].resetSafety) return;
+                player.blu.blueshifts[4].resetSafety = true
                 layers.blu.blueshiftReset(true, 4)
             },
             style() {
@@ -384,7 +396,7 @@
                         ], {background: "#2f2f80", borderRadius: "13px", padding: "3px", width: "630px"}],
                         ["blank", "25px"],
                         ["raw-html", "You have blueshifted <h3>" + formatWhole(player.blu.totalBlueshifts) + "</h3> times.", {color: "#ffffd1", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", "<small>Boosts light well ↻" + (hasMilestone("prj", 111) ? " and prism" : "") + " gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "<small>Boosts light well ↻" + (false ? " and prism" : "") + " gain by x" + formatSimple(player.blu.blueshiftEffect) + ".</small>", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["blank", "25px"],
 
                         ["style-row", [

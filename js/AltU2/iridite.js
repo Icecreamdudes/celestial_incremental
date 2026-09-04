@@ -423,6 +423,7 @@ addLayer("ir", {
         // Space Junk Mult
         player.ir.spaceJunkMult = new Decimal(1)
         if (hasUpgrade("ir", 301)) player.ir.spaceJunkMult = player.ir.spaceJunkMult.mul(upgradeEffect("ir", 301));
+        if (zoneRef) player.ir.spaceJunkMultTrue = player.ir.spaceGemMult.mul(zoneRef.xpReqMult);
         player.ir.spaceJunkMultTrue = player.ir.spaceJunkMult
 
         if (arena == null && player.subtabs["ir"]['stuff'] == 'Battle') {
@@ -524,8 +525,8 @@ addLayer("ir", {
                     arena.showUpgradeChoice();
                     arena.upgradeChoiceActive = true
                 } else if (arena && !showUpgrades && player.ev.evolutionsUnlocked[14]) {
-                    let amt = player.ir.spaceJunkMult.mul(zoneRef.xpReqMult).mul(Math.random() + 1).floor();
-                    amt = amt.max(1)
+                    let amt = player.ir.spaceJunkMult.mul(arena.shipStats.spaceJunkGain);
+                    amt = amt.mul(Math.random() + 1).floor().max(1);
                     player.ir.spaceJunk = player.ir.spaceJunk.add(amt);
                     arena.lootFlashPositions.push({ x: arena.ship.x, y: arena.ship.y, amount: amt, type: "spaceJunk" });
                 }

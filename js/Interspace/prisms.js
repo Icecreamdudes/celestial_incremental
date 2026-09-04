@@ -33,6 +33,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -48,6 +50,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -63,6 +67,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -78,6 +84,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -93,6 +101,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -108,6 +118,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -123,6 +135,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -138,6 +152,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -153,6 +169,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -168,6 +186,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -183,6 +203,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -198,6 +220,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -213,6 +237,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -228,6 +254,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -243,6 +271,8 @@
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
                 completionEffect: new Decimal(1),
+                pourSafety: false,
+                focusSafety: false,
 
                 focused: false,
                 isFocused: false,
@@ -314,6 +344,8 @@
             module.prismReq = fountain.getprismReq()
             module.completionEffect = fountain.getCompletionEffect()
 
+            player.pri.fountains[i].pourSafety = false
+            player.pri.fountains[i].focusSafety = false
             player.pri.fountains[i].focusTimerMax = player.prj.prismFountainFocusExtension.mul(4).div(Math.pow(1.4, i - 1))
             if (player.pri.fountains[i].isFocused) {
                 player.pri.fountains[i].focusTimer = player.pri.fountains[i].focusTimer.sub(delta)
@@ -357,14 +389,8 @@
         });
         player.pri.totalFountainCycles = new Decimal(player.pri.totalFountainCycles)
     },
-    /*
-    player.pri.fountains[1].completions = new Decimal(0); player.pri.fountains[2].completions = new Decimal(0);
-player.pri.fountains[3].completions = new Decimal(0); player.pri.fountains[4].completions = new Decimal(0);
-player.pri.fountains[5].completions = new Decimal(0); player.pri.fountains[6].completions = new Decimal(0);
-player.pri.fountains[7].completions = new Decimal(0); player.pri.fountains[8].completions = new Decimal(0);
-player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].completions = new Decimal(0);
- */
     prismReset(isRewarded) {
+        if (!player.wel.light.gte(1e15)) return;
         if (isRewarded) {
             player.pri.prisms = player.pri.prisms.add(player.pri.prismsToGet)
             player.pri.totalPrisms = player.pri.totalPrisms.add(player.pri.prismsToGet)
@@ -374,15 +400,17 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
 
         player.wel.light = new Decimal(0)
         player.wel.bestLight = new Decimal(0)
+        player.wel.lightWellSpeed = new Decimal(1)
+        player.wel.lightWellCycleYield = new Decimal(1)
 
         player.wel.modules[1].time = player.wel.modules[1].maxTime
-        player.wel.modules[1].timeSpeed = new Decimal(0)
+        player.wel.modules[1].timeSpeed = new Decimal(1)
         player.wel.modules[1].completions = new Decimal(0)
         player.wel.modules[2].time = player.wel.modules[2].maxTime
-        player.wel.modules[2].timeSpeed = new Decimal(0)
+        player.wel.modules[2].timeSpeed = new Decimal(1)
         player.wel.modules[2].completions = new Decimal(0)
         player.wel.modules[3].time = player.wel.modules[3].maxTime
-        player.wel.modules[3].timeSpeed = new Decimal(0)
+        player.wel.modules[3].timeSpeed = new Decimal(1)
         player.wel.modules[3].completions = new Decimal(0)
 
         player.wel.fountains[1].completions = new Decimal(0)
@@ -440,6 +468,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -467,6 +497,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -494,6 +526,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -521,6 +555,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -548,6 +584,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -575,6 +613,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -602,6 +642,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -629,6 +671,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -656,6 +700,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -683,6 +729,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -710,6 +758,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -737,6 +787,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -764,6 +816,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -791,6 +845,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -818,6 +874,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.pri.prisms.gte(player.pri.fountains[this.id].prismReq) && !player.pri.fountains[this.id].focused},
             unlocked() { return true },
             onClick() {
+                if (player.pri.fountains[this.id].pourSafety) return;
+                player.pri.fountains[this.id].pourSafety = true
                 player.pri.prisms = player.pri.prisms.sub(player.pri.fountains[this.id].prismReq)
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id].focused = true
@@ -901,6 +959,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
 
@@ -932,6 +992,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -958,6 +1020,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -984,6 +1048,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1010,6 +1076,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1036,6 +1104,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1062,6 +1132,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1088,6 +1160,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1114,6 +1188,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1140,6 +1216,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1166,6 +1244,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1192,6 +1272,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1218,6 +1300,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1244,6 +1328,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },
@@ -1270,6 +1356,8 @@ player.pri.fountains[9].completions = new Decimal(0); player.pri.fountains[10].c
             canClick() { return player.prj.focused.lt(player.prj.maxFocused) && !player.pri.fountains[this.id - 1000].isFocused },
             unlocked() { return layers.pri.fountains[this.id - 1000].canAuto() },
             onClick() {
+                if (player.pri.fountains[this.id - 1000].focusSafety) return;
+                player.pri.fountains[this.id - 1000].focusSafety = true
                 player.prj.focused = player.prj.focused.add(1)
                 player.pri.fountains[this.id - 1000].isFocused = true
             },

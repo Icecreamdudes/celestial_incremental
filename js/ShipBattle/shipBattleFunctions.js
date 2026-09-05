@@ -322,7 +322,7 @@ function SB_getUpgradedShipStats(upgrades) {
     if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
     if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
     if (hasUpgrade("ir", 108)) shipStats.attackDamage *= 1.15;
-    if ((player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0))) shipStats.attackDamage = shipStats.attackDamage.mul(1.5);
+    if ((player.pet && player.pet.legPetTimers && player.pet.legPetTimers[1] && player.pet.legPetTimers[1].current && typeof player.pet.legPetTimers[1].current.gt === "function" && player.pet.legPetTimers[1].current.gt(0))) shipStats.attackDamage *= 1.5;
     shipStats.attackSpeed = 1
     shipStats.attackSpeed *= 1 + 0.05 * (upgrades.attackSpeedUncommon || 0)
     shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackSpeedRare || 0)

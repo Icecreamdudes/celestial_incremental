@@ -3060,6 +3060,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3106,6 +3107,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3152,6 +3154,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3198,6 +3201,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3244,6 +3248,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3290,6 +3295,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3336,6 +3342,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3382,6 +3389,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3428,6 +3436,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3474,6 +3483,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3520,6 +3530,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {
@@ -3566,6 +3577,7 @@ addLayer("ir", {
                 let rarity = UPGRADE_RARITIES[upgrade.rarity]
                 if (player.ir.shipBattleSaveCurrent == null) return rarity.baseCost;
                 let upgradeCount = player.ir.shipBattleSaveCurrent.upgrades[player.ir.shipUpgradeShop[this.id - 401]]
+                if (player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]) upgradeCount += player.ir.shipBattleSaveCurrent.bankedUpgrades[player.ir.shipUpgradeShop[this.id - 401]]
                 if (upgradeCount) {
                     return rarity.baseCost.mul(rarity.costGrowth.pow(upgradeCount))
                 } else {

@@ -243,7 +243,7 @@
         }
         player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
 
-        player.i.pylonEnergyEffect = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.8).pow_base(10).sub(1).pow(4).add(1)
+        player.i.pylonEnergyEffect = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.8).sub(1).pow_base(10).sub(1).pow(4).add(1)
         player.i.pylonEnergyEffect2 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.65).sub(1).pow(3).mul(10).add(1)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.5).sub(1).pow(1.75).mul(3).add(1)
 

@@ -348,12 +348,12 @@
             unlocked() { return true },
             onClick() {
                 Object.keys(layers.prj.projects).forEach(i => {
-                    if (player.prj.projects[i].focused) {
-                        player.prj.projects[i].focused = false
+                    if (player.prj.modules[i].focused) {
+                        player.prj.modules[i].focused = false
                         player.prj.focused = player.prj.focused.sub(1)
                     }
-                    if (player.prj.projects[i].automated) {
-                        player.prj.projects[i].automated = false
+                    if (player.prj.modules[i].automated) {
+                        player.prj.modules[i].automated = false
                         player.prj.focused = player.prj.focused.sub(1)
                     }
                 });
@@ -1768,6 +1768,9 @@
                         switch (player.subtabs.wel.stuff) {
                             case "Fountains":
                                 clickClickable("wel", "lightFountains_respecFocus")
+                                break
+                            case "Wells":
+                                clickClickable("wel", "lightWells_respecFocus")
                                 break
                             default: break
                         }

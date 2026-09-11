@@ -2514,7 +2514,7 @@
             key: "p", 
             description: "Prismatic",
             onPress() {
-                clickClickable(this.layer, "lightWell1_blueshift")
+                clickClickable(this.layer, "prismaticReset")
             },
         },
     ]

@@ -1108,7 +1108,7 @@ addLayer("savebank", {
                             ["clickable", 311],
                         ], { width: "396.5", height: "50px", border: "2px solid white" }],
                         ["style-row", [
-                            ["style-row", [["raw-html", "026 - Eigth Infinity Challenge"]], { width: "296.5px", height: "50px" }],
+                            ["style-row", [["raw-html", "026 - Eighth Infinity Challenge"]], { width: "296.5px", height: "50px" }],
                             ["clickable", 312],
                         ], { width: "396.5", height: "50px", border: "2px solid white" }],
                     ]],
@@ -1141,7 +1141,7 @@ addLayer("savebank", {
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["style-row", [["raw-html", "031 - Eigth Tav NIP Upgrade"]], { width: "296.5px", height: "50px" }],
+                            ["style-row", [["raw-html", "031 - Eighth Tav NIP Upgrade"]], { width: "296.5px", height: "50px" }],
                             ["clickable", 405],
                         ], { width: "396.5", height: "50px", border: "2px solid white" }],
                         ["style-row", [

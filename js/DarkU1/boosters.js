@@ -70,6 +70,7 @@
         }
 
         player.db.boosterEffect = Decimal.pow(5, player.db.boosters)
+        if (getLevelableTier("pu", 403, true)) player.db.boosterEffect = player.db.boosterEffect.pow(buyableEffect("ani", 33))
         if (hasUpgrade("dv", 12)) player.db.boosterEffect = player.db.boosterEffect.pow(player.dgr.grassEclipseEffect);
         player.db.boosterEffect = player.db.boosterEffect.pow(buyableEffect("dt", 12))
 
@@ -83,6 +84,11 @@
         player.db.milestone8Effect = player.sma.starmetalAlloy.div(1e10).add(1).log(10).pow(2).div(100).add(1)
         player.db.milestone9Effect = player.pet.eclipseTimerTickspeedDivisor
 
+        player.db.permaMilestone4Effect = player.db.bestBoosters.add(1).pow(0.35).div(10).add(1)
+
+        if (hasUpgrade("ani", 25) && player.du.points.gte(player.db.boosterReq) && player.pet.legPetTimers[0].active) {
+            player.db.boosters = player.db.boosters.add(1)
+        }
         player.db.permaMilestone4Effect = player.db.bestBoosters.sub(12).pow(0.35).div(10).add(1)
     },
     bars: {},
@@ -129,7 +135,7 @@
 
                 player.dg.generatorResetSafety = true
 
-                layers.dg.generatorReset()
+                if (!hasUpgrade("ani", 19)) layers.dg.generatorReset()
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

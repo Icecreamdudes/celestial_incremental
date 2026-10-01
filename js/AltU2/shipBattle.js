@@ -289,13 +289,136 @@ const UPGRADE_POOL = {
         pool: "junk",
         effect() { addUpgrade("spaceJunkGainLegendary") },
     },
+
+    //MSB
+    soulEnergyGainEvo: {
+        name() { return "Soul Energy Gain"},
+        description() { return "+20% soul energy gain"},
+        rarity: "evolution",
+        pool: "labyrinth",
+        effect() { addUpgrade("soulEnergyGainEvo") },
+    },
+    soulEnergyCapEvo: {
+        name() { return "Soul Energy Capacity"},
+        description() { return "+20% soul energy capacity"},
+        rarity: "evolution",
+        pool: "labyrinth",
+        effect() { addUpgrade("soulEnergyCapEvo") },
+    },
+    attackEvo: {
+        name() { return "Evolved Attack"},
+        description() { return "+5% attack damage, +2.5% attack speed"},
+        rarity: "evolution",
+        pool: "labyrinth",
+        effect() { addUpgrade("attackEvo") },
+    },
+    dashEvo: {
+        name() { return "Distant Dashes"},
+        description() { return "+10% dash speed"},
+        rarity: "evolution",
+        pool: "labyrinth",
+        effect() { addUpgrade("dashEvo") },
+    },
+    defenseEvo: {
+        name() { return "Evolved Defense"},
+        description() { return "Take 10% less damage, +0.5 HP/sec" },
+        rarity: "evolution",
+        pool: "labyrinth",
+        effect() { addUpgrade("defenseEvo") },
+    },
+    //paragon
+    attackParagon: {
+        name() { return "Paragon Attack"},
+        description() { return "+10% attack damage, +5% attack speed"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("attackParagon") },
+    },
+    soulParagon: {
+        name() { return "Paragon Soul"},
+        description() { return "+20% soul energy gain, +20% soul energy capacity"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("soulParagon") },
+    },
+    passiveParagon: {
+        name() { return "Soul Generation"},
+        description() { return "+10% soul energy gain per second"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("passiveParagon") },
+    },
+    defenseParagon: {
+        name() { return "Paragon Defense"},
+        description() { return "Take 20% less damage, +1 HP/sec"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("defenseParagon") },
+    },
+    dashParagon: {
+        name() { return "Discounted Dashes"},
+        description() { return "Dashes are 20% cheaper"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("dashParagon") }, //new stat
+    },
+    speedParagon: {
+        name() { return "Perfect Speed"},
+        description() { return "+20% movement speed"},
+        rarity: "paragon",
+        pool: "labyrinth",
+        effect() { addUpgrade("speedParagon") }, //new stat
+    },
+    //ascended
+    attackAscension: {
+        name() { return "Ascended Attack"},
+        description() { return "+25% attack damage, +10% attack speed"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("attackAscension") },
+    },
+    soulAscension: {
+        name() { return "Ascended Soul"},
+        description() { return "+40% soul energy gain, +40% soul energy capacity"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("soulAscension") },
+    },
+    mobilityAscension: {
+        name() { return "Ascended Mobility"},
+        description() { return "+25% movement speed, +10% dash speed"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("mobilityAscension") },
+    },
+    passiveAscension: {
+        name() { return "Ascended Soul Generation"},
+        description() { return "+25% soul energy gain per second"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("passiveAscension") },
+    },
+    defenseAscension: {
+        name() { return "Ascended Defense"},
+        description() { return "Take 30% less damage, +2 HP/sec"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("defenseAscension") },
+    },
+    worldAscension: {
+        name() { return "The World Ascended"},
+        description() { return "THE WORLD duration is 20% longer"},
+        rarity: "ascension",
+        pool: "labyrinth",
+        effect() { addUpgrade("worldAscension") }, //new stat
+    },
 };
 
 const UPGRADE_RARITIES = {
     common: {
         weight() {
             let base = 80
-            return base
+            return player.tab == "anl" ? 0 :base
         },
         color: "#ffffff",
         baseCost: new Decimal(50),
@@ -305,7 +428,7 @@ const UPGRADE_RARITIES = {
     uncommon: {
         weight() {
             let base = this.enhanced ? 60 : 40;
-            return base
+            return player.tab == "anl" ? 0 :base
         },
         color: "#4cff4c",
         baseCost: new Decimal(150),
@@ -315,7 +438,7 @@ const UPGRADE_RARITIES = {
     rare: {
         weight() {
             let base = this.enhanced ? 40 : 20;
-            return base
+            return player.tab == "anl" ? 0 :base
         },
         color: "#4c8cff",
         baseCost: new Decimal(600),
@@ -325,7 +448,7 @@ const UPGRADE_RARITIES = {
     epic: {
         weight() {
             let base = this.enhanced ? 20 : 10;
-            return base
+            return player.tab == "anl" ? 0 :base
         },
         color: "#b44cff",
         baseCost: new Decimal(3000),
@@ -335,12 +458,42 @@ const UPGRADE_RARITIES = {
     legendary: {
         weight() {
             let base = this.enhanced ? 4 : 1;
-            return base
+            return player.tab == "anl" ? 0 :base
         },
         color: "#ffd34d",
         baseCost: new Decimal(20000),
         costGrowth: new Decimal(3),
         score: 6,
+    },
+    evolution: {
+        weight() {
+            let base = 100;
+            return player.tab != "anl" ? 0 : base
+        },
+        color: "#6651ff",
+        baseCost: new Decimal(20000),
+        costGrowth: new Decimal(3),
+        score: 1.5,
+    },
+    paragon: {
+        weight() {
+            let base = 20;
+            return player.tab != "anl" ? 0 : base
+        },
+        color: "#51a2ff",
+        baseCost: new Decimal(20000),
+        costGrowth: new Decimal(3),
+        score: 1.5,
+    },
+    ascension: {
+        weight() {
+            let base = 5;
+            return player.tab != "anl" ? 0 : base
+        },
+        color: "#c6f7ff",
+        baseCost: new Decimal(20000),
+        costGrowth: new Decimal(3),
+        score: 1.5,
     },
 };
 
@@ -423,6 +576,42 @@ const SHIP_STAT_FORMATTING = {
         valueSuffix: "",
         showCondition() {return true},
     },
+    soulEnergyGain: {
+        name: "Soul Energy Gain",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return player.tab == "anl"},
+    },
+    soulEnergyCap: {
+        name: "Soul Energy Capacity",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return player.tab == "anl"},
+    },
+    dashSpeed: {
+        name: "Dash Speed",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return player.tab == "anl"},
+    },
+    dashDiscount: {
+        name: "Dash Discount",
+        valuePrefix: "/",
+        valueSuffix: "",
+        showCondition() {return player.tab == "anl"},
+    },
+    passiveSoulGain: {
+        name: "Passive Soul Gain",
+        valuePrefix: "",
+        valueSuffix: "%",
+        showCondition() {return player.tab == "anl"},
+    },
+    worldDuration: {
+        name: "THE WORLD Duration",
+        valuePrefix: "x",
+        valueSuffix: "",
+        showCondition() {return player.tab == "anl"},
+    },
 }
 
 function pickUpgrade(canRepeat = true, repititions = 12, data = {}) {
@@ -447,27 +636,28 @@ function pickUpgrade(canRepeat = true, repititions = 12, data = {}) {
                 case "junk": {
                     if ((data.forceIncludePool && data.forceIncludePool.junk)) possibleUpgrades[upg.rarity].push(id);
                 break; }
+                case "labyrinth": {
+                    if (player.tab == "anl" ||(data.forceIncludePool.msb)) possibleUpgrades[upg.rarity].push(id);
+                break; }
                 default : {
-                    possibleUpgrades[upg.rarity].push(id);
+                     if (player.tab != "anl") possibleUpgrades[upg.rarity].push(id);
                 break; }
             }
         };
     }
     // Select Upgrades
     let chosen = [];
-    let maxChance = totalChance;
-    while (chosen.length < repititions) {
-        for (let id of Object.keys(UPGRADE_RARITIES)) {
-            if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
-                let index = Math.floor(possibleUpgrades[id].length * Math.random())
-                chosen.push(possibleUpgrades[id][index])
-                if (!canRepeat) possibleUpgrades[id].splice(index, 1)
-                break;
-            } else totalChance -= UPGRADE_RARITIES[id].weight();
+        while (chosen.length < 3) {
+            for (let id of Object.keys(UPGRADE_RARITIES)) {
+                if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
+                    let index = Math.floor(possibleUpgrades[id].length * Math.random())
+                    chosen.push(possibleUpgrades[id][index])
+                    possibleUpgrades[id].splice(index, 1)
+                    break;
+                } else totalChance -= UPGRADE_RARITIES[id].weight(); // <--- DEDUCTS WEIGHT
+            }
+            // BUG: totalChance is NEVER reset back to maxChance here!
         }
-        totalChance = maxChance
-    }
-    return chosen;
 }
 
 function pickUpgrades(data = {}) {
@@ -491,6 +681,9 @@ function pickUpgrades(data = {}) {
                 break; }
                 case "junk": {
                     if ((data.forceIncludePool && data.forceIncludePool.junk)) possibleUpgrades[upg.rarity].push(id);
+                break; }
+                case "labyrinth": {
+                    if (player.tab == "anl" ||(data.forceIncludePool.labyrinth)) possibleUpgrades[upg.rarity].push(id);
                 break; }
                 default : {
                     possibleUpgrades[upg.rarity].push(id);
@@ -854,7 +1047,9 @@ class SpaceArena {
         this.wingImgLoaded = false;
         this.wingImg.onload = () => { this.wingImgLoaded = true; };
 
-        // ...existing code...
+        this.marcelMist = []; //for marcel
+        this.timeStopTimer = 0; // Marcel Time Stop Ability
+        this.lastUpdate = Date.now();
 
         // Ship types
         if (player.ir.shipType == 1) {
@@ -1096,6 +1291,45 @@ class SpaceArena {
                 collisionDamage: 2,
             };
         }
+        if (player.ir.shipType == 11) {
+            this.ship = {
+                x: arenaWidth / 2,
+                y: arenaHeight / 2,
+                radius: 32,
+                angle: 0,
+                vx: 0,
+                vy: 0,
+                velocity: 0,
+                angularVelocity: 0,
+                maxVelocity: 7.5,
+                acceleration: 0.95,
+                deceleration: 0.12,
+                rotationSpeed: 0.08,
+                cooldown: 150,
+                lastShot: 0,
+                damage: 18,
+                collisionDamage: 0.5,
+                // Dash properties
+                dashCooldown: 200,
+                lastDash: 0,
+                dashFrames: 0,
+                dashSpeed: 50,
+            };
+
+            this.shipImg = new Image();
+            this.shipImg.src = 'resources/battle/msb.png';
+            this.shipImgLoaded = false;
+            this.shipImg.onload = () => { this.shipImgLoaded = true; };
+
+            // Tap/click to dash
+            this.canvasClickListener = (e) => {
+                if (player.ir.menu != 0) return;
+                let rect = this.canvas.getBoundingClientRect();
+                let clickX = e.clientX - rect.left;
+                let clickY = e.clientY - rect.top;
+                if (player.ir.soulEnergy.gte(player.ir.dashCost) && player.ir.mobileControls > 0) this.marcelDash(clickX, clickY);
+            };
+        }
 
         this.bullets = [];
         this.asteroids = [];
@@ -1185,9 +1419,10 @@ class SpaceArena {
         this.running = true;
         this.loop = setInterval(() => this.update(), 1000 / 60);
 
-        if (player.ir.shipType == 3 || player.ir.shipType == 7) {
+        if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 11) {
             this.canvas.addEventListener('click', this.canvasClickListener);
         }
+        this.lastSoulTime = performance.now();
     }
 
     removeArena() {
@@ -1201,7 +1436,7 @@ class SpaceArena {
         window.removeEventListener('pointermove', this.handlePointerMove);
         if (this.arenaDiv) document.body.removeChild(this.arenaDiv);
 
-        if ((player.ir.shipType == 3 || player.ir.shipType == 7) && this.canvasClickListener) {
+        if ((player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 11) && this.canvasClickListener) {
             this.canvas.removeEventListener('click', this.canvasClickListener);
         }
 
@@ -1215,46 +1450,115 @@ class SpaceArena {
         this.exitFullscreen();
     }
 
-    handleKeyDown = (e) => { this.keys[e.code] = true; };
-    handleKeyUp = (e) => { this.keys[e.code] = false; };
+    handleKeyDown = (e) => { 
+        this.keys[e.code] = true;
+        this.keys[e.key] = true;
+        if ((e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.key === 'Shift') && player.ir.shipType == 11) {
+            if (player.ir.soulEnergy.gte(player.ir.dashCost)) this.marcelDash();
+        }
+        if ((e.code === 'KeyE' || e.key === 'e') && player.ir.shipType == 11) {
+            this.marcelTimeStop();
+        }
+    };
+    handleKeyUp = (e) => { 
+        this.keys[e.code] = false;
+        this.keys[e.key] = false;
+    };
     handlePointerDown = (e) => {
         if (player.ir.menu == 0) this.pointerDown = true;
         if (player.ir.mobileControls > 0) {
             let rect = this.canvas.getBoundingClientRect();
+           /* if (player.ir.shipType == 11) {
+                let dashX = this.canvasWidth - (100 * this.mobileControlsScale);
+                let dashY = this.canvasHeight - (220 * this.mobileControlsScale);
+                let dashR = 45 * this.mobileControlsScale;
 
+                let now = Date.now();
+                let cooldown = (this.ship.dashCooldown || 1000) / (this.shipStats.attackSpeed || 1);
+                let isReady = (now - (this.ship.lastDash || 0)) >= cooldown;
+
+                this.ctx.save();
+                // Outer ring
+                this.ctx.fillStyle = isReady ? "#38bdf83f" : "#64748b20";
+                this.ctx.strokeStyle = isReady ? "#38bdf888" : "#47556944";
+                this.ctx.lineWidth = 2.5;
+                this.ctx.beginPath();
+                this.ctx.arc(dashX, dashY, dashR, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Inner circle
+                this.ctx.fillStyle = isReady ? "#0000004f" : "#0000002f";
+                this.ctx.beginPath();
+                this.ctx.arc(dashX, dashY, dashR * 0.82, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Button Text
+                this.ctx.fillStyle = isReady ? "#38bdf8ff" : "#94a3b866";
+                this.ctx.font = "bold " + Math.round(18 * this.mobileControlsScale) + "px monospace";
+                this.ctx.textAlign = "center";
+                this.ctx.textBaseline = "middle";
+                this.ctx.fillText("DASH", dashX, dashY);
+                this.ctx.restore();
+            } */ //DEPRECATED 
+             // MARCEL MOBILE DASH BUTTON TAP HITBOX
+            if (player.ir.shipType == 11) {
+                    let dashX = this.canvasWidth - (100 * this.mobileControlsScale);
+                    let dashY = this.canvasHeight - (220 * this.mobileControlsScale);
+                    let dashDist = Math.hypot(e.clientY - rect.top - dashY, e.clientX - rect.left - dashX);
+                    if (dashDist < this.mobileControlsScale * 55) {
+                        e.action = "dashButton";
+                        if (player.ir.soulEnergy.gte(player.ir.dashCost)) this.marcelDash();
+                    }
+
+                    // MARCEL MOBILE TIME STOP HITBOX
+                    let tsX = this.canvasWidth - (100 * this.mobileControlsScale);
+                    let tsY = this.canvasHeight - (340 * this.mobileControlsScale); // 120px above dash
+                    let tsDist = Math.hypot(e.clientY - rect.top - tsY, e.clientX - rect.left - tsX);
+                    if (tsDist < this.mobileControlsScale * 45) {
+                        e.action = "timeStopButton";
+                        this.marcelTimeStop();
+                    }
+            }
             if (player.ir.shipType != 3 && player.ir.shipType != 7) {
                 // LEFT STICK
-                let originX = 100 * this.mobileControlsScale
-                let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
-                this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                let originX = 100 * this.mobileControlsScale;
+                let originY = this.canvasHeight - (100 * this.mobileControlsScale);
+                let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11;
+                this.mobileLeftStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX);
                 if (this.mobileLeftStickDist < this.mobileControlsScale * 80) e.action = "leftStick";
+
                 if (isOmnidirectionalMoving || player.ir.mobileControls == 2) {
                     // RIGHT STICK
-                    originX = this.canvasWidth - (100 * this.mobileControlsScale)
-                    this.mobileRightStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                    originX = this.canvasWidth - (100 * this.mobileControlsScale);
+                    this.mobileRightStickDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX);
                     if (this.mobileRightStickDist < this.mobileControlsScale * 80) e.action = "rightStick";
                 }
                 if (!isOmnidirectionalMoving || player.ir.mobileControls == 2) {
                     // RIGHT BUTTON
-                    originX = this.canvasWidth - (100 * this.mobileControlsScale)
+                    originX = this.canvasWidth - (100 * this.mobileControlsScale);
                     if (player.ir.mobileControls == 2) originY = this.canvasHeight / 2;
-                    this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX)
+                    this.mobileRightButtonDist = Math.hypot(e.clientY - rect.top - originY, e.clientX - rect.left - originX);
                     if (this.mobileRightButtonDist < this.mobileControlsScale * 80) e.action = "rightButton";
                 }
+
+                // MARCEL MOBILE DASH BUTTON TAP HITBOX
+                if (player.ir.shipType == 11) {
+                    let dashX = this.canvasWidth - (100 * this.mobileControlsScale);
+                    let dashY = this.canvasHeight - (220 * this.mobileControlsScale);
+                    let dashDist = Math.hypot(e.clientY - rect.top - dashY, e.clientX - rect.left - dashX);
+                    if (dashDist < this.mobileControlsScale * 55) {
+                        e.action = "dashButton";
+                        if (player.ir.soulEnergy.gt(player.ir.dashCost)) this.marcelDash();
+                    }
+                }
+
                 this.pointerTouches.set(e.pointerId, {
                     clientX: e.clientX,
                     clientY: e.clientY,
                     pointerId: e.pointerId,
                     action: e.action,
-                })
-
-            }
-        }
-        if (player.ir.shipType == 8 && player.ir.menu == 0 && !player.ir.autoShoot) {
-            if (!(player.ir.mobileControls > 0 && e.action != "rightStick")) {
-                this.ship._laserActive = true
-                this.ship._laserTimer = -60;
+                });
             }
         }
     };
@@ -1286,22 +1590,130 @@ class SpaceArena {
         }
     };
     handlePointerCancel = (e) => this.handlePointerUp(e);
+    marcelTimeStop() {
+        if (player.ir.shipType != 11 || player.ir.menu != 0) return;
+        let cost = player.ir.timeStopCost;
 
+        if (player.ir.soulEnergy.gte(cost) && this.timeStopTimer <= 0) {
+            player.ir.soulEnergy = player.ir.soulEnergy.sub(cost);
+            if (!arena.bossActive) this.timeStopTimer = 6;
+            if (arena.bossActive && player.ir.battleStage != "roomGamma") this.timeStopTimer = 2.5;
+            if (arena.bossActive && player.ir.battleStage == "roomGamma") this.timeStopTimer = 1;
+            if (!arena.bossActive) this.timeStopMax = 6;
+            if (arena.bossActive && player.ir.battleStage != "roomGamma") this.timeStopMax = 2.5;
+            if (arena.bossActive && player.ir.battleStage == "roomGamma") this.timeStopMax = 1;
+
+            this.timeStopMax = this.timeStopMax * this.shipStats.worldDuration;
+            this.timeStopTimer = this.timeStopTimer * this.shipStats.worldDuration;
+            this.isTimeStopped = true; // State guard flag
+
+            // Get exact viewport screen coordinates
+            let { screenX, screenY } = this.getShipScreenCoords();
+
+            launchZaWarudoDOMEffect(screenX, screenY, 1000000);
+
+            this.lootFlashes.push({
+                x: this.ship.x,
+                y: this.ship.y,
+                text: "THE WORLD",
+                timer: 90,
+                color: "#8486fc",
+                style: "bold 32px monospace"
+            });
+        }
+    }
+    endTimeStop() {
+        this.timeStopTimer = 0;
+        if (typeof resumeZaWarudoTime === "function") {
+            resumeZaWarudoTime();
+        }
+    }
+    getShipScreenCoords() {
+        let rect = this.canvas.getBoundingClientRect();
+        return {
+            screenX: rect.left + (this.canvasWidth / 2),
+            screenY: rect.top + (this.canvasHeight / 2),
+            canvasX: this.canvasWidth / 2,
+            canvasY: this.canvasHeight / 2,
+        };
+    }
+    marcelDash(targetX = null, targetY = null) {
+        if (player.ir.shipType != 11 || player.ir.menu != 0) return;
+        if (!player.ir.soulEnergy.gte(player.ir.dashCost)) return;
+
+        let now = Date.now();
+        let cooldown = (this.ship.dashCooldown || 1000) / (this.shipStats.attackSpeed || 1);
+        if (now - (this.ship.lastDash || 0) < cooldown) return;
+
+        // Deduct energy and update timestamp only when the dash successfully executes
+        player.ir.soulEnergy = player.ir.soulEnergy.sub(player.ir.dashCost);
+        this.ship.lastDash = now;
+
+        let dashAngle = this.ship.angle || 0;
+        if (targetX !== null && targetY !== null) {
+            dashAngle = Math.atan2(targetY - (this.canvasHeight / 2), targetX - (this.canvasWidth / 2));
+        } else if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+            dashAngle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+        }
+
+        let speed = (36 + (this.shipStats.moveSpeed || 1) * 3.5) * this.shipStats.dashSpeed;
+        this.ship.vx = Math.cos(dashAngle) * speed;
+        this.ship.vy = Math.sin(dashAngle) * speed;
+        this.ship.angle = dashAngle;
+        this.ship.dashFrames = 16;
+        this.shipHitInvuln = 350; // Invulnerable during dash impact
+    }
     shoot() {
         let now = Date.now();
         let cooldown = this.ship.cooldown / this.shipStats.attackSpeed;
         if (now - this.ship.lastShot < cooldown) return;
-        this.ship.lastShot = now
+        this.ship.lastShot = now;
         let angle = this.ship.angle || 0;
         let r = 3;
         if (player.ir.shipType == 2) r = 9;
         if (player.ir.shipType == 10) r = 12;
         r *= this.shipStats.bulletSize;
-        // shipType 5 aims at the mouse and fires burst shots toward it
+
+        // shipType 11 (Marcel): fires only a knife toward cursor or stick direction
+        if (player.ir.shipType == 11) {
+            if (player.ir.mobileControls > 0) {
+                angle = this.mobileRightStickAngle ?? this.ship.angle;
+            } else if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
+                angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
+            } else {
+                angle = this.ship.angle || 0;
+            }
+
+            let startSpeed = 16 + this.shipStats.moveSpeed;
+            let knifeRadius = 5 * this.shipStats.bulletSize;
+
+            this.bullets.push({
+                x: this.ship.x + Math.cos(angle) * (this.ship.radius || 18),
+                y: this.ship.y + Math.sin(angle) * (this.ship.radius || 18),
+                vx: Math.cos(angle) * startSpeed,
+                vy: Math.sin(angle) * startSpeed,
+                ang: angle,
+                currentSpeed: startSpeed,
+                maxSpeed: 26 + this.shipStats.moveSpeed * 1.5,
+                knifePhase: 0, // 0: Decelerate, 1: Stasis freeze, 2: Re-launch
+                phaseTimer: 0,
+                life: 140,
+                radius: knifeRadius,
+                damage: this.shipStats.attackDamage,
+                pierce: 0,     // Non-piercing (destroys on first impact)
+                piercedAsteroids: [],
+                piercedEnemies: [],
+                fromEnemy: false,
+                isKnife: true,
+            });
+            return;
+        }
+
+        // shipType 5 aims at the mouse and fires burst shots toward it[cite: 1]
         if (player.ir.shipType == 5 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || player.ir.mobileControls > 0)) {
             if (player.ir.mobileControls > 0) angle = this.mobileRightStickAngle || this.ship.angle;
             else angle = Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
-            // spawn a short burst (multiple pellets) per shot
+            // spawn a short burst (multiple pellets) per shot[cite: 1]
             let pellets = 5;
             let spread = 0.22;
             let spd = 14 + this.shipStats.moveSpeed;
@@ -1320,7 +1732,7 @@ class SpaceArena {
                     piercedAsteroids: [],
                     piercedEnemies: [],
                     fromEnemy: false,
-                }
+                };
                 this.bullets.push(bullet);
             }
             return;
@@ -1328,8 +1740,8 @@ class SpaceArena {
         
         if (player.ir.shipType == 8 && ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || (player.ir.mobileControls > 0 && player.ir.autoShoot))) {
             if (player.ir.autoShoot && !this.ship._laserActive) {
-                this.ship._laserActive = true
-                this.ship._laserTimer = -60
+                this.ship._laserActive = true;
+                this.ship._laserTimer = -60;
             }
             return;
         } else if (player.ir.shipType == 8) return;
@@ -1339,7 +1751,7 @@ class SpaceArena {
         if (player.ir.shipType == 6) speed = 20;
         if (player.ir.shipType == 9) speed = 12;
         if (player.ir.shipType == 10) speed = 20;
-        speed *= this.shipStats.moveSpeed
+        speed *= this.shipStats.moveSpeed;
         let pierce = 0;
         if (player.ir.shipType == 2) pierce = 1;
         if (player.ir.shipType == 4) pierce = 10;
@@ -1361,19 +1773,19 @@ class SpaceArena {
             }
             if (closest) {
                 let c = this.getClosestCoords([closest.x, closest.y]);
-                let timeToHit = Math.hypot(c[1] - closest.y, c[0] - closest.x) / speed
-                c[0] -= closest.vx * timeToHit
-                c[1] -= closest.vy * timeToHit
+                let timeToHit = Math.hypot(c[1] - closest.y, c[0] - closest.x) / speed;
+                c[0] -= closest.vx * timeToHit;
+                c[1] -= closest.vy * timeToHit;
                 angle = Math.atan2(c[1] - closest.y, c[0] - closest.x);
-                angle = (angle % (2 * Math.PI)) - Math.PI
+                angle = (angle % (2 * Math.PI)) - Math.PI;
                 target = closest;
-                this.ship.currentTarget = closest; // keep marker for drawing
+                this.ship.currentTarget = closest; // keep marker for drawing[cite: 1]
             } else {
                 this.ship.currentTarget = null;
             }
         }
 
-        // Special evolver primary shard: breaks into 3 mini-shards on impact or on hitting arena edge
+        // Special evolver primary shard: breaks into 3 mini-shards on impact or on hitting arena edge[cite: 1]
         if (player.ir.shipType == 9) {
             this.bullets.push({
                 x: this.ship.x + Math.cos(angle) * 20,
@@ -1417,10 +1829,10 @@ class SpaceArena {
                 piercedAsteroids: [],
                 piercedEnemies: [],
                 fromEnemy: false,
-                // homing properties (only used for sniper bullets)
+                // homing properties (only used for sniper bullets)[cite: 1]
                 homing: player.ir.shipType == null,
                 target: target,
-                homingStrength: 0.18, // radians/frame max turn (tweakable)
+                homingStrength: 0.18, // radians/frame max turn (tweakable)[cite: 1]
             });
         }
     }
@@ -1622,35 +2034,86 @@ class SpaceArena {
     }
 
     update() {
-        
-        this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px"
-        this.arenaDiv.style.zIndex = player.ir.menu == 0 ? 10000 : -3
+        this.arenaDiv.style.backgroundPosition = (this.canvasWidth / 2 - this.ship.x) + "px " + (this.canvasHeight / 2 - this.ship.y) + "px";
+        this.arenaDiv.style.zIndex = player.ir.menu == 0 ? 10000 : -3;
 
-        if (player.ir.menu == 0 && !arena.bossActive) {
-            this.propertyAttackCooldown--
+        let now = Date.now();
+        let dt = (now - (this.lastUpdate || now)) / 1000;
+        this.lastUpdate = now;
+        dt = Math.min(dt, 0.1); // Clamp to prevent massive time jumps from lag spikes
+
+        // Check if Time Stop is active (measured in seconds)
+        let timeStopped = this.timeStopTimer > 0;
+        if (timeStopped) {
+            this.timeStopTimer = Math.max(0, this.timeStopTimer - dt);
+            if (this.timeStopTimer === 0) {
+                this.endTimeStop();
+                timeStopped = false;
+                        setTimeout(() => {
+        document.querySelectorAll('[id^="za-warudo"], .zw-overlay-container').forEach(e => e.remove()), document.querySelectorAll('.zw-frozen-world, body, html').forEach(e => { e.classList.remove('zw-frozen-world'); e.style.filter = ''; });
+        }, 100);
+            }
+        }
+        if (player.ir.shipType == 11) {
+            let now = performance.now();
+            
+            // Reset timer while menus are open to avoid huge energy bursts on unpause
+            if (!this.lastSoulTime || player.ir.menu !== 0) {
+                this.lastSoulTime = now;
+            }
+            
+            // Calculate delta in seconds; clamp to 0.1s to prevent spikes from tab defocus
+            let dt = Math.min((now - this.lastSoulTime) / 1000, 0.1);
+            this.lastSoulTime = now;
+
+            if (player.ir.menu === 0 && !timeStopped) {
+                let rawPercent = this.shipStats?.passiveSoulGain ?? this.shipStats?.passiveSoulGeneration ?? 0;
+
+                if (rawPercent > 0) {
+                    let baseGain = player.ir.soulEnergyGain || new Decimal(0.3);
+
+                    // Rate per second: 0.3 * (50 / 100) = 0.15/sec
+                    // Scaled across the actual frame elapsed time (dt)
+                    let gainThisFrame = baseGain.mul(rawPercent / 100).mul(dt);
+
+                    if (!player.ir.soulEnergy || isNaN(player.ir.soulEnergy.mag)) {
+                        player.ir.soulEnergy = new Decimal(0);
+                    }
+
+                    player.ir.soulEnergy = player.ir.soulEnergy.add(gainThisFrame);
+
+                    if (player.ir.soulEnergy.gt(player.ir.soulEnergyMax)) {
+                        player.ir.soulEnergy = player.ir.soulEnergyMax;
+                    }
+                }
+            }
+        }
+
+        if (player.ir.menu == 0 && !arena.bossActive && !timeStopped) {
+            this.propertyAttackCooldown--;
             if (this.propertyAttackCooldown <= 0) {
                 // IRIDITE DAGGERS
                 if (player.ir.battleStage == "iriditeZone" || (player.ir.battleStage == "spaceZone2" && player.ir.battleLevel.gte(10))) {
-                    this.propertyAttackCooldown = 600
-                    let repititions = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 2 : 1
+                    this.propertyAttackCooldown = 600;
+                    let repititions = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 2 : 1;
                     for (let i = 0; i < repititions; i++) {
-                        let ang = (Math.random() - 0.5) * Math.PI * 2
-                        let dist = 800
-                        let count = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 3 : 5
+                        let ang = (Math.random() - 0.5) * Math.PI * 2;
+                        let dist = 800;
+                        let count = player.ir.battleStage == "iriditeZone" && player.ir.battleLevel.gte(10) ? 3 : 5;
                         for (let j = 0; j < count; j++) {
                             SB_spawnWarning("iriditeDagger", null, {
                                 x: this.ship.x - Math.cos(ang) * dist,
                                 y: this.ship.y - Math.sin(ang) * dist,
                                 ang: ang,
                                 targetAng: (j - (count - 1) / 2) * Math.PI / 16 + ang,
-                            })
+                            });
                         }
                     }
                 }
                 // NOX SPEARS
                 if (player.ir.battleStage == "noxZone" || (player.ir.battleStage == "bloodZone1" && player.ir.battleLevel.gte(20))) {
-                    this.propertyAttackCooldown = 90
-                    SB_spawnWarning("allyNoxSpear", null)
+                    this.propertyAttackCooldown = 90;
+                    SB_spawnWarning("allyNoxSpear", null);
                 }
             }
         }
@@ -1659,46 +2122,53 @@ class SpaceArena {
         let newAsteroids = [];
         let xpOrbsToAdd = [];
         if (player.ir.shipHealth.lt(0)) this.onShipDeath();
+
         // Helper to handle enemy death logic (drops, flags, etc.)
         const handleEnemyDeath = (enemy) => {
             if (!enemy) return;
-            let celRef = SB_celestialites[enemy.type]
+            let celRef = SB_celestialites[enemy.type];
             // rock drop
             if (celRef && celRef.reward) {
-                let reward = celRef.reward()
+                let reward = celRef.reward();
 
                 if (reward.spaceRock) {
                     let amt = reward.spaceRock.mul(this.shipStats.spaceRockGain).floor();
-                    amt = amt.max(1)
+                    amt = amt.max(1);
                     player.ir.spaceRock = player.ir.spaceRock.add(amt);
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceRock" });
                 }
                 if (reward.spaceGem) {
                     let amt = reward.spaceGem.mul(this.shipStats.spaceGemGain).floor();
-                    amt = amt.max(1)
+                    amt = amt.max(1);
                     player.ir.spaceGem = player.ir.spaceGem.add(amt);
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "spaceGem" });
                 }
                 if (reward.bloodStones) {
                     let amt = reward.bloodStones.mul(this.shipStats.bloodStoneGain).floor();
-                    amt = amt.max(1)
+                    amt = amt.max(1);
                     player.bl.bloodStones = player.bl.bloodStones.add(amt);
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodStones" });
                 }
                 if (reward.bloodGems) {
                     let amt = reward.bloodGems.mul(this.shipStats.bloodGemGain).floor();
-                    amt = amt.max(1)
+                    amt = amt.max(1);
                     player.bl.bloodGems = player.bl.bloodGems.add(amt);
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
+                }
+                if (reward.epochFragments) {
+                    let amt = reward.epochFragments/*.mul(this.shipStats.celestialRadiationStoneGain)*/.floor();
+                    amt = amt.max(1);
+                    player.anl.epochFragments = player.anl.epochFragments.add(amt);
+                    arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "epochFragments" });
                 }
             }
             // xp drop -> spawn xp orb
             if (celRef && celRef.experienceReward) {
-                let amt = celRef.experienceReward()
+                let amt = celRef.experienceReward();
                 if (amt.gt(0)) xpOrbsToAdd.push({ x: enemy.x, y: enemy.y, amount: amt });
             }
 
-            SB_celestialites[enemy.type].onDeath(enemy)
+            SB_celestialites[enemy.type].onDeath(enemy);
 
             let i = this.enemies.indexOf(enemy);
             let j = this.asteroids.indexOf(enemy);
@@ -1709,20 +2179,17 @@ class SpaceArena {
             }
         };
 
-        // If we were in fullscreen iridite mode but the boss is gone, restore arena
-        
         if (player.ir.menu > 0) {
             this.draw();
             return;
         }
 
-        // decrement ship invulnerability timer each tick (approx 60FPS)
+        // Decrement ship invulnerability timer each tick (approx 60FPS)
         const _TICK_MS = 1000 / 60;
         if (this.shipHitInvuln > 0) this.shipHitInvuln = Math.max(0, this.shipHitInvuln - _TICK_MS);
 
         // Hard mode check
         const hardMode = player.ir.battleLevel.gte(8);
-        
         if (hardMode) this.enemySpawnCooldownMax = 700;
 
         // Health regen
@@ -1732,32 +2199,29 @@ class SpaceArena {
                 player.ir.shipHealth = new Decimal(arena.shipStats.maxHp);
             }
         }
+
         if (player.ir.shipType == 3) {
             // Auto Roll
             if (player.ir.autoShoot && typeof this.mouseX === "number" && typeof this.mouseY === "number" && player.ir.menu == 0) {
                 let now = Date.now();
-                this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed
+                this.ship.rollCooldown = 1500 / this.shipStats.attackSpeed;
                 if (now - this.ship.lastRollClick >= this.ship.rollCooldown) {
                     this.ship.lastRollClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     let mx = this.mouseX - (this.canvasWidth / 2);
                     let my = this.mouseY - (this.canvasHeight / 2);
                     this.ship.rollingAng = Math.atan2(my, mx);
-                    this.ship.rollingSpeed = Math.min(1, Math.max(0, (Math.hypot(my, mx) - 100) / 200))
-                };
+                    this.ship.rollingSpeed = Math.min(1, Math.max(0, (Math.hypot(my, mx) - 100) / 200));
+                }
             }
 
             this.ship.vx += Math.cos(this.ship.rollingAng) * this.ship.rollingSpeed * this.shipStats.moveSpeed / 5;
             this.ship.vy += Math.sin(this.ship.rollingAng) * this.ship.rollingSpeed * this.shipStats.moveSpeed / 5;
-            // Apply velocities
             this.ship.x += this.ship.vx;
             this.ship.y += this.ship.vy;
-
-            // Apply deceleration
             this.ship.vx *= this.ship.deceleration;
             this.ship.vy *= this.ship.deceleration;
 
-            // Wrap ship around arena edges
             if (this.ship.x < 0) this.ship.x += this.width;
             if (this.ship.x > this.width) this.ship.x -= this.width;
             if (this.ship.y < 0) this.ship.y += this.height;
@@ -1766,13 +2230,13 @@ class SpaceArena {
             // Auto Dash
             if (player.ir.autoShoot) {
                 let now = Date.now();
-                this.dashCooldown = 1000 / this.shipStats.attackSpeed
+                this.dashCooldown = 1000 / this.shipStats.attackSpeed;
                 if (now - this.lastDashClick >= this.dashCooldown) {
                     this.lastDashClick = now;
                     let rect = this.canvas.getBoundingClientRect();
                     this.ship.dashTarget = { x: this.mouseX, y: this.mouseY };
                     if (this.ship.dashTarget.x == undefined) {
-                        this.ship.dashTarget = {x: this.width / 2, y: this.height / 2}
+                        this.ship.dashTarget = { x: this.width / 2, y: this.height / 2 };
                     }
                 }
             }
@@ -1782,7 +2246,6 @@ class SpaceArena {
                 let dy = this.ship.dashTarget.y - this.ship.y;
                 let dist = Math.sqrt(dx * dx + dy * dy);
 
-                // Calculate velocity to move toward the target, but keep moving after
                 let frames = 30;
                 let speed = Math.max(12, dist / frames);
                 let angle = Math.atan2(dy, dx);
@@ -1794,22 +2257,17 @@ class SpaceArena {
                 this.ship.dashTarget = null;
                 this.ship.angle = angle;
             }
-            // Apply velocities
             this.ship.x += this.ship.vx;
             this.ship.y += this.ship.vy;
-
-            // Apply deceleration
             this.ship.vx *= this.ship.deceleration;
             this.ship.vy *= this.ship.deceleration;
 
-            // Wrap ship around arena edges
             if (this.ship.x < 0) this.ship.x += this.width;
             if (this.ship.x > this.width) this.ship.x -= this.width;
             if (this.ship.y < 0) this.ship.y += this.height;
             if (this.ship.y > this.height) this.ship.y -= this.height;
-        } else {
-
-            // MOBILE MOVEMENT / KEYBOARD SHOOTING
+        } else if (player.ir.shipType != 5 && player.ir.shipType != 8 && player.ir.shipType != 11) {
+            // Standard Keyboard Controls for Rotating Ships
             if (player.ir.mobileControls == 0) {
                 if (this.keys['KeyW']) {
                     this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
@@ -1827,44 +2285,48 @@ class SpaceArena {
                 if (this.keys['KeyA']) this.ship.angle -= this.ship.rotationSpeed;
                 if (this.keys['KeyD']) this.ship.angle += this.ship.rotationSpeed;
                 if (this.ship.currentTarget && player.ir.shipType == 4 && !this.keys['KeyA'] && !this.keys['KeyD'] && !this.keys['KeyW'] && !this.keys['KeyS']) {
-                    let target = this.ship.currentTarget
-                    let closest = this.getClosestCoords([target.x, target.y])
-                    let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed)
-                    closest[0] += target.vx * timeToHit
-                    closest[1] += target.vy * timeToHit
+                    let target = this.ship.currentTarget;
+                    let closest = this.getClosestCoords([target.x, target.y]);
+                    let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed);
+                    closest[0] += target.vx * timeToHit;
+                    closest[1] += target.vy * timeToHit;
 
                     let desired = Math.atan2(closest[1] - target.y, closest[0] - target.x);
-                    let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI*2) - Math.PI;
+                    let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI * 2) - Math.PI;
                     this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
                 }
             }
             if ((player.ir.mobileControls == 0 && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
                 if (player.ir.shipType == 10) {
-                    this.chargeShot()
+                    this.chargeShot();
                 } else {
-                    this.shoot()
+                    this.shoot();
                 }
             }
             if (this.shotChargeTimer) this.shotChargeTimer--;
             if (this.awaitingShotCharge && this.shotChargeTimer <= 0) {
-                this.shoot()
-                this.awaitingShotCharge = false
+                this.shoot();
+                this.awaitingShotCharge = false;
             }
 
             let maxVel = this.ship.maxVelocity + this.shipStats.moveSpeed;
             this.ship.velocity = Math.max(-maxVel, Math.min(maxVel, this.ship.velocity));
 
-            // Move ship
             this.ship.x += Math.cos(this.ship.angle) * this.ship.velocity;
             this.ship.y += Math.sin(this.ship.angle) * this.ship.velocity;
 
-            // Wrap ship around arena edges
             if (this.ship.x < 0) this.ship.x += this.width;
             if (this.ship.x > this.width) this.ship.x -= this.width;
             if (this.ship.y < 0) this.ship.y += this.height;
             if (this.ship.y > this.height) this.ship.y -= this.height;
+        } else {
+            // Auto Shoot / Pointer shooting for Omnidirectional ships (5, 8, 11)
+            if ((player.ir.mobileControls == 0 && (this.keys['Space'] || this.pointerDown)) || player.ir.autoShoot) {
+                this.shoot();
+            }
         }
 
+        // Mobile touch controls processing
         if (player.ir.mobileControls > 0) {
             this.pointerTouches.forEach((value, key, map) => {
                 if (!value.action) return;
@@ -1873,81 +2335,82 @@ class SpaceArena {
                         let rect = this.canvas.getBoundingClientRect();
                         let mouseX = value.clientX - rect.left;
                         let mouseY = value.clientY - rect.top;
-                        let originX = 100 * this.mobileControlsScale
-                        let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
-                        this.mobileLeftStickDist = Math.hypot(mouseY - originY, !isOmnidirectionalMoving ? 0 : mouseX - originX)
+                        let originX = 100 * this.mobileControlsScale;
+                        let originY = this.canvasHeight - (100 * this.mobileControlsScale);
+                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11;
+                        this.mobileLeftStickDist = Math.hypot(mouseY - originY, !isOmnidirectionalMoving ? 0 : mouseX - originX);
                         if (this.mobileLeftStickDist < this.mobileControlsScale * 20) {
-                            this.mobileLeftStickAngle = null
+                            this.mobileLeftStickAngle = null;
                         } else {
-                            if (player.ir.mobileControls == 1 || (player.ir.shipType == 5 || player.ir.shipType == 8)) {
-                                this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * (Math.PI / 4)
+                            if (player.ir.mobileControls == 1 || isOmnidirectionalMoving) {
+                                this.mobileLeftStickAngle = Math.round(Math.atan2(mouseY - originY, mouseX - originX) / Math.PI * 4) * (Math.PI / 4);
                             } else {
-                                this.mobileLeftStickAngle = Math.atan2(mouseY - originY, mouseX - originX) > 0 ? (Math.PI / 2) : (-Math.PI / 2)
+                                this.mobileLeftStickAngle = Math.atan2(mouseY - originY, mouseX - originX) > 0 ? (Math.PI / 2) : (-Math.PI / 2);
                             }
                         }
                         
                         if (this.mobileLeftStickAngle != null) {
-                            if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-                                // Desired Speed
+                            if (player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11) {
                                 const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
-                                let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed
-                                let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed
+                                let desiredVx = Math.cos(this.mobileLeftStickAngle) * maxSpeed;
+                                let desiredVy = Math.sin(this.mobileLeftStickAngle) * maxSpeed;
                             
-                                // Smoothly approach desired velocity (lerp) for less "wonky" feel
-                                const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
+                                const lerpFactor = 0.16;
                                 this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
                                 this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
-                            
-                                // Small global damping to stabilize movement
                                 this.ship.vx *= 0.995;
                                 this.ship.vy *= 0.995;
                             
-                                // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
                                 if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
-                            
-                                // Move ship (movement completely independent of facing)
                                 this.ship.x += this.ship.vx;
                                 this.ship.y += this.ship.vy;
                             } else {
-                            
-                                let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4
-                                ang = Math.round(ang)
+                                let ang = this.mobileLeftStickAngle / Math.PI * 4 + 4;
+                                ang = Math.round(ang);
                                 switch (ang) {
-                                    case 0, 8: {
+                                    case 0:
+                                    case 8: {
                                         this.ship.angle -= this.ship.rotationSpeed;
-                                    break;}
+                                        break;
+                                    }
                                     case 1: {
                                         this.ship.angle -= this.ship.rotationSpeed;
                                         this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     case 2: {
                                         this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     case 3: {
                                         this.ship.angle += this.ship.rotationSpeed;
                                         this.ship.velocity += this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     case 4: {
                                         this.ship.angle += this.ship.rotationSpeed;
-                                    break;}
+                                        break;
+                                    }
                                     case 5: {
                                         this.ship.angle += this.ship.rotationSpeed;
                                         this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     case 6: {
                                         this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     case 7: {
                                         this.ship.angle -= this.ship.rotationSpeed;
                                         this.ship.velocity -= this.ship.acceleration + this.shipStats.moveSpeed * 0.1;
-                                    break;}
+                                        break;
+                                    }
                                     default: {
                                         this.ship.angle -= this.ship.rotationSpeed;
-                                    break;};
+                                        break;
+                                    }
                                 }
                             
-                                // Wrap ship around arena edges
                                 if (this.ship.x < 0) this.ship.x += this.width;
                                 if (this.ship.x > this.width) this.ship.x -= this.width;
                                 if (this.ship.y < 0) this.ship.y += this.height;
@@ -1962,73 +2425,68 @@ class SpaceArena {
                                 if (this.ship.velocity > 0) this.ship.velocity = 0;
                             }
                         }
-                    break;}
+                        break;
+                    }
                     case "rightStick": {
                         let rect = this.canvas.getBoundingClientRect();
                         let mouseX = value.clientX - rect.left;
                         let mouseY = value.clientY - rect.top;
-                        let originX = this.canvasWidth - (100 * this.mobileControlsScale)
-                        let originY = this.canvasHeight - (100 * this.mobileControlsScale)
-                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8
-                        this.mobileRightStickDist = Math.hypot(!isOmnidirectionalMoving ? 0 : mouseY - originY, mouseX - originX)
+                        let originX = this.canvasWidth - (100 * this.mobileControlsScale);
+                        let originY = this.canvasHeight - (100 * this.mobileControlsScale);
+                        let isOmnidirectionalMoving = player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11;
+                        this.mobileRightStickDist = Math.hypot(!isOmnidirectionalMoving ? 0 : mouseY - originY, mouseX - originX);
                         if (this.mobileRightStickDist < this.mobileControlsScale * 20) {
-                            this.mobileRightStickAngle = null
+                            this.mobileRightStickAngle = null;
                         } else {
                             if (player.ir.mobileControls == 1 || isOmnidirectionalMoving) {
-                                this.mobileRightStickAngle = Math.atan2(mouseY - originY, mouseX - originX)
+                                this.mobileRightStickAngle = Math.atan2(mouseY - originY, mouseX - originX);
                             } else {
-                                this.mobileRightStickAngle = Math.abs(Math.atan2(mouseY - originY, mouseX - originX)) > Math.PI / 2 ? Math.PI : 0
+                                this.mobileRightStickAngle = Math.abs(Math.atan2(mouseY - originY, mouseX - originX)) > Math.PI / 2 ? Math.PI : 0;
                             }
                         }
                         
                         if (this.mobileRightStickAngle != null) {
                             if (player.ir.mobileControls == 1) {
-                                this.ship.angle = this.mobileRightStickAngle
-                                this.shoot()
+                                this.ship.angle = this.mobileRightStickAngle;
+                                this.shoot();
                             } else {
                                 this.ship.angle += this.mobileRightStickAngle == 0 ? this.ship.rotationSpeed : -this.ship.rotationSpeed;
                             }
                         }
-                    break;}
+                        break;
+                    }
                     case "rightButton": {
                         if (player.ir.shipType == 10) {
-                            this.chargeShot()
+                            this.chargeShot();
                         } else {
                             if (this.ship.currentTarget && player.ir.shipType == 4) {
-                                let target = this.ship.currentTarget
-                                let closest = this.getClosestCoords([target.x, target.y])
-                                let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed)
-                                closest[0] += target.vx * timeToHit
-                                closest[1] += target.vy * timeToHit
+                                let target = this.ship.currentTarget;
+                                let closest = this.getClosestCoords([target.x, target.y]);
+                                let timeToHit = Math.hypot(closest[1] - target.y, closest[0] - target.x) / (25 * this.shipStats.moveSpeed);
+                                closest[0] += target.vx * timeToHit;
+                                closest[1] += target.vy * timeToHit;
                             
                                 let desired = Math.atan2(closest[1] - target.y, closest[0] - target.x);
-                                let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI*2) - Math.PI;
+                                let angDist = (desired - this.ship.angle + Math.PI) % (Math.PI * 2) - Math.PI;
                                 this.ship.angle += (angDist < 0 ? angDist + Math.PI : angDist) * 0.125;
                             }
-                            this.shoot()
+                            this.shoot();
                         }
-                    break;}
+                        break;
+                    }
                     default: break;
                 }
-            })
+            });
         } else {
-            this.mobileLeftStickAngle = null
-            this.mobileRightStickAngle = null
+            this.mobileLeftStickAngle = null;
+            this.mobileRightStickAngle = null;
         }
-        if (this.ship.velocity > 0) {
-            this.ship.velocity -= this.ship.deceleration;
-            if (this.ship.velocity < 0) this.ship.velocity = 0;
-        } else if (this.ship.velocity < 0) {
-            this.ship.velocity += this.ship.deceleration;
-            if (this.ship.velocity > 0) this.ship.velocity = 0;
-        }
-        
-        if (player.ir.shipType == 5 || player.ir.shipType == 8) {
-            // Omnidirectional movement: smooth thrust toward desired velocity (rotation is purely visual)
+
+        // Omnidirectional movement logic (Ships 5, 8, 11)
+        if (player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11) {
             if (typeof this.ship.vx !== "number") this.ship.vx = 0;
             if (typeof this.ship.vy !== "number") this.ship.vy = 0;
 
-            // Build input vector
             let ix = 0, iy = 0;
             if (player.ir.mobileControls == 0) {
                 if (this.keys['KeyW']) iy -= 1;
@@ -2036,7 +2494,7 @@ class SpaceArena {
                 if (this.keys['KeyA']) ix -= 1;
                 if (this.keys['KeyD']) ix += 1;
             }
-            // Desired speed (account for moveSpeed upgrades)
+
             const maxSpeed = (this.ship.maxVelocity || 3.5) + (this.shipStats.moveSpeed || 0);
             let desiredVx = 0, desiredVy = 0;
             if (ix !== 0 || iy !== 0) {
@@ -2044,46 +2502,69 @@ class SpaceArena {
                 desiredVx = (ix / len) * maxSpeed;
                 desiredVy = (iy / len) * maxSpeed;
             }
-            // Smoothly approach desired velocity (lerp) for less "wonky" feel
-            const lerpFactor = 0.16; // tweak for responsiveness vs smoothness
-            this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
-            this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
-            // Small global damping to stabilize movement
-            this.ship.vx *= 0.995;
-            this.ship.vy *= 0.995;
-            // Zero legacy forward/backwards velocity so other ship logic doesn't interfere
+
+            // Dash momentum override vs standard smooth lerp
+            if (this.ship.dashFrames && this.ship.dashFrames > 0) {
+                this.ship.dashFrames--;
+                this.ship.vx *= 0.96;
+                this.ship.vy *= 0.96;
+
+                // Spawn blue mist particles along the dash trail (#094599 theme)
+                if (player.ir.shipType == 11) {
+                    for (let p = 0; p < 4; p++) {
+                        let offsetAng = this.ship.angle + Math.PI + (Math.random() - 0.5) * 1.2;
+                        let offsetDist = Math.random() * 12;
+                        this.marcelMist.push({
+                            x: this.ship.x + Math.cos(offsetAng) * offsetDist,
+                            y: this.ship.y + Math.sin(offsetAng) * offsetDist,
+                            vx: (Math.random() - 0.5) * 1.5 - (this.ship.vx * 0.1),
+                            vy: (Math.random() - 0.5) * 1.5 - (this.ship.vy * 0.1),
+                            radius: 12 + Math.random() * 10,
+                            maxRadius: 28 + Math.random() * 14,
+                            timer: 35 + Math.floor(Math.random() * 15),
+                            maxTimer: 50,
+                            rotation: Math.random() * Math.PI * 2,
+                            rotSpeed: (Math.random() - 0.5) * 0.05,
+                        });
+                    }
+                }
+            } else {
+                const lerpFactor = 0.16;
+                this.ship.vx += (desiredVx - this.ship.vx) * lerpFactor;
+                this.ship.vy += (desiredVy - this.ship.vy) * lerpFactor;
+                this.ship.vx *= 0.995;
+                this.ship.vy *= 0.995;
+            }
+
             if (typeof this.ship.velocity === "number") this.ship.velocity = 0;
-            // Move ship (movement completely independent of facing)
+
             this.ship.x += this.ship.vx;
             this.ship.y += this.ship.vy;
-            // Wrap ship around arena edges
+
             if (this.ship.x < 0) this.ship.x += this.width;
             if (this.ship.x > this.width) this.ship.x -= this.width;
             if (this.ship.y < 0) this.ship.y += this.height;
             if (this.ship.y > this.height) this.ship.y -= this.height;
-            // Rotation purely visual: smoothly face the mouse (won't affect movement)
+
             if (typeof this.mouseX === "number" && typeof this.mouseY === "number") {
                 let desired = Math.atan2(this.mouseY - this.canvasHeight / 2, this.mouseX - this.canvasWidth / 2);
                 let diff = desired - this.ship.angle;
                 while (diff > Math.PI) diff -= 2 * Math.PI;
                 while (diff < -Math.PI) diff += 2 * Math.PI;
-                // smaller rotation step for smoothness
                 this.ship.angle += Math.sign(diff) * Math.min(Math.abs(diff), Math.max(0.04, this.ship.rotationSpeed || 0.08));
             }
+
             if (player.ir.shipType == 8) {
-                // animate wings
                 if (typeof this.ship.wingPhase !== "number") this.ship.wingPhase = 0;
                 this.ship.wingPhase += 0.12;
-                // handle laser firing
                 if (this.ship._laserActive) {
-                    // Laser follows mouse direction
                     if ((typeof this.mouseX === "number" && typeof this.mouseY === "number") || this.mobileRightStickAngle != null || (player.ir.mobileControls > 0 && player.ir.autoShoot)) {
                         let desired = (player.ir.mobileControls > 0) ? -this.mobileRightStickAngle || -this.ship.angle : -Math.atan2(this.mouseY - (this.canvasHeight / 2), this.mouseX - (this.canvasWidth / 2));
                         let diff = desired - (this.ship._laserAngle || 0);
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
                         this.ship._laserAngle = (this.ship._laserAngle || 0) + diff * 0.15;
-                        this.ship._laserLength = 750 //Math.min(300, Math.hypot(this.mouseX - (this.canvasWidth / 2), this.mouseY - (this.canvasHeight / 2))) * 3
+                        this.ship._laserLength = 750;
                     }
                     if (this.ship._laserHitCooldown > 0) this.ship._laserHitCooldown--;
                     if (this.ship._laserActive && this.ship._laserHitCooldown <= 0) {
@@ -2092,9 +2573,8 @@ class SpaceArena {
                         let ux = Math.cos(ang), uy = Math.sin(ang);
                         let beamLen = Math.max(this.width, this.height) * 1.5;
                         let thickness = (this.ship.radius || 12) * 0.8;
-                        // Check enemies
                         for (let enemy of this.enemies.concat(this.asteroids)) {
-                            let closest = this.getClosestCoords([enemy.x, enemy.y])
+                            let closest = this.getClosestCoords([enemy.x, enemy.y]);
                             let ex = enemy.x - closest[0];
                             let ey = enemy.y - closest[1];
                             if (Math.hypot(ex, ey) > this.ship._laserLength) continue;
@@ -2102,11 +2582,10 @@ class SpaceArena {
                             let perp = Math.abs(ex * (-uy) + ey * ux);
                             if (proj > -enemy.radius && proj < beamLen && perp < thickness + enemy.radius) {
                                 if (!enemy.invulnerable) enemy.health = enemy.health.sub(dmg);
-                                SB_celestialites[enemy.type].onAttacked(enemy, dmg, "ship")
+                                SB_celestialites[enemy.type].onAttacked(enemy, dmg, "ship");
                                 if (enemy.health.lte(0)) handleEnemyDeath(enemy);
                             }
                         }
-                        // Check asteroids
                         for (let a of this.asteroids) {
                             let ax = a.x - this.ship.x;
                             let ay = a.y - this.ship.y;
@@ -2123,335 +2602,375 @@ class SpaceArena {
                     this.ship._laserActive = false;
                 }
             }
-        
         }
-        for (let bullet of this.bullets) {
-            // Homing behavior: enemy homing bullets should home to the player;
-            // player-fired homing bullets should home to enemies.
-            if (bullet.homing) {
-                if (bullet.fromEnemy) {
-                    // Home to player: compute desired and rotate toward it with clamped turn.
-                    let closest = this.getClosestCoords([bullet.x, bullet.y])
-                    let desired = Math.atan2(closest[1] - bullet.y, closest[0] - bullet.x);
-                    let current = Math.atan2(bullet.vy, bullet.vx);
-                    let diff = desired - current;
-                    while (diff > Math.PI) diff -= 2 * Math.PI;
-                    while (diff < -Math.PI) diff += 2 * Math.PI;
-                    let maxTurn = bullet.homingStrength || 0.18;
-                    let turn = Math.max(-maxTurn, Math.min(maxTurn, diff));
-                    let speed = Math.hypot(bullet.vx, bullet.vy) || 1;
-                    let newAngle = current + turn;
-                    bullet.vx = Math.cos(newAngle) * speed;
-                    bullet.vy = Math.sin(newAngle) * speed;
-                } else {
-                    // Player-fired homing: seek the nearest enemy
-                    if ((!bullet.target || !bullet.target.health.gt(0)) && this.enemies.length) {
-                        let closest = null;
-                        let closestDist = Infinity;
-                        for (let e of this.enemies) {
-                            if (e.health.lte(0)) continue;
-                            let c = this.getClosestCoords([bullet.x, bullet.y], [e.x, e.y]);
-                            let dx = c[0] - this.ship.x;
-                            let dy = c[1] - this.ship.y;
-                            let d = Math.hypot(dx, dy);
-                            if (d < closestDist) {
-                                closestDist = d;
-                                closest = e;
-                            }
+
+        // ==========================================
+        // TIME STOP FREEZE BARRIER
+        // ==========================================
+        if (!timeStopped) {
+            // Asteroid Spawning
+            if (!this.bossActive) {
+                this.asteroidSpawnTimer++;
+                if (this.asteroidSpawnTimer > 30) {
+                    this.asteroidSpawnTimer = 0;
+                    SB_spawnNaturalAsteroid();
+                }
+            }
+
+            // Enemy Spawning
+            if ((player.ir.battleStage !== "spaceZone1" || player.ir.battleLevel.gte(5)) && !this.bossActive) {
+                let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
+                if (this.enemySpawnCooldown > 0) {
+                    this.enemySpawnCooldown--;
+                }
+                if (this.enemySpawnCooldown <= 0) {
+                    SB_spawnNaturalCelestialite();
+                }
+            }
+
+            // Update Enemies
+            for (let enemy of this.enemies.concat(this.asteroids)) {
+                enemy.health = enemy.health.add(enemy.regen.div(60)).min(enemy.maxHealth);
+                SB_celestialites[enemy.type].tick(enemy);
+                SB_updateMovement(enemy);
+                enemy.x = ((enemy.x % this.width) + this.width) % this.width;
+                enemy.y = ((enemy.y % this.height) + this.height) % this.height;
+                if (enemy.health.lte(0)) {
+                    handleEnemyDeath(enemy);
+                    continue;
+                }
+            }
+
+            // Gamma Ship Trail Damage
+            if (this.gammaTrails) {
+                for (let trail of this.gammaTrails) {
+                    let closest = this.getClosestCoords([trail.x, trail.y]);
+                    trail.timer--;
+                    let dx = closest[0] - trail.x;
+                    let dy = closest[1] - trail.y;
+                    let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < trail.radius + shipRadius && trail.timer > 0) {
+                        let dmg = trail.damage / this.shipStats.damageReduction;
+                        if (!this._asteroidMinigamePaused) {
+                            if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
+                            player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                            if (player.ir.shipHealth.lte(0)) this.onShipDeath();
                         }
-                        bullet.target = closest;
                     }
+                }
+                this.gammaTrails = this.gammaTrails.filter(trail => trail.timer > 0);
+            }
 
-                    if (bullet.target && bullet.target.health.gt(0)) {
-                        let closest = this.getClosestCoords([bullet.target.x, bullet.target.y])
-                        let timeToHit = Math.hypot(closest[1] - bullet.y, closest[0] - bullet.x) / (Math.hypot(bullet.vx, bullet.vy) || 1)
-                        closest[0] += bullet.target.vx * timeToHit
-                        closest[1] += bullet.target.vy * timeToHit
+            // Update Warnings
+            for (let i in this.warnings) {
+                let warning = this.warnings[i];
+                let warnRef = SB_warnings[warning.type];
+                if (!warning.ready && warning.timer <= warnRef.postReadyTimer) {
+                    warnRef.onReady(warning);
+                    warning.ready = true;
+                }
+                SB_updateMovement(warning);
+                warnRef.tick(warning);
+                warning.timer--;
+                while (warning.x < 0) warning.x += this.width;
+                while (warning.x > this.width) warning.x -= this.width;
+                while (warning.y < 0) warning.y += this.height;
+                while (warning.y > this.height) warning.y -= this.height;
+            }
+            this.warnings = this.warnings.filter(warning => warning.timer >= 0);
 
-                        let desired = Math.atan2(bullet.target.y - bullet.y, bullet.target.x - bullet.x);
+            // Bullet Movement & Collision with Enemies
+            for (let bullet of this.bullets) {
+                // Knife Stasis Movement Physics
+                if (bullet.isKnife) {
+                    bullet.phaseTimer++;
+                    if (bullet.knifePhase === 0) {
+                        bullet.currentSpeed *= 0.9;
+                        bullet.vx = Math.cos(bullet.ang) * bullet.currentSpeed;
+                        bullet.vy = Math.sin(bullet.ang) * bullet.currentSpeed;
+
+                        if (bullet.phaseTimer >= 36 || bullet.currentSpeed < 0.1) {
+                            bullet.knifePhase = 1;
+                            bullet.phaseTimer = 0;
+                            bullet.currentSpeed = 0;
+                            bullet.vx = 0;
+                            bullet.vy = 0;
+                        }
+                    } else if (bullet.knifePhase === 1) {
+                        bullet.vx = 0;
+                        bullet.vy = 0;
+
+                        if (bullet.phaseTimer >= 10) {
+                            bullet.knifePhase = 2;
+                            bullet.phaseTimer = 0;
+                        }
+                    } else if (bullet.knifePhase === 2) {
+                        bullet.currentSpeed = Math.min(bullet.maxSpeed, (bullet.currentSpeed || 0) + 1.5);
+                        bullet.vx = Math.cos(bullet.ang) * bullet.currentSpeed;
+                        bullet.vy = Math.sin(bullet.ang) * bullet.currentSpeed;
+                    }
+                }
+
+                if (bullet.homing) {
+                    if (bullet.fromEnemy) {
+                        let closest = this.getClosestCoords([bullet.x, bullet.y]);
+                        let desired = Math.atan2(closest[1] - bullet.y, closest[0] - bullet.x);
                         let current = Math.atan2(bullet.vy, bullet.vx);
                         let diff = desired - current;
                         while (diff > Math.PI) diff -= 2 * Math.PI;
                         while (diff < -Math.PI) diff += 2 * Math.PI;
-
-                        let maxTurn = bullet.homingStrength || 0.12;
+                        let maxTurn = bullet.homingStrength || 0.18;
                         let turn = Math.max(-maxTurn, Math.min(maxTurn, diff));
                         let speed = Math.hypot(bullet.vx, bullet.vy) || 1;
                         let newAngle = current + turn;
                         bullet.vx = Math.cos(newAngle) * speed;
                         bullet.vy = Math.sin(newAngle) * speed;
-                    }
-                }
-            }
-
-            if (bullet.type) {
-                SB_updateMovement(bullet)
-            } else {
-                bullet.x += bullet.vx;
-                bullet.y += bullet.vy;
-            }
-            if (bullet.x < 0) bullet.x += this.width;
-            if (bullet.x > this.width) bullet.x -= this.width;
-            if (bullet.y < 0) bullet.y += this.height;
-            if (bullet.y > this.height) bullet.y -= this.height;
-            bullet.life--;
-
-            // Evolver shard edge collision: primary shard breaks into 3 mini shards when hitting arena edge
-            if (bullet.evolverShard) {
-                if (bullet.x < 0 || bullet.x > this.width || bullet.y < 0 || bullet.y > this.height) {
-                    // spawn 4 mini shards
-                        for (let k = 0; k < 4; k++) {
-                        const ang = Math.random() * Math.PI * 2;
-                        const spd = 6 + Math.random() * 4;
-                        this.bullets.push({
-                            x: Math.max(0, Math.min(this.width, bullet.x)),
-                            y: Math.max(0, Math.min(this.height, bullet.y)),
-                            vx: Math.cos(ang) * spd,
-                            vy: Math.sin(ang) * spd,
-                            life: 120,
-                            damage: (bullet.damage || 1) * 0.2,
-                            pierce: 0,
-                            piercedAsteroids: [],
-                            piercedEnemies: [],
-                            fromEnemy: false,
-                            evolverMini: true,
-                            radius: 4,
-                        });
-                    }
-                    bullet.life = 0;
-                }
-            }
-
-            // Massive sword bouncing logic
-            if (bullet.massiveSword) {
-                bullet.rot = (bullet.rot || 0) + (bullet.rotSpd || 0.15);
-                // bounce on edges without damping for the massive sword
-                if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx; }
-                if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx; }
-                if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy; }
-                if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy; }
-            }
-            // mini evolver shards bounce off edges until they hit an enemy
-            if (bullet.evolverMini) {
-                if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx * 0.9; }
-                if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx * 0.9; }
-                if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy * 0.9; }
-                if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy * 0.9; }
-                // slight damping to avoid infinite bouncing
-                bullet.vx *= 0.998;
-                bullet.vy *= 0.998;
-            }
-        }
-
-        // Asteroid spawning (disabled in hard mode or while boss active)
-        if (!this.bossActive) {
-            this.asteroidSpawnTimer++;
-            if (this.asteroidSpawnTimer > 30) {
-                this.asteroidSpawnTimer = 0;
-                SB_spawnNaturalAsteroid()
-            }
-        }
-
-        // Enemy spawning (Alpha, Beta, Gamma + hard-mode types when active) with cooldown
-        // TEMP
-        if ((player.ir.battleStage !== "spaceZone1" || player.ir.battleLevel.gte(5)) && !this.bossActive) {
-            let aliveEnemies = this.enemies.concat(this.asteroids).filter(e => e.alive).length;
-            if (this.enemySpawnCooldown > 0) {
-                this.enemySpawnCooldown--;
-            }
-            if (this.enemySpawnCooldown <= 0) {
-                SB_spawnNaturalCelestialite()
-            }
-        }
-
-        // Update enemies
-        for (let enemy of this.enemies.concat(this.asteroids)) {
-            enemy.health = enemy.health.add(enemy.regen.div(60)).min(enemy.maxHealth)
-            SB_celestialites[enemy.type].tick(enemy)
-            SB_updateMovement(enemy)
-            enemy.x = ((enemy.x % this.width) + this.width) % this.width
-            enemy.y = ((enemy.y % this.height) + this.height) % this.height
-            if (enemy.health.lte(0)) {
-                handleEnemyDeath(enemy);
-                continue;
-            }
-        }
-
-        // Gamma Ship trail damage
-        if (this.gammaTrails) {
-            for (let trail of this.gammaTrails) {
-                let closest = this.getClosestCoords([trail.x, trail.y])
-                trail.timer--;
-                let dx = closest[0] - trail.x;
-                let dy = closest[1] - trail.y;
-                let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < trail.radius + shipRadius && trail.timer > 0) {
-                    let dmg = trail.damage / this.shipStats.damageReduction;
-                    
-                    if (!this._asteroidMinigamePaused) {
-                        if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 4;
-                            player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
-                        if (player.ir.shipHealth.lte(0)) {
-                            this.onShipDeath();
-                        }
-                    }
-                }
-            }
-            this.gammaTrails = this.gammaTrails.filter(trail => trail.timer > 0);
-        }
-
-        for (let i in this.warnings) {
-            let warning = this.warnings[i]
-            let warnRef = SB_warnings[warning.type]
-            if (!warning.ready && warning.timer <= warnRef.postReadyTimer) {
-                warnRef.onReady(warning);
-                warning.ready = true;
-            }
-            SB_updateMovement(warning)
-            warnRef.tick(warning)
-            warning.timer--
-            while (warning.x < 0) warning.x += this.width
-            while (warning.x > this.width) warning.x -= this.width;
-            while (warning.y < 0) warning.y += this.height
-            while (warning.y > this.height) warning.y -= this.height;
-        }
-        this.warnings = this.warnings.filter(warning => warning.timer >= 0);
-
-        // Bullet-enemy collision (player bullets only)
-        for (let bullet of this.bullets) {
-            // allow normal player bullets OR special vampire spear bullets to hit enemies
-            if (bullet.fromEnemy && !bullet.vampireSpear) continue;
-            if (bullet.noCollision) continue;
-            for (let enemy of this.enemies.concat(this.asteroids)) {
-                    // Skip interactions with paused Iridite boss
-                if (enemy._pausedBoss) continue;
-                // avoid hitting same enemy multiple times per bullet
-                if (bullet.piercedEnemies && bullet.piercedEnemies.includes(enemy)) continue;
-                let dx = bullet.x - enemy.x;
-                let dy = bullet.y - enemy.y;
-                let dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < enemy.radius + bullet.radius) {
-                    let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
-                    if (!enemy.invulnerable) enemy.health = enemy.health.sub(bDmg);
-                    SB_celestialites[enemy.type].onAttacked(enemy, bDmg, "ship")
-
-                    // Vampire spear knockback: push enemies away along bullet velocity
-                    if (bullet.vampireSpear) {
-                        try {
-                            let nx = (typeof bullet.vx === 'number') ? bullet.vx : 0;
-                            let ny = (typeof bullet.vy === 'number') ? bullet.vy : 0;
-                            let nlen = Math.sqrt(nx * nx + ny * ny) || 1;
-                            nx /= nlen; ny /= nlen;
-                            // stronger knockback: apply to knockback velocity so physics feels smoother
-                            let kb = (typeof bullet.knockback === 'number') ? bullet.knockback : 18;
-                            enemy._knockbackVx = (enemy._knockbackVx || 0) + nx * kb;
-                            enemy._knockbackVy = (enemy._knockbackVy || 0) + ny * kb;
-                            // longer knockback duration
-                            enemy._knockbackTimer = Math.max(enemy._knockbackTimer || 0, 18);
-                        } catch (err) { /* ignore knockback errors */ }
-                    }
-
-                    // Handle piercing bullets: decrement pierce and mark enemy as pierced
-                    if (typeof bullet.pierce === "number" && bullet.pierce > 0) {
-                        bullet.pierce--;
-                        if (!bullet.piercedEnemies) bullet.piercedEnemies = [];
-                        bullet.piercedEnemies.push(enemy);
-                        // bullet remains alive until pierce runs out (< 0)
-                        if (bullet.pierce < 0) bullet.life = 0;
                     } else {
-                        // non-piercing: destroy bullet on hit
-                        // If this is an evolver primary shard, spawn 3 mini shards on impact
-                        if (bullet.evolverShard) {
-                            for (let k = 0; k < 4; k++) {
-                                const ang = Math.random() * Math.PI * 2;
-                                const spd = 6 + Math.random() * 4;
-                                this.bullets.push({
-                                    x: enemy.x,
-                                    y: enemy.y,
-                                    vx: Math.cos(ang) * spd,
-                                    vy: Math.sin(ang) * spd,
-                                    life: 120,
-                                    damage: (bullet.damage || 1) * 0.2,
-                                    pierce: 0,
-                                    piercedAsteroids: [],
-                                    piercedEnemies: [],
-                                    fromEnemy: false,
-                                    evolverMini: true,
-                                    radius: 4,
-                                });
+                        if ((!bullet.target || !bullet.target.health.gt(0)) && this.enemies.length) {
+                            let closest = null;
+                            let closestDist = Infinity;
+                            for (let e of this.enemies) {
+                                if (e.health.lte(0)) continue;
+                                let c = this.getClosestCoords([bullet.x, bullet.y], [e.x, e.y]);
+                                let dx = c[0] - this.ship.x;
+                                let dy = c[1] - this.ship.y;
+                                let d = Math.hypot(dx, dy);
+                                if (d < closestDist) {
+                                    closestDist = d;
+                                    closest = e;
+                                }
                             }
+                            bullet.target = closest;
                         }
-                        if (bullet.explosive) {
-                            arena.bullets.push({
-                                x: enemy.x,
-                                y: enemy.y,
-                                vx: 0,
-                                vy: 0,
-                                life: 3,
-                                damage: 0,
-                                pierce: 100,
+
+                        if (bullet.target && bullet.target.health.gt(0)) {
+                            let closest = this.getClosestCoords([bullet.target.x, bullet.target.y]);
+                            let timeToHit = Math.hypot(closest[1] - bullet.y, closest[0] - bullet.x) / (Math.hypot(bullet.vx, bullet.vy) || 1);
+                            closest[0] += bullet.target.vx * timeToHit;
+                            closest[1] += target.vy * timeToHit;
+
+                            let desired = Math.atan2(bullet.target.y - bullet.y, bullet.target.x - bullet.x);
+                            let current = Math.atan2(bullet.vy, bullet.vx);
+                            let diff = desired - current;
+                            while (diff > Math.PI) diff -= 2 * Math.PI;
+                            while (diff < -Math.PI) diff += 2 * Math.PI;
+
+                            let maxTurn = bullet.homingStrength || 0.12;
+                            let turn = Math.max(-maxTurn, Math.min(maxTurn, diff));
+                            let speed = Math.hypot(bullet.vx, bullet.vy) || 1;
+                            let newAngle = current + turn;
+                            bullet.vx = Math.cos(newAngle) * speed;
+                            bullet.vy = Math.sin(newAngle) * speed;
+                        }
+                    }
+                }
+
+                if (bullet.type) {
+                    SB_updateMovement(bullet);
+                } else {
+                    bullet.x += bullet.vx;
+                    bullet.y += bullet.vy;
+                }
+                if (bullet.x < 0) bullet.x += this.width;
+                if (bullet.x > this.width) bullet.x -= this.width;
+                if (bullet.y < 0) bullet.y += this.height;
+                if (bullet.y > this.height) bullet.y -= this.height;
+                bullet.life--;
+
+                // Evolver Shard Physics
+                if (bullet.evolverShard) {
+                    if (bullet.x < 0 || bullet.x > this.width || bullet.y < 0 || bullet.y > this.height) {
+                        for (let k = 0; k < 4; k++) {
+                            const ang = Math.random() * Math.PI * 2;
+                            const spd = 6 + Math.random() * 4;
+                            this.bullets.push({
+                                x: Math.max(0, Math.min(this.width, bullet.x)),
+                                y: Math.max(0, Math.min(this.height, bullet.y)),
+                                vx: Math.cos(ang) * spd,
+                                vy: Math.sin(ang) * spd,
+                                life: 120,
+                                damage: (bullet.damage || 1) * 0.2,
+                                pierce: 0,
                                 piercedAsteroids: [],
                                 piercedEnemies: [],
                                 fromEnemy: false,
-                                noCollision: true,
-                                radius: 64,
+                                evolverMini: true,
+                                radius: 4,
                             });
-                            if (bullet.life > 0) {
-                                for (let enemy2 of this.enemies.concat(this.asteroids)) {
-                                    let dx = bullet.x - enemy2.x;
-                                    let dy = bullet.y - enemy2.y;
-                                    let dist = Math.sqrt(dx * dx + dy * dy);
-                                    if (dist < 256) {
-                                        enemy2.health = enemy2.health.sub(bDmg * (1 - dist / 128));
-                                    }
-                                }
-                            }
                         }
                         bullet.life = 0;
                     }
+                }
 
-                    if (enemy.health.lte(0)) {
-                        handleEnemyDeath(enemy);
+                // Massive Sword Bouncing
+                if (bullet.massiveSword) {
+                    bullet.rot = (bullet.rot || 0) + (bullet.rotSpd || 0.15);
+                    if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx; }
+                    if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx; }
+                    if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy; }
+                    if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy; }
+                }
+
+                if (bullet.evolverMini) {
+                    if (bullet.x < 0) { bullet.x = 0; bullet.vx = -bullet.vx * 0.9; }
+                    if (bullet.x > this.width) { bullet.x = this.width; bullet.vx = -bullet.vx * 0.9; }
+                    if (bullet.y < 0) { bullet.y = 0; bullet.vy = -bullet.vy * 0.9; }
+                    if (bullet.y > this.height) { bullet.y = this.height; bullet.vy = -bullet.vy * 0.9; }
+                    bullet.vx *= 0.998;
+                    bullet.vy *= 0.998;
+                }
+
+                // Player Bullets Hit Enemies
+                if (bullet.fromEnemy && !bullet.vampireSpear) continue;
+                if (bullet.noCollision) continue;
+                for (let enemy of this.enemies.concat(this.asteroids)) {
+                    if (enemy._pausedBoss) continue;
+                    if (bullet.piercedEnemies && bullet.piercedEnemies.includes(enemy)) continue;
+                    let dx = bullet.x - enemy.x;
+                    let dy = bullet.y - enemy.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < enemy.radius + bullet.radius) {
+                        let bDmg = (typeof bullet.damage === 'number') ? bullet.damage : (bullet.damage && bullet.damage.toNumber ? bullet.damage.toNumber() : Number(bullet.damage || 0));
+                        if (!enemy.invulnerable) enemy.health = enemy.health.sub(bDmg);
+                        SB_celestialites[enemy.type].onAttacked(enemy, bDmg, "ship");
+                        
+                        if (player.ir.shipType == 11) {
+                            if (player.ir.soulEnergy.lt(player.ir.soulEnergyMax)) {
+                                player.ir.soulEnergy = player.ir.soulEnergy.add(player.ir.soulEnergyGain);
+                            }
+                        }
+
+                        if (bullet.vampireSpear) {
+                            try {
+                                let nx = (typeof bullet.vx === 'number') ? bullet.vx : 0;
+                                let ny = (typeof bullet.vy === 'number') ? bullet.vy : 0;
+                                let nlen = Math.sqrt(nx * nx + ny * ny) || 1;
+                                nx /= nlen; ny /= nlen;
+                                let kb = (typeof bullet.knockback === 'number') ? bullet.knockback : 18;
+                                enemy._knockbackVx = (enemy._knockbackVx || 0) + nx * kb;
+                                enemy._knockbackVy = (enemy._knockbackVy || 0) + ny * kb;
+                                enemy._knockbackTimer = Math.max(enemy._knockbackTimer || 0, 18);
+                            } catch (err) { }
+                        }
+
+                        if (typeof bullet.pierce === "number" && bullet.pierce > 0) {
+                            bullet.pierce--;
+                            if (!bullet.piercedEnemies) bullet.piercedEnemies = [];
+                            bullet.piercedEnemies.push(enemy);
+                            if (bullet.pierce < 0) bullet.life = 0;
+                        } else {
+                            if (bullet.evolverShard) {
+                                for (let k = 0; k < 4; k++) {
+                                    const ang = Math.random() * Math.PI * 2;
+                                    const spd = 6 + Math.random() * 4;
+                                    this.bullets.push({
+                                        x: enemy.x,
+                                        y: enemy.y,
+                                        vx: Math.cos(ang) * spd,
+                                        vy: Math.sin(ang) * spd,
+                                        life: 120,
+                                        damage: (bullet.damage || 1) * 0.2,
+                                        pierce: 0,
+                                        piercedAsteroids: [],
+                                        piercedEnemies: [],
+                                        fromEnemy: false,
+                                        evolverMini: true,
+                                        radius: 4,
+                                    });
+                                }
+                            }
+                            if (bullet.explosive) {
+                                arena.bullets.push({
+                                    x: enemy.x,
+                                    y: enemy.y,
+                                    vx: 0,
+                                    vy: 0,
+                                    life: 3,
+                                    damage: 0,
+                                    pierce: 100,
+                                    piercedAsteroids: [],
+                                    piercedEnemies: [],
+                                    fromEnemy: false,
+                                    noCollision: true,
+                                    radius: 64,
+                                });
+                                if (bullet.life > 0) {
+                                    for (let enemy2 of this.enemies.concat(this.asteroids)) {
+                                        let dx = bullet.x - enemy2.x;
+                                        let dy = bullet.y - enemy2.y;
+                                        let dist = Math.sqrt(dx * dx + dy * dy);
+                                        if (dist < 256) {
+                                            enemy2.health = enemy2.health.sub(bDmg * (1 - dist / 128));
+                                        }
+                                    }
+                                }
+                            }
+                            bullet.life = 0;
+                        }
+
+                        if (enemy.health.lte(0)) {
+                            handleEnemyDeath(enemy);
+                        }
+
+                        if (bullet.life <= 0) break;
                     }
-
-                    // stop scanning further enemies only if bullet was destroyed
-                    if (bullet.life <= 0) break;
                 }
             }
-        }
-        
 
-        // Enemy bullets hit player (also include vampire spear projectiles)
-        for (let bullet of this.bullets) {
-            if (!bullet.fromEnemy && !bullet.vampireSpear) continue;
-            let dx = bullet.x - this.ship.x;
-            let dy = bullet.y - this.ship.y;
-            let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            let bulletRadius = (typeof bullet.radius === "number") ? bullet.radius : (bullet.fromEnemy && bullet.homing ? 10 : 6);
-            // account for projectile radius (giant bullets are larger)
-            if (dist < shipRadius + bulletRadius) {
-                 // ensure each enemy projectile only deals damage once
-                if (!bullet._hitPlayer) {
-                    bullet._hitPlayer = true;
-                    let dmg = bullet.damage / this.shipStats.damageReduction;
-                    if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
-                    player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
-                    if (bullet.type) SB_projectiles[bullet.type].onHit(bullet, "player");
-                
-                    // remove the projectile immediately so it can't deal damage again
-                    bullet.life = 0;
+            // Enemy Bullets Hit Player
+            for (let bullet of this.bullets) {
+                if (!bullet.fromEnemy && !bullet.vampireSpear) continue;
+                let dx = bullet.x - this.ship.x;
+                let dy = bullet.y - this.ship.y;
+                let shipRadius = player.ir.shipType == 3 || player.ir.shipType == 7 ? this.ship.radius : 12;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                let bulletRadius = (typeof bullet.radius === "number") ? bullet.radius : (bullet.fromEnemy && bullet.homing ? 10 : 6);
+                if (dist < shipRadius + bulletRadius) {
+                    if (!bullet._hitPlayer) {
+                        bullet._hitPlayer = true;
+                        let dmg = bullet.damage / this.shipStats.damageReduction;
+                        if (player.ir.shipType == 3 || player.ir.shipType == 7) dmg /= 1.5;
+                        player.ir.shipHealth = player.ir.shipHealth.sub(dmg);
+                        if (bullet.type) SB_projectiles[bullet.type].onHit(bullet, "player");
+                        bullet.life = 0;
+                    }
                 }
             }
-        }
 
-        // remove dead/consumed bullets so homing projectiles vanish on hit
-        this.bullets = this.bullets.filter(b => b.life > 0);
+            this.bullets = this.bullets.filter(b => b.life > 0);
 
-        // Ship-enemy collision
+            // Update XP Orbs
+            for (let orb of this.xpOrbs) {
+                let closest = this.getClosestCoords([orb.x, orb.y]);
+                let dx = closest[0] - orb.x;
+                let dy = closest[1] - orb.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                let speed = 2;
+                if (dist > 5) {
+                    orb.x += dx / dist * speed;
+                    orb.y += dy / dist * speed;
+                }
+                if (dist < 30 && !orb.picked) {
+                    player.ir.battleXP = player.ir.battleXP.add(orb.amount * this.shipStats.xpGain);
+                    addLevelableXP("ir", player.ir.shipType, orb.amount * this.shipStats.xpGain);
+                    orb.picked = true;
+                }
+                orb.x = ((orb.x % this.width) + this.width) % this.width;
+                orb.y = ((orb.y % this.height) + this.height) % this.height;
+                orb.timer--;
+            }
+            this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
+
+            // Update Special Projectiles
+            for (let projectile of this.bullets) {
+                if (!projectile.type) continue;
+                SB_projectiles[projectile.type].tick(projectile);
+            }
+        } // <--- END OF TIME STOP FREEZE BARRIER
+
+        // Ship-Enemy Collision (Always active so Marcel can ram frozen enemies during Time Stop)
         for (let enemy of this.enemies.concat(this.asteroids)) {
-            // Skip collisions for a paused Iridite boss
             if (enemy._pausedBoss) continue;
             let dx = this.ship.x - enemy.x;
             let dy = this.ship.y - enemy.y;
@@ -2460,12 +2979,26 @@ class SpaceArena {
             if (dist < enemy.radius + shipRadius && !enemy.attached) {
                 let enemyDmg = new Decimal(this.ship.collisionDamage * this.shipStats.attackDamage);
                 if (enemyDmg.isNan() || enemyDmg.lt(0)) enemyDmg = new Decimal(0);
-                if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(0.1));
+
+                // MARCEL HIGH-DAMAGE DASH RAMMING
+                if (player.ir.shipType == 11 && this.ship.dashFrames > 0) {
+                    let ramMultiplier = 5; // Deals 5x base collision damage on dash contact
+                    let totalRamDamage = enemyDmg.mul(ramMultiplier);
+                    if (!enemy.invulnerable) enemy.health = enemy.health.sub(totalRamDamage);
+                    SB_celestialites[enemy.type].onAttacked(enemy, totalRamDamage, "ship");
+
+                    let kbAng = Math.atan2(enemy.y - this.ship.y, enemy.x - this.ship.x);
+                    enemy._knockbackVx = Math.cos(kbAng) * 32;
+                    enemy._knockbackVy = Math.sin(kbAng) * 32;
+                    enemy._knockbackTimer = 22;
+                } else if (player.ir.shipType != 3 && player.ir.shipType != 7 && !enemy.invulnerable) {
+                    enemy.health = enemy.health.sub(enemyDmg.mul(0.1));
+                }
                 if (player.ir.shipType == 3 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg.mul(1.5));
                 if (player.ir.shipType == 7 && !enemy.invulnerable) enemy.health = enemy.health.sub(enemyDmg);
-                SB_celestialites[enemy.type].onAttacked(enemy, enemyDmg, "ship")
+                SB_celestialites[enemy.type].onAttacked(enemy, enemyDmg, "ship");
 
-                let dmgReduction = (typeof this.shipStats.damageReduction === 'number' ? this.shipStats.damageReduction : (this.shipStats.damageReduction.toNumber ? this.shipStats.damageReduction.toNumber() : Number(this.shipStats.damageReduction)))
+                let dmgReduction = (typeof this.shipStats.damageReduction === 'number' ? this.shipStats.damageReduction : (this.shipStats.damageReduction.toNumber ? this.shipStats.damageReduction.toNumber() : Number(this.shipStats.damageReduction)));
                 if (hasUpgrade("ir", 24)) dmgReduction *= 1.25;
                 let shipDmgRaw = enemy.bodyDamage.toNumber() / this.shipStats.damageReduction * enemy.damage.toNumber();
                 let shipDmg = (typeof shipDmgRaw === 'number') ? shipDmgRaw : (shipDmgRaw.toNumber ? shipDmgRaw.toNumber() : Number(shipDmgRaw));
@@ -2473,15 +3006,11 @@ class SpaceArena {
                 if (player.ir.shipType == 3 || player.ir.shipType == 7) shipDmg /= 50;
                 if (!this._asteroidMinigamePaused) this.applyShipDamage(shipDmg);
 
-               if (true /*player.ir.shipType == 3 || player.ir.shipType == 7*/) {
-                    let angle = Math.atan2(dy, dx);
-                    let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)))
-                    if (Number.isNaN(speed) || !isFinite(speed) || speed < 0) speed = 0
-                    this.ship.vy += Math.sin(angle) * 6/(Math.sqrt(speed+1));
-                    this.ship.vx += Math.cos(angle) * 6/(Math.sqrt(speed+1));
-                } else {
-                    //this.ship.velocity = -10;
-                }
+                let angle = Math.atan2(dy, dx);
+                let speed = Math.abs(Math.sqrt(Math.pow(this.ship.vx, 2) + Math.pow(this.ship.vy, 2)));
+                if (Number.isNaN(speed) || !isFinite(speed) || speed < 0) speed = 0;
+                this.ship.vy += Math.sin(angle) * 6 / (Math.sqrt(speed + 1));
+                this.ship.vx += Math.cos(angle) * 6 / (Math.sqrt(speed + 1));
                 
                 if (enemy.health.lte(0) || enemy.health.isNan()) handleEnemyDeath(enemy);
                 if ((player.ir.shipHealth.isNaN && player.ir.shipHealth.isNan()) || !player.ir.shipHealth.isFinite() || player.ir.shipHealth.lt(0)) player.ir.shipHealth = new Decimal(0);
@@ -2492,7 +3021,7 @@ class SpaceArena {
             }
         }
 
-        // Add loot flashes
+        // Add Loot Flashes
         for (let pos of arena.lootFlashPositions) {
             if (pos.type == "spaceRock") {
                 this.lootFlashes.push({
@@ -2544,10 +3073,20 @@ class SpaceArena {
                     style: "24px monospace"
                 });
             }
+            if (pos.type == "epochFragments") {
+                this.lootFlashes.push({
+                    x: pos.x,
+                    y: pos.y,
+                    text: `+${formatWhole(pos.amount)} epoch fragment`,
+                    timer: 240,
+                    color: "#82f182",
+                    style: "16px monospace"
+                });
+            }
         }
         arena.lootFlashPositions = [];
 
-        // Add XP orbs
+        // Add XP Orbs
         for (let orb of xpOrbsToAdd) {
             this.xpOrbs.push({
                 x: orb.x,
@@ -2558,33 +3097,22 @@ class SpaceArena {
             });
         }
 
-        // Update XP orbs (move toward ship, pick up if close)
-        for (let orb of this.xpOrbs) {
-            let closest = this.getClosestCoords([orb.x, orb.y])
-            let dx = closest[0] - orb.x;
-            let dy = closest[1] - orb.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            let speed = 2;
-            if (dist > 5) {
-                orb.x += dx / dist * speed;
-                orb.y += dy / dist * speed;
+        // Update Marcel Dash Mist Particles
+        if (this.marcelMist) {
+            for (let mist of this.marcelMist) {
+                mist.x += mist.vx;
+                mist.y += mist.vy;
+                mist.vx *= 0.95;
+                mist.vy *= 0.95;
+                mist.rotation += mist.rotSpeed;
+                mist.radius += (mist.maxRadius - mist.radius) * 0.05;
+                mist.timer--;
+                mist.x = ((mist.x % this.width) + this.width) % this.width;
+                mist.y = ((mist.y % this.height) + this.height) % this.height;
             }
-            if (dist < 30 && !orb.picked) {
-                player.ir.battleXP = player.ir.battleXP.add(orb.amount * this.shipStats.xpGain);
-                addLevelableXP("ir", player.ir.shipType, orb.amount * this.shipStats.xpGain)
-                orb.picked = true;
-            }
-            orb.x = ((orb.x % this.width) + this.width) % this.width
-            orb.y = ((orb.y % this.height) + this.height) % this.height
-            orb.timer--;
+            this.marcelMist = this.marcelMist.filter(m => m.timer > 0);
         }
-        this.xpOrbs = this.xpOrbs.filter(orb => !orb.picked && orb.timer > 0);
 
-        // Update special projectiles
-        for (let projectile of this.bullets) {
-            if (!projectile.type) continue;
-            SB_projectiles[projectile.type].tick(projectile)
-        }
 
         this.draw();
     }
@@ -2666,6 +3194,34 @@ class SpaceArena {
     draw() {
         this.ctx.clearRect(0, 0, this.width, this.height);
 
+        // Draw Marcel Glowing Blue Mist Trail (#094599 Scheme)
+        if (this.marcelMist && this.marcelMist.length > 0) {
+            this.ctx.save();
+            if (!options.performanceMode) {
+                this.ctx.globalCompositeOperation = "lighter";
+            }
+            for (let mist of this.marcelMist) {
+                let wrapped = this.getVisibleWrappedCoords([mist.x, mist.y], [mist.radius * 2, mist.radius * 2]);
+                if (!wrapped) continue;
+
+                let drawX = wrapped[0] + (this.canvasWidth / 2) - this.ship.x;
+                let drawY = wrapped[1] + (this.canvasHeight / 2) - this.ship.y;
+                let alpha = Math.max(0, mist.timer / mist.maxTimer);
+
+                let g = this.ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, mist.radius);
+                g.addColorStop(0, `rgba(40, 120, 235, ${0.7 * alpha})`);      // Bright electric blue core
+                g.addColorStop(0.35, `rgba(9, 69, 153, ${0.6 * alpha})`);      // Core #094599 sapphire
+                g.addColorStop(0.7, `rgba(5, 40, 95, ${0.35 * alpha})`);       // Deep midnight blue
+                g.addColorStop(1, `rgba(9, 69, 153, 0)`);                      // Edge fadeout
+
+                this.ctx.fillStyle = g;
+                this.ctx.beginPath();
+                this.ctx.arc(drawX, drawY, mist.radius, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+            this.ctx.globalCompositeOperation = "source-over";
+            this.ctx.restore();
+        }
         // Draw ship
         this.ctx.save();
         this.ctx.translate(this.canvasWidth / 2, this.canvasHeight / 2);
@@ -3036,6 +3592,27 @@ class SpaceArena {
             this.ctx.fill();
 
         }
+        if (player.ir.shipType == 11) 
+        {
+            this.ctx.rotate(this.ship.angle);
+            const r = this.ship.radius || 18;
+            if (this.shipImgLoaded) {
+            this.ctx.drawImage(this.shipImg, -r, -r, r * 2, r * 2);
+            } else {
+            // Fallback polygon while image is loading
+            this.ctx.fillStyle = "#8a9ba8";
+            this.ctx.strokeStyle = "#ffffff";
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath();
+            this.ctx.moveTo(r, 0);
+            this.ctx.lineTo(-r * 0.8, r * 0.7);
+            this.ctx.lineTo(-r * 0.4, 0);
+            this.ctx.lineTo(-r * 0.8, -r * 0.7);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.stroke();
+        }
+}
         this.ctx.restore();
 
         // Draw warns
@@ -3056,21 +3633,22 @@ class SpaceArena {
                     this.ctx.beginPath();
                     this.ctx.arc(wrapped[0], wrapped[1], trail.radius, 0, 2 * Math.PI);
                     this.ctx.fillStyle = "#b44cff";
+                    if (player.tab == "anl") this.ctx.fillStyle = "#22c55e";
                     this.ctx.fill();
                     this.ctx.restore();
                 }
             }
         }
 
-        // Draw bullets
+// Draw bullets
         for (let bullet of this.bullets) {
             if (bullet.type && SB_projectiles[bullet.type]) {
                 SB_projectiles[bullet.type].draw(this.ctx, bullet);
                 continue;
             }
 
-            let radius = bullet.radius || 20
-            let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [radius * 2, radius * 2])
+            let radius = bullet.radius || 20;
+            let wrapped = this.getVisibleWrappedCoords([bullet.x, bullet.y], [radius * 2, radius * 2]);
             if (!wrapped) continue;
             // Skip ritual projectiles - RitualArena handles these with custom visuals
             if (bullet.ritualOrb || bullet.ritualBlade) continue;
@@ -3135,13 +3713,11 @@ class SpaceArena {
                 this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
-                // determine font size; giant bullets are significantly larger
                 let fontSize = 10;
                 if (bullet.giant) fontSize = Math.max(36, (bullet.radius || 18) * 1.6);
                 else if (bullet.fromEnemy && bullet.homing) fontSize = 20;
                 else if (bullet.fromEnemy) fontSize = 14;
                 else if (bullet.size) fontSize = Math.max(fontSize, bullet.size / 1.2);
-                // optional giant base glow
                 if (bullet.giant) {
                     this.ctx.save();
                     this.ctx.globalCompositeOperation = "lighter";
@@ -3154,14 +3730,126 @@ class SpaceArena {
                 this.ctx.font = `${fontSize}px monospace`;
                 this.ctx.textAlign = "center";
                 this.ctx.textBaseline = "middle";
-                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffff00";//ffec8b
+                this.ctx.fillStyle = bullet.fromEnemy ? "#ffeecb" : "#ffff00";
                 this.ctx.shadowColor = "#fff1";
                 if (!options.performanceMode) {this.ctx.shadowBlur = 6} else {this.ctx.shadowBlur = 0};
                 this.ctx.fillText("✦", 0, 0);
                 this.ctx.restore();
-            } else {
+            } else if (bullet.isKnife) {
                 this.ctx.save();
+                this.ctx.translate(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y);
+                
+                // Preserve aim angle when velocity drops to 0 during stasis
+                let ang = (bullet.vx !== 0 || bullet.vy !== 0) ? Math.atan2(bullet.vy, bullet.vx) : (bullet.ang ?? 0);
+                this.ctx.rotate(ang);
 
+                let s = (this.shipStats.bulletSize || 1);
+                let len = 35 * s;
+                let bw = 4.2 * s;
+
+                // 1. Ring Pommel (Chamfered Steel Loop)
+                let ringX = -15 * s;
+                let outerR = 5.6 * s;
+                let innerR = 2.8 * s;
+
+                let ringGrad = this.ctx.createLinearGradient(ringX - outerR, -outerR, ringX + outerR, outerR);
+                ringGrad.addColorStop(0, "#cbd5e1");
+                ringGrad.addColorStop(0.5, "#64748b");
+                ringGrad.addColorStop(1, "#1e293b");
+
+                this.ctx.fillStyle = ringGrad;
+                this.ctx.strokeStyle = "#0f172a";
+                this.ctx.lineWidth = 1 * s;
+                this.ctx.beginPath();
+                this.ctx.arc(ringX, 0, outerR, 0, Math.PI * 2);
+                this.ctx.arc(ringX, 0, innerR, 0, Math.PI * 2, true); // Inner hole cutout
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // 2. Handle / Grip (Smooth, Solid Gunmetal Shaft)
+                let handleStart = ringX + outerR * 0.85;
+                let handleEnd = 1.5 * s;
+                let hw = 1.6 * s;
+
+                let handleGrad = this.ctx.createLinearGradient(0, -hw, 0, hw);
+                handleGrad.addColorStop(0, "#334155");
+                handleGrad.addColorStop(0.5, "#475569");
+                handleGrad.addColorStop(1, "#1e293b");
+
+                this.ctx.fillStyle = handleGrad;
+                this.ctx.strokeStyle = "#0f172a";
+                this.ctx.lineWidth = 0.9 * s;
+                this.ctx.beginPath();
+                this.ctx.rect(handleStart, -hw, handleEnd - handleStart, hw * 2);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // 3. Crossguard (Tapered Steel Bar)
+                let gw = 1.2 * s;
+                let gh = 5.8 * s;
+                let gx = 1.5 * s;
+
+                let guardGrad = this.ctx.createLinearGradient(gx, -gh, gx + gw, gh);
+                guardGrad.addColorStop(0, "#94a3b8");
+                guardGrad.addColorStop(0.5, "#cbd5e1");
+                guardGrad.addColorStop(1, "#334155");
+
+                this.ctx.fillStyle = guardGrad;
+                this.ctx.strokeStyle = "#0f172a";
+                this.ctx.lineWidth = 1 * s;
+                this.ctx.beginPath();
+                this.ctx.roundRect(gx, -gh, gw, gh * 2, 0.4 * s);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // 4. Extended Stiletto Blade (Diamond Bevel Facets)
+                let bladeStartX = gx + gw;
+
+                // Upper Facet (Reflective Light)
+                let topBladeGrad = this.ctx.createLinearGradient(bladeStartX, -bw, len, 0);
+                topBladeGrad.addColorStop(0, "#f8fafc");
+                topBladeGrad.addColorStop(0.35, "#cbd5e1");
+                topBladeGrad.addColorStop(1, "#94a3b8");
+
+                this.ctx.fillStyle = topBladeGrad;
+                this.ctx.strokeStyle = "#0f172a";
+                this.ctx.lineWidth = 0.9 * s;
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(bladeStartX, -bw);
+                this.ctx.lineTo(bladeStartX, 0);
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Lower Facet (Shaded Steel)
+                let btmBladeGrad = this.ctx.createLinearGradient(bladeStartX, 0, len, bw);
+                btmBladeGrad.addColorStop(0, "#64748b");
+                btmBladeGrad.addColorStop(0.5, "#475569");
+                btmBladeGrad.addColorStop(1, "#1e293b");
+
+                this.ctx.fillStyle = btmBladeGrad;
+                this.ctx.beginPath();
+                this.ctx.moveTo(len, 0);
+                this.ctx.lineTo(bladeStartX, 0);
+                this.ctx.lineTo(bladeStartX, bw);
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Center Spine Ridge (Highlight Seam)
+                this.ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+                this.ctx.lineWidth = 0.8 * s;
+                this.ctx.beginPath();
+                this.ctx.moveTo(len * 0.97, 0);
+                this.ctx.lineTo(bladeStartX, 0);
+                this.ctx.stroke();
+
+                this.ctx.restore();
+            } else {
+                // Default fallback: Standard yellow circle for normal ships
+                this.ctx.save();
                 let r = bullet.radius || 3;
                 this.ctx.beginPath();
                 this.ctx.arc(wrapped[0] + (this.canvasWidth / 2) - this.ship.x, wrapped[1] + (this.canvasHeight / 2) - this.ship.y, r, 0, 2 * Math.PI);
@@ -3169,6 +3857,7 @@ class SpaceArena {
                 this.ctx.fill();
                 this.ctx.restore();
             }
+
             // Evolver primary shard rendering (crystal shard with facets)
             if (bullet.evolverShard) {
                 this.ctx.save();
@@ -3178,7 +3867,6 @@ class SpaceArena {
                 this.ctx.rotate(ang);
                 let len = Math.min(56, (bullet.radius || 26) * 2);
 
-                // crystal gradients matching ship
                 let mainG = this.ctx.createLinearGradient(len, 0, -len * 0.7, 0);
                 mainG.addColorStop(0, '#5fb8ff');
                 mainG.addColorStop(0.5, '#7c4dff');
@@ -3187,8 +3875,6 @@ class SpaceArena {
                 facetG.addColorStop(0, '#3f51b5');
                 facetG.addColorStop(1, '#00bcd4');
 
-
-                // main crystal body
                 this.ctx.beginPath();
                 this.ctx.moveTo(len, 0);
                 this.ctx.lineTo(len * 0.3, -len * 0.4);
@@ -3203,7 +3889,6 @@ class SpaceArena {
                 this.ctx.lineWidth = Math.max(2, len * 0.1);
                 this.ctx.stroke();
 
-                // facet lines
                 this.ctx.beginPath();
                 this.ctx.moveTo(len * 0.3, -len * 0.4);
                 this.ctx.lineTo(-len * 0.5, len * 0.2);
@@ -3216,7 +3901,6 @@ class SpaceArena {
                 this.ctx.lineTo(-len * 0.5, -len * 0.2);
                 this.ctx.stroke();
 
-                // side facets
                 this.ctx.beginPath();
                 this.ctx.moveTo(len * 0.3, -len * 0.4);
                 this.ctx.lineTo(0, -len * 0.6);
@@ -3233,7 +3917,6 @@ class SpaceArena {
                 this.ctx.fillStyle = facetG;
                 this.ctx.fill();
 
-                // highlights
                 this.ctx.beginPath();
                 this.ctx.moveTo(len * 0.5, -len * 0.1);
                 this.ctx.lineTo(len * 0.2, 0);
@@ -3244,21 +3927,6 @@ class SpaceArena {
 
                 this.ctx.restore();
             }
-            // Evolver mini shard rendering (small blue bullet)
-            if (bullet.evolverMini) {
-                this.ctx.save();
-                this.ctx.translate((this.canvasWidth / 2) - this.ship.x, (this.canvasHeight / 2) - this.ship.y);
-                this.ctx.beginPath();
-                let r = bullet.radius || 4;
-                this.ctx.arc(wrapped[0], wrapped[1], r, 0, 2 * Math.PI);
-                this.ctx.fillStyle = '#5fb8ff';
-                this.ctx.fill();
-                this.ctx.strokeStyle = '#2c3e50';
-                this.ctx.lineWidth = 1;
-                this.ctx.stroke();
-                this.ctx.restore();
-            }
-            // Evolver mini shard rendering (smaller triangle)
             if (bullet.evolverMini) {
                 this.ctx.save();
                 this.ctx.translate(wrapped[0], wrapped[1]);
@@ -3266,7 +3934,6 @@ class SpaceArena {
                 let ang = Math.atan2(bullet.vy, bullet.vx || 0);
                 this.ctx.rotate(ang);
                 let len = Math.min(8, bullet.radius || 6);
-                // mini shards use the same family as the ship but slightly desaturated
                 let g2 = this.ctx.createLinearGradient(len, 0, -len * 0.6, 0);
                 g2.addColorStop(0, 'rgba(241,182,255,0.95)');
                 g2.addColorStop(0.5, 'rgba(154,167,255,0.95)');
@@ -3500,7 +4167,7 @@ class SpaceArena {
             this.ctx.globalAlpha = 1
             this.ctx.lineWidth = 3;
 
-            let isCondensedControls = player.ir.mobileControls == 1 || player.ir.shipType == 5 || player.ir.shipType == 8
+            let isCondensedControls = player.ir.mobileControls == 1 || player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11
 
             // LEFT STICK
 
@@ -3580,7 +4247,7 @@ class SpaceArena {
             // RIGHT STICK
 
             if (isCondensedControls) { // CONDENSED
-                if (player.ir.shipType == 5 || player.ir.shipType == 8) {
+                if (player.ir.shipType == 5 || player.ir.shipType == 8 || player.ir.shipType == 11) {
                     // OUTER CIRCLE
                     this.ctx.fillStyle = "#ffff003f";
                     this.ctx.beginPath();
@@ -3714,7 +4381,81 @@ class SpaceArena {
                 }
 
             }
+            // TIME STOP BUTTON
+                let tsX = this.canvasWidth - (100 * this.mobileControlsScale);
+                let tsY = this.canvasHeight - (340 * this.mobileControlsScale); // Higher than dash
+                let tsR = 35 * this.mobileControlsScale;
 
+                let tsCost = player.ir.timeStopCost;
+                let tsReady = player.ir.soulEnergy.gte(tsCost) && (this.timeStopTimer || 0) <= 0;
+
+                this.ctx.save();
+                this.ctx.fillStyle = tsReady ? "#c084fc3f" : "#64748b20";
+                this.ctx.strokeStyle = tsReady ? "#c084fc88" : "#47556944";
+                this.ctx.lineWidth = 2.5;
+                this.ctx.beginPath();
+                this.ctx.arc(tsX, tsY, tsR, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                this.ctx.fillStyle = tsReady ? "#0000004f" : "#0000002f";
+                this.ctx.beginPath();
+                this.ctx.arc(tsX, tsY, tsR * 0.82, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                this.ctx.fillStyle = tsReady ? "#c084fcff" : "#94a3b866";
+                this.ctx.font = "bold " + Math.round(14 * this.mobileControlsScale) + "px monospace";
+                this.ctx.textAlign = "center";
+                this.ctx.textBaseline = "middle";
+                this.ctx.fillText("THE WORLD", tsX, tsY);
+                this.ctx.restore();
+
+        }
+
+        // Draw Marcel Time Stop Duration Bar
+        if (player.ir.shipType == 11 && this.timeStopTimer > 0) {
+            let barW = 68;
+            let barH = 6;
+            let barX = (this.canvasWidth / 2) - (barW / 2);
+            let barY = (this.canvasHeight / 2) - (this.ship.radius || 32) - 22;
+            let maxTime = this.timeStopMax || 6;
+            let pct = Math.max(0, Math.min(1, this.timeStopTimer / maxTime));
+
+            this.ctx.save();
+
+            // Outer dark background capsule
+            this.ctx.fillStyle = "rgba(10, 15, 30, 0.85)";
+            this.ctx.strokeStyle = "#8486fc88";
+            this.ctx.lineWidth = 1.5;
+            this.ctx.beginPath();
+            this.ctx.roundRect(barX - 1, barY - 1, barW + 2, barH + 2, 4);
+            this.ctx.fill();
+            this.ctx.stroke();
+
+            // Glowing fill bar
+            if (pct > 0) {
+                let fillGrad = this.ctx.createLinearGradient(barX, 0, barX + barW, 0);
+                fillGrad.addColorStop(0, "#8486fc");
+                fillGrad.addColorStop(0.5, "#a855f7");
+                fillGrad.addColorStop(1, "#c084fc");
+
+                this.ctx.shadowColor = "#8486fc";
+                this.ctx.shadowBlur = 8;
+                this.ctx.fillStyle = fillGrad;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, Math.max(2, barW * pct), barH, 3);
+                this.ctx.fill();
+            }
+
+            // Remaining seconds text
+            this.ctx.shadowBlur = 0;
+            this.ctx.font = "bold 11px monospace";
+            this.ctx.textAlign = "center";
+            this.ctx.textBaseline = "bottom";
+            this.ctx.fillStyle = "#e0e7ff";
+            this.ctx.fillText(this.timeStopTimer.toFixed(1) + "s", this.canvasWidth / 2, barY - 3);
+
+            this.ctx.restore();
         }
 
         // Draw upgrade choice overlay (unchanged)
@@ -3918,6 +4659,7 @@ class SpaceArena {
 
     resumeEvents() {
         this.running = true;
+        this.lastUpdate = Date.now();
         if (!this.loop) {
             this.loop = setInterval(() => this.update(), 1000 / 60);
         }
@@ -3934,6 +4676,7 @@ class SpaceArena {
         if (player.tab == "ir") player.subtabs["ir"]['stuff'] = "Lose";
         if (player.tab == "bl") player.subtabs["bl"]['stuff'] = "Lose";
         if (player.tab == "cbs") player.subtabs["cbs"]['stuff'] = "Lose";
+        if (player.tab == "anl") player.subtabs["anl"]['stuff'] = "Lose";
         localStorage.setItem('arenaActive', 'false');
     }
 }

@@ -9,6 +9,8 @@ function makeParticles(data, amount=1, type = "normal", extra = {}) {
         for (thing in data) {
             switch(thing) {
                 case 'onClick': // Functions that should be copied over
+                case 'onDespawn':
+                case 'onHover':
                 case 'onMouseEnter':
                 case 'onMouseLeave':
                 case 'update':
@@ -52,6 +54,7 @@ function updateParticles(diff) {
 		particle.time -= diff;
         particle.fadeInTimer -= diff;
 		if (particle["time"] < 0) {
+            if (particle.onDespawn) run(particle.onDespawn, particle)
 			Vue.delete(particles, p); 
             
 		}
@@ -152,7 +155,7 @@ function constructParticleStyle(particle){
         height: particle.height + 'px',
         transform: "rotate(" + particle.angle + "deg)",
         opacity: getOpacity(particle),
-        "pointer-events": (particle.onClick || particle.onHover) ? 'auto' : 'none',
+        "pointer-events": (particle.onClick || particle.onHover || particle.onMouseEnter || particle.onMouseLeave) ? 'auto' : 'none',
     }
     if (particle.color) {
         style["background-color"] = particle.color

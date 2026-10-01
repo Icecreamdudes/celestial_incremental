@@ -69,6 +69,7 @@ addLayer("bb", {
         if (hasUpgrade("al", 119)) player.bb.beeBreadGain = player.bb.beeBreadGain.mul(upgradeEffect("al", 119))
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.bee.preAlephMult)
         player.bb.beeBreadGain = player.bb.beeBreadGain.mul(buyableEffect("tw", 43))
+        player.bb.beeBreadGain = player.bb.beeBreadGain.mul(player.bpl.roles.mutated.effect)
 
         // Per Second Gain
         if (hasUpgrade("al", 130)) player.bb.beeBreadPerSecond = player.bb.beeBreadPerSecond.add(player.bb.beeBreadGain.div(100).mul(delta))

@@ -87,6 +87,8 @@ addLayer("cbs", {
             player.subtabs["cbs"]['stuff'] = "Refresh Page :(";
         }
 
+        player.cbs.ascensionShards = player.cbs.ascensionShards.floor()
+
         if (cutsceneActive && player.tab == "cbs")
         {
             player.ir.shipHealth = player.ir.shipHealthMax
@@ -96,6 +98,7 @@ addLayer("cbs", {
         player.cbs.ritualCosts[1] = player.cbs.ascensionShards.min(100).pow(0.5).pow_base(2.5).mul(15).floor()
 
         player.cbs.ritualSpiritCooldownMax = new Decimal(21600)
+        if (hasAchievement("achievements", 1013)) player.cbs.ritualSpiritCooldownMax = player.cbs.ritualSpiritCooldownMax.div(1.5)
         player.cbs.ritualSpiritCooldown = player.cbs.ritualSpiritCooldown.sub(delta)
 
         //pylon
@@ -620,6 +623,89 @@ addLayer("cbs", {
                 return look
             },
         },
+
+        //ghost upgrades for bug fixing
+        101: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing IX",
+            unlocked() { return player.cbs.shrineReactivated },
+            description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e42),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#c6f7ff"
+                return look
+            },
+            effect() {
+                return new Decimal(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        }, 
+        102: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing IX",
+            unlocked() { return player.cbs.shrineReactivated },
+            description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e42),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#c6f7ff"
+                return look
+            },
+            effect() {
+                return new Decimal(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        }, 
+        103: {
+            fullDisplay() {
+                return "<div style='height:25px;display:flex;align-items:center'><div>" +
+                "<h3>" + this.title + "</h3>" + // TOP
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:65px;display:flex;align-items:center'><div>" + 
+                this.description() + // MIDDLE
+                "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='height:25px;display:flex;align-items:center'><div>" + 
+                "<span style='color:black'>" + formatWhole(this.cost) + " " + this.currencyDisplayName + "</span>" // BOTTOM
+                "</div></div>"
+            },
+            title: "Blessing IX",
+            unlocked() { return player.cbs.shrineReactivated },
+            description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
+            cost: new Decimal(1e42),
+            currencyLocation() { return player.za },
+            currencyDisplayName: "Chance Points",
+            currencyInternalName: "chancePoints",
+            style() {
+                let look = {borderRadius: "10px", color: "black", borderWidth: "3px", borderColor: "#064666", outline: "3px solid #c6f7ff", width: "200px", maxHeight: "125px", minHeight: "125px", fontSize: "12px", margin: "6px", padding: "0"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#bf8f8f" : look.backgroundColor = "#c6f7ff"
+                return look
+            },
+            effect() {
+                return new Decimal(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        }, 
     },
     buyables: {
         11: {
@@ -1835,6 +1921,7 @@ addLayer("cbs", {
                             ["style-column", container, {marginLeft: "-3px", border: "3px solid " + player.ir.primaryColor, background: player.ir.menu != 2 ? "transparent" : "black"}]
                         ], {display: player.ir.menu == 0 ? "none !important" : "",  height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
                         ["style-column", [], {background: player.ir.primaryColor, width: (arena && arena._fullscreen) ? "calc(100vw)" : "806px", height: "3px"}],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "soulBar"],]]]]],
                         ["layer-proxy", ["ir", [["row", [["ex-bar", "bossHealthBar"],]]]]],
                         ["layer-proxy", ["ir", [["style-column", [
                             ["blank", "9px", {width: "6px"}],

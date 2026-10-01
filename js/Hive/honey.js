@@ -90,6 +90,7 @@ addLayer("ho", {
         if (hasUpgrade("al", 202)) player.ho.cellGain = player.ho.cellGain.mul(2)
         player.ho.cellGain = player.ho.cellGain.mul(player.bee.preAlephMult)
         player.ho.cellGain = player.ho.cellGain.mul(buyableEffect("tw", 44))
+        player.ho.cellGain = player.ho.cellGain.mul(player.ne.zeta.effect)
 
         //FLOOR VALUE
         player.ho.cellGain = player.ho.cellGain.floor()

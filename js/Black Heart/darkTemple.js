@@ -338,6 +338,7 @@ addLayer("darkTemple", {
         player.darkTemple.bestowalCostDiv = new Decimal(1)
         player.darkTemple.bestowalCostDiv = player.darkTemple.bestowalCostDiv.mul(buyableEffect("depth1", 104))
         player.darkTemple.bestowalCostDiv = player.darkTemple.bestowalCostDiv.mul(buyableEffect("depth2", 104))
+        if (hasUpgrade("anl", 14)) player.darkTemple.bestowalCostDiv = player.darkTemple.bestowalCostDiv.mul(1.4)
 
         player.darkTemple.byproductMult = new Decimal(1)
         if (hasUpgrade("darkTemple", 8)) player.darkTemple.byproductMult = player.darkTemple.byproductMult.mul(upgradeEffect("darkTemple", 8))

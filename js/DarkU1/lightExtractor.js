@@ -28,6 +28,12 @@
 
         timeSinceReset: new Decimal(0),
         timeSinceEnter: new Decimal(0),
+
+        evoInput: new Decimal(0),
+        paraInput: new Decimal(0),
+
+        potentialBoost: new Decimal(0),
+        evolutionBoost: new Decimal(0),
     }},
     automate() {
         if (hasUpgrade("sma", 201)) {
@@ -77,7 +83,12 @@
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("st", 208)[0])
         player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(buyableEffect("funify", 12))
         if (getLevelableTier("pu", 100, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(levelableEffect("pu", 100)[0])
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.tr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.sr.spaceDecayEffect)
+        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(upgradeEffect("mr", 14))
+
         if (getLevelableTier("pu", 401, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(buyableEffect("bl", 21))
+        if (getLevelableTier("pu", 403, true)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.pow(player.dec.electronsEffect)
         if (hasMilestone("prj", 107)) player.le.starmetalAlloyReq = player.le.starmetalAlloyReq.div(player.prj.milestone107Effect)
 
 
@@ -108,8 +119,13 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("al", 105))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("car", 410)[0])
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("funify", 13))
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ani.stones.cosmic.effect)
+        if (hasAchievement("achievements", 1001)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.5)
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("anl", 12))
+    
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.prj.modules[1].completionEffect)
         if (hasMilestone("prj", 104)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.sma.starmetalExitTime.min(21600).div(600).add(1).pow(0.5));
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.le.evolutionBoost)
 
         player.le.starmetalAlloyValue = new Decimal(1)
         player.le.starmetalAlloyValue = player.le.starmetalAlloyValue.mul(buyableEffect("ep1", 15))
@@ -121,6 +137,11 @@
         player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.db.milestone1Effect)
         if (hasUpgrade("sma", 210)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("sma", 210))
         if (getLevelableTier("pu", 200, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(levelableEffect("pu", 200)[1])
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.tr.radiation.effect)
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.sr.spaceDecayEffect)
+        if (getLevelableTier("pu", 403, true) && hasUpgrade("mr", 14)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(upgradeEffect("mr", 14))
+            
+        if (getLevelableTier("pu", 403, true)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.pow(player.dec.electronsEffect)
         if (hasMilestone("prj", 107)) player.le.eclipseShardsReq = player.le.eclipseShardsReq.div(player.prj.milestone107Effect)
 
         player.le.eclipseShardsToGetToGet = player.le.resetAmount.add(1)
@@ -134,7 +155,10 @@
         if (hasMilestone("db", 102)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
         if (hasMilestone("db", 108)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(1.2)
         player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(levelableEffect("st", 307)[0])
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.ani.stones.temporal.effect)
         if (hasMilestone("prj", 104)) player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.sma.eclipseExitTime.min(86400).div(1800).add(1).pow(0.4));
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(buyableEffect("sp", 43))
+        player.le.eclipseShardsToGetTrue = player.le.eclipseShardsToGetTrue.mul(player.le.evolutionBoost)
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11))
@@ -155,7 +179,7 @@
             player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
         }
         if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.legPetTimers[0].active) {
-            pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
             player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
             player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
             if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
@@ -186,9 +210,38 @@
             layers.pu.generateSelection();
         }
         player.le.universeResetSafety = false
+
+
+        //evolved boosts
+        player.le.potentialBoost = new Decimal(1)
+        if (player.le.evoInput.gt(0)) player.le.potentialBoost = player.le.potentialBoost.mul(player.le.evoInput.add(1).log(10).add(1))
+        if (player.le.paraInput.gt(0)) player.le.potentialBoost = player.le.potentialBoost.mul(player.le.paraInput.add(1).log(3).add(1))
+
+        if (player.pet.legPetTimers[0].active) {
+            player.le.potentialBoost = player.le.potentialBoost.pow(0.5) //eclipse
+        }
     },
     bars: {},
     clickables: {
+        1: {
+            title() {
+                return player.pet.legPetTimers[0].active ? "Multiply your Eclipse Shard gain by x" + formatSimple(player.le.potentialBoost) + "." : "Multiply your SMA gain by x" + formatSimple(player.le.potentialBoost) + "."
+            },
+            canClick() { return (player.le.evoInput.gt(0) || player.le.paraInput.gt(0)) && player.cb.evolutionShards.gte(player.le.evoInput) && player.cb.paragonShards.gte(player.le.paraInput) && player.le.evolutionBoost.lte(1)},
+            unlocked: true,
+            tooltip() {
+                if (player.le.evolutionBoost.gt(1)) return "Next gain already multiplied by x" + formatSimple(player.le.evolutionBoost) + "."
+                if (player.cb.evolutionShards.lt(player.le.evoInput) || player.cb.paragonShards.lt(player.le.paraInput)) return "Not enough shards."
+                if (player.le.evoInput.lte(0) && player.le.paraInput.lte(0)) return "No shards inputted."
+                return ""
+            },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.le.evoInput)
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.le.paraInput)
+                player.le.evolutionBoost = player.le.potentialBoost
+            },
+            style: {width: '360px', minHeight: '100px', lineHeight: "1", borderRadius: "30px", fontSize: "16px", color: "white"},
+        },
         11: {
             title() { return "<h2>Reset everything in this universe for stored starmetal alloy.<br>Req: " + format(player.le.starmetalAlloyReq) + " Points" },
             canClick() { return player.du.points.gte(player.le.starmetalAlloyReq) && !player.le.universeResetSafety },
@@ -217,10 +270,12 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
                 player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
 
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
+
+                player.ani.stones.cosmic.amount = player.ani.stones.cosmic.amount.add(player.ani.stones.cosmic.toGet)
+
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -230,6 +285,7 @@
                 }
                 player.le.starmetalAlloyToGet = new Decimal(0)
                 player.le.resetAmount = new Decimal(0)
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
 
                 if (!hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(0)
                 if (hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(1)
@@ -243,6 +299,7 @@
                 layers.pu.generateSelection();
 
                 player.sma.starmetalExitTime = new Decimal(0)
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -278,13 +335,11 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
-                pauseUniverseAll(["D1", "U3", "A2", "DS"], "unpause", true)
-                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
-                if (!hasAchievement("achievements", 1204) && player.dt.storedToGet.gte(1)) completeAchievement("achievements", 1204);
-                if (!hasAchievement("achievements", 1206) && player.dt.storedToGet.gte(7)) completeAchievement("achievements", 1206);
-                if (!hasAchievement("achievements", 1215) && player.dt.storedToGet.gte(7200)) completeAchievement("achievements", 1215);
-
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
+                player.prj.storedTimeCapsules = player.prj.storedTimeCapsules.add(player.dt.storedToGet)
+
+                player.ani.stones.temporal.amount = player.ani.stones.temporal.amount.add(player.ani.stones.temporal.toGet)
+
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
                     if (getLevelableTier("pu", prop, true)) {
@@ -312,6 +367,8 @@
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
 
                 player.sma.eclipseExitTime = new Decimal(0)
+
+                pauseUniverseAll(["D1", "U3", "A2", "A1", "UB", "BH", "DS"], "unpause", true)
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -723,6 +780,58 @@
         player.funify.buyables[16] = new Decimal(0)
 
         player.du.noPunchcards = true
+
+        if (player.pu.selectedPunchcards[3] == 403) {
+            player.pu.selectedPunchcards[3] = 0
+            player.pu.legendarySelectionActive = false
+        }
+
+        //decay
+        player.dec.decay = new Decimal(0)
+        player.dec.stability = new Decimal(0)
+        player.dec.carbon14 = new Decimal(0)
+        player.dec.nitrogen14 = new Decimal(0)
+        player.dec.magnesium28 = new Decimal(0)
+        player.dec.aluminum28 = new Decimal(0)
+        player.dec.silicon28 = new Decimal(0)
+
+        player.dec.dysprosium154 = new Decimal(0)
+        player.dec.gadolinium150 = new Decimal(0)
+        player.dec.samarium146 = new Decimal(0)
+        player.dec.neodymium142 = new Decimal(0)
+
+        player.subtabs["dec"]["stuff"] = "Main"
+
+        player.dec.buyables[31] = new Decimal(0)
+        player.dec.buyables[32] = new Decimal(0)
+        player.dec.buyables[33] = new Decimal(0)
+        player.dec.buyables[34] = new Decimal(0)
+        player.dec.buyables[35] = new Decimal(0)
+        player.dec.buyables[36] = new Decimal(0)
+
+        player.dec.electrons = new Decimal(0)
+        player.dec.alphaParticles = new Decimal(0)
+
+        player.dec.buyables[41] = new Decimal(0)
+        player.dec.buyables[42] = new Decimal(0)
+        player.dec.buyables[43] = new Decimal(0)
+        player.dec.buyables[44] = new Decimal(0)
+        player.dec.buyables[45] = new Decimal(0)
+        player.dec.buyables[46] = new Decimal(0)
+        player.dec.buyables[47] = new Decimal(0)
+        player.dec.buyables[48] = new Decimal(0)
+        player.dec.buyables[49] = new Decimal(0)
+        player.dec.buyables[51] = new Decimal(0)
+        player.dec.buyables[52] = new Decimal(0)
+        player.dec.buyables[53] = new Decimal(0)
+        player.dec.buyables[54] = new Decimal(0)
+        player.dec.buyables[55] = new Decimal(0)
+        player.dec.buyables[56] = new Decimal(0)
+        player.dec.buyables[57] = new Decimal(0)
+        player.dec.buyables[58] = new Decimal(0)
+        player.dec.buyables[59] = new Decimal(0)
+
+        player.le.evolutionBoost = new Decimal(1)
     },
     upgrades: {
         11: {
@@ -1193,6 +1302,37 @@
                 buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return hasUpgrade("sma", 14) },
                 embedLayer: 'pu',
+            },
+            "Evolved Boosts": {
+                buttonStyle() { return { border: "2px solid #384166", background: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "10px" } },
+                unlocked() { return getLevelableTier("pu", 310, true) },
+                content: [
+                    ["blank", "25px"],
+                            ["left-row", [
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+            ], {width: "148px", height: "50px", borderRight: "2px solid #7f7f7f"}],
+            ["tooltip-row", [
+                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+            ], {width: "150px", height: "50px"}],
+        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid #7f7f7f", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["top-column", [
+                ["raw-html", "Evo-Shards", {color: "white", fontSize: "40px", fontFamily: "monospace"}],
+                ["blank", "5px"],
+                ["text-input", "evoInput", {width: "320px", height: "80px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "40px", border: "0px", padding: "0px 10px"}],
+                ["blank", "5px"],
+                ["raw-html", "Para-Shards", {color: "white", fontSize: "40px", fontFamily: "monospace"}],
+                ["blank", "5px"],
+                ["text-input", "paraInput", {width: "320px", height: "80px", backgroundColor: "rgba(0,0,0,0.4)", color: "white", fontSize: "40px", border: "0px", padding: "0px 10px"}],
+                ["blank", "8px"],
+                ["clickable", 1],
+            ], () => {return {width: "400px", height: "400px", padding: "10px", background: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "10px", marginLeft: "20px"}}],
+                ]
             },
         },
     },

@@ -1041,6 +1041,16 @@ addLayer("ev8", {
             },
         },
 
+        ascTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(86400),
+                base: new Decimal(1),
+                asc: new Decimal(0),
+                average: new Decimal(0),
+            },
+        },
+
         evoButtonTimersMax: [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),],
         evoButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         evoButtonBase: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),],
@@ -1068,6 +1078,8 @@ addLayer("ev8", {
 
         ESCMult = ESCMult.mul(levelableEffect("pet", 1102)[1])
         ESCMult = ESCMult.mul(levelableEffect("ir", 9)[0])
+        if (hasUpgrade("cbs", 102)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 102))
+        if (hasAchievement("achievements", 1012)) ESCMult = ESCMult.mul(1.2)
         if (hasUpgrade("cbs", 19)) ESCMult = ESCMult.mul(upgradeEffect("cbs", 19))
 
         ESCMult = ESCMult.sub(1).mul(buyableEffect("sme", 117).sub(1)).add(1)
@@ -1105,6 +1117,13 @@ addLayer("ev8", {
 
             player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
         }
+
+        player.ev8.ascTimers[0].base = new Decimal(1)
+        player.ev8.ascTimers[0].max = new Decimal(86400)
+        for (let thing in player.ev8.ascTimers) {
+            player.ev8.ascTimers[thing].current = player.ev8.ascTimers[thing].current.sub(onepersec.mul(delta))
+        }
+
     },
     clickables: {
         //evo
@@ -1273,6 +1292,33 @@ addLayer("ev8", {
             style() {
                 let look = {width: "140px", minHeight: "40px", borderRadius: "10px", margin: "5px", border: "2px solid #0000007f"}
                 this.canClick() ? look.backgroundColor = "#cceaf9" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+
+        //THE BUTTON
+        201: {
+            title() { return player.ev8.ascTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.ascTimers[0].current) + "." : "<h3>+" + formatWhole(player.ev8.ascTimers[0].base) + " Shards of Ascension."},
+            canClick() { return player.ev8.ascTimers[0].current.lt(0) },
+            unlocked: true,
+            onClick() {
+                player.cbs.ascensionShards = player.cbs.ascensionShards.add(player.ev8.ascTimers[0].base)
+                player.ev8.ascTimers[0].current = player.ev8.ascTimers[0].max
+                doPopup("none", "+" + formatWhole(player.ev8.ascTimers[0].base) + " Shards of Ascension!", "Shard Obtained!", 5, "#c6f7ff", "resources/ascensionShard.png")
+                playAscensionEffect(9000, {
+                    texts: [
+                    "ASCENDANT RELIC RECOVERED",
+                    "RITUAL UNECESSARY",
+                    "FRAMEWORK OF THE TRUE ASCENDANT",
+                    "SHARD OF ASCENSION OBTAINED"
+                ]
+                });
+            },
+            style() {
+                let look = {width: "250px", minHeight: "250px", maxHeight: "250px", color: "white", border: "3px solid #000000", borderRadius: "15px", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, 0px 0px 3px black"}
+                look.background = tmp[this.layer].clickables[this.id].canClick ? "linear-gradient(180deg, #064666 0%, #032333 50%, #064666 100%)" : "#361e1e"
+                look.backgroundImage = "url(resources/ascensionShardDark.png)"
+                look.backgroundSize = "244px 244px"
                 return look
             },
         },
@@ -1447,15 +1493,60 @@ addLayer("ev8", {
             currencyInternalName: "paragonShards",
             style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
-      /*  23: {
-            title: "Shard Research XII",
-            unlocked() { return player.au2.au2Unlocked && hasUpgrade("ev8", 19) && hasUpgrade("ev8", 21) && hasUpgrade("ev8", 22)},
-            description: "Unlocks MINING (In AU2).",
-            cost: new Decimal(20),
+        28: {
+            title: "Shard Research XVII",
+            unlocked() { return player.anl.clearedRooms.roomAlpha },
+            description: "Boosts Kres, Nav, and Sel point gain based on evolution shards.",
+            cost: new Decimal(500000),
             currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+            effect() {
+                return player.cb.evolutionShards.pow(0.3).mul(0.01).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        29: {
+            title: "Shard Research XVIII",
+            unlocked() { return player.anl.clearedRooms.roomAlpha },
+            description: "Unlocks eclipse points.",
+            cost: new Decimal(2500000),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
+        },
+        31: {
+            title: "Shard Research XIX",
+            unlocked() {return player.anl.clearedRooms.roomAlpha},
+            description: "Boost orb gain by x1.5.",
+            cost: new Decimal(30000),
+            currencyLocation() {return player.cb},
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
-        }, */
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+        },
+        32: {
+            title: "Shard Research XIX",
+            unlocked() {return player.anl.clearedRooms.roomAlpha},
+            description: "Unlocks THE BUTTON.",
+            cost: new Decimal(100000),
+            currencyLocation() {return player.cb},
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
+        },
+        33: {
+            title: "Shard Research XX",
+            unlocked() {return player.anl.clearedRooms.roomAlpha},
+            description: "Unlocks RECLOCK.",
+            cost: new Decimal(10),
+            currencyLocation() {return player.cbs},
+            currencyDisplayName: "Shards of Ascension",
+            currencyInternalName: "ascensionShards",
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid #c6f7ff", borderRadius: "15px", margin: "2px"},
+        },
     },
     microtabs: {
         stuff: {
@@ -1483,6 +1574,22 @@ addLayer("ev8", {
                     ["clickable", 199],
                 ]
             },
+            "THE BUTTON": {
+                buttonStyle() { return {color: "black", borderColor: "black", backgroundColor: "#c6f7ff", borderRadius: "5px"} },
+                unlocked() { return hasUpgrade("ev8", 32) },
+                content: [
+                    ["blank", "10px"],
+                    ["left-row", [
+                        ["tooltip-row", [
+                            ["raw-html", "<img src='resources/ascensionShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                            ["raw-html", () => { return formatShortWhole(player.cbs.ascensionShards)}, {width: "245px", height: "50px", color: "#c6f7ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px", fontSize: "24px"}],
+                        ], {width: "300px", height: "50px"}],
+                    ], {width: "300px", height: "50px", backgroundColor: "black", border: "3px solid #c6f7ff", borderRadius: "10px", userSelect: "none"}],
+                    ["blank", "25px"],
+                    ["clickable", 201],
+
+                ]
+            },
             "Research": {
                 buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", background: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px"} },
                 unlocked() { return true },
@@ -1491,7 +1598,10 @@ addLayer("ev8", {
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
                         ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
-                        ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27]], {maxWidth: "600px"}],
+                        ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27],
+                        ["upgrade", 28], ["upgrade", 29], ["upgrade", 31], ["upgrade", 32],
+                        ["upgrade", 33],
+                    ], {maxWidth: "600px"}],
                 ]
             },
         },
@@ -1516,3 +1626,350 @@ addLayer("ev8", {
     ],
     layerShown() { return player.ev.evolutionsUnlocked[8]  }
 })
+
+/*
+playAscensionEffect(9000, {
+  texts: [
+    "ASCENDANT RELIC RECOVERED",
+    "RITUAL UNECESSARY",
+    "FRAMEWORK OF THE TRUE ASCENDANT",
+    "SHARD OF ASCENSION OBTAINED"
+  ]
+});
+*/
+function playAscensionEffect(duration = 9000, options = {}) {
+  return new Promise((resolve) => {
+    // Text phrases to cycle through
+    const messages = (options.texts && options.texts.length > 0)
+      ? options.texts
+      : [
+          "ASCENSION INITIATED",
+          "CELESTIAL RESONANCE",
+          "ASTRAL DUALITY",
+          "SHARD OF ETERNITY"
+        ];
+
+    // Setup fullscreen canvas
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.style.position = "fixed";
+    canvas.style.top = "0";
+    canvas.style.left = "0";
+    canvas.style.width = "100vw";
+    canvas.style.height = "100vh";
+    canvas.style.pointerEvents = "none";
+    canvas.style.zIndex = options.zIndex !== undefined ? options.zIndex : "-1";
+    document.body.appendChild(canvas);
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const onResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", onResize);
+
+    // Initialize star particles
+    const particleCount = 80;
+    const stars = Array.from({ length: particleCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 2.2 + 0.6,
+      speedY: -(Math.random() * 0.4 + 0.15),
+      speedX: (Math.random() - 0.5) * 0.2,
+      phase: Math.random() * Math.PI * 2,
+      crossFlare: Math.random() > 0.8,
+    }));
+
+    // Shard geometry
+    const shardVertices = {
+      top: [0, -1.2],
+      leftUpper: [-0.62, -0.65],
+      leftMid: [-0.75, 0.25],
+      leftBottom: [-0.4, 0.75],
+      bottom: [-0.25, 1.2],
+      bottomFacet: [0.05, 0.65],
+      rightUpper: [0.55, -0.6],
+      rightMid: [0.68, 0.42],
+      innerCenter: [-0.08, -0.15],
+      innerMid: [-0.18, 0.45],
+    };
+
+    const shardFaces = [
+      ["top", "rightUpper", "innerCenter"],
+      ["top", "innerCenter", "leftUpper"],
+      ["leftUpper", "innerCenter", "leftMid"],
+      ["innerCenter", "rightUpper", "rightMid"],
+      ["innerCenter", "rightMid", "bottomFacet"],
+      ["innerCenter", "bottomFacet", "innerMid"],
+      ["leftMid", "innerCenter", "innerMid"],
+      ["leftMid", "innerMid", "leftBottom"],
+      ["leftBottom", "innerMid", "bottom"],
+      ["innerMid", "bottomFacet", "bottom"],
+    ];
+
+    const faceShades = [
+      "rgba(35, 18, 85, 0.85)",
+      "rgba(45, 20, 105, 0.82)",
+      "rgba(145, 50, 180, 0.7)",
+      "rgba(25, 60, 120, 0.8)",
+      "rgba(32, 125, 160, 0.75)",
+      "rgba(75, 50, 140, 0.78)",
+      "rgba(195, 80, 200, 0.65)",
+      "rgba(220, 110, 210, 0.55)",
+      "rgba(60, 25, 110, 0.85)",
+      "rgba(28, 90, 130, 0.82)",
+    ];
+
+    let startTime = null;
+    let animId = null;
+
+    function drawSun(x, y, radius, rayCount, rayLength, angle) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = "rgba(70, 95, 165, 0.22)";
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let i = 0; i < rayCount; i++) {
+        const a = (i * 2 * Math.PI) / rayCount;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a - 0.16) * radius, Math.sin(a - 0.16) * radius);
+        ctx.lineTo(
+          Math.cos(a) * (radius + rayLength),
+          Math.sin(a) * (radius + rayLength)
+        );
+        ctx.lineTo(Math.cos(a + 0.16) * radius, Math.sin(a + 0.16) * radius);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawMoon(x, y, radius, rotation) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.fillStyle = "rgba(50, 70, 140, 0.28)";
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0.25 * Math.PI, 1.75 * Math.PI, false);
+      ctx.arc(radius * 0.45, 0, radius * 0.82, 1.65 * Math.PI, 0.35 * Math.PI, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function render(now) {
+      if (startTime === null) startTime = now;
+      const elapsed = Math.max(0, now - startTime);
+      const progress = Math.min(elapsed / duration, 1.0);
+
+      // Global Master Fade
+      const globalFade = Math.min(1000, duration * 0.15);
+      let masterAlpha = 1.0;
+      if (elapsed < globalFade) {
+        masterAlpha = elapsed / globalFade;
+      } else if (duration - elapsed < globalFade) {
+        masterAlpha = Math.max(0, (duration - elapsed) / globalFade);
+      }
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.save();
+      ctx.globalAlpha = masterAlpha;
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const t = elapsed * 0.001;
+
+      // 1. Nebula Background
+      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+      bgGrad.addColorStop(0.0, "#5b86e5");
+      bgGrad.addColorStop(0.35, "#36d1dc");
+      bgGrad.addColorStop(0.65, "#432b7b");
+      bgGrad.addColorStop(1.0, "#2a154c");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      const nebula = ctx.createRadialGradient(
+        cx + Math.cos(t * 0.5) * 120,
+        cy + Math.sin(t * 0.4) * 80,
+        40,
+        cx,
+        cy,
+        Math.max(width, height) * 0.6
+      );
+      nebula.addColorStop(0, "rgba(225, 110, 230, 0.45)");
+      nebula.addColorStop(0.5, "rgba(90, 45, 160, 0.25)");
+      nebula.addColorStop(1, "transparent");
+      ctx.fillStyle = nebula;
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Celestial Glyphs
+      const glyphScale = Math.min(width, height) * 0.28;
+      drawSun(cx + glyphScale * 0.5, cy + glyphScale * 0.2, glyphScale * 0.7, 8, glyphScale * 0.28, t * 0.08);
+      drawMoon(cx - glyphScale * 0.55, cy - glyphScale * 0.25, glyphScale * 0.75, -0.45 + Math.sin(t * 0.3) * 0.04);
+
+      // 3. Stars
+      stars.forEach((star) => {
+        star.y += star.speedY;
+        star.x += star.speedX;
+        if (star.y < 0) star.y = height;
+        if (star.x < 0) star.x = width;
+        if (star.x > width) star.x = 0;
+
+        const twinkle = 0.4 + 0.6 * Math.sin(t * 4 + star.phase);
+        ctx.fillStyle = `rgba(255, 255, 255, ${twinkle * 0.9})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (star.crossFlare) {
+          ctx.strokeStyle = `rgba(210, 245, 255, ${twinkle * 0.75})`;
+          ctx.lineWidth = 0.75;
+          const flareLen = star.size * 3.8;
+          ctx.beginPath();
+          ctx.moveTo(star.x - flareLen, star.y);
+          ctx.lineTo(star.x + flareLen, star.y);
+          ctx.moveTo(star.x, star.y - flareLen);
+          ctx.lineTo(star.x, star.y + flareLen);
+          ctx.stroke();
+        }
+      });
+
+      // 4. Central Shard
+      const shardScale = Math.min(width, height) * 0.22;
+      const bobbing = Math.sin(t * 1.5) * 10;
+      const shardCenterY = cy - 25 + bobbing;
+
+      ctx.save();
+      ctx.translate(cx, shardCenterY);
+
+      const gemGlow = ctx.createRadialGradient(0, 0, 10, 0, 0, shardScale * 1.6);
+      gemGlow.addColorStop(0, "rgba(56, 239, 255, 0.45)");
+      gemGlow.addColorStop(0.5, "rgba(186, 85, 211, 0.2)");
+      gemGlow.addColorStop(1, "transparent");
+      ctx.fillStyle = gemGlow;
+      ctx.beginPath();
+      ctx.arc(0, 0, shardScale * 1.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      shardFaces.forEach((face, idx) => {
+        ctx.beginPath();
+        const p0 = shardVertices[face[0]];
+        ctx.moveTo(p0[0] * shardScale, p0[1] * shardScale);
+        for (let i = 1; i < face.length; i++) {
+          const p = shardVertices[face[i]];
+          ctx.lineTo(p[0] * shardScale, p[1] * shardScale);
+        }
+        ctx.closePath();
+        ctx.fillStyle = faceShades[idx % faceShades.length];
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(200, 245, 255, 0.25)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      ctx.strokeStyle = "#171424";
+      ctx.lineWidth = Math.max(3, shardScale * 0.038);
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      shardFaces.forEach((face) => {
+        ctx.beginPath();
+        const p0 = shardVertices[face[0]];
+        ctx.moveTo(p0[0] * shardScale, p0[1] * shardScale);
+        for (let i = 1; i < face.length; i++) {
+          const p = shardVertices[face[i]];
+          ctx.lineTo(p[0] * shardScale, p[1] * shardScale);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      // 5. Protected Dynamic Celestial Text Sequence
+      const sliceDuration = duration / Math.max(1, messages.length);
+      const currentIdx = Math.max(
+        0,
+        Math.min(Math.floor(elapsed / sliceDuration), messages.length - 1)
+      );
+      const currentText = String(messages[currentIdx] || "");
+
+      const textLocalElapsed = elapsed - currentIdx * sliceDuration;
+      const textLocalProgress = textLocalElapsed / sliceDuration;
+
+      let textAlpha = 1.0;
+      const textFade = 0.2;
+      if (textLocalProgress < textFade) {
+        textAlpha = textLocalProgress / textFade;
+      } else if (textLocalProgress > 1.0 - textFade) {
+        textAlpha = Math.max(0, (1.0 - textLocalProgress) / textFade);
+      }
+
+      ctx.save();
+      const textY = shardCenterY + shardScale * 1.5 - (textLocalProgress * 14);
+      const fontSize = Math.max(16, Math.min(width, height) * 0.035);
+
+      ctx.font = `600 ${fontSize}px "Cinzel", "Trajan Pro", "Georgia", serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      if ("letterSpacing" in ctx) {
+        ctx.letterSpacing = "6px";
+      }
+
+      ctx.shadowColor = "rgba(110, 230, 255, 0.9)";
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = `rgba(255, 255, 255, ${textAlpha * 0.95})`;
+      ctx.fillText(currentText, cx, textY);
+
+      const underlineWidth = fontSize * (currentText.length * 0.45);
+      const underGrad = ctx.createLinearGradient(
+        cx - underlineWidth / 2,
+        0,
+        cx + underlineWidth / 2,
+        0
+      );
+      underGrad.addColorStop(0, "transparent");
+      underGrad.addColorStop(0.5, `rgba(168, 238, 255, ${textAlpha * 0.8})`);
+      underGrad.addColorStop(1, "transparent");
+      ctx.strokeStyle = underGrad;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(cx - underlineWidth / 2, textY + fontSize * 0.85);
+      ctx.lineTo(cx + underlineWidth / 2, textY + fontSize * 0.85);
+      ctx.stroke();
+      ctx.restore();
+
+      // 6. Dual Astral Borders
+      const inset = Math.min(width, height) * 0.045;
+      const borderThickness = Math.max(2, Math.min(width, height) * 0.012);
+
+      ctx.strokeStyle = "rgba(168, 238, 255, 0.85)";
+      ctx.lineWidth = borderThickness * 1.8;
+      ctx.strokeRect(inset, inset, width - inset * 2, height - inset * 2);
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.lineWidth = borderThickness * 0.6;
+      ctx.strokeRect(inset * 1.3, inset * 1.3, width - inset * 2.6, height - inset * 2.6);
+
+      ctx.restore();
+
+      // 7. Loop control
+      if (progress < 1.0) {
+        animId = requestAnimationFrame(render);
+      } else {
+        window.removeEventListener("resize", onResize);
+        cancelAnimationFrame(animId);
+        canvas.remove();
+        resolve();
+      }
+    }
+
+    animId = requestAnimationFrame(render);
+  });
+}

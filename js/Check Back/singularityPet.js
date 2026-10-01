@@ -18,6 +18,10 @@ addLayer("sp", {
         selPoints: new Decimal(0),
         selPointsMax: new Decimal(100),
         selPointsPerSecond: new Decimal(0),
+
+        eclipsePoints: new Decimal(0),
+        eclipsePointsMax: new Decimal(100),
+        eclipsePointsPerSecond: new Decimal(0),
     }},
     nodeStyle: {
         background: "linear-gradient(90deg, #910a27, #710a91, #065c19)",
@@ -39,6 +43,8 @@ addLayer("sp", {
         player.sp.kresPointsPerSecond = kresAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 404).add(1))
         if (hasUpgrade("ev8", 21)) player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(1.4)
         player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(buyableEffect("ep1", 17))
+        if (hasUpgrade("ev8", 28)) player.sp.kresPointsPerSecond = player.sp.kresPointsPerSecond.mul(upgradeEffect("ev8", 28))
+            
         player.sp.kresPoints = player.sp.kresPoints.add(player.sp.kresPointsPerSecond.mul(delta))
 
         if (player.sp.kresPoints.gte(player.sp.kresPointsMax)) {
@@ -54,6 +60,8 @@ addLayer("sp", {
         player.sp.navPointsPerSecond = navAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 405).add(1))
         if (hasUpgrade("ev8", 21)) player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(1.4)
         player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(buyableEffect("ep1", 17))
+        if (hasUpgrade("ev8", 28)) player.sp.navPointsPerSecond = player.sp.navPointsPerSecond.mul(upgradeEffect("ev8", 28))
+
         player.sp.navPoints = player.sp.navPoints.add(player.sp.navPointsPerSecond.mul(delta))
 
         if (player.sp.navPoints.gte(player.sp.navPointsMax)) {
@@ -69,10 +77,23 @@ addLayer("sp", {
         player.sp.selPointsPerSecond = selAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 406).add(1))
         if (hasUpgrade("ev8", 21)) player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(1.4)
         player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(buyableEffect("ep1", 17))
+        if (hasUpgrade("ev8", 28)) player.sp.selPointsPerSecond = player.sp.selPointsPerSecond.mul(upgradeEffect("ev8", 28))
         player.sp.selPoints = player.sp.selPoints.add(player.sp.selPointsPerSecond.mul(delta))
 
         if (player.sp.selPoints.gte(player.sp.selPointsMax)) {
             player.sp.selPoints = player.sp.selPointsMax
+        }
+
+        //eclipse
+        player.sp.eclipsePointsMax = new Decimal(100)
+        player.sp.eclipsePointsMax = player.sp.eclipsePointsMax.add(buyableEffect("sp", 41))
+
+        let eclipseAmt = getLevelableAmount("pet", 501).add(getLevelableTier("pet", 501).mul(2).min(40))
+        player.sp.eclipsePointsPerSecond = eclipseAmt.pow(1.1).div(10).mul(getLevelableTier("pet", 501).add(1))
+        player.sp.eclipsePoints = player.sp.eclipsePoints.add(player.sp.eclipsePointsPerSecond.mul(delta))
+
+        if (player.sp.eclipsePoints.gte(player.sp.eclipsePointsMax)) {  
+            player.sp.eclipsePoints = player.sp.eclipsePointsMax
         }
     },
     upgrades: {
@@ -647,6 +668,169 @@ addLayer("sp", {
             },
             style: {width: '250px', height: '150px', color: "white", backgroundColor: "#065c19"},
         },
+
+
+        41: {
+            purchaseLimit() { return new Decimal(990) },
+            currency() { return player.sp.eclipsePoints},
+            pay() { player.sp.eclipsePoints = player.sp.eclipsePoints.sub(player.sp.eclipsePointsMax) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(10) },
+            unlocked() { return true },
+            cost(x) { return player.sp.eclipsePointsMax},
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Capacity Increaser (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/999)"
+            },
+            display() {
+                return 'which are boosting eclipse point capacity by +' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + formatSimple(tmp[this.layer].buyables[this.id].cost) + ' Eclipse Points'
+            },
+            buy() {
+                this.pay()
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            style() {
+                let look = {width: "250px", height: "100px", fontSize: "12px", color: "black", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
+                getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            },
+        },
+        42: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.sp.eclipsePoints},
+            pay(amt) { player.sp.eclipsePoints = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).div(100).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Eclipse Stats"
+            },
+            display() {
+                return 'which are boosting Eclipse\'s base stats by +' + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1).mul(100)) + '%.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Eclipse Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "250px", height: "150px", color: "black", backgroundColor: "#f5ff68"},
+        },
+        43: {
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.sp.eclipsePoints},
+            pay(amt) { player.sp.eclipsePoints = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Eclipse Synergy"
+            },
+            display() {
+                return 'which are boosting eclipse shards by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Eclipse Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '250px', height: '150px', color: "black", backgroundColor: "#f5ff68"},
+        },
+        44: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.sp.eclipsePoints},
+            pay(amt) { player.sp.eclipsePoints = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.05).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Eclipse Legendary Gems"
+            },
+            display() {
+                return 'which are boosting legendary gem gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Eclipse Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '250px', height: '150px', color: "black", backgroundColor: "#f5ff68"},
+        },
+        45: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.sp.eclipsePoints},
+            pay(amt) { player.sp.eclipsePoints = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.05).add(1) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Eclipse Legendary Cooldown"
+            },
+            display() {
+                return 'which are dividing XPBoost button cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Eclipse Points'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+    
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '250px', height: '150px', color: "black", backgroundColor: "#f5ff68"},
+        },
     },
     microtabs: {
         stuff: {
@@ -705,6 +889,25 @@ addLayer("sp", {
                         ["blank", "20px"],
                         ["style-row", [["upgrade", 31], ["upgrade", 32]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
                     ], {width: "700px", background: "#011b07", border: "3px solid white", borderRadius: "20px"}],
+                ],
+            },
+            "Eclipse": {
+                title() {return "Eclipse<br><small>(" + formatSimple(player.sp.eclipsePoints, 2) + "/" + formatWhole(player.sp.eclipsePointsMax) + ")</small>"},
+                buttonStyle() { return {color: "white", background: "#8e9620", borderColor: "rgba(0,0,0,0.5)", borderRadius: "5px"}},
+                unlocked() { return hasUpgrade("ev8", 31)},
+                content: [
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["blank", "20px"],
+                        ["raw-html", () => {return "You have <h3>" + formatSimple(player.sp.eclipsePoints, 2) + "/" + formatWhole(player.sp.eclipsePointsMax) + "</h3> eclipse points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You are gaining <h3>" + format(player.sp.eclipsePointsPerSecond) + "</h3> eclipse points per second. (based on level & ascension)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["blank", "20px"],
+                        ["buyable", 41],
+                        ["blank", "20px"],
+                        ["row", [["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44], ["ex-buyable", 45]], {maxWidth: "600px"}],
+                        ["blank", "20px"],
+                        ["style-row", [["upgrade", 41], ["upgrade", 42]], () => {return hasUpgrade("depth4", 4) ? {marginBottom: "20px"} : {}}],
+                    ], {width: "700px", background: "#3f420e", border: "3px solid white", borderRadius: "20px"}],
                 ],
             },
         },

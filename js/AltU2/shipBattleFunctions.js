@@ -124,7 +124,7 @@ function SB_spawnNaturalAsteroid() {
         console.warn("Cannot find celestialite \"" + celId + "\".")
         return
     };
-    SB_spawnAsteroid(celId)
+    if (player.tab != "anl") SB_spawnAsteroid(celId)
 }
 
 function SB_updateMovement(obj) {
@@ -217,6 +217,12 @@ function SB_getDefaultShipStats() {
         bloodStoneGain: 1,
         bloodGemGain: 1,
         xpGain: 1,
+        soulEnergyGain: 1,
+        soulEnergyCap: 1,
+        dashSpeed: 1,
+        dashDiscount: 1,
+        passiveSoulGain: 0,
+        worldDuration: 1,
     };
     return base
 }
@@ -230,30 +236,48 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.attackDamage *= 1 + 0.15 * upgrades.attackDamageRare
     shipStats.attackDamage *= 1 + 0.2 * upgrades.attackEpic
     shipStats.attackDamage *= 1 + 0.3 * upgrades.attackLegendary
+    shipStats.attackDamage *= 1 + 0.05 * upgrades.attackEvo
+    shipStats.attackDamage *= 1 + 0.1 * upgrades.attackParagon
+    shipStats.attackDamage *= 1 + 0.25 * upgrades.attackAscension
+    if (player.ir.shipType == 11) shipStats.attackDamage *= getBuyableAmount("anl", 102).div(20).add(1).toNumber()
 
     shipStats.attackSpeed = 1
     shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackSpeedUncommon
     shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackSpeedRare
     shipStats.attackSpeed *= 1 + 0.075 * upgrades.attackEpic
     shipStats.attackSpeed /= 1 + 0.2 * upgrades.attackLegendary
+    shipStats.attackSpeed *= 1 + 0.025 * upgrades.attackEvo
+    shipStats.attackSpeed *= 1 + 0.05 * upgrades.attackParagon
+    shipStats.attackSpeed *= 1 + 0.1 * upgrades.attackAscension
+    if (player.ir.shipType == 11) shipStats.attackSpeed *= getBuyableAmount("anl", 104).div(40).add(1).toNumber()
 
     shipStats.maxHp = 1
 
     shipStats.damageReduction = 1
     shipStats.damageReduction *= 1 + 0.1 * upgrades.damageReductionRare
+    shipStats.damageReduction *= 1 + 0.1 * upgrades.defenseEvo
     shipStats.damageReduction *= 1 + 0.15 * upgrades.defenseEpic
     shipStats.damageReduction *= 1 + 0.2 * upgrades.defenseLegendary
+    shipStats.damageReduction *= 1 + 0.2 * upgrades.defenseParagon
+    shipStats.damageReduction *= 1 + 0.3 * upgrades.defenseAscension
 
     shipStats.healthRegen = 0
     shipStats.healthRegen += upgrades.healthRegenUncommon * 0.5 / 60
+    shipStats.healthRegen += upgrades.defenseEvo * 0.5 / 60
+    shipStats.healthRegen += upgrades.defenseParagon * 1 / 60
+    shipStats.healthRegen += upgrades.defenseAscension * 2 / 60
     shipStats.healthRegen += upgrades.healthRegenRare * 0.75 / 60
     shipStats.healthRegen += upgrades.defenseEpic * 0.75 / 60
+    if (player.ir.shipType == 11) shipStats.healthRegen += getBuyableAmount("anl", 105).div(300).toNumber()
     shipStats.healthRegen *= 1 + 0.2 * upgrades.defenseLegendary
     shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
 
     shipStats.moveSpeed = 1
     shipStats.moveSpeed *= 1 + 0.1 * upgrades.moveSpeedRare
+    shipStats.moveSpeed *= 1 + 0.2 * upgrades.speedParagon
     shipStats.moveSpeed *= 1 + 0.25 * upgrades.moveSpeedLegendary
+    shipStats.moveSpeed *= 1 + 0.25 * upgrades.mobilityAscension
+    if (player.ir.shipType == 11) shipStats.moveSpeed *= getBuyableAmount("anl", 106).div(20).add(1).toNumber()
 
     shipStats.bulletSize = 1
     if (player.ir.shipType == 3 || player.ir.shipType == 7 || player.ir.shipType == 8) {
@@ -268,6 +292,7 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.xpGain *= 1 + 0.15 * upgrades.xpGainRare
     shipStats.xpGain *= 1 + 0.2 * upgrades.xpGainEpic
     shipStats.xpGain *= 1 + 0.2 * upgrades.dropGainLegendary
+    if (player.ir.shipType == 11) shipStats.xpGain *= getBuyableAmount("anl", 103).div(20).add(1).toNumber()
     
     shipStats.spaceRockGain = 1
     shipStats.spaceRockGain *= 1 + 0.05 * upgrades.spaceRockGainCommon
@@ -300,7 +325,31 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.bloodGemGain *= 1 + 0.05 * upgrades.bloodLootGainEpic
     shipStats.bloodGemGain *= 1 + 0.2 * upgrades.bloodLootGainLegendary
 
+    shipStats.soulEnergyGain = 1
+    shipStats.soulEnergyGain *= 1 + 0.2 * upgrades.soulEnergyGainEvo
+    shipStats.soulEnergyGain *= 1 + 0.2 * upgrades.soulParagon
+    shipStats.soulEnergyGain *= getBuyableAmount("anl", 101).div(40).add(1).toNumber()
+
+    shipStats.soulEnergyCap = 1
+    shipStats.soulEnergyCap *= 1 + 0.2 * upgrades.soulEnergyCapEvo
+    shipStats.soulEnergyCap *= 1 + 0.2 * upgrades.soulParagon
+
+    shipStats.dashSpeed = 1
+    shipStats.dashSpeed *= 1 + 0.1 * upgrades.dashEvo
+    shipStats.dashSpeed *= 1 + 0.1 * upgrades.mobilityAscension
+    
+    shipStats.dashDiscount = 1
+    shipStats.dashDiscount *= 1 + 0.2 * upgrades.dashParagon
+
+    shipStats.worldDuration = 1
+    shipStats.worldDuration *= 1 + 0.2 * upgrades.worldAscension
+
+    shipStats.passiveSoulGain = 0
+    shipStats.passiveSoulGain += 10 * upgrades.passiveParagon
+    shipStats.passiveSoulGain += 25 * upgrades.passiveAscension
     return shipStats
+
+    
 }
 
 function SB_getUpgradedShipStats(upgrades) {
@@ -311,7 +360,12 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackDamageRare || 0)
     shipStats.attackDamage *= 1 + 0.15 * (upgrades.attackEpic || 0)
     shipStats.attackDamage *= 1 + 0.3 * (upgrades.attackLegendary || 0)
+    shipStats.attackDamage *= 1 + 0.05 * (upgrades.attackEvo || 0)
+    shipStats.attackDamage *= 1 + 0.1 * (upgrades.attackParagon || 0)
+    shipStats.attackDamage *= 1 + 0.25 * (upgrades.attackAscension || 0)
     shipStats.attackDamage *= levelableEffect("ir", player.ir.shipType)[2].toNumber()
+    if (player.ir.shipType == 11) shipStats.attackDamage *= getBuyableAmount("anl", 102).div(20).add(1).toNumber()
+
     if (hasMilestone("spaceZone1", 12)) shipStats.attackDamage *= 1.25;
     if (hasMilestone("spaceZone1", 14)) shipStats.attackDamage *= 1.15;
     if (hasUpgrade("ir", 22)) shipStats.attackDamage *= upgradeEffect("ir", 22).toNumber();
@@ -322,14 +376,22 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackSpeedRare || 0)
     shipStats.attackSpeed *= 1 + 0.075 * (upgrades.attackEpic || 0)
     shipStats.attackSpeed /= 1 + 0.2 * (upgrades.attackLegendary || 0)
+    shipStats.attackSpeed *= 1 + 0.025 * (upgrades.attackEvo || 0)
+    shipStats.attackSpeed *= 1 + 0.05 * (upgrades.attackParagon || 0)
+    shipStats.attackSpeed *= 1 + 0.1 * (upgrades.attackAscension || 0)
+    if (player.ir.shipType == 11) shipStats.attackSpeed *= getBuyableAmount("anl", 104).div(40).add(1).toNumber()
     shipStats.maxHp = player.ir.shipHealthMax.toNumber()
     
     shipStats.healthRegen = 0
     if (hasUpgrade("ir", 14)) shipStats.healthRegen += 0.5 / 60;
     if (hasMilestone("spaceZone3", 12)) shipStats.healthRegen *= 2;
     shipStats.healthRegen += (upgrades.healthRegenUncommon * 0.5 / 60 || 0)
+    shipStats.healthRegen += (upgrades.defenseEvo * 0.5 / 60 || 0)
+    shipStats.healthRegen += (upgrades.defenseParagon * 1 / 60 || 0)
+    shipStats.healthRegen += (upgrades.defenseAscension * 2 / 60 || 0)
     shipStats.healthRegen += (upgrades.healthRegenRare * 0.75 / 60 || 0)
     shipStats.healthRegen += (upgrades.defenseEpic * 0.75 / 60 || 0)
+    if (player.ir.shipType == 11) shipStats.healthRegen += getBuyableAmount("anl", 105).div(300).toNumber()
     shipStats.healthRegen *= 1 + 0.2 * (upgrades.defenseLegendary || 0)
     shipStats.healthRegen *= getBuyableAmount("bl", 13).div(50).add(1).toNumber()
     shipStats.bulletSize = 1
@@ -340,11 +402,17 @@ function SB_getUpgradedShipStats(upgrades) {
     }
     shipStats.damageReduction = 1
     shipStats.damageReduction *= 1 + 0.1 * (upgrades.damageReductionRare || 0)
+    shipStats.damageReduction *= 1 + 0.1 * (upgrades.defenseEvo || 0)
     shipStats.damageReduction *= 1 + 0.15 * (upgrades.defenseEpic || 0)
     shipStats.damageReduction *= 1 + 0.2 * (upgrades.defenseLegendary || 0)
+    shipStats.damageReduction *= 1 + 0.2 * (upgrades.defenseParagon || 0)
+    shipStats.damageReduction *= 1 + 0.3 * (upgrades.defenseAscension || 0)
     shipStats.moveSpeed = 1
     shipStats.moveSpeed *= 1 + 0.1 * (upgrades.moveSpeedRare || 0)
     shipStats.moveSpeed *= 1 + 0.25 * (upgrades.moveSpeedLegendary || 0)
+    shipStats.moveSpeed *= 1 + 0.2 * (upgrades.speedParagon || 0)
+    shipStats.moveSpeed *= 1 + 0.25 * (upgrades.mobilityAscension || 0)
+    if (player.ir.shipType == 11) shipStats.moveSpeed *= getBuyableAmount("anl", 106).div(20).add(1).toNumber()
     
     shipStats.spaceRockGain = player.ir.spaceRockMult.toNumber()
     shipStats.spaceRockGain *= 1 + 0.05 * (upgrades.spaceRockGainCommon || 0)
@@ -389,6 +457,32 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.xpGain *= 1 + 0.2 * (upgrades.xpGainEpic || 0)
     shipStats.xpGain *= 1 + 0.2 * (upgrades.dropGainLegendary || 0)
     if (player.bl.noxDefeated) shipStats.xpGain *= 1 + player.ir.battleLevel.toNumber() * 0.02
+    if (player.ir.shipType == 11) shipStats.xpGain *= getBuyableAmount("anl", 103).div(20).add(1).toNumber()
+
+    shipStats.soulEnergyGain = 1
+    shipStats.soulEnergyGain *= 1 + 0.2 * (upgrades.soulEnergyGainEvo || 0)
+    shipStats.soulEnergyGain *= 1 + 0.2 * (upgrades.soulParagon || 0)
+    shipStats.soulEnergyGain *= 1 + 0.4 * (upgrades.soulAscension || 0)
+    shipStats.soulEnergyGain *= getBuyableAmount("anl", 101).div(40).add(1).toNumber()
+
+    shipStats.soulEnergyCap = 1
+    shipStats.soulEnergyCap *= 1 + 0.2 * (upgrades.soulEnergyCapEvo || 0)
+    shipStats.soulEnergyCap *= 1 + 0.2 * (upgrades.soulParagon || 0)
+    shipStats.soulEnergyCap *= 1 + 0.4 * (upgrades.soulAscension || 0)
+
+    shipStats.dashSpeed = 1
+    shipStats.dashSpeed *= 1 + 0.1 * (upgrades.dashEvo || 0)
+    shipStats.dashSpeed *= 1 + 0.1 * (upgrades.mobilityAscension || 0)
+
+    shipStats.dashDiscount = 1
+    shipStats.dashDiscount *= 1 + 0.2 * (upgrades.dashParagon || 0)
+
+    shipStats.worldDuration = 1
+    shipStats.worldDuration *= 1 + 0.2 * (upgrades.worldAscension || 0)
+
+    shipStats.passiveSoulGain = 0
+    shipStats.passiveSoulGain += 10 * (upgrades.passiveParagon || 0)
+    shipStats.passiveSoulGain += 25 * (upgrades.passiveAscension || 0)
     return shipStats
 }
 
@@ -424,10 +518,15 @@ function SB_exitRun() {
     }
     if (player.tab == "bl") {
         player.subtabs["bl"]['stuff'] = 'stages'
+        pauseUniverseAll(["A2", "D1"], "unpause", true)
     }
     if (player.tab == "cbs") {
         player.subtabs["cbs"]['stuff'] = 'Ritual'
         pauseUniverseAll(["A2", "DS"], "unpause", true)
+    }
+    if (player.tab == "anl") {
+        player.subtabs["anl"]['stuff'] = 'Labyrinth'
+        pauseUniverseAll(["A2", "AD1"], "unpause", true)
     }
 
     if (arena) {
@@ -451,16 +550,22 @@ function SB_enterRun(zoneId) {
     }
     if (player.tab == "bl") {
         player.subtabs["bl"]['stuff'] = 'Battle'
+        pauseUniverseAll(["A2", "D1"], "pause", true)
     }
     if (player.tab == "cbs") {
         player.subtabs["cbs"]['stuff'] = 'Battle'
         pauseUniverseAll(["A2", "DS"], "pause", true)
     }
+    if (player.tab == "anl") {
+        player.subtabs["anl"]['stuff'] = 'Battle'
+        pauseUniverseAll(["A2", "AD1"], "pause", true)
+    }
     
     player.ir.primaryColor = SB_zones[zoneId].primaryColor
     player.ir.secondaryColor = SB_zones[zoneId].secondaryColor
 
-    arena = new SpaceArena(800, 800, 3200, 3200);
+    if (player.tab != "anl") arena = new SpaceArena(800, 800, 3200, 3200);
+    if (player.tab == "anl") arena = new SpaceArena(800, 800, 3200, 3200);
     arena.spawnArena();
     for (const [i, v] of Object.entries(player.ir.shipBattleSaveCurrent.upgrades)) {
         arena.upgrades[i] = v

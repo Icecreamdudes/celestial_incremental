@@ -1720,6 +1720,7 @@
                             ["style-column", container, {marginLeft: "-3px", border: "3px solid " + player.ir.primaryColor, background: player.ir.menu != 2 ? "transparent" : "black"}]
                         ], {display: player.ir.menu == 0 ? "none !important" : "",  height: (arena && arena._fullscreen) ? "calc(100vh - 279px)" : "800px", width: (arena && arena._fullscreen) ? "calc(100vw - 6px)" : "800px"}],
                         ["style-column", [], {background: player.ir.primaryColor, width: (arena && arena._fullscreen) ? "calc(100vw)" : "806px", height: "3px"}],
+                        ["layer-proxy", ["ir", [["row", [["ex-bar", "soulBar"],]]]]],
                         ["layer-proxy", ["ir", [["row", [["ex-bar", "bossHealthBar"],]]]]],
                         ["layer-proxy", ["ir", [["style-column", [
                             ["blank", "9px", {width: "6px"}],
@@ -1752,6 +1753,24 @@
                     ["layer-proxy", ["ir", [["clickable", 12]]]],
                 ]
             },
+            "Nox, The Vampire Knight": {
+                buttonStyle() { return { border: "2px solid #f57171ff", borderRadius: "10px" } },
+                unlocked() { return player.bl.noxDefeated && !player.ir.inBattle},
+                content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", "Perks for beating Nox", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #f57171ff", background: "#290303ff", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-column", [
+                        ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "With the fifth pylon built, you'll see what this world has truly been. Eclipse, you must create your field again, but don't get punchcards early on within. When you make seven, your opponent spawns and you will learn your lesson.", {color: "#88f", fontSize: "18px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", "Keep blood battle buyables on resets", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                    ], {width: "800px", border: "3px solid #f57171ff", background: "#2b0a12", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                ]
+            }
         },
         battleUpgradeSelection: {
             "experience": {

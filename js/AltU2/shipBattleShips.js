@@ -10,6 +10,7 @@ const SB_shipNames = [ // TEMPORARY BEFORE MOVING TO A NEW SYSTEM
     "astral",
     "evolver",
     "railgun",
+    "marcel",
 ]
 
 SB_ships.cruiser = {
@@ -440,3 +441,40 @@ SB_ships.railgun = {
         // NYI
     },
 }
+SB_ships.marcel = {
+    name: "Marcel",
+    baseStats: {
+        // DEFENSE
+        maxHp: 800,
+        damageReduction: 1,
+        bodyDamageReduction: 1,
+        healthRegen: 0,
+
+        // OFFENSE
+        attackDamage: 50,
+        bodyDamage: 1,
+        attackSpeed: 200,
+
+        // AGILITY
+        moveSpeed: 10,
+        acceleration: 1.5,
+        deceleration: 0.25,
+        rotationSpeed: 0.12,
+
+        // SCALE
+        shipRadius: 18,
+        bulletRadius: 5,
+        bulletSize: 1,
+
+        // HARVESTING
+        xpGain: 1,
+        spaceRockGain: 1,
+        spaceGemGain: 1,
+        bloodStoneGain: 1,
+        bloodGemGain: 1,
+    },
+    includeUpgrades: [],
+    dontIncludeUpgrades: [],
+    makeBullet() {},
+    draw(ctx) {},
+};

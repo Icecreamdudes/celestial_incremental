@@ -655,12 +655,15 @@ addLayer("pet", {
         player.pet.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
         player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(levelableEffect("ir", 5)[1])
         player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(buyableEffect("cof", 33))
+        player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(buyableEffect("sp", 44))
 
         player.pet.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
         player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(levelableEffect("ir", 5)[1])
         player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(buyableEffect("cof", 33))
+        player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(buyableEffect("sp", 44))
 
         player.pet.legendaryGemTimerMax = new Decimal(86400)
+        player.pet.legendaryGemTimerMax = player.pet.legendaryGemTimerMax.div(buyableEffect("sp", 44))
         player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(onepersec.mul(delta))
 
         player.pet.gemEffects[0] = player.cb.legendaryPetGems[0].pow(0.1).div(5).add(1)
@@ -766,8 +769,19 @@ addLayer("pet", {
 
         player.pet.eclipseTimerTickspeedMultiplier = new Decimal(1)
         player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(player.dv.timeDrainRate)
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(player.ani.darkRadiationEffect)
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("tr", 11))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("tr", 12))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("tr", 13))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 31))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 32))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 33))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 34))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 35))
+        if (getLevelableTier("pu", 403, true)) player.pet.eclipseTimerTickspeedMultiplier = player.pet.eclipseTimerTickspeedMultiplier.mul(buyableEffect("dec", 36))
 
-        player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(player.pet.eclipseTimerTickspeedMultiplier.div(player.pet.eclipseTimerTickspeedDivisor).mul(delta))
+        if (getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active) player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.add(player.pet.eclipseTimerTickspeedMultiplier.div(player.pet.eclipseTimerTickspeedDivisor).mul(delta))
+        if (!getLevelableTier("pu", 403, true)) player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].current.sub(player.pet.eclipseTimerTickspeedMultiplier.div(player.pet.eclipseTimerTickspeedDivisor).mul(delta))
 
         player.pet.legPetTimers[1].current = player.pet.legPetTimers[1].current.sub(delta)
 
@@ -816,6 +830,7 @@ addLayer("pet", {
         //cooldown
         player.pet.legPetTimers[0].cooldownMax = new Decimal(1800)
         player.pet.legPetTimers[0].cooldownMax = player.pet.legPetTimers[0].cooldownMax.div(levelableEffect("pet", 501)[3])
+        if (hasUpgrade("hr", 15)) player.pet.legPetTimers[0].cooldownMax = new Decimal(0)
 
         player.pet.legPetTimers[1].cooldownMax = new Decimal(7200)
         for (let thing in player.pet.legPetTimers) {
@@ -1076,7 +1091,7 @@ addLayer("pet", {
             onClick () {
                 player.pet.legPetTimers[0].cooldown = player.pet.legPetTimers[0].cooldownMax
                 player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].max
-                player.pet.legPetTimers[0].active = true
+                player.pet.legPetTimers[0].active
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = "D1"

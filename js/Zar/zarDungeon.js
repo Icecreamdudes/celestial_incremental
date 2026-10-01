@@ -912,6 +912,7 @@ addLayer("zarDungeon", {
                         player.bh.characters[i].stun = ["none", new Decimal(0)]
 
                     for (let j = 0; j < 4; j++) {
+                        player.bh.characters[i].skills[j].cooldown = player.bh.characters[i].skills[j].cooldownMax.sub(0.01)
                         player.bh.characters[i].skills[j].duration = new Decimal(0)
                         player.bh.characters[i].skills[j].interval = new Decimal(0)
                     }

@@ -1,4 +1,4 @@
-addLayer('g', {
+﻿addLayer('g', {
     name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U1",
@@ -122,6 +122,7 @@ addLayer('g', {
         // SOFTCAP START
         player.g.doomSoftcapStart = new Decimal("1e500000")
         player.g.doomSoftcapStart = player.g.doomSoftcapStart.pow(buyableEffect("fa", 407))
+        if (hasUpgrade("s", 33)) player.g.doomSoftcapStart = player.g.doomSoftcapStart.mul(upgradeEffect("s", 33))
 
         // SOFTCAP WEAKENER
         let doomWeaken = new Decimal(1)

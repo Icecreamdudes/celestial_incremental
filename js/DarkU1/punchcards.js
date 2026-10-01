@@ -1,7 +1,6 @@
 addLayer("pu", {
     name: "Punchcards", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "PU", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "D1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -39,19 +38,30 @@ addLayer("pu", {
         if (player.pu.selectedPunchcards[player.pu.selectionIndex] > 400) {
             if (player.bl.noxDefeated && player.pu.selectedPunchcards[player.pu.selectionIndex] == 401) {
                 player.pu.selectionCost = new Decimal(3)
-            } else {
+            } else if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 401) {
                 player.pu.selectionCost = new Decimal(5)
             }
             if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 402) {
                 player.pu.selectionCost = new Decimal(2)
             }
-        } else {
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 403) {
+                player.pu.selectionCost = new Decimal(9)
+                if (hasUpgrade("mr", 15)) player.pu.selectionCost = player.pu.selectionCost.sub(1)
+            }
+        }
+        if (player.pu.selectedPunchcards[player.pu.selectionIndex] >= 500) {
+            player.pu.selectionCost = new Decimal(3)
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 503) player.pu.selectionCost = new Decimal(2)
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 505) player.pu.selectionCost = new Decimal(2)
+            if (player.pu.selectedPunchcards[player.pu.selectionIndex] == 506) player.pu.selectionCost = new Decimal(2)
+        } else if (player.pu.selectedPunchcards[player.pu.selectionIndex] < 400) {
             player.pu.selectionCost = new Decimal(1)
         }
 
         player.pu.legendaryPunchcardsUnlocked = new Decimal(0)
         if (run(layers.pu.levelables[401].canSelect, layers.pu.levelables[401]) && !getLevelableTier("pu", 401, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
         if (run(layers.pu.levelables[402].canSelect, layers.pu.levelables[402]) && !getLevelableTier("pu", 402, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
+        if (run(layers.pu.levelables[403].canSelect, layers.pu.levelables[403]) && !getLevelableTier("pu", 403, true)) player.pu.legendaryPunchcardsUnlocked = player.pu.legendaryPunchcardsUnlocked.add(1)
 
         player.pu.legendaryPunchcardChance = Decimal.add(0.04, player.pu.legendaryPunchcardsUnlocked.sub(1).mul(0.02))
         player.pu.legendaryPunchcardChance = player.pu.legendaryPunchcardChance.add(buyableEffect("rp", 13))
@@ -72,6 +82,22 @@ addLayer("pu", {
 
         player.pu.legendaryRaise = new Decimal(1)
         player.pu.legendaryRaise = player.pu.legendaryRaise.mul(player.bl.bloodEffect)
+
+        if (player.du.aniciffoSummon)
+        {
+            player.pu.legendarySelectionActive = true
+            player.pu.selectedPunchcards[4] = 403
+        }
+
+
+        //failsafe
+        for (let i = 0; i < 4; i++) {
+            if (i != 4) {
+                if (player.pu.selectedPunchcards[i] > 400 && player.pu.selectedPunchcards[i] < 500) {
+                    player.pu.selectedPunchcards[i] = 0
+                }
+            }
+        }
     },
     generateSelection() {
         player.pu.selectedPunchcards = [0, 0, 0, 0, 0]
@@ -82,6 +108,7 @@ addLayer("pu", {
                 if (prop >= 200 && prop < 300) raritySelect[1].push(prop) // RARE
                 if (prop >= 300 && prop < 400) raritySelect[2].push(prop) // EPIC
                 if (prop >= 400 && prop < 500) raritySelect[3].push(prop) // LEGENDARY
+                if (prop >= 500 && prop < 600) raritySelect[4].push(prop) // RADIOACTIVE
             }
         }
         for (let i = 0; i < 4; i++) {
@@ -104,6 +131,27 @@ addLayer("pu", {
             let choice = Math.floor(Math.random() * raritySelect[rarity].length)
             player.pu.selectedPunchcards[i] = raritySelect[rarity][choice]
             raritySelect[rarity].splice(choice, 1)
+        }
+
+        //radioactive
+        if (hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) && 
+    (
+        ((run(layers.pu.levelables[501].canSelect, layers.pu.levelables[501])) && !getLevelableTier("pu", 501, true)) || 
+        ((run(layers.pu.levelables[502].canSelect, layers.pu.levelables[502])) && !getLevelableTier("pu", 502, true)) || 
+        ((run(layers.pu.levelables[503].canSelect, layers.pu.levelables[503])) && !getLevelableTier("pu", 503, true)) ||
+        ((run(layers.pu.levelables[504].canSelect, layers.pu.levelables[504])) && !getLevelableTier("pu", 504, true)) ||
+        ((run(layers.pu.levelables[505].canSelect, layers.pu.levelables[505])) && !getLevelableTier("pu", 505, true)) ||
+        ((run(layers.pu.levelables[506].canSelect, layers.pu.levelables[506])) && !getLevelableTier("pu", 506, true)) 
+        ) ) //be sure to keep updating
+        {
+            let rng2 = Math.random()
+            if (rng2 < 0.3)
+            {
+                let slot = getRandomInt(player.pu.selectedPunchcards.length-1)
+                let choice = Math.floor(Math.random() * raritySelect[4].length)
+                player.pu.selectedPunchcards[slot] = raritySelect[4][choice]
+                raritySelect[4].splice(choice, 1)
+            }
         }
 
         //legendary
@@ -185,12 +233,14 @@ addLayer("pu", {
         },
         10: {
             title() { return "Activate this card" },
+            tooltip() { return player.pu.selectionCost.gt(1) ? "Costs " + formatWhole(player.pu.selectionCost) + " punchcard selections." : "" },
             canClick() { return player.pu.storedSelections.gte(player.pu.selectionCost) && player.pu.selectedPunchcards[player.pu.selectionIndex] != 0},
             unlocked: true,
             onClick() {
                 setLevelableTier("pu", player.pu.selectedPunchcards[player.pu.selectionIndex], new Decimal(1))
                 player.pu.storedSelections = player.pu.storedSelections.sub(player.pu.selectionCost)
                 player.du.noPunchcards = false
+                player.du.aniciffoSummon = false
                 layers.pu.generateSelection();
             },
             style() {
@@ -210,7 +260,9 @@ addLayer("pu", {
                     str = str.concat("rarePunchcard" + (val - 200))
                 } else if (val >= 300 && val < 400) {
                     str = str.concat("epicPunchcard" + (val - 300))
-                } else {
+                } else if (val >= 500 && val < 600) {
+                    str = str.concat("radioactivePunchcard" + (val - 500))
+                }  else {
                     str = str.concat("lockedPunchcard")
                 }
                 return str.concat(".png'style='width:69px;height:119px'></img>")
@@ -239,7 +291,9 @@ addLayer("pu", {
                     str = str.concat("rarePunchcard" + (val - 200))
                 } else if (val >= 300 && val < 400) {
                     str = str.concat("epicPunchcard" + (val - 300))
-                } else {
+                } else if (val >= 500 && val < 600) {
+                    str = str.concat("radioactivePunchcard" + (val - 500))
+                }  else {
                     str = str.concat("lockedPunchcard")
                 }
                 return str.concat(".png'style='width:69px;height:119px'></img>")
@@ -268,7 +322,9 @@ addLayer("pu", {
                     str = str.concat("rarePunchcard" + (val - 200))
                 } else if (val >= 300 && val < 400) {
                     str = str.concat("epicPunchcard" + (val - 300))
-                } else {
+                } else if (val >= 500 && val < 600) {
+                    str = str.concat("radioactivePunchcard" + (val - 500))
+                }  else {
                     str = str.concat("lockedPunchcard")
                 }
                 return str.concat(".png'style='width:69px;height:119px'></img>")
@@ -297,7 +353,9 @@ addLayer("pu", {
                     str = str.concat("rarePunchcard" + (val - 200))
                 } else if (val >= 300 && val < 400) {
                     str = str.concat("epicPunchcard" + (val - 300))
-                } else {
+                } else if (val >= 500 && val < 600) {
+                    str = str.concat("radioactivePunchcard" + (val - 500))
+                }  else {
                     str = str.concat("lockedPunchcard")
                 }
                 return str.concat(".png'style='width:69px;height:119px'></img>")
@@ -2301,7 +2359,7 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.le.resetAmount.add(1).pow(0.1).pow(this.effectScale()).pow(player.pu.epicRaise)
+                eff[0] = player.le.resetAmount.add(1).pow(0.2).pow(this.effectScale()).pow(player.pu.epicRaise)
                 if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
                 if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.25)
                 return eff
@@ -2598,6 +2656,56 @@ addLayer("pu", {
                 return look
             }
         },
+        310: {
+            image() {return this.canClick() ? "resources/Punchcards/epicPunchcard10.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Evolution"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks evolved boosts (in light extractor)</small><br>",
+                    "x" + format(this.effect()[0]) + " to effective deposited shard count<br><small>(Based on punchcard level)</small><br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to ESC",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = getLevelableAmount(this.layer, this.id).pow(0.75).div(2).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(0.6).div(20).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return player.anl.clearedRooms.roomBeta || this.canClick()},
+            canSelect() {return player.anl.clearedRooms.roomBeta},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.7).mul(7500).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(442007).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#003f7f" : look.backgroundColor = "#00254c"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
 
         //Legendary
         401: {
@@ -2635,7 +2743,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return (player.ir.iriditeDefeated && hasUpgrade("le", 201)) || this.canClick()},
-            canSelect() {return player.ir.iriditeDefeated && hasUpgrade("le", 201)},
+            canSelect() {return player.ir.iriditeDefeated && hasUpgrade("le", 201) && !getLevelableTier("pu", 403, true)},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -2702,6 +2810,384 @@ addLayer("pu", {
             style() {
                 let look = {width: "80px", height: "152px", borderColor: "black"}
                 !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        403: {
+            image() {return this.canClick() ? "resources/Punchcards/legendaryPunchcard3.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Aniciffo"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "<h5>Unlock Aniciffo, the Celestial of Radioactivity<br>",
+                    "x" + format(this.effect()[0]) + " to points (based on eclipse timer)<br>",
+                    "x-1 to eclipse timer tickspeed<br></h5>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to radioactive pylon energy gain",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.0125).add(1.4)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.005).add(2).min(2.5)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.pet.legPetTimers[0].current.pow(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect).abs()
+                eff[1] = getLevelableAmount(this.layer, this.id).pow(1.5).add(1)
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("le", 201) && player.pet.legPetTimers[0].active && player.du.aniciffoSummon) || this.canClick()},
+            canSelect() {return hasUpgrade("le", 201) && player.pet.legPetTimers[0].active && player.du.aniciffoSummon},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(1.85).mul(100000).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(2.5, getLevelableAmount(this.layer, this.id).sub(9)).mul(7079000).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#AB2042" : look.backgroundColor = "#5C173D"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+
+        //radioactive
+        501: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard1.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Carbon-14"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks carbon-14 decay<br>",
+                    "x" + format(this.effect()[0]) + " to decay (based on dark radiation)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to dark radiation (based on grass jumps)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.ani.darkRadiation.pow(0.05).div(5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.dgj.grassJump.pow(1.4).div(5).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        502: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard2.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Magnesium-28"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks magnesium-28 decay<br>",
+                    "x" + format(this.effect()[0]) + " to stability (based on decay)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to dark radiation (based on SMA)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.dec.decay.pow(0.175).div(3).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.sma.starmetalAlloy.pow(0.1).div(4).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        503: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard3.png" : "resources/Punchcards/lockedPunchcard.png"},
+            title() {
+                let str = "Neutron"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<h5><u>Active</u><br>",
+                    "Unlocks new decay/stability buyables<br>",
+                    "x" + format(this.effect()[0]) + " to decay (based on eclipse timer)<br>",
+                    "x" + format(this.effect()[1]) + " to stability (based on eclipse timer)<br></h5>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[2]) + " to colored radiation (based on eclipse shards)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            challengeType: 'Ec',
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.pet.legPetTimers[0].current.pow(0.065).div(10).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.pet.legPetTimers[0].current.pow(0.055).div(10).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[2] = player.sma.eclipseShards.pow(0.2).div(4).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) && player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        504: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard4.png" : "resources/Punchcards/lockedPunchcard.png"}, //MAKE SURE TO CHANGE PLACEHOLDER
+            title() {
+                let str = "Dysprosium-154"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks dysprosium-154 decay<br>",
+                    "x" + format(this.effect()[0]) + " to decay power (based on universe resets)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to space decay (based on radiation)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            challengeType: 'SM',
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.le.resetAmount.pow(0.4).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.ra.radiation.pow(0.0625).div(1000).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("ani", 27) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("ani", 27) && getLevelableTier("pu", 403, true) && !player.pet.legPetTimers[0].active},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        505: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard5.png" : "resources/Punchcards/lockedPunchcard.png"}, //MAKE SURE TO CHANGE PLACEHOLDER
+            title() {
+                let str = "Beta Decay"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks electrons<br>",
+                    "x" + format(this.effect()[0]) + " to electron gain (based on universe resets)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to time radiation (based on radiation)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.le.resetAmount.pow(0.6).mul(0.5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.ra.radiation.pow(0.0725).div(2000).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("mr", 18) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("mr", 18) && getLevelableTier("pu", 403, true) && (getLevelableTier("pu", 501, true) || getLevelableTier("pu", 502, true))},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
+                return look
+            }
+        },
+        506: {
+            image() {return this.canClick() ? "resources/Punchcards/radioactivePunchcard6.png" : "resources/Punchcards/lockedPunchcard.png"}, //MAKE SURE TO CHANGE PLACEHOLDER
+            title() {
+                let str = "Alpha Decay"
+                if (getLevelableTier(this.layer, this.id, true)) {str = str.concat("<small> [ACTIVE]</small>")} else {str = str.concat("<small style='color:gray'> [INACTIVE]</small>")}
+                return str
+            },
+            description() {
+                let str = [
+                    !getLevelableTier(this.layer, this.id, true) ? "<span style='color:gray'>" : "",
+                    "<u>Active</u><br>",
+                    "Unlocks alpha particles<br>",
+                    "x" + format(this.effect()[0]) + " to alpha particle gain (based on universe resets)<br>",
+                    !getLevelableTier(this.layer, this.id, true) ? "</span>" : "",
+                    "<u>Passive</u><br>",
+                    "x" + format(this.effect()[1]) + " to space radiation (based on radiation)",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
+                ]
+                return str.join("")
+            },
+            effectScale() {
+                let scale = new Decimal(1)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) scale = getLevelableAmount(this.layer, this.id).mul(0.025).add(1.75)
+                if (getLevelableAmount(this.layer, this.id).gte(50)) scale = getLevelableAmount(this.layer, this.id).sub(49).log(2).mul(0.01).add(3).min(4)
+                return scale
+            },
+            effect() {
+                let eff = [new Decimal(1), new Decimal(1)]
+                eff[0] = player.le.resetAmount.pow(0.6).mul(0.5).add(1).pow(this.effectScale()).pow(player.bl.bloodEffect)
+                eff[1] = player.ra.radiation.pow(0.07).div(3000).add(1).pow(this.effectScale())
+                return eff
+            },
+            // CLICK CODE
+            unlocked() {return (hasUpgrade("hr", 18) && getLevelableTier("pu", 403, true)) || this.canClick()},
+            canSelect() {return hasUpgrade("hr", 18) && getLevelableTier("pu", 403, true) && (getLevelableTier("pu", 504, true))},
+            canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableTier(this.layer, this.id, true)},
+            onClick() {return layers[this.layer].levelables.index = this.id},
+            // LEVEL CODE
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).add(1).pow(15).mul(1e10).floor()
+                if (getLevelableAmount(this.layer, this.id).gte(10)) return Decimal.pow(100, getLevelableAmount(this.layer, this.id).sub(9)).mul(4e25).floor()
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            // STYLE CODE
+            barStyle() { return {backgroundColor: "#1a3b0f"}},
+            style() {
+                let look = {width: "80px", height: "152px", borderColor: "black"}
+                !this.canClick() ? look.backgroundColor = "#222222" : getLevelableTier(this.layer, this.id, true) ? look.backgroundColor = "#146111" : look.backgroundColor = "#082407"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid #aaa" : look.outline = "0px solid #aaa"
                 return look
             }
@@ -2796,20 +3282,25 @@ addLayer("pu", {
                                 ["levelable", 200], ["levelable", 209], ["levelable", 210], ["levelable", 211], ["levelable", 212],
                                 ["levelable", 213], ["levelable", 214], ["levelable", 215],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #705b1c 0 15px, #8c7223 0 30px)", padding: "2px"} : {width: "600px", background: "repeating-linear-gradient(-45deg, #666666 0 15px, #808080 0 30px)", padding: "2px", borderBottom: "3px solid #7f5f00"}}],
-
+                            ["style-column", [
+                                ["raw-html", () => { return "Radioactive (30%)<h6>[Takes priority over other card rarities]<br>(Some radioactive punchcards require other radioactive punchcards)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "601px", height: "64px", backgroundColor: "#58c454", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-row", [
+                                ["levelable", 501], ["levelable", 502],["levelable", 503],["levelable", 504],["levelable", 505],["levelable", 506],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #146111 0 15px, #1d8e19 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", "Epic (10%)", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "601px", height: "40px", backgroundColor: "#3078bf", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304],  
                                 ["levelable", 300], ["levelable", 305], ["levelable", 306], ["levelable", 307], ["levelable", 308],
-                                ["levelable", 309],
+                                ["levelable", 309], ["levelable", 310],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #183b5e 0 15px, #1e4a75 0 30px)", padding: "2px"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["raw-html", () => { return "Legendary (" + formatWhole(player.pu.legendaryPunchcardChance.mul(100)) + "%)<h6>[Chance increases with available legendaries]<br>[Takes priority over other card rarities]"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => {return hasUpgrade("le", 201) ? {width: "601px", height: "64px", backgroundColor: "#AB2042", border: "2px solid #0000007f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
-                                ["levelable", 401], ["levelable", 402],
+                                ["levelable", 401], ["levelable", 402], ["levelable", 403],
                             ], () => {return hasUpgrade("le", 201) ? {width: "600px", background: "repeating-linear-gradient(-45deg, #541021 0 15px, #661328 0 30px)", padding: "2px"} : {display: "none !important"}}],
                         ], {width: "620px", height: "522px"}],
                     ], {width: "620px", height: "700px", border: "3px solid #8ca3ff", backgroundColor: "#1c2033"}],
@@ -2835,3 +3326,13 @@ addLayer("pu", {
     deactivated() {return player.pu.paused},
     layerShown() { return player.startedGame == true },
 })
+
+
+/*
+                            ["style-column", [
+                                ["raw-html", () => { return "Radioactive (30%)<h6>[Takes priority over other card rarities]<br>(Some radioactive punchcards require other radioactive punchcards)"}, {color: "#1d8e19", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "535px", height: "70px", backgroundColor: "#146111", borderTop: "3px solid #1d8e19", borderBottom: "3px solid #1d8e19", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-row", [
+                                ["levelable", 501], ["levelable", 502], ["levelable", 503], ["levelable", 504], ["levelable", 505], ["levelable", 506],
+                            ], () => {return hasUpgrade("ani", 26) && getLevelableTier("pu", 403, true) ? {width: "525px", backgroundColor: "#082407", padding: "5px"} : {display: "none !important"}}],
+*/

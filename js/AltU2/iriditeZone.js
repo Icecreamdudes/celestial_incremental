@@ -533,6 +533,7 @@ SB_celestialites.iridite = {
         arena.bossActive = false
 
         player.ir.iriditeDefeated = true
+        if (!player.ir.tookDamageInIriditeFight) player.ir.astralShipUnlocked = true
         player.ir.battleXP = player.ir.battleXPReq
     },
     draw: (ctx, celestialite) => {

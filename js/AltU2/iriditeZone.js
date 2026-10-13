@@ -192,6 +192,7 @@ SB_zones.iriditeZone = {
     levelUp(level) {
         if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("iridite")
+            player.ir.tookDamageInIriditeFight = false
         }
     },
     statMult: new Decimal(4),

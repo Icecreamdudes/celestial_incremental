@@ -227,6 +227,7 @@
                 "</div></div>"
             },
             title: "Spinny spinny wheel haha",
+            onPurchase() { player.wof.wheelsSpinned = decimalZero },
             unlocked() { return hasUpgrade("za", 12) },
             description: "Unlock the wheel of fortune!!!",
             cost: new Decimal(10000),

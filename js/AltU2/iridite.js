@@ -1622,7 +1622,7 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
-            canClick() { return arena ? (selectedSalvagedUpgradeIndex != 0) : true},
+            canClick() { return arena ? (arena.selectedSalvagedUpgradeIndex != 0) : true},
             unlocked() { return arena && arena.salvagedUpgradeChoices.length > 0},
             onClick() {
                 if (!arena || arena.salvagedUpgradeChoices.length <= 0) return;
@@ -1648,7 +1648,7 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
-            canClick() { return arena ? (selectedSalvagedUpgradeIndex != 1) : true},
+            canClick() { return arena ? (arena.selectedSalvagedUpgradeIndex != 1) : true},
             unlocked() { return arena && arena.salvagedUpgradeChoices.length > 1},
             onClick() {
                 if (!arena || arena.salvagedUpgradeChoices.length <= 1) return;
@@ -1674,7 +1674,7 @@ addLayer("ir", {
                 "</div></div><div style='height:" + this.style().borderWidth + ";background-color:" + this.style().borderColor + "'></div><div style='padding-left:4px;padding-right:4px;height:78px;display:flex;align-items:center'><div>" + 
                 upg.description() // MIDDLE
             },
-            canClick() { return arena ? (selectedSalvagedUpgradeIndex != 2) : true},
+            canClick() { return arena ? (arena.selectedSalvagedUpgradeIndex != 2) : true},
             unlocked() { return arena && arena.salvagedUpgradeChoices.length > 2},
             onClick() {
                 if (!arena || arena.salvagedUpgradeChoices.length <= 2) return;

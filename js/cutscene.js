@@ -3526,7 +3526,7 @@
         "D1-Blood": {
             type: "normal",
             portrait: "resources/secret.png",
-            trigger() {return player.bl.blood.gte(1)},
+            trigger() { try{ return player.bl.blood.gte(1) } catch(e) { return false; } },
             dialogue: [
                 { text: "You soon realize that you have superphysical powers imbued into your own blood.", },
                 { text: "Are these powers constructed into your very own physical being?", },

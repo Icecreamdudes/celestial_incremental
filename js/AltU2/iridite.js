@@ -54,6 +54,7 @@ let rerollBuyableShipUpgrades = function(luck) {
             space: true,
             blood: hasUpgrade("le", 201),
             junk: true,
+            labyrinth: false,
         }
     }) : [];
 
@@ -528,15 +529,11 @@ addLayer("ir", {
         player.ir.sendGain = SB_AUTO_DATA[player.ir.shipType].getFinalMult(SB_AUTO_DATA[player.ir.shipType].getBaseStatMult())
         if (hasUpgrade("ir", 302)) player.ir.sendGain = player.ir.sendGain.mul(1.5)
         player.ir.shipUpgradeRerollTimer = player.ir.shipUpgradeRerollTimer.sub(delta)
-        if (player.ir.shipUpgradeShop.length == 0 || player.ir.shipUpgradeRerollTimer.lte(0)) {
+        if (player.ir.shipUpgradeRerollTimer.lte(0)) {
             rerollBuyableShipUpgrades(0)
             player.ir.shipUpgradeRerollTimer = new Decimal(1800)
         }
 
-        if (!player.ir.shipUpgradeShop || player.ir.shipUpgradeShop.length === 0 || player.ir.shipUpgradeRerollTimer.lte(0)) {
-            rerollBuyableShipUpgrades(0);
-            player.ir.shipUpgradeRerollTimer = new Decimal(1800);
-        }
         player.ir.battleXPReq = player.ir.battleLevel.add(9).mul(5).add(player.ir.battleLevel.sub(1).pow(2))
         if (hasUpgrade("ir", 103)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)
         if (hasUpgrade("ir", 106)) player.ir.battleXPReq = player.ir.battleXPReq.div(1.5)

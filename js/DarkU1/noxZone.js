@@ -111,7 +111,8 @@ addLayer("noxZone", {
                 ["raw-html", "Gain half as many blood stones.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                 ["blank", "10px"],
                 ["raw-html", "<u>Unlocks</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                ["raw-html", "[Coming Soon]", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", "With the fifth pylon and projects built, you'll see what this world has truly been. Eclipse, you must create your field again, but don't get punchcards early on within. When you make seven, your opponent spawns and you will learn your lesson.", {color: "#88f", fontSize: "18px", fontFamily: "monospace"}],
+
                 ["blank", "10px"],
                 ["raw-html", "<u>Effects</u>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ["raw-html", "\"Humanity\" punchcard cost decreased from 5 -> 3.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],

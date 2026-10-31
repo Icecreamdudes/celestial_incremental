@@ -1276,7 +1276,7 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 
 	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
-	<h3>v1.15 - v1.15 - Decaying Descent</h3><br>
+	<h3>v1.15 - Decaying Descent</h3><br>
 		Content:<br>
 			- DUE TO THE SECRETIVE NATURE OF THIS UPDATE, THIS WON'T BE REVEALED [For the next few weeks or so]<br>
 			- Check Nox perks!<br>

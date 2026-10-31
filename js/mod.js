@@ -1279,9 +1279,9 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.15 - Decaying Descent</h3><br>
 		Content:<br>
 			- DUE TO THE SECRETIVE NATURE OF THIS UPDATE, THIS WON'T BE REVEALED [For the next few weeks or so]<br>
-			- Check Nox perks!<br>
+			- Check Nox perks!<br><br>
 		Balancing:<br>
-			-Made a lot of balancing changes
+			-Made a lot of balancing changes<br><br>
 		Bug Fixes:<br>
 			-Fixed a lot of bugs<br><br>
 	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>

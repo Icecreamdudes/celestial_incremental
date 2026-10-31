@@ -641,6 +641,7 @@ addLayer("cbs", {
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
             cost: new Decimal(1e42),
+            canAfford: false,
             currencyLocation() { return player.za },
             currencyDisplayName: "Chance Points",
             currencyInternalName: "chancePoints",
@@ -665,6 +666,7 @@ addLayer("cbs", {
                 "</div></div>"
             },
             title: "Blessing IX",
+            canAfford: false,
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
             cost: new Decimal(1e42),
@@ -692,6 +694,7 @@ addLayer("cbs", {
                 "</div></div>"
             },
             title: "Blessing IX",
+            canAfford: false,
             unlocked() { return player.cbs.shrineReactivated },
             description() { return "Ascension Shards boost Evolution Shard Chance. (x" + format(this.effect()) + ")"},
             cost: new Decimal(1e42),

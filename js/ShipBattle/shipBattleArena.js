@@ -3121,9 +3121,7 @@ class SpaceArena {
         const INVULN_MS = 1000 / 3;
         if (this.shipHitInvuln && this.shipHitInvuln > 0) return false;
 
-        if (this.enemies.concat(this.asteroids).some(e => e.type === "iriditeBoss" && e.health.gt(0))) {
-            player.ir.tookDamageInIriditeFight = true;
-        }
+        this.damageCheckIridite();
 
         // grant invulnerability
         this.shipHitInvuln = INVULN_MS;
@@ -3156,6 +3154,13 @@ class SpaceArena {
             else if (typeof player.ir.shipHealth === 'number' && player.ir.shipHealth <= 0) this.onShipDeath();
         } catch (e) {}
         return true;
+    }
+
+    // Checks if damage was taken while iridite boss is alive.
+    damageCheckIridite() {
+        if (this.enemies.concat(this.asteroids).some(e => e.type === "iridite" && e.health.gt(0))) {
+            player.ir.tookDamageInIriditeFight = true;
+        }
     }
 
     createSmallAsteroid(x, y) {

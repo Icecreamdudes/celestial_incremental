@@ -115,9 +115,9 @@
         }
 
         //Conditions for aniciffo unlock (very secret)
-        if (player.le.resetAmount.gte(7) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && player.pet.legPetTimers[0].active) {
+        if (player.le.resetAmount.gte(7) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && player.pet.legPetTimers[0].active && hasUpgrade("wel", 21)) {
             player.du.aniciffoSummon = true
-        } else if (player.le.resetAmount.gte(10) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && !player.pet.legPetTimers[0].active && hasUpgrade("ani", 16)) 
+        } else if (player.le.resetAmount.gte(10) && player.du.noPunchcards && player.s.pylonBuilt && player.bl.noxDefeated && !player.pet.legPetTimers[0].active && hasUpgrade("ani", 16) && hasUpgrade("wel", 21)) 
         {
             player.du.aniciffoSummon = true
         } else

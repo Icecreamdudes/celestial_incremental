@@ -162,6 +162,7 @@ SB_zones.noxZone = {
     levelUp(level) {
         if (level.modulo(20).eq(0)) {
             SB_spawnCelestialite("nox")
+            player.ir.battleXP = new Decimal(0); // Avoid player from leveling past boss and missing the fight
         }
     },
     statMult: new Decimal(4.44),

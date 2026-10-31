@@ -17,7 +17,8 @@
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/core.js", "Singularity/coreFragments.js", "DarkU1/funify2.js",
-		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js", "AltU2/shipBattleFunctions.js", "AltU2/shipBattleShips.js",
+		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/spacePets.js", "AltU2/starDimensions.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js", "AltU2/spaceship.js",
+		"ShipBattle/shipBattle.js", "ShipBattle/shipBattleFunctions.js", "ShipBattle/shipBattleShips.js",
 		"AltU2/spaceZone1.js", "AltU2/spaceZone2.js", "AltU2/iriditeZone.js", "AltU2/spaceZone3.js", "AltU2/evolutionField.js", "AltU2/spaceZone4.js", 
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
@@ -32,7 +33,7 @@
 		"Hive/nest.js", "Check Back/gwaTemple.js", "Zar/zarDungeon.js", "Black Heart/creation.js", "DarkU1/rerollPoints.js",
 		"DarkAU1/aniciffo.js", "DarkAU1/timeRadiation.js", "DarkAU1/spaceRadiation.js", "DarkAU1/mindRadiation.js", "DarkAU1/heartRadiation.js",
 		"DarkAU1/decay.js", "DarkAU1/hopeRadiation.js", "DarkAU1/rageRadiation.js", "DarkAU1/labyrinth.js", "DarkAU1/msb.js", "DarkAU1/msb2.js", "DarkAU1/msb3.js",
-		"Check Back/diamondDust.js", "Check Back/treasureRoom.js", "Check Back/reclock.js",
+		"Check Back/diamondDust.js", "Check Back/treasureRoom.js", "Check Back/reclock.js", "Hall of Celestials/celestialHall2.js",
 
 		"Singularity/lightRift.js",
 		"Interspace/well.js", "Interspace/projects.js", "Interspace/prisms.js", "Interspace/blueshift.js", "Interspace/bumpy.js", "Interspace/cere.js", "Check Back/goobert.js",
@@ -54,7 +55,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 11400, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 11403 = v1.14.3)
+	num: 11401, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 11403 = v1.14.3)
 	name: "A Change of Space",
 }
 
@@ -257,7 +258,7 @@ function updateStyles() {
 			if (player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.matosLair.milestone[25] > 0) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
-		case "sma": case "sme": case "smn":
+		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			if (player.tab == "sme" && player.subtabs["sme"]["stuff"] == "Starmetal Studies") layerBG = "linear-gradient(120deg, #393a15 0%, #2f260c 25%, #3a181d 50%, #35183a, 75%, #18333a 100%)"
 			break;
@@ -326,7 +327,8 @@ function updateStyles() {
 					layerBG = "linear-gradient(45deg, #0d132e 0%, #0b1a22 100%)"
 					break; 
 				case "roomBoss": 
-					layerBG = "linear-gradient(35deg, #083019 0%, #182730 100%)"
+					if (player.bh.celestialite.id != "noxBoss") layerBG = "linear-gradient(35deg, #083019 0%, #182730 100%)"
+					if (player.bh.celestialite.id == "noxBoss") layerBG = "linear-gradient(15deg, #410f2aff 0%, #4f1818 50%, #290303ff 100%)"
 					break;
 				default: 
 					layerBG = "linear-gradient(0deg, black)"
@@ -345,7 +347,7 @@ function updateStyles() {
 		case "dec":
 			layerBG = "url(resources/ad1bg2.png)"
 			break;
-		case "ch": case "mm":
+		case "ch": case "mm": case "ch2":
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
 			break;
 		case "ro": case "mi":
@@ -379,6 +381,9 @@ function updateStyles() {
 			break;
 		case "bum":
 			layerBG = "linear-gradient(0deg, #dfffdf -700%, #180b18 100%)"
+			break;
+		case "cer":
+			layerBG = "linear-gradient(0deg, #402030 0%, #1f0812 100%)"
 			break;
 		case "cer":
 			layerBG = "linear-gradient(0deg, #402030 0%, #1f0812 100%)"
@@ -444,43 +449,131 @@ function updateStyles() {
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
-	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || player.tab === "sa" || player.tab === "sh" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
-	    // Add the galaxy background if it doesn't already exist
-    	if (!document.getElementById("galaxy-background")) {
-	        const galaxyBackground = document.createElement("div");
-        	galaxyBackground.id = "galaxy-background";
-    	    galaxyBackground.style.position = "fixed";
-	        galaxyBackground.style.top = "0";
-        	galaxyBackground.style.left = "0";
-    	    galaxyBackground.style.width = "100%";
-	        galaxyBackground.style.height = "100%";
-        	galaxyBackground.style.overflow = "hidden";
-    	    galaxyBackground.style.zIndex = "-2003"; // Ensure it stays in the background
-	        galaxyBackground.style.background = "radial-gradient(circle, #151230, #000000)"; // Galaxy gradient
-        	document.body.appendChild(galaxyBackground);
+	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "spet" || player.tab === "sdim" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || player.tab === "sa" || player.tab === "sh" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+	    //if (options.performanceMode) {
+			// Add the galaxy background if it doesn't already exist
+    		if (!document.getElementById("galaxy-background")) {
+	    	    const galaxyBackground = document.createElement("div");
+        		galaxyBackground.id = "galaxy-background";
+    		    galaxyBackground.style.position = "fixed";
+	    	    galaxyBackground.style.top = "0";
+        		galaxyBackground.style.left = "0";
+    		    galaxyBackground.style.width = "100%";
+	    	    galaxyBackground.style.height = "100%";
+        		galaxyBackground.style.overflow = "hidden";
+    		    galaxyBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+	    	    galaxyBackground.style.background = "radial-gradient(circle, #151230, #000000)"; // Galaxy gradient
+        		document.body.appendChild(galaxyBackground);
 
-    	    // Add stars
-	        for (let i = 0; i < 200; i++) {
-            	const star = document.createElement("div");
-        	    star.style.position = "absolute";
-    	        star.style.width = `${Math.random() * 2 + 1}px`; // Random size between 1px and 3px
-	            star.style.height = star.style.width; // Ensure the height matches the width
-            	star.style.backgroundColor = "white"; // Plain white color
-        	    star.style.borderRadius = "50%"; // Make it circular
-    	        star.style.top = `${Math.random() * 100}vh`; // Random vertical position
-	            star.style.left = `${Math.random() * 100}vw`; // Random horizontal position
-	            galaxyBackground.appendChild(star);
-	        }
-	    }
+    		    // Add stars
+	    	    for (let i = 0; i < 200; i++) {
+        	    	const star = document.createElement("div");
+        		    star.style.position = "absolute";
+    		        star.style.width = `${Math.random() * 2 + 1}px`; // Random size between 1px and 3px
+	    	        star.style.height = star.style.width; // Ensure the height matches the width
+        	    	star.style.backgroundColor = "white"; // Plain white color
+        		    star.style.borderRadius = "50%"; // Make it circular
+    		        star.style.top = `${Math.random() * 100}vh`; // Random vertical position
+	    	        star.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+	    	        galaxyBackground.appendChild(star);
+	    	    }
+	    	}
+		/*} else {
+			if (!document.getElementById("fancy-galaxy-background")) {
+				const fancyGalaxyBackground = document.createElement("canvas");
+				fancyGalaxyBackground.id = "fancy-galaxy-background";
+				fancyGalaxyBackground.transitionDuration = "0s";
+				fancyGalaxyBackground.style.filter = "blur(3px)";
+				fancyGalaxyBackground.style.position = "fixed";
+				fancyGalaxyBackground.style.top = "0";
+				fancyGalaxyBackground.style.left = "0";
+				fancyGalaxyBackground.style.width = "100%";
+				fancyGalaxyBackground.style.height = "100%";
+				fancyGalaxyBackground.style.overflow = "hidden";
+				fancyGalaxyBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+	    	    fancyGalaxyBackground.style.backgroundImage = "url(resources/ui/spaceBattle/spaceZone1.png)"; // Galaxy gradient
+				fancyGalaxyBackground.initialized = false
+				document.body.appendChild(fancyGalaxyBackground);
+			} else {
+				const fancyGalaxyBackground = document.getElementById("fancy-galaxy-background");
+				const rect = fancyGalaxyBackground.getBoundingClientRect()
+				const ctx = fancyGalaxyBackground.getContext('2d')
+				fancyGalaxyBackground.width = window.innerWidth;
+				fancyGalaxyBackground.height = window.innerHeight;
+				fancyGalaxyBackground.style.backgroundPosition = "0 " + ((Date.now() / 16) % 3200) + "px";
+				fancyGalaxyBackground.style.transitionDuration = "0s";
+
+				ctx.clearRect(0, 0, 800, 800)
+				ctx.save()
+				ctx.globalAlpha = Math.abs(Math.sin((Date.now() / 10000) % (Math.PI * 2)))
+				ctx.translate(0, (Date.now() / 16) % 3200)
+				let img = new Image()
+				img.src = "resources/ui/spaceBattle/spaceZone1.png"
+				ctx.fillStyle = ctx.createPattern(img, "repeat");
+				ctx.fillRect(0, -(Date.now() / 16) % 3200, fancyGalaxyBackground.width, fancyGalaxyBackground.height);
+				ctx.globalCompositeOperation = 'lighter'
+				ctx.fillRect(0, -(Date.now() / 16) % 3200, fancyGalaxyBackground.width, fancyGalaxyBackground.height);
+			
+		}}*/
 	} else {
 	    // Remove the galaxy background if the tab is not "au2"
 	    const galaxyBackground = document.getElementById("galaxy-background");
 	    if (galaxyBackground) {
 	        galaxyBackground.remove();
 	    }
-	}
+	    const fancyGalaxyBackground = document.getElementById("fancy-galaxy-background");
+	    if (fancyGalaxyBackground) {
+	        fancyGalaxyBackground.remove();
+	    }
+	}/*
+	if (player.tab === "bl") {
+	    if (options.performanceMode) {
+		} else {
+			if (!document.getElementById("fancy-blood-background")) {
+				const fancyBloodBackground = document.createElement("canvas");
+				fancyBloodBackground.id = "fancy-blood-background";
+				fancyBloodBackground.transitionDuration = "0s";
+				fancyBloodBackground.style.filter = "blur(6px) brightness(50%)";
+				fancyBloodBackground.style.position = "fixed";
+				fancyBloodBackground.style.top = "0";
+				fancyBloodBackground.style.left = "0";
+				fancyBloodBackground.style.width = "100%";
+				fancyBloodBackground.style.height = "100%";
+				fancyBloodBackground.style.overflow = "hidden";
+				fancyBloodBackground.style.zIndex = "-2003"; // Ensure it stays in the background
+	    	    fancyBloodBackground.style.backgroundImage = "url(resources/ui/spaceBattle/bloodZone1.png)"; // Galaxy gradient
+				fancyBloodBackground.initialized = false
+				document.body.appendChild(fancyBloodBackground);
+			} else {
+				const fancyBloodBackground = document.getElementById("fancy-blood-background");
+				const rect = fancyBloodBackground.getBoundingClientRect()
+				const ctx = fancyBloodBackground.getContext('2d')
+				fancyBloodBackground.width = window.innerWidth;
+				fancyBloodBackground.height = window.innerHeight;
+				fancyBloodBackground.style.backgroundPosition = "0 " + ((Date.now() / 16) % 3200) + "px";
+				fancyBloodBackground.style.transitionDuration = "0s";
+
+				ctx.clearRect(0, 0, 800, 800)
+				ctx.save()
+				ctx.globalAlpha = Math.abs(Math.sin((Date.now() / 10000) % (Math.PI * 2)))
+				ctx.translate(0, (Date.now() / 16) % 3200)
+				let img = new Image()
+				img.src = "resources/ui/spaceBattle/bloodZone1.png"
+				ctx.fillStyle = ctx.createPattern(img, "repeat");
+				ctx.fillRect(0, -(Date.now() / 16) % 3200, fancyBloodBackground.width, fancyBloodBackground.height);
+				ctx.globalCompositeOperation = 'multiply'
+				ctx.fillRect(0, -(Date.now() / 16) % 3200, fancyBloodBackground.width, fancyBloodBackground.height);
+			}
+		}
+	} else {
+	    // Remove the galaxy background if the tab is not "au2"
+	    const fancyBloodBackground = document.getElementById("fancy-blood-background");
+	    if (fancyBloodBackground) {
+	        fancyBloodBackground.remove();
+	    }
+	}*/
 	if (!options.performanceMode && (player.tab === "cp" || player.tab === "ar" || player.tab === "an" || player.tab === "pr" || player.tab === "rt" || player.tab === "rg" || player.tab === "gs" || player.tab === "fu" || player.tab === "oi" || player.tab === "en")) {
-	    // Add the galaxy background if it doesn't already exist
+	    // Add the rain background if it doesn't already exist
     	if (!document.getElementById("rain-background")) {
 	        const rainBackground = document.createElement("canvas");
         	rainBackground.id = "rain-background";
@@ -553,8 +646,9 @@ function updateStyles() {
 	    }
 	}
 
-	if (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "lightRift") {
-    	let t = Date.now()
+	if (!options.performanceMode && (player.tab === "wel" || player.tab === "prj" || player.tab === "pri" || player.tab === "blu" || player.tab === "bum" || player.tab === "cer" || player.tab === "lightRift")
+    	) {
+		let t = Date.now()
     	t = ((t % 1000) / 1000) * 32
 		// Add the dotted background if it doesn't already exist
     	if (!document.getElementById("dotted-background")) {
@@ -575,7 +669,7 @@ function updateStyles() {
 			dottedBackground.style.backgroundPosition = `${t}px ${t}px`;
 	    }
 		const el = document.getElementById("dotted-background");
-		if (player.tab === "bum" || player.tab === "cer" || (player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon")) {
+		if ((player.tab === "prj" && player.subtabs["prj"]["stuff"] == "Pylon") || player.tab === "bum" || player.tab === "cer") {
 			el.style.backgroundImage = "url(resources/ui/dotted_background_light.png)";
 		} else {
 			el.style.backgroundImage = "url(resources/ui/dotted_background.png)";
@@ -588,7 +682,7 @@ function updateStyles() {
 	        dottedBackground.remove();
 	    }
 	}
-	if (player.tab === "wel" || player.tab === "cer") {
+	if (!options.performanceMode && (player.tab === "wel" || player.tab === "cer")) {
     	let t = Date.now()
     	t = ((t % 60000) / 60000) * 25
 		// Add the light ray background if it doesn't already exist
@@ -608,31 +702,32 @@ function updateStyles() {
         	lightRayBackground.style.overflow = "hidden";
 	    }
 		const el = document.getElementById("lightRay-background");
-		if (player.tab === "wel") {
-			el.style.background = "conic-gradient(at 50% -64px, " +
-			"#4d99730f " + (t - 12.5) + "%, #4d99730f " + t + "%," +
-			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
-			"#4d99730f " + (t + 12.5) + "%, #4d99730f " + (t + 25) + "%," +
-			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
-			"#4d99730f " + (t + 37.5) + "%, #4d99730f " + (t + 50) + "%," +
-			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
-			"#4d99730f " + (t + 62.5) + "%, #4d99730f " + (t + 75) + "%," +
-			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
-			"#4d99730f " + (t + 87.5) + "%, #4d99730f " + (t + 100) + "%," +
-			"#0000 " + (t + 100) + "%)"
-		} else if (player.tab === "cer") {
-			el.style.background = "conic-gradient(at 50% -64px, " +
-			"#ff80c00f " + (t - 12.5) + "%, #ff80c00f " + t + "%," +
-			"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
-			"#ff80c00f " + (t + 12.5) + "%, #ff80c00f " + (t + 25) + "%," +
-			"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
-			"#ff80c00f " + (t + 37.5) + "%, #ff80c00f " + (t + 50) + "%," +
-			"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
-			"#ff80c00f " + (t + 62.5) + "%, #ff80c00f " + (t + 75) + "%," +
-			"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
-			"#ff80c00f " + (t + 87.5) + "%, #ff80c00f " + (t + 100) + "%," +
-			"#0000 " + (t + 100) + "%)"
+		let pos = window.innerWidth > 1250 ? "calc(50% + 200px) 100%" : "50% calc(93% - 6px)"
+		let color = "#ffffff"
+		switch (player.tab) {
+			case "wel": {
+				color = "#4d9973"
+			break; }
+			case "cer": {
+				color = "#ff80c0"
+			break; }
+			case "default": {
+				color = "#ffffff"
+			break; }
 		}
+		el.style.background = "conic-gradient(at " + pos + ", " +
+		color + "0f " + (t - 37.5) + "%, " + color + "0f " + (t - 25) + "%," +
+		"#0000 " + (t - 25) + "%, #0000 " + (t - 12.5) + "%," +
+		color + "0f " + (t - 12.5) + "%, " + color + "0f " + t + "%," +
+		"#0000 " + t + "%, #0000 " + (t + 12.5) + "%," +
+		color + "0f " + (t + 12.5) + "%, " + color + "0f " + (t + 25) + "%," +
+		"#0000 " + (t + 25) + "%, #0000 " + (t + 37.5) + "%," +
+		color + "0f " + (t + 37.5) + "%, " + color + "0f " + (t + 50) + "%," +
+		"#0000 " + (t + 50) + "%, #0000 " + (t + 62.5) + "%," +
+		color + "0f " + (t + 62.5) + "%, " + color + "0f " + (t + 75) + "%," +
+		"#0000 " + (t + 75) + "%, #0000 " + (t + 87.5) + "%," +
+		color + "0f " + (t + 87.5) + "%, " + color + "0f " + (t + 100) + "%," +
+		"#0000 " + (t + 100) + "%)"
 	} else {
 	    // Remove the light ray background if the tab is not in the well
 	    const lightRayBackground = document.getElementById("lightRay-background");
@@ -1014,10 +1109,10 @@ function updateStyles() {
 			if (!player.sma.inStarmetalChallenge && player.tab == "hor") player.musuniverse = "A1"
 			if (!player.sma.inStarmetalChallenge && player.tab == "rar") player.musuniverse = "UB"
 			break;
-		case "ch": case "mm":
+		case "ch": case "mm": case "ch2":
             player.musuniverse = "CH"
 			break;
-		case "au2": case "st": case "pl": case "ir": case "se": case "sb": case "sa": case "sh":
+		case "au2": case "st": case "spet": case "sdim": case "pl": case "ir": case "se": case "sb": case "sa": case "sh":
 			player.musuniverse = "A2"
 			break;
 		case "mi":
@@ -1028,7 +1123,7 @@ function updateStyles() {
 			player.musuniverse = "UB"
 			break;
 		case "wel": case "pri": case "prj": case "blu": case "bum":
-		case "cer":
+		case "cer": case "smn":
 			player.musuniverse = "UD"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
@@ -1091,6 +1186,10 @@ function updateStyles() {
 							}
 							if (player.bh.currentStage == "depth1" && player.bh.combo.lt(0)) {
 								playAndLoopAudio("music/depth1Encore.mp3", options.musicVolume/10)
+								break;
+							}
+							if (player.bh.currentStage == "roomBoss" && player.bh.celestialite.id == "noxBoss") {
+								playAndLoopAudio("music/bloodBattle.mp3", options.musicVolume/10)
 								break;
 							}
 							// Default Behavior
@@ -1167,16 +1266,24 @@ let hotkey = `<h1>Hotkeys:</h1><br>
 
 let credits = `<h1>Credits:</h1><br>
 		-Game by Icecreamdude.<br>
-		-Music by !Sweet and 150percent.<br>
-		-Ideas and Balancing by Nova.<br>
-		-Art by Jtoh_Sc.<br>
-		-Testing by Nova and Piterpicher.<br>
-		-Bug Fixes by Tsanth and Forwaken.<br>
+		-Music by Icecreamdude and 150percent.<br>
+		-Content by Icecreamdude, Forwaken, Bumpy, Akash.<br>
+		-Additional development by Ruzz and Deusovi.<br>
+		-Art by Bumpy, Akash and other contributors.<br>
+		-Tested by a bunch of people.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
 
 	<h2 style='color:#ff3f3f'>MAJOR SPOILERS BELOW</h2><br><br>
+	<h3>v1.15 - v1.15 - Decaying Descent</h3><br>
+		Content:<br>
+			- DUE TO THE SECRETIVE NATURE OF THIS UPDATE, THIS WON'T BE REVEALED [For the next few weeks or so]<br>
+			- Check Nox perks!<br>
+		Balancing:<br>
+			-Made a lot of balancing changes
+		Bug Fixes:<br>
+			-Fixed a lot of bugs<br><br>
 	<h3>v1.14 - The Interspace Update Part I: A Change of Space</h3><br>
 	
 		Content:<br>
@@ -2768,6 +2875,28 @@ function fixOldSave(oldVersion){
 		player.cbs.buyables[21] = new Decimal(0)
 		player.cbs.buyables[22] = new Decimal(0)
 		player.cbs.buyables[23] = new Decimal(0)
+	}
+	if (oldVersion < 11401) {
+		player.sdim.starPower = new Decimal(player.st.starPower)
+		player.sdim.dimensionAmounts = player.st.dimensionAmounts
+		player.sdim.dimensionsTimer = player.st.dimensionsTimer
+		player.sdim.dimensionsTimerMax = player.st.dimensionsTimerMax
+		player.sdim.dimensionsGain = player.st.dimensionsGain
+		player.sdim.dimensionPower = player.st.dimensionPower
+		player.sdim.dimensionPowerEffects = player.st.dimensionPowerEffects
+		player.sdim.dimensionPowerPerSecond = player.st.dimensionPowerPerSecond
+		player.sdim.dimMax = player.st.dimMax
+		player.sdim.buyables[1] = new Decimal(player.st.buyables[1])
+		player.sdim.buyables[11] = new Decimal(player.st.buyables[11])
+		player.sdim.buyables[12] = new Decimal(player.st.buyables[12])
+		player.sdim.buyables[13] = new Decimal(player.st.buyables[13])
+		player.sdim.buyables[14] = new Decimal(player.st.buyables[14])
+		player.sdim.buyables[15] = new Decimal(player.st.buyables[15])
+		player.sdim.buyables[16] = new Decimal(player.st.buyables[16])
+		player.sdim.buyables[17] = new Decimal(player.st.buyables[17])
+		player.sdim.buyables[18] = new Decimal(player.st.buyables[18])
+
+		player.spet.levelables = player.st.levelables
 	}
 }
 

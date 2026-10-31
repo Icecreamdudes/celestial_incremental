@@ -1339,57 +1339,71 @@ SB_celestialites.aniciffo1 = {
             }
         }
 
-        // 2. Draw Boss Body
+       // 3. Boss Body & Effects
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 4, celestialite.radius * 4]);
         if (!wrapped) return;
 
         ctx.save();
         ctx.translate(wrapped[0] + camX, wrapped[1] + camY);
 
-        // Telegraph Aim Guide Line (Only during the 30-tick windup)
-        if (celestialite.currentAttack === "dashSlash" && celestialite.attackTimer > 26) {
-            let progress = Math.max(0, Math.min(1, (56 - celestialite.attackTimer) / 30));
+        if (celestialite.phase === 2) {
+            let pulse = Math.sin(celestialite.phase2Aura || 0) * 8;
+            let auraRadius = Math.max(0, celestialite.radius + 14 + pulse);
+            ctx.beginPath();
+            ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(74, 222, 128, 0.45)";
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([6, 6]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        let isAiming = (celestialite.currentAttack === "dashSlash" && celestialite.attackTimer > 22) ||
+                       (celestialite.currentAttack === "blinkDash" && celestialite.dashPhase === "telegraph");
+
+        if (isAiming) {
             ctx.save();
             ctx.rotate(celestialite.aimAng);
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.lineTo(550, 0);
-            ctx.strokeStyle = `rgba(74, 222, 128, ${0.4 + progress * 0.6})`;
-            ctx.lineWidth = 2.5 + progress * 3.5;
+            ctx.lineTo(850, 0);
+            ctx.strokeStyle = celestialite.phase === 2 ? "rgba(134, 239, 172, 0.85)" : "rgba(74, 222, 128, 0.75)";
+            ctx.lineWidth = celestialite.phase === 2 ? 3.5 : 2.8;
             ctx.setLineDash([10, 6]);
             ctx.stroke();
             ctx.restore();
         }
 
-        // Shockwave Ring
         if (celestialite.pulseRing > 0) {
+            let maxRing = celestialite.maxPulseRing || 60;
+            let currentRadius = Math.max(0, (maxRing - celestialite.pulseRing) * 5.5);
             ctx.beginPath();
-            ctx.arc(0, 0, (48 - celestialite.pulseRing) * 5, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(134, 239, 172, ${celestialite.pulseRing / 48})`;
+            ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(134, 239, 172, ${Math.max(0, celestialite.pulseRing / maxRing)})`;
             ctx.lineWidth = 3.5;
             ctx.stroke();
             celestialite.pulseRing--;
         }
 
-        // Colossal Sword Slash Arc Flare (Strictly visible only during active slash recovery)
-        if (celestialite.currentAttack === "dashSlash" && celestialite.attackTimer <= 10 && celestialite.slashEffect > 0) {
+        // Colossal Slash Arc Render
+        if (celestialite.slashEffect > 0) {
             ctx.save();
             ctx.rotate(celestialite.aimAng);
 
             ctx.beginPath();
-            ctx.arc(15, 0, celestialite.radius + 150, -1.5, 1.5);
+            ctx.arc(15, 0, celestialite.radius + 152, -1.5, 1.5);
             ctx.strokeStyle = `rgba(34, 197, 94, ${0.45 * celestialite.slashEffect})`;
             ctx.lineWidth = 38 * celestialite.slashEffect;
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(15, 0, celestialite.radius + 140, -1.45, 1.45);
+            ctx.arc(15, 0, celestialite.radius + 142, -1.45, 1.45);
             ctx.strokeStyle = `rgba(74, 222, 128, ${celestialite.slashEffect})`;
             ctx.lineWidth = 20 * celestialite.slashEffect;
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(15, 0, celestialite.radius + 135, -1.35, 1.35);
+            ctx.arc(15, 0, celestialite.radius + 136, -1.35, 1.35);
             ctx.strokeStyle = `rgba(255, 255, 255, ${celestialite.slashEffect})`;
             ctx.lineWidth = 8 * celestialite.slashEffect;
             ctx.stroke();
@@ -1397,91 +1411,29 @@ SB_celestialites.aniciffo1 = {
             ctx.restore();
         }
 
-        // Silhouette & Armor
-        ctx.fillStyle = "#03160a";
-        ctx.beginPath();
-        ctx.ellipse(-24, 6, 7, 28, 0.2, 0, Math.PI * 2);
-        ctx.ellipse(24, 6, 7, 28, -0.2, 0, Math.PI * 2);
-        ctx.ellipse(-12, 34, 6, 26, 0.05, 0, Math.PI * 2);
-        ctx.ellipse(12, 34, 6, 26, -0.05, 0, Math.PI * 2);
-        ctx.ellipse(0, 8, 18, 26, 0, 0, Math.PI * 2);
-        ctx.fill();
+        // Determine Directional Facing (Right = 1, Left = -1)
+        let facing = 1;
+        if (isAiming) {
+            facing = Math.cos(celestialite.aimAng) >= 0 ? 1 : -1;
+        } else if (Math.abs(celestialite.vx) > 0.15) {
+            facing = celestialite.vx > 0 ? 1 : -1;
+        } else {
+            facing = Math.cos(celestialite.playerAng || 0) >= 0 ? 1 : -1;
+        }
 
-        ctx.beginPath();
-        ctx.arc(0, -20, 24, 0, Math.PI * 2);
-        ctx.fillStyle = "#03160a";
-        ctx.fill();
-
-        ctx.fillStyle = "#0f2615";
-        ctx.strokeStyle = "#22c55e";
-        ctx.lineWidth = 2;
-
-        ctx.beginPath();
-        ctx.moveTo(-14, -2); ctx.lineTo(0, -10); ctx.lineTo(14, -2);
-        ctx.lineTo(11, 20); ctx.lineTo(0, 28); ctx.lineTo(-11, 20);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(0, 8, 5, 0, Math.PI * 2);
-        ctx.fillStyle = "#86efac";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(-16, -6); ctx.lineTo(-30, -14); ctx.lineTo(-24, 4); ctx.closePath();
-        ctx.moveTo(16, -6); ctx.lineTo(30, -14); ctx.lineTo(24, 4); ctx.closePath();
-        ctx.fillStyle = "#0f2615";
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(-20, -24); ctx.lineTo(-12, -38); ctx.lineTo(-4, -28);
-        ctx.lineTo(0, -42); ctx.lineTo(4, -28); ctx.lineTo(12, -38); ctx.lineTo(20, -24);
-        ctx.closePath();
-        ctx.fillStyle = "#0f2615";
-        ctx.fill();
-        ctx.strokeStyle = "#4ade80";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(134, 239, 172, 0.45)";
-        ctx.beginPath();
-        ctx.arc(-8, -19, 7, 0, Math.PI * 2);
-        ctx.arc(8, -19, 7, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(-8, -19, 4, 0, Math.PI * 2);
-        ctx.arc(8, -19, 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Executioner Sword
-        ctx.save();
-        ctx.translate(22, 10);
-        ctx.rotate(celestialite.swordAng);
-
-        ctx.beginPath();
-        ctx.moveTo(-4, 0); ctx.lineTo(4, 0); ctx.lineTo(5, -42); ctx.lineTo(0, -56); ctx.lineTo(-5, -42);
-        ctx.closePath();
-        ctx.fillStyle = "#071f0e";
-        ctx.fill();
-        ctx.strokeStyle = "#4ade80";
-        ctx.lineWidth = 1.75;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, -50);
-        ctx.strokeStyle = "#bbf7d0";
-        ctx.lineWidth = 1.25;
-        ctx.stroke();
-
-        ctx.fillStyle = "#0f2615";
-        ctx.fillRect(-10, 0, 20, 3.5);
-        ctx.fillRect(-2, 3.5, 4, 12);
-        ctx.restore();
+        // Render Aniciffo Animated Sprite via BHB_drawAniciffo
+        BHB_drawAniciffo(
+            ctx,
+            0,
+            0,
+            celestialite.swordAng ?? -0.4,
+            celestialite.phase || 1,
+            104,
+            104,
+            null,
+            facing,
+            true
+        );
 
         ctx.restore();
     }

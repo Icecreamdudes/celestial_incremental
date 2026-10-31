@@ -324,7 +324,7 @@ SB_celestialites.ritualSpirit = {
         arena.gammaTrails = []
         arena.bossActive = false
 
-        player.cbs.ascensionShards = ritualDuration < 90 ? player.cbs.ascensionShards.add(2) : player.cbs.ascensionShards.add(1)
+        player.cbs.ascensionShards = player.cbs.ritualDuration < 90 ? player.cbs.ascensionShards.add(2) : player.cbs.ascensionShards.add(1)
         player.ir.battleXP = player.ir.battleXPReq
 
         screenFlash("Ritual Success.\nYou have earned a Shard of Ascension.", 3000)
@@ -595,7 +595,7 @@ SB_celestialites.ritualMinion = {
     color: "#ffffe0",
     health: new Decimal(500),
     damage: new Decimal(5),
-    bodyDamage: new Decimal(1),
+    bodyDamage: new Decimal(2),
     regen: new Decimal(-5),
     reward() {
         let gain = {}

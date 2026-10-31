@@ -180,8 +180,8 @@ SB_celestialites.nox = {
     symbol: "nox",
     radius: 64,
     color: "#7a0000",
-    health: new Decimal(2e5),
-    damage: new Decimal(12),
+    health: new Decimal(5e5),
+    damage: new Decimal(30),
     bodyDamage: new Decimal(0.125),
     regen: new Decimal(16),
     reward() {

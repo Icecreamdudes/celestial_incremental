@@ -48,6 +48,7 @@
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("ra", 26))
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("anl", 22))
         player.mr.radiation.toGet = player.mr.radiation.toGet.mul(buyableEffect("anl", 109))
+        if (player.anl.aniciffoDefeated) player.mr.radiation.toGet = player.mr.radiation.toGet.mul(10)
 
         if (hasMilestone("rar", 15) && player.ani.passiveGeneration) player.mr.radiation.amount = player.mr.radiation.amount.add(player.mr.radiation.toGet.mul(Decimal.mul(0.01, delta)))
 
@@ -254,7 +255,7 @@
             currencyDisplayName: "Mind Radiation",
             currencyInternalName: "amount",
             effect() {
-                return player.dec.decay.pow(5).add(1)
+                return player.dec.decay.pow(3).add(1)
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
@@ -280,7 +281,7 @@
                     ["blank", "25px"],
                     ["raw-html", () => { return formatWhole(player.mr.particleClick) + "/" + formatWhole(player.mr.particleClickReq) + " mind radiation particles clicked."}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.mr.radiation.amount) + "</h3> mind radiation. (+" + format(player.mr.radiation.toGet) + "/" + formatTime(player.mr.radiation.max) + "/" + formatWhole(player.mr.particleClickReq) + ")"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.mr.radiation.amount) + "</h3> mind radiation. (+" + format(player.mr.radiation.toGet) + "/" + formatTime(player.mr.radiation.max) + "/" + formatWhole(player.mr.particleClickReq) + ")"}, {color: "#00923d", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Based on dark radiation)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts dark celestial point gain by x<h3>" + format(player.mr.radiation.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts space buyable effects by ^<h3>" + format(player.mr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],

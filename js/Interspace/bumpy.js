@@ -20,75 +20,93 @@
         fountains: {
             1: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
             2: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
             3: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
             4: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
             5: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
             6: {
                 time: new Decimal(0),
-                timeReq: new Decimal(60),
+                timeReq: new Decimal(600),
                 timeSpeed: new Decimal(1),
                 canAddCompletion: false,
                 completions: new Decimal(0),
                 maxCompletions: new Decimal(0),
+                completionEffect: new Decimal(1),
 
                 focused: false,
-                starlightReq: new Decimal(1),
-                completionEffect: new Decimal(1),
+                isFocused: false,
+                focusTimer: new Decimal(0),
+                focusTimerMax: new Decimal(2),
+                statReq: new Decimal(1),
             },
         },
     }},
@@ -125,7 +143,7 @@
             let fountain = layers.bum.fountains[i]
             module.timeSpeed = fountain.getTimeSpeed()
             module.timeReq = fountain.getTimeReq()
-            module.starlightReq = fountain.getstarlightReq()
+            module.starlightReq = fountain.getStatReq()
             module.completionEffect = fountain.getCompletionEffect()
 
             if (module.focused) {
@@ -264,144 +282,6 @@
                     look.color = "#dfffdf"
                 }
                 look.borderBottom = "0"
-                return look
-            },
-        },
-        1001: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1002: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1003: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1004: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1005: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
-                return look
-            },
-        },
-        1006: {
-            title() { return "<h3>Deposit</h3>" },
-            canClick() { return player.prj.focused.lt(player.prj.maxFocused) && player.bum.starlight.gte(player.bum.fountains[this.id - 1000].starlightReq) && !player.bum.fountains[this.id - 1000].focused},
-            unlocked() { return true },
-            onClick() {
-                player.bum.starlight = player.bum.starlight.sub(player.bum.fountains[this.id - 1000].starlightReq)
-                player.prj.focused = player.prj.focused.add(1)
-                player.bum.fountains[this.id - 1000].focused = true
-            },
-            style() {
-                let look = {width: "200px", minHeight: "45px", borderRadius: "0px"}
-                if (this.canClick()) {
-                    look.backgroundColor = "#ffbfff"
-                    look.border = "3px solid #0000003f"
-                    look.color = "black"
-                } else {
-                    look.background = "#361e1e"
-                    look.border = "3px solid #663737"
-                    look.color = "white"
-                }
                 return look
             },
         },
@@ -636,7 +516,7 @@
             fullDisplay() {
                 let s = "<h2>"
                 if (hasUpgrade(this.layer, this.id) || this.condition()) {
-                    s += "Unlock space zone IV.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
+                    s += "Unlock a new iridite upgrade.</h2><br><br><h3>Cost: " + formatWhole(this.cost) + " " + this.currencyDisplayName + "</h3>"
                 } else {
                     s += "???</h2><br><h3>Req: ???</h3>"
                 }
@@ -998,14 +878,15 @@
     fountains: {
         1: {
             title: "Light Fountain III",
-            completionEffectPrefix: "x",
-            completionEffectStat: "Light, based on Project Speed",
-            condition() {
-                return true
-            },
-            canAuto() {
-                return false
-            },
+            unlocked() { return true },
+            conditionDisplay() { return "This should always be unlocked... why are you seeing this??"},
+            condition() { return true },
+            canAuto() { return false },
+            infiniteAuto() { return false },
+            effectDisplay() { return "Boosts light gain by x" + formatSimple(layers.bum.fountains[1].getCompletionEffect(), 2) + ", based on project speed"},
+            currencyLocation() { return player.bum },
+            currencyInternalName: "starlight",
+            currencyDisplayName: "Starlight",
             getCompletionEffect() {
                 let completions = player.bum.fountains[1].completions
 
@@ -1025,7 +906,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[1].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1046,14 +927,15 @@
         },
         2: {
             title: "Focus Fountain",
-            completionEffectPrefix: "+",
-            completionEffectStat: "Max Focus",
-            condition() {
-                return true
-            },
-            canAuto() {
-                return false
-            },
+            unlocked() { return true },
+            conditionDisplay() { return "This should always be unlocked... why are you seeing this??"},
+            condition() { return true },
+            canAuto() { return false },
+            infiniteAuto() { return false },
+            effectDisplay() { return "Increases focus cap by +" + formatSimple(layers.bum.fountains[2].getCompletionEffect(), 2)},
+            currencyLocation() { return player.bum },
+            currencyInternalName: "starlight",
+            currencyDisplayName: "Starlight",
             getCompletionEffect() {
                 return player.bum.fountains[2].completions
             },
@@ -1069,7 +951,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[2].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1092,14 +974,15 @@
         },
         3: {
             title: "Prism Fountain",
-            completionEffectPrefix: "x",
-            completionEffectStat: "Prisms",
-            condition() {
-                return true
-            },
-            canAuto() {
-                return false
-            },
+            unlocked() { return true },
+            conditionDisplay() { return "This should always be unlocked... why are you seeing this??"},
+            condition() { return true },
+            canAuto() { return false },
+            infiniteAuto() { return false },
+            effectDisplay() { return "Boosts prism gain by x" + formatSimple(layers.bum.fountains[3].getCompletionEffect(), 2)},
+            currencyLocation() { return player.bum },
+            currencyInternalName: "starlight",
+            currencyDisplayName: "Starlight",
             getCompletionEffect() {
                 return player.bum.fountains[3].completions.pow(0.5).pow_base(1.5)
             },
@@ -1115,7 +998,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[3].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1161,7 +1044,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[4].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1207,7 +1090,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[5].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1253,7 +1136,7 @@
 
                 return s
             },
-            getstarlightReq() {
+            getStatReq() {
                 let completions = player.bum.fountains[5].completions
                 let s = completions.div(4).add(1).pow(1.25)
                 
@@ -1311,19 +1194,8 @@
                     let look = [
                         ["blank", "25px"],
                         ["style-row", [
-                            makeStarlightFountain(1, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(2, true),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(3, false),
                         ]],
-                        ["blank", "6px", {width: "6px"}],
                         ["style-row", [
-                            makeStarlightFountain(4, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(5, false),
-                            ["blank", "6px", {width: "6px"}],
-                            makeStarlightFountain(6, false),
                         ]],
                         ["blank", "25px"],
                     ]
@@ -1398,10 +1270,6 @@
         }
     },
     tabFormat: [
-        ["raw-html", 
-        "COMING SOON..."
-        , {color: "#dfffdf", fontSize: "32px", fontFamily: "monospace"}],
-        /*
         ["raw-html", () => { return "You have <h3>" + formatWhole(player.wel.light) + "</h3> light." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.bum.starlight) + "</h3> starlight." }, {color: "#dfffdf", fontSize: "24px", fontFamily: "monospace"}],
@@ -1414,9 +1282,9 @@
         ["blank", "15px"],
         ["clickable", "starshineReset"],
         ["blank", "15px"],
-        ["microtabs", "stuff", { 'border-width': '0px' }],*/
+        ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasMilestone("prj", 303)},
+    layerShown() { return false && player.startedGame == true && hasMilestone("prj", 303)},
     hotkeys: [
         {
             key: "s", 
@@ -1427,53 +1295,3 @@
         },
 	]
 })
-
-const makeStarlightFountain = function (id, effectIsWhole) {
-    let thisFountain =
-        ["style-row", [
-            ["style-column", [
-                ["style-column", [
-                    ["style-column", [
-                        ["style-column", [
-                            ["style-column", [
-                            ], {background: "#bfffbf", borderRadius: "0", width: "44px", height: (format(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).min(1).max(0).mul(197))) + "px", marginTop: (format(new Decimal(197).sub(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).min(1).max(0).mul(197)))) + "px"}],
-                        ], {background: "#171117", borderRadius: "10px 0 0 10px", width: "50px", height: "197px"}],
-                    ], {width: "50px", height: "0"}],
-                    ["style-column", [
-                        ["style-column", [
-                        ], {border: "3px solid #806080", borderRadius: "10px 0 0 10px", width: "44px", height: "197px"}],
-                    ], {width: "50px", height: "0"}],
-                ], {background: "#806080", borderRadius: "10px 0 0 10px", width: "50px", height: "203px"}],
-            ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "10px 0 0 10px", borderRight: "0", width: "50px", height: "203px"}],
-            ["style-column", [
-                ["style-column", [
-                    ["blank", "10px"],
-                    ["raw-html", layers.bum.fountains[id].title, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                    ["raw-html", player.bum.fountains[id].timeSpeed.lte(0) ? "<span style='color:#ffff00'>Can't Complete w/o Light!</span>" : (player.bum.fountains[id].focused ? formatTime(player.bum.fountains[id].timeReq.sub(player.bum.fountains[id].time).div(player.bum.fountains[id].timeSpeed)) : player.wel.light.lte(player.bum.fountains[id].starlightReq) ? "<span style='color:#ffff00'>Can't afford!</span>" : (formatTime(player.bum.fountains[id].timeReq.div(player.bum.fountains[id].timeSpeed).mul(player.bum.fountains[id].time.div(player.bum.fountains[id].timeReq).neg().add(1)))) + " CD"), {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                    ["raw-html", "<small>(" + format(player.bum.fountains[id].time, 1) + "/" + format(player.bum.fountains[id].timeReq, 1) + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                    ["blank", "10px"],
-                    ["style-column", [
-                        ["raw-html", player.bum.fountains[id].starlightReq.eq(0) ? "Your first cycle is free!" : "-" + formatWhole(player.bum.fountains[id].starlightReq) + " Starlight", {color: "white", fontSize: "14px", fontFamily: "monospace"}],
-                    ], {background: "#806080", borderRadius: "0 10px 0 0", width: "200px", height:"25px"}],
-                    ["blank", "3px"],
-                    ["style-row", [
-                        ["hoverless-clickable", id + 1000],
-                        ["style-row", [
-                            ["blank", "3px", {width: "3px"}],
-                        ], {display: layers.bum.fountains[id].canAuto() ? "" : "none !important"}],
-                        ["hoverless-clickable", id + 2000],
-                    ], {height: "45px"}]
-                ], {background: "#4d394d", border: "3px solid #4d394d", borderRadius: "0 10px 0 0", width: "200px", height: "150px"}],
-                ["style-column", [
-                    ["style-column", [
-                        ["tooltip-row", [
-                            ["raw-html", formatWhole(player.bum.fountains[id].completions) + " ↻", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                            ["raw-html", "<div class='bottomTooltip'>Best: " + formatShortWhole(player.bum.fountains[id].bestCompletions) + " " + layers.bum.fountains[id].title + " ↻</div>"],
-                        ], {}],
-                        ["raw-html", "<small>(" + layers.bum.fountains[id].completionEffectPrefix + (effectIsWhole ? formatWhole(layers.bum.fountains[id].getCompletionEffect()) : formatShort(layers.bum.fountains[id].getCompletionEffect())) + " " + layers.bum.fountains[id].completionEffectStat + ")</small>", {color: "white", fontSize: "14px", fontFamily: "monospace", lineHeight: "18px", display: "block"}],
-                    ], {background: "#4d394d", border: "3px solid #806080", borderRadius: "0px 0 7px 0", width: "197px", height: "44px"}],
-                ], {background: "#806080", border: "3px solid #4d394d", borderRadius: "0px 0 10px 0", borderTop: "0px", borderLeft: "0px", height: "50px"}],
-            ], {width: "206px"}]
-        ]]
-    return thisFountain
-}

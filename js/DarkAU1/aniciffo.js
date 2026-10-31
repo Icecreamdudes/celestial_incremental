@@ -138,6 +138,7 @@
         mult = mult.mul(buyableEffect("ra", 21))
         if (inChallenge("anl", 14)) mult = mult.pow(0.1)
         mult = mult.mul(buyableEffect("anl", 107))
+        if (player.anl.aniciffoDefeated) mult = mult.mul(100)
 
         player.ani.darkRadiationToGet = player.ani.darkRadiationToGet.mul(mult)
 
@@ -304,6 +305,7 @@
             //dunno why i didnt do this earlier
             player.ani.radiation[prop].toGet = player.ani.radiation[prop].toGet.mul(buyableEffect("ra", 22))
             player.ani.radiation[prop].toGet = player.ani.radiation[prop].toGet.mul(buyableEffect("anl", 107))
+            if (player.anl.aniciffoDefeated) player.ani.radiation[prop].toGet = player.ani.radiation[prop].toGet.mul(100)
         }
 
         if (player.musuniverse == "AD1") {
@@ -617,7 +619,7 @@
             title: "Aniciffo Upgrade II",
             unlocked() { return hasUpgrade("ani", 11) },
             description: "Red radiation is 3x cheaper and is boosted by x1.5.",
-            cost: new Decimal(50),
+            cost: new Decimal(25),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -631,7 +633,7 @@
             title: "Aniciffo Upgrade III",
             unlocked() { return hasUpgrade("ani", 12) },
             description: "Unlock orange radiation and buyables.",
-            cost: new Decimal(250),
+            cost: new Decimal(100),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -645,7 +647,7 @@
             title: "Aniciffo Upgrade IV",
             unlocked() { return hasUpgrade("ani", 13) },
             description: "Unlock yellow radiation.",
-            cost: new Decimal(5000),
+            cost: new Decimal(2000),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",
@@ -659,7 +661,7 @@
             title: "Aniciffo Upgrade V",
             unlocked() { return hasUpgrade("ani", 14) },
             description: "Unlock time radiation.",
-            cost: new Decimal(25000),
+            cost: new Decimal(10000),
             currencyLocation() { return player.ani },
             currencyDisplayName: "Dark Radiation",
             currencyInternalName: "darkRadiation",

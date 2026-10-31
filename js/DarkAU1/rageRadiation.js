@@ -290,7 +290,7 @@
 
                     ["raw-html", () => { return "This layer is also available in Hive."}, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.rar.radiation.amount) + "</h3> rage radiation. (+" + format(player.rar.radiation.toGet) + "/" + formatTime(player.rar.radiation.max) + ")"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.rar.radiation.amount) + "</h3> rage radiation. (+" + format(player.rar.radiation.toGet) + "/" + formatTime(player.rar.radiation.max) + ")"}, {color: "#520c61", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Based on grassjumpers)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts grassjumper gain by x<h3>" + format(player.rar.radiation.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts stability gain by x<h3>" + format(player.rar.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
@@ -306,7 +306,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "15px"],
                     ["style-column", [
-                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.rar.essence.amount) + "</h3> rage essence."}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.rar.essence.amount) + "</h3> rage essence."}, {color: "#520c61", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts time radiation gain by x<h3>" + format(player.rar.essence.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Multiplies glossary effect base by x<h3>" + format(player.rar.essence.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ], {backgroundColor: "#520c61", border: "3px solid #ba4ad3", borderRadius: "13px 13px 0px 0px", width: "588px", height: "80px"}],

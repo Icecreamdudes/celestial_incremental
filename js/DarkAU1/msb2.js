@@ -58,7 +58,7 @@ SB_zones.roomBeta = {
     primaryColor: "#7AFAB7",
     secondaryColor: "#215355",
 
-    levelLimit: 21,
+    levelLimit: 20,
     asteroidLimit: 16,
     celestialiteSpawnCooldown: 100,
     celestialiteLimit: 26,

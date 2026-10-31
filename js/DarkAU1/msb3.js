@@ -718,7 +718,6 @@ SB_celestialites.aniciffo = {
         },
 
         // --- PHASE 2 MOVE 1: BLINK DASH ---
-        // Teleports to a random offset around the player, telegraphs, then dashes straight at them.
         blinkDash(celestialite) {
             if (!celestialite.attackInitialized) {
                 celestialite.attackInitialized = true;
@@ -763,14 +762,13 @@ SB_celestialites.aniciffo = {
                 celestialite.swordAng = -1.4;
 
                 celestialite.dashPhase = "telegraph";
-                celestialite.dashSubTimer = 36; // brief wind-up before the dash
+                celestialite.dashSubTimer = 36;
             }
             // 2. TELEGRAPH — hold still and track the player
             else if (celestialite.dashPhase === "telegraph") {
                 celestialite.vx = 0;
                 celestialite.vy = 0;
 
-                // Keep aim locked on player during telegraph
                 let closest = arena.getClosestCoords([celestialite.x, celestialite.y]);
                 let diff = Math.atan2(closest[1] - celestialite.y, closest[0] - celestialite.x) - celestialite.aimAng;
                 while (diff > Math.PI) diff -= 2 * Math.PI;
@@ -781,7 +779,7 @@ SB_celestialites.aniciffo = {
                 celestialite.dashSubTimer--;
                 if (celestialite.dashSubTimer <= 0) {
                     celestialite.dashPhase = "dashing";
-                    celestialite.dashSubTimer = 28; // max ticks for the dash
+                    celestialite.dashSubTimer = 28;
                     const dashSpeed = 62;
                     celestialite.vx = Math.cos(celestialite.aimAng) * dashSpeed;
                     celestialite.vy = Math.sin(celestialite.aimAng) * dashSpeed;
@@ -793,7 +791,6 @@ SB_celestialites.aniciffo = {
                 celestialite.vy *= 0.97;
                 celestialite.dashSubTimer--;
 
-                // Slash arc + hit detection once we get close
                 if (celestialite.playerDist < 200) {
                     celestialite.slashEffect = 1.0;
 
@@ -811,7 +808,6 @@ SB_celestialites.aniciffo = {
                         }
                     }
 
-                    // Fire projectile fan at the player
                     if (!celestialite.slashProjFired && arena && arena.bullets) {
                         celestialite.slashProjFired = true;
                         let projSpeed = 10;
@@ -835,12 +831,10 @@ SB_celestialites.aniciffo = {
                     }
                 }
 
-                // End dash when slowed enough or watchdog expires
                 let speed = Math.hypot(celestialite.vx, celestialite.vy);
                 if (speed < 6 || celestialite.dashSubTimer <= 0) {
                     celestialite.dashesLeft--;
                     if (celestialite.dashesLeft > 0) {
-                        // Blink again immediately
                         celestialite.dashPhase = "blink";
                     } else {
                         celestialite.vx = 0;
@@ -948,21 +942,18 @@ SB_celestialites.aniciffo = {
         },
 
         // --- MOVE: RAPID LASERS ---
-        // Fires a quick succession of aimed laser bullets directly at the player.
         rapidLasers(celestialite) {
             if (!celestialite.attackInitialized) {
                 celestialite.attackInitialized = true;
-                // Phase 2 fires more shots with shorter gaps
                 celestialite.rlShotsLeft = celestialite.phase === 2 ? 9 : 6;
-                celestialite.rlShotInterval = celestialite.phase === 2 ? 9 : 12; // ticks between shots
-                celestialite.rlShotTimer = 8; // initial delay before first shot
+                celestialite.rlShotInterval = celestialite.phase === 2 ? 9 : 12;
+                celestialite.rlShotTimer = 8;
                 celestialite.attackTimer = celestialite.phase === 2
-                    ? 8 + (9 * 9) + 20   // initial + shots + linger
+                    ? 8 + (9 * 9) + 20
                     : 8 + (6 * 12) + 20;
                 celestialite.slashEffect = 0;
             }
 
-            // Drift backward slowly while firing
             celestialite.vx *= 0.88;
             celestialite.vy *= 0.88;
             if (celestialite.playerDist < 220) {
@@ -982,7 +973,6 @@ SB_celestialites.aniciffo = {
                     if (arena && arena.bullets) {
                         let closest = arena.getClosestCoords([celestialite.x, celestialite.y]);
                         let aimAng = Math.atan2(closest[1] - celestialite.y, closest[0] - celestialite.x);
-                        // Phase 2 fires a tight triple shot; phase 1 fires a single aimed shot
                         let spreadCount = celestialite.phase === 2 ? 3 : 1;
                         for (let s = 0; s < spreadCount; s++) {
                             let spread = spreadCount === 1 ? 0 : (s - 1) * 0.18;
@@ -1004,7 +994,6 @@ SB_celestialites.aniciffo = {
                             });
                         }
 
-                        // Visual: small pulse ring on each shot
                         celestialite.maxPulseRing = 14;
                         celestialite.pulseRing = 14;
                     }
@@ -1073,7 +1062,6 @@ SB_celestialites.aniciffo = {
                 } else if (bomb.detonating > 0) {
                     bomb.detonating--;
 
-                    // Hit detection: check every tick during detonation
                     if (!bomb.hitPlayer && arena && arena.ship) {
                         let closestShip = arena.getClosestCoords([bomb.x, bomb.y]);
                         let relX = closestShip[0] - bomb.x;
@@ -1084,20 +1072,15 @@ SB_celestialites.aniciffo = {
                         let maxReach = Math.max(arena.canvasWidth, arena.canvasHeight) * 1.5;
 
                         if (distToBomb <= maxReach) {
-                            // Check if player is within either of the two cross-beam lines
                             let cosA = Math.cos(bomb.angle || 0);
                             let sinA = Math.sin(bomb.angle || 0);
-                            // Perpendicular distance to the horizontal axis (beam along angle)
                             let perpH = Math.abs(-relX * sinA + relY * cosA);
-                            // Perpendicular distance to the vertical axis (beam perpendicular to angle)
                             let perpV = Math.abs(relX * cosA + relY * sinA);
                             let beamHalfWidth = 10 + shipRadius;
 
                             if (perpH < beamHalfWidth || perpV < beamHalfWidth) {
                                 bomb.hitPlayer = true;
                                 let bombDmg = (celestialite.damage || new Decimal(34)).mul(1.5);
-                                // Directly subtract health — bomb has its own hitPlayer guard so we
-                                // don't need applyShipDamage's invuln gate (which would silently block this)
                                 let dmgReduction = (arena.shipStats && arena.shipStats.damageReduction) || 1;
                                 if (player.ir && player.ir.shipHealth && typeof player.ir.shipHealth.sub === "function") {
                                     player.ir.shipHealth = player.ir.shipHealth.sub(bombDmg.div(dmgReduction));
@@ -1127,13 +1110,11 @@ SB_celestialites.aniciffo = {
                 } else if (laser.detonating > 0) {
                     laser.detonating--;
 
-                    // Re-check every tick during the beam so staying in the laser continues to deal damage
                     if (arena && arena.ship) {
                         let shipRadius = (player.ir.shipType == 3 || player.ir.shipType == 7) ? arena.ship.radius : 14;
-                        // Tight hitbox — matches the bright white core (6px wide = 3 each side)
                         let beamHalfWidth = 8;
-
                         let dist = 0;
+
                         if (laser.axis === "vertical") {
                             let relX = arena.ship.x - laser.coord;
                             while (relX > arena.width / 2) relX -= arena.width;
@@ -1156,7 +1137,6 @@ SB_celestialites.aniciffo = {
                                 player.ir.shipHealth = player.ir.shipHealth.sub(laserDmg.div(reduction));
                             }
                         } else if (dist >= beamHalfWidth + shipRadius) {
-                            // Player escaped the beam — allow them to be hit again if they re-enter
                             laser.hitPlayer = false;
                         }
                     }
@@ -1317,7 +1297,6 @@ SB_celestialites.aniciffo = {
                     ctx.save();
                     ctx.rotate(bomb.angle || 0);
 
-                    // Cross-beam flash
                     ctx.fillStyle = `rgba(34, 197, 94, ${0.45 * beamAlpha})`;
                     ctx.fillRect(-fullScreenReach, -16, fullScreenReach * 2, 32);
                     ctx.fillRect(-16, -fullScreenReach, 32, fullScreenReach * 2);
@@ -1342,7 +1321,6 @@ SB_celestialites.aniciffo = {
                     ctx.setLineDash([]);
                     ctx.restore();
 
-                    // Expanding blast radius ring
                     let expandR = burstProgress * blastRadius;
                     ctx.beginPath();
                     ctx.arc(0, 0, expandR, 0, Math.PI * 2);
@@ -1409,7 +1387,7 @@ SB_celestialites.aniciffo = {
             }
         }
 
-        // 3. Boss Body
+        // 3. Boss Body & Effects
         let wrapped = arena.getVisibleWrappedCoords([celestialite.x, celestialite.y], [celestialite.radius * 4, celestialite.radius * 4]);
         if (!wrapped) return;
 
@@ -1481,89 +1459,29 @@ SB_celestialites.aniciffo = {
             ctx.restore();
         }
 
-        ctx.fillStyle = "#03160a";
-        ctx.beginPath();
-        ctx.ellipse(-24, 6, 7, 28, 0.2, 0, Math.PI * 2);
-        ctx.ellipse(24, 6, 7, 28, -0.2, 0, Math.PI * 2);
-        ctx.ellipse(-12, 34, 6, 26, 0.05, 0, Math.PI * 2);
-        ctx.ellipse(12, 34, 6, 26, -0.05, 0, Math.PI * 2);
-        ctx.ellipse(0, 8, 18, 26, 0, 0, Math.PI * 2);
-        ctx.fill();
+        // Determine Directional Facing (Right = 1, Left = -1)
+        let facing = 1;
+        if (isAiming) {
+            facing = Math.cos(celestialite.aimAng) >= 0 ? 1 : -1;
+        } else if (Math.abs(celestialite.vx) > 0.15) {
+            facing = celestialite.vx > 0 ? 1 : -1;
+        } else {
+            facing = Math.cos(celestialite.playerAng || 0) >= 0 ? 1 : -1;
+        }
 
-        ctx.beginPath();
-        ctx.arc(0, -20, 24, 0, Math.PI * 2);
-        ctx.fillStyle = "#03160a";
-        ctx.fill();
-
-        ctx.fillStyle = celestialite.phase === 2 ? "#14381d" : "#0f2615";
-        ctx.strokeStyle = celestialite.phase === 2 ? "#4ade80" : "#22c55e";
-        ctx.lineWidth = 2;
-
-        ctx.beginPath();
-        ctx.moveTo(-14, -2); ctx.lineTo(0, -10); ctx.lineTo(14, -2);
-        ctx.lineTo(11, 20); ctx.lineTo(0, 28); ctx.lineTo(-11, 20);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(0, 8, 5, 0, Math.PI * 2);
-        ctx.fillStyle = celestialite.phase === 2 ? "#bbf7d0" : "#86efac";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(-16, -6); ctx.lineTo(-30, -14); ctx.lineTo(-24, 4); ctx.closePath();
-        ctx.moveTo(16, -6); ctx.lineTo(30, -14); ctx.lineTo(24, 4); ctx.closePath();
-        ctx.fillStyle = celestialite.phase === 2 ? "#14381d" : "#0f2615";
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(-20, -24); ctx.lineTo(-12, -38); ctx.lineTo(-4, -28);
-        ctx.lineTo(0, -42); ctx.lineTo(4, -28); ctx.lineTo(12, -38); ctx.lineTo(20, -24);
-        ctx.closePath();
-        ctx.fillStyle = celestialite.phase === 2 ? "#14381d" : "#0f2615";
-        ctx.fill();
-        ctx.strokeStyle = celestialite.phase === 2 ? "#86efac" : "#4ade80";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(134, 239, 172, 0.45)";
-        ctx.beginPath();
-        ctx.arc(-8, -19, 7, 0, Math.PI * 2);
-        ctx.arc(8, -19, 7, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(-8, -19, 4, 0, Math.PI * 2);
-        ctx.arc(8, -19, 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.save();
-        ctx.translate(22, 10);
-        ctx.rotate(celestialite.swordAng);
-
-        ctx.beginPath();
-        ctx.moveTo(-4, 0); ctx.lineTo(4, 0); ctx.lineTo(5, -42); ctx.lineTo(0, -56); ctx.lineTo(-5, -42);
-        ctx.closePath();
-        ctx.fillStyle = "#071f0e";
-        ctx.fill();
-        ctx.strokeStyle = celestialite.phase === 2 ? "#86efac" : "#4ade80";
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, -50);
-        ctx.strokeStyle = celestialite.phase === 2 ? "#ffffff" : "#bbf7d0";
-        ctx.lineWidth = 1.25;
-        ctx.stroke();
-
-        ctx.fillStyle = "#0f2615";
-        ctx.fillRect(-10, 0, 20, 3.5);
-        ctx.fillRect(-2, 3.5, 4, 12);
-        ctx.restore();
+        // Render Aniciffo Animated Sprite via BHB_drawAniciffo
+        BHB_drawAniciffo(
+            ctx,
+            0,
+            0,
+            celestialite.swordAng ?? -0.4,
+            celestialite.phase || 1,
+            104,
+            104,
+            null,
+            facing,
+            true
+        );
 
         ctx.restore();
     }

@@ -61,6 +61,7 @@
         if (player.car.cardDrawAmount.gte(50)) player.car.cardShredReq = player.car.cardShredReq.mul(player.car.cardDrawAmount.pow(5).add(1))
 
         player.car.cardsToGet = new Decimal(1)
+       if (hasAchievement("achievements", 1019)) player.car.cardsToGet = player.car.cardsToGet.add(1)
         player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 14))
         player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 24))
         player.car.cardsToGet = player.car.cardsToGet.add(buyableEffect("car", 34))

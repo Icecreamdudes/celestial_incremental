@@ -61,6 +61,7 @@
         player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("ra", 24))
         player.sr.radiation.toGet = player.sr.radiation.toGet.mul(challengeEffect("anl", 12))
         player.sr.radiation.toGet = player.sr.radiation.toGet.mul(buyableEffect("anl", 108))
+        if (player.anl.aniciffoDefeated) player.sr.radiation.toGet = player.sr.radiation.toGet.mul(10)
 
         if (player.pet.legPetTimers[0].active) player.sr.radiation.toGet = new Decimal(0)
 
@@ -335,7 +336,7 @@
                     ["blank", "25px"],
                     ["raw-html", () => { return "You must click all 10 space radiation particles in order to reset."}, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.sr.radiation.amount) + "</h3> space radiation. (+" + format(player.sr.radiation.toGet) + "/" + formatTime(player.sr.radiation.max) + ")"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.sr.radiation.amount) + "</h3> space radiation. (+" + format(player.sr.radiation.toGet) + "/" + formatTime(player.sr.radiation.max) + ")"}, {color: "#000000", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Based on space)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts normality gain by x<h3>" + format(player.sr.radiation.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts dark radiation gain by x<h3>" + format(player.sr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
@@ -343,7 +344,7 @@
                     ["blank", "25px"],
                     ["raw-html", () => { return "Space decay and generators only update when you click dark radiation."}, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.sr.spaceDecay) + "</h3> space decay. (+" + format(player.sr.spaceDecayPerClick) + "/click)"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.sr.spaceDecay) + "</h3> space decay. (+" + format(player.sr.spaceDecayPerClick) + "/click)"}, {color: "#000000", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Divides universe reset requirement by /<h3>" + format(player.sr.spaceDecayEffect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts time radiation gain by x<h3>" + format(player.sr.spaceDecayEffect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],

@@ -969,6 +969,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return player.universe == "DS"},
             unlocked: true,
+            marked: true,
         },
         1002: {
             name: "Heads and Tails",
@@ -977,13 +978,15 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return player.cf.heads.gte(10) && player.cf.tails.gte(10)},
             unlocked: true,
+            marked: true,
         },
         1003: {
-            name: "People ctill clip coins?",
+            name: "Coin Clipper",
             image: "resources/achievements/11_00.png",
-            tooltip: "<h3>People Still Clip Coins?</h3><hr style='margin-bottom:4px'>Use the coin clipper.<br><br>Reward: Extend chance point softcap by x1.2.",
+            tooltip: "<h3>Coin Clipper</h3><hr style='margin-bottom:4px'>Divide your flip count.<br><br>Reward: Extend chance point softcap by x1.2.",
             color: "#c4c4c4",
             unlocked: true,
+            marked: true,
         },
         1004: {
             name: "Time to Spin!",
@@ -992,6 +995,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return hasUpgrade("za", 13)},
             unlocked: true,
+            marked: true,
         },
         1005: {
             name: "Casual Gambler",
@@ -1000,6 +1004,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return player.wof.wheelsSpinned.gte(5)},
             unlocked: true,
+            marked: true,
         },
         1006: {
             name: "Unfair Coinflip",
@@ -1008,6 +1013,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return ((player.cf.heads.gte(player.cf.tails.mul(10)) || player.cf.tails.gte(player.cf.heads.mul(10))) && player.cf.heads.gte(100) && player.cf.tails.gte(100))},
             unlocked: true,
+            marked: true,
         },
         1007: {
             name: "SLOTS! SLOTS! SLOTS!",
@@ -1016,6 +1022,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return hasUpgrade("za", 16)},
             unlocked: true,
+            marked: true,
         },
         1008: {
             name: "Colored Chips",
@@ -1024,6 +1031,7 @@ addLayer("achievements", {
             color: "#c4c4c4",
             complete() {return player.sm.chips[0].gte(1) && player.sm.chips[1].gte(1) && player.sm.chips[2].gte(1)},
             unlocked: true,
+            marked: true,
         },
         1009: {
             name: "I JUST HIT THE JACKPOT!!!",
@@ -1031,6 +1039,7 @@ addLayer("achievements", {
             tooltip: "<h3>I JUST HIT THE JACKPOT!!!</h3><hr style='margin-bottom:4px'>Get three of the same currency on the slot machine.<br><br>Reward: x1.25 to all chip gain.",
             color: "#c4c4c4",
             unlocked: true,
+            marked: true,
         },
         1010: {
             name: "Almost Certain",
@@ -1038,7 +1047,7 @@ addLayer("achievements", {
             tooltip: "<h3>Almost Certain</h3><hr style='margin-bottom:4px'>Gain 1e10 chance points.<br><br>Reward: x2 to chance point gain.",
             color: "#c4c4c4",
             complete() {return player.za.chancePoints.gte(1e10)},
-            unlocked: true,
+           unlocked: true,
         },
         1011: {
             name: "Chronic Gambler",
@@ -1046,7 +1055,7 @@ addLayer("achievements", {
             tooltip: "<h3>Chronic Gambler</h3><hr style='margin-bottom:4px'>Spin slots 100 times.<br><br>Reward: Heads and tails softcap is raised by ^0.95.",
             color: "#c4c4c4",
             complete() {return player.sm.spinAmount.gte(100)},
-            unlocked: true,
+           unlocked: true,
         },
         1012: {
             name: "Why is check back involved with everything?",
@@ -1054,7 +1063,8 @@ addLayer("achievements", {
             tooltip: "<h3>Why is check back involved with everything?</h3><hr style='margin-bottom:4px'>Unlock the check back shrine.<br><br>Reward: x1.25 to all chip gain.",
             color: "#c4c4c4",
             complete() {return hasUpgrade("za", 19)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1013: {
             name: "Ascended",
@@ -1062,7 +1072,8 @@ addLayer("achievements", {
             tooltip: "<h3>Ascended</h3><hr style='margin-bottom:4px'>Earn a shard of ascension.<br><br>Reward: Divide ritual cooldown by /1.5.",
             color: "#9c9292",
             complete() {return  player.cbs.ascensionShards.gte(1)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1014: {
             name: "Another Pylon",
@@ -1070,7 +1081,8 @@ addLayer("achievements", {
             tooltip: "<h3>Another Pylon</h3><hr style='margin-bottom:4px'>Build the temporal pylon.<br><br>Reward: Boost CB tickspeed by x1.1.",
             color: "#c4c4c4",
             complete() {return  player.cbs.pylonBuilt},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1015: {
             name: "Tiered Up",
@@ -1078,7 +1090,8 @@ addLayer("achievements", {
             tooltip: "<h3>Tiered Up</h3><hr style='margin-bottom:4px'>Upgrade your temporal pylon to tier 5.<br><br>Reward: Boost CB tickspeed by x1.1.",
             color: "#c4c4c4",
             complete() {return  player.cbs.pylonTier.gte(5)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1016: {
             name: "A new type of cards",
@@ -1086,7 +1099,8 @@ addLayer("achievements", {
             tooltip: "<h3>A new type of cards</h3><hr style='margin-bottom:4px'>Unlock cards.<br><br>Reward: Boost chance point gain by x5.",
             color: "#c4c4c4",
             complete() {return  hasUpgrade("za", 21)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1017: {
             name: "Generated",
@@ -1094,15 +1108,69 @@ addLayer("achievements", {
             tooltip: "<h3>Generated</h3><hr style='margin-bottom:4px'>Reach 100 card generators.<br><br>Reward: Boost card shred gain by x1.25.",
             color: "#c4c4c4",
             complete() {return  player.car.cardGenerators.gte(100)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
         },
         1018: {
             name: "Chanced Out",
             image: "resources/achievements/11_00.png",
-            tooltip: "<h3>Generated</h3><hr style='margin-bottom:4px'>Reach 1e45 chance points.<br><br>Reward: Boost card generator gain by x1.25.",
+            tooltip: "<h3>Chanced Out</h3><hr style='margin-bottom:4px'>Reach 1e45 chance points.<br><br>Reward: Boost card generator gain by x1.25.",
             color: "#c4c4c4",
             complete() {return  player.za.chancePoints.gte(1e45)},
-            unlocked: true,
+           unlocked: true,
+           marked: true,
+        },
+        1019: {
+            name: "A long way to go until 52!",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>A long way to go until 52!</h3><hr style='margin-bottom:4px'>Reach 1,000,000 card generators.<br><br>Reward: Increase card draw amount by +1.",
+            color: "#c4c4c4",
+            complete() {return  player.car.cardGenerators.gte(1000000)},
+           unlocked: true,
+           marked: true,
+        },
+        1020: {
+            name: "Unlucky 13",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>Unlucky 13</h3><hr style='margin-bottom:4px'>Obtain a final hand value of 13.<br><br>Reward: Increase base zar chip gain by +1.",
+            color: "#c4c4c4",
+           unlocked: true,
+           marked: true,
+        },
+        1021: {
+            name: "Small ROI",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>Small ROI</h3><hr style='margin-bottom:4px'>Spend more than 100 evo shards on a game of blackjack.<br><br>Reward: Increase base zar chip gain by +2.",
+            color: "#c4c4c4",
+           unlocked: true,
+           marked: true,
+        },
+        1022: {
+            name: "First Ultimate is a Healing Ability...",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>First Ultimate is a Healing Ability...</h3><hr style='margin-bottom:4px'>Unlock violet resonance.<br><br>Reward: +2 MND.",
+            color: "#c4c4c4",
+           unlocked: true,
+           marked: true,
+            complete() {return player.zarDungeon.navMilestone},
+        },
+        1023: {
+            name: "Bullseye",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>Bullseye</h3><hr style='margin-bottom:4px'>Unlock snake eyes.<br><br>Reward: +2 AGI.",
+            color: "#c4c4c4",
+           unlocked: true,
+           marked: true,
+            complete() {return player.zarDungeon.diceFiveMilestone},
+        },
+        1024: {
+            name: "No more Mr.Dice guy",
+            image: "resources/achievements/11_00.png",
+            tooltip: "<h3>No more Mr.Dice guy</h3><hr style='margin-bottom:4px'>Defeat Zar.<br><br>Reward: +2 DEF.",
+            color: "#c4c4c4",
+            complete() {return player.zarDungeon.zarDefeated},
+           unlocked: true,
+            marked: true,
         },
         1201: {
             name: "Welcome to Inter Space",
@@ -1545,9 +1613,6 @@ addLayer("achievements", {
                     ["category-button", ["~ 9 ~<br><h6>Iridite</h6>", "stars", 9], {width: "155px", height: "40px", color: "#5a4fcf", background: "#160239", borderRight: "3px solid white"}],
                 ], () => {return tmp.achievements.microtabs.stars[9].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 */
-                ["style-row", [
-                    ["category-button", ["~ 10 ~<br><h6>Early Hive</h6>", "stars", 10], {width: "155px", height: "40px", color: "#f9c901", background: "#352300", borderRight: "3px solid white"}],
-                ], () => {return tmp.achievements.microtabs.stars[10].unlocked ? {width: "155px", height: "40px", borderBottom: "3px solid white"} : {display: "none !important"}}],
                 /*
                 ["style-row", [
                     ["category-button", ["~ 11 ~<br><h6>Early Zar</h6>", "stars", 11], {width: "155px", height: "40px", color: "#c0c0c0", background: "#606060", borderRight: "3px solid white"}],

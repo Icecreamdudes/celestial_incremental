@@ -153,7 +153,7 @@
         if (player.dec.aluminum28.gt(0)) player.dec.electronsPerSecond = player.dec.electronsPerSecond.mul(player.dec.aluminum28Effect2.cbrt())
 
         player.dec.electrons = player.dec.electrons.add(player.dec.electronsPerSecond.mul(delta))
-        player.dec.electronsEffect = Decimal.div(1, player.dec.electrons.pow(0.25).div(30).add(1))
+        player.dec.electronsEffect = Decimal.div(1, player.dec.electrons.plus(1).log10().div(5).add(1))
 
         //alpha particles
         if (player.dec.dysprosium154.gt(0) || player.dec.gadolinium150.gt(0) || player.dec.samarium146.gt(0)) 
@@ -290,6 +290,15 @@
         player.dec.neodymium142Effect = player.dec.neodymium142.pow(2).add(1)
         player.dec.neodymium142Effect2 = player.dec.neodymium142.pow(0.75)
 
+        if (player.dec.silicon28.lt(0)) {
+            player.dec.silicon28 = new Decimal(0)
+        }
+        if (player.dec.neodymium142.lt(0)) {
+            player.dec.neodymium142 = new Decimal(0)
+        }
+        if (player.dec.nitrogen14.lt(0)) {
+            player.dec.nitrogen14 = new Decimal(0)
+        }
     },
     milestones: {
         

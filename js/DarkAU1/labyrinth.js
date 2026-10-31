@@ -34,6 +34,9 @@
 
         marcelTimeStop: false,
         timeStopTimer: new Decimal(0),
+
+        aniciffoPassed: false,
+        aniciffoDefeated: false,
     }},
     automate() {},
     nodeStyle() {
@@ -135,7 +138,7 @@
         if ((inChallenge("anl", 13)||inChallenge("anl", 15)) && !player.bh.bhPause && player.aniciffoLabyrinth.inLabyrinth && !player.bh.bulletHell && player.bh.celestialite.id != "none" && !player.anl.marcelTimeStop)
         {
             player.anl.boogieTimer = player.anl.boogieTimer.add(delta)
-            if (player.anl.boogieTimer.gte(8))
+            if (player.anl.boogieTimer.gte(20))
             {
                 if (inChallenge("anl", 13)) {
                 let random = getRandomInt(7)
@@ -233,7 +236,7 @@
                 if (random == 0) {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.5, noRepeatDir: true, fourDir: false}}, {width:500, height:500, duration:12})
                 } else if (random == 1) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 2, spearSpeed: 6, spearLength: 80, spearWidth: 12, yellowChance: 0.1, noRepeatDir: true, fourDir: false}}, {width:500, height:500, duration:12})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 2, spearSpeed: 5, spearLength: 80, spearWidth: 12, yellowChance: 0.1, noRepeatDir: true, fourDir: false}}, {width:500, height:500, duration:12})
                 } else if (random == 2) {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 1, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 1, fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 3) {
@@ -255,7 +258,7 @@
             player.anl.selectedRoomDisplay = "???"
         }
 
-        if (player.universe == "U3" && player.musuniverse == "AD1") {
+        if (player.universe == "U3" && player.sma.inStarmetalChallenge) {
             player.universe = "AD1" //lazy fix
         }
 
@@ -267,6 +270,20 @@
             player.anl.marcelTimeStop = false
         } else {
             player.anl.marcelTimeStop = false
+        }
+
+        if (player.bh.currentStage != "roomBoss") {
+            player.anl.aniciffoPassed = false
+        }
+
+        if (player.bh.currentStage == "roomBoss" && player.bh.celestialite.id == "noxBoss" && player.bh.celestialite.health.lte(25000)) {
+            celestialiteDeath()
+            player.anl.aniciffoDefeated = true
+            player.anl.clearedRooms.roomBoss = true
+        }
+
+        if (player.tab != "bh") {
+            bhAttack(new Decimal(1000), 3, 0, "allPlayer", "", "magic")
         }
     },
     clickables: {
@@ -746,7 +763,7 @@
             style() {
                 let look = {borderRadius: "15px", width: "120px", height: "120px", color: "white", border: "3px solid rgba(0,0,0,0.5)", fontSize: "9px", margin: "2px", borderRadius: "15px",}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "#455541"
-                if (!player.anl.clearedRooms.roomF) {look.background = "black";look.borderColor = "#3d4d39"}
+                if (!player.anl.clearedRooms.roomG) {look.background = "black";look.borderColor = "#3d4d39"}
                 return look
             },
         },
@@ -818,7 +835,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.025).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Soul Enhancer</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20" + ")\n\
                     Boost soul energy gain.\n\
@@ -844,7 +861,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Sharper Knives</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20" + ")\n\
                     Boost Marcel's damage.\n\
@@ -870,9 +887,9 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
-                return "<h3>Experienced Soul</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20" + ")\n\
+                return "<h3>Experienced Soul</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/40" + ")\n\
                     Boost Marcel's XP gain.\n\
                     Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + "<br>Epoch Fragments"
@@ -896,7 +913,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.025).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Faster Arm</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20" + ")\n\
                     Boost Marcel's attack speed.\n\
@@ -922,7 +939,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.25)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Soul Regeneration</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20" + ")\n\
                     Boost Marcel's HP regen.\n\
@@ -948,7 +965,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Speedy Soul</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10" + ")\n\
                     Boost Marcel's movement speed.\n\
@@ -974,7 +991,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).pow(3).add(1)},
             unlocked() { return player.anl.clearedRooms.roomBeta },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Epoch Color</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50" + ")\n\
                     Boost dark and colored radiation gain.\n\
@@ -1000,7 +1017,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).pow(2.5).add(1)},
             unlocked() { return player.anl.clearedRooms.roomBeta },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Epoch Spacetime</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50" + ")\n\
                     Boost space and time radiation gain.\n\
@@ -1026,7 +1043,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).pow(2).add(1)},
             unlocked() { return player.anl.clearedRooms.roomBeta },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Epoch Heartmind</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50" + ")\n\
                     Boost heart and mind radiation gain.\n\
@@ -1052,7 +1069,7 @@
             effect(x) {return getBuyableAmount(this.layer, this.id).pow(0.5).add(1)},
             unlocked() { return player.anl.clearedRooms.roomBeta },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() {return this.currency().gte(this.cost())&& player.anl.clearedRooms.roomG},
+            canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>Epoch Hoperage</h3> (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50" + ")\n\
                     Boost hope and rage radiation gain.\n\
@@ -1523,7 +1540,7 @@
             },
             "Epoch Fragments": {
                 buttonStyle() { return { color: "white", borderRadius: "5px", borderColor: "#daff74" } },
-                unlocked() { return !player.ir.inBattle },
+                unlocked() { return !player.ir.inBattle && player.anl.clearedRooms.roomB },
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
@@ -2032,6 +2049,7 @@ addLayer("aniciffoLabyrinth", {
                             player.bh.characters[i].skills[j].duration = new Decimal(0)
                             player.bh.characters[i].skills[j].interval = new Decimal(0)
                             }
+                            player.bh.celestialite.stun[1] = new Decimal(0)
                         }
                     }, 200); 
                 } else {
@@ -2325,8 +2343,17 @@ addLayer("aniciffoLabyrinth", {
                     ["style-column", [
                         ["raw-html", "Perks for defeating Aniciffo", {color: "var(--textColor)", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "403px", height: "35px", borderBottom: "0px solid var(--regBorder)", marginBottom: "5px"}],
-                    ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                                        ["raw-html", "<u>Unlocks</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "More radioactive pylon buyables", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "New legendary punchcard [COMING SOON]", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "??? (HALL OF CELESTIALS???)", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                     ["blank", "10px"],
+                    ["raw-html", "<u>Effects</u>", {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", "x2 to celestial radiation gain", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "x100,000 to radiation gain", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "x100 to dark radiation gain", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "x10 to time and space radiation gain", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
+                    ["raw-html", "x10 to mind and heart radiation gain", {color: "var(--textColor)", fontSize: "18px", fontFamily: "monospace"}],
                 ], () => {
                     let look = {width: "410px", height: "344px", background: "linear-gradient(145deg, #156812 0%, #478040 100%)", borderRadius: "0 0 0 0", border: "3px solid #606e2f", borderTop: "0px", borderRight: "0px"}
                     if (!player.anl.clearedRooms.roomBoss) {look.filter = "brightness(25%) blur(10px)"; look.userSelect = "none"}
@@ -2538,7 +2565,7 @@ BHS.roomBoss = {
         if (typeof combo == "object") combo = combo.toNumber()
         switch (combo) {
             default:
-                return "aniciffoBoss"
+                return player.anl.aniciffoPassed ? "noxBoss" : "aniciffoBoss"
         }
     },
 }
@@ -3692,7 +3719,7 @@ BHC.formaldehyde = {
                     }
                     }, { width: 500, height: 500, duration: 18 }) 
                 } else if (random == 4) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 5, spearLength: 80, spearWidth: 12, yellowChance: 0.1, orbitSpeed: 0.3, fourDir: false}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 0.1, orbitSpeed: 0.3, fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 5) {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.5,fourDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 6){
@@ -3758,16 +3785,16 @@ BHC.uf6 = {
                 let random = getRandomInt(6)
 
                 if (random == 0) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 3, spearLength: 80, spearWidth: 12, redChance: 0.3, fourDir: true}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3.6, spearSpeed: 3, spearLength: 80, spearWidth: 12, redChance: 0.3, fourDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 1)
                 {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 1.7, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 1, fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 2) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 5, spearLength: 80, spearWidth: 12, noRepeatDir: true, fourDir: true}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 2.6, spearSpeed: 5, spearLength: 80, spearWidth: 12, noRepeatDir: true, fourDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 3) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 3, spearLength: 80, spearWidth: 12, redChance: 0, fourDir: false}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3.5, spearSpeed: 3, spearLength: 80, spearWidth: 12, redChance: 0, fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 4) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 2.4, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 0.5, redChance: 0.5, orbitSpeed: 0.15,fourDir: false}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 2.1, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 0.5, redChance: 0.5, orbitSpeed: 0.15,fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 5) {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 1, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 1, orbitSpeed: 10,fourDir: true}}, {width:500, height:500, duration:16})
                 }
@@ -3825,12 +3852,12 @@ BHC.strychnine = {
                 let random = getRandomInt(7)
 
                 if (random == 0) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 9, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.9, fourDir: false, noRepeatDir: true}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 7, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.9, fourDir: false, noRepeatDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 1)
                 {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 5, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, fourDir: true}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, fourDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 2) {
-                    bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, noRepeatDir: false, fourDir: false}}, {width:500, height:500, duration:16})
+                    bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, noRepeatDir: false, fourDir: false}}, {width:500, height:500, duration:16})
                 } else if (random == 3) {
                     bulletHellGreen({"greenSpearRain": {spearPerSec: 1.8, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 1, fourDir: true}}, {width:500, height:500, duration:16})
                 } else if (random == 4) {
@@ -3927,17 +3954,17 @@ BHC.aniciffoBoss = {
                 if (!player.bh.celestialite.actions[0].variables.attacks) player.bh.celestialite.actions[0].variables.attacks = 0
                 switch (player.bh.celestialite.actions[0].variables.attacks) {
                     case 0:
-                        bhAttack(new Decimal(120), 3, 0, "randomPlayer")
+                        bhAttack(new Decimal(120), 3, 0, "randomPlayer", "", "physical")
                         player.bh.celestialite.actions[0].variables.attacks = 1
                         break;
                     case 1:
-                        bhAttack(new Decimal(40), 3, 0, "allPlayer")
+                        bhAttack(new Decimal(40), 3, 0, "allPlayer", "", "ranged")
                         player.bh.celestialite.actions[0].variables.attacks = 2
                         break;
                     case 2:
                         for (let i = 0; i < 5; i++) {
                             setTimeout(() => {
-                                bhAttack(new Decimal(20), 3, 0, "randomPlayer")
+                                bhAttack(new Decimal(20), 3, 0, "randomPlayer", "", "magic")
                             }, 200*i)
                         }
                         player.bh.celestialite.actions[0].variables.attacks = 0
@@ -3971,19 +3998,19 @@ BHC.aniciffoBoss = {
                     //(0=E 1=SE 2=S 3=SW 4=W 5=NW 6=N 7=NE)
                     let random = getRandomInt(7)
                     if (random == 0) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 6, spearLength: 80, spearWidth: 12, blueChance: 0.6, fourDir: true, noRepeatDir: true}}, {width:500, height:500, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 0.6, fourDir: true, noRepeatDir: true}}, {width:500, height:500, duration:16})
                     } else if (random == 1) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 12, spearSpeed: 6, spearLength: 80, spearWidth: 12, redChance: 0.9, fourDir: false, noRepeatDir: true}}, {width:500, height:500, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 9, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.99, fourDir: false, noRepeatDir: true}}, {width:500, height:500, duration:16})
                     } else if (random == 2) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 12, spearLength: 80, spearWidth: 12, blueChance: 0, fourDir: true, noRepeatDir: true}}, {width:1200, height:1200, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 2.5, spearSpeed: 9, spearLength: 80, spearWidth: 12, blueChance: 0, fourDir: true, noRepeatDir: true}}, {width:800, height:800, duration:16})
                     } else if (random == 3) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 5, spearSpeed: 5, spearLength: 80, spearWidth: 12, blueChance: 0, fourDir: true, noRepeatDir: true}}, {width:500, height:500, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 5, spearLength: 80, spearWidth: 12, blueChance: 0, fourDir: true, noRepeatDir: true}}, {width:500, height:500, duration:16})
                     } else if (random == 4) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 6, spearLength: 80, spearWidth: 12, redChance: 0.2, yellowChance: 0.1, blueChance: 0.2,orbitSpeed: 0.2, fourDir: false, noRepeatDir: true}}, {width:600, height:600, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 2.7, spearSpeed: 4, spearLength: 80, spearWidth: 12, redChance: 0.2, yellowChance: 0.1, blueChance: 0.2,orbitSpeed: 0.2, fourDir: false, noRepeatDir: true}}, {width:600, height:600, duration:16})
                     } else if (random == 5) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 6, spearLength: 80, spearWidth: 12, blueChance: 1, fourDir: false, noRepeatDir: false}}, {width:600, height:600, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, fourDir: false, noRepeatDir: false}}, {width:600, height:600, duration:16})
                     } else if (random == 6) {
-                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 7, spearLength: 80, spearWidth: 12, fourDir: false, noRepeatDir: true}}, {width:600, height:600, duration:16})
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 5, spearLength: 80, spearWidth: 12, fourDir: false, noRepeatDir: true}}, {width:600, height:600, duration:16})
                     } else if (random == 7) {
                                         bulletHellGreen({
                 "greenSpearChoreography": {
@@ -4047,17 +4074,660 @@ BHC.aniciffoBoss = {
                     }
                 } else
                 {
-
+                    let random = getRandomInt(7)
+                    if (random == 0) {
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 2.2, spearSpeed: 4, spearLength: 80, spearWidth: 12, yellowChance: 1, orbitSpeed: 0.2, fourDir: false}}, {width:500, height:500, duration:16})
+                    } else if (random == 1) {
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 6, spearSpeed: 4, spearLength: 80, spearWidth: 12, blueChance: 1, fourDir: true, noRepeatDir: false}}, {width:500, height:500, duration:16})
+                    } else if (random == 2) {
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3, spearSpeed: 12, spearLength: 80, spearWidth: 12, blueChance: 0, fourDir: false, noRepeatDir: true}}, {width:800, height:800, duration:16})
+                    } else if (random == 3) {
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 4, spearSpeed: 7, spearLength: 80, spearWidth: 12, redChance: 0.2, yellowChance: 0.1, blueChance: 0.2,orbitSpeed: 0.25, fourDir: false, noRepeatDir: true}}, {width:600, height:600, duration:16})
+                    } else if (random == 4) {
+                        bulletHellGreen({"greenSpearRain": {spearPerSec: 3.5, spearSpeed: 7, spearLength: 80, spearWidth: 12, redChance: 0.5, blueChance: 0.5, noRepeatDir: false, fourDir: false}}, {width:500, height:500, duration:16})
+                    } else if (random == 5) {
+                    bulletHellGreen({
+                    "greenSpearChoreography": {
+                    loop: true,
+                    sequence: [
+                    { delay: 150, dir: 0, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 300, dir: 0, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 450, dir: 2, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 600, dir: 2, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 750, dir: 4, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 900, dir: 4, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 1050, dir: 6, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 1200, dir: 6, speed: 7, loop: true, blue: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    ]
+                    }
+                    }, { width: 500, height: 500, duration: 18 }) 
+                    } else if (random == 6) {
+                                            bulletHellGreen({
+                    "greenSpearChoreography": {
+                    loop: true,
+                    sequence: [
+                    { delay: 200, dir: 1, speed: 4, loop: true, green: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 400, dir: 3, speed: 4, loop: true, green: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 600, dir: 5, speed: 4, loop: true, green: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    { delay: 800, dir: 7, speed: 4, loop: true, green: true },                                                                                                                                                                                                                                                                                                                                                                                                                               
+                    ]
+                    }
+                    }, { width: 500, height: 500, duration: 18 }) 
+                    }
                 }
             },
             cooldown: new Decimal(25),
         },
+        3: {
+            name: "???",
+            passive: true,
+            constantType: "function",
+            constantTarget: "randomPlayer",
+            onPassive(index, slot, target) {
+                if (!player.bh.celestialite.actions[1].variables.attacks) player.bh.celestialite.actions[1].variables.attacks = 0
+                if (player.bh.celestialite.health.lt(240000) && player.bh.celestialite.attackID == 0) {
+                    bulletHell(
+                        { "aniciffoParallelLasers": { warningMs: 600, fireDurationMs: 300, waveInterval: 900, spacing: 190, columnCount: 3 } },
+                        { width: window.innerWidth, height: window.innerHeight, duration: 18, transparent: true, speed: 7 });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(230000) && player.bh.celestialite.attackID == 1) {
+                    bulletHell({"aniciffoBombs": {
+                        bombsPerBurst: 3,    // how many bombs per throw
+                        burstInterval: 1000, // ms between throws
+                        bombSpeed: 10,       // base launch speed (+ up to 4 random)
+                        fuseTicks: 38,       // ticks until detonation
+                        miniBombCount: 5,    // bullets in the radial burst on detonation
+                        miniBombSpeed: 4,    // speed of those mini-bullets
+                        enemySpeed: 3,       // how fast Aniciffo moves
+                    }}, {width: window.innerWidth, height: window.innerHeight,transparent: true,duration: 20, speed: 7})
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(220000) && player.bh.celestialite.attackID == 2)
+                {
+                    bulletHellAniciffoArrows(
+                    { arrowPerSec: 6.5, arrowSpeed: 5.5, redChance: 0, yellowChance: 0.4,},
+                    {width: 1000, height: 700, duration: 18, transparent: false, speed: 8.5}
+                    );
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(210000) && player.bh.celestialite.attackID == 3)
+                {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 3,
+                            burstInterval: 2200,
+                            bombSpeed: 10,
+                            fuseTicks: 38,
+                            miniBombCount: 5,
+                            miniBombSpeed: 4,
+                            enemySpeed: 3
+                        },
+                        "aniciffoParallelLasers": {
+                            waveInterval: 3200,
+                            warningMs: 1000,
+                            fireDurationMs: 400,
+                            spacing: 190,
+                            columnCount: 3,
+                            angleMode: "any"
+                        }
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 7.5,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(200000) && player.bh.celestialite.attackID == 4)
+                {
+                    bulletHellAniciffoArrows(
+                    { arrowPerSec: 3.5, arrowSpeed: 4.5, redChance: 0.3, yellowChance: 0.3,},
+                    {width: 1000, height: 700, duration: 18, transparent: false, speed: 8.5}
+                    );
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(190000) && player.bh.celestialite.attackID == 5)
+                {
+                    bulletHell({"aniciffoDash": {
+                        dashSpeed: 18,
+                        telegraphTicks: 42,
+                        slashRange: 200,
+                        slashDamage: 50,
+                        projCount: 8,
+                        projSpeed: 15,
+                    }}, {width: window.innerWidth, height: window.innerHeight,transparent: true,duration: 20, speed: 8.5})
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(180000) && player.bh.celestialite.attackID == 6)
+                {
+                    bulletHell({
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 3400,
+                            warningMs: 1100,
+                            fireDurationMs: 400,
+                            spacing: 210,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 3,
+                            angleMode: "any"
+                        },
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 1.8,      // balanced rate to weave between lasers
+                            arrowSpeed: 4.6,
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 0.33,
+                            yellowChance: 0.33,
+                            greenChance: 0.34,
+                            orbitTriggerDist: 140
+                        }
+                        
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(170000) && player.bh.celestialite.attackID == 7) {
+                    bulletHell({
+                        "aniciffoBombDash": {
+                        bombsPerBurst: 3,        // throws 3 main bombs
+                        bombSpeed: 9,            // launch velocity
+                        fuseTicks: 38,           // main bomb fuse duration
+                        miniBombCount: 4,        // mini bombs released per explosion
+                        miniBombSpeed: 6,        // scatter velocity
+                        miniFuseTicks: 28,       // mini bomb fuse duration
+                        dashSpeed: 21,           // dash speed
+                        telegraphTicks: 36,      // telegraph aim duration
+                        slashRange: 130,         // sword slash trigger distance
+                        slashDamage: 24,         // damage per hit
+                        phase: 2                 // Phase 2 radioactive emerald armor
+                }
+                },  {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 9,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(160000) && player.bh.celestialite.attackID == 8) {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 3,
+                            burstInterval: 2200,
+                            bombSpeed: 10,
+                            fuseTicks: 38,
+                            miniBombCount: 5,
+                            miniBombSpeed: 4,
+                            enemySpeed: 3
+                        },
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 3.8,      // balanced rate to weave between lasers
+                            arrowSpeed: 4.6,
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 0.13,
+                            yellowChance: 0.33,
+                            orbitTriggerDist: 140
+                        }
+                        
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8.5
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(150000) && player.bh.celestialite.attackID == 9) {
+                    bulletHellAniciffoArrows(
+                    { arrowPerSec: 6.5, arrowSpeed: 10.5, redChance: 0.1, yellowChance: 0,},
+                    {width: 1200, height: 800, duration: 18, transparent: false, speed: 8.5}
+                    );
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(140000) && player.bh.celestialite.attackID == 10) {
+                    bulletHell({
+                        "aniciffoBombDash": {
+                        bombsPerBurst: 3,        // throws 3 main bombs
+                        bombSpeed: 9,            // launch velocity
+                        fuseTicks: 38,           // main bomb fuse duration
+                        miniBombCount: 4,        // mini bombs released per explosion
+                        miniBombSpeed: 6,        // scatter velocity
+                        miniFuseTicks: 28,       // mini bomb fuse duration
+                        dashSpeed: 21,           // dash speed
+                        telegraphTicks: 36,      // telegraph aim duration
+                        slashRange: 130,         // sword slash trigger distance
+                        slashDamage: 24,         // damage per hit
+                        phase: 2                 // Phase 2 radioactive emerald armor
+                },
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 3.8,      // balanced rate to weave between lasers
+                            arrowSpeed: 4.6,
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 0,
+                            yellowChance: 0.33,
+                            orbitTriggerDist: 140
+                        }
+                        
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(130000) && player.bh.celestialite.attackID == 11) {
+                    bulletHell({
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 900,
+                            warningMs: 900,
+                            fireDurationMs: 500,
+                            spacing: 210,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 12,
+                            angleMode: "any"
+                        },
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 3.8,      // balanced rate to weave between lasers
+                            arrowSpeed: 4.6,
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 0,
+                            yellowChance: 0.25,
+                            orbitTriggerDist: 140
+                        }
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8
+                    });
+                    player.bh.celestialite.attackID += 1
+                    }
+                if (player.bh.celestialite.health.lt(120000) && player.bh.celestialite.attackID == 12) {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 1,
+                            burstInterval: 100,
+                            bombSpeed: 14,
+                            fuseTicks: 800,
+                            miniBombCount: 0,
+                            miniBombSpeed: 4,
+                            enemySpeed: 2
+                        },
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8.5,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }  
+                if (player.bh.celestialite.health.lt(110000) && player.bh.celestialite.attackID == 13) {
+                    bulletHell({
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 500,
+                            warningMs: 600,
+                            fireDurationMs: 400,
+                            spacing: 240,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 1,
+                            angleMode: "any"
+                        },
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 7.8,      // balanced rate to weave between lasers
+                            arrowSpeed: 5.6,
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 0,
+                            yellowChance: 1,
+                            orbitTriggerDist: 140
+                        }
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 9
+                    });
+                    player.bh.celestialite.attackID += 1
+                }      
+                if (player.bh.celestialite.health.lt(100000) && player.bh.celestialite.attackID == 14) {
+                    bulletHell(
+                    {
+                        "aniciffoArrowChaos": {
+                            arrowPerSec: 50,      // balanced rate to weave between lasers
+                            arrowSpeed: 26,                   
+                            arrowLength: 72,
+                            arrowWidth: 12,
+                            headSize: 14,
+                            damage: 26,
+                            redChance: 1,
+                            orbitTriggerDist: 140
+                        },
+                    }
+                    , {width: window.innerWidth, height: window.innerHeight,transparent: true,duration: 20, speed: 12.5})
+                    player.bh.celestialite.attackID += 1
+                }      
+                if (player.bh.celestialite.health.lt(90000) && player.bh.celestialite.attackID == 15) {
+                    bulletHell({"aniciffoAirRaid": {bombInterval: 1400, arrowPerSec: 3.5, slashPerSec: 0, laserInterval: 1600, bossSpeed: 4, phase: 1, redChance: 0.05, yellowChance: 0.25}}, {width: window.innerWidth, height: window.innerHeight, transparent: true, speed: 9, duration: 18})
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(80000) && player.bh.celestialite.attackID == 16) {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 3,
+                            burstInterval: 600,
+                            bombSpeed: 14,
+                            fuseTicks: 400,
+                            miniBombCount: 0,
+                            miniBombSpeed: 4,
+                            enemySpeed: 2
+                        },
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 8.5,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }      
+                if (player.bh.celestialite.health.lt(70000) && player.bh.celestialite.attackID == 17) {
+                    bulletHell({
+                        "aniciffoDash": {
+                        dashSpeed: 27,
+                        telegraphTicks: 25,
+                        slashRange: 200,
+                        slashDamage: 50,
+                        projCount: 8,
+                        projSpeed: 15,
+                        },
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 1600,
+                            warningMs: 900,
+                            fireDurationMs: 500,
+                            spacing: 210,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 12,
+                            angleMode: "any"
+                        },
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 12
+                    });
+                    player.bh.celestialite.attackID += 1
+                }     
+                if (player.bh.celestialite.health.lt(60000) && player.bh.celestialite.attackID == 18) {
+                                        bulletHell({
+                        "aniciffoBombDash": {
+                        bombsPerBurst: 3,        // throws 3 main bombs
+                        bombSpeed: 9,            // launch velocity
+                        fuseTicks: 38,           // main bomb fuse duration
+                        miniBombCount: 4,        // mini bombs released per explosion
+                        miniBombSpeed: 6,        // scatter velocity
+                        miniFuseTicks: 28,       // mini bomb fuse duration
+                        dashSpeed: 21,           // dash speed
+                        telegraphTicks: 36,      // telegraph aim duration
+                        slashRange: 130,         // sword slash trigger distance
+                        slashDamage: 24,         // damage per hit
+                        phase: 2                 // Phase 2 radioactive emerald armor
+                    },
+                        "aniciffoAirRaid": {bombInterval: 2100, arrowPerSec: 1.5, slashPerSec: 0, laserInterval: 1600, bossSpeed: 4, phase: 1, redChance: 0.05, yellowChance: 0.25},
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 1600,
+                            warningMs: 900,
+                            fireDurationMs: 500,
+                            spacing: 210,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 12,
+                            angleMode: "any"
+                        },
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 12
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(50000) && player.bh.celestialite.attackID == 19) {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 4,
+                            burstInterval: 1000,
+                            bombSpeed: 8,
+                            fuseTicks: 20,
+                            miniBombCount: 6,
+                            miniBombSpeed: 5,
+                            enemySpeed: 1
+                        },
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 9.5,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(40000) && player.bh.celestialite.attackID == 20) {
+                    bulletHell({
+                        "aniciffoBombs": {
+                            bombsPerBurst: 1,
+                            burstInterval: 400,
+                            bombSpeed: 8,
+                            fuseTicks: 20,
+                            miniBombCount: 8,
+                            miniBombSpeed: 5,
+                            enemySpeed: 1
+                        },
+                        "aniciffoAirRaid": {bombInterval: 2100, arrowPerSec: 1.5, slashPerSec: 0, laserInterval: 1600, bossSpeed: 4, phase: 1, redChance: 0, yellowChance: 0.25},
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 9.5,
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(30000) && player.bh.celestialite.attackID == 21) {
+                    bulletHell(
+                        {
+                            "aniciffoAirRaid": {bombInterval: 120, arrowPerSec: -1, slashPerSec: -1, bossSpeed: 12, phase: 2,},
+                        }, {width: window.innerWidth, height: window.innerHeight, transparent: true, speed: 9, duration: 18})
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(20000) && player.bh.celestialite.attackID == 22) {
+                     bulletHell({
+                        "aniciffoBombDash": {
+                        bombsPerBurst: 5,        // throws 3 main bombs
+                        bombSpeed: 9,            // launch velocity
+                        fuseTicks: 38,           // main bomb fuse duration
+                        miniBombCount: 4,        // mini bombs released per explosion
+                        miniBombSpeed: 6,        // scatter velocity
+                        miniFuseTicks: 28,       // mini bomb fuse duration
+                        dashSpeed: 21,           // dash speed
+                        telegraphTicks: 36,      // telegraph aim duration
+                        slashRange: 130,         // sword slash trigger distance
+                        slashDamage: 24,         // damage per hit
+                        },
+                        "aniciffoParallelLasers": {
+                            // Spawn Aniciffo safely near the top edge to prevent overlapping the player
+                            locX: window.innerWidth / 2,
+                            locY: Math.max(80, window.innerHeight * 0.22),
+                            waveInterval: 1600,
+                            warningMs: 900,
+                            fireDurationMs: 500,
+                            spacing: 180,          // generous spacing so you have room to intercept red arrows
+                            columnCount: 12,
+                            angleMode: "any"
+                        },
+                        "aniciffoAirRaid": {bombInterval: 2100, arrowPerSec: 1.5, slashPerSec: 0, laserInterval: 1600, bossSpeed: 4, phase: 1, redChance: 0, yellowChance: 0.25},
+
+                    }, {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        duration: 25,
+                        transparent: true,
+                        speed: 12
+                    });
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.health.lt(10000) && player.bh.celestialite.attackID == 23) {
+                    bulletHellAniciffoUltimate(
+                        {},
+                        {
+                            width: window.innerWidth,
+                            height: window.innerHeight,
+                            duration: 50,
+                            transparent: true,
+                            speed: 10
+                        }
+                    );
+                    player.bh.celestialite.attackID += 1
+                }
+                if (player.bh.celestialite.attackID >= 24 && player.bh.celestialite.health.lt(0)) {
+                    player.bh.celestialite = layers.bh.startData().celestialite
+                    player.anl.aniciffoPassed = true
+                    player.bh.characters[2].id = "none"
+                    player.bh.characters[2].skills[0].id = "none"
+                    player.bh.characters[2].skills[1].id = "none"
+                    player.bh.characters[2].skills[2].id = "none"
+                    player.bh.characters[2].skills[3].id = "none"
+                }
+            },
+            cooldown: new Decimal(Infinity),
+        },
     },
 
+
+}
+BHC.noxBoss = {
+    name: "Nox, the Vampire Knight",
+    icon() { return player.bh.characterData["nox"].batActive ? "resources/noxBat.png" : "resources/nox.png" },
+    health: new Decimal(50000),
+    damage: new Decimal(50),
+    defense: new Decimal(20),
+    luck: new Decimal(0),
+    agility: new Decimal(16),
+    noRandomStats: true,
+    immortal: true,
+    actions: {
+        0: {
+            name() {
+                return "Bloodthirsty Spear"
+            },
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            onTrigger(index, slot, target) {
+                bhAttack(new Decimal(100), 3, 0, "randomPlayer", "", "physical")
+                bhHeal(new Decimal(80), 3, 0, "celestialite", "")
+                if (player.creation.incrementalEnergy.gte(player.creation.incrementalEnergyMult)) {
+                    player.creation.incrementalEnergy = player.creation.incrementalEnergy.sub(player.creation.incrementalEnergyMult.mul(0.5))
+                    bhLog("<span style='color: #8b0e7a'>Nox, the Vampire Knight, used " + format(player.creation.incrementalEnergyMult.mul(0.5)) + " incremental energy.</span>")
+                } else {
+                    player.creation.incrementalEnergy = new Decimal(0)
+                }
+            },
+            cooldown: new Decimal(6),
+        },
+        1: {
+            name: "Blood Synthesis",
+            passive: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "regenAdd"() {return new Decimal(40)}, // Add to regen stat
+            },
+            cooldown: new Decimal(Infinity),
+        },
+        2: {
+            name: "Vampiric Transformation",
+            instant: true,
+            type: "effect",
+            target: "celestialite",
+            value: new Decimal(1),
+            cooldown: new Decimal(28),
+
+            active: true,
+            constantType: "effect",
+            constantTarget: "celestialite",
+            effects: {
+                "agilityMult"(char) {return player.bh.skillData["nox_vampiricTransformation"].level.mul(0.5).add(3).mul(Decimal.div(char.potency.add(100), 100))}, // Multiplicative Effect
+                "attributes"() {
+                    player.bh.characterData["nox"].batActive = true
+                    startPersistentWait(BHA.nox_vampiricTransformation.duration.div(player.bh.timeSpeed), () => {
+                    player.bh.characterData["nox"].batActive = false
+                    });
+                    return {"air": new Decimal(0.35)}
+                },
+            },
+            duration: new Decimal(8),
+        },
+        3: {
+            name() {
+                return "Bloodword Curse"
+            },
+            instant: true,
+            type: "function",
+            target: "randomPlayer",
+            onTrigger(index, slot, target) {
+                if (!player.bh.celestialite.actions[3].variables.attacks) player.bh.celestialite.actions[3].variables.attacks = 0
+                let str = ["Stealing the framework is my only chance at living a free life.", "You may be angry with me, but I have always been greedy in nature.", "You see, our world contains many different mythical races.", 
+                    "Some races are praised for their strength, while others are feared.", "However, vampires have been feared the most out of all the races.", "Vampires have a long history of murdering innocent people for blood.",
+                    "However, not all vampires are terrible people. I have never killed a man for blood.", "My family and I have faced so much discrimination and prejudice. It is a shame that we have to live in a world where vampires are feared.",
+                    "However, across the ocean, past the great mountains and the great desert, vampires are treated with respect and dignity. I have always dreamed of going to that land, but I have never had the chance.",
+                    "If I sell this framework, I will finally get the chance to visit this land and live a normal life.", "Please... let me have this."
+                ]
+                bulletHell({"bloodwordCurse": {targetText: str[player.bh.celestialite.actions[3].variables.attacks], dps: 24, lockMovement: true}}, {duration: 15, width: 700, height: 500})
+                player.bh.celestialite.actions[3].variables.attacks = player.bh.celestialite.actions[3].variables.attacks + 1
+                if (player.bh.celestialite.actions[3].variables.attacks > 11) player.bh.celestialite.actions[3].variables.attacks = 0
+            },
+            cooldown: new Decimal(14),
+        },
+    },
     reward() {
         let gain = {}
-
-        gain.celestialRadiation = Decimal.add(getRandomInt(5), 16)
         return gain
     },
 }

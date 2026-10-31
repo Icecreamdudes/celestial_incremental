@@ -38,7 +38,7 @@
     },
     clickables: {
         11: {
-            title() { return "<h1>→" },
+            title() { return "<img src='resources/tav.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" },
             canClick() { return true },
             unlocked() { return true },
             tooltip() { return "Tav, the Celestial of Limits" },
@@ -48,7 +48,7 @@
             style: { width: '50px', "min-height": '50px' }, // Tav
         },
         12: {
-            title() { return "<h1>Ξ" },
+            title() { return "<img src='resources/cante.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" },
             canClick() { return true },
             unlocked() { return true },
             tooltip() { return "Cante, the Celestial of Replicanti" },
@@ -59,7 +59,7 @@
             branches: [11],
         },
         13: {
-            title() { return "<h1>☻" },
+            title() { return "<img src='resources/jocus.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" },
             canClick() { return true },
             unlocked() { return true },
             tooltip() { return "Jocus, the Celestial of Fun" },
@@ -70,7 +70,7 @@
             branches: [12],
         },
         14: {
-            title() { return player.matosLair.milestone[25] > 0 ? "<h1>⊘" : "<h1>?" },
+            title() { return player.matosLair.milestone[25] > 0 ? "<img src='resources/matos.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" : "<h1>?" },
             canClick() { return player.matosLair.milestone[25] > 0 },
             unlocked() { return true },
             tooltip() { return player.matosLair.milestone[25] > 0 ? "Matos, the Celestial of Machinery" : "" },
@@ -81,7 +81,7 @@
             branches() {return player.matosLair.milestone[25] > 0 ? [13] : []},
         },
         15: {
-            title() { return player.ir.iriditeDefeated ? "<h1>✦" : "<h1>?" },
+            title() { return player.ir.iriditeDefeated ? "<img src='resources/iridite.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" : "<h1>?" },
             canClick() { return player.ir.iriditeDefeated },
             unlocked() { return true },
             tooltip() { return player.ir.iriditeDefeated ? "Iridite, the Astral Celestial" : "" },
@@ -92,7 +92,7 @@
             branches() {return player.ir.iriditeDefeated ? [14] : []},
         },
         16: {
-            title() { return player.alephsChamber.milestone[25] > 0 ? "<h1>ℵ" : "<h1>?" },
+            title() { return player.alephsChamber.milestone[25] > 0 ? "<img src='resources/aleph.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" : "<h1>?" },
             canClick() { return player.alephsChamber.milestone[25] > 0 },
             unlocked() { return true },
             tooltip() { return player.alephsChamber.milestone[25] > 0 ? "Aleph, the Celestial of Swarms" : ""},
@@ -103,7 +103,7 @@
             branches() {return player.alephsChamber.milestone[25] > 0 ? [15] : []},
         },
         17: {
-            title() { return player.zarDungeon.zarDefeated ? "<h1>⚅" : "<h1>?"  },
+            title() { return player.zarDungeon.zarDefeated ? "<img src='resources/zar.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" : "<h1>?"  },
             canClick() { return player.zarDungeon.zarDefeated },
             unlocked() { return true },
             tooltip() { return player.zarDungeon.zarDefeated ? "Zar, the Celestial of Chance" : ""},
@@ -123,7 +123,7 @@
             style: { width: '50px', "min-height": '50px' }, // Tera
         },
         19: {
-            title() { return "<h1>☉" },
+            title() { return "<img src='resources/mysteryNova.png' style='width:calc(150%);height:calc(150%);margin:-15px -15px'></img>" },
             canClick() { return false },
             unlocked() { return true },
             onClick() {

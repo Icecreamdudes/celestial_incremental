@@ -289,7 +289,7 @@
 
                     ["raw-html", () => { return "This layer is also available in Alt-Universe 1."}, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.hor.radiation.amount) + "</h3> hope radiation. (+" + format(player.hor.radiation.toGet) + "/" + formatTime(player.hor.radiation.max) + ")"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.hor.radiation.amount) + "</h3> hope radiation. (+" + format(player.hor.radiation.toGet) + "/" + formatTime(player.hor.radiation.max) + ")"}, {color: "#b1993a", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Based on fun points)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts fun point gain by x<h3>" + format(player.hor.radiation.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts decay gain by x<h3>" + format(player.hor.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
@@ -305,7 +305,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "15px"],
                     ["style-column", [
-                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.hor.essence.amount) + "</h3> hope essence."}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + formatWhole(player.hor.essence.amount) + "</h3> hope essence."}, {color: "#b1993a", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts space radiation gain by x<h3>" + format(player.hor.essence.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Raises fourth replicanti point softcap divider by ^<h3>" + format(player.hor.essence.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ], {backgroundColor: "#685a21", border: "3px solid #ffde55", borderRadius: "13px 13px 0px 0px", width: "588px", height: "80px"}],

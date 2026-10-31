@@ -347,6 +347,7 @@ function SB_getUpgradeMultis(upgrades) {
     shipStats.passiveSoulGain = 0
     shipStats.passiveSoulGain += 10 * upgrades.passiveParagon
     shipStats.passiveSoulGain += 25 * upgrades.passiveAscension
+
     return shipStats
 
     
@@ -483,6 +484,7 @@ function SB_getUpgradedShipStats(upgrades) {
     shipStats.passiveSoulGain = 0
     shipStats.passiveSoulGain += 10 * (upgrades.passiveParagon || 0)
     shipStats.passiveSoulGain += 25 * (upgrades.passiveAscension || 0)
+
     return shipStats
 }
 

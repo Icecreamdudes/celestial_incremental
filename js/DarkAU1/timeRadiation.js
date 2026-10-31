@@ -57,6 +57,7 @@
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("ra", 23))
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(challengeEffect("anl", 12))
         player.tr.radiation.toGet = player.tr.radiation.toGet.mul(buyableEffect("anl", 108))
+        if (player.anl.aniciffoDefeated) player.tr.radiation.toGet = player.tr.radiation.toGet.mul(10)
 
         if (!player.pet.legPetTimers[0].active) player.tr.radiation.toGet = new Decimal(0)
 
@@ -461,7 +462,7 @@
                     ["blank", "25px"],
                     ["raw-html", () => { return "You must click the particles in the correct numbered order in order to reset."}, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", () => { return "You have <h3>" + format(player.tr.radiation.amount) + "</h3> time radiation. (+" + format(player.tr.radiation.toGet) + "/" + formatTime(player.tr.radiation.max) + ")"}, {color: "#ffffff", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "You have <h3>" + format(player.tr.radiation.amount) + "</h3> time radiation. (+" + format(player.tr.radiation.toGet) + "/" + formatTime(player.tr.radiation.max) + ")"}, {color: "#b70d0e", textShadow: "1px 1px 0 #ffffff, -1px 1px 0 #ffffff, 1px -1px 0 #ffffff, -1px -1px 0 #ffffff", fontSize: "24px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Based on eclipse time)" }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Divides universe reset requirement by /<h3>" + format(player.tr.radiation.effect) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts dark radiation gain by x<h3>" + format(player.tr.radiation.effect2) + "</h3>." }, {color: "#ffffff", fontSize: "16px", fontFamily: "monospace"}],

@@ -59,6 +59,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.ra.masteryScoreEffect)
         if (player.anl.clearedRooms.roomF) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(10000)
         if (player.ep1.dragonEvolutionIndex >= 1) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(3);
+        if (player.anl.aniciffoDefeated) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(100000)
 
         // POWER MODIFIERS
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.pow(player.se.starsExploreEffect[1][1])
@@ -302,8 +303,8 @@
 
         //new buyables
         17: {
-            costBase() { return new Decimal("1e100000") },
-            costGrowth() { return new Decimal("1e1000") },
+            costBase() { return new Decimal("1e10000") },
+            costGrowth() { return new Decimal("1e100") },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.s.singularityPoints},
             pay(amt) { player.s.singularityPoints = this.currency().sub(amt) },

@@ -535,7 +535,7 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
                 return
             }
             // Defense Calc
-            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.characters[receive].defense)))
+            damage = Decimal.mul(damage, Decimal.div(100, Decimal.add(100, player.bh.characters[receive].defense)))
         } else {
             // Shield Calc
             if (player.bh.celestialite.shield.gt(0)) {
@@ -544,7 +544,7 @@ function bhAttack(damage, index, slot, target, str = "", method = "none", attr =
                 return
             }
             // Defense Calc
-            damage = damage.mul(Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense)))
+            damage = Decimal.mul(damage, (Decimal.div(100, Decimal.add(100, player.bh.celestialite.defense))))
         }
         if (index == 3) {
             if (receive == 3) {
@@ -715,6 +715,7 @@ function celestialiteReward(gain) {
     }
     if (gain.celestialRadiation) {
         gain.celestialRadiation = gain.celestialRadiation.mul(generalMult).floor()
+        if (player.anl.aniciffoDefeated) gain.celestialRadiation = gain.celestialRadiation.mul(2)
         player.anl.celestialRadiation = player.anl.celestialRadiation.add(gain.celestialRadiation)
         bhLog("<span style='color: #6491e6'>" + str + "You gained " + formatWhole(gain.celestialRadiation) + " celestial radiation! (You have " + formatWhole(player.anl.celestialRadiation) + ")")
     }

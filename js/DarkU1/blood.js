@@ -57,7 +57,7 @@
         player.bl.bloodToGet = player.bl.bloodToGet.mul(buyableEffect("bl", 102))
         if (getLevelableTier("pu", 401, true)) player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("pu", 401)[0])
         player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("car", 412)[0])
-        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("st", 303)[0])
+        player.bl.bloodToGet = player.bl.bloodToGet.mul(levelableEffect("spet", 303)[0])
 
         if (player.bl.bloodToGet.gte(10)) player.bl.bloodToGet = player.bl.bloodToGet.div(10).pow(0.2).mul(10)
 
@@ -336,14 +336,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -380,14 +380,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -424,14 +424,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -468,14 +468,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -512,14 +512,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -556,14 +556,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -595,7 +595,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
@@ -628,7 +628,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
@@ -661,7 +661,7 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
@@ -703,14 +703,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -747,14 +747,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -791,14 +791,14 @@
             buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
+                    if (!hasMilestone("bloodZone1", 14)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -856,11 +856,11 @@
                             ["style-row", [
                                 ["style-row", [
                                     ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
-                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.secondaryColor + "7f", borderRadius: "0"}],
-                            ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                                ], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? player.ir.secondaryColor + "7f" : "#00002f", borderRadius: "0"}],
+                            ], {display: player.ev.evolutionsUnlocked[14] ? "none !important" : ""}],
                             ["style-row", [
                                 ["category-button", ["Salvaged Upgrades", "shipSelectionStats", "salvagedUpgrades"], {width: player.ir.inBattle ? "157.6px" : "104px", height: "50px", background: player.ir.inBattle ? (player.ir.secondaryColor + "7f") : "#00003f", border: "3px solid " + (player.ir.inBattle ? (player.ir.primaryColor + "7f") : "#f571717f"), borderRadius: "0"}],
-                            ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+                            ], {display: player.ev.evolutionsUnlocked[14] ? "" : "none !important"}],
 
                         ], {width: player.ir.inBattle ? "800px" : "532px", height: "50px", borderRadius: "16px 16px 0 0"}],
                         ["style-row", [], {background: player.ir.inBattle ? player.ir.primaryColor : "#f57171", width: player.ir.inBattle ? "800px" : "532px", height: "3px"}],
@@ -1496,10 +1496,10 @@
                                 ["style-row", [
                                     ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
                                 ], {width: "265px", height: "40px", background: "#00003f", borderRadius: "0"}],
-                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[14] ? "none !important" : ""}}],
                             ["style-row", [
                                 ["category-button", ["Space Junk", "ships", "automation"], {width: "265px", height: "40px", background: "#381111", border: "3px solid #f571717f", borderRadius: "0"}],
-                            ], () => {return {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}}],
+                            ], () => {return {display: player.ev.evolutionsUnlocked[14] ? "" : "none !important"}}],
 
                         ], {width: "800px", height: "40px", borderBottom: "3px solid #f57171", borderRadius: "0"}],
                         ["style-column", [
@@ -1534,7 +1534,7 @@
                                     // Connections
                                     
                                     ["style-column", [
-                                        createConnectionComponent(0, 0, 100, 0, "#f57171"),
+                                       // createConnectionComponent(0, 0, 100, 0, "#f57171"),
                                     ], () => {
                                         return {display: hasUpgrade("bl", 11) ? "" : "none !important", width: "0", height: "0"}
                                     }],
@@ -1678,10 +1678,10 @@
                                             ["style-row", [
                                                 ["raw-html", "???", { "color": "#ffffff7f", "font-size": "16px", "font-family": "monospace" }],
                                             ], {width: "398.5px", height: "50px", background: "#00003f", borderRadius: "0"}],
-                                        ], {display: player.ev.evolutionsUnlocked[13] ? "none !important" : ""}],
+                                        ], {display: player.ev.evolutionsUnlocked[14] ? "none !important" : ""}],
                                         ["style-row", [
                                             ["category-button", ["Salvaged Upgrades", "battleUpgradeSelection", "salvage"], {width: "398.5px", height: "50px", background: "#00005f", border: "3px solid " + player.ir.primaryColor + "7f", borderRadius: "0"}],
-                                        ], {display: player.ev.evolutionsUnlocked[13] ? "" : "none !important"}],
+                                        ], {display: player.ev.evolutionsUnlocked[14] ? "" : "none !important"}],
                                     ], {background: "black", width: "800px", height: "50px", borderRadius: "16px 16px 0 0"}],
                                     ["style-row", [], {background: player.ir.primaryColor, width: "800px", height: "3px"}],
                                     ["buttonless-microtabs", "battleUpgradeSelection", {borderWidth: "0"}],

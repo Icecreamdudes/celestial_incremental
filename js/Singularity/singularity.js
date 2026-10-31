@@ -112,6 +112,9 @@
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 1))
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 2))
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 3))
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 4))
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 5))
+            player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(buyableEffect("s", 6))
             player.s.pylonEnergyPerSecond = player.s.pylonEnergyPerSecond.mul(levelableEffect("pu", 403)[1])
 
             player.s.pylonPassiveEffect = player.points.pow(0.0001).add(1).pow(player.s.pylonTierEffect).pow(buyableEffect("fu", 106))
@@ -520,6 +523,111 @@
             },
             style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
         },
+        4: {
+            costBase() { return new Decimal(1e150) },
+            costGrowth() { return new Decimal(1e10) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.ani.darkRadiation },
+            pay(amt) { player.ani.darkRadiation = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(1.6).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt && player.anl.aniciffoDefeated},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor IV"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Dark Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
+        5: {
+            costBase() { return new Decimal(1e200) },
+            costGrowth() { return new Decimal(1e15) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.ani.darkRadiation },
+            pay(amt) { player.ani.darkRadiation = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(1.4).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt && player.anl.aniciffoDefeated},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor V"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Dark Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
+        6: {
+            costBase() { return new Decimal(1e250) },
+            costGrowth() { return new Decimal(1e20) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.ani.darkRadiation },
+            pay(amt) { player.ani.darkRadiation = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(player.ra.radiation.add(1).log(1.2).div(40).add(1)).add(1)},
+            unlocked() { return hasUpgrade("s", 31) && player.s.pylonBuilt && player.anl.aniciffoDefeated},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Radioactive Pylon Factor VI"
+            },
+            display() {
+                return 'which are boosting radioactive pylon energy by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    (Based on Radiation)\n\
+                    Cost: ' + formatWhole(tmp[this.layer].buyables[this.id].cost) + ' Dark Radiation'
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '250px', height: '150px', color: "white", backgroundColor: "#801757", backgroundImage: "linear-gradient(120deg, #801757 0%, #D3173A 100%)" }
+        },
         11: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1000) },
@@ -622,6 +730,7 @@
             },
             style: { width: '275px', height: '150px', backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
+        
     },
     milestones: {
         11: {
@@ -835,6 +944,10 @@
                     ["raw-html", () => {return player.s.pylonBuilt ? "Your radioactive pylon is tier " + formatWhole(player.s.pylonTier) + ", which boosts effective pylon energy and the passive effect by ^" + formatSimple(player.s.pylonTierEffect) + "." : ""}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["rounded-ex-buyable", 1], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 2], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 3],]], 
+                    ["blank", "25px"],
+                    ["raw-html", () => { return player.anl.aniciffoDefeated ? "You have <h3>" + format(player.ani.darkRadiation) + " dark radiation." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["rounded-ex-buyable", 4], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 5], ["blank", "3px", {width: "3px"}], ["rounded-ex-buyable", 6],]], 
                     ["blank", "10px"],
                     ["clickable", 12],
                 ],

@@ -694,12 +694,7 @@ addLayer("settings", {
                     ["top-column", [
                         ["blank", "10px"]
                         ["raw-html", "Game by Icecreamdude", {color: "var(--textColor)", fontSize: "14px", fontFamily: "monospace"}],
-                        ["raw-html", "Music: Icecreamdude !Sweet 150percent Citrine/Niko/Flushmak<br>" +
-                            "Content: Icecreamdude Forwaken Akash Bumpy<br>" +
-                            "Ideas: Nova<br>" +
-                            "Art: Jtoh_Sc Lemonsja Akash Vel Bumpy<br>" +
-                            "Testing: Nova Piterpicher Vel Bumpy<br>" +
-                            "Bug Fixing: Tsanth Forwaken", {color: "var(--textColor)", fontSize: "12px", fontFamily: "monospace"}],
+                        ["raw-html", "<h5>Game by Icecreamdude.<br>Music by Icecreamdude and 150percent.<br>Content by Icecreamdude, Forwaken, Bumpy, Akash.<br>Additional development by Ruzz and Deusovi.<br>Art by Bumpy, Akash and other contributors.<br>Tested by a bunch of people.<br>",]
                     ], {width: "306px", height: "255px"}],
                     ["style-row", [
                         ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556><button class=can style='display:flex;align-items:center;justify-content:center;width:306px;height:40px;font-size:20px;color:#dde0fc;background:#5865f2;border:3px solid #2c3279'>Join the Discord!</button></a>", {fontFamily: "monospace",}],

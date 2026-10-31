@@ -88,6 +88,11 @@
 
        // stopRain()
 
+
+        //KEEP THIS FOR NOW
+        player.ak.guess = ""
+        player.el.guess = ""
+
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
@@ -174,7 +179,7 @@
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.pow(player.co.cores.point.effect[1])
         player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
-        player.gain = player.gain.pow(player.st.starPowerEffect)
+        player.gain = player.gain.pow(player.sdim.starPowerEffect)
         player.gain = player.gain.pow(player.se.starsExploreEffect[0][1])
         player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
         player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
@@ -247,7 +252,7 @@
         }
         player.i.pylonEnergy = player.i.pylonEnergy.add(player.i.pylonEnergyPerSecond.mul(delta))
 
-        player.i.pylonEnergyEffect = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.8).pow_base(10).sub(1).pow(4).add(1)
+        player.i.pylonEnergyEffect = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.8).sub(1).pow_base(10).sub(1).pow(4).add(1)
         player.i.pylonEnergyEffect2 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.65).sub(1).pow(3).mul(10).add(1)
         player.i.pylonEnergyEffect3 = player.i.pylonEnergy.add(1).pow(player.i.pylonTierEffect).log(10).add(1).pow(0.5).sub(1).pow(1.75).mul(3).add(1)
 

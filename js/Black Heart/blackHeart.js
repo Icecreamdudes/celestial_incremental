@@ -1551,6 +1551,7 @@ addLayer("bh", {
         agilityAdd = agilityAdd.add(player.bh.skillData["vespasian_paralyticBite"].maxLevel.div(2))
         agilityAdd = agilityAdd.add(buyableEffect("sme", 133))
         agilityAdd = agilityAdd.add(levelableEffect("car", 106)[0])
+        if (hasAchievement("achievements", 1023)) agilityAdd = agilityAdd.add(2)
 
         // =-- DEFENSE STUFF --= //
         let defenseBase = new Decimal(1)
@@ -1565,6 +1566,7 @@ addLayer("bh", {
         defenseAdd = defenseAdd.add(levelableEffect("pet", 310)[1])
         defenseAdd = defenseAdd.add(buyableEffect("stagnantSynestia", 1))
         defenseAdd = defenseAdd.add(levelableEffect("car", 108)[0])
+        if (hasAchievement("achievements", 1024)) defenseAdd = defenseAdd.add(2)
 
         // =-- LUCK STUFF --= //
         let luckBase = new Decimal(1)
@@ -1593,6 +1595,7 @@ addLayer("bh", {
         if (player.alephsChamber.milestone[25] > 0) mendingAdd = mendingAdd.add(10)
         mendingAdd = mendingAdd.add(levelableEffect("car", 110)[0])
         mendingAdd = mendingAdd.add(player.bh.skillData["nav_violetResonance"].maxLevel)
+        if (hasAchievement("achievements", 1022)) mendingAdd = mendingAdd.add(2)
 
         // =-- POTENCY STUFF --= //
         let potencyBase = new Decimal(1)

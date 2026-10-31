@@ -150,7 +150,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pet", 306)[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pu", 106)[1])
-        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.st.starPowerEffect2)
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.sdim.starPowerEffect2)
 
         // POWER MODIFIERS
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])

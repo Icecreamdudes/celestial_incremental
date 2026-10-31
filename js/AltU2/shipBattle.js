@@ -2156,7 +2156,7 @@ class SpaceArena {
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "bloodGems" });
                 }
                 if (reward.epochFragments) {
-                    let amt = reward.epochFragments/*.mul(this.shipStats.celestialRadiationStoneGain)*/.floor();
+                    let amt = reward.epochFragments.floor();
                     amt = amt.max(1);
                     player.anl.epochFragments = player.anl.epochFragments.add(amt);
                     arena.lootFlashPositions.push({ x: enemy.x, y: enemy.y, amount: amt, type: "epochFragments" });

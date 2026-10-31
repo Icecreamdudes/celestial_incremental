@@ -76,6 +76,8 @@
         player.zd.gameCost = player.zd.gameCost.div(buyableEffect("zd", 18))
 
         player.zd.zarChipsToGet = new Decimal(1)
+        if (hasAchievement("achievements", 1020)) player.zd.zarChipsToGet = player.zd.zarChipsToGet.add(1)
+        if (hasAchievement("achievements", 1020)) player.zd.zarChipsToGet = player.zd.zarChipsToGet.add(2)
         player.zd.zarChipsToGet = player.zd.zarChipsToGet.add(buyableEffect("zd", 15))
         player.zd.zarChipsToGet = player.zd.zarChipsToGet.mul(levelableEffect("pu", 402)[1])
 
@@ -176,6 +178,9 @@
                 makeShinies(GOLDEN_EFFECT_TEXT, 1, {x: 1000, y: 450, text: "It's a tie!<br><h5>Evolution shards returned."})
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.zd.gameCost)
             }
+            if (player.zd.playerScore.eq(13)) {
+                completeAchievement("achievements", 1020)
+            }
         }
 
         player.zd.gameOver = true
@@ -234,6 +239,7 @@
             unlocked() { return true },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(player.zd.gameCost)
+                if (player.zd.gameCost.gte(100) && !hasAchievement("achievements", 1021)) completeAchievement("achievements", 1021)
 
                 layers.zd.startGame();
                 player.zd.gameOver = false

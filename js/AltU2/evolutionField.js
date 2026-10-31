@@ -64,7 +64,7 @@ addLayer("evolutionField", {
                 arena.spawnArena();
                 localStorage.setItem('arenaActive', 'true');
 
-                pauseUniverseAll(["A2", "DS"], "pause", true)
+                pauseUniverseAll(["A2", "SB", "DS"], "pause", true)
 
                 player.ir.shipHealth = player.ir.shipHealthMax
 

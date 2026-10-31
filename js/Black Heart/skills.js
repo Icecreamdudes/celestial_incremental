@@ -1587,7 +1587,7 @@ BHA.creation_increment = {
     get name() { 
         return player.bh.flipside ? "Replicate" : "Increment";
     },
-    description() {return  player.bh.flipside ? "Multiplies incremental energy by x" + format(new Decimal.add(1, Decimal.mul(player.creation.incrementalEnergyMult.pow(0.25).mul(0.07), Decimal.div(Decimal.add(1, player.bh.skillData["creation_increment"]), player.creation.replicateSoftcap)))) + ", as well as dealing physical damage based on current incremental energy. Also increments incremental energy by 1, for good measure. (Has diminishing returns)"
+    description() {return  player.bh.flipside ? "Multiplies incremental energy by x" + format(new Decimal.add(1, Decimal.mul(player.creation.incrementalEnergyMult.pow(0.4).mul(0.07), Decimal.div(Decimal.add(1, player.bh.skillData["creation_increment"]), player.creation.replicateSoftcap)))) + ", as well as dealing physical damage based on current incremental energy. Also increments incremental energy by 1, for good measure. (Has diminishing returns)"
          : "Increments incremental energy by " + format(new Decimal.mul(new Decimal(1).add(Decimal.mul(0.5, player.bh.skillData["creation_increment"])), player.creation.incrementalEnergyMult)) + ", as well as dealing physical damage based on current incremental energy."},
     passiveText() {return "+" + formatSimple(player.bh.skillData["creation_increment"].maxLevel.div(5)) + " DMG"},
     char: "creation",
@@ -1595,7 +1595,7 @@ BHA.creation_increment = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1608,7 +1608,7 @@ BHA.creation_increment = {
     {
         if (player.bh.flipside)
         {
-            let mult = new Decimal.add(1, Decimal.mul(player.creation.incrementalEnergyMult.pow(0.25).mul(0.07), Decimal.div(Decimal.add(1, player.bh.skillData["creation_increment"]), player.creation.replicateSoftcap)))
+            let mult = new Decimal.add(1, Decimal.mul(player.creation.incrementalEnergyMult.pow(0.4).mul(0.07), Decimal.div(Decimal.add(1, player.bh.skillData["creation_increment"]), player.creation.replicateSoftcap)))
             player.creation.incrementalEnergy = player.creation.incrementalEnergy.add(1)
             player.creation.incrementalEnergy = player.creation.incrementalEnergy.mul(mult)
             bhLog("<span style='color: #8a76b0'>" + "Your incremental energy has multiplied by " + format(mult) + "!</span>")
@@ -1643,7 +1643,7 @@ BHA.creation_upgrade = {
     curCostBase: new Decimal(750),
     curCostScale: new Decimal(3.5),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1692,7 +1692,7 @@ BHA.creation_prestige = {
     curCostBase: new Decimal(2500),
     curCostScale: new Decimal(5),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1723,7 +1723,7 @@ BHA.creation_mend = {
     curCostBase: new Decimal(1000),
     curCostScale: new Decimal(4),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1903,7 +1903,7 @@ BHA.nox_bloodthirstySpear = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
 
     instant: true,
     type: "function",
@@ -1956,7 +1956,7 @@ BHA.nox_bloodDrain = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
     passive: true,
     constantType: "effect",
     constantTarget: "self",
@@ -1997,7 +1997,7 @@ BHA.nox_vampiricTransformation = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
     instant: true,
     active: true,
     constantType: "effect",
@@ -2045,7 +2045,7 @@ BHA.nox_lastChance = {
     curCostBase: new Decimal(250),
     curCostScale: new Decimal(3),
     currency: "paragonShards",
-    unlocked() {return true},
+    unlocked() {return false},
     instant: true,
     active: true,
     constantType: "effect",

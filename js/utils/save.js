@@ -328,11 +328,32 @@ function exportSave() {
 	document.execCommand("copy");
 	document.body.removeChild(el);
 }
+
+// Saves are written with btoa(unescape(encodeURIComponent(json))) (see save()/exportFile()),
+// so importing has to undo both steps, exactly like load() does. Round tripping through
+// atob() alone turns every non-ASCII character into its UTF-8 bytes read back as Latin-1,
+// and since the imported value is saved again, every "export -> import" cycle doubles the
+// length of those strings. The "\u200d" placeholder kept in the element and akash guess
+// boxes grew to several megabytes this way, bloating the whole save with it.
+function parseImportedSave(raw) {
+	let text = (typeof raw === "string" ? raw : String(raw)).trim();
+	try {
+		return JSON.parse(decodeURIComponent(escape(atob(text))));
+	} catch (e) {
+		// Fall back to a plain base64 payload so hand-edited or already decoded saves still work.
+		try {
+			return JSON.parse(atob(text));
+		} catch (e2) {
+			throw e;
+		}
+	}
+}
+
 function importSave(imported = undefined, forced = false) {
 	if (imported === undefined)
 		imported = prompt("Paste your save here. Don't screw up the timeline though.");
 	try {
-		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
+		tempPlr = Object.assign(getStartPlayer(), parseImportedSave(imported));
 		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save may or may not work, just press 'ok' and see what happens.")) // Wrong save (use "Forced" to force it to accept.)
 			return;
 		player = tempPlr;

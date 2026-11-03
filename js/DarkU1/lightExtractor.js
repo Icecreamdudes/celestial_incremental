@@ -368,7 +368,7 @@
                 player.pet.legPetTimers[0].current = new Decimal(0)
                 layers.pu.generateSelection();
 
-                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+                player.pet.legPetTimers[0].cooldown = player.pet.legPetTimers[0].cooldownMax
 
                 player.sma.eclipseExitTime = new Decimal(0)
 

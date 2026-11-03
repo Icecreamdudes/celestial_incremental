@@ -5910,7 +5910,7 @@
             portrait: "resources/secret.png",
             background: "linear-gradient(160deg, #1d2b0b 0%, #22331d 100%)",
             music: "music/lament.mp3",
-            trigger() {return hasUpgrade("anl", 13)},
+            trigger() {return player.anl.clearedRooms.roomC},
             dialogue: [
                 { text: "You and the others reach the end of the room."  },
                 { text: "This is starting to get a little repetitive...", portrait: "resources/nox.png"  },

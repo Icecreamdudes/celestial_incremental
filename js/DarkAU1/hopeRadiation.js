@@ -63,7 +63,7 @@
         }
 
         //essence
-        player.hor.essence.req = Decimal.mul("1e100000", Decimal.pow("1e75000", player.hor.essence.amount.mul(2.25)))
+        player.hor.essence.req = Decimal.mul("1e50000", Decimal.pow("1e25000", player.hor.essence.amount.mul(2)))
         player.hor.essence.req2 = player.hor.essence.amount.add(1).pow(Decimal.add(10, player.hor.essence.amount.mul(4))).mul("1e60")
 
         player.hor.essence.effect = player.hor.essence.amount.mul(2).pow(3).add(1)

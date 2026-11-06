@@ -1493,7 +1493,7 @@ window.bhAttack = function(damage, index = 3, slot = 0, target = "randomPlayer",
                 window.lastDamageTime = now;
                 if (!info.greenMode && !info.blueMode) bhAttack(player.bh.celestialite.damage.mul(0.666), 3, 0, "randomPlayer")
                 if (info.blueMode) bhAttack(player.bh.celestialite.damage.mul(0.333), 3, 0, "randomPlayer")
-                if (info.greenMode) bhAttack(player.bh.celestialite.damage.mul(2), 3, 0, "randomPlayer")
+                if (info.greenMode) bhAttack(player.bh.celestialite.damage, 3, 0, "randomPlayer")
             }
         }
 

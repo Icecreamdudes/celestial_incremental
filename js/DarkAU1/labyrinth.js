@@ -1,4 +1,19 @@
-﻿addLayer("anl", {
+﻿function labyrinthBulletHellGreen(actions, values, ...args) {
+    for (const [actionName, config] of Object.entries(actions)) {
+        if (actionName === "greenSpearRain" || actionName === "blueSpearRain") {
+            const defaultRate = actionName === "greenSpearRain" ? 2 : 1.5;
+            config.spearPerSec = (config.spearPerSec ?? config.bulletPerSec ?? defaultRate) / 1.5;
+            config.spearSpeed = (config.spearSpeed ?? 5) / 1.5;
+        } else if (actionName.endsWith("SpearChoreography")) {
+            for (const spear of config.sequence ?? []) {
+                spear.speed = (spear.speed ?? 5) / 1.5;
+            }
+        }
+    }
+    return bulletHellGreen(actions, values, ...args);
+}
+
+addLayer("anl", {
     name: "Aniciffo's Labyrinth", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "<h4>L", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,

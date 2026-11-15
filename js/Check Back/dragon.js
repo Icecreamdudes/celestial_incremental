@@ -506,8 +506,8 @@ addLayer("ep1", {
             canClick() {
                 let t = false
                 if (player.matosLair.milestone[25] >= 1) t = true;
-                for (let i = 0; i > player.co.cores; i++) {
-                    if (player.co.cores[i].level.gte(99)) {t = true}
+                for (let i of Object.keys(player.co.cores)) {
+                    if (player.co.cores[i].level.gte(99)) {t = true; break}
                 }
                 return this.unlocked()
                 && player.ep1.fire.gte(1e4)
@@ -1772,7 +1772,7 @@ addLayer("ep1", {
             description() {
                 return "Reduces gold button cooldown by /" + format(player.ep1.upgrade201Effect) + ", based on starmetal alloy."
             },
-            unlocked() { return true },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 },
             cost: new Decimal(4),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Platinum Shards",
@@ -1802,7 +1802,7 @@ addLayer("ep1", {
             description() {
                 return "Double platinum shard chance from gold buttons."
             },
-            unlocked() { return true },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 },
             cost: new Decimal(12),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Platinum Shards",
@@ -1832,7 +1832,7 @@ addLayer("ep1", {
             description() {
                 return "Boost gold gain by x1.01 for each platinum buyable level."
             },
-            unlocked() { return true },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 },
             cost: new Decimal(32),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Platinum Shards",
@@ -1865,7 +1865,7 @@ addLayer("ep1", {
             description() {
                 return "+0.005 to the gold buyable base."
             },
-            unlocked() { return true },
+            unlocked() { return player.ep1.dragonEvolutionIndex >= 4 },
             cost: new Decimal(100),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Platinum Shards",
@@ -2215,7 +2215,7 @@ addLayer("ep1", {
                                     ]],
                                 ], () => {
                                     let look = {backgroundColor: "#c3d1de", borderLeft: "2px solid white", borderTop: "2px solid white", borderRight: "2px solid #7f7f7f", borderBottom: "2px solid #7f7f7f", width: "600px", height: "400px", padding: "3px"}
-                                        if (player.ep1.dragonEvolutionIndex <= 4) look.display = "none !important";
+                                        if (player.ep1.dragonEvolutionIndex < 4) look.display = "none !important";
                                         return look
                                     }], 
                             ], {position: "relative", left: "325px", top: "0px", width: "0px", height: "0px"}],

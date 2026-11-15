@@ -48,15 +48,15 @@ const createConnectionComponent = function(x1, y1, x2, y2, color) {
 }
 
 let rerollBuyableShipUpgrades = function(luck) {
-    let picker = typeof pickUpgrade === "function" ? pickUpgrade : (typeof pickUpgrades === "function" ? pickUpgrades : null);
-    let chosen = picker ? picker(true, 12, {
+    let chosen = pickUpgrade(true, 12, {
         forceIncludePool: {
             space: true,
             blood: hasUpgrade("le", 201),
             junk: true,
             labyrinth: false,
         }
-    }) : [];
+    });
+    console.log(chosen)
 
     player.ir.shipUpgradeShop = Array.isArray(chosen) ? chosen : [];
 

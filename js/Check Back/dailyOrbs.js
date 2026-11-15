@@ -90,7 +90,7 @@ addLayer("ev2", {
 
         // PURCHASE EXPONENT
 
-        player.ev2.purchaseExponent = new Decimal(0.8)
+        player.ev2.purchaseExponent = new Decimal(0.85)
         if (hasUpgrade("ep1", 303)) player.ev2.purchaseExponent = player.ev2.purchaseExponent.add(0.05);
 
         // XP PURCHASE

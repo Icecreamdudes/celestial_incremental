@@ -5,7 +5,6 @@ addLayer("st", {
     universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-    levelableAscend: true,
     startData() { return {
         unlocked: true,
     }},

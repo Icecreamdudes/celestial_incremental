@@ -636,28 +636,27 @@ function pickUpgrade(canRepeat = true, repititions = 12, data = {}) {
                 case "junk": {
                     if ((data.forceIncludePool && data.forceIncludePool.junk)) possibleUpgrades[upg.rarity].push(id);
                 break; }
-                case "labyrinth": {
-                    if (player.tab == "anl" ||(data.forceIncludePool.labyrinth)) possibleUpgrades[upg.rarity].push(id);
-                break; }
                 default : {
-                     if (player.tab != "anl") possibleUpgrades[upg.rarity].push(id);
+                    possibleUpgrades[upg.rarity].push(id);
                 break; }
             }
         };
     }
     // Select Upgrades
     let chosen = [];
-        while (chosen.length < 3) {
-            for (let id of Object.keys(UPGRADE_RARITIES)) {
-                if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
-                    let index = Math.floor(possibleUpgrades[id].length * Math.random())
-                    chosen.push(possibleUpgrades[id][index])
-                    possibleUpgrades[id].splice(index, 1)
-                    break;
-                } else totalChance -= UPGRADE_RARITIES[id].weight(); // <--- DEDUCTS WEIGHT
-            }
-            // BUG: totalChance is NEVER reset back to maxChance here!
+    let maxChance = totalChance;
+    while (chosen.length < repititions) {
+        for (let id of Object.keys(UPGRADE_RARITIES)) {
+            if (totalChance * Math.random() < UPGRADE_RARITIES[id].weight()) {
+                let index = Math.floor(possibleUpgrades[id].length * Math.random())
+                chosen.push(possibleUpgrades[id][index])
+                if (!canRepeat) possibleUpgrades[id].splice(index, 1)
+                break;
+            } else totalChance -= UPGRADE_RARITIES[id].weight();
         }
+        totalChance = maxChance
+    }
+    return chosen;
 }
 
 function pickUpgrades(data = {}) {

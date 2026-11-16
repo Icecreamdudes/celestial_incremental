@@ -56,7 +56,6 @@ let rerollBuyableShipUpgrades = function(luck) {
             labyrinth: false,
         }
     });
-    console.log(chosen)
 
     player.ir.shipUpgradeShop = Array.isArray(chosen) ? chosen : [];
 

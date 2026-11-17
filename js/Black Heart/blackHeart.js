@@ -1161,7 +1161,7 @@ addLayer("bh", {
                         if (Object.keys(variables).length === 0) continue
                         let target = calcTarget(3, i, variables.target, "effect")
                         for (let k in variables) {
-                            if (k == "target" || k == "specTarget") continue
+                            if (k == "target" || k == "storedTarget") continue
                             for (let t = 0; t < target.length; t++) {
                                 let val = run(variables[k], variables, player.bh.celestialite)
                                 if (k == "attributes") {

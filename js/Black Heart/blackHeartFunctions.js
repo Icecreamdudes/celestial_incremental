@@ -930,117 +930,172 @@ function celestialiteSpawn() {
     }
 }
 
+/**
+ * Check if the character in this slot is alive.
+ * @param {number} chaeracterId The Id of the character to check
+ * @returns True if they are alive; false otherwise.
+ */
+function isAlive(chaeracterId) {
+    if (player.bh.characters[chaeracterId].id === "none") return false;
+    if (player.bh.characters[chaeracterId].health.lte(0)) return false;
+    return true;
+}
+
+/**
+ * Check if this entity can be healed (if their health is below maximum)
+ * @param {*} entity 
+ * @returns True if they can be healed; false otherwise.
+ */
+function canBeHealed(entity) {
+    return entity.health.lt(entity.maxHealth);
+}
+
 function calcTarget(index, slot, target, action = "none") {
-    let playerTaunt = -1
-    let celestialiteTaunt = false
-    stored = false
-    for (let i = 0; i < 3; i++) {
-        if (player.bh.characters[i].attributes["taunt"]) playerTaunt = i
-    }
-    if (player.bh.celestialite.attributes["taunt"]) celestialiteTaunt = true
+    let stored = false;
+
+    const playerTaunt = [0,1,2].find(x => player.bh.characters[x].attributes["taunt"]);
+    const celestialiteTaunt = !!player.bh.celestialite.attributes["taunt"];
+
     let result = []
     switch (target) {
         case "storedTarget":
-            stored = true
-            if (index == 3) {
-                if (player.bh.celestialite.actions[slot].variables["specTarget"] && player.bh.celestialite.actions[slot].variables["specTarget"] != null) {
-                    result = player.bh.celestialite.actions[slot].variables["specTarget"]
-                    break;
-                }
-            } else {
-                if (player.bh.characters[index].skills[slot].variables["specTarget"] && player.bh.characters[index].skills[slot].variables["specTarget"] != null) {
-                    result = player.bh.characters[index].skills[slot].variables["specTarget"]
-                    break;
-                }
+            stored = true;
+            const targetAction = (index === 3) ? player.bh.celestialite.actions[slot] : player.bh.characters[index].skills[slot];
+            if (!!targetAction.variables["storedTarget"]) {
+                // special Target is either a list of target indexes or undefined
+                result.concat(targetAction.variables["storedTarget"]); 
+                break;
             }
-            result = []
+
         case "randomPlayer":
+            // Taunting overrrides randomness
             if (celestialiteTaunt && (action == "heal" || action == "effect")) return [3]
             if (playerTaunt >= 0) return [playerTaunt]
-            let potTarget = []
+
+            let potentialTargets = []
             for (let i = 0; i < 3; i++) {
-                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") potTarget.push(i)
+                if (isAlive(i)) potentialTargets.push(i)
             }
-            let rndP = potTarget[Math.floor(Math.random()*potTarget.length)]
-            result = [rndP]
+
+            let target = potentialTargets[Math.floor(Math.random()*potentialTargets.length)]
+            result.push(target);
             break;
+
         case "randomPlayerHeal":
-            if (celestialiteTaunt && (action == "heal" || action == "effect") && player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) return [3]
-            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) return [playerTaunt]
-            let pothTarget = []
-            for (let i = 0; i < 3; i++) {
-                if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") pothTarget.push(i)
+            // Taunting overrides randomness... if healing is meaningful.
+            if (celestialiteTaunt && (action == "heal" || action == "effect")) {
+                if (canBeHealed(player.bh.celestialite)) return [3];
             }
-            let rndhP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
-            result = [rndhP]
-            if (result[0] === undefined && action != "heal") {
-                for (let i = 0; i < 3; i++) {
-                    if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") pothTarget.push(i)
-                }
-                let randP = pothTarget[Math.floor(Math.random()*pothTarget.length)]
-                result = [randP]
-            }
-            break;
-        case "random":
-            let rndTarget = [3]
             if (playerTaunt >= 0) {
-                rndTarget.push(playerTaunt)
+                if (canBeHealed(player.bh.characters[playerTaunt])) return [playerTaunt];
+            }
+        
+            // We want to prioritize lower-health characters...
+            // ...but it should still be random. 
+            let candidates = []
+            let weights = []
+            for (let i = 0; i < 3; i++) {
+                // Identify valid characters
+                if (!isAlive(i)) continue;
+                const character = player.bh.characters[i];
+
+                const healthFraction = character.health.dividedBy(character.maxHealth).toNumber();
+                if (healthFraction <= 0 || healthFraction >= 0.999) continue;
+
+                const weight = (1-healthFraction) / healthFraction;
+                candidates.push(i);
+                weights.push(weight);
+            }
+
+            // Normalize the weights
+            const normalization = weights.reduce((a,b) => a + b, 0);
+            weights = weights.map(x => x / normalization);
+
+            if (candidates.length === 0 || normalization === 0) {
+                // If healing skills don't give other buffs, this is probably fine
+                return [0]; 
+            }
+
+            let threshold = Math.random();
+            for (let i = 0; i < weights.length; i++) {
+                threshold -= weights[i];
+                if (threshold <= 0) {
+                    result.push(candidates[i]);
+                    break;
+                }
+            }
+            if (threshold > 0) result.push(candidates[candidates.length-1]);
+            break;
+
+        case "random":
+            let randomCandidates = [3]
+            if (playerTaunt >= 0) {
+                randomCandidates.push(playerTaunt)
             } else {
                 for (let i = 0; i < 3; i++) {
-                    if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") rndTarget.push(i)
+                    if (isAlive(i)) randomCandidates.push(i)
                 }
             }
-            let rndA = rndTarget[Math.floor(Math.random()*rndTarget.length)]
-            result = [rndA]
+            let rndA = randomCandidates[Math.floor(Math.random()*randomCandidates.length)]
+            result.push(rndA);
             break;
+
         case "randomHeal":
             let rndhTarget = []
-            if (player.bh.celestialite.health.lt(player.bh.celestialite.maxHealth)) rndhTarget.push(3)
-            if (playerTaunt >= 0 && player.bh.characters[playerTaunt].health.lt(player.bh.characters[playerTaunt].maxHealth)) {
+            if (canBeHealed(player.bh.celestialite)) rndhTarget.push(3)
+            if (playerTaunt >= 0 && canBeHealed(player.bh.characters[playerTaunt])) {
                 rndhTarget.push(playerTaunt)
             } else {
                 for (let i = 0; i < 3; i++) {
-                    if (player.bh.characters[i].health.gt(0) && (player.bh.characters[i].health.lt(player.bh.characters[i].maxHealth)) && player.bh.characters[i].id != "none") rndhTarget.push(i)
+                    if (isAlive(i) && canBeHealed(player.bh.characters[i])) {
+                        rndhTarget.push(i)
+                    }
                 }
             }
             let rndhA = rndhTarget[Math.floor(Math.random()*rndhTarget.length)]
-            result = [rndhA]
+            result.push(rndhA);
             break;
-        case "self": // Use when start is player
+
+        case "self":
             if (index == 3) return [3]
-            result = [index]
+            result.push(index);
             break;
+
         case "celestialite":
-            result = [3]
+            result.push(3);
             break;
         case "allPlayer":
-            let plays = []
             for (let i = 0; i < 3; i++) {
-                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") plays.push(i)
+                if (isAlive(i)) result.push(i)
             }
             if (playerTaunt >= 0) {
-                for (let i = 0; i < plays.length; i++) {plays[i] = playerTaunt}
+                for (let i = 0; i < result.length; i++) {
+                    result[i] = playerTaunt
+                }
             }
-            result = plays
             break;
+
         case "all":
-            let play = []
             for (let i = 0; i < 3; i++) {
-                if (player.bh.characters[i].health.gt(0) && player.bh.characters[i].id != "none") play.push(i)
+                if (isAlive(i)) result.push(i)
             }
             if (playerTaunt >= 0) {
-                for (let i = 0; i < play.length; i++) {play[i] = playerTaunt}
+                for (let i = 0; i < result.length; i++) {result[i] = playerTaunt}
             }
-            play.push(3)
-            result = play
+            result.push(3)
+            result = result
             break;
     }
+
+    // Special targetting for abilities
     if (index == 3) {
-        if (BHC[player.bh.celestialite.id].actions[slot] && BHC[player.bh.celestialite.id].actions[slot].properties && BHC[player.bh.celestialite.id].actions[slot].properties["storeTarget"] && action != "effect" && !stored) {
-            player.bh.celestialite.actions[slot].variables["specTarget"] = result
+        if (!!BHC[player.bh.celestialite.id].actions[slot]?.properties?.["storeTarget"] && action !== "effect" && !stored) {
+            player.bh.celestialite.actions[slot].variables["storedTarget"] = result
         }
     } else if (slot < 4) {
-        if (BHA[player.bh.characters[index].skills[slot].id] && BHA[player.bh.characters[index].skills[slot].id].properties && BHA[player.bh.characters[index].skills[slot].id].properties["storeTarget"] && action != "effect" && !stored) player.bh.characters[index].skills[slot].variables["specTarget"] = result
+        if (!!BHA[player.bh.characters[index].skills[slot].id]?.properties?.["storeTarget"] && action != "effect" && !stored) {
+            player.bh.characters[index].skills[slot].variables["storedTarget"] = result
+        }
     }
     if (result[0] == null) result = []
     return result

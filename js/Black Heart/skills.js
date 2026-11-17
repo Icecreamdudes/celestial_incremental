@@ -498,8 +498,8 @@ BHA.nav_healSpell = {
     type: "heal",
     target: "randomPlayerHeal",
     value() {return new Decimal(10).add(player.bh.skillData["nav_healSpell"].level.mul(2))},
-    cooldown: new Decimal(15),
-    cooldownCap: new Decimal(5),
+    cooldown: new Decimal(1),
+    cooldownCap: new Decimal(1),
 }
 BHA.nav_reboundingAura = {
     name: "Rebounding Aura",

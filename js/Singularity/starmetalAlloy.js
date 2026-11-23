@@ -103,23 +103,23 @@
                 layers.co.singularityReset()
                 setTimeout(() => {layers.co.singularityReset()}, 100)
 
-        }
+            }
         }
 
-        if (player.sme.autoEnterToggle) {
-            player.sma.inStarmetalChallenge = true
-            player.universe = "D1"
-            player.tab = "le"
-            changeTheme()
+        if (player.sme.autoEnterToggle && !player.sma.inStarmetalChallenge) {
+            player.sma.inStarmetalChallenge = true;
+            player.universe = "D1";
+            player.tab = "le";
+            changeTheme();
 
-            layers.le.starmetalResetAgain()
+            layers.le.starmetalResetAgain();
 
             layers.pu.generateSelection();
 
-            player.subtabs["le"]["stuff"] = "Main"
-            player.subtabs.pu["stuff"] = "Selection"
+            player.subtabs["le"]["stuff"] = "Main";
+            player.subtabs.pu["stuff"] = "Selection";
 
-            pauseUniverseAll(["D1", "U3", "A2", "A1", "SB", "UB", "BH", "DS"], "pause", true)
+            pauseUniverseAll(["D1", "U3", "A2", "A1", "SB", "UB", "BH", "DS"], "pause", true);
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()

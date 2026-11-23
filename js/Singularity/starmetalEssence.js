@@ -1,4 +1,38 @@
-﻿addLayer("sme", {
+﻿
+function starmetalEssenceProgressBar(id) {
+    return {
+        unlocked() { 
+            return player.sme.buyables[id].gte(1) 
+        },
+        direction: RIGHT,
+        width: 350,
+        height: 143,
+        progress() {
+            return player.sme.generatorTimers[id].dividedBy(player.sme.generatorTimersMax[id]);
+        },
+        borderStyle: {
+            borderLeft: "3px solid white", 
+            borderRight: "3px solid white", 
+            borderTop: "0px solid white", 
+            borderBottom: "0px solid white", 
+            borderRadius: "0"
+        },
+        baseStyle: {
+            backgroundColor: "rgba(0,0,0,0.5)"
+        },
+        fillStyle: {
+            backgroundColor: "#d460eb"
+        },
+        display() {
+            const timer = `${format(player.sme.generatorTimers[id])}/${format(player.sme.generatorTimersMax[id])}`;
+            const production = format(player.sme.generatorProduction[id]);
+            return `<h5>${timer} seconds to produce ${production} Starmetal Essence.</h5>`;
+            // return "<h5>" + format(player.sme.generatorTimers[id]) + "/" +  + "<h5> seconds to produce " + format(player.sme.generatorProduction[id]) + " starmetal essence.</h5>";
+        },
+    }
+}
+
+addLayer("sme", {
     name: "Starmetal Essence", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "SME", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U3",
@@ -36,7 +70,9 @@
     branches: ["bh", "sd", "sma"],
     color: "#d460eb",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = new Decimal(1);
+
+
 
         player.sme.generatorTimersMax = [
             new Decimal(10),new Decimal(40),new Decimal(90),new Decimal(160),new Decimal(250), new Decimal(360)
@@ -79,8 +115,7 @@
             }
         }
         
-        if (player.sme.leaveInput.gte(1)) player.sme.leaveAmount = player.sme.leaveInput
-        if (player.sme.leaveInput.lt(1)) player.sme.leaveAmount = new Decimal(1)
+        player.sme.leaveAmount = player.sme.leaveInput.max(1);
     },
     clickables: {
         11: {
@@ -88,11 +123,7 @@
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.sme.starmetalResetToggle) {
-                    player.sme.starmetalResetToggle = false
-                } else {
-                    player.sme.starmetalResetToggle = true
-                }
+                player.sme.starmetalResetToggle = !player.sme.starmetalResetToggle;
             },
             style() {
                 let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
@@ -105,11 +136,7 @@
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.sme.autoLeaveToggle) {
-                    player.sme.autoLeaveToggle = false
-                } else {
-                    player.sme.autoLeaveToggle = true
-                }
+                player.sme.autoLeaveToggle = !player.sme.autoLeaveToggle;
             },
             style() {
                 let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
@@ -122,11 +149,7 @@
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.sme.autoEnterToggle) {
-                    player.sme.autoEnterToggle = false
-                } else {
-                    player.sme.autoEnterToggle = true
-                }
+                player.sme.autoEnterToggle = !player.sme.autoEnterToggle;
             },
             style() {
                 let look = {width: "133px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
@@ -136,98 +159,12 @@
         },
     },
     bars: {
-        0: {
-            unlocked() { return player.sme.buyables[0].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[0].div(player.sme.generatorTimersMax[0])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[0]) + "/" + format(player.sme.generatorTimersMax[0]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[0]) + " starmetal essence.</h5>";
-            },
-        },
-        1: {
-            unlocked() { return player.sme.buyables[1].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[1].div(player.sme.generatorTimersMax[1])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[1]) + "/" + format(player.sme.generatorTimersMax[1]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[1]) + " starmetal essence.</h5>";
-            },
-        },
-        2: {
-            unlocked() { return player.sme.buyables[2].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[2].div(player.sme.generatorTimersMax[2])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[2]) + "/" + format(player.sme.generatorTimersMax[2]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[2]) + " starmetal essence.</h5>";
-            },
-
-        },
-        3: {
-            unlocked() { return player.sme.buyables[3].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[3].div(player.sme.generatorTimersMax[3])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[3]) + "/" + format(player.sme.generatorTimersMax[3]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[3]) + " starmetal essence.</h5>";
-            },
-
-        },
-        4: {
-            unlocked() { return player.sme.buyables[4].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[4].div(player.sme.generatorTimersMax[4])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[4]) + "/" + format(player.sme.generatorTimersMax[4]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[4]) + " starmetal essence.</h5>";
-            },
-        },
-        5: {
-            unlocked() { return player.sme.buyables[5].gte(1) },
-            direction: RIGHT,
-            width: 350,
-            height: 143,
-            progress() {
-                return player.sme.generatorTimers[5].div(player.sme.generatorTimersMax[5])
-            },
-            borderStyle: {borderLeft: "3px solid white", borderRight: "3px solid white", borderTop: "0px solid white", borderBottom: "0px solid white", borderRadius: "0"},
-            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#d460eb"},
-            display() {
-                return "<h5>" + format(player.sme.generatorTimers[5]) + "/" + format(player.sme.generatorTimersMax[5]) + "<h5> seconds to produce " + format(player.sme.generatorProduction[5]) + " starmetal essence.</h5>";
-            },
-        },
+        0: starmetalEssenceProgressBar(0),
+        1: starmetalEssenceProgressBar(1),
+        2: starmetalEssenceProgressBar(2),
+        3: starmetalEssenceProgressBar(3),
+        4: starmetalEssenceProgressBar(4),
+        5: starmetalEssenceProgressBar(5),
     },
     upgrades: {},
     buyables: {

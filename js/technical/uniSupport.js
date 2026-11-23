@@ -38,9 +38,8 @@ function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
             let time = (Date.now() - player.uni[universe].pauseTime) / 1000;
             let tree = universes[universe].tree;
             for (const row of tree) {
-                for (const e in row) {
-                    if (e == "bh" && universe == "U3") continue;
-                    const layer = row[e];
+                for (const layer of row) {
+                    if (layer == "bh" && universe == "U3") continue;
                     if(!layers[layer].update) continue;
                     layers[layer].update(time);
                 }

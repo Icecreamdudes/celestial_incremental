@@ -12,8 +12,8 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
     if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
         let time = (Date.now() - player.uni[universe].pauseTime) / 1000
         let tree = universes[universe].tree
-		for (row in tree) {
-			for (thing in tree[row]) {
+        for (row in tree) {
+            for (thing in tree[row]) {
                 layers[tree[row][thing]].update(time)
             }
         }
@@ -33,25 +33,22 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
 function pauseUniverseAll(exemptions, type = "toggle", temp = false) {
     for (let universe in player.uni) {
         if (tmp.uni[uni].disabled) continue
-        let abort = false
-        for (let j in exemptions) {
-            if (exemptions[j] == universe) abort = true
-        }
-        if (abort) continue
+        if (exemptions.includes(universe)) continue;
         if (type == "unpause" || type == "toggle" && player.uni[universe].paused) {
-            let time = (Date.now() - player.uni[universe].pauseTime) / 1000
-            let tree = universes[universe].tree
-    		for (row in tree) {
-	    		for (thing in tree[row]) {
-                    if (tree[row][thing] == "bh" && universe == "U3") continue
-                    if(!layers[tree[row][thing]].update) continue
-                    layers[tree[row][thing]].update(time)
+            let time = (Date.now() - player.uni[universe].pauseTime) / 1000;
+            let tree = universes[universe].tree;
+            for (const row of tree) {
+                for (const e in row) {
+                    if (e == "bh" && universe == "U3") continue;
+                    const layer = row[e];
+                    if(!layers[layer].update) continue;
+                    layers[layer].update(time);
                 }
             }
             if (!temp) {
-                player.uni[universe].paused = false
+                player.uni[universe].paused = false;
             } else {
-                player.uni[universe].paused = player.uni[universe].lastPaused
+                player.uni[universe].paused = player.uni[universe].lastPaused;
             }
         } else {
             if (temp) player.uni[universe].lastPaused = player.uni[universe].paused
@@ -106,8 +103,8 @@ addUniverse("U1", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
-			backgroundOrigin: "border-box",
-			borderColor: "#555555",
+            backgroundOrigin: "border-box",
+            borderColor: "#555555",
         }
         if (player.universe=="U1") {
             style.outline = "2px solid white"
@@ -127,7 +124,7 @@ addUniverse("UA", {
         let style = {
             backgroundColor: "black",
             borderColor: "#0061ff",
-        	color: "white",
+            color: "white",
         }
         if (player.universe=="UA") {
             style.outline = "2px solid white"
@@ -147,8 +144,8 @@ addUniverse("U2", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
-			backgroundOrigin: "border-box",
-			borderColor: "#116622",
+            backgroundOrigin: "border-box",
+            borderColor: "#116622",
         }
         if (player.universe=="U2") {
             style.outline = "2px solid white"
@@ -174,8 +171,8 @@ addUniverse("A1", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
-			backgroundOrigin: "border-box",
-			borderColor: "#013851"
+            backgroundOrigin: "border-box",
+            borderColor: "#013851"
         }
         if (player.universe=="A1") {
             style.outline = "2px solid white"
@@ -196,8 +193,8 @@ addUniverse("A2", {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
             backgroundOrigin: "border-box",
-			color: "#ffffff",
-        	borderColor: "#270052",
+            color: "#ffffff",
+            borderColor: "#270052",
         }
         if (player.universe=="A2") {
             style.outline = "2px solid white"
@@ -218,8 +215,8 @@ addUniverse("SB", {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
             backgroundOrigin: "border-box",
-			color: "#ffffff",
-        	borderColor: "#270052",
+            color: "#ffffff",
+            borderColor: "#270052",
         }
         if (player.universe=="A2") {
             style.outline = "2px solid white"
@@ -239,8 +236,8 @@ addUniverse("U3", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(140deg, red 0%, black 125%)",
-			backgroundOrigin: "border-box",
-			borderColor: "#600000"
+            backgroundOrigin: "border-box",
+            borderColor: "#600000"
         }
         if (player.universe=="U3") {
             style.outline = "2px solid white"
@@ -260,9 +257,9 @@ addUniverse("D1", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
-			backgroundOrigin: "border-box",
-			color: "#ffffff",
-			borderColor: "#555555",
+            backgroundOrigin: "border-box",
+            color: "#ffffff",
+            borderColor: "#555555",
         }
         if (player.universe=="D1") {
             style.outline = "2px solid white"
@@ -281,9 +278,9 @@ addUniverse("AD1", {
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #1d901a 0%, #6dc464 100%)",
-			backgroundOrigin: "border-box",
-			color: "#ffffff",
-			borderColor: "#032209",
+            backgroundOrigin: "border-box",
+            color: "#ffffff",
+            borderColor: "#032209",
         }
         if (player.universe=="AD1") {
             style.outline = "2px solid white"
@@ -410,7 +407,7 @@ addUniverse("UD", {
         let style = {
             background: "linear-gradient(135deg, #dfffdf 0%, #ffa1ff 100%)",
             backgroundOrigin: "border-box",
-        	borderColor: "#1a6641",
+            borderColor: "#1a6641",
             color: "#1a6641",
         }
         if (player.universe=="UD") {
